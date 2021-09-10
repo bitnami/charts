@@ -213,9 +213,12 @@ statefulset:
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
 hostAliases: []
-## @param containerPort MinIO&reg; container port to open
+## @param containerPorts.api MinIO&reg; container port to open for MinIO&reg; API
+## @param containerPorts.console MinIO&reg; container port to open for MinIO&reg; Console
 ##
-containerPort: 9000
+containerPorts:
+  api: 9000
+  console: 9001
 ## MinIO&reg; pod Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param podSecurityContext.enabled Enable pod Security Context
@@ -396,13 +399,19 @@ service:
   ## @param service.type MinIO&reg; service type
   ##
   type: ClusterIP
-  ## @param service.port MinIO&reg; service port
+  ## @param service.ports.api MinIO&reg; API service port
+  ## @param service.ports.console MinIO&reg; Console service port
   ##
-  port: 9000
-  ## @param service.nodePort Specify the nodePort value for the LoadBalancer and NodePort service types
+  ports:
+    api: 9000
+    console: 9001
+  ## @param service.nodePorts.api Specify the MinIO&reg API nodePort value for the LoadBalancer and NodePort service types
+  ## @param service.nodePorts.console Specify the MinIO&reg Console nodePort value for the LoadBalancer and NodePort service types
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ##
-  nodePort: ""
+  nodePorts:
+    api: ""
+    console: ""
   ## @param service.loadBalancerIP loadBalancerIP if service type is `LoadBalancer` (optional, cloud specific)
   ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
   ##
@@ -449,7 +458,7 @@ ingress:
   ## @param ingress.servicePort Service port to be used
   ## Default is http. Alternative is https.
   ##
-  servicePort: minio
+  servicePort: minio-console
   ## @param ingress.annotations Ingress annotations
   ## For a full list of possible ingress annotations, please see
   ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md

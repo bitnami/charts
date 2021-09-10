@@ -118,7 +118,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `statefulset.zones`                     | Number of zones (only for MinIO&reg; distributed mode)                                                                                                                                        | `1`             |
 | `statefulset.drivesPerNode`             | Number of drives attached to every node (only for MinIO&reg; distributed mode)                                                                                                                | `1`             |
 | `hostAliases`                           | MinIO&reg; pod host aliases                                                                                                                                                                   | `[]`            |
-| `containerPort`                         | MinIO&reg; container port to open                                                                                                                                                             | `9000`          |
+| `containerPorts.api`                    | MinIO&reg; container port to open for MinIO&reg; API                                                                                                                                          | `9000`          |
+| `containerPorts.console`                | MinIO&reg; container port to open for MinIO&reg; Console                                                                                                                                      | `9001`          |
 | `podSecurityContext.enabled`            | Enable pod Security Context                                                                                                                                                                   | `true`          |
 | `podSecurityContext.fsGroup`            | Group ID for the container                                                                                                                                                                    | `1001`          |
 | `containerSecurityContext.enabled`      | Enable container Security Context                                                                                                                                                             | `true`          |
@@ -168,8 +169,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                               | Description                                                                                                 | Value                    |
 | ---------------------------------- | ----------------------------------------------------------------------------------------------------------- | ------------------------ |
 | `service.type`                     | MinIO&reg; service type                                                                                     | `ClusterIP`              |
-| `service.port`                     | MinIO&reg; service port                                                                                     | `9000`                   |
-| `service.nodePort`                 | Specify the nodePort value for the LoadBalancer and NodePort service types                                  | `""`                     |
+| `service.ports.api`                | MinIO&reg; API service port                                                                                 | `9000`                   |
+| `service.ports.console`            | MinIO&reg; Console service port                                                                             | `9001`                   |
+| `service.nodePorts.api`            | Specify the MinIO&reg API nodePort value for the LoadBalancer and NodePort service types                    | `""`                     |
+| `service.nodePorts.console`        | Specify the MinIO&reg Console nodePort value for the LoadBalancer and NodePort service types                | `""`                     |
 | `service.loadBalancerIP`           | loadBalancerIP if service type is `LoadBalancer` (optional, cloud specific)                                 | `""`                     |
 | `service.loadBalancerSourceRanges` | Addresses that are allowed when service is LoadBalancer                                                     | `[]`                     |
 | `service.externalTrafficPolicy`    | Enable client source IP preservation                                                                        | `Cluster`                |
@@ -180,7 +183,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.hostname`                 | Default host for the ingress resource                                                                       | `minio.local`            |
 | `ingress.path`                     | The Path to MinIO&reg;. You may need to set this to '/*' in order to use this with ALB ingress controllers. | `/`                      |
 | `ingress.pathType`                 | Ingress path type                                                                                           | `ImplementationSpecific` |
-| `ingress.servicePort`              | Service port to be used                                                                                     | `minio`                  |
+| `ingress.servicePort`              | Service port to be used                                                                                     | `minio-console`          |
 | `ingress.annotations`              | Ingress annotations                                                                                         | `{}`                     |
 | `ingress.tls`                      | Enable TLS configuration for the hostname defined at `ingress.hostname` parameter                           | `false`                  |
 | `ingress.extraHosts`               | The list of additional hostnames to be covered with this ingress record.                                    | `[]`                     |
@@ -473,6 +476,17 @@ There are cases where you may want to deploy extra objects, such a ConfigMap con
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 8.0.0
+
+This version updates MinIO&reg; after some major changes, affecting its Web UI. MinIO&reg; has replaced its MinIO&reg; Browser with the MinIO&reg; Console, and Web UI has been moved to a separated port. As a result the following variables have been affected:
+- `.Values.service.port` has been slit into `.Values.service.ports.api` (default: 9000) and `.Values.service.ports.console` (default: 9001).
+- `.Values.containerPort` has been slit into `.Values.containerPorts.api` (default: 9000) and `.Values.containerPort.console` (default: 9001).
+- `.Values.service.nodePort`has been slit into `.Values.nodePorts.api` and `.Values.nodePorts.console`.
+- Service port `minio` has been replaced with `minio-api` and `minio-console` with target ports minio-api and minio-console respectively.
+- Liveness, readiness and startup probes now use port `minio-console` instead of `minio`.
+
+Please note that Web UI, previously running on port 9000 will now use port 9001 leaving port 9000 for the MinIO&reg; Server API.
 
 ### To 7.0.0
 
