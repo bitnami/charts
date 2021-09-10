@@ -83,6 +83,18 @@ data:
 
         eval $quorum_info_command | grep -Fq "s_down"
     }
+    
+    trigger_manual_failover() {
+        if is_boolean_yes "$REDIS_TLS_ENABLED"; then
+            failover_command="redis-cli {{- if .Values.auth.sentinel }} -a $REDIS_PASSWORD {{- end }} -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} sentinel failover {{ .Values.sentinel.masterSet }}"
+        else
+            failover_command="redis-cli {{- if .Values.auth.sentinel }} -a $REDIS_PASSWORD {{- end }} -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT sentinel failover {{ .Values.sentinel.masterSet }}"
+        fi
+
+        info "about to run the command: $failover_command"
+
+        echo $($failover_command)
+    }
 
     get_sentinel_master_info() {
         if is_boolean_yes "$REDIS_TLS_ENABLED"; then
@@ -112,11 +124,19 @@ data:
     else
         export REDIS_REPLICATION_MODE="slave"
 
-        # Check to see if quorum
+        retry_count=0
         while validate_quorum
         do
             sleep 1s
             info "sleeping, waiting for redis master to come up"
+            if ! ((n % 10)); then
+                info "Trying to manually failover"
+                failover_result=$(trigger_manual_failover)
+                
+                debug "Failover result: $(failover_result"
+            fi
+            
+            ((retry_count+=1))
         done
         info "redis master is up now"
         
