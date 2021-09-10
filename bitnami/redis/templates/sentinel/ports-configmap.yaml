@@ -1,4 +1,4 @@
-{{- if and (eq .Values.architecture "replication") .Values.sentinel.enabled (eq .Values.sentinel.service.type "NodePort") }}
+{{- if and (eq .Values.architecture "replication") .Values.sentinel.enabled (eq .Values.sentinel.service.type "NodePort") (not .Values.sentinel.service.nodePorts.redis ) }}
 {{- /* create a list to keep track of ports we choose to use */}}
 {{ $chosenports := (list ) }}
 
