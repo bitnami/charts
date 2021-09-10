@@ -109,6 +109,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `tolerations`                        | Tolerations for pod assignment                                                                                       | `[]`                 |
 | `existingSecret`                     | Name of a secret with the application password                                                                       | `""`                 |
 | `containerPorts`                     | Container ports                                                                                                      | `{}`                 |
+| `extraContainerPorts`                | Array of additional container ports for the Magento container                                                        | `[]`                 |
 | `sessionAffinity`                    | Control where client requests go, to the same pod or round-robin                                                     | `None`               |
 | `podAffinityPreset`                  | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                  | `""`                 |
 | `podAntiAffinityPreset`              | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                             | `soft`               |
