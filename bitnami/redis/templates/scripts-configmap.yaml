@@ -127,9 +127,9 @@ data:
         retry_count=1
         while validate_quorum
         do
-            sleep 1s
             info "sleeping, waiting for redis master to come up"
-            if ! ((n % 11)); then
+            sleep 1s
+            if ! ((retry_count % 11)); then
                 info "Trying to manually failover"
                 failover_result=$(trigger_manual_failover)
                 
