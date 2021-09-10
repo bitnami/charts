@@ -54,9 +54,6 @@ data:
         return 0
     }
 
-    # when connecting to sentinel port, you need to check to correct auth flag
-    # .Values.auth.enabled -> .Values.auth.sentinel
-
     validate_quorum() {
         if is_boolean_yes "$REDIS_TLS_ENABLED"; then
             quorum_info_command="redis-cli {{- if .Values.auth.sentinel }} -a $REDIS_PASSWORD {{- end }} -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} sentinel master {{ .Values.sentinel.masterSet }}"
