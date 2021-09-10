@@ -104,12 +104,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraEnvVarsSecret`                 | Secret containing extra env vars (in case of sensitive data)                                                         | `""`                 |
 | `extraVolumes`                       | Array of extra volumes to be added to the deployment (evaluated as template). Requires setting `extraVolumeMounts`   | `[]`                 |
 | `extraVolumeMounts`                  | Array of extra volume mounts to be added to the container (evaluated as template). Normally used with `extraVolumes` | `[]`                 |
+| `extraContainerPorts`                | Array of additional container ports for the Magento container                                                        | `[]`                 |
 | `initContainers`                     | Add additional init containers to the pod (evaluated as a template)                                                  | `[]`                 |
 | `sidecars`                           | Attach additional containers to the pod (evaluated as a template)                                                    | `[]`                 |
 | `tolerations`                        | Tolerations for pod assignment                                                                                       | `[]`                 |
 | `existingSecret`                     | Name of a secret with the application password                                                                       | `""`                 |
 | `containerPorts`                     | Container ports                                                                                                      | `{}`                 |
-| `extraContainerPorts`                | Array of additional container ports for the Magento container                                                        | `[]`                 |
 | `sessionAffinity`                    | Control where client requests go, to the same pod or round-robin                                                     | `None`               |
 | `podAffinityPreset`                  | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                  | `""`                 |
 | `podAntiAffinityPreset`              | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                             | `soft`               |
