@@ -133,7 +133,7 @@ data:
                 info "Trying to manually failover"
                 failover_result=$(trigger_manual_failover)
                 
-                debug "Failover result: $(failover_result"
+                debug "Failover result: $(failover_result)"
             fi
             
             ((retry_count+=1))
