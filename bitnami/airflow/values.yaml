@@ -840,12 +840,14 @@ git:
 ## @param ldap.enabled Enable LDAP authentication
 ## @param ldap.uri Server URI, eg. ldap://ldap_server:389
 ## @param ldap.base Base of the search, eg. ou=example,o=org
+## @param ldap.uidField if doing an indirect bind to ldap, this is the field that matches the username when searching for the account to bind to
 ## @param ldap.binddn Bind DN
 ## @param ldap.bindpw Bind Password
-## @param ldap.uidField Field used for uid
+## @param ldap.userRegistration Set to True to enable user self registration
+## @param ldap.userRegistrationRole Set role name, to be assign when a user registers himself. This role must already exist. Mandatory when using ldap.userRegistration
 ## @param ldap.rolesMapping mapping from LDAP DN to a list of roles
-## @param ldap.groupField LDAP user attribute which has their role DNs
 ## @param ldap.rolesSyncAtLogin replace ALL the user's roles each login, or only on registration
+## @para
 ##
 ldap:
   enabled: false
@@ -854,15 +856,10 @@ ldap:
   uidField: 'cn'
   binddn: 'cn=admin,dc=example,dc=org'
   bindpw: 'PuvSXQhyM9MukoN90juqgGfPxxMxA2fg'
-  #userRegistration: 'True'
-  #userRegistrationRole: 'Public'
-  #firstnameField: 'givenName'
-  #lastnameField: 'sn'
-  #emailField: 'mail'
+  userRegistration: 'True'
+  userRegistrationRole: 'Public'
   rolesMapping: '{ "cn=All,ou=Groups,dc=example,dc=org": ["User"], "cn=Admins,ou=Groups,dc=example,dc=org": ["Admin"], }'
-  #groupField: 'memberOf'
   rolesSyncAtLogin: 'True'
-  permanentSessionLifetime: '1800'
 
   ## SSL/TLS parameters for LDAP
   ## @param ldap.tls.enabled Enabled TLS/SSL for LDAP, you must include the CA file.

@@ -114,31 +114,19 @@ spec:
                 secretKeyRef:
                   name: {{ include "airflow.ldapSecretName" . }}
                   key: bind-password
-            #- name: AIRFLOW_LDAP_USER_REGISTRATION
-            #  value: {{ .Values.ldap.userRegistration | quote }}
-            #- name: AIRFLOW_LDAP_USER_REGISTRATION_ROLE
-            #  value: {{ .Values.ldap.userRegistrationRole | quote }}
-            #- name: AIRFLOW_LDAP_FIRSTNAME_FIELD
-            #  value: {{ .Values.ldap.firstnameField | quote }}
-            #- name: AIRFLOW_LDAP_LASTNAME_FIELD
-            #  value: {{ .Values.ldap.lastnameField | quote }}
-            #- name: AIRFLOW_LDAP_EMAIL_FIELD
-            #  value: {{ .Values.ldap.emailField | quote }}
+            - name: AIRFLOW_LDAP_USER_REGISTRATION
+              value: {{ .Values.ldap.userRegistration | quote }}
+            - name: AIRFLOW_LDAP_USER_REGISTRATION_ROLE
+              value: {{ .Values.ldap.userRegistrationRole | quote }}
             - name: AIRFLOW_LDAP_ROLES_MAPPING
               value: {{ .Values.ldap.rolesMapping | quote }}
-            #- name: AIRFLOW_LDAP_GROUP_FIELD
-            #  value: {{ .Values.ldap.groupField }}
             - name: AIRFLOW_LDAP_ROLES_SYNC_AT_LOGIN
               value: {{ .Values.ldap.rolesSyncAtLogin | quote }}
-            - name: AIRFLOW_LDAP_PERM_SESSION_LIFETIME 
-              value: {{ .Values.ldap.permanentSessionLifetime | quote }}
             - name: AIRFLOW_LDAP_USE_TLS
               value: {{ ternary "True" "False" .Values.ldap.tls.enabled | quote }}
             {{- if .Values.ldap.tls.enabled }}
             - name: AIRFLOW_LDAP_TLS_CA_CERTIFICATE
               value: {{ include "airflow.ldapCAFilename" . | quote }}
-            #- name: AIRFLOW_LDAP_ALLOW_SELF_SIGNED
-            #  value: {{ .Values.ldap.tls.allowSelfSigned }}
             {{- end }}
             {{- end }}
             {{- if .Values.extraEnvVars }}
