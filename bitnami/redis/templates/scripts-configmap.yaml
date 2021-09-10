@@ -19,19 +19,38 @@ data:
     . /opt/bitnami/scripts/liblog.sh
     . /opt/bitnami/scripts/libvalidations.sh
 
-    {{- if eq .Values.sentinel.service.type "NodePort" }}
     get_port() {
         hostname="$1"
         type="$2"
 
         port_var=$(echo "${hostname^^}_SERVICE_PORT_$type" | sed "s/-/_/g")
         port=${!port_var}
-        echo $port
+        
+        if [ -z "$port" ]; then
+            case $type in
+                "SENTINEL")
+                    echo {{ .Values.sentinel.containerPort }}
+                    ;;
+                "REDIS")
+                    echo {{ .Values.master.containerPort }}
+                    ;;
+            esac
+        else
+            echo $port
+        fi
     }
-    
-    SERVPORT=$(get_port "$HOSTNAME" "SENTINEL")
-    REDISPORT=$(get_port "$HOSTNAME" "REDIS")    
-    {{- end }}
+
+    get_full_hostname() {
+        hostname="$1"
+
+        {{- if eq .Values.sentinel.service.type "NodePort" }}
+        echo "${hostname}.{{- .Release.Namespace }}"
+        {{- else }}
+        echo "${hostname}.${HEADLESS_SERVICE}"
+        {{- end}}
+    }
+
+    REDISPORT=$(get_port "$HOSTNAME" "REDIS")
 
     myip=$(hostname -i)
 
@@ -42,8 +61,7 @@ data:
 
     HEADLESS_SERVICE="{{ template "common.names.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
     REDIS_SERVICE="{{ template "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
-    SENTINEL_SERVICE_ENV_NAME={{ printf "%s%s"  (upper (include "common.names.fullname" .)| replace "-" "_") "_SERVICE_PORT_TCP_SENTINEL" }}
-    SENTINEL_SERVICE_PORT=${!SENTINEL_SERVICE_ENV_NAME}
+    SENTINEL_SERVICE_PORT=$(get_port "{{ include "common.names.fullname" . }}" "TCP_SENTINEL")
 
     not_exists_dns_entry() {
         if [[ -z "$(getent ahosts "$HEADLESS_SERVICE" | grep "^${myip}" )" ]]; then
@@ -125,11 +143,9 @@ data:
         cp /opt/bitnami/redis/mounted-etc/redis.conf /opt/bitnami/redis/etc/redis.conf
     fi
 
-    {{- if eq .Values.sentinel.service.type "NodePort" }}
     echo "" >> /opt/bitnami/redis/etc/replica.conf
     echo "replica-announce-port $REDISPORT" >> /opt/bitnami/redis/etc/replica.conf
-    echo "replica-announce-ip $HOSTNAME.{{ .Release.Namespace }}" >> /opt/bitnami/redis/etc/replica.conf
-    {{- end }}
+    echo "replica-announce-ip $(get_full_hostname "$HOSTNAME")" >> /opt/bitnami/redis/etc/replica.conf
     
     {{- if .Values.tls.enabled }}
     ARGS=("--port" "0")
@@ -185,23 +201,44 @@ data:
     . /opt/bitnami/scripts/libvalidations.sh
     . /opt/bitnami/scripts/libfile.sh
 
-    {{- if eq .Values.sentinel.service.type "NodePort" }}
+    HEADLESS_SERVICE="{{ template "common.names.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
+    REDIS_SERVICE="{{ template "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
+
     get_port() {
         hostname="$1"
         type="$2"
 
         port_var=$(echo "${hostname^^}_SERVICE_PORT_$type" | sed "s/-/_/g")
         port=${!port_var}
-        echo $port
+        
+        if [ -z "$port" ]; then
+            case $type in
+                "SENTINEL")
+                    echo {{ .Values.sentinel.containerPort }}
+                    ;;
+                "REDIS")
+                    echo {{ .Values.master.containerPort }}
+                    ;;
+            esac
+        else
+            echo $port
+        fi
     }
     
-    info "HOSTNAME=$HOSTNAME"
-    SERVPORT=$(get_port "$HOSTNAME" "SENTINEL")
-    REDISPORT=$(get_port "$HOSTNAME" "REDIS")    
-    info "SERVPORT=$SERVPORT"
-    info "REDISPORT=$REDISPORT"
-    {{- end }}
+    get_full_hostname() {
+        hostname="$1"
 
+        {{- if eq .Values.sentinel.service.type "NodePort" }}
+        echo "${hostname}.{{- .Release.Namespace }}"
+        {{- else }}
+        echo "${hostname}.${HEADLESS_SERVICE}"
+        {{- end}}
+    }
+
+    SERVPORT=$(get_port "$HOSTNAME" "SENTINEL")
+    REDISPORT=$(get_port "$HOSTNAME" "REDIS")
+    SENTINEL_SERVICE_PORT=$(get_port "{{ include "common.names.fullname" . }}" "TCP_SENTINEL")
+    
     myip=$(hostname -i)
 
     # If there are more than one IP, use the first IPv4 address
@@ -209,10 +246,6 @@ data:
         myip=$(echo $myip | awk '{if ( match($0,/([0-9]+\.)([0-9]+\.)([0-9]+\.)[0-9]+/) ) { print substr($0,RSTART,RLENGTH); } }')
     fi
 
-    HEADLESS_SERVICE="{{ template "common.names.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
-    REDIS_SERVICE="{{ template "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
-    SENTINEL_SERVICE_ENV_NAME={{ printf "%s%s"  (upper (include "common.names.fullname" .)| replace "-" "_") "_SERVICE_PORT_TCP_SENTINEL" }}
-    SENTINEL_SERVICE_PORT=${!SENTINEL_SERVICE_ENV_NAME}
 
     sentinel_conf_set() {
         local -r key="${1:?missing key}"
@@ -268,13 +301,8 @@ data:
         # Only node available on the network, master by default
         export REDIS_REPLICATION_MODE="master"
 
-        {{- if eq .Values.sentinel.service.type "NodePort" }}
-        REDIS_MASTER_HOST="$HOSTNAME.{{- .Release.Namespace }}"
+        REDIS_MASTER_HOST=$(get_full_hostname "$HOSTNAME")
         REDIS_MASTER_PORT_NUMBER="$REDISPORT"
-        {{- else }}
-        REDIS_MASTER_HOST=${myip}
-        REDIS_MASTER_PORT_NUMBER="{{ .Values.master.containerPort }}"
-        {{- end }}
     else
         export REDIS_REPLICATION_MODE="slave"
 
@@ -292,44 +320,31 @@ data:
         ip="$2"
 
         if [[ -n "$hostname" && -n "$ip" && "$hostname" != "$HOSTNAME" ]]; then
-            {{- if eq .Values.sentinel.service.type "NodePort" }}
-            sentinel_conf_add "sentinel known-sentinel {{ .Values.sentinel.masterSet }} $hostname.{{ .Release.Namespace }} $(get_port "$hostname" "SENTINEL") $(host_id "$hostname")"
-            {{- else }}
-            sentinel_conf_add "sentinel known-sentinel {{ .Values.sentinel.masterSet }} $ip {{ .Values.sentinel.containerPort }} $(host_id "$hostname")"
-            {{- end }}
+            sentinel_conf_add "sentinel known-sentinel {{ .Values.sentinel.masterSet }} $(get_full_hostname "$hostname") $(get_port "$hostname" "SENTINEL") $(host_id "$hostname")"
         fi 
     }
     add_known_replica() {
         hostname="$1"
         ip="$2"
 
-        {{- if eq .Values.sentinel.service.type "NodePort" }}
-        if [[ -n "$ip" && "$hostname.{{ .Release.Namespace }}" != "$REDIS_MASTER_HOST" ]]; then
-            sentinel_conf_add "sentinel known-replica {{ .Values.sentinel.masterSet }} $hostname.{{ .Release.Namespace }} $(get_port "$hostname" "REDIS")"
+        if [[ -n "$ip" && "$(get_full_hostname "$hostname")" != "$REDIS_MASTER_HOST" ]]; then
+            sentinel_conf_add "sentinel known-replica {{ .Values.sentinel.masterSet }} $(get_full_hostname "$hostname") $(get_port "$hostname" "REDIS")"
         fi
-        {{- else }}
-        if [[ -n "$ip" && "$ip" != "$REDIS_MASTER_HOST" ]]; then
-            sentinel_conf_add "sentinel known-replica {{ .Values.sentinel.masterSet }} $ip {{ .Values.replica.containerPort }}"
-        fi
-        {{- end }}
     }
 
     # Add available hosts on the network as known replicas & sentinels
     for node in $(seq 0 $(({{ .Values.replica.replicaCount }}-1))); do
         hostname="{{ template "common.names.fullname" . }}-node-$node"
         ip="$(getent hosts "$hostname.$HEADLESS_SERVICE" | awk '{ print $1 }')"
-        info "for node $node, hostname=$hostname and ip=$ip"
         add_known_sentinel "$hostname" "$ip"
         add_known_replica "$hostname" "$ip"
     done
     
-    {{- if eq .Values.sentinel.service.type "NodePort" }}
     echo "" >> /opt/bitnami/redis-sentinel/etc/sentinel.conf
     echo "sentinel announce-hostnames yes" >> /opt/bitnami/redis-sentinel/etc/sentinel.conf
     echo "sentinel resolve-hostnames yes" >> /opt/bitnami/redis-sentinel/etc/sentinel.conf
     echo "sentinel announce-port $SERVPORT" >> /opt/bitnami/redis-sentinel/etc/sentinel.conf
-    echo "sentinel announce-ip $HOSTNAME.{{ .Release.Namespace }}" >> /opt/bitnami/redis-sentinel/etc/sentinel.conf
-    {{- end }}
+    echo "sentinel announce-ip $(get_full_hostname "$HOSTNAME")" >> /opt/bitnami/redis-sentinel/etc/sentinel.conf
 
     {{- if .Values.tls.enabled }}
     ARGS=("--port" "0")
@@ -346,13 +361,6 @@ data:
     {{- if .Values.sentinel.preExecCmds }}
     {{ .Values.sentinel.preExecCmds | nindent 4 }}
     {{- end }}
-    echo "###"
-    echo "printing /opt/bitnami/redis-sentinel/etc/sentinel.conf"
-    cat /opt/bitnami/redis-sentinel/etc/sentinel.conf
-    echo "###"
-    echo "printing /opt/bitnami/scripts/start-scripts/start-sentinel.sh"
-    cat /opt/bitnami/scripts/start-scripts/start-sentinel.sh
-    echo "###"
     exec redis-server /opt/bitnami/redis-sentinel/etc/sentinel.conf --sentinel {{- if .Values.tls.enabled }} "${ARGS[@]}" {{- end }}
   prestop-sentinel.sh: |
     #!/bin/bash
@@ -478,20 +486,38 @@ data:
   start-replica.sh: |
     #!/bin/bash
 
-    {{- if eq .Values.sentinel.service.type "NodePort" }}
     get_port() {
         hostname="$1"
         type="$2"
 
         port_var=$(echo "${hostname^^}_SERVICE_PORT_$type" | sed "s/-/_/g")
         port=${!port_var}
-        echo $port
+        
+        if [ -z "$port" ]; then
+            case $type in
+                "SENTINEL")
+                    echo {{ .Values.sentinel.containerPort }}
+                    ;;
+                "REDIS")
+                    echo {{ .Values.master.containerPort }}
+                    ;;
+            esac
+        else
+            echo $port
+        fi
     }
-    
-    info "HOSTNAME=$HOSTNAME"
-    REDISPORT=$(get_port "$HOSTNAME" "REDIS")   
-    info "REDISPORT=$REDISPORT"
-    {{- end }}
+
+    get_full_hostname() {
+        hostname="$1"
+
+        {{- if eq .Values.sentinel.service.type "NodePort" }}
+        echo "${hostname}.{{- .Release.Namespace }}"
+        {{- else }}
+        echo "${hostname}.${HEADLESS_SERVICE}"
+        {{- end}}
+    }
+
+    REDISPORT=$(get_port "$HOSTNAME" "REDIS")
     
     [[ -f $REDIS_PASSWORD_FILE ]] && export REDIS_PASSWORD="$(< "${REDIS_PASSWORD_FILE}")"
     [[ -f $REDIS_MASTER_PASSWORD_FILE ]] && export REDIS_MASTER_PASSWORD="$(< "${REDIS_MASTER_PASSWORD_FILE}")"
@@ -506,11 +532,9 @@ data:
         cp /opt/bitnami/redis/mounted-etc/redis.conf /opt/bitnami/redis/etc/redis.conf
     fi
 
-    {{- if eq .Values.sentinel.service.type "NodePort" }}
     echo "" >> /opt/bitnami/redis/etc/replica.conf
     echo "replica-announce-port $REDISPORT" >> /opt/bitnami/redis/etc/replica.conf
-    echo "replica-announce-ip $HOSTNAME.{{ .Release.Namespace }}" >> /opt/bitnami/redis/etc/replica.conf
-    {{- end }}
+    echo "replica-announce-ip $(get_full_hostname "$HOSTNAME")" >> /opt/bitnami/redis/etc/replica.conf
 
     {{- if .Values.tls.enabled }}
     ARGS=("--port" "0")
