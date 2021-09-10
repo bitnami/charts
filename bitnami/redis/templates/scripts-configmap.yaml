@@ -124,16 +124,16 @@ data:
     else
         export REDIS_REPLICATION_MODE="slave"
 
-        retry_count=0
+        retry_count=1
         while validate_quorum
         do
             sleep 1s
             info "sleeping, waiting for redis master to come up"
-            if ! ((n % 10)); then
+            if ! ((n % 11)); then
                 info "Trying to manually failover"
                 failover_result=$(trigger_manual_failover)
                 
-                debug "Failover result: $(failover_result)"
+                debug "Failover result: $failover_result"
             fi
             
             ((retry_count+=1))
