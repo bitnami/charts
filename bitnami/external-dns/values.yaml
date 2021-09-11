@@ -480,9 +480,12 @@ transip:
   ## @param transip.account When using the TransIP provider, specify the account name.
   ##
   account: ""
-  ## @param transip.apiKey When using the TransIP provider, specify the API key to use.
+  ## @param transip.apiKey When using the TransIP provider, specify the API key to use. Mutually excluse with apiKeySecret.
   ##
   apiKey: ""
+  ## @param transip.apiKeySecret When using the TransIP provider, specify the secret containing the API key to use. Mutually exclusive with apiKey.
+  ##
+  apiKeySecret: ""
 ## VinylDNS configuration to be set via arguments/env. variables
 ##
 vinyldns:

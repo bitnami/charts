@@ -661,10 +661,22 @@ Validate values of TransIP DNS:
 - must provide the API key when provider is "transip"
 */}}
 {{- define "external-dns.validateValues.transip.apiKey" -}}
-{{- if and (eq .Values.provider "transip") (not .Values.transip.apiKey) -}}
+{{- if and (eq .Values.provider "transip") (not .Values.transip.apiKey) (not .Values.transip.apiKeySecret) -}}
 external-dns: transip.apiKey
     You must provide the TransIP API key when provider="transip".
     Please set the apiKey parameter (--set transip.apiKey="xxxx")
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of TransIP DNS:
+- can't provide both transip.apiKey and transip.apiKeySecret
+*/}}
+{{- define "external-dns.validateValues.transip.apiKeySecret" -}}
+{{- if and (eq .Values.provider "transip") .Values.transip.apiKey .Values.transip.apiKeySecret -}}
+external-dns: transip.apiKeySecret
+    You can't provide both transip.apiKey and transip.apiKeySecret when provider="transip".
+    Please unset the apiKey parameter (--set transip.apiKey="")
 {{- end -}}
 {{- end -}}
 

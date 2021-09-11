@@ -652,7 +652,11 @@ spec:
         # TransIP volume(s)
         - name: transip-api-key
           secret:
+            {{- if .Values.transip.apiKeySecret }}
+            secretName: {{ .Values.transip.apiKeySecret }}
+            {{- else }}
             secretName: {{ template "external-dns.fullname" . }}
+            {{- end }}
         {{- end }}
         {{- if .Values.extraVolumes }}
         # Extra volume(s)
