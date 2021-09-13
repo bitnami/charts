@@ -1018,6 +1018,10 @@ Find more information about how to deal with common errors related to Bitnami’
 
 ## Upgrading
 
+### To 6.0.0
+
+This major updates the MinIO&reg; subchart to its newest major, 8.0.0, which now has two separated services for MinIO&reg; Console and MinIO&reg; API. Check [MinIO&reg; Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/minio#to-800) for more information.
+
 ### To 5.4.0
 
 This version introduces support for the receiver dual-mode implementation for Thanos [v0.22+](https://github.com/thanos-io/thanos/releases/tag/v0.22.0)
