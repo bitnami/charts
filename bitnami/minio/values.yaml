@@ -62,7 +62,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/minio
-  tag: 2021.6.17-debian-10-r38
+  tag: 2021.9.9-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -88,7 +88,7 @@ image:
 clientImage:
   registry: docker.io
   repository: bitnami/minio-client
-  tag: 2021.7.27-debian-10-r7
+  tag: 2021.9.2-debian-10-r7
 ## @param mode MinIO&reg; server mode (`standalone` or `distributed`)
 ## ref: https://docs.minio.io/docs/distributed-minio-quickstart-guide
 ##
@@ -213,9 +213,12 @@ statefulset:
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
 hostAliases: []
-## @param containerPort MinIO&reg; container port to open
+## @param containerPorts.api MinIO&reg; container port to open for MinIO&reg; API
+## @param containerPorts.console MinIO&reg; container port to open for MinIO&reg; Console
 ##
-containerPort: 9000
+containerPorts:
+  api: 9000
+  console: 9001
 ## MinIO&reg; pod Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param podSecurityContext.enabled Enable pod Security Context
@@ -396,13 +399,19 @@ service:
   ## @param service.type MinIO&reg; service type
   ##
   type: ClusterIP
-  ## @param service.port MinIO&reg; service port
+  ## @param service.ports.api MinIO&reg; API service port
+  ## @param service.ports.console MinIO&reg; Console service port
   ##
-  port: 9000
-  ## @param service.nodePort Specify the nodePort value for the LoadBalancer and NodePort service types
+  ports:
+    api: 9000
+    console: 9001
+  ## @param service.nodePorts.api Specify the MinIO&reg API nodePort value for the LoadBalancer and NodePort service types
+  ## @param service.nodePorts.console Specify the MinIO&reg Console nodePort value for the LoadBalancer and NodePort service types
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ##
-  nodePort: ""
+  nodePorts:
+    api: ""
+    console: ""
   ## @param service.loadBalancerIP loadBalancerIP if service type is `LoadBalancer` (optional, cloud specific)
   ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
   ##
@@ -449,7 +458,7 @@ ingress:
   ## @param ingress.servicePort Service port to be used
   ## Default is http. Alternative is https.
   ##
-  servicePort: minio
+  servicePort: minio-console
   ## @param ingress.annotations Ingress annotations
   ## For a full list of possible ingress annotations, please see
   ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
@@ -568,7 +577,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r151
+    tag: 10-debian-10-r188
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -617,7 +626,8 @@ serviceAccount:
 
 ## @section Other parameters
 
-## MinIO&reg; Pod Disruption Budget configuration (only in distributed mode)
+## MinIO&reg; Pod Disruption Budget configuration in distributed mode.
+## If MinIO&reg; Gateway is enabled, creates a Pod Disruption Budget for the Gateway instead (mutually exclusive with distributed mode).
 ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
 ##
 pdb:
@@ -684,6 +694,24 @@ gateway:
   ## @param gateway.replicaCount Number of MinIO&reg; Gateway replicas
   ##
   replicaCount: 4
+  ## @param gateway.updateStrategy.type Update strategy type for MinIO&reg; Gateway replicas
+  updateStrategy:
+    type: Recreate
+  ## Autoscaling configuration for MinIO&reg; Gateway. overrides gateway.replicaCount if enabled
+  ## @param gateway.autoscaling.enabled Enable autoscaling for MinIO&reg; Gateway deployment
+  ## @param gateway.autoscaling.minReplicas Minimum number of replicas to scale back
+  ## @param gateway.autoscaling.maxReplicas Maximum number of replicas to scale out
+  ## @param gateway.autoscaling.targetCPU Target CPU utilization percentage
+  ## @param gateway.autoscaling.targetMemory Target Memory utilization percentage
+  autoscaling:
+    enabled: false
+    minReplicas: "4"
+    maxReplicas: "4"
+    targetCPU: ""
+    targetMemory: ""
+  ## @param gateway.priorityClassName Pod priority class name for MinIO&reg; Gateway
+  ##
+  priorityClassName: ""
   ## Gateway authentication configuration
   ##
   auth:
@@ -692,12 +720,20 @@ gateway:
     ## @param gateway.auth.azure.secretKey Secret Key to access MinIO using Azure Gateway
     ## @param gateway.auth.azure.storageAccountName Azure Storage Account Name to use to access Azure Blob Storage
     ## @param gateway.auth.azure.storageAccountKey Azure Storage Account Key to use to access Azure Blob Storage
+    ## @param gateway.auth.azure.storageAccountNameExistingSecret Existing Secret name to extract Azure Storage Account Name from to access Azure Blob Storage
+    ## @param gateway.auth.azure.storageAccountNameExistingSecretKey Existing Secret key to extract Azure Storage Account Name from to use to access Azure Blob Storage
+    ## @param gateway.auth.azure.storageAccountKeyExistingSecret Existing Secret name to extract Azure Storage Account Key from to access Azure Blob Storage
+    ## @param gateway.auth.azure.storageAccountKeyExistingSecretKey Existing Secret key to extract Azure Storage Account Key from to use to access Azure Blob Storage
     ##
     azure:
       accessKey: ""
       secretKey: ""
       storageAccountName: ""
       storageAccountKey: ""
+      storageAccountNameExistingSecret: ""
+      storageAccountNameExistingSecretKey: ""
+      storageAccountKeyExistingSecret: ""
+      storageAccountKeyExistingSecretKey: ""
     ## Authentication configuration for GCS. Ignored unless type=gcs
     ## @param gateway.auth.gcs.accessKey Access Key to access MinIO using GCS Gateway
     ## @param gateway.auth.gcs.secretKey Secret Key to access MinIO using GCS Gateway

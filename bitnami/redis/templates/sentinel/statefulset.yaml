@@ -308,6 +308,20 @@ spec:
             - name: REDIS_SENTINEL_PORT
               value: {{ .Values.sentinel.containerPort | quote }}
             {{- end }}
+            {{- if .Values.sentinel.extraEnvVars }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.sentinel.extraEnvVars "context" $ ) | nindent 12 }}
+            {{- end }}
+          {{- if or .Values.sentinel.extraEnvVarsCM .Values.sentinel.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.sentinel.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ .Values.sentinel.extraEnvVarsCM }}
+            {{- end }}
+            {{- if .Values.sentinel.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ .Values.sentinel.extraEnvVarsSecret }}
+            {{- end }}
+          {{- end }}
           ports:
             - name: redis-sentinel
               containerPort: {{ .Values.sentinel.containerPort }}

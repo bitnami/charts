@@ -134,7 +134,7 @@ spec:
             - --redis
             - {{ include "argocd.redisHost" . }}:{{ include "argocd.redisPort" . }}
           {{- if .Values.controller.extraArgs }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.controller.extraArgs "context" $) | nindent 8 }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.controller.extraArgs "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           ports:

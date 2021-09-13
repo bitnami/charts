@@ -75,7 +75,7 @@ To uninstall/delete the `my-release` deployment:
 | --------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`                        | kong image registry                                                                                                                                                              | `docker.io`           |
 | `image.repository`                      | kong image repository                                                                                                                                                            | `bitnami/kong`        |
-| `image.tag`                             | kong image tag (immutable tags are recommended)                                                                                                                                  | `2.5.0-debian-10-r18` |
+| `image.tag`                             | kong image tag (immutable tags are recommended)                                                                                                                                  | `2.5.1-debian-10-r0`  |
 | `image.pullPolicy`                      | kong image pull policy                                                                                                                                                           | `IfNotPresent`        |
 | `image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                                                                                 | `[]`                  |
 | `image.debug`                           | Enable image debug mode                                                                                                                                                          | `false`               |
@@ -122,6 +122,7 @@ To uninstall/delete the `my-release` deployment:
 | `service.exposeAdmin`           | Add the Kong Admin ports to the service                                                       | `false`                  |
 | `service.adminHttpPort`         | kong admin HTTPS service port (only if service.exposeAdmin=true)                              | `8001`                   |
 | `service.adminHttpsPort`        | kong admin HTTPS service port (only if service.exposeAdmin=true)                              | `8444`                   |
+| `service.disableHttpPort`       | Disable Kong proxy HTTP and Kong admin HTTP ports                                             | `false`                  |
 | `service.proxyHttpNodePort`     | Port to bind to for NodePort service type (proxy HTTP)                                        | `""`                     |
 | `service.proxyHttpsNodePort`    | Port to bind to for NodePort service type (proxy HTTPS)                                       | `""`                     |
 | `service.adminHttpNodePort`     | Port to bind to for NodePort service type (admin HTTP)                                        | `""`                     |
@@ -134,7 +135,7 @@ To uninstall/delete the `my-release` deployment:
 | `ingress.pathType`              | Ingress path type                                                                             | `ImplementationSpecific` |
 | `ingress.apiVersion`            | Force Ingress API version (automatically detected if not set)                                 | `""`                     |
 | `ingress.hostname`              | Default host for the ingress resource                                                         | `kong.local`             |
-| `ingress.path`                  | Ingress path                                                                                  | `ImplementationSpecific` |
+| `ingress.path`                  | Ingress path                                                                                  | `/`                      |
 | `ingress.annotations`           | Ingress annotations                                                                           | `{}`                     |
 | `ingress.tls`                   | Create TLS Secret                                                                             | `false`                  |
 | `ingress.extraHosts`            | The list of additional hostnames to be covered with this ingress record.                      | `[]`                     |
@@ -198,7 +199,7 @@ To uninstall/delete the `my-release` deployment:
 | `ingressController.customResourceDeletePolicy`         | Add custom CRD resource delete policy (for Helm 2 support)                                                                                    | `{}`                              |
 | `ingressController.image.registry`                     | Kong Ingress Controller image registry                                                                                                        | `docker.io`                       |
 | `ingressController.image.repository`                   | Kong Ingress Controller image name                                                                                                            | `bitnami/kong-ingress-controller` |
-| `ingressController.image.tag`                          | Kong Ingress Controller image tag                                                                                                             | `1.3.1-debian-10-r50`             |
+| `ingressController.image.tag`                          | Kong Ingress Controller image tag                                                                                                             | `1.3.1-debian-10-r84`             |
 | `ingressController.image.pullPolicy`                   | kong ingress controller image pull policy                                                                                                     | `IfNotPresent`                    |
 | `ingressController.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                                              | `[]`                              |
 | `ingressController.proxyReadyTimeout`                  | Maximum time (in seconds) to wait for the Kong container to be ready                                                                          | `300`                             |
@@ -518,6 +519,10 @@ postgresql 08:05:12.59 INFO  ==> Deploying PostgreSQL with persisted data...
 - https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
 - https://helm.sh/docs/topics/v2_v3_migration/
 - https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
+
+### To 4.0.0
+
+This major updates the Cassandra subchart to its newest major, 4.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/cassandra#to-800) you can find more information about the changes introduced in those versions.
 
 ### To 2.0.0
 

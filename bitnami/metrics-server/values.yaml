@@ -23,6 +23,14 @@ nameOverride: ""
 ##
 fullnameOverride: ""
 
+## @param commonLabels Add labels to all the deployed resources
+##
+commonLabels: {}
+
+## @param commonAnnotations Add annotations to all the deployed resources
+##
+commonAnnotations: {}
+
 ## @section Metrics Server parameters
 
 ## Bitnami Metrics Server image version
@@ -36,7 +44,7 @@ fullnameOverride: ""
 image:
   registry: docker.io
   repository: bitnami/metrics-server
-  tag: 0.5.0-debian-10-r59
+  tag: 0.5.0-debian-10-r83
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images

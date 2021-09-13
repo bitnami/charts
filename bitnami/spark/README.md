@@ -72,7 +72,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ------------------------------------------------ | --------------------- |
 | `image.registry`    | Spark image registry                             | `docker.io`           |
 | `image.repository`  | Spark image repository                           | `bitnami/spark`       |
-| `image.tag`         | Spark image tag (immutable tags are recommended) | `3.1.2-debian-10-r44` |
+| `image.tag`         | Spark image tag (immutable tags are recommended) | `3.1.2-debian-10-r70` |
 | `image.pullPolicy`  | Spark image pull policy                          | `IfNotPresent`        |
 | `image.pullSecrets` | Specify docker-registry secret names as an array | `[]`                  |
 | `image.debug`       | Enable image debug mode                          | `false`               |
@@ -211,7 +211,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.pathType`          | Ingress path type                                                                                      | `ImplementationSpecific` |
 | `ingress.apiVersion`        | Force Ingress API version (automatically detected if not set)                                          | `""`                     |
 | `ingress.hostname`          | Default host for the ingress resource                                                                  | `spark.local`            |
-| `ingress.path`              | The Path to Spark. You may need to set this to '/*' in order to use this with ALB ingress controllers. | `ImplementationSpecific` |
+| `ingress.path`              | The Path to Spark. You may need to set this to '/*' in order to use this with ALB ingress controllers. | `/`                      |
 | `ingress.annotations`       | Ingress annotations                                                                                    | `{}`                     |
 | `ingress.tls`               | Enable TLS configuration for the hostname defined at ingress.hostname parameter                        | `false`                  |
 | `ingress.extraHosts`        | The list of additional hostnames to be covered with this ingress record.                               | `[]`                     |

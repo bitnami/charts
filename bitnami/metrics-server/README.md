@@ -59,7 +59,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------ | -------------------------------------------------------------------------------------------- | ----- |
 | `nameOverride`     | String to partially override common.names.fullname template (will maintain the release name) | `""`  |
 | `fullnameOverride` | String to fully override common.names.fullname template                                      | `""`  |
-
+| `commonLabels` | Labels to add to all deployed objects template                                      | `""`  |
+| `commonAnnotations` | Annotations to add to all deployed objects  template                                      | `""`  |
 
 ### Metrics Server parameters
 
@@ -67,7 +68,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------ |
 | `image.registry`                                  | Metrics Server image registry                                                                                                                                            | `docker.io`              |
 | `image.repository`                                | Metrics Server image repository                                                                                                                                          | `bitnami/metrics-server` |
-| `image.tag`                                       | Metrics Server image tag (immutable tags are recommended)                                                                                                                | `0.5.0-debian-10-r59`    |
+| `image.tag`                                       | Metrics Server image tag (immutable tags are recommended)                                                                                                                | `0.5.0-debian-10-r83`    |
 | `image.pullPolicy`                                | Metrics Server image pull policy                                                                                                                                         | `IfNotPresent`           |
 | `image.pullSecrets`                               | Metrics Server image pull secrets                                                                                                                                        | `[]`                     |
 | `hostAliases`                                     | Add deployment host aliases                                                                                                                                              | `[]`                     |

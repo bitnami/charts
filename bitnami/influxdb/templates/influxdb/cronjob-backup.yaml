@@ -50,7 +50,7 @@ spec:
               persistentVolumeClaim:
                 claimName: {{ include "common.names.fullname" . }}-backups
             {{- else }}
-                emptyDir: {}
+              emptyDir: {}
             {{- end }}
           {{- if .Values.backup.affinity }}
           affinity: {{- include "common.tplvalues.render" (dict "value" .Values.backup.affinity "context" $) | nindent 12 }}

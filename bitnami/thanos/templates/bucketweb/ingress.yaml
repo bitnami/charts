@@ -16,6 +16,9 @@ metadata:
     {{ $key }}: {{ $value | quote }}
     {{- end }}
 spec:
+  {{- if and .Values.bucketweb.ingress.ingressClassName (eq "true" (include "common.ingress.supportsIngressClassname" .)) }}
+  ingressClassName: {{ .Values.bucketweb.ingress.ingressClassName | quote }}
+  {{- end }}
   rules:
     {{- if .Values.bucketweb.ingress.hostname }}
     - host: {{ .Values.bucketweb.ingress.hostname }}

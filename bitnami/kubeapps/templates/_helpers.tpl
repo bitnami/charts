@@ -17,6 +17,15 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*
+Create a default fully qualified app name for Redis dependency.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+*/}}
+{{- define "kubeapps.redis.fullname" -}}
+{{- $name := default "redis" .Values.redis.nameOverride -}}
+{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
 Create name for the apprepository-controller based on the fullname
 */}}
 {{- define "kubeapps.apprepository.fullname" -}}
@@ -70,6 +79,20 @@ Create proxy_pass for the frontend config
 */}}
 {{- define "kubeapps.frontend-config.proxy_pass" -}}
 http://{{ include "kubeapps.kubeops.fullname" . }}:{{ .Values.kubeops.service.port }}
+{{- end -}}
+
+{{/*
+Create proxy_pass for the kubeappsapis
+*/}}
+{{- define "kubeapps.kubeappsapis.proxy_pass" -}}
+http://{{ include "kubeapps.kubeappsapis.fullname" . }}:{{ .Values.kubeappsapis.service.port }}
+{{- end -}}
+
+{{/*
+Create name for kubeappsapis based on the fullname
+*/}}
+{{- define "kubeapps.kubeappsapis.fullname" -}}
+{{- printf "%s-internal-kubeappsapis" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
@@ -149,6 +172,17 @@ Return the Postgresql secret name
       {{- printf "%s" .Values.postgresql.existingSecret -}}
   {{- else -}}
       {{- printf "%s" (include "kubeapps.postgresql.fullname" .) -}}
+  {{- end -}}
+{{- end -}}
+
+{{/*
+Return the Redis secret name
+*/}}
+{{- define "kubeapps.redis.secretName" -}}
+  {{- if .Values.redis.existingSecret }}
+      {{- printf "%s" .Values.redis.existingSecret -}}
+  {{- else -}}
+      {{- printf "%s" (include "kubeapps.redis.fullname" .) -}}
   {{- end -}}
 {{- end -}}
 
