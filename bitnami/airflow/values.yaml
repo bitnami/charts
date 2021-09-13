@@ -844,7 +844,7 @@ git:
 ## @param ldap.binddn Bind DN
 ## @param ldap.bindpw Bind Password
 ## @param ldap.userRegistration Set to True to enable user self registration
-## @param ldap.userRegistrationRole Set role name, to be assign when a user registers himself. This role must already exist. Mandatory when using ldap.userRegistration
+## @param ldap.userRegistrationRole Set role name to be assign when a user registers himself. This role must already exist. Mandatory when using ldap.userRegistration
 ## @param ldap.rolesMapping mapping from LDAP DN to a list of roles
 ## @param ldap.rolesSyncAtLogin replace ALL the user's roles each login, or only on registration
 ## @para
