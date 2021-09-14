@@ -79,9 +79,9 @@ spec:
           {{- end }}
           env:
             - name: BP_NAME
-              value: "BP1"
+              value: {{ include "dataplatform.fullname" . }}
             - name: DP_URI
-              value: "dp-dataplatform-bp1-emitter:8091"
+              value: http://{{ include "dataplatform.emitter-name" . }}:{{ .Values.dataplatform.emitter.service.port }}
           ports:
             - name: exporter-port
               containerPort: {{ .Values.dataplatform.exporter.port }}

@@ -79,7 +79,7 @@ spec:
           {{- end }}
           env:
             - name: BP_NAME
-              value: "BP1"
+              value: {{ include "dataplatform.fullname" . }}
             - name: BP_RELEASE_NAME
               value: "dp"
             - name: BP_NAMESPACE
@@ -93,7 +93,7 @@ spec:
           {{- if .Values.dataplatform.emitter.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.dataplatform.emitter.livenessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
-              path: "/metrics"
+              path: "/v1/health"
               port: {{ .Values.dataplatform.emitter.port }}
           {{- else if .Values.dataplatform.emitter.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.dataplatform.emitter.customLivenessProbe "context" $) | nindent 12 }}
@@ -101,7 +101,7 @@ spec:
           {{- if .Values.dataplatform.emitter.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.dataplatform.emitter.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
-              path: "/metrics"
+              path: "/v1/health"
               port: {{ .Values.dataplatform.emitter.port }}
           {{- else if .Values.dataplatform.emitter.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.dataplatform.emitter.customReadinessProbe "context" $) | nindent 12 }}
