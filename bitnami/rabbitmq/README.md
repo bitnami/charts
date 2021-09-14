@@ -54,7 +54,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
 
-### RabitMQ Image parameters
+### RabbitMQ Image parameters
 
 | Name                | Description                                                    | Value                |
 | ------------------- | -------------------------------------------------------------- | -------------------- |
