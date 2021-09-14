@@ -1,0 +1,86 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{include "argo-workflows.controller.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: controller
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+data:
+  config: |
+    {{- if .Values.controller.instanceID.enabled }}
+    {{- if .Values.controller.instanceID.useReleaseName }}
+    instanceID: {{ .Release.Name }}
+    {{- else }}
+    instanceID: {{ .Values.controller.instanceID.explicitID }}
+    {{- end }}
+    {{- end }}
+    containerRuntimeExecutor: {{ .Values.controller.containerRuntimeExecutor }}
+    {{- if .Values.controller.containerRuntimeExecutors }}
+    containerRuntimeExecutors:
+    {{- include "common.tplvalues.render" (dict "value" .Values.controller.containerRuntimeExecutors "context" $) | nindent 6 }}
+    {{- end }}
+    {{- if .Values.controller.parallelism }}
+    parallelism: {{ .Values.controller.parallelism }}
+    {{- end }}
+    {{- if .Values.controller.namespaceParallelism }}
+    namespaceParallelism: {{ .Values.controller.namespaceParallelism }}
+    {{- end }}
+    {{- if or .Values.executor.resources .Values.executor.extraEnvVars .Values.executor.securityContext }}
+    executor:
+      {{- if .Values.executor.resources }}
+      resources: {{- include "common.tplvalues.render" (dict "value" .Values.executor.resources "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.executor.extraEnvVars }}
+      env: {{- include "common.tplvalues.render" (dict "value" .Values.executor.extraEnvVars "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.executor.securityContext }}
+      securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.executor.securityContext "context" $) | nindent 8 }}
+      {{- end }}
+    {{- end }}
+    {{- if .Values.controller.artifactRepository.enabled }}
+    artifactRepository:
+      {{- if .Values.controller.artifactRepository.archiveLogs }}
+      archiveLogs: {{ .Values.controller.artifactRepository.archiveLogs }}
+      {{- end }}
+      {{- if .Values.controller.artifactRepository.configuration }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.controller.artifactRepository.configuration "context" $) | nindent 6 }}
+      {{- end }}
+    {{- end}}
+    {{- if .Values.controller.metrics.enabled }}
+    metricsConfig: {{- include "common.tplvalues.render" (dict "value" .Values.controller.metrics "context" $) | nindent 6 }}
+    {{- end }}
+    {{- if .Values.controller.telemetry.enabled }}
+    telemetryConfig: {{- include "common.tplvalues.render" (dict "value" .Values.controller.telemetry "context" $) | nindent 6 }}
+    {{- end }}
+    {{- if .Values.controller.persistence }}
+    persistence:
+      connectionPool:
+        maxIdleConns: {{ .Values.controller.persistence.connectionPool.maxIdleConns }}
+        maxOpenConns: {{ .Values.controller.persistence.connectionPool.maxOpenConns }}
+      nodeStatusOffLoad: {{ .Values.controller.persistence.nodeStatusOffLoad }}
+      archive: {{ .Values.controller.persistence.archive }}
+      {{- if .Values.controller.persistence.postgresql.enabled }}
+      {{- omit .Values.controller.persistence.postgresql "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      {{- if .Values.controller.persistence.mysql.enabled }}
+      {{- omit .Values.controller.persistence.mysql "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      {{- end }}
+    {{- if .Values.controller.workflowDefaults }}
+    workflowDefaults: {{- include "common.tplvalues.render" (dict "value" .Values.controller.workflowDefaults "context" $) | nindent 6 }}
+    {{- end }}
+    {{- if .Values.server.sso }}
+    sso: {{- include "common.tplvalues.render" (dict "value" .Values.server.sso "context" $) | nindent 6 }}
+    {{- end }}
+    {{- if .Values.controller.workflowRestrictions }}
+    workflowRestrictions: {{- include "common.tplvalues.render" (dict "value" .Values.controller.workflowRestrictions "context" $) | nindent 6 }}
+    {{- end }}
+    {{- if .Values.controller.links }}
+    links: {{- include "common.tplvalues.render" (dict "value" .Values.controller.links "context" $) | nindent 6 }}
+    {{- end }}
