@@ -95,7 +95,7 @@ electionID: ingress-controller-leader
 reportNodeInternalIp: false
 ## @param watchIngressWithoutClass Process Ingress objects without ingressClass annotation/ingressClassName field
 ##
-watchIngressWithoutClass: nginx
+watchIngressWithoutClass: false
 ## @param ingressClass Name of the ingress class to route through this controller
 ##
 ingressClass: nginx
