@@ -1,0 +1,1027 @@
+## @section Global parameters
+## Global Docker image parameters
+## Please, note that this will override the image parameters, including dependencies, configured to use the global value
+## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+
+## @param global.imageRegistry Global Docker image registry
+## @param global.imagePullSecrets Global Docker registry secret names as an array
+## @param global.storageClass Global StorageClass for Persistent Volume(s)
+##
+global:
+  imageRegistry: ""
+  ## E.g.
+  ## imagePullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  imagePullSecrets: []
+  storageClass: ""
+
+## @section Common parameters
+
+## @param kubeVersion Override Kubernetes version
+##
+kubeVersion: ""
+## @param nameOverride String to partially override common.names.fullname
+##
+nameOverride: ""
+## @param fullnameOverride String to fully override common.names.fullname
+##
+fullnameOverride: ""
+## @param commonLabels Labels to add to all deployed objects
+##
+commonLabels: {}
+## @param commonAnnotations Annotations to add to all deployed objects
+##
+commonAnnotations: {}
+## @param clusterDomain Kubernetes cluster domain name
+##
+clusterDomain: cluster.local
+## @param extraDeploy Array of extra objects to deploy with the release
+##
+extraDeploy: []
+## @param singleNamespace Restrict Argo to only deploy into a single namespace by apply Roles and RoleBindings instead of the Cluster equivalents, and start argo-cli with the --namespaced flag. Use it in clusters with strict access policy.
+##
+singleNamespace: false
+## @param createAggregateRoles Create Aggregated cluster roles
+##
+createAggregateRoles: true
+
+## Enable diagnostic mode in the deployment
+##
+diagnosticMode:
+  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+  ##
+  enabled: false
+  ## @param diagnosticMode.command Command to override all containers in the deployment
+  ##
+  command:
+    - sleep
+  ## @param diagnosticMode.args Args to override all containers in the deployment
+  ##
+  args:
+    - infinity
+
+## @section Argo Workflows Server configuration parameters
+
+## Argo Workflows server (based on the CLI) image
+##
+server:
+  ## Bitnami Argo Workflow CLI image
+  ## ref: https://hub.docker.com/r/bitnami/argo-workflow-cli/tags/
+  ## @param server.image.registry server image registry
+  ## @param server.image.repository server image repository
+  ## @param server.image.tag server image tag (immutable tags are recommended)
+  ## @param server.image.pullPolicy server image pull policy
+  ## @param server.image.pullSecrets server image pull secrets
+  ## @param server.image.debug Enable server image debug mode
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/bitnami-docker-argo-workflow-cli
+    tag: %%IMAGE_TAG%%
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+    ## Enable debug mode
+    ##
+    debug: false
+  ## @param server.enabled Enable server deployment
+  ##
+  enabled: true
+  ## @param server.replicaCount Number of server replicas to deploy
+  ##
+  replicaCount: 1
+  ## Configure extra options for server containers' liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param server.livenessProbe.enabled Enable livenessProbe on server nodes
+  ## @param server.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param server.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param server.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param server.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param server.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 10
+    periodSeconds: 20
+    timeoutSeconds: 1
+    failureThreshold: 3
+    successThreshold: 1
+  ## @param server.readinessProbe.enabled Enable readinessProbe on server nodes
+  ## @param server.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param server.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param server.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param server.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param server.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 10
+    periodSeconds: 20
+    timeoutSeconds: 1
+    failureThreshold: 3
+    successThreshold: 1
+  ## @param server.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param server.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## server resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param server.resources.limits The resources limits for the server containers
+  ## @param server.resources.requests The requested resources for the server containers
+  ##
+  resources:
+    limits: {}
+    requests: {}
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param server.podSecurityContext.enabled Enabled server pods' Security Context
+  ## @param server.podSecurityContext.fsGroup Set server pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param server.containerSecurityContext.enabled Enabled server containers' Security Context
+  ## @param server.containerSecurityContext.runAsUser Set server containers' Security Context runAsUser
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+
+  ## SSO configuration when SSO is specified as a server auth mode.
+  ## All the values are required. SSO is activated by adding --auth-mode=sso to the server command line.
+  ## @param server.sso.enabled Enable SSO configuration for the server auth mode
+  ## @param server.sso.issuer Root URL for the OIDC identity provider
+  ## @param server.sso.clientId.name Name of the secret containing the OIDC client ID
+  ## @param server.sso.clientId.key Key in the secret to obtain the OIDC client ID
+  ## @param server.sso.clientSecret Name of the secret containing the OIDC client secret
+  ## @param server.sso.clientSecret.key Key in the secret to obtain the OIDC client secret
+  ## @param server.sso.redirectUrl The OIDC redirect URL. Should be in the form <argo-root-url>/oauth2/callback.
+  ## @param server.sso.rbac.enabled Create RBAC resources for SSO
+  ## @param server.sso.secretWhitelist Restricts the secrets that the server can read
+  ## @param server.sso.scopes Scopes requested from the SSO ID provider
+  sso:
+    enabled: false
+    ## The root URL of the OIDC identity provider.
+    ## E.g.
+    ## issuer: "https://accounts.google.com"
+    issuer:
+    ## Name of a secret and a key in it to retrieve the app OIDC client ID from.
+    ##
+    clientId:
+      name: ""
+      key: ""
+    ## Name of a secret and a key in it to retrieve the app OIDC client secret from.
+    ##
+    clientSecret:
+      name: ""
+      key: ""
+    ## The OIDC redirect URL. Should be in the form <argo-root-url>/oauth2/callback.
+    ##
+    redirectUrl: ""
+    ## Create RBAC resources for SSO
+    rbac:
+      enabled: true
+    ## When present, restricts secrets the server can read to a given list.
+    ## You can use it to restrict the server to only be able to access the
+    ## service account token secrets that are associated with service accounts
+    ## used for authorization.
+    ##
+    secretWhitelist: []
+    ## Scopes requested from the SSO ID provider.  The 'groups' scope requests
+    ## group membership information, which is usually used for authorization
+    ## decisions.
+    ##
+    scopes: []
+
+  ## @param server.clusterWorkflowTemplates.enabled Create ClusterRole and CRB for the controoler to access ClusterWorkflowTemplates
+  ## @param server.clusterWorkflowTemplates.enableEditing Give the server permissions to edit ClusterWorkflowTemplates
+  ##
+  clusterWorkflowTemplates:
+    # Create a ClusterRole and CRB for the controller to access ClusterWorkflowTemplates.
+    enabled: true
+    enableEditing: true
+  ## Pod disruption budget configuration
+  ## Ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+  ## @param server.pdb.enabled Create Pod Disruption Budget for the server component
+  ## @param server.minAvailable Sets the min number of pods availables for the Pod Disruption Budget
+  ## @param server.maxAvailable Sets the max number of pods unavailable for the Pod Disruption Budget
+  ##
+  pdb:
+    enabled: false
+    minAvailable: 1
+    maxUnavailable: 1
+
+  ## Run the argo server in "secure" mode.
+  ## Ref: https://argoproj.github.io/argo-workflows/tls/
+  ## @param server.secure Run Argo server in secure mode
+  ##
+  secure: false
+
+  ## Base URL for client resources
+  ## Ref: https://github.com/argoproj/argo-workflows/issues/716#issuecomment-433213190
+  ##
+  baseHref: /
+
+  ## Server container port
+  ## @param server.containerPort argo Server container port
+  containerPort: 2746
+
+  ## ServiceAccount configuration
+  ##
+  serviceAccount:
+    ## @param server.serviceAccount.create Specifies whether a ServiceAccount should be created
+    ##
+    create: true
+    ## @param server.serviceAccount.name The name of the ServiceAccount to use.
+    ## If not set and create is true, a name is generated using the common.names.fullname template
+    ##
+    name: ""
+
+  ## @param server.existingConfigmap The name of an existing ConfigMap with your custom configuration for server
+  ##
+  existingConfigmap:
+  ## @param server.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param server.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param server.hostAliases server pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param server.podLabels Extra labels for server pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param server.podAnnotations Annotations for server pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param server.podAffinityPreset Pod affinity preset. Ignored if `server.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param server.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `server.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## Node server.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param server.nodeAffinityPreset.type Node affinity preset type. Ignored if `server.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param server.nodeAffinityPreset.key Node label key to match. Ignored if `server.affinity` is set
+    ##
+    key: ""
+    ## @param server.nodeAffinityPreset.values Node label values to match. Ignored if `server.affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param server.affinity Affinity for server pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `server.podAffinityPreset`, `server.podAntiAffinityPreset`, and `server.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param server.nodeSelector Node labels for server pods assignment
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+  ## @param server.tolerations Tolerations for server pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param server.updateStrategy.type server statefulset strategy type
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    ## StrategyType
+    ## Can be set to RollingUpdate or OnDelete
+    ##
+    type: RollingUpdate
+  ## @param server.priorityClassName server pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param server.lifecycleHooks for the server container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param server.extraEnvVars Array with extra environment variables to add to server nodes
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param server.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for server nodes
+  ##
+  extraEnvVarsCM:
+  ## @param server.extraEnvVarsSecret Name of existing Secret containing extra env vars for server nodes
+  ##
+  extraEnvVarsSecret:
+  ## @param server.extraVolumes Optionally specify extra list of additional volumes for the server pod(s)
+  ##
+  extraVolumes: []
+  ## @param server.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the server container(s)
+  ##
+  extraVolumeMounts: []
+  ## @param server.sidecars Add additional sidecar containers to the server pod(s)
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: {}
+  ## @param server.initContainers Add additional init containers to the server pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: {}
+
+  ## Server service parameters
+  ##
+  service:
+    ## @param server.service.type server service type
+    ##
+    type: LoadBalancer
+    ## @param server.service.port server service HTTP port
+    ##
+    port: 80
+    ## @param server.service.httpsPort server service HTTPS port
+    ##
+    httpsPort: 443
+    ## Node ports to expose
+    ## @param server.service.nodePorts.http Node port for HTTP
+    ## @param server.service.nodePorts.https Node port for HTTPS
+    ## NOTE: choose port between <30000-32767>
+    ##
+    nodePorts:
+      http:
+      https:
+    ## @param server.service.clusterIP server service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP:
+    ## @param server.service.loadBalancerIP server service Load Balancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerIP:
+    ## @param server.service.loadBalancerSourceRanges server service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param server.service.externalTrafficPolicy server service external traffic policy
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param server.service.annotations Additional custom annotations for server service
+    ##
+    annotations: {}
+
+## @section Argo Workflows Controller configuration parameters
+
+## Argo Workflows Controller
+##
+controller:
+  ## Bitnami Argo Workflow Controller image
+  ## ref: https://hub.docker.com/r/bitnami/argo-workflow-controller/tags/
+  ## @param controller.image.registry controller image registry
+  ## @param controller.image.repository controller image repository
+  ## @param controller.image.tag controller image tag (immutable tags are recommended)
+  ## @param controller.image.pullPolicy controller image pull policy
+  ## @param controller.image.pullSecrets controller image pull secrets
+  ## @param controller.image.debug Enable controller image debug mode
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/bitnami-docker-argo-workflow-controller
+    tag: %%IMAGE_TAG%%
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+    ## Enable debug mode
+    ##
+    debug: false
+  ## @param controller.replicaCount Number of controller replicas to deploy
+  ##
+  replicaCount: 1
+  ## Configure extra options for controller containers' liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param controller.livenessProbe.enabled Enable livenessProbe on controller nodes
+  ## @param controller.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param controller.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param controller.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param controller.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param controller.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 90
+    periodSeconds: 60
+    timeoutSeconds: 30
+    failureThreshold: 3
+    successThreshold: 1
+  ## @param controller.readinessProbe.enabled Enable readinessProbe on controller nodes
+  ## @param controller.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param controller.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param controller.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param controller.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param controller.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 90
+    periodSeconds: 60
+    timeoutSeconds: 30
+    failureThreshold: 3
+    successThreshold: 1
+  ## @param controller.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param controller.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## controller resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param controller.resources.limits The resources limits for the controller containers
+  ## @param controller.resources.requests The requested resources for the controller containers
+  ##
+  resources:
+    limits: {}
+    requests: {}
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param controller.podSecurityContext.enabled Enabled controller pods' Security Context
+  ## @param controller.podSecurityContext.fsGroup Set controller pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param controller.containerSecurityContext.enabled Enabled controller containers' Security Context
+  ## @param controller.containerSecurityContext.runAsUser Set controller containers' Security Context runAsUser
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+
+  ## Server container port
+  ## @param server.containerPort argo Server container port
+  containerPort: 6060
+
+  ## Controller persistence parameters. It can also be connected to an existing postgresql. Check
+  ## @param controller.persistence.enabled Enabled controller persistence
+  ## @param controller.persistence.connectionPool.maxIdleConns Msximun number of postgresql connections
+  ## @param controller.persistence.connectionPool.maxopenConns Maximun number of open connections
+  ## @param controller.persistence.nodeStatusOffLoad Save the entire workflow into etcd and DB
+  ## @param controller.persistence.archive Enable archiving old workflows
+  ## @param controller.persistence.postgresql.enabled Enable Postgresql persistence
+  ## @param controller.persistence.postgresql.host Host to use postgresql persistence
+  ## @param controller.persistence.postgresql.port Port for Postgresql
+  ## @param controller.persistence.postgresql.database Postgresql database
+  ## @param controller.persistence.postgresql.tableName Postgresql table name
+  ## @param controller.persistence.postgresql.userNameSecret.name Name of the secret containing the postgresql username
+  ## @param controller.persistence.postgresql.userNameSecret.key Key of the secret containing the postgresql username
+  ## @param controller.persistence.postgresql.passwordSecret.name Name of the secret containing the postgresql password
+  ## @param controller.persistence.postgresql.passwordSecret.name Key of the secret containing the postgresql password
+  ## @param controller.persistence.mysql.enabled Enable MySQL persistence
+  ## @param controller.persistence.mysql.host Host to use mysql persistence
+  ## @param controller.persistence.mysql.port Port for Postgresql
+  ## @param controller.persistence.mysql.database Postgresql database
+  ## @param controller.persistence.mysql.tableName Postgresql table name
+  ## @param controller.persistence.mysql.userNameSecret.name Name of the secret containing the mysql username
+  ## @param controller.persistence.mysql.userNameSecret.key Key of the secret containing the mysql username
+  ## @param controller.persistence.mysql.passwordSecret.name Name of the secret containing the mysql password
+  ## @param controller.persistence.mysql.passwordSecret.name Key of the secret containing the mysql password
+  ##
+  persistence:
+    enabled: false
+    connectionPool:
+      maxIdleConns: 100
+      maxOpenConns: 0
+    ## Save the entire workflow into etcd and DB
+    nodeStatusOffLoad: false
+    ## Enable archiving of old workflows
+    archive: false
+    postgresql:
+      enabled: false
+      host: '{{ include "argo-workflows.postgresql.fullname" . }}'
+      port: 5432
+      database: postgres
+      tableName: argo_workflows
+      ## the database secrets must be in the same namespace of the controller
+      userNameSecret:
+        name: argo-postgres-config
+        key: username
+      passwordSecret:
+        name: argo-postgres-config
+        key: password
+    mysql:
+      enabled: false
+      host: '{{ include "argo-workflows.mysql.fullname" . }}'
+      port: 3306
+      database: mysql
+      tableName: argo_workflows
+      ## the database secrets must be in the same namespace of the controller
+      userNameSecret:
+        name: argo-mysql-config
+        key: username
+      passwordSecret:
+        name: argo-mysql-config
+        key: password
+  ## Configure the controller to accept only submissions with a matching instanceID attribute
+  ## @param controller.instanceID.enabled Enable submission filtering based on instanceID attribute. Requires to set instanceID.useReleaseName or instanceID.explicitID
+  ## @param controller.instanceID.useReleaseName Use the release name to filter submissions
+  ## @param controller.instanceID.explicitID Filter submissions based on an explicit instance ID
+  ##
+  instanceID:
+    enabled: false
+    ## NOTE: If `instanceID.enabled` is set to `true` then either `instanceID.userReleaseName` or `instanceID.explicitID` must be defined.
+    useReleaseName: false
+    explicitID: ""
+  ## @param controller.clusterWorkflowTemplates.enabled Whether to create a ClusterRole and Cluster Role Binding to access ClusterWokflowTemplates resources
+  ##
+  clusterWorkflowTemplates:
+    enabled: true
+  ## Default container runtime that the executor will use
+  ## Ref: https://argoproj.github.io/argo-workflows/workflow-executors/
+  ## @param controller.containerRuntimeExecutor Specifies the container runtime for the executor
+  ##
+  containerRuntimeExecutor: docker
+  ## Array containing extra container runtime executors configurations
+  ## Ref: https://argoproj.github.io/argo-workflows/workflow-executors/
+  ## @param controller.containerRuntimeExecutors Array containing extra container runtime executors configurations
+  ## E.g:
+  ##  - name: emissary
+  ##     selector:
+  ##       matchLabels:
+  ##         workflows.argoproj.io/container-runtime-executor: emissary
+  ##
+  containerRuntimeExecutors: []
+  ## Parallelism dictates how many workflows can be running at the same time
+  ## @param controller.parallelism Number of workflows running at the same time
+  ##
+  parallelism:
+  ## Maximun number of workflows running in a namespace
+  ## @param controller.namespaceParallelism Maximun number of workflows running in a namespace
+  ##
+  namespaceParallelism:
+  ## Artifact repository configuration to store controller artifacts
+  ## @param controller.artifactRepository.enabled Enable storing controller artifacts
+  ## @param controller.artifactRepository.archiveLogs Whether to archive the main container logs in the artifact repository
+  ## @param controller.artifactRepository.configuration Object configuring the desired artifact repository. Check https://argoproj.github.io/argo-workflows/fields/#artifactoryartifact
+  ##
+  artifactRepository:
+    enabled: false
+    archiveLogs: false
+    ## E.g:
+    ## gcs:
+    ##   bucket: my-bucket-name
+    ##   key: path/in/bucket
+    ##   serviceAccountKeySecret:
+    ##     name: my-gcs-credentials
+    ##     key: serviceAccountKey
+    ##
+    configuration: {}
+  ## Metrics configuration for the controller
+  ## @param controller.metrics.enabled Enable controller metrics exporter
+  ## @param controller.metrics.path Path to expose controller metrics
+  ## @param controller.metrics.port Port to expose controller metrics
+  ## @param controller.metrics.servicePort Service port to expose controller metrics
+  ## @param controller.metrics.servicePortName Name of the service port that expose controller metrics
+  ## @param controller.serviceMonitor.enabled Enable prometheus service monitor configuration
+  ##
+  metrics:
+    enabled: false
+    path: /metrics
+    port: 9090
+    servicePort: 8080
+    servicePortName: metrics
+    serviceMonitor:
+      enabled: false
+  ## Telemetry configuration for the controller
+  ## @param controller.telemetry.enabled Enable telemetry for the controller
+  ## @param controller.telemetry.path Path to expose telemetry information
+  ## @param controller.telemetry.port Port to expose telemetry information
+  ## @param controller.telemetry.servicePort Service port to expose telemetry information
+  ## @param controller.telemetry.servicePortName Name of the service port that expose telemetry information
+  ##
+  telemetry:
+    enabled: false
+    path: /telemetry
+    port: 8081
+    servicePort: 8081
+    servicePortName: telemetry
+  ## Workflows default configuration for versions greater than 2.7
+  ## Ref: https://argoproj.github.io/argo-workflows/default-workflow-specs/#setting-default-workflow-values
+  ## @param controller.workflowDefaults Default workflow configuration for versions greater than 2.7
+  ## E.g
+  ##  spec:
+  ##    ttlStrategy:
+  ##      secondsAfterCompletion: 84600
+  ##
+  workflowDefaults: {}
+  ## Number of workflow workers to deploy
+  ## @param controller.workflowWorkers Number of workflow workers to deploy
+  ##
+  workflowWorkers: 32
+  ## Number of pod workers to deploy
+  ## @param controller.podWorkers Number of pod workers to deploy
+  ##
+  podWorkers: 32
+  ## Workflows restrictions. Only for versions 2.9 or greater.
+  ## Ref: https://argoproj.github.io/argo-workflows/workflow-restrictions/
+  ## @param controller.workfloRestrictions Workflows restrictions for the controller
+  ##
+  workflowRestrictions: {}
+  ## Workflows custom links
+  ## Ref: https://argoproj.github.io/argo-workflows/links/
+  ## @param controller.links Configure shown custom links
+  ##
+  links: []
+  ## Namespaces allowed to run workflows
+  ## @param controller.workflowNamespaces Namespaces allowed to run workflows
+  workflowNamespaces:
+    - default
+  ## Logging level for the controller
+  ## @param controller.logging.level Level for the controller logging
+  ## @param contrller.logging.globalLevel Global logging level for the controller
+  ##
+  logging:
+    level: info
+    globalLevel: "0"
+  ## Pod disruption budget configuration
+  ## Ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+  ## @param controller.pdb.enabled Create Pod Disruption Budget for the controller component
+  ## @param controller.minAvailable Sets the min number of pods availables for the Pod Disruption Budget
+  ## @param controller.maxAvailable Sets the max number of pods unavailable for the Pod Disruption Budget
+  ##
+  pdb:
+    enabled: false
+    minAvailable: 1
+    maxUnavailable: 1
+  ## @param controller.existingConfigmap The name of an existing ConfigMap with your custom configuration for controller
+  ##
+  existingConfigmap:
+  ## @param controller.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param controller.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param controller.hostAliases controller pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param controller.podLabels Extra labels for controller pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param controller.podAnnotations Annotations for controller pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param controller.podAffinityPreset Pod affinity preset. Ignored if `controller.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param controller.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `controller.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## Node controller.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param controller.nodeAffinityPreset.type Node affinity preset type. Ignored if `controller.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param controller.nodeAffinityPreset.key Node label key to match. Ignored if `controller.affinity` is set
+    ##
+    key: ""
+    ## @param controller.nodeAffinityPreset.values Node label values to match. Ignored if `controller.affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param controller.affinity Affinity for controller pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `controller.podAffinityPreset`, `controller.podAntiAffinityPreset`, and `controller.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param controller.nodeSelector Node labels for controller pods assignment
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+  ## @param controller.tolerations Tolerations for controller pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param controller.updateStrategy.type controller statefulset strategy type
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    ## StrategyType
+    ## Can be set to RollingUpdate or OnDelete
+    ##
+    type: RollingUpdate
+  ## @param controller.priorityClassName controller pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param controller.lifecycleHooks for the controller container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param controller.extraEnvVars Array with extra environment variables to add to controller nodes
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param controller.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for controller nodes
+  ##
+  extraEnvVarsCM:
+  ## @param controller.extraEnvVarsSecret Name of existing Secret containing extra env vars for controller nodes
+  ##
+  extraEnvVarsSecret:
+  ## @param controller.extraVolumes Optionally specify extra list of additional volumes for the controller pod(s)
+  ##
+  extraVolumes: []
+  ## @param controller.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the controller container(s)
+  ##
+  extraVolumeMounts: []
+  ## @param controller.sidecars Add additional sidecar containers to the controller pod(s)
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: {}
+  ## @param controller.initContainers Add additional init containers to the controller pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: {}
+
+  ## Controller service parameters
+  ##
+  service:
+    ## @param controller.service.type controller service type
+    ##
+    type: LoadBalancer
+    ## Node ports to expose
+    ## @param controller.service.nodePorts.http Node port for HTTP
+    ## @param controller.service.nodePorts.https Node port for HTTPS
+    ## NOTE: choose port between <30000-32767>
+    ##
+    nodePorts:
+      http:
+      https:
+    ## @param controller.service.clusterIP controller service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP:
+    ## @param controller.service.loadBalancerIP controller service Load Balancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerIP:
+    ## @param controller.service.loadBalancerSourceRanges controller service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param controller.service.externalTrafficPolicy controller service external traffic policy
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param controller.service.annotations Additional custom annotations for controller service
+    ##
+    annotations: {}
+  ## Controller RBAC configuration
+  ##
+  rbac:
+    ## @param controller.rbac.create Specifies whether RBAC resources should be created
+    ##
+    create: false
+
+## @section Executor configuration section
+
+executor:
+  ## Bitnami Argo Workflow Executor image
+  ## ref: https://hub.docker.com/r/bitnami/argo-workflow-exec/tags/
+  ## @param executor.image.registry executor image registry
+  ## @param executor.image.repository executor image repository
+  ## @param executor.image.tag executor image tag (immutable tags are recommended)
+  ## @param executor.image.pullPolicy executor image pull policy
+  ## @param executor.image.pullSecrets executor image pull secrets
+  ## @param executor.image.debug Enable executor image debug mode
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/bitnami-docker-argo-workflow-exec
+    tag: %%TODO%
+    pullPolicy: Always
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+  ## Init container's resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param executor.resources.limits The resources limits for the init container
+  ## @param executor.resources.requests The requested resources for the init container
+  ##
+  resources:
+    limits: {}
+    requests: {}
+  ## @param executor.extraEnvVars Array with extra environment variables to add to server nodes
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param executor.podSecurityContext.enabled Enabled executor pods' Security Context
+  ## @param executor.podSecurityContext.fsGroup Set executor pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param executor.containerSecurityContext.enabled Enabled executor containers' Security Context
+  ## @param executor.containerSecurityContext.runAsUser Set executor containers' Security Context runAsUser
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+
+## @section Traffic Exposure Parameters
+
+## Server ingress parameters
+## ref: http://kubernetes.io/docs/user-guide/ingress/
+##
+ingress:
+  ## @param ingress.enabled Enable ingress record generation for server
+  ##
+  enabled: false
+  ## @param ingress.pathType Ingress path type
+  ##
+  pathType: ImplementationSpecific
+  ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
+  ##
+  apiVersion:
+  ## @param ingress.hostname Default host for the ingress record
+  ##
+  hostname: server.local
+  ## @param ingress.path Default path for the ingress record
+  ## NOTE: You may need to set this to '/*' in order to use this with ALB ingress controllers
+  ##
+  path: /
+  ## @param ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+  ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster.
+  ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+  ##
+  ingressClassName: ""
+  ## @param ingress.annotations Additional custom annotations for the ingress record
+  ## NOTE: If `ingress.certManager=true`, annotation `kubernetes.io/tls-acme: "true"` will automatically be added
+  ##
+  annotations: {}
+  ## @param ingress.tls Enable TLS configuration for the host defined at `ingress.hostname` parameter
+  ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.ingress.hostname }}`
+  ## You can:
+  ##   - Use the `ingress.secrets` parameter to create this TLS secret
+  ##   - Relay on cert-manager to create it by setting `ingress.certManager=true`
+  ##   - Relay on Helm to create self-signed certificates by setting `ingress.selfSigned=true`
+  ##
+  tls: false
+  ## @param ingress.certManager Add the corresponding annotations for cert-manager integration
+  ##
+  certManager: false
+  ## @param ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
+  ##
+  selfSigned: false
+  ## @param ingress.extraHosts An array with additional hostname(s) to be covered with the ingress record
+  ## e.g:
+  ## extraHosts:
+  ##   - name: server.local
+  ##     path: /
+  ##
+  extraHosts: []
+  ## @param ingress.extraPaths An array with additional arbitrary paths that may need to be added to the ingress under the main host
+  ## e.g:
+  ## extraPaths:
+  ## - path: /*
+  ##   backend:
+  ##     serviceName: ssl-redirect
+  ##     servicePort: use-annotation
+  ##
+  extraPaths: []
+  ## @param ingress.extraTls TLS configuration for additional hostname(s) to be covered with this ingress record
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+  ## e.g:
+  ## extraTls:
+  ## - hosts:
+  ##     - server.local
+  ##   secretName: server.local-tls
+  ##
+  extraTls: []
+  ## @param ingress.secrets Custom TLS certificates as secrets
+  ## NOTE: 'key' and 'certificate' are expected in PEM format
+  ## NOTE: 'name' should line up with a 'secretName' set further up
+  ## If it is not set and you're using cert-manager, this is unneeded, as it will create a secret for you with valid certificates
+  ## If it is not set and you're NOT using cert-manager either, self-signed certificates will be created valid for 365 days
+  ## It is also possible to create and manage the certificates outside of this helm chart
+  ## Please see README.md for more information
+  ## e.g:
+  ## secrets:
+  ##   - name: server.local-tls
+  ##     key: |-
+  ##       -----BEGIN RSA PRIVATE KEY-----
+  ##       ...
+  ##       -----END RSA PRIVATE KEY-----
+  ##     certificate: |-
+  ##       -----BEGIN CERTIFICATE-----
+  ##       ...
+  ##       -----END CERTIFICATE-----
+  ##
+  secrets: []
+
+## @section Workflows configuration
+
+workflow:
+  ## Service account configuration for workflows
+  ## @param workflow.serviceAccount.create Whether to create a service account to run workflows
+  ## @param workflow.serviceAccount.name Service account name to run workflows
+  ##
+  serviceAccount:
+    create: false
+    name:
+  ## Create RBAC resources to run workflows.
+  ## A Role and Role Bindding are created per namespace in controller.workflowNamespaces
+  ## @param workflow.rbac.create Whether to create RBAC resource to run workflows
+  ##
+  rbac:
+    create: true
