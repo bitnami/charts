@@ -19,7 +19,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 - Kubernetes 1.12+
 - Helm 3.1.0
 
-## Installing the Chart
+## Insta``ling the Chart
 
 To install the chart with the release name `my-release`:
 
@@ -279,20 +279,57 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Airflow ldap parameters
 
+
+            - name: AIRFLOW_LDAP_URI
+              value: {{ .Values.ldap.uri }}
+            - name: AIRFLOW_LDAP_SEARCH
+              value: {{ .Values.ldap.base }}
+            - name: AIRFLOW_LDAP_UID_FIELD
+              value: {{ .Values.ldap.uidField }}
+            - name: AIRFLOW_LDAP_BIND_USER
+              value: {{ .Values.ldap.binddn }}
+            - name: AIRFLOW_LDAP_BIND_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "airflow.ldapSecretName" . }}
+                  key: bind-password
+            - name: AIRFLOW_LDAP_USER_REGISTRATION
+              value: {{ .Values.ldap.userRegistration | quote }}
+            - name: AIRFLOW_LDAP_USER_REGISTRATION_ROLE
+              value: {{ .Values.ldap.userRegistrationRole | quote }}
+            - name: AIRFLOW_LDAP_ROLES_MAPPING
+              value: {{ .Values.ldap.rolesMapping | quote }}
+            - name: AIRFLOW_LDAP_ROLES_SYNC_AT_LOGIN
+              value: {{ .Values.ldap.rolesSyncAtLogin | quote }}
+            - name: AIRFLOW_LDAP_USE_TLS
+              value: {{ ternary "True" "False" .Values.ldap.tls.enabled | quote }}
+            {{- if .Values.ldap.tls.enabled }}
+            - name: AIRFLOW_LDAP_ALLOW_SELF_SIGNED
+              value: {{ .Values.ldap.tls.allowSelfSigned | quote }}            
+            - name: AIRFLOW_LDAP_TLS_CA_CERTIFICATE
+              value: {{ include "airflow.ldapCAFilename" . | quote }}
+
+
+
+
+
 | Name                             | Description                                                                                      | Value                      |
 | -------------------------------- | ------------------------------------------------------------------------------------------------ | -------------------------- |
 | `ldap.enabled`                   | Enable LDAP authentication                                                                       | `false`                    |
 | `ldap.uri`                       | Server URI, eg. ldap://ldap_server:389                                                           | `ldap://ldap_server:389`   |
 | `ldap.base`                      | Base of the search, eg. ou=example,o=org                                                         | `ou=example,o=org`         |
+| `ldap.uidField`                  | Field used for uid                                                                               | `uid`                      |
 | `ldap.binddn`                    | Bind DN                                                                                          | `cn=user,ou=example,o=org` |
 | `ldap.bindpw`                    | Bind Password                                                                                    | `""`                       |
-| `ldap.uidField`                  | Field used for uid                                                                               | `uid`                      |
+| `ldap.userRegistration`          | Set to True to enable user self registration                                                     | `True`                     |
+| `ldap.ldap.userRegistrationRole` | Set role name to be assign when a user registers himself                                         | `Public`                   |
+| `ldap.ldap.rolesMapping`         | mapping from LDAP DN to a list of roles                                                          | `{ "cn=All,ou=Groups,dc=example,dc=org": ["User"], "cn=Admins,ou=Groups,dc=example,dc=org": ["Admin"], }`|
 | `ldap.tls.enabled`               | Enabled TLS/SSL for LDAP, you must include the CA file.                                          | `false`                    |
 | `ldap.tls.allowSelfSigned`       | Allow to use self signed certificates                                                            | `true`                     |
 | `ldap.tls.CAcertificateSecret`   | Name of the existing secret containing the certificate CA file that will be used by ldap client. | `""`                       |
 | `ldap.tls.CAcertificateFilename` | LDAP CA cert filename                                                                            | `""`                       |
 
-
+ldap.rolesMapping
 ### Airflow exposing parameters
 
 | Name                  | Description                                                                            | Value                    |
