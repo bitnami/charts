@@ -93,6 +93,9 @@ electionID: ingress-controller-leader
 ## ref: https://kubernetes.github.io/ingress-nginx/deploy/baremetal/#via-the-host-network
 ##
 reportNodeInternalIp: false
+## @param watchIngressWithoutClass Process Ingress objects without ingressClass annotation/ingressClassName field
+##
+watchIngressWithoutClass: nginx
 ## @param ingressClass Name of the ingress class to route through this controller
 ##
 ingressClass: nginx
