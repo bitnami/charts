@@ -35,6 +35,9 @@ spec:
       {{- if .Values.web.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.web.hostAliases "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.web.schedulerName }}
+      schedulerName: {{ .Values.web.schedulerName }}
+      {{- end }}
       {{- if .Values.web.topologySpreadConstraints }}
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.web.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
