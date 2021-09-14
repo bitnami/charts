@@ -566,6 +566,10 @@ Find more information about how to deal with common errors related to Bitnami’
 
 A major chart version change (like v1.2.3 -> v2.0.0) indicates that there is an incompatible breaking change needing manual actions.
 
+### To 15.0.0
+
+The parameter to enable the usage of StaticIDs was removed. The behaviour is to [always use StaticIDs](https://github.com/bitnami/charts/pull/7278).
+
 ### To 14.8.0
 
 The Redis&trade; sentinel exporter was removed in this version because the upstream project was deprecated. The regular Redis&trade; exporter is included in the sentinel scenario as usual.
