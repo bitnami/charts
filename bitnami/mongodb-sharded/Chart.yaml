@@ -26,5 +26,5 @@ name: mongodb-sharded
 sources:
   - https://github.com/bitnami/bitnami-docker-mongodb-sharded
   - https://mongodb.org
-version: 3.9.4
+version: 3.9.5
 
