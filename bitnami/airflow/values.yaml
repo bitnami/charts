@@ -414,11 +414,11 @@ service:
   ## @param service.type Airflow service type
   ##
   type: ClusterIP
-  ## @param service.ports.https.http Airflow service HTTP port
+  ## @param service.ports.http Airflow service HTTP port
   ##
   ports:
     http: 8080
-  ## @param service.nodePorts.https.http Airflow service NodePort
+  ## @param service.nodePorts.http Airflow service NodePort
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ##
   nodePorts:
@@ -602,7 +602,7 @@ scheduler:
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
-  ## @param web.schedulerName Name of the k8s scheduler (other than default)
+  ## @param scheduler.schedulerName Name of the k8s scheduler (other than default)
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
   schedulerName: ""
@@ -669,7 +669,7 @@ worker:
   ## @param worker.args Override args
   ##
   args: []
-  ## @param controller.lifecycleHooks Add lifecycle hooks to the Airflow Worker container(s)
+  ## @param worker.lifecycleHooks Add lifecycle hooks to the Airflow Worker container(s)
   ##
   lifecycleHooks: {}
   ## @param worker.podAnnotations Add annotations to the worker pods
