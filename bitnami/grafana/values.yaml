@@ -160,11 +160,14 @@ dashboardsProvider:
 ## @param dashboardsConfigMaps Array with the names of a series of ConfigMaps containing dashboards files
 ## They will be mounted by the default dashboard provider if it is enabled
 ## Use an array with the configMap names.
+## uncomment "foldersFromFilesStructure: true" line in default provider config. or create yours dashboard provider.
 ## Example:
 ## dashboardsConfigMaps:
 ##   - configMapName: mydashboard
+##       folderName: AWS
 ##     fileName: mydashboard.json
 ##   - configMapName: myotherdashboard
+##      folderName: AWS
 ##     fileName: myotherdashboard.json
 ##
 dashboardsConfigMaps: []
