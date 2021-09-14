@@ -15,6 +15,9 @@ spec:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: web
   replicas: {{ default 1 .Values.web.replicaCount }}
+  {{- if .Values.web.updateStrategy }}
+  strategy: {{- toYaml .Values.web.updateStrategy | nindent 4 }}
+  {{- end }}
   template:
     metadata:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
@@ -31,6 +34,9 @@ spec:
       {{- include "airflow.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.web.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.web.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.web.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.web.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       priorityClassName: {{ .Values.web.priorityClassName | quote }}
       {{- if .Values.podSecurityContext.enabled }}
@@ -75,6 +81,9 @@ spec:
           {{- if .Values.web.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.web.args "context" $) | nindent 12 }}
           {{- end }}
+          {{- if .Values.web.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.web.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
           env:
             {{- include "airflow.configure.airflow.common"  . | nindent 12 }}
             {{- include "airflow.configure.database" . | nindent 12 }}
@@ -85,7 +94,7 @@ spec:
             - name: AIRFLOW_WEBSERVER_HOST
               value: '0.0.0.0'
             - name: AIRFLOW_WEBSERVER_PORT_NUMBER
-              value: {{ .Values.web.containerPort | quote }}
+              value: {{ .Values.web.containerPorts.http | quote }}
             - name: AIRFLOW_USERNAME
               value: {{ .Values.auth.username }}
             - name: AIRFLOW_PASSWORD
@@ -148,37 +157,49 @@ spec:
             {{- end }}
           ports:
             - name: http
-              containerPort: {{ .Values.web.containerPort }}
-        {{- if .Values.web.livenessProbe.enabled }}
+              containerPort: {{ .Values.web.containerPorts.http }}
+          {{- if .Values.web.livenessProbe.enabled }}
           livenessProbe:
-          {{- if $baseUrl }}
+            {{- if $baseUrl }}
             tcpSocket:
               port: http
-          {{- else }}
+            {{- else }}
             httpGet:
               path: /health
               port: http
-          {{- end }}
+            {{- end }}
             {{ omit .Values.web.livenessProbe "enabled" | toYaml | nindent 12 }}
-        {{- else if .Values.web.customLivenessProbe }}
-          livenessProbe:
-            {{- include "common.tplvalues.render" (dict "value" .Values.web.customLivenessProbe "context" $) | trim | nindent 12 }}
-        {{- end }}
-        {{- if .Values.web.readinessProbe.enabled }}
+          {{- else if .Values.web.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.web.customLivenessProbe "context" $) | trim | nindent 12 }}
+          {{- end }}
+          {{- if .Values.web.readinessProbe.enabled }}
           readinessProbe:
-          {{- if $baseUrl }}
+            {{- if $baseUrl }}
             tcpSocket:
               port: http
-          {{- else }}
+            {{- else }}
             httpGet:
               path: /health
               port: http
-          {{- end }}
+            {{- end }}
             {{ omit .Values.web.readinessProbe "enabled" | toYaml | nindent 12 }}
-        {{- else if .Values.web.customReadinessProbe }}
-          readinessProbe:
-            {{- include "common.tplvalues.render" (dict "value" .Values.web.customReadinessProbe "context" $) | trim | nindent 12 }}
-        {{- end }}
+          {{- else if .Values.web.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.web.customReadinessProbe "context" $) | trim | nindent 12 }}
+          {{- end }}
+          {{- if .Values.web.startupProbe.enabled }}
+          startupProbe:
+            {{- if $baseUrl }}
+            tcpSocket:
+              port: http
+            {{- else }}
+            httpGet:
+              path: /health
+              port: http
+            {{- end }}
+            {{ omit .Values.web.startupProbe "enabled" | toYaml | nindent 12 }}
+          {{- else if .Values.web.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.web.customStartupProbe "context" $) | trim | nindent 12 }}
+          {{- end }}
           volumeMounts:
           {{- if .Files.Glob "files/dags/*.py" }}
             - name: local-dag-files

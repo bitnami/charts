@@ -14,7 +14,7 @@ spec:
   clusterIP: None
   ports:
     - name: worker
-      port: {{ .Values.worker.port }}
+      port: {{ .Values.worker.containerPorts.worker }}
       targetPort: worker
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: worker

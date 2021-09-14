@@ -16,6 +16,9 @@ spec:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: scheduler
   replicas: {{ default 1 .Values.scheduler.replicaCount }}
+  {{- if .Values.scheduler.updateStrategy }}
+  strategy: {{- toYaml .Values.scheduler.updateStrategy | nindent 4 }}
+  {{- end }}
   template:
     metadata:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
@@ -32,6 +35,9 @@ spec:
       {{- include "airflow.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.scheduler.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.scheduler.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.scheduler.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.scheduler.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       priorityClassName: {{ .Values.scheduler.priorityClassName | quote }}
       {{- if .Values.podSecurityContext.enabled }}
@@ -76,6 +82,9 @@ spec:
           {{- if .Values.scheduler.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.scheduler.args "context" $) | nindent 12 }}
           {{- end }}
+          {{- if .Values.scheduler.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.scheduler.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
           env:
             {{- include "airflow.configure.airflow.common" . | nindent 12 }}
             {{- include "airflow.configure.database" . | nindent 12 }}
@@ -86,7 +95,7 @@ spec:
             - name: AIRFLOW_WEBSERVER_HOST
               value: {{ include "common.names.fullname" . }}
             - name: AIRFLOW_WEBSERVER_PORT_NUMBER
-              value: {{ .Values.service.port | quote }}
+              value: {{ .Values.service.ports.http | quote }}
             {{- if .Values.extraEnvVars }}
               {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -112,14 +121,15 @@ spec:
             {{- end }}
           ports:
             - name: task-logs
-              containerPort: {{ .Values.worker.port }}
+              containerPort: {{ .Values.scheduler.containerPorts.taskLogs }}
           {{- if .Values.scheduler.customLivenessProbe }}
-          livenessProbe:
-            {{- include "common.tplvalues.render" (dict "value" .Values.scheduler.customLivenessProbe "context" $) | trim | nindent 12 }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.scheduler.customLivenessProbe "context" $) | trim | nindent 12 }}
           {{- end }}
           {{- if .Values.scheduler.customReadinessProbe }}
-          readinessProbe:
-            {{- include "common.tplvalues.render" (dict "value" .Values.scheduler.customReadinessProbe "context" $) | trim | nindent 12 }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.scheduler.customReadinessProbe "context" $) | trim | nindent 12 }}
+          {{- end }}
+          {{- if .Values.scheduler.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.scheduler.customStartupProbe "context" $) | trim | nindent 12 }}
           {{- end }}
           volumeMounts:
           {{- if .Files.Glob "files/dags/*.py" }}

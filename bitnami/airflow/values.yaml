@@ -245,15 +245,19 @@ web:
   ## @param web.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param web.lifecycleHooks Add lifecycle hooks to the Airflow Web container(s)
+  ##
+  lifecycleHooks: {}
   ## @param web.podLabels Add extra labels to the web's pods
   ##
   podLabels: {}
   ## @param web.podAnnotations Add extra annotations to the web's pods
   ##
   podAnnotations: {}
-  ## @param web.containerPort Container port to be used for exposing http server
+  ## @param web.containerPorts.http Container port to be used for exposing http server
   ##
-  containerPort: 8080
+  containerPorts:
+    http: 8080
   ## @param web.extraVolumeMounts Add extra volume mounts
   ##
   extraVolumeMounts: []
@@ -289,8 +293,22 @@ web:
     ##    memory: 256Mi
     ##    cpu: 250m
     requests: {}
-  ## Configure extra options for Web containers' liveness and readiness probes
+  ## Configure extra options for Web containers' liveness, readiness and startup probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+  ## @param web.startupProbe.enabled Enable startupProbe
+  ## @param web.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param web.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param web.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param web.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param web.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 180
+    periodSeconds: 20
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
   ## @param web.livenessProbe.enabled Enable livenessProbe
   ## @param web.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
   ## @param web.livenessProbe.periodSeconds Period seconds for livenessProbe
@@ -319,7 +337,11 @@ web:
     timeoutSeconds: 5
     failureThreshold: 6
     successThreshold: 1
+  ## @param web.customStartupProbe Custom liveness probe for the Web component
+  ##
+  customStartupProbe: {}
   ## @param web.customLivenessProbe Custom liveness probe for the Web component
+  ##
   customLivenessProbe: {}
   ## @param web.customReadinessProbe Custom rediness probe for the Web component
   ##
@@ -345,6 +367,17 @@ web:
   ##         containerPort: 1234
   ##
   sidecars: []
+  ## @param web.updateStrategy.type Airflow Web deployment strategy type.
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+  ## e.g:
+  ## updateStrategy:
+  ##  type: RollingUpdate
+  ##  rollingUpdate:
+  ##    maxSurge: 25%
+  ##    maxUnavailable: 25%
+  ##
+  updateStrategy:
+    type: RollingUpdate
   ## @param web.initContainers Add initContainers to the Web pods
   ## Example:
   ## initContainers:
@@ -364,6 +397,15 @@ web:
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
+  ## @param web.schedulerName Name of the k8s scheduler (other than default)
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param web.topologySpreadConstraints Topology Spread Constraints for pod assignment
+  ## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+  ## The value is evaluated as a template
+  ##
+  topologySpreadConstraints: []
 
 ## Airflow service parameters.
 ## For minikube, set this to NodePort, elsewhere use LoadBalancer
@@ -372,13 +414,15 @@ service:
   ## @param service.type Airflow service type
   ##
   type: ClusterIP
-  ## @param service.port Airflow service HTTP port
+  ## @param service.ports.https.http Airflow service HTTP port
   ##
-  port: 8080
-  ## @param service.nodePort Airflow service NodePort
+  ports:
+    http: 8080
+  ## @param service.nodePorts.https.http Airflow service NodePort
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ##
-  nodePort: ""
+  nodePorts:
+    http: ""
   ## @param service.clusterIP Airflow service Cluster IP
   ## e.g.:
   ## clusterIP: None
@@ -447,6 +491,9 @@ scheduler:
   ## @param scheduler.args Override args
   ##
   args: []
+  ## @param scheduler.lifecycleHooks Add lifecycle hooks to the Airflow Scheduler container(s)
+  ##
+  lifecycleHooks: {}
   ## @param scheduler.hostAliases Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -472,6 +519,21 @@ scheduler:
   ## @param scheduler.extraEnvVarsSecret Secret with extra environment variables
   ##
   extraEnvVarsSecret: ""
+  ## @param scheduler.containerPorts.taskLogs Port where the scheduler will be exposed
+  ##
+  containerPorts:
+    taskLogs: 8793
+  ## @param scheduler.updateStrategy.type Airflow Scheduler deployment strategy type.
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+  ## e.g:
+  ## updateStrategy:
+  ##  type: RollingUpdate
+  ##  rollingUpdate:
+  ##    maxSurge: 25%
+  ##    maxUnavailable: 25%
+  ##
+  updateStrategy:
+    type: RollingUpdate
   ## Scheduler containers' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -491,6 +553,9 @@ scheduler:
     ##    memory: 256Mi
     ##    cpu: 250m
     requests: {}
+  ## @param scheduler.customStartupProbe Custom Startup probe
+  ##
+  customStartupProbe: {}
   ## @param scheduler.customLivenessProbe Custom Liveness probe
   ##
   customLivenessProbe: {}
@@ -537,6 +602,15 @@ scheduler:
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
+  ## @param web.schedulerName Name of the k8s scheduler (other than default)
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param scheduler.topologySpreadConstraints Topology Spread Constraints for pod assignment
+  ## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+  ## The value is evaluated as a template
+  ##
+  topologySpreadConstraints: []
 
 ## @section Airflow worker parameters
 
@@ -571,9 +645,10 @@ worker:
     ## It turns BASH and/or NAMI debugging in the image
     ##
     debug: false
-  ## @param worker.port Port where the worker will be exposed
+  ## @param worker.containerPorts.worker Port where the worker will be exposed
   ##
-  port: 8793
+  containerPorts:
+    worker: 8793
   ## @param worker.replicaCount Number of worker replicas
   ##
   replicaCount: 1
@@ -594,6 +669,9 @@ worker:
   ## @param worker.args Override args
   ##
   args: []
+  ## @param controller.lifecycleHooks Add lifecycle hooks to the Airflow Worker container(s)
+  ##
+  lifecycleHooks: {}
   ## @param worker.podAnnotations Add annotations to the worker pods
   ##
   podAnnotations: {}
@@ -635,8 +713,22 @@ worker:
     ##    memory: 256Mi
     ##    cpu: 250m
     requests: {}
-  ## Configure extra options for liveness and readiness probes
+  ## Configure extra options for liveness, readiness and startup probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+  ## @param worker.startupProbe.enabled Enable startupProbe
+  ## @param worker.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param worker.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param worker.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param worker.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param worker.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
   ## @param worker.livenessProbe.enabled Enable livenessProbe
   ## @param worker.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
   ## @param worker.livenessProbe.periodSeconds Period seconds for livenessProbe
@@ -665,6 +757,9 @@ worker:
     timeoutSeconds: 5
     failureThreshold: 6
     successThreshold: 1
+  ## @param worker.customStartupProbe Custom Liveness probe
+  ##
+  customStartupProbe: {}
   ## @param worker.customLivenessProbe Custom Liveness probe
   ##
   customLivenessProbe: {}
@@ -695,14 +790,11 @@ worker:
     maxReplicas: 3
     targetCPU: 80
     targetMemory: 80
-  ## @param worker.updateStrategy StatefulSet controller supports automated updates. There are two valid update strategies: RollingUpdate and OnDelete
+  ## @param worker.updateStrategy.type StatefulSet controller supports automated updates. There are two valid update strategies: RollingUpdate and OnDelete
   ## ref: https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#updating-statefulsets
   ##
-  updateStrategy: RollingUpdate
-  ## @param worker.rollingUpdatePartition Partition update strategy
-  ## https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#partitions
-  ##
-  rollingUpdatePartition: ""
+  updateStrategy:
+    type: RollingUpdate
   ## @param worker.sidecars Add sidecars to the worker pods.
   ## Example:
   ## sidecars:
@@ -743,6 +835,15 @@ worker:
   ## Note: this configuration supersedes the global tolerations configuration
   ##
   tolerations: []
+  ## @param worker.schedulerName Name of the k8s scheduler (other than default)
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param worker.topologySpreadConstraints Topology Spread Constraints for pod assignment
+  ## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+  ## The value is evaluated as a template
+  ##
+  topologySpreadConstraints: []
 
 ## @section Airflow git sync parameters
 

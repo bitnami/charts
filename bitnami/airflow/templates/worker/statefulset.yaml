@@ -20,14 +20,9 @@ spec:
       app.kubernetes.io/component: worker
   serviceName: {{ include "common.names.fullname" . }}-worker-headless
   replicas: {{ default 1 .Values.worker.replicaCount }}
-  updateStrategy:
-    type: {{ .Values.worker.updateStrategy | quote }}
-    {{- if (eq "Recreate" .Values.worker.updateStrategy) }}
-    rollingUpdate: null
-    {{- else if .Values.worker.rollingUpdatePartition }}
-    rollingUpdate:
-      partition: {{ .Values.worker.rollingUpdatePartition }}
-    {{- end }}
+  {{- if .Values.worker.updateStrategy }}
+  updateStrategy: {{- toYaml .Values.worker.updateStrategy | nindent 4 }}
+  {{- end }}
   template:
     metadata:
       annotations:
@@ -44,6 +39,12 @@ spec:
       {{- include "airflow.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.worker.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.worker.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.web.schedulerName }}
+      schedulerName: {{ .Values.web.schedulerName }}
+      {{- end }}
+      {{- if .Values.worker.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.worker.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       priorityClassName: {{ .Values.worker.priorityClassName | quote }}
       {{- if .Values.podSecurityContext.enabled }}
@@ -96,6 +97,9 @@ spec:
           {{- if .Values.worker.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.worker.args "context" $) | nindent 12 }}
           {{- end }}
+          {{- if .Values.worker.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.worker.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
           {{- if .Values.worker.resources }}
           resources: {{- toYaml .Values.worker.resources | nindent 12 }}
           {{- end }}
@@ -108,7 +112,7 @@ spec:
             - name: AIRFLOW_WEBSERVER_HOST
               value: {{ include "common.names.fullname" . }}
             - name: AIRFLOW_WEBSERVER_PORT_NUMBER
-              value: {{ .Values.service.port | quote }}
+              value: {{ .Values.service.ports.http | quote }}
             {{- if .Values.extraEnvVars }}
               {{ toYaml .Values.extraEnvVars | nindent 12 }}
             {{- end }}
@@ -134,15 +138,14 @@ spec:
             {{- end }}
           ports:
             - name: worker
-              containerPort: {{ .Values.worker.port }}
+              containerPort: {{ .Values.worker.containerPorts.worker }}
           {{- if .Values.worker.livenessProbe.enabled }}
           livenessProbe:
             tcpSocket:
               port: worker
             {{ omit .Values.worker.livenessProbe "enabled" | toYaml | nindent 12 }}
           {{- else if .Values.worker.customLivenessProbe }}
-          livenessProbe:
-            {{- include "common.tplvalues.render" (dict "value" .Values.worker.customLivenessProbe "context" $) | trim | nindent 12 }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.worker.customLivenessProbe "context" $) | trim | nindent 12 }}
           {{- end }}
           {{- if .Values.worker.readinessProbe.enabled }}
           readinessProbe:
@@ -150,8 +153,15 @@ spec:
               port: worker
             {{ omit .Values.worker.readinessProbe "enabled" | toYaml | nindent 12 }}
           {{- else if .Values.worker.customReadinessProbe }}
-          readinessProbe:
-            {{- include "common.tplvalues.render" (dict "value" .Values.worker.customReadinessProbe "context" $) | trim | nindent 12 }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.worker.customReadinessProbe "context" $) | trim | nindent 12 }}
+          {{- end }}
+          {{- if .Values.worker.startupProbe.enabled }}
+          startupProbe:
+            tcpSocket:
+              port: worker
+            {{ omit .Values.worker.startupProbe "enabled" | toYaml | nindent 12 }}
+          {{- else if .Values.worker.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.worker.customStartupProbe "context" $) | trim | nindent 12 }}
           {{- end }}
           volumeMounts:
           {{- if .Files.Glob "files/dags/*.py" }}
