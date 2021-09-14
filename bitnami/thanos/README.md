@@ -103,7 +103,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | ----------------------------- | ----------------------------------------------------------------------------------------- | ------------------- |
 | `image.registry`              | Thanos image registry                                                                     | `docker.io`         |
 | `image.repository`            | Thanos image repository                                                                   | `bitnami/thanos`    |
-| `image.tag`                   | Thanos image tag (immutable tags are recommended)                                         | `0.22.0-scratch-r2` |
+| `image.tag`                   | Thanos image tag (immutable tags are recommended)                                         | `0.22.0-scratch-r3` |
 | `image.pullPolicy`            | Thanos image pull policy                                                                  | `IfNotPresent`      |
 | `image.pullSecrets`           | Specify docker-registry secret names as an array                                          | `[]`                |
 | `objstoreConfig`              | The [objstore configuration](https://thanos.io/storage.md/)                               | `""`                |
@@ -805,7 +805,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `volumePermissions.enabled`           | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`    | Init container volume-permissions image registry                                                                     | `docker.io`             |
 | `volumePermissions.image.repository`  | Init container volume-permissions image repository                                                                   | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                                          | `10-debian-10-r159`     |
+| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                                          | `10-debian-10-r188`     |
 | `volumePermissions.image.pullPolicy`  | Init container volume-permissions image pull policy                                                                  | `Always`                |
 | `volumePermissions.image.pullSecrets` | Specify docker-registry secret names as an array                                                                     | `[]`                    |
 
@@ -1017,6 +1017,10 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 6.0.0
+
+This major updates the MinIO&reg; subchart to its newest major, 8.0.0, which now has two separated services for MinIO&reg; Console and MinIO&reg; API. Check [MinIO&reg; Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/minio#to-800) for more information.
 
 ### To 5.4.0
 

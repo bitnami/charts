@@ -133,6 +133,9 @@ auth:
   ## ref: https://docs.mongodb.com/manual/tutorial/enable-authentication/
   ##
   enabled: true
+  ## @param auth.rootUser MongoDB&reg; root user
+  ##
+  rootUser: root
   ## @param auth.rootPassword MongoDB&reg; root password
   ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#setting-the-root-password-on-first-run
   ##
