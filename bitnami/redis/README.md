@@ -568,7 +568,7 @@ A major chart version change (like v1.2.3 -> v2.0.0) indicates that there is an 
 
 ### To 15.0.0
 
-The parameter to enable the usage of StaticIDs was removed. The behaviour is to [always use StaticIDs](https://github.com/bitnami/charts/pull/7278).
+The parameter to enable the usage of StaticIDs was removed. The behavior is to [always use StaticIDs](https://github.com/bitnami/charts/pull/7278).
 
 ### To 14.8.0
 
