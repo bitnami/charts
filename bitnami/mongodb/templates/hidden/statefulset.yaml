@@ -401,6 +401,8 @@ spec:
           {{- end }}
           env:
           {{- if .Values.auth.enabled }}
+          - name: MONGODB_ROOT_USER
+            value: {{ .Values.auth.rootUser | quote }}
           - name: MONGODB_ROOT_PASSWORD
             valueFrom:
               secretKeyRef:
