@@ -292,4 +292,4 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ### To 1.0.0
 
-This major update the Redis&trade; subchart to it newest major, 15.0.0.
+This major update the Redis&trade; subchart to its newest major, 15.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1500) you can find more info about the specific changes.

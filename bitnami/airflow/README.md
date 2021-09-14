@@ -648,7 +648,7 @@ $ kubectl delete pod airflow-postgresql-0
 
 ### To 11.0.0
 
-This major update the Redis&trade; subchart to it newest major, 15.0.0.
+This major update the Redis&trade; subchart to its newest major, 15.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1500) you can find more info about the specific changes.
 
 ### To 6.5.0
 
