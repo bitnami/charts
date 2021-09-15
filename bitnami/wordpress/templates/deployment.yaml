@@ -226,7 +226,7 @@ spec:
             {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.livenessProbe.enabled }}
-          livenessProbe: {{- if eq .Values.livenessProbe "enabled" }}
+          livenessProbe:
             enabled: true
             httpGet:
               path: /wp-admin/install.php
@@ -242,7 +242,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.readinessProbe.enabled }}
-          readinessProbe: {{- if eq .Values.readinessProbe "enabled" }}
+          readinessProbe:
             enabled: true
             httpGet:
               path: /wp-login.php
