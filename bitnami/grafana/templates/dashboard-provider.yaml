@@ -30,4 +30,6 @@ data:
       options:
         # <string, required> path to dashboard files on disk. Required
         path: /opt/bitnami/grafana/dashboards
+        # <bool> enable folders creation for dashboards
+        #foldersFromFilesStructure: true
 {{- end }}
