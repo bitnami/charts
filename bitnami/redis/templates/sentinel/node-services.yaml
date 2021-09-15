@@ -13,7 +13,7 @@
 {{- end }}
 
 ---
-apiVersion: v1
+apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: Service
 metadata:
   name: {{ template "common.names.fullname" $ }}-node-{{$i}}
