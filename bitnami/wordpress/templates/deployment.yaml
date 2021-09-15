@@ -226,12 +226,34 @@ spec:
             {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.livenessProbe.enabled }}
-          livenessProbe: {{- omit .Values.livenessProbe "enabled" | toYaml | nindent 12 }}
+          livenessProbe: {{- if eq .Values.livenessProbe "enabled" }}
+            enabled: true
+            httpGet:
+              path: /wp-admin/install.php
+              port: {{ .Values.wordpressScheme }}
+              scheme: {{ .Values.wordpressScheme | upper }}
+              httpHeaders: []
+            initialDelaySeconds: 120
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 6
+            successThreshold: 1
           {{- else if .Values.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.readinessProbe.enabled }}
-          readinessProbe: {{- omit .Values.readinessProbe "enabled" | toYaml | nindent 12 }}
+          readinessProbe: {{- if eq .Values.readinessProbe "enabled" }}
+            enabled: true
+            httpGet:
+              path: /wp-login.php
+              port: {{ .Values.wordpressScheme }}
+              scheme: {{ .Values.wordpressScheme | upper }}
+              httpHeaders: []
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 6
+            successThreshold: 1
           {{- else if .Values.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
