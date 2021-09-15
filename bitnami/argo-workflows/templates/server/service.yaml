@@ -13,18 +13,18 @@ metadata:
   {{- end }}
 spec:
   type: {{ .Values.server.service.type }}
-  {{- if (or (eq .Values.server.service.type "LoadBalancer") (eq .Values.service.server.type "NodePort")) }}
+  {{- if (or (eq .Values.server.service.type "LoadBalancer") (eq .Values.server.service.type "NodePort")) }}
   externalTrafficPolicy: {{ .Values.server.service.externalTrafficPolicy | quote }}
   {{- end }}
-  {{ if eq .Values.service.server.type "LoadBalancer" }}
-  loadBalancerSourceRanges: {{ .Values.service.server.loadBalancerSourceRanges }}
-  {{ end }}
+  {{- if eq .Values.server.service.type "LoadBalancer" }}
+  loadBalancerSourceRanges: {{ .Values.server.service.loadBalancerSourceRanges }}
+  {{- end }}
   {{- if (and (eq .Values.server.service.type "LoadBalancer") (not (empty .Values.server.service.loadBalancerIP))) }}
   loadBalancerIP: {{ .Values.server.service.loadBalancerIP }}
   {{- end }}
   ports:
     - name: http
-      port: {{- .Values.server.service.port }}
+      port: {{ .Values.server.service.port }}
       targetPort: web
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: server

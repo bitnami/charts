@@ -78,7 +78,7 @@ server:
   image:
     registry: docker.io
     repository: bitnami/bitnami-docker-argo-workflow-cli
-    tag: %%IMAGE_TAG%%
+    tag: 3.1.11-debian-10-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -427,7 +427,7 @@ controller:
   image:
     registry: docker.io
     repository: bitnami/bitnami-docker-argo-workflow-controller
-    tag: %%IMAGE_TAG%%
+    tag: 3.1.11-debian-10-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -703,8 +703,16 @@ controller:
     enabled: false
     minAvailable: 1
     maxUnavailable: 1
+  ## Service Account configuration
+  ## @param controller.serviceAccount.create Specifies whether a ServiceAccount should be created
   ## @param controller.existingConfigmap The name of an existing ConfigMap with your custom configuration for controller
   ##
+  serviceAccount:
+    create: true
+    ## If not set and create is true, a name is generated using the common.names.fullname template
+    ##
+    name: ""
+##
   existingConfigmap:
   ## @param controller.command Override default container command (useful when using custom images)
   ##
@@ -854,12 +862,6 @@ controller:
     ## @param controller.service.annotations Additional custom annotations for controller service
     ##
     annotations: {}
-  ## Controller RBAC configuration
-  ##
-  rbac:
-    ## @param controller.rbac.create Specifies whether RBAC resources should be created
-    ##
-    create: false
 
 ## @section Executor configuration section
 
@@ -876,7 +878,7 @@ executor:
   image:
     registry: docker.io
     repository: bitnami/bitnami-docker-argo-workflow-exec
-    tag: %%TODO%
+    tag: 3.1.11-debian-10-r0
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

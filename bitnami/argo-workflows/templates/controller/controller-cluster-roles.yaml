@@ -16,143 +16,143 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 rules:
-- apiGroups:
-  - ""
-  resources:
-  - pods
-  - pods/exec
-  verbs:
-  - create
-  - get
-  - list
-  - watch
-  - update
-  - patch
-  - delete
-- apiGroups:
-  - ""
-  resources:
-  - configmaps
-  verbs:
-  - get
-  - watch
-  - list
-- apiGroups:
-  - ""
-  resources:
-  - persistentvolumeclaims
-  verbs:
-  - create
-  - delete
-- apiGroups:
-  - argoproj.io
-  resources:
-  - workflows
-  - workflows/finalizers
-  verbs:
-  - get
-  - list
-  - watch
-  - update
-  - patch
-  - delete
-  - create
-- apiGroups:
-  - argoproj.io
-  resources:
-  - workflowtemplates
-  - workflowtemplates/finalizers
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - argoproj.io
-  resources:
-  - cronworkflows
-  - cronworkflows/finalizers
-  verbs:
-  - get
-  - list
-  - watch
-  - update
-  - patch
-  - delete
-- apiGroups:
-  - ""
-  resources:
-  - events
-  verbs:
-  - create
-  - patch
-- apiGroups:
-  - ""
-  resources:
-  - serviceaccounts
-  verbs:
-  - get
-  - list
-- apiGroups:
-  - "policy"
-  resources:
-  - poddisruptionbudgets
-  verbs:
-  - create
-  - get
-  - delete
-{{- if .Values.controller.persistence }}
-- apiGroups:
-  - ""
-  resources:
-  - secrets
-  resourceNames:
-  {{- if .Values.controller.persistence.postgresql }}
-  - {{ .Values.controller.persistence.postgresql.userNameSecret.name }}
-  - {{ .Values.controller.persistence.postgresql.passwordSecret.name }}
-  {{- end}}
-  {{- if .Values.controller.persistence.mysql }}
-  - {{ .Values.controller.persistence.mysql.userNameSecret.name }}
-  - {{ .Values.controller.persistence.mysql.passwordSecret.name }}
-  {{- end}}
-  verbs:
-  - get
-{{- end}}
-- apiGroups:
-  - coordination.k8s.io
-  resources:
-  - leases
-  verbs:
-  - create
-- apiGroups:
-  - coordination.k8s.io
-  resources:
-  - leases
-  resourceNames:
-  {{- if .Values.controller.instanceID.enabled }}
-    {{- if .Values.controller.instanceID.useReleaseName }}
-  - workflow-controller-{{ .Release.Name }}
-  - workflow-controller-lease-{{ .Release.Name }}
-    {{- else }}
-  - workflow-controller-{{ .Values.controller.instanceID.explicitID }}
-  - workflow-controller-lease-{{ .Values.controller.instanceID.explicitID }}
+  - apiGroups:
+      - ""
+    resources:
+      - pods
+      - pods/exec
+    verbs:
+      - create
+      - get
+      - list
+      - watch
+      - update
+      - patch
+      - delete
+  - apiGroups:
+      - ""
+    resources:
+      - configmaps
+    verbs:
+      - get
+      - watch
+      - list
+  - apiGroups:
+      - ""
+    resources:
+     - persistentvolumeclaims
+    verbs:
+      - create
+      - delete
+  - apiGroups:
+      - argoproj.io
+    resources:
+      - workflows
+      - workflows/finalizers
+    verbs:
+      - get
+      - list
+      - watch
+      - update
+      - patch
+      - delete
+      - create
+  - apiGroups:
+      - argoproj.io
+    resources:
+      - workflowtemplates
+      - workflowtemplates/finalizers
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - argoproj.io
+    resources:
+      - cronworkflows
+      - cronworkflows/finalizers
+    verbs:
+      - get
+      - list
+      - watch
+      - update
+      - patch
+      - delete
+  - apiGroups:
+      - ""
+    resources:
+      - events
+    verbs:
+      - create
+      - patch
+  - apiGroups:
+      - ""
+    resources:
+      - serviceaccounts
+    verbs:
+      - get
+      - list
+  - apiGroups:
+      - "policy"
+    resources:
+      - poddisruptionbudgets
+    verbs:
+      - create
+      - get
+      - delete
+  {{- if .Values.controller.persistence }}
+  - apiGroups:
+      - ""
+    resources:
+      - secrets
+    resourceNames:
+    {{- if .Values.controller.persistence.postgresql }}
+      - {{ .Values.controller.persistence.postgresql.userNameSecret.name }}
+      - {{ .Values.controller.persistence.postgresql.passwordSecret.name }}
+    {{- end}}
+    {{- if .Values.controller.persistence.mysql }}
+      - {{ .Values.controller.persistence.mysql.userNameSecret.name }}
+      - {{ .Values.controller.persistence.mysql.passwordSecret.name }}
     {{- end }}
-  {{- else }}
-  - workflow-controller
-  - workflow-controller-lease
+    verbs:
+      - get
   {{- end }}
-  verbs:
-  - get
-  - watch
-  - update
-  - patch
-  - delete
+  - apiGroups:
+      - coordination.k8s.io
+    resources:
+      - leases
+    verbs:
+      - create
+  - apiGroups:
+      - coordination.k8s.io
+    resources:
+      - leases
+    resourceNames:
+    {{- if .Values.controller.instanceID.enabled }}
+      {{- if .Values.controller.instanceID.useReleaseName }}
+      - workflow-controller-{{ .Release.Name }}
+      - workflow-controller-lease-{{ .Release.Name }}
+      {{- else }}
+      - workflow-controller-{{ .Values.controller.instanceID.explicitID }}
+      - workflow-controller-lease-{{ .Values.controller.instanceID.explicitID }}
+      {{- end }}
+    {{- else }}
+      - workflow-controller
+      - workflow-controller-lease
+    {{- end }}
+    verbs:
+      - get
+      - watch
+      - update
+      - patch
+      - delete
 
 {{- if .Values.controller.clusterWorkflowTemplates.enabled }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-    name: {{ include "argo-workflows.controller.fullname" . }}-cluster-template
+  name: {{ include "argo-workflows.controller.fullname" . }}-cluster-template
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: controller
@@ -163,13 +163,13 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 rules:
-- apiGroups:
-  - argoproj.io
-  resources:
-  - clusterworkflowtemplates
-  - clusterworkflowtemplates/finalizers
-  verbs:
-  - get
-  - list
-  - watch
+  - apiGroups:
+      - argoproj.io
+    resources:
+      - clusterworkflowtemplates
+      - clusterworkflowtemplates/finalizers
+    verbs:
+      - get
+      - list
+      - watch
 {{- end }}

@@ -27,13 +27,6 @@ Return the proper service name for Argo Workflows controller
 {{- end -}}
 
 {{/*
-Return the proper service name for Argo Workflows server
-*/}}
-{{- define "argo-workflows.controller.fullname" -}}
-  {{- printf "%s-controller" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
-{{- end -}}
-
-{{/*
 Create a default fully qualified postgresql name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
@@ -90,7 +83,7 @@ Create the name of the workflows service account to use
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "argo-workflows.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.server.image .Values.controller.image .Values.volumePermissions.image) "global" .Values.global) -}}
+{{- include "common.images.pullSecrets" (dict "images" (list .Values.server.image .Values.controller.image) "global" .Values.global) -}}
 {{- end -}}
 
 {{/*
@@ -102,6 +95,7 @@ Validate instanceID configuration
 {{- printf "Error: controller.instanceID.useReleaseName or controller.instanceID.explicitInstanceID is required when enabling instanceID" -}}
 {{- end -}}
 {{- end -}}
+{{- end -}}
 
 {{/*
 Validate artifact repository configuration
@@ -110,6 +104,7 @@ Validate artifact repository configuration
 {{- if .Values.controller.artifactRepository.enabled -}}
 {{- if not .Values.controller.artifactRepository.configuration -}}
 {{- printf "Error: controller.artifactRepository.configuration is required when enabling controller.artifactRepository.enabled" -}}
+{{- end -}}
 {{- end -}}
 {{- end -}}
 

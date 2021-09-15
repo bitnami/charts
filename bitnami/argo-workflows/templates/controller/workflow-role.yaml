@@ -1,5 +1,5 @@
 {{- if .Values.workflow.rbac.create }}
-{{- $namespaces := .Release.Namespace }}
+{{- $namespaces := list .Release.Namespace }}
 {{- if and (not .Values.singleNamespace) .Values.controller.workflowNamespaces }}
 {{- $namespaces := .Values.controller.workflowNamespaces }}
 {{- end }}
@@ -10,13 +10,13 @@ kind: Role
 metadata:
   name: {{ include "common.names.fullname" $ }}-workflow
   namespace: {{ . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" $ | nindent 4 }}
     app.kubernetes.io/component: controller
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- if $.Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" $.Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
-  {{- if .Values.commonAnnotations }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- if $.Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $.Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 rules:
   - apiGroups:

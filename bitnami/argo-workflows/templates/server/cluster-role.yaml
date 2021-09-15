@@ -17,111 +17,111 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 rules:
-- apiGroups:
-  - ""
-  resources:
-  - configmaps
-  - events
-  verbs:
-  - get
-  - watch
-  - list
-- apiGroups:
-  - ""
-  resources:
-  - pods
-  - pods/exec
-  - pods/log
-  verbs:
-  - get
-  - list
-  - watch
-  - delete
-{{- if .Values.server.sso.enabled }}
-- apiGroups:
-  - ""
-  resources:
-  - secrets
-  resourceNames:
-  - sso
-  verbs:
-  - get
-  - update
-- apiGroups:
-  - ""
-  resources:
-  - secrets
-  verbs:
-  - create
-{{- if .Values.server.sso.rbac }}
-- apiGroups:
-  - ""
-  resources:
-  - serviceaccounts
-  verbs:
-  - get
-  - list
-{{- end }}
-{{- end }}
-- apiGroups:
-  - ""
-  resources:
-  - secrets
-  verbs:
-  - get
-{{- if .Values.server.sso.enabled }}
+  - apiGroups:
+      - ""
+    resources:
+      - configmaps
+      - events
+    verbs:
+      - get
+      - watch
+      - list
+  - apiGroups:
+      - ""
+    resources:
+      - pods
+      - pods/exec
+      - pods/log
+    verbs:
+      - get
+      - list
+      - watch
+      - delete
+  {{- if .Values.server.sso.enabled }}
+  - apiGroups:
+      - ""
+    resources:
+      - secrets
+    resourceNames:
+      - sso
+    verbs:
+      - get
+      - update
+  - apiGroups:
+      - ""
+    resources:
+      - secrets
+    verbs:
+      - create
   {{- if .Values.server.sso.rbac }}
-    {{- with .Values.server.sso.rbac.secretWhitelist }}
-  resourceNames: {{- toYaml . | nindent 4 }}
+  - apiGroups:
+      - ""
+    resources:
+    - serviceaccounts
+    verbs:
+      - get
+      - list
+  {{- end }}
+  {{- end }}
+  - apiGroups:
+      - ""
+    resources:
+      - secrets
+    verbs:
+      - get
+  {{- if .Values.server.sso.enabled }}
+    {{- if .Values.server.sso.rbac }}
+      {{- with .Values.server.sso.rbac.secretWhitelist }}
+    resourceNames: {{- toYaml . | nindent 6 }}
+      {{- end }}
     {{- end }}
   {{- end }}
-{{- end }}
-- apiGroups:
-  - ""
-  resources:
-  - events
-  verbs:
-  - watch
-  - create
-  - patch
-{{- if .Values.controller.persistence.enabled }}
-- apiGroups:
-  - ""
-  resources:
-  - secrets
-  resourceNames:
-  {{- if .Values.controller.persistence.postgresql.enabled }}
-  {{- with .Values.controller.persistence.postgresql }}
-  - {{ .userNameSecret.name }}
-  - {{ .passwordSecret.name }}
-  {{- end }}
-  {{- end }}
-  {{- if .Values.controller.persistence.mysql.enabled }}
-  {{- with .Values.controller.persistence.mysql }}
-  - {{ .userNameSecret.name }}
-  - {{ .passwordSecret.name }}
-  {{- end }}
-  {{- end }}
-  verbs:
-  - get
-{{- end}}
-- apiGroups:
-    - argoproj.io
-  resources:
-    - eventsources
-    - sensors
-    - workflows
-    - workfloweventbindings
-    - workflowtemplates
-    - cronworkflows
-  verbs:
-    - create
-    - get
-    - list
-    - watch
-    - update
-    - patch
-    - delete
+  - apiGroups:
+      - ""
+    resources:
+      - events
+    verbs:
+      - watch
+      - create
+      - patch
+  {{- if .Values.controller.persistence.enabled }}
+  - apiGroups:
+      - ""
+    resources:
+      - secrets
+    resourceNames:
+    {{- if .Values.controller.persistence.postgresql.enabled }}
+    {{- with .Values.controller.persistence.postgresql }}
+      - {{ .userNameSecret.name }}
+      - {{ .passwordSecret.name }}
+    {{- end }}
+    {{- end }}
+    {{- if .Values.controller.persistence.mysql.enabled }}
+    {{- with .Values.controller.persistence.mysql }}
+      - {{ .userNameSecret.name }}
+      - {{ .passwordSecret.name }}
+    {{- end }}
+    {{- end }}
+    verbs:
+      - get
+  {{- end}}
+  - apiGroups:
+      - argoproj.io
+    resources:
+      - eventsources
+      - sensors
+      - workflows
+      - workfloweventbindings
+      - workflowtemplates
+      - cronworkflows
+    verbs:
+      - create
+      - get
+      - list
+      - watch
+      - update
+      - patch
+      - delete
 
 {{- if .Values.server.clusterWorkflowTemplates.enabled }}
 ---
@@ -130,7 +130,7 @@ kind: ClusterRole
 metadata:
   name: {{ include "argo-workflows.server.fullname" . }}-cluster-template
   namespace: {{ .Release.Namespace | quote }}
-    labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: server
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -139,19 +139,19 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 rules:
-- apiGroups:
-  - argoproj.io
-  resources:
-  - clusterworkflowtemplates
-  verbs:
-  - get
-  - list
-  - watch
-  {{- if .Values.server.clusterWorkflowTemplates.enableEditing }}
-  - create
-  - update
-  - patch
-  - delete
-  {{- end }}
+  - apiGroups:
+      - argoproj.io
+    resources:
+      - clusterworkflowtemplates
+    verbs:
+      - get
+      - list
+      - watch
+      {{- if .Values.server.clusterWorkflowTemplates.enableEditing }}
+      - create
+      - update
+      - patch
+      - delete
+      {{- end }}
 {{- end }}
 {{- end }}
