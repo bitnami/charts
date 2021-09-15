@@ -35,7 +35,7 @@ spec:
             {{- if .Values.initContainers }}
             {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
             {{- end }}
-            {{- if and .Values.volumePermissions.enabled .Values.containerSecurityContext.enabled }}
+            {{- if and .Values.volumePermissions.enabled (or .Values.podSecurityContext.enabled .Values.containerSecurityContext.enabled) }}
             - name: volume-permissions
               image: {{ include "etcd.volumePermissions.image" . }}
               imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
