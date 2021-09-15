@@ -7,7 +7,7 @@ dependencies:
   version: 5.7.2
 - name: elasticsearch
   repository: https://charts.bitnami.com/bitnami
-  version: 17.0.2
+  version: 17.0.3
 - name: logstash
   repository: https://charts.bitnami.com/bitnami
   version: 3.6.5
@@ -16,6 +16,6 @@ dependencies:
   version: 3.1.11
 - name: common
   repository: https://charts.bitnami.com/bitnami
-  version: 1.8.0
-digest: sha256:235a3673c3146ab894e9e3f8f4ddf6140a2155cf82ca305d97f5ebd5ba179e2c
-generated: "2021-09-13T10:00:31.9197+02:00"
+  version: 1.9.0
+digest: sha256:e7e8c66b1ddd5ef1f5f93bfe1a54ace250f220b4390a3aff8e3410b915ebaae4
+generated: "2021-09-15T13:51:57.038914+05:30"

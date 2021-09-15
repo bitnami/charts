@@ -1,0 +1,120 @@
+{{- if .Values.dataplatform.emitter.enabled }}
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: dataplatform-emitter
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  name: {{ include "dataplatform.emitter-name" . }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+  namespace: {{ .Release.Namespace | quote }}
+spec:
+  replicas: 1
+  {{- if .Values.dataplatform.emitter.updateStrategy }}
+  strategy: {{- include "common.tplvalues.render" (dict "value" .Values.dataplatform.emitter.updateStrategy "context" $) | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: dataplatform-emitter
+  template:
+    metadata:
+      annotations:
+        {{- if .Values.dataplatform.emitter.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.dataplatform.emitter.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.commonAnnotations }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
+        {{- end }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        app.kubernetes.io/component: dataplatform-emitter
+        {{- if .Values.dataplatform.emitter.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.dataplatform.emitter.podLabels "context" $) | nindent 8 }}
+        {{- end }}
+    spec:
+      serviceAccountName: {{ include "dataplatform.serviceAccountName" . }}
+      {{- include "dataplatform.emitter.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.dataplatform.emitter.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.dataplatform.emitter.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.dataplatform.emitter.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.dataplatform.emitter.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.dataplatform.emitter.podAffinityPreset "component" "dataplatform-emitter" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.dataplatform.emitter.podAntiAffinityPreset "component" "dataplatform-emitter" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.dataplatform.emitter.nodeAffinityPreset.type "key" .Values.dataplatform.emitter.nodeAffinityPreset.key "values" .Values.dataplatform.emitter.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.dataplatform.emitter.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.dataplatform.emitter.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.dataplatform.emitter.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.dataplatform.emitter.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.dataplatform.emitter.priorityClassName }}
+      priorityClassName: {{ .Values.dataplatform.emitter.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.dataplatform.emitter.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.dataplatform.emitter.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      initContainers:
+        {{- if .Values.dataplatform.emitter.initContainers }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.dataplatform.emitter.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+      containers:
+        - name: dataplatform-emitter
+          image: {{ include "dataplatform.emitter.image" . }}
+          imagePullPolicy: {{ .Values.dataplatform.emitter.image.pullPolicy | quote }}
+          {{- if .Values.dataplatform.emitter.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.dataplatform.emitter.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.dataplatform.emitter.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.dataplatform.emitter.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.dataplatform.emitter.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.dataplatform.emitter.args "context" $) | nindent 12 }}
+          {{- end }}
+          env:
+            - name: BP_NAME
+              value: {{ include "dataplatform.fullname" . }}
+            - name: BP_RELEASE_NAME
+              value: {{ .Release.Name }}
+            - name: BP_NAMESPACE
+              value: {{ .Release.Namespace }}
+          ports:
+            - name: emitter-port
+              containerPort: {{ .Values.dataplatform.emitter.port }}
+          {{- if .Values.dataplatform.emitter.resources }}
+          resources: {{- toYaml .Values.dataplatform.emitter.resources | nindent 12 }}
+          {{- end }}
+          {{- if .Values.dataplatform.emitter.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.dataplatform.emitter.livenessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: "/v1/health"
+              port: {{ .Values.dataplatform.emitter.port }}
+          {{- else if .Values.dataplatform.emitter.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.dataplatform.emitter.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.dataplatform.emitter.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.dataplatform.emitter.readinessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: "/v1/health"
+              port: {{ .Values.dataplatform.emitter.port }}
+          {{- else if .Values.dataplatform.emitter.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.dataplatform.emitter.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+          {{- if .Values.dataplatform.emitter.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.dataplatform.emitter.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.dataplatform.emitter.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.dataplatform.emitter.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        {{- if .Values.dataplatform.emitter.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.dataplatform.emitter.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+{{ end }}
