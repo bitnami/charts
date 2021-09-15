@@ -58,7 +58,7 @@ remove the template comments and leave the yaml comments to help debug
 #chosenports {{$chosenports}}}}
 
 ---
-apiVersion: v1
+apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: ConfigMap
 metadata:
   name: {{ template "common.names.fullname" . }}-ports-configmap
