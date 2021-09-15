@@ -127,7 +127,7 @@ data:
         retry_count=1
         while validate_quorum
         do
-            info "sleeping, waiting for redis master to come up"
+            info "sleeping, waiting for Redis master to come up"
             sleep 1s
             if ! ((retry_count % 11)); then
                 info "Trying to manually failover"
@@ -138,7 +138,7 @@ data:
             
             ((retry_count+=1))
         done
-        info "redis master is up now"
+        info "Redis master is up now"
         
         # Fetches current master's host and port
         REDIS_SENTINEL_INFO=($(get_sentinel_master_info))
