@@ -97,6 +97,7 @@ Refer to the [chart documentation for more information on each of these architec
 | `architecture`           | MongoDB&reg; architecture (`standalone` or `replicaset`)                                                                      | `standalone`          |
 | `useStatefulSet`         | Set to true to use a StatefulSet instead of a Deployment (only when `architecture=standalone`)                                | `false`               |
 | `auth.enabled`           | Enable authentication                                                                                                         | `true`                |
+| `auth.rootUser`          | MongoDB&reg; root user                                                                                                        | `root`                |
 | `auth.rootPassword`      | MongoDB&reg; root password                                                                                                    | `""`                  |
 | `auth.username`          | MongoDB&reg; custom user (mandatory if `auth.database` is set)                                                                | `""`                  |
 | `auth.password`          | MongoDB&reg; custom user password                                                                                             | `""`                  |

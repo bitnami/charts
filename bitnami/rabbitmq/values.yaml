@@ -16,7 +16,7 @@ global:
   imagePullSecrets: []
   storageClass: ""
 
-## @section RabitMQ Image parameters
+## @section RabbitMQ Image parameters
 ## Bitnami RabbitMQ image version
 ## ref: https://hub.docker.com/r/bitnami/rabbitmq/tags/
 ## @param image.registry RabbitMQ image registry
