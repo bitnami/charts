@@ -227,7 +227,6 @@ spec:
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
-            enabled: true
             httpGet:
               path: /wp-admin/install.php
               port: {{ .Values.wordpressScheme }}
@@ -243,7 +242,6 @@ spec:
           {{- end }}
           {{- if .Values.readinessProbe.enabled }}
           readinessProbe:
-            enabled: true
             httpGet:
               path: /wp-login.php
               port: {{ .Values.wordpressScheme }}
