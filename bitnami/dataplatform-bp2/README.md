@@ -361,6 +361,10 @@ Regular upgrade is compatible from previous versions.
 
 ## Upgrading
 
+### To 8.0.0
+
+This major adds the data platform metrics emitter and Prometheus exporters to the chart which emit health metrics of the data platform.
+
 ### To 7.0.0
 
 This major updates the Elasticsearch subchart to its newest major, 17.0.0, which adds support for X-pack security features such as SSL/TLS encryption and password protection. Check [Elasticsearch Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/elasticsearch#to-1700) for more information.
