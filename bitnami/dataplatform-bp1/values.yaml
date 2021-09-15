@@ -22,19 +22,32 @@ global:
 ##
 dataplatform:
   serviceAccount:
-    ## @param serviceAccount.create Specifies whether a ServiceAccount should be created
+    ## @param dataplatform.serviceAccount.create Specifies whether a ServiceAccount should be created
     ##
-    create: false
-    ## @param serviceAccount.name The name of the ServiceAccount to create
+    create: true
+    ## @param dataplatform.serviceAccount.name The name of the ServiceAccount to create
     ## If not set and create is true, a name is generated using the fullname template
     ##
     name: ""
+    ## @param dataplatform.serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
+    ## Can be set to false if pods using this serviceAccount do not need to use K8s API
+    ##
+    automountServiceAccountToken: true
+  ## Role Based Access
+  ## ref: https://kubernetes.io/docs/admin/authorization/rbac/
+  ##
+  rbac:
+    ## @param dataplatform.rbac.create Whether to create & use RBAC resources or not
+    ## binding dataplatform ServiceAccount to a role
+    ## that allows dataplatform pods querying the K8s API
+    ##
+    create: true
   exporter:
-    ## @param exporter.enabled Start a side-car prometheus exporter
+    ## @param dataplatform.exporter.enabled Start a prometheus exporter
     ##
     enabled: true
     ## Data Platform BP1 exporter image
-    ## ref: https://hub.docker.com/r/bitnami/kafka-exporter/tags/
+    ## ref: https://hub.docker.com/r/bitnami/dataplatform-exporter/tags/
     ## @param dataplatform.exporter.image.registry dataplatform exporter image registry
     ## @param dataplatform.exporter.image.repository dataplatform exporter image repository
     ## @param dataplatform.exporter.image.tag dataplatform exporter image tag (immutable tags are recommended)
@@ -59,12 +72,12 @@ dataplatform:
       pullSecrets: []    
     ## Configure extra options for liveness probe
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
-    ## @param exporter.livenessProbe.enabled Enable livenessProbe
-    ## @param exporter.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
-    ## @param exporter.livenessProbe.periodSeconds Period seconds for livenessProbe
-    ## @param exporter.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
-    ## @param exporter.livenessProbe.failureThreshold Failure threshold for livenessProbe
-    ## @param exporter.livenessProbe.successThreshold Success threshold for livenessProbe
+    ## @param dataplatform.exporter.livenessProbe.enabled Enable livenessProbe
+    ## @param dataplatform.exporter.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+    ## @param dataplatform.exporter.livenessProbe.periodSeconds Period seconds for livenessProbe
+    ## @param dataplatform.exporter.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+    ## @param dataplatform.exporter.livenessProbe.failureThreshold Failure threshold for livenessProbe
+    ## @param dataplatform.exporter.livenessProbe.successThreshold Success threshold for livenessProbe
     ##
     livenessProbe:
       enabled: true
@@ -75,12 +88,12 @@ dataplatform:
       successThreshold: 1
     ## Configure extra options for readiness probe
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
-    ## @param exporter.readinessProbe.enabled Enable readinessProbe
-    ## @param exporter.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
-    ## @param exporter.readinessProbe.periodSeconds Period seconds for readinessProbe
-    ## @param exporter.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
-    ## @param exporter.readinessProbe.failureThreshold Failure threshold for readinessProbe
-    ## @param exporter.readinessProbe.successThreshold Success threshold for readinessProbe
+    ## @param dataplatform.exporter.readinessProbe.enabled Enable readinessProbe
+    ## @param dataplatform.exporter.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+    ## @param dataplatform.exporter.readinessProbe.periodSeconds Period seconds for readinessProbe
+    ## @param dataplatform.exporter.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+    ## @param dataplatform.exporter.readinessProbe.failureThreshold Failure threshold for readinessProbe
+    ## @param dataplatform.exporter.readinessProbe.successThreshold Success threshold for readinessProbe
     ##
     readinessProbe:
       enabled: true
@@ -89,19 +102,19 @@ dataplatform:
       timeoutSeconds: 15
       failureThreshold: 15
       successThreshold: 15
-    ## @param exporter.port dataplatform exporter port
+    ## @param dataplatform.exporter.port dataplatform exporter port
     ##
     port: 9090
-    ## @param exporter.threads Number of dataplatform exporter threads
+    ## @param dataplatform.exporter.threads Number of dataplatform exporter threads
     ##
     threads: 7
-    ## @param exporter.command Override dataplatform entrypoint string.
+    ## @param dataplatform.exporter.command Override dataplatform entrypoint string.
     ##
     command: []
-    ## @param exporter.args Arguments for the provided command if needed
+    ## @param dataplatform.exporter.args Arguments for the provided command if needed
     ##
     args: []
-    ## Solr resource requests and limits
+    ## Exporter resource requests and limits
     ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
     ## We usually recommend not to specify default resources and to leave this as a conscious
     ## choice for the user. This also increases chances charts run on environments with little
@@ -123,9 +136,9 @@ dataplatform:
       requests: {}
     ## dataplatform exporter containers' Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-    ## @param exporter.containerSecurityContext.enabled Enable dataplatform exporter containers' Security Context
-    ## @param exporter.containerSecurityContext.runAsUser User ID for the containers.
-    ## @param exporter.containerSecurityContext.runAsNonRoot Enable dataplatform exporter containers' Security Context runAsNonRoot
+    ## @param dataplatform.exporter.containerSecurityContext.enabled Enable dataplatform exporter containers' Security Context
+    ## @param dataplatform.exporter.containerSecurityContext.runAsUser User ID for the containers.
+    ## @param dataplatform.exporter.containerSecurityContext.runAsNonRoot Enable dataplatform exporter containers' Security Context runAsNonRoot
     ##
     containerSecurityContext:
       enabled: true
@@ -133,17 +146,17 @@ dataplatform:
       runAsNonRoot: true
     ## dataplatform exporter pods' Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-    ## @param exporter.podSecurityContext.enabled Enable Solr dataplatform pods' Security Context
-    ## @param exporter.podSecurityContext.fsGroup Group ID for the pods.
+    ## @param dataplatform.exporter.podSecurityContext.enabled Enable exporter pods' Security Context
+    ## @param dataplatform.exporter.podSecurityContext.fsGroup Group ID for the pods.
     ##
     podSecurityContext:
       enabled: true
       fsGroup: 1001
-    ## @param exporter.podAffinityPreset Solr pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+    ## @param dataplatform.exporter.podAffinityPreset exporter pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
     ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
     ##
     podAffinityPreset: ""
-    ## @param exporter.podAntiAffinityPreset Solr pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+    ## @param dataplatform.exporter.podAntiAffinityPreset exporter pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
     ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
     ##
     podAntiAffinityPreset: soft
@@ -151,76 +164,76 @@ dataplatform:
     ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
     ##
     nodeAffinityPreset:
-      ## @param exporter.nodeAffinityPreset.type Solr node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+      ## @param dataplatform.exporter.nodeAffinityPreset.type exporter node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
       type: ""
-      ## @param exporter.nodeAffinityPreset.key Solr node label key to match Ignored if `affinity` is set.
+      ## @param dataplatform.exporter.nodeAffinityPreset.key exporter node label key to match Ignored if `affinity` is set.
       ## E.g.
       ## key: "kubernetes.io/e2e-az-name"
       ##
       key: ""
-      ## @param exporter.nodeAffinityPreset.values Solr node label values to match. Ignored if `affinity` is set.
+      ## @param dataplatform.exporter.nodeAffinityPreset.values exporter node label values to match. Ignored if `affinity` is set.
       ## E.g.
       ## values:
       ##   - e2e-az1
       ##   - e2e-az2
       ##
       values: []
-    ## @param exporter.affinity Affinity settings for Solr pod assignment. Evaluated as a template
+    ## @param dataplatform.exporter.affinity Affinity settings for exporter pod assignment. Evaluated as a template
     ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
     ##
     affinity: {}
-    ## @param exporter.nodeSelector Node labels for Solr pods assignment. Evaluated as a template
+    ## @param dataplatform.exporter.nodeSelector Node labels for exporter pods assignment. Evaluated as a template
     ## ref: https://kubernetes.io/docs/user-guide/node-selection/
     ##
     nodeSelector: {}
-    ## @param exporter.tolerations Tolerations for Solr pods assignment. Evaluated as a template
+    ## @param dataplatform.exporter.tolerations Tolerations for exporter pods assignment. Evaluated as a template
     ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
     ##
     tolerations: []
-    ## @param exporter.podLabels Additional labels for Metrics exporter pod
+    ## @param dataplatform.exporter.podLabels Additional labels for Metrics exporter pod
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
     ##
     podLabels: {}
-    ## @param exporter.podAnnotations Additional annotations for Metrics exporter pod
+    ## @param dataplatform.exporter.podAnnotations Additional annotations for Metrics exporter pod
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
     ##
     podAnnotations: {}
-    ## @param exporter.customLivenessProbe Override default liveness probe%%MAIN_CONTAINER_NAME%%
+    ## @param dataplatform.exporter.customLivenessProbe Override default liveness probe%%MAIN_CONTAINER_NAME%%
     ##
     customLivenessProbe: {}
-    ## @param exporter.customReadinessProbe Override default readiness probe%%MAIN_CONTAINER_NAME%%
+    ## @param dataplatform.exporter.customReadinessProbe Override default readiness probe%%MAIN_CONTAINER_NAME%%
     ##
     customReadinessProbe: {}
     ## Update strategy
     ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
     ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
     ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
-    ## @param exporter.updateStrategy.type Update strategy - only really applicable for deployments with RWO PVs attached
-    ## @param exporter.updateStrategy.rollingUpdate Deployment rolling update configuration parameters
+    ## @param dataplatform.exporter.updateStrategy.type Update strategy - only really applicable for deployments with RWO PVs attached
+    ## @param dataplatform.exporter.updateStrategy.rollingUpdate Deployment rolling update configuration parameters
     ##
     updateStrategy:
       type: RollingUpdate
       rollingUpdate: {}
-    ## @param exporter.extraEnvVars Additional environment variables to set
+    ## @param dataplatform.exporter.extraEnvVars Additional environment variables to set
     ## Example:
     ## extraEnvVars:
     ##   - name: FOO
     ##     value: "bar"
     ##
     extraEnvVars: []
-    ## @param exporter.extraEnvVarsCM ConfigMap with extra environment variables
+    ## @param dataplatform.exporter.extraEnvVarsCM ConfigMap with extra environment variables
     ##
     extraEnvVarsCM: ""
-    ## @param exporter.extraEnvVarsSecret Secret with extra environment variables
+    ## @param dataplatform.exporter.extraEnvVarsSecret Secret with extra environment variables
     ##
     extraEnvVarsSecret: ""
-    ## @param exporter.extraVolumes Extra volumes to add to the deployment
+    ## @param dataplatform.exporter.extraVolumes Extra volumes to add to the deployment
     ##
     extraVolumes: []
-    ## @param exporter.extraVolumeMounts Extra volume mounts to add to the container
+    ## @param dataplatform.exporter.extraVolumeMounts Extra volume mounts to add to the container
     ##
     extraVolumeMounts: []
-    ## @param exporter.initContainers Add init containers to the %%MAIN_CONTAINER_NAME%% pods
+    ## @param dataplatform.exporter.initContainers Add init containers to the %%MAIN_CONTAINER_NAME%% pods
     ## Example:
     ## initContainers:
     ##   - name: your-image-name
@@ -231,7 +244,7 @@ dataplatform:
     ##         containerPort: 1234
     ##
     initContainers: []
-    ## @param exporter.sidecars Add sidecars to the %%MAIN_CONTAINER_NAME%% pods
+    ## @param dataplatform.exporter.sidecars Add sidecars to the %%MAIN_CONTAINER_NAME%% pods
     ## Example:
     ## sidecars:
     ##   - name: your-image-name
@@ -242,34 +255,34 @@ dataplatform:
     ##         containerPort: 1234
     ##
     sidecars: []
-    ## Service for the Solr exporter deployment
+    ## Service for the dataplatform exporter deployment
     ##
     service:
-      ## @param exporter.service.type Service type for default solr exporter service
+      ## @param dataplatform.exporter.service.type Service type for default dataplatform exporter service
       ##
       type: ClusterIP
-      ## @param exporter.service.annotations annotations for solr exporter service
+      ## @param dataplatform.exporter.service.annotations annotations for dataplatform exporter service
       ##
       annotations: {}
-      ## @param exporter.service.labels Additional labels for solr exporter service
+      ## @param dataplatform.exporter.service.labels Additional labels for dataplatform exporter service
       ##
       labels: {}
-      ## @param exporter.service.port Kubernetes Service port
+      ## @param dataplatform.exporter.service.port Kubernetes Service port
       ##
       port: 9090
-      ## @param exporter.service.loadBalancerIP Load balancer IP for the Solr Exporter Service (optional, cloud specific)
+      ## @param dataplatform.exporter.service.loadBalancerIP Load balancer IP for the dataplatform Exporter Service (optional, cloud specific)
       ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
       ##
       loadBalancerIP: ""
-      ## @param exporter.service.nodePorts.http Node ports for the HTTP exporter service
-      ## @param exporter.service.nodePorts.https Node ports for the HTTPS exporter service
+      ## @param dataplatform.exporter.service.nodePorts.http Node ports for the HTTP exporter service
+      ## @param dataplatform.exporter.service.nodePorts.https Node ports for the HTTPS exporter service
       ## nodePorts:
       ##   http: <to set explicitly, choose port between 30000-32767>
       ##   https: <to set explicitly, choose port between 30000-32767>
       nodePorts:
         http: ""
         https: ""
-      ## @param exporter.service.loadBalancerSourceRanges Exporter Load Balancer Source ranges
+      ## @param dataplatform.exporter.service.loadBalancerSourceRanges Exporter Load Balancer Source ranges
       ## loadBalancerSourceRanges:
       ##   - 10.10.10.0/24
       ##
@@ -278,22 +291,22 @@ dataplatform:
         prometheus.io/scrape: "true"
         prometheus.io/port: "9090"
         prometheus.io/path: "/metrics"
-    ## @param exporter.hostAliases Deployment pod host aliases
+    ## @param dataplatform.exporter.hostAliases Deployment pod host aliases
     ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
     ##
     hostAliases: []
 
   emitter:
-    ## @param exporter.enabled Start a side-car prometheus exporter
+    ## @param dataplatform.emitter.enabled Start dataplatform metrics emitter
     ##
     enabled: true
-    ## Data Platform BP1 exporter image
-    ## ref: https://hub.docker.com/r/bitnami/kafka-exporter/tags/
-    ## @param dataplatform.exporter.image.registry dataplatform exporter image registry
-    ## @param dataplatform.exporter.image.repository dataplatform exporter image repository
-    ## @param dataplatform.exporter.image.tag dataplatform exporter image tag (immutable tags are recommended)
-    ## @param dataplatform.exporter.image.pullPolicy dataplatform exporter image pull policy
-    ## @param dataplatform.exporter.image.pullSecrets Specify docker-registry secret names as an array
+    ## Data Platform BP1 emitter image
+    ## ref: https://hub.docker.com/r/bitnami/dataplatform-emitter/tags/
+    ## @param dataplatform.emitter.image.registry dataplatform emitter image registry
+    ## @param dataplatform.emitter.image.repository dataplatform emitter image repository
+    ## @param dataplatform.emitter.image.tag dataplatform emitter image tag (immutable tags are recommended)
+    ## @param dataplatform.emitter.image.pullPolicy dataplatform emitter image pull policy
+    ## @param dataplatform.emitter.image.pullSecrets Specify docker-registry secret names as an array
     ##
     image:
       registry: harbor-repo.vmware.com
@@ -313,12 +326,12 @@ dataplatform:
       pullSecrets: []    
     ## Configure extra options for liveness probe
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
-    ## @param exporter.livenessProbe.enabled Enable livenessProbe
-    ## @param exporter.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
-    ## @param exporter.livenessProbe.periodSeconds Period seconds for livenessProbe
-    ## @param exporter.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
-    ## @param exporter.livenessProbe.failureThreshold Failure threshold for livenessProbe
-    ## @param exporter.livenessProbe.successThreshold Success threshold for livenessProbe
+    ## @param dataplatform.emitter.livenessProbe.enabled Enable livenessProbe
+    ## @param dataplatform.emitter.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+    ## @param dataplatform.emitter.livenessProbe.periodSeconds Period seconds for livenessProbe
+    ## @param dataplatform.emitter.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+    ## @param dataplatform.emitter.livenessProbe.failureThreshold Failure threshold for livenessProbe
+    ## @param dataplatform.emitter.livenessProbe.successThreshold Success threshold for livenessProbe
     ##
     livenessProbe:
       enabled: true
@@ -329,12 +342,12 @@ dataplatform:
       successThreshold: 1
     ## Configure extra options for readiness probe
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
-    ## @param exporter.readinessProbe.enabled Enable readinessProbe
-    ## @param exporter.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
-    ## @param exporter.readinessProbe.periodSeconds Period seconds for readinessProbe
-    ## @param exporter.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
-    ## @param exporter.readinessProbe.failureThreshold Failure threshold for readinessProbe
-    ## @param exporter.readinessProbe.successThreshold Success threshold for readinessProbe
+    ## @param dataplatform.emitter.readinessProbe.enabled Enable readinessProbe
+    ## @param dataplatform.emitter.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+    ## @param dataplatform.emitter.readinessProbe.periodSeconds Period seconds for readinessProbe
+    ## @param dataplatform.emitter.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+    ## @param dataplatform.emitter.readinessProbe.failureThreshold Failure threshold for readinessProbe
+    ## @param dataplatform.emitter.readinessProbe.successThreshold Success threshold for readinessProbe
     ##
     readinessProbe:
       enabled: true
@@ -343,26 +356,26 @@ dataplatform:
       timeoutSeconds: 15
       failureThreshold: 15
       successThreshold: 15
-    ## @param exporter.port dataplatform exporter port
+    ## @param dataplatform.emitter.port dataplatform emitter port
     ##
     port: 8091
-    ## @param exporter.threads Number of dataplatform exporter threads
+    ## @param dataplatform.emitter.threads Number of dataplatform emitter threads
     ##
     threads: 7
-    ## @param exporter.command Override dataplatform entrypoint string.
+    ## @param dataplatform.emitter.command Override dataplatform entrypoint string.
     ##
     command: []
-    ## @param exporter.args Arguments for the provided command if needed
+    ## @param dataplatform.emitter.args Arguments for the provided command if needed
     ##
     args: []
-    ## Solr resource requests and limits
+    ## Dataplatform metrics emitter resource requests and limits
     ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
     ## We usually recommend not to specify default resources and to leave this as a conscious
     ## choice for the user. This also increases chances charts run on environments with little
     ## resources, such as Minikube. If you do want to specify resources, uncomment the following
     ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    ## @param exporter.resources.limits The resources limits for the container
-    ## @param exporter.resources.requests The requested resources for the container
+    ## @param dataplatform.emitter.resources.limits The resources limits for the container
+    ## @param dataplatform.emitter.resources.requests The requested resources for the container
     ##
     resources:
       ## Example:
@@ -375,29 +388,29 @@ dataplatform:
       ##    cpu: 200m
       ##    memory: 10Mi
       requests: {}
-    ## dataplatform exporter containers' Security Context
+    ## dataplatform emitter containers' Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-    ## @param exporter.containerSecurityContext.enabled Enable dataplatform exporter containers' Security Context
-    ## @param exporter.containerSecurityContext.runAsUser User ID for the containers.
-    ## @param exporter.containerSecurityContext.runAsNonRoot Enable dataplatform exporter containers' Security Context runAsNonRoot
+    ## @param dataplatform.emitter.containerSecurityContext.enabled Enable dataplatform emitter containers' Security Context
+    ## @param dataplatform.emitter.containerSecurityContext.runAsUser User ID for the containers.
+    ## @param dataplatform.emitter.containerSecurityContext.runAsNonRoot Enable dataplatform emitter containers' Security Context runAsNonRoot
     ##
     containerSecurityContext:
       enabled: true
       runAsUser: 1001
       runAsNonRoot: true
-    ## dataplatform exporter pods' Security Context
+    ## dataplatform emitter pods' Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-    ## @param exporter.podSecurityContext.enabled Enable Solr dataplatform pods' Security Context
-    ## @param exporter.podSecurityContext.fsGroup Group ID for the pods.
+    ## @param dataplatform.emitter.podSecurityContext.enabled Enable dataplatform emitter pods' Security Context
+    ## @param dataplatform.emitter.podSecurityContext.fsGroup Group ID for the pods.
     ##
     podSecurityContext:
       enabled: true
       fsGroup: 1001
-    ## @param exporter.podAffinityPreset Solr pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+    ## @param dataplatform.emitter.podAffinityPreset emitter pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
     ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
     ##
     podAffinityPreset: ""
-    ## @param exporter.podAntiAffinityPreset Solr pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+    ## @param dataplatform.emitter.podAntiAffinityPreset emitter pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
     ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
     ##
     podAntiAffinityPreset: soft
@@ -405,76 +418,76 @@ dataplatform:
     ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
     ##
     nodeAffinityPreset:
-      ## @param exporter.nodeAffinityPreset.type Solr node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+      ## @param dataplatform.emitter.nodeAffinityPreset.type emitter node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
       type: ""
-      ## @param exporter.nodeAffinityPreset.key Solr node label key to match Ignored if `affinity` is set.
+      ## @param dataplatform.emitter.nodeAffinityPreset.key emitter node label key to match Ignored if `affinity` is set.
       ## E.g.
       ## key: "kubernetes.io/e2e-az-name"
       ##
       key: ""
-      ## @param exporter.nodeAffinityPreset.values Solr node label values to match. Ignored if `affinity` is set.
+      ## @param dataplatform.emitter.nodeAffinityPreset.values emitter node label values to match. Ignored if `affinity` is set.
       ## E.g.
       ## values:
       ##   - e2e-az1
       ##   - e2e-az2
       ##
       values: []
-    ## @param exporter.affinity Affinity settings for Solr pod assignment. Evaluated as a template
+    ## @param dataplatform.emitter.affinity Affinity settings for emitter pod assignment. Evaluated as a template
     ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
     ##
     affinity: {}
-    ## @param exporter.nodeSelector Node labels for Solr pods assignment. Evaluated as a template
+    ## @param dataplatform.emitter.nodeSelector Node labels for emitter pods assignment. Evaluated as a template
     ## ref: https://kubernetes.io/docs/user-guide/node-selection/
     ##
     nodeSelector: {}
-    ## @param exporter.tolerations Tolerations for Solr pods assignment. Evaluated as a template
+    ## @param dataplatform.emitter.tolerations Tolerations for emitter pods assignment. Evaluated as a template
     ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
     ##
     tolerations: []
-    ## @param exporter.podLabels Additional labels for Metrics exporter pod
+    ## @param dataplatform.emitter.podLabels Additional labels for Metrics emitter pod
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
     ##
     podLabels: {}
-    ## @param exporter.podAnnotations Additional annotations for Metrics exporter pod
+    ## @param dataplatform.emitter.podAnnotations Additional annotations for Metrics emitter pod
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
     ##
     podAnnotations: {}
-    ## @param exporter.customLivenessProbe Override default liveness probe%%MAIN_CONTAINER_NAME%%
+    ## @param dataplatform.emitter.customLivenessProbe Override default liveness probe%%MAIN_CONTAINER_NAME%%
     ##
     customLivenessProbe: {}
-    ## @param exporter.customReadinessProbe Override default readiness probe%%MAIN_CONTAINER_NAME%%
+    ## @param dataplatform.emitter.customReadinessProbe Override default readiness probe%%MAIN_CONTAINER_NAME%%
     ##
     customReadinessProbe: {}
     ## Update strategy
     ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
     ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
     ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
-    ## @param exporter.updateStrategy.type Update strategy - only really applicable for deployments with RWO PVs attached
-    ## @param exporter.updateStrategy.rollingUpdate Deployment rolling update configuration parameters
+    ## @param dataplatform.emitter.updateStrategy.type Update strategy - only really applicable for deployments with RWO PVs attached
+    ## @param dataplatform.emitter.updateStrategy.rollingUpdate Deployment rolling update configuration parameters
     ##
     updateStrategy:
       type: RollingUpdate
       rollingUpdate: {}
-    ## @param exporter.extraEnvVars Additional environment variables to set
+    ## @param dataplatform.emitter.extraEnvVars Additional environment variables to set
     ## Example:
     ## extraEnvVars:
     ##   - name: FOO
     ##     value: "bar"
     ##
     extraEnvVars: []
-    ## @param exporter.extraEnvVarsCM ConfigMap with extra environment variables
+    ## @param dataplatform.emitter.extraEnvVarsCM ConfigMap with extra environment variables
     ##
     extraEnvVarsCM: ""
-    ## @param exporter.extraEnvVarsSecret Secret with extra environment variables
+    ## @param dataplatform.emitter.extraEnvVarsSecret Secret with extra environment variables
     ##
     extraEnvVarsSecret: ""
-    ## @param exporter.extraVolumes Extra volumes to add to the deployment
+    ## @param dataplatform.emitter.extraVolumes Extra volumes to add to the deployment
     ##
     extraVolumes: []
-    ## @param exporter.extraVolumeMounts Extra volume mounts to add to the container
+    ## @param dataplatform.emitter.extraVolumeMounts Extra volume mounts to add to the container
     ##
     extraVolumeMounts: []
-    ## @param exporter.initContainers Add init containers to the %%MAIN_CONTAINER_NAME%% pods
+    ## @param dataplatform.emitter.initContainers Add init containers to the %%MAIN_CONTAINER_NAME%% pods
     ## Example:
     ## initContainers:
     ##   - name: your-image-name
@@ -485,7 +498,7 @@ dataplatform:
     ##         containerPort: 1234
     ##
     initContainers: []
-    ## @param exporter.sidecars Add sidecars to the %%MAIN_CONTAINER_NAME%% pods
+    ## @param dataplatform.emitter.sidecars Add sidecars to the %%MAIN_CONTAINER_NAME%% pods
     ## Example:
     ## sidecars:
     ##   - name: your-image-name
@@ -496,39 +509,39 @@ dataplatform:
     ##         containerPort: 1234
     ##
     sidecars: []
-    ## Service for the Solr exporter deployment
+    ## Service for the dataplatform emitter deployment
     ##
     service:
-      ## @param exporter.service.type Service type for default solr exporter service
+      ## @param dataplatform.emitter.service.type Service type for default dataplatform metrics emitter service
       ##
       type: ClusterIP
-      ## @param exporter.service.annotations annotations for solr exporter service
+      ## @param dataplatform.emitter.service.annotations annotations for dataplatform emitter service
       ##
       annotations: {}
-      ## @param exporter.service.labels Additional labels for solr exporter service
+      ## @param dataplatform.emitter.service.labels Additional labels for dataplatform emitter service
       ##
       labels: {}
-      ## @param exporter.service.port Kubernetes Service port
+      ## @param dataplatform.emitter.service.port Kubernetes Service port
       ##
       port: 8091
-      ## @param exporter.service.loadBalancerIP Load balancer IP for the Solr Exporter Service (optional, cloud specific)
+      ## @param dataplatform.emitter.service.loadBalancerIP Load balancer IP for the dataplatform emitter Service (optional, cloud specific)
       ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
       ##
       loadBalancerIP: ""
-      ## @param exporter.service.nodePorts.http Node ports for the HTTP exporter service
-      ## @param exporter.service.nodePorts.https Node ports for the HTTPS exporter service
+      ## @param dataplatform.emitter.service.nodePorts.http Node ports for the HTTP emitter service
+      ## @param dataplatform.emitter.service.nodePorts.https Node ports for the HTTPS emitter service
       ## nodePorts:
       ##   http: <to set explicitly, choose port between 30000-32767>
       ##   https: <to set explicitly, choose port between 30000-32767>
       nodePorts:
         http: ""
         https: ""
-      ## @param exporter.service.loadBalancerSourceRanges Exporter Load Balancer Source ranges
+      ## @param dataplatform.emitter.service.loadBalancerSourceRanges Emitter Load Balancer Source ranges
       ## loadBalancerSourceRanges:
       ##   - 10.10.10.0/24
       ##
       loadBalancerSourceRanges: []     
-    ## @param exporter.hostAliases Deployment pod host aliases
+    ## @param dataplatform.emitter.hostAliases Deployment pod host aliases
     ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
     ##
     hostAliases: []

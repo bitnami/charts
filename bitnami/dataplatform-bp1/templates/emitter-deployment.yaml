@@ -81,9 +81,9 @@ spec:
             - name: BP_NAME
               value: {{ include "dataplatform.fullname" . }}
             - name: BP_RELEASE_NAME
-              value: "dp"
+              value: {{ .Release.Name }}
             - name: BP_NAMESPACE
-              value: "default"
+              value: {{ .Release.Namespace }}
           ports:
             - name: emitter-port
               containerPort: {{ .Values.dataplatform.emitter.port }}
