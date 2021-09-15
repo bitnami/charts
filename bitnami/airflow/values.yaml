@@ -851,7 +851,7 @@ git:
 ##
 ldap:
   enabled: false
-  uri: 'ldap://ldap_server:1389'
+  uri: 'ldap://ldap_server:389'
   base: 'dc=example,dc=org'
   uidField: 'cn'
   binddn: 'cn=admin,dc=example,dc=org'
