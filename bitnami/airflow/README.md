@@ -19,7 +19,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 - Kubernetes 1.12+
 - Helm 3.1.0
 
-## Insta``ling the Chart
+## Installing the Chart
 
 To install the chart with the release name `my-release`:
 
