@@ -69,7 +69,7 @@ dataplatform:
       ## pullSecrets:
       ##   - myRegistryKeySecretName
       ##
-      pullSecrets: []    
+      pullSecrets: []
     ## Configure extra options for liveness probe
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
     ## @param dataplatform.exporter.livenessProbe.enabled Enable livenessProbe
@@ -322,7 +322,7 @@ dataplatform:
       ## pullSecrets:
       ##   - myRegistryKeySecretName
       ##
-      pullSecrets: []    
+      pullSecrets: []
     ## Configure extra options for liveness probe
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
     ## @param dataplatform.emitter.livenessProbe.enabled Enable livenessProbe
