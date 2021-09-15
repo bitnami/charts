@@ -263,7 +263,10 @@ dataplatform:
       type: ClusterIP
       ## @param dataplatform.exporter.service.annotations annotations for dataplatform exporter service
       ##
-      annotations: {}
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9090"
+        prometheus.io/path: "/metrics"
       ## @param dataplatform.exporter.service.labels Additional labels for dataplatform exporter service
       ##
       labels: {}
@@ -287,10 +290,6 @@ dataplatform:
       ##   - 10.10.10.0/24
       ##
       loadBalancerSourceRanges: []
-      annotations:
-        prometheus.io/scrape: "true"
-        prometheus.io/port: "9090"
-        prometheus.io/path: "/metrics"
     ## @param dataplatform.exporter.hostAliases Deployment pod host aliases
     ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
     ##

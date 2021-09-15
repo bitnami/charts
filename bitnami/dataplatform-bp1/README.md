@@ -308,6 +308,10 @@ In order to render complete information about the deployment including all the s
 
 ## Upgrading
 
+### To 8.0.0
+
+This major adds the data platform metrics emitter and Prometheus exporters to the chart which emit health metrics of the data platform.
+
 ### To 7.0.0
 
 This major updates the Kafka subchart and the Solr subchart to their newest major, 14.0.0 and 2.0.0 respectively. [Here](https://github.com/bitnami/charts/pull/7114) you can find more information about the changes introduced in those versions.
