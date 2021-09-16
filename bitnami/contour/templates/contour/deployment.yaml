@@ -8,13 +8,10 @@ metadata:
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: contour
 spec:
-  replicas: {{ .Values.replicaCount }}
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      # This value of maxSurge means that during a rolling update
-      # the new ReplicaSet will be created first.
-      maxSurge: 50%
+  replicas: {{ .Values.contour.replicaCount }}
+  {{- if .Values.updateStrategy }}
+  strategy: {{- toYaml .Values.updateStrategy | nindent 4 }}
+  {{- end }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: contour
@@ -130,11 +127,11 @@ spec:
             {{- if .Values.contour.extraEnvVars }}
               {{- include "common.tplvalues.render" (dict "value" .Values.contour.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
-          {{- if or .Values.contour.extraEnvVarsConfigMap .Values.contour.extraEnvVarsSecret }}
+          {{- if or .Values.contour.extraEnvVarsCM .Values.contour.extraEnvVarsSecret }}
           envFrom:
-            {{- if .Values.contour.extraEnvVarsConfigMap }}
+            {{- if .Values.contour.extraEnvVarsCM }}
             - configMapRef:
-                name: {{ include "common.tplvalues.render" ( dict "value" .Values.contour.extraEnvVarsConfigMap "context" $ ) }}
+                name: {{ include "common.tplvalues.render" ( dict "value" .Values.contour.extraEnvVarsCM "context" $ ) }}
             {{- end }}
             {{- if .Values.contour.extraEnvVarsSecret }}
             - secretRef:
@@ -146,12 +143,9 @@ spec:
         {{- end }}
       dnsPolicy: ClusterFirst
       serviceAccountName: {{ include "contour.contourServiceAccountName" . }}
-      {{- if .Values.contour.securityContext.enabled }}
+      {{- if .Values.contour.podSecurityContext.enabled }}
       securityContext:
-        runAsUser: {{ .Values.contour.securityContext.runAsUser }}
-        runAsGroup: {{ .Values.contour.securityContext.runAsGroup }}
-        fsGroup: {{ .Values.contour.securityContext.fsGroup }}
-        runAsNonRoot: {{ .Values.contour.securityContext.runAsNonRoot }}
+        fsGroup: {{ .Values.contour.podSecurityContext.fsGroup }}
       {{- end }}
       volumes:
         - name: contourcert

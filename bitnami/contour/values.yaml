@@ -2,9 +2,11 @@
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
 ## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets [array] Global Docker registry secret names as an array
+## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
 global:
   imageRegistry: ""
@@ -13,8 +15,10 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  storageClass: ""
 
 ## @section Common parameters
+##
 
 ## @param nameOverride String to partially override contour.fullname include (will maintain the release name)
 ##
@@ -32,12 +36,16 @@ kubeVersion: ""
 ## @param extraDeploy [array] Array of extra objects to deploy with the release
 ##
 extraDeploy: []
+## @param commonLabels Labels to add to all deployed objects
+##
+commonLabels: {}
+## @param commonAnnotations Annotations to add to all deployed objects
+##
+commonAnnotations: {}
 
 ## @section Contour parameters
-
-## @param replicaCount Number of Contour Pod replicas
 ##
-replicaCount: 2
+
 ## To configure Contour, you must specify ONE of the following two options.
 ## @param existingConfigMap Specifies the name of an externally-defined ConfigMap to use as the configuration (this is mutually exclusive with `configInline`)
 ## Helm will not manage the contents of this ConfigMap, it is your responsibility to create it.
@@ -86,6 +94,9 @@ contour:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
+  ## @param replicaCount Number of Contour Pod replicas
+  ##
+  replicaCount: 2
   ## @param contour.hostAliases [array] Add deployment host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -108,11 +119,13 @@ contour:
     ## limits:
     ##    cpu: 400m
     ##    memory: 258Mi
+    ##
     limits: {}
     ## Examples:
     ## requests:
     ##    cpu: 100m
     ##    memory: 25Mi
+    ##
     requests: {}
   ## @param contour.manageCRDs Manage the creation, upgrade and deletion of Contour CRDs.
   ##
@@ -125,6 +138,10 @@ contour:
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
   podAntiAffinityPreset: soft
+  ## @param contour.podLabels [object] Extra labels for Contour pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
   ## Node affinity preset
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
   ## @param contour.nodeAffinityPreset.type Contour Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
@@ -166,6 +183,24 @@ contour:
   serviceAccount:
     create: true
     name: ""
+  ## Contour Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param defaultBackend.podSecurityContext.enabled Default backend Pod securityContext
+  ## @param defaultBackend.podSecurityContext.fsGroup Set Default backend Pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+  ## Envoy container security context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param contour.containerSecurityContext.enabled Envoy Container securityContext
+  ## @param contour.containerSecurityContext.runAsUser User ID for the Contour container (to change this, http and https containerPorts must be set to >1024)
+  ## @param contour.containerSecurityContext.runAsNonRoot Run as noon root
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
   ## @param contour.livenessProbe.enabled Enable/disable the Liveness probe
   ## @param contour.livenessProbe.initialDelaySeconds Delay before liveness probe is initiated
   ## @param contour.livenessProbe.periodSeconds How often to perform the probe
@@ -253,9 +288,9 @@ contour:
   ##    value: env_var_value
   ##
   extraEnvVars: []
-  ## @param contour.extraEnvVarsConfigMap ConfigMap containing extra env vars to be added to all Contour containers
+  ## @param contour.extraEnvVarsCM ConfigMap containing extra env vars to be added to all Contour containers
   ##
-  extraEnvVarsConfigMap: ""
+  extraEnvVarsCM: ""
   ## @param contour.extraEnvVarsSecret Secret containing extra env vars to be added to all Contour containers
   ##
   extraEnvVarsSecret: ""
@@ -264,6 +299,7 @@ contour:
   ingressClass: contour
 
 ## @section Envoy parameters
+##
 
 envoy:
   ## @param envoy.enabled Envoy Proxy creation
@@ -310,30 +346,36 @@ envoy:
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
   ## @param envoy.resources.limits [object] Specify resource limits which the container is not allowed to succeed.
   ## @param envoy.resources.requests [object] Specify resource requests which the container needs to spawn.
+  ##
   resources:
     ## Example:
     ## limits:
     ##   cpu: 400m
     ##   memory: 250Mi
+    ##
     limits: {}
     ## Examples:
     ## requests:
     ## cpu: 100m
     ## memory: 25Mi
+    ##
     requests: {}
   ## @param envoy.shutdownManager.resources.limits [object] Specify resource limits which the container is not allowed to succeed.
   ## @param envoy.shutdownManager.resources.requests [object] Specify resource requests which the container needs to spawn.
+  ##
   shutdownManager:
     resources:
       ## Example:
       ## limits:
       ##   cpu: 50m
       ##   memory: 32Mi
+      ##
       limits: {}
       ## Examples:
       ## requests:
       ## cpu: 10m
       ## memory: 16Mi
+      ##
       requests: {}
   ## @param envoy.kind Install as deployment or daemonset
   ##
@@ -562,14 +604,15 @@ envoy:
   ##    value: env_var_value
   ##
   extraEnvVars: []
-  ## @param envoy.extraEnvVarsConfigMap ConfigMap containing extra env vars to be added to all Envoy containers
+  ## @param envoy.extraEnvVarsCM ConfigMap containing extra env vars to be added to all Envoy containers
   ##
-  extraEnvVarsConfigMap: ""
+  extraEnvVarsCM: ""
   ## @param envoy.extraEnvVarsSecret Secret containing extra env vars to be added to all Envoy containers
   ##
   extraEnvVarsSecret: ""
 
 ## @section Default backend parameters
+##
 
 ## Default 404 backend
 ##
@@ -644,11 +687,13 @@ defaultBackend:
     ## limits:
     ##   cpu: 250m
     ##   memory: 256Mi
+    ##
     limits: {}
     ## Examples:
     ## requests:
     ##   cpu: 250m
     ##   memory: 256Mi
+    ##
     requests: {}
   ## Default backend containers' liveness probe. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
@@ -768,6 +813,7 @@ defaultBackend:
     maxUnavailable: ""
 
 ## @section Metrics parameters
+##
 
 ## Prometheus Operator service monitors
 ## @param prometheus.serviceMonitor.namespace Specify if the servicemonitors will be deployed into a different namespace (blank deploys into same namespace as chart)
@@ -787,6 +833,7 @@ prometheus:
     relabelings: []
 
 ## @section Other parameters
+##
 
 ## @param rbac.create Create the RBAC roles for API accessibility
 ##
