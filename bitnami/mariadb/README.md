@@ -161,6 +161,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `primary.service.nodePort`                   | MariaDB Primary Kubernetes service node port                                                                      | `""`            |
 | `primary.service.clusterIP`                  | MariaDB Primary Kubernetes service clusterIP IP                                                                   | `""`            |
 | `primary.service.loadBalancerIP`             | MariaDB Primary loadBalancerIP if service type is `LoadBalancer`                                                  | `""`            |
+| `primary.service.externalTrafficPolicy`      | Enable client source IP preservation                                                                            | `Cluster`                      |
 | `primary.service.loadBalancerSourceRanges`   | Address that are allowed when MariaDB Primary service is LoadBalancer                                             | `[]`            |
 | `primary.service.annotations`                | Provide any additional annotations which may be required                                                          | `{}`            |
 | `primary.pdb.enabled`                        | Enable/disable a Pod Disruption Budget creation for MariaDB primary pods                                          | `false`         |
@@ -233,6 +234,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `secondary.service.nodePort`                   | MariaDB secondary Kubernetes service node port                                                                        | `""`            |
 | `secondary.service.clusterIP`                  | MariaDB secondary Kubernetes service clusterIP IP                                                                     | `""`            |
 | `secondary.service.loadBalancerIP`             | MariaDB secondary loadBalancerIP if service type is `LoadBalancer`                                                    | `""`            |
+| `secondary.service.externalTrafficPolicy`      | Enable client source IP preservation                                                                                | `Cluster`                      |
 | `secondary.service.loadBalancerSourceRanges`   | Address that are allowed when MariaDB secondary service is LoadBalancer                                               | `[]`            |
 | `secondary.service.annotations`                | Provide any additional annotations which may be required                                                              | `{}`            |
 | `secondary.pdb.enabled`                        | Enable/disable a Pod Disruption Budget creation for MariaDB secondary pods                                            | `false`         |
