@@ -63,6 +63,16 @@ spec:
   logFormat: {{ .Values.prometheus.logFormat }}
   listenLocal: {{ .Values.prometheus.listenLocal }}
   enableAdminAPI: {{ .Values.prometheus.enableAdminAPI }}
+  {{- if .Values.prometheus.web }}
+  web:
+    {{ toYaml .Values.prometheus.web | indent 4 }}
+  {{- end }}
+  {{- if .Values.prometheus.enableFeatures }}
+  enableFeatures:
+    {{- range $enableFeatures := .Values.prometheus.enableFeatures }}
+    - {{ tpl $enableFeatures $ }}
+    {{- end }}
+  {{- end }}
   {{- if .Values.prometheus.scrapeInterval }}
   scrapeInterval: {{ .Values.prometheus.scrapeInterval }}
   {{- end }}

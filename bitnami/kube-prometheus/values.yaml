@@ -650,6 +650,13 @@ prometheus:
   ## ref: https://prometheus.io/docs/prometheus/latest/querying/api/#tsdb-admin-apis
   ##
   enableAdminAPI: false
+  ## @param prometheus.web WebTLSConfig defines the TLS parameters for HTTPS
+  ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#webtlsconfig
+  web: {}
+  # @param prometheus.enableFeatures EnableFeatures API enables access to Prometheus disabled features.
+  # ref: https://prometheus.io/docs/prometheus/latest/disabled_features/
+  enableFeatures: []
+  # - exemplar-storage
   ## @param prometheus.alertingEndpoints Alertmanagers to which alerts will be sent
   ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#alertmanagerendpoints
   ##
