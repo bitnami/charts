@@ -15,9 +15,12 @@ spec:
   type: ClusterIP
   clusterIP: None
   ports:
-    - name: minio
-      port: {{ .Values.service.port }}
-      targetPort: minio
+    - name: minio-api
+      port: {{ .Values.service.ports.api }}
+      targetPort: minio-api
+    - name: minio-console
+      port: {{ .Values.service.ports.console }}
+      targetPort: minio-console
   publishNotReadyAddresses: true
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
 {{- end }}

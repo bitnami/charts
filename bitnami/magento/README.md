@@ -104,6 +104,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraEnvVarsSecret`                 | Secret containing extra env vars (in case of sensitive data)                                                         | `""`                 |
 | `extraVolumes`                       | Array of extra volumes to be added to the deployment (evaluated as template). Requires setting `extraVolumeMounts`   | `[]`                 |
 | `extraVolumeMounts`                  | Array of extra volume mounts to be added to the container (evaluated as template). Normally used with `extraVolumes` | `[]`                 |
+| `extraContainerPorts`                | Array of additional container ports for the Magento container                                                        | `[]`                 |
 | `initContainers`                     | Add additional init containers to the pod (evaluated as a template)                                                  | `[]`                 |
 | `sidecars`                           | Attach additional containers to the pod (evaluated as a template)                                                    | `[]`                 |
 | `tolerations`                        | Tolerations for pod assignment                                                                                       | `[]`                 |
@@ -543,6 +544,10 @@ kubectl create secret generic my-ca-1 --from-file my-ca-1.crt
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Notable changes
+
+### 19.0.0
+
+This major updates the Elasticsearch subchart to its newest major, 17.0.0, which adds support for X-pack security features such as SSL/TLS encryption and password protection. Check [Elasticsearch Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/elasticsearch#to-1700) for more information.
 
 ### 18.0.0
 

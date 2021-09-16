@@ -26,7 +26,7 @@ fullnameOverride: ""
 ##
 clusterDomain: cluster.local
 
-## @section etcd parameters
+## @section external-dns parameters
 
 ## Bitnami external-dns image version
 ## ref: https://hub.docker.com/r/bitnami/external-dns/tags/

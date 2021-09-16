@@ -108,7 +108,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ---------------------------------------- | --------------------------------------------------------------------------- | --------------------- |
 | `web.image.registry`                     | Airflow image registry                                                      | `docker.io`           |
 | `web.image.repository`                   | Airflow image repository                                                    | `bitnami/airflow`     |
-| `web.image.tag`                          | Airflow image tag (immutable tags are recommended)                          | `2.1.2-debian-10-r37` |
+| `web.image.tag`                          | Airflow image tag (immutable tags are recommended)                          | `2.1.3-debian-10-r10` |
 | `web.image.pullPolicy`                   | Airflow image pull policy                                                   | `IfNotPresent`        |
 | `web.image.pullSecrets`                  | Airflow image pull secrets                                                  | `[]`                  |
 | `web.image.debug`                        | Enable image debug mode                                                     | `false`               |
@@ -162,7 +162,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------------- | ----------------------------------------------------------------------- | --------------------------- |
 | `scheduler.image.registry`                   | Airflow Scheduler image registry                                        | `docker.io`                 |
 | `scheduler.image.repository`                 | Airflow Scheduler image repository                                      | `bitnami/airflow-scheduler` |
-| `scheduler.image.tag`                        | Airflow Scheduler image tag (immutable tags are recommended)            | `2.1.2-debian-10-r37`       |
+| `scheduler.image.tag`                        | Airflow Scheduler image tag (immutable tags are recommended)            | `2.1.3-debian-10-r18`       |
 | `scheduler.image.pullPolicy`                 | Airflow Scheduler image pull policy                                     | `IfNotPresent`              |
 | `scheduler.image.pullSecrets`                | Airflow Scheduler image pull secrets                                    | `[]`                        |
 | `scheduler.image.debug`                      | Enable image debug mode                                                 | `false`                     |
@@ -195,7 +195,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ------------------------ |
 | `worker.image.registry`                     | Airflow Worker image registry                                                                                        | `docker.io`              |
 | `worker.image.repository`                   | Airflow Worker image repository                                                                                      | `bitnami/airflow-worker` |
-| `worker.image.tag`                          | Airflow Worker image tag (immutable tags are recommended)                                                            | `2.1.2-debian-10-r35`    |
+| `worker.image.tag`                          | Airflow Worker image tag (immutable tags are recommended)                                                            | `2.1.3-debian-10-r19`    |
 | `worker.image.pullPolicy`                   | Airflow Worker image pull policy                                                                                     | `IfNotPresent`           |
 | `worker.image.pullSecrets`                  | Airflow Worker image pull secrets                                                                                    | `[]`                     |
 | `worker.image.debug`                        | Enable image debug mode                                                                                              | `false`                  |
@@ -249,48 +249,52 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Airflow git sync parameters
 
-| Name                           | Description                                                                            | Value                 |
-| ------------------------------ | -------------------------------------------------------------------------------------- | --------------------- |
-| `git.image.registry`           | Git image registry                                                                     | `docker.io`           |
-| `git.image.repository`         | Git image repository                                                                   | `bitnami/git`         |
-| `git.image.tag`                | Git image tag (immutable tags are recommended)                                         | `2.33.0-debian-10-r6` |
-| `git.image.pullPolicy`         | Git image pull policy                                                                  | `IfNotPresent`        |
-| `git.image.pullSecrets`        | Git image pull secrets                                                                 | `[]`                  |
-| `git.dags.enabled`             | Enable in order to download DAG files from git repositories.                           | `false`               |
-| `git.dags.repositories`        | Array of repositories from which to download DAG files                                 | `[]`                  |
-| `git.plugins.enabled`          | Enable in order to download Plugins files from git repositories.                       | `false`               |
-| `git.plugins.repositories`     | Array of repositories from which to download DAG files                                 | `[]`                  |
-| `git.clone.command`            | Override cmd                                                                           | `[]`                  |
-| `git.clone.args`               | Override args                                                                          | `[]`                  |
-| `git.clone.extraVolumeMounts`  | Add extra volume mounts                                                                | `[]`                  |
-| `git.clone.extraEnvVars`       | Add extra environment variables                                                        | `[]`                  |
-| `git.clone.extraEnvVarsCM`     | ConfigMap with extra environment variables                                             | `""`                  |
-| `git.clone.extraEnvVarsSecret` | Secret with extra environment variables                                                | `""`                  |
-| `git.clone.resources`          | Clone init container resource requests and limits                                      | `{}`                  |
-| `git.sync.interval`            | Interval in seconds to pull the git repository containing the plugins and/or DAG files | `60`                  |
-| `git.sync.command`             | Override cmd                                                                           | `[]`                  |
-| `git.sync.args`                | Override args                                                                          | `[]`                  |
-| `git.sync.extraVolumeMounts`   | Add extra volume mounts                                                                | `[]`                  |
-| `git.sync.extraEnvVars`        | Add extra environment variables                                                        | `[]`                  |
-| `git.sync.extraEnvVarsCM`      | ConfigMap with extra environment variables                                             | `""`                  |
-| `git.sync.extraEnvVarsSecret`  | Secret with extra environment variables                                                | `""`                  |
-| `git.sync.resources`           | Sync sidecar container resource requests and limits                                    | `{}`                  |
+| Name                           | Description                                                                            | Value                  |
+| ------------------------------ | -------------------------------------------------------------------------------------- | ---------------------- |
+| `git.image.registry`           | Git image registry                                                                     | `docker.io`            |
+| `git.image.repository`         | Git image repository                                                                   | `bitnami/git`          |
+| `git.image.tag`                | Git image tag (immutable tags are recommended)                                         | `2.33.0-debian-10-r28` |
+| `git.image.pullPolicy`         | Git image pull policy                                                                  | `IfNotPresent`         |
+| `git.image.pullSecrets`        | Git image pull secrets                                                                 | `[]`                   |
+| `git.dags.enabled`             | Enable in order to download DAG files from git repositories.                           | `false`                |
+| `git.dags.repositories`        | Array of repositories from which to download DAG files                                 | `[]`                   |
+| `git.plugins.enabled`          | Enable in order to download Plugins files from git repositories.                       | `false`                |
+| `git.plugins.repositories`     | Array of repositories from which to download DAG files                                 | `[]`                   |
+| `git.clone.command`            | Override cmd                                                                           | `[]`                   |
+| `git.clone.args`               | Override args                                                                          | `[]`                   |
+| `git.clone.extraVolumeMounts`  | Add extra volume mounts                                                                | `[]`                   |
+| `git.clone.extraEnvVars`       | Add extra environment variables                                                        | `[]`                   |
+| `git.clone.extraEnvVarsCM`     | ConfigMap with extra environment variables                                             | `""`                   |
+| `git.clone.extraEnvVarsSecret` | Secret with extra environment variables                                                | `""`                   |
+| `git.clone.resources`          | Clone init container resource requests and limits                                      | `{}`                   |
+| `git.sync.interval`            | Interval in seconds to pull the git repository containing the plugins and/or DAG files | `60`                   |
+| `git.sync.command`             | Override cmd                                                                           | `[]`                   |
+| `git.sync.args`                | Override args                                                                          | `[]`                   |
+| `git.sync.extraVolumeMounts`   | Add extra volume mounts                                                                | `[]`                   |
+| `git.sync.extraEnvVars`        | Add extra environment variables                                                        | `[]`                   |
+| `git.sync.extraEnvVarsCM`      | ConfigMap with extra environment variables                                             | `""`                   |
+| `git.sync.extraEnvVarsSecret`  | Secret with extra environment variables                                                | `""`                   |
+| `git.sync.resources`           | Sync sidecar container resource requests and limits                                    | `{}`                   |
 
 
 ### Airflow ldap parameters
 
-| Name                             | Description                                                                                      | Value                      |
-| -------------------------------- | ------------------------------------------------------------------------------------------------ | -------------------------- |
-| `ldap.enabled`                   | Enable LDAP authentication                                                                       | `false`                    |
-| `ldap.uri`                       | Server URI, eg. ldap://ldap_server:389                                                           | `ldap://ldap_server:389`   |
-| `ldap.base`                      | Base of the search, eg. ou=example,o=org                                                         | `ou=example,o=org`         |
-| `ldap.binddn`                    | Bind DN                                                                                          | `cn=user,ou=example,o=org` |
-| `ldap.bindpw`                    | Bind Password                                                                                    | `""`                       |
-| `ldap.uidField`                  | Field used for uid                                                                               | `uid`                      |
-| `ldap.tls.enabled`               | Enabled TLS/SSL for LDAP, you must include the CA file.                                          | `false`                    |
-| `ldap.tls.allowSelfSigned`       | Allow to use self signed certificates                                                            | `true`                     |
-| `ldap.tls.CAcertificateSecret`   | Name of the existing secret containing the certificate CA file that will be used by ldap client. | `""`                       |
-| `ldap.tls.CAcertificateFilename` | LDAP CA cert filename                                                                            | `""`                       |
+| Name                             | Description                                                                                                                        | Value                                                                                                     |
+| -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| `ldap.enabled`                   | Enable LDAP authentication                                                                                                         | `false`                                                                                                   |
+| `ldap.uri`                       | Server URI, eg. ldap://ldap_server:389                                                                                             | `ldap://ldap_server:389`                                                                                  |
+| `ldap.base`                      | Base of the search, eg. ou=example,o=org                                                                                           | `dc=example,dc=org`                                                                                       |
+| `ldap.uidField`                  | if doing an indirect bind to ldap, this is the field that matches the username when searching for the account to bind to           | `cn`                                                                                                      |
+| `ldap.binddn`                    | Bind DN                                                                                                                            | `cn=admin,dc=example,dc=org`                                                                              |
+| `ldap.bindpw`                    | Bind Password                                                                                                                      | `""`                                                                                                      |
+| `ldap.userRegistration`          | Set to True to enable user self registration                                                                                       | `True`                                                                                                    |
+| `ldap.userRegistrationRole`      | Set role name to be assign when a user registers himself. This role must already exist. Mandatory when using ldap.userRegistration | `Public`                                                                                                  |
+| `ldap.rolesMapping`              | mapping from LDAP DN to a list of roles                                                                                            | `{ "cn=All,ou=Groups,dc=example,dc=org": ["User"], "cn=Admins,ou=Groups,dc=example,dc=org": ["Admin"], }` |
+| `ldap.rolesSyncAtLogin`          | replace ALL the user's roles each login, or only on registration                                                                   | `True`                                                                                                    |
+| `ldap.tls.enabled`               | Enabled TLS/SSL for LDAP, you must include the CA file.                                                                            | `false`                                                                                                   |
+| `ldap.tls.allowSelfSigned`       | Allow to use self signed certificates                                                                                              | `true`                                                                                                    |
+| `ldap.tls.CAcertificateSecret`   | Name of the existing secret containing the certificate CA file that will be used by ldap client.                                   | `""`                                                                                                      |
+| `ldap.tls.CAcertificateFilename` | LDAP CA cert filename                                                                                                              | `""`                                                                                                      |
 
 
 ### Airflow exposing parameters
@@ -341,7 +345,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                      | Start a side-car prometheus exporter                                      | `false`                       |
 | `metrics.image.registry`               | Airflow Exporter image registry                                           | `docker.io`                   |
 | `metrics.image.repository`             | Airflow Exporter image repository                                         | `bitnami/airflow-exporter`    |
-| `metrics.image.tag`                    | Airflow Exporter image tag (immutable tags are recommended)               | `0.20210126.0-debian-10-r191` |
+| `metrics.image.tag`                    | Airflow Exporter image tag (immutable tags are recommended)               | `0.20210126.0-debian-10-r213` |
 | `metrics.image.pullPolicy`             | Airflow Exporter image pull policy                                        | `IfNotPresent`                |
 | `metrics.image.pullSecrets`            | Airflow Exporter image pull secrets                                       | `[]`                          |
 | `metrics.hostAliases`                  | Deployment pod host aliases                                               | `[]`                          |
@@ -645,6 +649,10 @@ $ kubectl delete pod airflow-postgresql-0
 - https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
 - https://helm.sh/docs/topics/v2_v3_migration/
 - https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
+
+### To 11.0.0
+
+This major update the Redis&trade; subchart to its newest major, 15.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1500) you can find more info about the specific changes.
 
 ### To 6.5.0
 

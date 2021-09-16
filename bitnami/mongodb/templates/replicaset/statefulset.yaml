@@ -268,6 +268,8 @@ spec:
                   name: {{ include "mongodb.secretName" . }}
                   key: mongodb-metrics-password
             {{- end }}
+            - name: MONGODB_ROOT_USER
+              value: {{ .Values.auth.rootUser | quote }}
             - name: MONGODB_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -447,6 +449,8 @@ spec:
           env:
           {{- if .Values.auth.enabled }}
           {{- if not .Values.metrics.username }}
+          - name: MONGODB_ROOT_USER
+            value: {{ .Values.auth.rootUser | quote }}
           - name: MONGODB_ROOT_PASSWORD
             valueFrom:
               secretKeyRef:

@@ -61,7 +61,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `clusterDomain`    | Kubernetes Cluster Domain                                                                    | `cluster.local` |
 
 
-### etcd parameters
+### external-dns parameters
 
 | Name                                          | Description                                                                                                                                                                  | Value                     |
 | --------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
