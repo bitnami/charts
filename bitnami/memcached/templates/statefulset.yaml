@@ -164,7 +164,7 @@ spec:
           ports:
             - name: {{ .Values.metrics.portName }}
               containerPort: 9150
-          {{- if .Values.livenessProbe.enabled }}
+          {{- if .Values.metrics.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
               path: /metrics
@@ -175,7 +175,7 @@ spec:
             successThreshold: {{ .Values.metrics.livenessProbe.successThreshold }}
             failureThreshold: {{ .Values.metrics.livenessProbe.failureThreshold }}
           {{- end }}
-          {{- if .Values.readinessProbe.enabled }}
+          {{- if .Values.metrics.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
               path: /metrics
