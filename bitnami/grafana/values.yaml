@@ -160,11 +160,14 @@ dashboardsProvider:
 ## @param dashboardsConfigMaps Array with the names of a series of ConfigMaps containing dashboards files
 ## They will be mounted by the default dashboard provider if it is enabled
 ## Use an array with the configMap names.
+## In order to use subfolders, uncomment "#foldersFromFilesStructure: true" line in default provider config. or create your own dashboard provider.
 ## Example:
 ## dashboardsConfigMaps:
 ##   - configMapName: mydashboard
+##     folderName: foo
 ##     fileName: mydashboard.json
 ##   - configMapName: myotherdashboard
+##     folderName: bar
 ##     fileName: myotherdashboard.json
 ##
 dashboardsConfigMaps: []

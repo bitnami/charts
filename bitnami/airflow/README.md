@@ -279,18 +279,22 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Airflow ldap parameters
 
-| Name                             | Description                                                                                      | Value                      |
-| -------------------------------- | ------------------------------------------------------------------------------------------------ | -------------------------- |
-| `ldap.enabled`                   | Enable LDAP authentication                                                                       | `false`                    |
-| `ldap.uri`                       | Server URI, eg. ldap://ldap_server:389                                                           | `ldap://ldap_server:389`   |
-| `ldap.base`                      | Base of the search, eg. ou=example,o=org                                                         | `ou=example,o=org`         |
-| `ldap.binddn`                    | Bind DN                                                                                          | `cn=user,ou=example,o=org` |
-| `ldap.bindpw`                    | Bind Password                                                                                    | `""`                       |
-| `ldap.uidField`                  | Field used for uid                                                                               | `uid`                      |
-| `ldap.tls.enabled`               | Enabled TLS/SSL for LDAP, you must include the CA file.                                          | `false`                    |
-| `ldap.tls.allowSelfSigned`       | Allow to use self signed certificates                                                            | `true`                     |
-| `ldap.tls.CAcertificateSecret`   | Name of the existing secret containing the certificate CA file that will be used by ldap client. | `""`                       |
-| `ldap.tls.CAcertificateFilename` | LDAP CA cert filename                                                                            | `""`                       |
+| Name                             | Description                                                                                                                        | Value                                                                                                     |
+| -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| `ldap.enabled`                   | Enable LDAP authentication                                                                                                         | `false`                                                                                                   |
+| `ldap.uri`                       | Server URI, eg. ldap://ldap_server:389                                                                                             | `ldap://ldap_server:389`                                                                                  |
+| `ldap.base`                      | Base of the search, eg. ou=example,o=org                                                                                           | `dc=example,dc=org`                                                                                       |
+| `ldap.uidField`                  | if doing an indirect bind to ldap, this is the field that matches the username when searching for the account to bind to           | `cn`                                                                                                      |
+| `ldap.binddn`                    | Bind DN                                                                                                                            | `cn=admin,dc=example,dc=org`                                                                              |
+| `ldap.bindpw`                    | Bind Password                                                                                                                      | `""`                                                                                                      |
+| `ldap.userRegistration`          | Set to True to enable user self registration                                                                                       | `True`                                                                                                    |
+| `ldap.userRegistrationRole`      | Set role name to be assign when a user registers himself. This role must already exist. Mandatory when using ldap.userRegistration | `Public`                                                                                                  |
+| `ldap.rolesMapping`              | mapping from LDAP DN to a list of roles                                                                                            | `{ "cn=All,ou=Groups,dc=example,dc=org": ["User"], "cn=Admins,ou=Groups,dc=example,dc=org": ["Admin"], }` |
+| `ldap.rolesSyncAtLogin`          | replace ALL the user's roles each login, or only on registration                                                                   | `True`                                                                                                    |
+| `ldap.tls.enabled`               | Enabled TLS/SSL for LDAP, you must include the CA file.                                                                            | `false`                                                                                                   |
+| `ldap.tls.allowSelfSigned`       | Allow to use self signed certificates                                                                                              | `true`                                                                                                    |
+| `ldap.tls.CAcertificateSecret`   | Name of the existing secret containing the certificate CA file that will be used by ldap client.                                   | `""`                                                                                                      |
+| `ldap.tls.CAcertificateFilename` | LDAP CA cert filename                                                                                                              | `""`                                                                                                      |
 
 
 ### Airflow exposing parameters
