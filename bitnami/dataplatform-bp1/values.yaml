@@ -16,7 +16,7 @@ global:
   imagePullSecrets: []
   storageClass: ""
 
-## @section Data Platform Exporter deployment parameters
+## @section Data Platform Chart parameters
 
 ## Configuration for the dataplatform prometheus exporter
 ##
@@ -43,15 +43,15 @@ dataplatform:
     ##
     create: true
   exporter:
-    ## @param dataplatform.exporter.enabled Start a prometheus exporter
+    ## @param dataplatform.exporter.enabled Start Data Platform prometheus exporter
     ##
     enabled: true
-    ## Data Platform BP1 exporter image
+    ## Data Platform Prometheus exporter image
     ## ref: https://hub.docker.com/r/bitnami/dataplatform-exporter/tags/
-    ## @param dataplatform.exporter.image.registry dataplatform exporter image registry
-    ## @param dataplatform.exporter.image.repository dataplatform exporter image repository
-    ## @param dataplatform.exporter.image.tag dataplatform exporter image tag (immutable tags are recommended)
-    ## @param dataplatform.exporter.image.pullPolicy dataplatform exporter image pull policy
+    ## @param dataplatform.exporter.image.registry Data Platform exporter image registry
+    ## @param dataplatform.exporter.image.repository Data Platform exporter image repository
+    ## @param dataplatform.exporter.image.tag Data Platform exporter image tag (immutable tags are recommended)
+    ## @param dataplatform.exporter.image.pullPolicy Data Platform exporter image pull policy
     ## @param dataplatform.exporter.image.pullSecrets Specify docker-registry secret names as an array
     ##
     image:
@@ -102,13 +102,13 @@ dataplatform:
       timeoutSeconds: 15
       failureThreshold: 15
       successThreshold: 15
-    ## @param dataplatform.exporter.port dataplatform exporter port
+    ## @param dataplatform.exporter.port Data Platform Prometheus exporter port
     ##
     port: 9090
-    ## @param dataplatform.exporter.threads Number of dataplatform exporter threads
+    ## @param dataplatform.exporter.threads Number of Data Platform exporter threads
     ##
     threads: 7
-    ## @param dataplatform.exporter.command Override dataplatform entrypoint string.
+    ## @param dataplatform.exporter.command Override Data Platform entrypoint string.
     ##
     command: []
     ## @param dataplatform.exporter.args Arguments for the provided command if needed
@@ -120,8 +120,8 @@ dataplatform:
     ## choice for the user. This also increases chances charts run on environments with little
     ## resources, such as Minikube. If you do want to specify resources, uncomment the following
     ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    ## @param exporter.resources.limits The resources limits for the container
-    ## @param exporter.resources.requests The requested resources for the container
+    ## @param dataplatform.exporter.resources.limits The resources limits for the container
+    ## @param dataplatform.exporter.resources.requests The requested resources for the container
     ##
     resources:
       ## Example:
@@ -136,9 +136,9 @@ dataplatform:
       requests: {}
     ## dataplatform exporter containers' Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-    ## @param dataplatform.exporter.containerSecurityContext.enabled Enable dataplatform exporter containers' Security Context
+    ## @param dataplatform.exporter.containerSecurityContext.enabled Enable Data Platform exporter containers' Security Context
     ## @param dataplatform.exporter.containerSecurityContext.runAsUser User ID for the containers.
-    ## @param dataplatform.exporter.containerSecurityContext.runAsNonRoot Enable dataplatform exporter containers' Security Context runAsNonRoot
+    ## @param dataplatform.exporter.containerSecurityContext.runAsNonRoot Enable Data Platform exporter containers' Security Context runAsNonRoot
     ##
     containerSecurityContext:
       enabled: true
@@ -152,11 +152,11 @@ dataplatform:
     podSecurityContext:
       enabled: true
       fsGroup: 1001
-    ## @param dataplatform.exporter.podAffinityPreset exporter pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+    ## @param dataplatform.exporter.podAffinityPreset Data Platform exporter pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
     ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
     ##
     podAffinityPreset: ""
-    ## @param dataplatform.exporter.podAntiAffinityPreset exporter pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+    ## @param dataplatform.exporter.podAntiAffinityPreset Data Platform exporter pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
     ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
     ##
     podAntiAffinityPreset: soft
@@ -164,14 +164,14 @@ dataplatform:
     ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
     ##
     nodeAffinityPreset:
-      ## @param dataplatform.exporter.nodeAffinityPreset.type exporter node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+      ## @param dataplatform.exporter.nodeAffinityPreset.type Data Platform exporter node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
       type: ""
-      ## @param dataplatform.exporter.nodeAffinityPreset.key exporter node label key to match Ignored if `affinity` is set.
+      ## @param dataplatform.exporter.nodeAffinityPreset.key Data Platform exporter node label key to match Ignored if `affinity` is set.
       ## E.g.
       ## key: "kubernetes.io/e2e-az-name"
       ##
       key: ""
-      ## @param dataplatform.exporter.nodeAffinityPreset.values exporter node label values to match. Ignored if `affinity` is set.
+      ## @param dataplatform.exporter.nodeAffinityPreset.values Data Platform exporter node label values to match. Ignored if `affinity` is set.
       ## E.g.
       ## values:
       ##   - e2e-az1
@@ -190,7 +190,7 @@ dataplatform:
     ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
     ##
     tolerations: []
-    ## @param dataplatform.exporter.podLabels Additional labels for Metrics exporter pod
+    ## @param dataplatform.exporter.podLabels Additional labels for exporter pod
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
     ##
     podLabels: {}
@@ -258,16 +258,18 @@ dataplatform:
     ## Service for the dataplatform exporter deployment
     ##
     service:
-      ## @param dataplatform.exporter.service.type Service type for default dataplatform exporter service
+      ## @param dataplatform.exporter.service.type Service type for default Data Platform exporter service
       ##
       type: ClusterIP
-      ## @param dataplatform.exporter.service.annotations annotations for dataplatform exporter service
+      ## @param dataplatform.exporter.service.annotations.prometheus.io/scrape Enable Data Platform exporter Prometheus scraping
+      ## @param dataplatform.exporter.service.annotations.prometheus.io/port Data Platform Prometheus exporter port
+      ## @param dataplatform.exporter.service.annotations.prometheus.io/path Data Platform Prometheus exporter metrics path
       ##
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "9090"
         prometheus.io/path: "/metrics"
-      ## @param dataplatform.exporter.service.labels Additional labels for dataplatform exporter service
+      ## @param dataplatform.exporter.service.labels Additional labels for Data Platform exporter service
       ##
       labels: {}
       ## @param dataplatform.exporter.service.port Kubernetes Service port
@@ -296,15 +298,15 @@ dataplatform:
     hostAliases: []
 
   emitter:
-    ## @param dataplatform.emitter.enabled Start dataplatform metrics emitter
+    ## @param dataplatform.emitter.enabled Start Data Platform metrics emitter
     ##
     enabled: true
-    ## Data Platform BP1 emitter image
+    ## Data Platform metrics emitter image
     ## ref: https://hub.docker.com/r/bitnami/dataplatform-emitter/tags/
-    ## @param dataplatform.emitter.image.registry dataplatform emitter image registry
-    ## @param dataplatform.emitter.image.repository dataplatform emitter image repository
-    ## @param dataplatform.emitter.image.tag dataplatform emitter image tag (immutable tags are recommended)
-    ## @param dataplatform.emitter.image.pullPolicy dataplatform emitter image pull policy
+    ## @param dataplatform.emitter.image.registry Data Platform emitter image registry
+    ## @param dataplatform.emitter.image.repository Data Platform emitter image repository
+    ## @param dataplatform.emitter.image.tag Data Platform emitter image tag (immutable tags are recommended)
+    ## @param dataplatform.emitter.image.pullPolicy Data Platform emitter image pull policy
     ## @param dataplatform.emitter.image.pullSecrets Specify docker-registry secret names as an array
     ##
     image:
@@ -355,13 +357,13 @@ dataplatform:
       timeoutSeconds: 15
       failureThreshold: 15
       successThreshold: 15
-    ## @param dataplatform.emitter.port dataplatform emitter port
+    ## @param dataplatform.emitter.port Data Platform emitter port
     ##
     port: 8091
-    ## @param dataplatform.emitter.threads Number of dataplatform emitter threads
+    ## @param dataplatform.emitter.threads Number of Data Platform emitter threads
     ##
     threads: 7
-    ## @param dataplatform.emitter.command Override dataplatform entrypoint string.
+    ## @param dataplatform.emitter.command Override Data Platform entrypoint string.
     ##
     command: []
     ## @param dataplatform.emitter.args Arguments for the provided command if needed
@@ -389,27 +391,27 @@ dataplatform:
       requests: {}
     ## dataplatform emitter containers' Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-    ## @param dataplatform.emitter.containerSecurityContext.enabled Enable dataplatform emitter containers' Security Context
+    ## @param dataplatform.emitter.containerSecurityContext.enabled Enable Data Platform emitter containers' Security Context
     ## @param dataplatform.emitter.containerSecurityContext.runAsUser User ID for the containers.
-    ## @param dataplatform.emitter.containerSecurityContext.runAsNonRoot Enable dataplatform emitter containers' Security Context runAsNonRoot
+    ## @param dataplatform.emitter.containerSecurityContext.runAsNonRoot Enable Data Platform emitter containers' Security Context runAsNonRoot
     ##
     containerSecurityContext:
       enabled: true
       runAsUser: 1001
       runAsNonRoot: true
-    ## dataplatform emitter pods' Security Context
+    ## Data Platform emitter pods' Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-    ## @param dataplatform.emitter.podSecurityContext.enabled Enable dataplatform emitter pods' Security Context
+    ## @param dataplatform.emitter.podSecurityContext.enabled Enable Data Platform emitter pods' Security Context
     ## @param dataplatform.emitter.podSecurityContext.fsGroup Group ID for the pods.
     ##
     podSecurityContext:
       enabled: true
       fsGroup: 1001
-    ## @param dataplatform.emitter.podAffinityPreset emitter pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+    ## @param dataplatform.emitter.podAffinityPreset Data Platform emitter pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
     ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
     ##
     podAffinityPreset: ""
-    ## @param dataplatform.emitter.podAntiAffinityPreset emitter pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+    ## @param dataplatform.emitter.podAntiAffinityPreset Data Platform emitter pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
     ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
     ##
     podAntiAffinityPreset: soft
@@ -417,14 +419,14 @@ dataplatform:
     ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
     ##
     nodeAffinityPreset:
-      ## @param dataplatform.emitter.nodeAffinityPreset.type emitter node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+      ## @param dataplatform.emitter.nodeAffinityPreset.type Data Platform emitter node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
       type: ""
-      ## @param dataplatform.emitter.nodeAffinityPreset.key emitter node label key to match Ignored if `affinity` is set.
+      ## @param dataplatform.emitter.nodeAffinityPreset.key Data Platform emitter node label key to match Ignored if `affinity` is set.
       ## E.g.
       ## key: "kubernetes.io/e2e-az-name"
       ##
       key: ""
-      ## @param dataplatform.emitter.nodeAffinityPreset.values emitter node label values to match. Ignored if `affinity` is set.
+      ## @param dataplatform.emitter.nodeAffinityPreset.values Data Platform emitter node label values to match. Ignored if `affinity` is set.
       ## E.g.
       ## values:
       ##   - e2e-az1
@@ -508,22 +510,22 @@ dataplatform:
     ##         containerPort: 1234
     ##
     sidecars: []
-    ## Service for the dataplatform emitter deployment
+    ## Service for the Data Platform emitter deployment
     ##
     service:
-      ## @param dataplatform.emitter.service.type Service type for default dataplatform metrics emitter service
+      ## @param dataplatform.emitter.service.type Service type for default Data Platform metrics emitter service
       ##
       type: ClusterIP
-      ## @param dataplatform.emitter.service.annotations annotations for dataplatform emitter service
+      ## @param dataplatform.emitter.service.annotations annotations for Data Platform emitter service
       ##
       annotations: {}
-      ## @param dataplatform.emitter.service.labels Additional labels for dataplatform emitter service
+      ## @param dataplatform.emitter.service.labels Additional labels for Data Platform emitter service
       ##
       labels: {}
       ## @param dataplatform.emitter.service.port Kubernetes Service port
       ##
       port: 8091
-      ## @param dataplatform.emitter.service.loadBalancerIP Load balancer IP for the dataplatform emitter Service (optional, cloud specific)
+      ## @param dataplatform.emitter.service.loadBalancerIP Load balancer IP for the Data Platform emitter Service (optional, cloud specific)
       ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
       ##
       loadBalancerIP: ""
@@ -535,7 +537,7 @@ dataplatform:
       nodePorts:
         http: ""
         https: ""
-      ## @param dataplatform.emitter.service.loadBalancerSourceRanges Emitter Load Balancer Source ranges
+      ## @param dataplatform.emitter.service.loadBalancerSourceRanges Data Platform Emitter Load Balancer Source ranges
       ## loadBalancerSourceRanges:
       ##   - 10.10.10.0/24
       ##
