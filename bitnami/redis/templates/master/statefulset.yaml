@@ -169,15 +169,14 @@ spec:
           livenessProbe:
             initialDelaySeconds: {{ .Values.master.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.master.livenessProbe.periodSeconds }}
-            # One second longer than command timeout should prevent generation of zombie processes.
-            timeoutSeconds: {{ add1 .Values.master.livenessProbe.timeoutSeconds }}
+            timeoutSeconds: {{ .Values.master.livenessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.master.livenessProbe.successThreshold }}
             failureThreshold: {{ .Values.master.livenessProbe.failureThreshold }}
             exec:
               command:
                 - sh
                 - -c
-                - /health/ping_liveness_local.sh {{ .Values.master.livenessProbe.timeoutSeconds }}
+                - /health/ping_liveness_local.sh
           {{- else if .Values.master.customLivenessProbe }}
           livenessProbe: {{- toYaml .Values.master.customLivenessProbe | nindent 12 }}
           {{- end }}
@@ -185,14 +184,14 @@ spec:
           readinessProbe:
             initialDelaySeconds: {{ .Values.master.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.master.readinessProbe.periodSeconds }}
-            timeoutSeconds: {{ add1 .Values.master.readinessProbe.timeoutSeconds }}
+            timeoutSeconds: {{ .Values.master.readinessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.master.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.master.readinessProbe.failureThreshold }}
             exec:
               command:
                 - sh
                 - -c
-                - /health/ping_readiness_local.sh {{ .Values.master.readinessProbe.timeoutSeconds }}
+                - /health/ping_readiness_local.sh
           {{- else if .Values.master.customReadinessProbe }}
           readinessProbe: {{- toYaml .Values.master.customReadinessProbe | nindent 12 }}
           {{- end }}

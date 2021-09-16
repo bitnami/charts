@@ -184,14 +184,14 @@ spec:
           livenessProbe:
             initialDelaySeconds: {{ .Values.replica.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.replica.livenessProbe.periodSeconds }}
-            timeoutSeconds: {{ add1 .Values.replica.livenessProbe.timeoutSeconds }}
+            timeoutSeconds: {{ .Values.replica.livenessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.replica.livenessProbe.successThreshold }}
             failureThreshold: {{ .Values.replica.livenessProbe.failureThreshold}}
             exec:
               command:
                 - sh
                 - -c
-                - /health/ping_liveness_local_and_master.sh {{ .Values.replica.livenessProbe.timeoutSeconds }}
+                - /health/ping_liveness_local_and_master.sh
           {{- else if .Values.replica.customLivenessProbe }}
           livenessProbe: {{- toYaml .Values.replica.customLivenessProbe | nindent 12 }}
           {{- end }}
@@ -199,14 +199,14 @@ spec:
           readinessProbe:
             initialDelaySeconds: {{ .Values.replica.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.replica.readinessProbe.periodSeconds }}
-            timeoutSeconds: {{ add1 .Values.replica.readinessProbe.timeoutSeconds }}
+            timeoutSeconds: {{ .Values.replica.readinessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.replica.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.replica.readinessProbe.failureThreshold }}
             exec:
               command:
                 - sh
                 - -c
-                - /health/ping_readiness_local_and_master.sh {{ .Values.replica.readinessProbe.timeoutSeconds }}
+                - /health/ping_readiness_local_and_master.sh
           {{- else if .Values.replica.customReadinessProbe }}
           readinessProbe: {{- toYaml .Values.replica.customReadinessProbe | nindent 12 }}
           {{- end }}

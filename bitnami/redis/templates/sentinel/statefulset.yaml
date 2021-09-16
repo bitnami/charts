@@ -187,7 +187,7 @@ spec:
               command:
                 - sh
                 - -c
-                - /health/ping_liveness_local.sh {{ .Values.replica.livenessProbe.timeoutSeconds }}
+                - /health/ping_liveness_local.sh
           {{- else if .Values.replica.customLivenessProbe }}
           livenessProbe: {{- toYaml .Values.replica.customLivenessProbe | nindent 12 }}
           {{- end }}
@@ -202,7 +202,7 @@ spec:
               command:
                 - sh
                 - -c
-                - /health/ping_readiness_local.sh {{ .Values.replica.livenessProbe.timeoutSeconds }}
+                - /health/ping_readiness_local.sh
           {{- else if .Values.replica.customReadinessProbe }}
           readinessProbe: {{- toYaml .Values.replica.customReadinessProbe | nindent 12 }}
           {{- end }}
@@ -337,7 +337,7 @@ spec:
               command:
                 - sh
                 - -c
-                - /health/ping_sentinel.sh {{ .Values.sentinel.livenessProbe.timeoutSeconds }}
+                - /health/ping_sentinel.sh
           {{- else if .Values.sentinel.customLivenessProbe }}
           livenessProbe: {{- toYaml .Values.sentinel.customLivenessProbe | nindent 12 }}
           {{- end }}
@@ -354,7 +354,7 @@ spec:
               command:
                 - sh
                 - -c
-                - /health/ping_sentinel.sh {{ .Values.sentinel.livenessProbe.timeoutSeconds }}
+                - /health/ping_sentinel.sh
           {{- else if .Values.sentinel.customReadinessProbe }}
           readinessProbe: {{- toYaml .Values.sentinel.customReadinessProbe | nindent 12 }}
           {{- end }}
