@@ -136,6 +136,18 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.portName`                            | Memcached exporter port name                                                                    | `metrics`                    |
 | `metrics.resources.limits`                    | The resources limits for the container                                                          | `{}`                         |
 | `metrics.resources.requests`                  | The requested resources for the container                                                       | `{}`                         |
+| `metrics.livenessProbe.enabled`               | Enable livenessProbe                                                                            | `true`                       |
+| `metrics.livenessProbe.initialDelaySeconds`   | Initial delay seconds for livenessProbe                                                         | `15`                         |
+| `metrics.livenessProbe.periodSeconds`         | Period seconds for livenessProbe                                                                | `10`                         |
+| `metrics.livenessProbe.timeoutSeconds`        | Timeout seconds for livenessProbe                                                               | `5`                          |
+| `metrics.livenessProbe.failureThreshold`      | Failure threshold for livenessProbe                                                             | `3`                          |
+| `metrics.livenessProbe.successThreshold`      | Success threshold for livenessProbe                                                             | `1`                          |
+| `metrics.readinessProbe.enabled`              | Enable readinessProbe                                                                           | `true`                       |
+| `metrics.readinessProbe.initialDelaySeconds`  | Initial delay seconds for readinessProbe                                                        | `5`                          |
+| `metrics.readinessProbe.periodSeconds`        | Period seconds for readinessProbe                                                               | `10`                         |
+| `metrics.readinessProbe.timeoutSeconds`       | Timeout seconds for readinessProbe                                                              | `1`                          |
+| `metrics.readinessProbe.failureThreshold`     | Failure threshold for readinessProbe                                                            | `3`                          |
+| `metrics.readinessProbe.successThreshold`     | Success threshold for readinessProbe                                                            | `1`                          |
 | `metrics.service.type`                        | Kubernetes service type for Prometheus metrics                                                  | `ClusterIP`                  |
 | `metrics.service.port`                        | Prometheus metrics service port                                                                 | `9150`                       |
 | `metrics.service.annotations`                 | Annotations for the Prometheus metrics service                                                  | `{}`                         |
