@@ -540,7 +540,7 @@ dataplatform:
       ## loadBalancerSourceRanges:
       ##   - 10.10.10.0/24
       ##
-      loadBalancerSourceRanges: []     
+      loadBalancerSourceRanges: []
     ## @param dataplatform.emitter.hostAliases Deployment pod host aliases
     ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
     ##
