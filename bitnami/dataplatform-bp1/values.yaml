@@ -55,9 +55,9 @@ dataplatform:
     ## @param dataplatform.exporter.image.pullSecrets Specify docker-registry secret names as an array
     ##
     image:
-      registry: harbor-repo.vmware.com
-      repository: octo_data_platforms/dp-exporter
-      tag: latest
+      registry: docker.io
+      repository: bitnami/dataplatform-exporter
+      tag: latest     
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -308,8 +308,8 @@ dataplatform:
     ## @param dataplatform.emitter.image.pullSecrets Specify docker-registry secret names as an array
     ##
     image:
-      registry: harbor-repo.vmware.com
-      repository: octo_data_platforms/dp-emitter
+      registry: docker.io
+      repository: bitnami/dataplatform-emitter
       tag: latest
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
