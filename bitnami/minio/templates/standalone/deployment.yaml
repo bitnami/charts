@@ -130,7 +130,7 @@ spec:
             - name: MINIO_PROMETHEUS_AUTH_TYPE
               value: {{ .Values.metrics.prometheusAuthType | quote }}
             - name: MINIO_CONSOLE_PORT
-              value: {{ .Values.containerPorts.console }}
+              value: {{ .Values.containerPorts.console | quote }}
             {{- if .Values.tls.mountPath }}
             - name: MINIO_CERTSDIR
               value: {{ .Values.tls.mountPath | quote }}
