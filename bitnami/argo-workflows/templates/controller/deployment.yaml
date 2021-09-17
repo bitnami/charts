@@ -67,15 +67,11 @@ spec:
           {{- if .Values.controller.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.controller.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
-          {{- if .Values.diagnosticMode.enabled }}
-          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
-          {{- else if .Values.controller.command }}
+          {{- if .Values.controller.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.controller.command "context" $) | nindent 12 }}
           {{- end }}
           args:
-          {{- if .Values.diagnosticMode.enabled }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
-          {{- else if .Values.controller.args }}
+          {{- if .Values.controller.args }}
           {{- include "common.tplvalues.render" (dict "value" .Values.controller.args "context" $) | nindent 12 }}
           {{- else }}
             - --configmap
@@ -134,7 +130,6 @@ spec:
           {{- if .Values.controller.resources }}
           resources: {{- toYaml .Values.controller.resources | nindent 12 }}
           {{- end }}
-          {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.controller.livenessProbe.enabled }}
           livenessProbe:
             tcpSocket:
@@ -161,7 +156,6 @@ spec:
           {{- end }}
           {{- if .Values.controller.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.controller.lifecycleHooks "context" $) | nindent 12 }}
-          {{- end }}
           {{- end }}
           volumeMounts:
           {{- if .Values.controller.extraVolumeMounts }}
