@@ -6,14 +6,20 @@ metadata:
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: server
+    app.kubernetes.io/part-of: argo-workflows
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
   {{- if or .Values.ingress.annotations .Values.commonAnnotations .Values.ingress.certManager }}
   annotations:
+    ingress.kubernetes.io/rewrite-target: /$2
+    {{- if .Values.server.secure }}
+    ingress.kubernetes.io/protocol: https # Traefik
+    nginx.ingress.kubernetes.io/backend-protocol: https # Nginx
+    {{- end }}
     {{- if .Values.ingress.certManager }}
     kubernetes.io/tls-acme: "true"
-    {{- end }}``
+    {{- end }}
     {{- if .Values.ingress.annotations }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.ingress.annotations "context" $) | nindent 4 }}
     {{- end }}

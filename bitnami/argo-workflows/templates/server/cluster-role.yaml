@@ -9,6 +9,7 @@ metadata:
   name: {{ include "argo-workflows.server.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/part-of: argo-workflows
     app.kubernetes.io/component: server
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -37,7 +38,7 @@ rules:
       - list
       - watch
       - delete
-  {{- if .Values.server.sso.enabled }}
+  {{- if and .Values.server.auth.enabled .Values.server.auth.sso.enabled }}
   - apiGroups:
       - ""
     resources:
@@ -53,7 +54,7 @@ rules:
       - secrets
     verbs:
       - create
-  {{- if .Values.server.sso.rbac }}
+  {{- if .Values.server.auth.sso.rbac }}
   - apiGroups:
       - ""
     resources:
@@ -69,9 +70,9 @@ rules:
       - secrets
     verbs:
       - get
-  {{- if .Values.server.sso.enabled }}
-    {{- if .Values.server.sso.rbac }}
-      {{- with .Values.server.sso.rbac.secretWhitelist }}
+  {{- if and .Values.server.auth.enabled .Values.server.auth.sso.enabled }}
+    {{- if .Values.server.auth.sso.rbac }}
+      {{- with .Values.server.auth.sso.rbac.secretWhitelist }}
     resourceNames: {{- toYaml . | nindent 6 }}
       {{- end }}
     {{- end }}
@@ -122,6 +123,18 @@ rules:
       - update
       - patch
       - delete
+  - apiGroups:
+      - dataflow.argoproj.io
+    resources:
+      - pipelines
+    verbs:
+      - create
+      - get
+      - list
+      - watch
+      - update
+      - patch
+      - delete
 
 {{- if .Values.server.clusterWorkflowTemplates.enabled }}
 ---
@@ -131,6 +144,7 @@ metadata:
   name: {{ include "argo-workflows.server.fullname" . }}-cluster-template
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/part-of: argo-workflows
     app.kubernetes.io/component: server
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}

@@ -9,6 +9,7 @@ metadata:
   name: {{ include "argo-workflows.server.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/part-of: argo-workflows
     app.kubernetes.io/component: server
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -37,6 +38,7 @@ metadata:
   name: {{ include "argo-workflows.server.fullname" . }}-cluster-template
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/part-of: argo-workflows
     app.kubernetes.io/component: server
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}

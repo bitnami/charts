@@ -1,4 +1,4 @@
-{{- if .Values.workflow.rbac.create }}
+{{- if .Values.workflows.rbac.create }}
 {{- $namespaces := list .Release.Namespace }}
 {{- if and (not .Values.singleNamespace) .Values.controller.workflowNamespaces }}
 {{- $namespaces := .Values.controller.workflowNamespaces }}
@@ -23,7 +23,9 @@ rules:
       - ""
     resources:
       - pods
+      - configmaps
     verbs:
+      - list
       - get
       - watch
       - patch

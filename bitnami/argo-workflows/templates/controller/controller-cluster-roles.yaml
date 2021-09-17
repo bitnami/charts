@@ -8,6 +8,7 @@ metadata:
   name: {{ include "argo-workflows.controller.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/part-of: argo-workflows
     app.kubernetes.io/component: controller
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -49,6 +50,8 @@ rules:
     resources:
       - workflows
       - workflows/finalizers
+      - workflowtasksets
+      - workflowtasksets/finalizers
     verbs:
       - get
       - list
@@ -100,7 +103,7 @@ rules:
       - create
       - get
       - delete
-  {{- if .Values.controller.persistence }}
+  {{- if .Values.controller.persistence.enabled }}
   - apiGroups:
       - ""
     resources:
@@ -155,6 +158,7 @@ metadata:
   name: {{ include "argo-workflows.controller.fullname" . }}-cluster-template
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/part-of: argo-workflows
     app.kubernetes.io/component: controller
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}

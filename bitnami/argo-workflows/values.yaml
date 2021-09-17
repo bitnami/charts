@@ -162,51 +162,62 @@ server:
     enabled: true
     runAsUser: 1001
 
-  ## SSO configuration when SSO is specified as a server auth mode.
-  ## All the values are required. SSO is activated by adding --auth-mode=sso to the server command line.
-  ## @param server.sso.enabled Enable SSO configuration for the server auth mode
-  ## @param server.sso.issuer Root URL for the OIDC identity provider
-  ## @param server.sso.clientId.name Name of the secret containing the OIDC client ID
-  ## @param server.sso.clientId.key Key in the secret to obtain the OIDC client ID
-  ## @param server.sso.clientSecret Name of the secret containing the OIDC client secret
-  ## @param server.sso.clientSecret.key Key in the secret to obtain the OIDC client secret
-  ## @param server.sso.redirectUrl The OIDC redirect URL. Should be in the form <argo-root-url>/oauth2/callback.
-  ## @param server.sso.rbac.enabled Create RBAC resources for SSO
-  ## @param server.sso.secretWhitelist Restricts the secrets that the server can read
-  ## @param server.sso.scopes Scopes requested from the SSO ID provider
-  sso:
-    enabled: false
-    ## The root URL of the OIDC identity provider.
-    ## E.g.
-    ## issuer: "https://accounts.google.com"
-    issuer:
-    ## Name of a secret and a key in it to retrieve the app OIDC client ID from.
+  ## Enable authentication with the specified mode
+  ## Ref: https://argoproj.github.io/argo-workflows/argo-server-auth-mode/
+  ##
+  auth:
+    ## @param server.auth.enabled Enable authentication
     ##
-    clientId:
-      name: ""
-      key: ""
-    ## Name of a secret and a key in it to retrieve the app OIDC client secret from.
+    enabled: true
+    ## @param server.auth.enabled Set authentication mode. Either `server`, `client` or `sso`.
     ##
-    clientSecret:
-      name: ""
-      key: ""
-    ## The OIDC redirect URL. Should be in the form <argo-root-url>/oauth2/callback.
+    mode: client
+    ## SSO configuration when SSO is specified as a server auth mode.
+    ## All the values are required. SSO is activated by adding --auth-mode=sso to the server command line.
+    ## @param server.sso.enabled Enable SSO configuration for the server auth mode
+    ## @param server.sso.issuer Root URL for the OIDC identity provider
+    ## @param server.sso.clientId.name Name of the secret containing the OIDC client ID
+    ## @param server.sso.clientId.key Key in the secret to obtain the OIDC client ID
+    ## @param server.sso.clientSecret Name of the secret containing the OIDC client secret
+    ## @param server.sso.clientSecret.key Key in the secret to obtain the OIDC client secret
+    ## @param server.sso.redirectUrl The OIDC redirect URL. Should be in the form <argo-root-url>/oauth2/callback.
+    ## @param server.sso.rbac.enabled Create RBAC resources for SSO
+    ## @param server.sso.secretWhitelist Restricts the secrets that the server can read
+    ## @param server.sso.scopes Scopes requested from the SSO ID provider
     ##
-    redirectUrl: ""
-    ## Create RBAC resources for SSO
-    rbac:
-      enabled: true
-    ## When present, restricts secrets the server can read to a given list.
-    ## You can use it to restrict the server to only be able to access the
-    ## service account token secrets that are associated with service accounts
-    ## used for authorization.
-    ##
-    secretWhitelist: []
-    ## Scopes requested from the SSO ID provider.  The 'groups' scope requests
-    ## group membership information, which is usually used for authorization
-    ## decisions.
-    ##
-    scopes: []
+    sso:
+      enabled: false
+      ## The root URL of the OIDC identity provider.
+      ## E.g.
+      ## issuer: "https://accounts.google.com"
+      issuer:
+      ## Name of a secret and a key in it to retrieve the app OIDC client ID from.
+      ##
+      clientId:
+        name: ""
+        key: ""
+      ## Name of a secret and a key in it to retrieve the app OIDC client secret from.
+      ##
+      clientSecret:
+        name: ""
+        key: ""
+      ## The OIDC redirect URL. Should be in the form <argo-root-url>/oauth2/callback.
+      ##
+      redirectUrl: ""
+      ## Create RBAC resources for SSO
+      rbac:
+        enabled: true
+      ## When present, restricts secrets the server can read to a given list.
+      ## You can use it to restrict the server to only be able to access the
+      ## service account token secrets that are associated with service accounts
+      ## used for authorization.
+      ##
+      secretWhitelist: []
+      ## Scopes requested from the SSO ID provider.  The 'groups' scope requests
+      ## group membership information, which is usually used for authorization
+      ## decisions.
+      ##
+      scopes: []
 
   ## @param server.clusterWorkflowTemplates.enabled Create ClusterRole and CRB for the controoler to access ClusterWorkflowTemplates
   ## @param server.clusterWorkflowTemplates.enableEditing Give the server permissions to edit ClusterWorkflowTemplates
@@ -239,7 +250,8 @@ server:
 
   ## Server container port
   ## @param server.containerPort argo Server container port
-  containerPort: 2746
+  ports:
+    container: 2746
 
   ## ServiceAccount configuration
   ##
@@ -371,7 +383,7 @@ server:
   service:
     ## @param server.service.type server service type
     ##
-    type: LoadBalancer
+    type: ClusterIP
     ## @param server.service.port server service HTTP port
     ##
     port: 80
@@ -510,7 +522,8 @@ controller:
 
   ## Server container port
   ## @param server.containerPort argo Server container port
-  containerPort: 6060
+  ports:
+    container: 6060
 
   ## Controller persistence parameters. It can also be connected to an existing postgresql. Check
   ## @param controller.persistence.enabled Enabled controller persistence
@@ -586,11 +599,12 @@ controller:
   ##
   clusterWorkflowTemplates:
     enabled: true
-  ## Default container runtime that the executor will use
+  ## Default container runtime that the executor will use.
+  ## Set as `k8sapi` because `docker` requires privileged access. Also, `k8sapi` allows to runAsNonRoot
   ## Ref: https://argoproj.github.io/argo-workflows/workflow-executors/
   ## @param controller.containerRuntimeExecutor Specifies the container runtime for the executor
   ##
-  containerRuntimeExecutor: docker
+  containerRuntimeExecutor: k8sapi
   ## Array containing extra container runtime executors configurations
   ## Ref: https://argoproj.github.io/argo-workflows/workflow-executors/
   ## @param controller.containerRuntimeExecutors Array containing extra container runtime executors configurations
@@ -830,7 +844,7 @@ controller:
   service:
     ## @param controller.service.type controller service type
     ##
-    type: LoadBalancer
+    type: ClusterIP
     ## Node ports to expose
     ## @param controller.service.nodePorts.http Node port for HTTP
     ## @param controller.service.nodePorts.https Node port for HTTPS
@@ -879,6 +893,10 @@ executor:
     registry: docker.io
     repository: bitnami/bitnami-docker-argo-workflow-exec
     tag: 3.1.11-debian-10-r0
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1013,7 +1031,7 @@ ingress:
 
 ## @section Workflows configuration
 
-workflow:
+workflows:
   ## Service account configuration for workflows
   ## @param workflow.serviceAccount.create Whether to create a service account to run workflows
   ## @param workflow.serviceAccount.name Service account name to run workflows

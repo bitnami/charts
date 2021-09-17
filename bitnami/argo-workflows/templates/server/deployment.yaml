@@ -5,6 +5,7 @@ metadata:
   name: {{ include "argo-workflows.server.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/part-of: argo-workflows
     app.kubernetes.io/component: server
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -84,18 +85,22 @@ spec:
             {{- if .Values.singleNamespace }}
             - --namespaced
             {{- end }}
+            {{- if .Values.server.auth.enabled }}
+            - --auth-mode
+            - {{ .Values.server.auth.mode }}
+            {{- end }}
             {{- if .Values.server.extraArgs }}
             {{- include "common.tplvalues.render" (dict "value" .Values.server.extraArgs "context" $) | nindent 12 }}
             {{- end }}
             {{- end }}
           ports:
             - name: web
-              containerPort: {{ .Values.server.containerPort }}
+              containerPort: {{ .Values.server.ports.container }}
           env:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" (or .Values.server.image.debug .Values.diagnosticMode.enabled) | quote }}
             - name: IN_CLUSTER
-              value: true
+              value: "true"
             - name: ARGO_NAMESPACE
               valueFrom:
                 fieldRef:
@@ -120,9 +125,13 @@ spec:
           {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.server.livenessProbe.enabled }}
+          livenessProbe:
             httpGet:
               path: /
-              port: {{ .Values.server.containerPort }}
+              port: {{ .Values.server.ports.container }}
+              {{- if .Values.server.secure }}
+              scheme: HTTPS
+              {{- end }}
             initialDelaySeconds: {{ .Values.server.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.server.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.server.livenessProbe.timeoutSeconds }}
@@ -135,7 +144,10 @@ spec:
           readinessProbe:
             httpGet:
               path: /
-              port: {{ .Values.server.containerPort }}
+              port: {{ .Values.server.ports.container }}
+              {{- if .Values.server.secure }}
+              scheme: HTTPS
+              {{- end }}
             initialDelaySeconds: {{ .Values.server.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.server.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.server.readinessProbe.timeoutSeconds }}

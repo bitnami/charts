@@ -72,7 +72,7 @@ Create the name of the controller service account to use
 Create the name of the workflows service account to use
 */}}
 {{- define "argo-workflows.workflows.serviceAccountName" -}}
-{{- if .Values.controller.serviceAccount.create -}}
+{{- if .Values.workflows.serviceAccount.create -}}
     {{ default (printf "%s-workflows" (include "common.names.fullname" .)) .Values.workflows.serviceAccount.name }}
 {{- else -}}
     {{ default "default" .Values.workflows.serviceAccount.name }}

@@ -18,6 +18,8 @@ rules:
     resources:
     - workflows
     - workflows/finalizers
+    - workflowtasksets
+    - workflowtasksets/finalizers
     - workfloweventbindings
     - workfloweventbindings/finalizers
     - workflowtemplates
@@ -50,6 +52,8 @@ rules:
     resources:
       - workflows
       - workflows/finalizers
+      - workflowtasksets
+      - workflowtasksets/finalizers
       - workfloweventbindings
       - workfloweventbindings/finalizers
       - workflowtemplates
@@ -87,6 +91,8 @@ rules:
     resources:
       - workflows
       - workflows/finalizers
+      - workflowtasksets
+      - workflowtasksets/finalizers
       - workfloweventbindings
       - workfloweventbindings/finalizers
       - workflowtemplates
