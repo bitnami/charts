@@ -413,6 +413,8 @@ Refer to the [chart documentation for more information on each of these architec
 | `metrics.image.tag`                          | MongoDB&reg; Prometheus exporter image tag (immutable tags are recommended)                                           | `0.11.2-debian-10-r266`    |
 | `metrics.image.pullPolicy`                   | MongoDB&reg; Prometheus exporter image pull policy                                                                    | `IfNotPresent`             |
 | `metrics.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                      | `[]`                       |
+| `metrics.username`                           | String with username for the metrics exporter                                                                       | `""`                       | 
+| `metrics.password`                           | String with password for the metrics exporter                                                                       | `""`                       | 
 | `metrics.extraFlags`                         | String with extra flags to the metrics exporter                                                                       | `""`                       |
 | `metrics.extraUri`                           | Additional URI options of the metrics service                                                                         | `""`                       |
 | `metrics.resources.limits`                   | The resources limits for Prometheus exporter containers                                                               | `{}`                       |
