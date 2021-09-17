@@ -20,15 +20,16 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.externalTrafficPolicy)) }}
-  externalTrafficPolicy: {{ .Values.service.externalTrafficPolicy }} 
+  externalTrafficPolicy: {{ .Values.service.externalTrafficPolicy }}
   {{- end }}
   {{- if not (empty .Values.service.clusterIP) }}
-  clusterIP: {{ .Values.service.clusterIP }} 
+  clusterIP: {{ .Values.service.clusterIP }}
   {{- end }}
   {{- if and (eq .Values.service.type "LoadBalancer") (not (empty .Values.service.loadBalancerIP)) }}
   loadBalancerIP: {{ .Values.service.loadBalancerIP }}
   {{- end }}
   ports:
+    {{- if not .Values.service.disableHttpPort }}
     - port: {{ .Values.service.proxyHttpPort }}
       targetPort: http-proxy
       protocol: TCP
@@ -38,6 +39,7 @@ spec:
       {{- else if eq .Values.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
+    {{- end }}
     - port: {{ .Values.service.proxyHttpsPort }}
       targetPort: https-proxy
       protocol: TCP
@@ -48,6 +50,7 @@ spec:
       nodePort: null
       {{- end }}
     {{- if .Values.service.exposeAdmin }}
+    {{- if not .Values.service.disableHttpPort }}
     - port: {{ .Values.service.adminHttpPort }}
       targetPort: http-admin
       protocol: TCP
@@ -57,6 +60,7 @@ spec:
       {{- else if eq .Values.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
+    {{- end }}
     - port: {{ .Values.service.adminHttpsPort }}
       targetPort: https-admin
       protocol: TCP

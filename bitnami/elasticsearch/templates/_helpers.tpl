@@ -486,3 +486,14 @@ Compile all warnings into a single message, and call fail.
 {{-   printf "\nVALUES VALIDATION:\n%s" $message | fail -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Sysctl set if less then
+*/}}
+{{- define "elasticsearch.sysctlIfLess" -}}
+CURRENT=`sysctl -n {{ .key }}`;
+DESIRED="{{ .value }}";
+if [ "$DESIRED" -gt "$CURRENT" ]; then
+    sysctl -w {{ .key }}={{ .value }};
+fi;
+{{- end -}}

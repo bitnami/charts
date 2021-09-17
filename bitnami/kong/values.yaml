@@ -69,7 +69,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/kong
-  tag: 2.5.0-debian-10-r48
+  tag: 2.5.1-debian-10-r6
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -257,6 +257,9 @@ service:
   ## @param service.adminHttpsPort kong admin HTTPS service port (only if service.exposeAdmin=true)
   ##
   adminHttpsPort: 8444
+  ## @param service.disableHttpPort Disable Kong proxy HTTP and Kong admin HTTP ports
+  ##
+  disableHttpPort: false
   ## Specify the nodePort value for the LoadBalancer and NodePort service types.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ## @param service.proxyHttpNodePort Port to bind to for NodePort service type (proxy HTTP)
@@ -533,7 +536,7 @@ ingressController:
   image:
     registry: docker.io
     repository: bitnami/kong-ingress-controller
-    tag: 1.3.1-debian-10-r77
+    tag: 1.3.1-debian-10-r89
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images

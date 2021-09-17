@@ -91,8 +91,10 @@ spec:
               value: {{ .Values.forceInitScripts | quote }}
             - name: KIBANA_SERVER_ENABLE_TLS
               value: {{ ternary "true" "false" .Values.tls.enabled | quote }}
+            {{- if or .Values.tls.usePemCerts (include "kibana.createTlsSecret" . ) }}
             - name: KIBANA_SERVER_TLS_USE_PEM
-              value: {{ ternary "true" "false" (or .Values.tls.usePemCerts (include "kibana.createTlsSecret" .)) | quote }}
+              value: "true"
+            {{- end }}
             {{- if and .Values.tls.enabled .Values.tls.usePemCerts (or .Values.tls.keyPassword .Values.tls.passwordsSecret) }}
             - name: KIBANA_SERVER_KEY_PASSWORD
               valueFrom:
@@ -151,11 +153,12 @@ spec:
           livenessProbe:
             httpGet:
             {{- if .Values.configuration.server.rewriteBasePath }}
-              path: {{ .Values.configuration.server.basePath }}/api/status
+              path: {{ .Values.configuration.server.basePath }}/login
             {{- else }}
-              path: /api/status
+              path: /login
             {{- end }}
               port: http
+              scheme: {{ ternary "HTTPS" "HTTP" .Values.tls.enabled }}
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
@@ -166,11 +169,12 @@ spec:
           readinessProbe:
             httpGet:
             {{- if .Values.configuration.server.rewriteBasePath }}
-              path: {{ .Values.configuration.server.basePath }}/api/status
+              path: {{ .Values.configuration.server.basePath }}/login
             {{- else }}
-              path: /api/status
+              path: /login
             {{- end }}
               port: http
+              scheme: {{ ternary "HTTPS" "HTTP" .Values.tls.enabled }}
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
