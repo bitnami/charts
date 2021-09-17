@@ -84,27 +84,61 @@ spec:
               value: {{ .Release.Name }}
             - name: BP_NAMESPACE
               value: {{ .Release.Namespace }}
+          {{- if or .Values.dataplatform.emitter.extraEnvVarsCM .Values.dataplatform.exporter.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.dataplatform.emitter.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.dataplatform.emitter.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.dataplatform.emitter.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.dataplatform.emitter.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- end }}
           ports:
             - name: emitter-port
-              containerPort: {{ .Values.dataplatform.emitter.port }}
+              containerPort: {{ .Values.dataplatform.emitter.containerPorts.http }}
           {{- if .Values.dataplatform.emitter.resources }}
           resources: {{- toYaml .Values.dataplatform.emitter.resources | nindent 12 }}
           {{- end }}
           {{- if .Values.dataplatform.emitter.livenessProbe.enabled }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.dataplatform.emitter.livenessProbe "enabled") "context" $) | nindent 12 }}
+          livenessProbe:
             httpGet:
               path: "/v1/health"
-              port: {{ .Values.dataplatform.emitter.port }}
+              port: {{ .Values.dataplatform.emitter.containerPorts.http }}
+            initialDelaySeconds: {{ .Values.dataplatform.emitter.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.dataplatform.emitter.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.dataplatform.emitter.livenessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.dataplatform.emitter.livenessProbe.failureThreshold }}
+            successThreshold: {{ .Values.dataplatform.emitter.livenessProbe.successThreshold }}
           {{- else if .Values.dataplatform.emitter.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.dataplatform.emitter.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.dataplatform.emitter.readinessProbe.enabled }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.dataplatform.emitter.readinessProbe "enabled") "context" $) | nindent 12 }}
+          readinessProbe:
             httpGet:
               path: "/v1/health"
-              port: {{ .Values.dataplatform.emitter.port }}
+              port: {{ .Values.dataplatform.emitter.containerPorts.http }}
+            initialDelaySeconds: {{ .Values.dataplatform.emitter.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.dataplatform.emitter.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.dataplatform.emitter.readinessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.dataplatform.emitter.readinessProbe.failureThreshold }}
+            successThreshold: {{ .Values.dataplatform.emitter.readinessProbe.successThreshold }}
           {{- else if .Values.dataplatform.emitter.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.dataplatform.emitter.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.dataplatform.emitter.startupProbe.enabled }}
+          startupProbe:
+            httpGet:
+              path: "/v1/health"
+              port: {{ .Values.dataplatform.emitter.containerPorts.http }}
+            initialDelaySeconds: {{ .Values.dataplatform.emitter.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.dataplatform.emitter.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.dataplatform.emitter.startupProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.dataplatform.emitter.startupProbe.failureThreshold }}
+            successThreshold: {{ .Values.dataplatform.emitter.startupProbe.successThreshold }}
+          {{- else if .Values.dataplatform.emitter.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.dataplatform.emitter.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
           {{- if .Values.dataplatform.emitter.extraVolumeMounts }}

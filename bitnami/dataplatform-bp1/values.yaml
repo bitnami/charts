@@ -2,6 +2,7 @@
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
 ## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
@@ -16,8 +17,15 @@ global:
   imagePullSecrets: []
   storageClass: ""
 
-## @section Data Platform Chart parameters
+## @section Common parameters
+## @param commonLabels Labels to add to all deployed objects
+##
+commonLabels: {}
+## @param commonAnnotations Annotations to add to all deployed objects
+##
+commonAnnotations: {}
 
+## @section Data Platform Chart parameters
 ## Configuration for the dataplatform prometheus exporter
 ##
 dataplatform:
@@ -43,15 +51,15 @@ dataplatform:
     ##
     create: true
   exporter:
-    ## @param dataplatform.exporter.enabled Start Data Platform prometheus exporter
+    ## @param dataplatform.exporter.enabled Start a prometheus exporter
     ##
     enabled: true
-    ## Data Platform Prometheus exporter image
+    ## Data Platform BP1 exporter image
     ## ref: https://hub.docker.com/r/bitnami/dataplatform-exporter/tags/
-    ## @param dataplatform.exporter.image.registry Data Platform exporter image registry
-    ## @param dataplatform.exporter.image.repository Data Platform exporter image repository
-    ## @param dataplatform.exporter.image.tag Data Platform exporter image tag (immutable tags are recommended)
-    ## @param dataplatform.exporter.image.pullPolicy Data Platform exporter image pull policy
+    ## @param dataplatform.exporter.image.registry dataplatform exporter image registry
+    ## @param dataplatform.exporter.image.repository dataplatform exporter image repository
+    ## @param dataplatform.exporter.image.tag dataplatform exporter image tag (immutable tags are recommended)
+    ## @param dataplatform.exporter.image.pullPolicy dataplatform exporter image pull policy
     ## @param dataplatform.exporter.image.pullSecrets Specify docker-registry secret names as an array
     ##
     image:
@@ -102,13 +110,31 @@ dataplatform:
       timeoutSeconds: 15
       failureThreshold: 15
       successThreshold: 15
-    ## @param dataplatform.exporter.port Data Platform Prometheus exporter port
+    ## Configure extra options for startup probe
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-startup-probes/#configure-probes
+    ## @param dataplatform.exporter.startupProbe.enabled Enable startupProbe
+    ## @param dataplatform.exporter.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+    ## @param dataplatform.exporter.startupProbe.periodSeconds Period seconds for startupProbe
+    ## @param dataplatform.exporter.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+    ## @param dataplatform.exporter.startupProbe.failureThreshold Failure threshold for startupProbe
+    ## @param dataplatform.exporter.startupProbe.successThreshold Success threshold for startupProbe
     ##
-    port: 9090
-    ## @param dataplatform.exporter.threads Number of Data Platform exporter threads
+    startupProbe:
+      enabled: false
+      initialDelaySeconds: 10
+      periodSeconds: 5
+      timeoutSeconds: 15
+      failureThreshold: 15
+      successThreshold: 15
+    ## @param dataplatform.exporter.containerPorts.http Data Platform Prometheus exporter port
     ##
-    threads: 7
-    ## @param dataplatform.exporter.command Override Data Platform entrypoint string.
+    containerPorts:
+      http: 9090
+    ## @param dataplatform.exporter.priorityClassName exporter priorityClassName
+    ## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+    ##
+    priorityClassName: ""
+    ## @param dataplatform.exporter.command Override Data Platform Exporter entrypoint string.
     ##
     command: []
     ## @param dataplatform.exporter.args Arguments for the provided command if needed
@@ -128,11 +154,13 @@ dataplatform:
       ## limits:
       ##    cpu: 200m
       ##    memory: 256Mi
+      ##
       limits: {}
       ## Examples:
       ## requests:
       ##    cpu: 200m
       ##    memory: 10Mi
+      ##
       requests: {}
     ## dataplatform exporter containers' Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
@@ -146,7 +174,7 @@ dataplatform:
       runAsNonRoot: true
     ## dataplatform exporter pods' Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-    ## @param dataplatform.exporter.podSecurityContext.enabled Enable exporter pods' Security Context
+    ## @param dataplatform.exporter.podSecurityContext.enabled Enable Data Platform exporter pods' Security Context
     ## @param dataplatform.exporter.podSecurityContext.fsGroup Group ID for the pods.
     ##
     podSecurityContext:
@@ -165,6 +193,7 @@ dataplatform:
     ##
     nodeAffinityPreset:
       ## @param dataplatform.exporter.nodeAffinityPreset.type Data Platform exporter node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+      ##
       type: ""
       ## @param dataplatform.exporter.nodeAffinityPreset.key Data Platform exporter node label key to match Ignored if `affinity` is set.
       ## E.g.
@@ -190,7 +219,7 @@ dataplatform:
     ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
     ##
     tolerations: []
-    ## @param dataplatform.exporter.podLabels Additional labels for exporter pod
+    ## @param dataplatform.exporter.podLabels Additional labels for Metrics exporter pod
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
     ##
     podLabels: {}
@@ -198,12 +227,15 @@ dataplatform:
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
     ##
     podAnnotations: {}
-    ## @param dataplatform.exporter.customLivenessProbe Override default liveness probe%%MAIN_CONTAINER_NAME%%
+    ## @param dataplatform.exporter.customLivenessProbe Override default liveness probe
     ##
     customLivenessProbe: {}
-    ## @param dataplatform.exporter.customReadinessProbe Override default readiness probe%%MAIN_CONTAINER_NAME%%
+    ## @param dataplatform.exporter.customReadinessProbe Override default readiness probe
     ##
     customReadinessProbe: {}
+    ## @param dataplatform.exporter.customStartupProbe Override default startup probe
+    ##
+    customStartupProbe: {}
     ## Update strategy
     ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
     ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
@@ -255,13 +287,13 @@ dataplatform:
     ##         containerPort: 1234
     ##
     sidecars: []
-    ## Service for the dataplatform exporter deployment
+    ## Service for the Data Platform exporter deployment
     ##
     service:
-      ## @param dataplatform.exporter.service.type Service type for default Data Platform exporter service
+      ## @param dataplatform.exporter.service.type Service type for default Data Platform Prometheus exporter service
       ##
       type: ClusterIP
-      ## @param dataplatform.exporter.service.annotations.prometheus.io/scrape Enable Data Platform exporter Prometheus scraping
+      ## @param dataplatform.exporter.service.annotations.prometheus.io/scrape Enable Data Platform Prometheus exporter
       ## @param dataplatform.exporter.service.annotations.prometheus.io/port Data Platform Prometheus exporter port
       ## @param dataplatform.exporter.service.annotations.prometheus.io/path Data Platform Prometheus exporter metrics path
       ##
@@ -272,21 +304,21 @@ dataplatform:
       ## @param dataplatform.exporter.service.labels Additional labels for Data Platform exporter service
       ##
       labels: {}
-      ## @param dataplatform.exporter.service.port Kubernetes Service port
+      ## @param dataplatform.exporter.service.ports.http Kubernetes Service port
       ##
-      port: 9090
-      ## @param dataplatform.exporter.service.loadBalancerIP Load balancer IP for the dataplatform Exporter Service (optional, cloud specific)
+      ports:
+        http: 9090
+      ## @param dataplatform.exporter.service.loadBalancerIP Load balancer IP for the Data Platform Exporter Service (optional, cloud specific)
       ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
       ##
       loadBalancerIP: ""
       ## @param dataplatform.exporter.service.nodePorts.http Node ports for the HTTP exporter service
-      ## @param dataplatform.exporter.service.nodePorts.https Node ports for the HTTPS exporter service
       ## nodePorts:
       ##   http: <to set explicitly, choose port between 30000-32767>
       ##   https: <to set explicitly, choose port between 30000-32767>
+      ##
       nodePorts:
         http: ""
-        https: ""
       ## @param dataplatform.exporter.service.loadBalancerSourceRanges Exporter Load Balancer Source ranges
       ## loadBalancerSourceRanges:
       ##   - 10.10.10.0/24
@@ -301,7 +333,7 @@ dataplatform:
     ## @param dataplatform.emitter.enabled Start Data Platform metrics emitter
     ##
     enabled: true
-    ## Data Platform metrics emitter image
+    ## Data Platform BP1 emitter image
     ## ref: https://hub.docker.com/r/bitnami/dataplatform-emitter/tags/
     ## @param dataplatform.emitter.image.registry Data Platform emitter image registry
     ## @param dataplatform.emitter.image.repository Data Platform emitter image repository
@@ -357,19 +389,37 @@ dataplatform:
       timeoutSeconds: 15
       failureThreshold: 15
       successThreshold: 15
-    ## @param dataplatform.emitter.port Data Platform emitter port
+    ## Configure extra options for startup probe
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-startup-probes/#configure-probes
+    ## @param dataplatform.emitter.startupProbe.enabled Enable startupProbe
+    ## @param dataplatform.emitter.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+    ## @param dataplatform.emitter.startupProbe.periodSeconds Period seconds for startupProbe
+    ## @param dataplatform.emitter.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+    ## @param dataplatform.emitter.startupProbe.failureThreshold Failure threshold for startupProbe
+    ## @param dataplatform.emitter.startupProbe.successThreshold Success threshold for startupProbe
     ##
-    port: 8091
-    ## @param dataplatform.emitter.threads Number of Data Platform emitter threads
+    startupProbe:
+      enabled: false
+      initialDelaySeconds: 10
+      periodSeconds: 5
+      timeoutSeconds: 15
+      failureThreshold: 15
+      successThreshold: 15
+    ## @param dataplatform.emitter.containerPorts.http Data Platform emitter port
     ##
-    threads: 7
+    containerPorts:
+      http: 8091
+    ## @param dataplatform.emitter.priorityClassName exporter priorityClassName
+    ## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+    ##
+    priorityClassName: ""
     ## @param dataplatform.emitter.command Override Data Platform entrypoint string.
     ##
     command: []
     ## @param dataplatform.emitter.args Arguments for the provided command if needed
     ##
     args: []
-    ## Dataplatform metrics emitter resource requests and limits
+    ## Data Platform metrics emitter resource requests and limits
     ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
     ## We usually recommend not to specify default resources and to leave this as a conscious
     ## choice for the user. This also increases chances charts run on environments with little
@@ -383,13 +433,15 @@ dataplatform:
       ## limits:
       ##    cpu: 200m
       ##    memory: 256Mi
+      ##
       limits: {}
       ## Examples:
       ## requests:
       ##    cpu: 200m
       ##    memory: 10Mi
+      ##
       requests: {}
-    ## dataplatform emitter containers' Security Context
+    ## Data Platform emitter containers' Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
     ## @param dataplatform.emitter.containerSecurityContext.enabled Enable Data Platform emitter containers' Security Context
     ## @param dataplatform.emitter.containerSecurityContext.runAsUser User ID for the containers.
@@ -420,6 +472,7 @@ dataplatform:
     ##
     nodeAffinityPreset:
       ## @param dataplatform.emitter.nodeAffinityPreset.type Data Platform emitter node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+      ##
       type: ""
       ## @param dataplatform.emitter.nodeAffinityPreset.key Data Platform emitter node label key to match Ignored if `affinity` is set.
       ## E.g.
@@ -459,6 +512,9 @@ dataplatform:
     ## @param dataplatform.emitter.customReadinessProbe Override default readiness probe%%MAIN_CONTAINER_NAME%%
     ##
     customReadinessProbe: {}
+    ## @param dataplatform.emitter.customStartupProbe Override default startup probe
+    ##
+    customStartupProbe: {}
     ## Update strategy
     ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
     ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
@@ -522,21 +578,21 @@ dataplatform:
       ## @param dataplatform.emitter.service.labels Additional labels for Data Platform emitter service
       ##
       labels: {}
-      ## @param dataplatform.emitter.service.port Kubernetes Service port
+      ## @param dataplatform.emitter.service.ports.http Kubernetes Service port
       ##
-      port: 8091
-      ## @param dataplatform.emitter.service.loadBalancerIP Load balancer IP for the Data Platform emitter Service (optional, cloud specific)
+      ports:
+        http: 8091
+      ## @param dataplatform.emitter.service.loadBalancerIP Load balancer IP for the dataplatform emitter Service (optional, cloud specific)
       ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
       ##
       loadBalancerIP: ""
       ## @param dataplatform.emitter.service.nodePorts.http Node ports for the HTTP emitter service
-      ## @param dataplatform.emitter.service.nodePorts.https Node ports for the HTTPS emitter service
       ## nodePorts:
       ##   http: <to set explicitly, choose port between 30000-32767>
       ##   https: <to set explicitly, choose port between 30000-32767>
+      ##
       nodePorts:
         http: ""
-        https: ""
       ## @param dataplatform.emitter.service.loadBalancerSourceRanges Data Platform Emitter Load Balancer Source ranges
       ## loadBalancerSourceRanges:
       ##   - 10.10.10.0/24
@@ -548,6 +604,7 @@ dataplatform:
     hostAliases: []
 
 ## @section Zookeeper chart parameters
+##
 
 zookeeper:
   ## @param zookeeper.enabled Switch to enable or disable the Zookeeper helm chart
@@ -586,10 +643,11 @@ zookeeper:
               - key: app.kubernetes.io/instance
                 operator: In
                 values:
-                  - '{{ .Release.Name }}'
+                  - "{{ .Release.Name }}"
           topologyKey: "kubernetes.io/hostname"
 
 ## @section Kafka chart parameters
+##
 
 ## Kafka Subchart parameters
 ##
@@ -630,7 +688,7 @@ kafka:
               - key: app.kubernetes.io/instance
                 operator: In
                 values:
-                  - '{{ .Release.Name }}'
+                  - "{{ .Release.Name }}"
           topologyKey: "kubernetes.io/hostname"
     podAffinity:
       preferredDuringSchedulingIgnoredDuringExecution:
@@ -645,7 +703,7 @@ kafka:
                 - key: app.kubernetes.io/instance
                   operator: In
                   values:
-                    - '{{ .Release.Name }}'
+                    - "{{ .Release.Name }}"
             topologyKey: "kubernetes.io/hostname"
   ## Prometheus Exporters / Metrics
   ##
@@ -705,9 +763,10 @@ kafka:
     ## This is set to the zookeeper deployed as part of this chart
     ##
     servers:
-      - '{{ .Release.Name }}-zookeeper'
+      - "{{ .Release.Name }}-zookeeper"
 
 ## @section Solr chart parameters
+##
 
 ## Solr Subchart parameters
 ##
@@ -741,7 +800,7 @@ solr:
               - key: app.kubernetes.io/instance
                 operator: In
                 values:
-                  - '{{ .Release.Name }}'
+                  - "{{ .Release.Name }}"
           topologyKey: "kubernetes.io/hostname"
   resources:
     ## Recommended values for cpu and memory requests
@@ -778,7 +837,7 @@ solr:
                   - key: app.kubernetes.io/instance
                     operator: In
                     values:
-                      - '{{ .Release.Name }}'
+                      - "{{ .Release.Name }}"
               topologyKey: "kubernetes.io/hostname"
     ## Solr Prometheus exporter container resource requests and limits
     ## @param solr.exporter.resources.limits The resources limits for the container
@@ -800,9 +859,10 @@ solr:
     ## In this case, it is set to the zookeeper deployed as part of this chart.
     ##
     servers:
-      - '{{ .Release.Name }}-zookeeper'
+      - "{{ .Release.Name }}-zookeeper"
 
 ## @section Spark chart parameters
+##
 
 ## Spark Subchart parameters
 ##
@@ -842,7 +902,7 @@ spark:
                 - key: app.kubernetes.io/instance
                   operator: In
                   values:
-                    - '{{ .Release.Name }}'
+                    - "{{ .Release.Name }}"
             topologyKey: "kubernetes.io/hostname"
   ## Spark worker specific configuration
   ##
@@ -870,7 +930,7 @@ spark:
                 - key: app.kubernetes.io/instance
                   operator: In
                   values:
-                    - '{{ .Release.Name }}'
+                    - "{{ .Release.Name }}"
             topologyKey: "kubernetes.io/hostname"
     ## @param spark.worker.resources.limits The resources limits for the container
     ## @param spark.worker.resources.requests [object] The resources limits for the container
@@ -889,17 +949,18 @@ spark:
     ## @param spark.metrics.masterAnnotations [object] Annotations for enabling prometheus to access the metrics endpoint of the master nodes
     ##
     masterAnnotations:
-      prometheus.io/scrape: 'true'
-      prometheus.io/path: '/metrics/'
-      prometheus.io/port: '8080'
+      prometheus.io/scrape: "true"
+      prometheus.io/path: "/metrics/"
+      prometheus.io/port: "8080"
     ## @param spark.metrics.workerAnnotations [object] Annotations for enabling prometheus to access the metrics endpoint of the worker nodes
     ##
     workerAnnotations:
-      prometheus.io/scrape: 'true'
-      prometheus.io/path: '/metrics/'
-      prometheus.io/port: '8081'
+      prometheus.io/scrape: "true"
+      prometheus.io/path: "/metrics/"
+      prometheus.io/port: "8081"
 
 ## @section Tanzu Observability (Wavefront) chart parameters
+##
 
 ## Wavefront Subchart parameters
 ##
@@ -950,7 +1011,7 @@ wavefront:
           type: prometheus
           selectors:
             images:
-              - '*bitnami/kafka-exporter*'
+              - "*bitnami/kafka-exporter*"
           port: 9308
           path: /metrics
           scheme: http
@@ -961,7 +1022,7 @@ wavefront:
           type: prometheus
           selectors:
             images:
-              - '*bitnami/jmx-exporter*'
+              - "*bitnami/jmx-exporter*"
           port: 5556
           path: /metrics
           scheme: http
@@ -972,7 +1033,7 @@ wavefront:
           type: prometheus
           selectors:
             images:
-              - '*bitnami/solr*'
+              - "*bitnami/solr*"
           port: 9983
           path: /metrics
           scheme: http
@@ -982,7 +1043,7 @@ wavefront:
           type: prometheus
           selectors:
             images:
-              - '*bitnami/spark*'
+              - "*bitnami/spark*"
           port: 8081
           path: /metrics/
           scheme: http
@@ -993,7 +1054,7 @@ wavefront:
           type: prometheus
           selectors:
             images:
-              - '*bitnami/spark*'
+              - "*bitnami/spark*"
           port: 8080
           path: /metrics/
           scheme: http

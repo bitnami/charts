@@ -95,6 +95,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
 
+### Common parameters
+
+| Name                | Description                                | Value |
+| ------------------- | ------------------------------------------ | ----- |
+| `commonLabels`      | Labels to add to all deployed objects      | `{}`  |
+| `commonAnnotations` | Annotations to add to all deployed objects | `{}`  |
+
+
 ### Data Platform Chart parameters
 
 | Name                                                             | Description                                                                                                      | Value                           |
@@ -103,11 +111,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dataplatform.serviceAccount.name`                               | The name of the ServiceAccount to create                                                                         | `""`                            |
 | `dataplatform.serviceAccount.automountServiceAccountToken`       | Allows auto mount of ServiceAccountToken on the serviceAccount created                                           | `true`                          |
 | `dataplatform.rbac.create`                                       | Whether to create & use RBAC resources or not                                                                    | `true`                          |
-| `dataplatform.exporter.enabled`                                  | Start Data Platform prometheus exporter                                                                          | `true`                          |
-| `dataplatform.exporter.image.registry`                           | Data Platform exporter image registry                                                                            | `docker.io`                     |
-| `dataplatform.exporter.image.repository`                         | Data Platform exporter image repository                                                                          | `bitnami/dataplatform-exporter` |
-| `dataplatform.exporter.image.tag`                                | Data Platform exporter image tag (immutable tags are recommended)                                                | `latest`                        |
-| `dataplatform.exporter.image.pullPolicy`                         | Data Platform exporter image pull policy                                                                         | `IfNotPresent`                  |
+| `dataplatform.exporter.enabled`                                  | Start a prometheus exporter                                                                                      | `true`                          |
+| `dataplatform.exporter.image.registry`                           | dataplatform exporter image registry                                                                             | `docker.io`                     |
+| `dataplatform.exporter.image.repository`                         | dataplatform exporter image repository                                                                           | `bitnami/dataplatform-exporter` |
+| `dataplatform.exporter.image.tag`                                | dataplatform exporter image tag (immutable tags are recommended)                                                 | `latest`                        |
+| `dataplatform.exporter.image.pullPolicy`                         | dataplatform exporter image pull policy                                                                          | `IfNotPresent`                  |
 | `dataplatform.exporter.image.pullSecrets`                        | Specify docker-registry secret names as an array                                                                 | `[]`                            |
 | `dataplatform.exporter.livenessProbe.enabled`                    | Enable livenessProbe                                                                                             | `true`                          |
 | `dataplatform.exporter.livenessProbe.initialDelaySeconds`        | Initial delay seconds for livenessProbe                                                                          | `10`                            |
@@ -121,16 +129,22 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dataplatform.exporter.readinessProbe.timeoutSeconds`            | Timeout seconds for readinessProbe                                                                               | `15`                            |
 | `dataplatform.exporter.readinessProbe.failureThreshold`          | Failure threshold for readinessProbe                                                                             | `15`                            |
 | `dataplatform.exporter.readinessProbe.successThreshold`          | Success threshold for readinessProbe                                                                             | `15`                            |
-| `dataplatform.exporter.port`                                     | Data Platform Prometheus exporter port                                                                           | `9090`                          |
-| `dataplatform.exporter.threads`                                  | Number of Data Platform exporter threads                                                                         | `7`                             |
-| `dataplatform.exporter.command`                                  | Override Data Platform entrypoint string.                                                                        | `[]`                            |
+| `dataplatform.exporter.startupProbe.enabled`                     | Enable startupProbe                                                                                              | `false`                         |
+| `dataplatform.exporter.startupProbe.initialDelaySeconds`         | Initial delay seconds for startupProbe                                                                           | `10`                            |
+| `dataplatform.exporter.startupProbe.periodSeconds`               | Period seconds for startupProbe                                                                                  | `5`                             |
+| `dataplatform.exporter.startupProbe.timeoutSeconds`              | Timeout seconds for startupProbe                                                                                 | `15`                            |
+| `dataplatform.exporter.startupProbe.failureThreshold`            | Failure threshold for startupProbe                                                                               | `15`                            |
+| `dataplatform.exporter.startupProbe.successThreshold`            | Success threshold for startupProbe                                                                               | `15`                            |
+| `dataplatform.exporter.containerPorts.http`                      | Data Platform Prometheus exporter port                                                                           | `9090`                          |
+| `dataplatform.exporter.priorityClassName`                        | exporter priorityClassName                                                                                       | `""`                            |
+| `dataplatform.exporter.command`                                  | Override Data Platform Exporter entrypoint string.                                                               | `[]`                            |
 | `dataplatform.exporter.args`                                     | Arguments for the provided command if needed                                                                     | `[]`                            |
 | `dataplatform.exporter.resources.limits`                         | The resources limits for the container                                                                           | `{}`                            |
 | `dataplatform.exporter.resources.requests`                       | The requested resources for the container                                                                        | `{}`                            |
 | `dataplatform.exporter.containerSecurityContext.enabled`         | Enable Data Platform exporter containers' Security Context                                                       | `true`                          |
 | `dataplatform.exporter.containerSecurityContext.runAsUser`       | User ID for the containers.                                                                                      | `1001`                          |
 | `dataplatform.exporter.containerSecurityContext.runAsNonRoot`    | Enable Data Platform exporter containers' Security Context runAsNonRoot                                          | `true`                          |
-| `dataplatform.exporter.podSecurityContext.enabled`               | Enable exporter pods' Security Context                                                                           | `true`                          |
+| `dataplatform.exporter.podSecurityContext.enabled`               | Enable Data Platform exporter pods' Security Context                                                             | `true`                          |
 | `dataplatform.exporter.podSecurityContext.fsGroup`               | Group ID for the pods.                                                                                           | `1001`                          |
 | `dataplatform.exporter.podAffinityPreset`                        | Data Platform exporter pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                            |
 | `dataplatform.exporter.podAntiAffinityPreset`                    | Data Platform exporter pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`                          |
@@ -140,10 +154,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dataplatform.exporter.affinity`                                 | Affinity settings for exporter pod assignment. Evaluated as a template                                           | `{}`                            |
 | `dataplatform.exporter.nodeSelector`                             | Node labels for exporter pods assignment. Evaluated as a template                                                | `{}`                            |
 | `dataplatform.exporter.tolerations`                              | Tolerations for exporter pods assignment. Evaluated as a template                                                | `[]`                            |
-| `dataplatform.exporter.podLabels`                                | Additional labels for exporter pod                                                                               | `{}`                            |
+| `dataplatform.exporter.podLabels`                                | Additional labels for Metrics exporter pod                                                                       | `{}`                            |
 | `dataplatform.exporter.podAnnotations`                           | Additional annotations for Metrics exporter pod                                                                  | `{}`                            |
-| `dataplatform.exporter.customLivenessProbe`                      | Override default liveness probe%%MAIN_CONTAINER_NAME%%                                                           | `{}`                            |
-| `dataplatform.exporter.customReadinessProbe`                     | Override default readiness probe%%MAIN_CONTAINER_NAME%%                                                          | `{}`                            |
+| `dataplatform.exporter.customLivenessProbe`                      | Override default liveness probe                                                                                  | `{}`                            |
+| `dataplatform.exporter.customReadinessProbe`                     | Override default readiness probe                                                                                 | `{}`                            |
+| `dataplatform.exporter.customStartupProbe`                       | Override default startup probe                                                                                   | `{}`                            |
 | `dataplatform.exporter.updateStrategy.type`                      | Update strategy - only really applicable for deployments with RWO PVs attached                                   | `RollingUpdate`                 |
 | `dataplatform.exporter.updateStrategy.rollingUpdate`             | Deployment rolling update configuration parameters                                                               | `{}`                            |
 | `dataplatform.exporter.extraEnvVars`                             | Additional environment variables to set                                                                          | `[]`                            |
@@ -153,15 +168,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dataplatform.exporter.extraVolumeMounts`                        | Extra volume mounts to add to the container                                                                      | `[]`                            |
 | `dataplatform.exporter.initContainers`                           | Add init containers to the %%MAIN_CONTAINER_NAME%% pods                                                          | `[]`                            |
 | `dataplatform.exporter.sidecars`                                 | Add sidecars to the %%MAIN_CONTAINER_NAME%% pods                                                                 | `[]`                            |
-| `dataplatform.exporter.service.type`                             | Service type for default Data Platform exporter service                                                          | `ClusterIP`                     |
-| `dataplatform.exporter.service.annotations.prometheus.io/scrape` | Enable Data Platform exporter Prometheus scraping                                                                | `true`                     |
-| `dataplatform.exporter.service.annotations.prometheus.io/port`   | Data Platform Prometheus exporter port                                                                           | `9090`                     |
-| `dataplatform.exporter.service.annotations.prometheus.io/path`   | Data Platform Prometheus exporter metrics path                                                                   | `/metrics`                     |
+| `dataplatform.exporter.service.type`                             | Service type for default Data Platform Prometheus exporter service                                               | `ClusterIP`                     |
+| `dataplatform.exporter.service.annotations.prometheus.io/scrape` | Enable Data Platform Prometheus exporter                                                                         | `undefined`                     |
+| `dataplatform.exporter.service.annotations.prometheus.io/port`   | Data Platform Prometheus exporter port                                                                           | `undefined`                     |
+| `dataplatform.exporter.service.annotations.prometheus.io/path`   | Data Platform Prometheus exporter metrics path                                                                   | `undefined`                     |
 | `dataplatform.exporter.service.labels`                           | Additional labels for Data Platform exporter service                                                             | `{}`                            |
-| `dataplatform.exporter.service.port`                             | Kubernetes Service port                                                                                          | `9090`                          |
-| `dataplatform.exporter.service.loadBalancerIP`                   | Load balancer IP for the dataplatform Exporter Service (optional, cloud specific)                                | `""`                            |
+| `dataplatform.exporter.service.ports.http`                       | Kubernetes Service port                                                                                          | `9090`                          |
+| `dataplatform.exporter.service.loadBalancerIP`                   | Load balancer IP for the Data Platform Exporter Service (optional, cloud specific)                               | `""`                            |
 | `dataplatform.exporter.service.nodePorts.http`                   | Node ports for the HTTP exporter service                                                                         | `""`                            |
-| `dataplatform.exporter.service.nodePorts.https`                  | Node ports for the HTTPS exporter service                                                                        | `""`                            |
 | `dataplatform.exporter.service.loadBalancerSourceRanges`         | Exporter Load Balancer Source ranges                                                                             | `[]`                            |
 | `dataplatform.exporter.hostAliases`                              | Deployment pod host aliases                                                                                      | `[]`                            |
 | `dataplatform.emitter.enabled`                                   | Start Data Platform metrics emitter                                                                              | `true`                          |
@@ -182,8 +196,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dataplatform.emitter.readinessProbe.timeoutSeconds`             | Timeout seconds for readinessProbe                                                                               | `15`                            |
 | `dataplatform.emitter.readinessProbe.failureThreshold`           | Failure threshold for readinessProbe                                                                             | `15`                            |
 | `dataplatform.emitter.readinessProbe.successThreshold`           | Success threshold for readinessProbe                                                                             | `15`                            |
-| `dataplatform.emitter.port`                                      | Data Platform emitter port                                                                                       | `8091`                          |
-| `dataplatform.emitter.threads`                                   | Number of Data Platform emitter threads                                                                          | `7`                             |
+| `dataplatform.emitter.startupProbe.enabled`                      | Enable startupProbe                                                                                              | `false`                         |
+| `dataplatform.emitter.startupProbe.initialDelaySeconds`          | Initial delay seconds for startupProbe                                                                           | `10`                            |
+| `dataplatform.emitter.startupProbe.periodSeconds`                | Period seconds for startupProbe                                                                                  | `5`                             |
+| `dataplatform.emitter.startupProbe.timeoutSeconds`               | Timeout seconds for startupProbe                                                                                 | `15`                            |
+| `dataplatform.emitter.startupProbe.failureThreshold`             | Failure threshold for startupProbe                                                                               | `15`                            |
+| `dataplatform.emitter.startupProbe.successThreshold`             | Success threshold for startupProbe                                                                               | `15`                            |
+| `dataplatform.emitter.containerPorts.http`                       | Data Platform emitter port                                                                                       | `8091`                          |
+| `dataplatform.emitter.priorityClassName`                         | exporter priorityClassName                                                                                       | `""`                            |
 | `dataplatform.emitter.command`                                   | Override Data Platform entrypoint string.                                                                        | `[]`                            |
 | `dataplatform.emitter.args`                                      | Arguments for the provided command if needed                                                                     | `[]`                            |
 | `dataplatform.emitter.resources.limits`                          | The resources limits for the container                                                                           | `{}`                            |
@@ -205,6 +225,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dataplatform.emitter.podAnnotations`                            | Additional annotations for Metrics emitter pod                                                                   | `{}`                            |
 | `dataplatform.emitter.customLivenessProbe`                       | Override default liveness probe%%MAIN_CONTAINER_NAME%%                                                           | `{}`                            |
 | `dataplatform.emitter.customReadinessProbe`                      | Override default readiness probe%%MAIN_CONTAINER_NAME%%                                                          | `{}`                            |
+| `dataplatform.emitter.customStartupProbe`                        | Override default startup probe                                                                                   | `{}`                            |
 | `dataplatform.emitter.updateStrategy.type`                       | Update strategy - only really applicable for deployments with RWO PVs attached                                   | `RollingUpdate`                 |
 | `dataplatform.emitter.updateStrategy.rollingUpdate`              | Deployment rolling update configuration parameters                                                               | `{}`                            |
 | `dataplatform.emitter.extraEnvVars`                              | Additional environment variables to set                                                                          | `[]`                            |
@@ -217,10 +238,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dataplatform.emitter.service.type`                              | Service type for default Data Platform metrics emitter service                                                   | `ClusterIP`                     |
 | `dataplatform.emitter.service.annotations`                       | annotations for Data Platform emitter service                                                                    | `{}`                            |
 | `dataplatform.emitter.service.labels`                            | Additional labels for Data Platform emitter service                                                              | `{}`                            |
-| `dataplatform.emitter.service.port`                              | Kubernetes Service port                                                                                          | `8091`                          |
-| `dataplatform.emitter.service.loadBalancerIP`                    | Load balancer IP for the Data Platform emitter Service (optional, cloud specific)                                | `""`                            |
+| `dataplatform.emitter.service.ports.http`                        | Kubernetes Service port                                                                                          | `8091`                          |
+| `dataplatform.emitter.service.loadBalancerIP`                    | Load balancer IP for the dataplatform emitter Service (optional, cloud specific)                                 | `""`                            |
 | `dataplatform.emitter.service.nodePorts.http`                    | Node ports for the HTTP emitter service                                                                          | `""`                            |
-| `dataplatform.emitter.service.nodePorts.https`                   | Node ports for the HTTPS emitter service                                                                         | `""`                            |
 | `dataplatform.emitter.service.loadBalancerSourceRanges`          | Data Platform Emitter Load Balancer Source ranges                                                                | `[]`                            |
 | `dataplatform.emitter.hostAliases`                               | Deployment pod host aliases                                                                                      | `[]`                            |
 
