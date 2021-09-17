@@ -160,6 +160,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.certManager`              | Add annotations for cert-manager                                                              | `false`                  |
 | `ingress.pathType`                 | Ingress Path type                                                                             | `ImplementationSpecific` |
 | `ingress.apiVersion`               | Override API Version (automatically detected if not set)                                      | `""`                     |
+| `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                 | `nil`                    |
 | `ingress.hostname`                 | Default host for the ingress resource                                                         | `drupal.local`           |
 | `ingress.path`                     | The Path to Drupal. You may need to set this to '/*' in order to use this                     | `/`                      |
 | `ingress.annotations`              | Ingress annotations done as key:value pairs                                                   | `{}`                     |
