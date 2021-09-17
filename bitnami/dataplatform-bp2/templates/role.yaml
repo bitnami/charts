@@ -23,7 +23,7 @@ rules:
       - list
       - watch
   - apiGroups:
-    - ""
+      - ""
     resources:
       - namespaces
       - namespaces/status
@@ -32,7 +32,7 @@ rules:
       - list
       - watch
   - apiGroups:
-    - apps
+      - apps
     resources:
       - controllerrevisions
       - daemonsets
@@ -49,5 +49,5 @@ rules:
     verbs:
       - get
       - list
-      - watch      
+      - watch
 {{- end -}}

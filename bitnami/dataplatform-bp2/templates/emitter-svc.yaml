@@ -7,7 +7,7 @@ metadata:
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
-    {{- if .Values.dataplatform.emitter.service.Labels }}
+    {{- if .Values.dataplatform.emitter.service.labels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.dataplatform.emitter.service.labels "context" $ ) | nindent 4 }}
     {{- end }}
   name: "{{ include "dataplatform.emitter-name" . }}"
@@ -31,7 +31,7 @@ spec:
   {{- end }}
   ports:
     - name: tcp-client
-      port: {{ .Values.dataplatform.emitter.service.port }}
+      port: {{ .Values.dataplatform.emitter.service.ports.http }}
       protocol: TCP
       targetPort: emitter-port
       {{- if and (or (eq .Values.dataplatform.emitter.service.type "NodePort") (eq .Values.dataplatform.emitter.service.type "LoadBalancer")) (not (empty .Values.dataplatform.emitter.service.nodePorts.http)) }}
