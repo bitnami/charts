@@ -13,7 +13,7 @@ metadata:
       {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
-annotations:
+  annotations:
     {{- if (ne (index .Values.envoy.service.annotations "service.beta.kubernetes.io/aws-load-balancer-type" | toString ) "nlb") }}
     # This annotation puts the AWS ELB into "TCP" mode so that it does not
     # do HTTP negotiation for HTTPS connections at the ELB edge.
