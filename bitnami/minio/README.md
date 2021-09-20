@@ -190,6 +190,19 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.extraPaths`               | Any additional paths that may need to be added to the ingress under the main host                           | `[]`                     |
 | `ingress.extraTls`                 | The tls configuration for additional hostnames to be covered with this ingress record.                      | `[]`                     |
 | `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets               | `[]`                     |
+| `apiIngress.enabled`               | Enable ingress controller resource                                                                          | `false`                  |
+| `apiIngress.certManager`           | Set this to true in order to add the corresponding annotations for cert-manager                             | `false`                  |
+| `apiIngress.apiVersion`            | Force Ingress API version (automatically detected if not set)                                               | `""`                     |
+| `apiIngress.hostname`              | Default host for the ingress resource                                                                       | `minio.local`            |
+| `apiIngress.path`                  | The Path to MinIO&reg;. You may need to set this to '/*' in order to use this with ALB ingress controllers. | `/`                      |
+| `apiIngress.pathType`              | Ingress path type                                                                                           | `ImplementationSpecific` |
+| `apiIngress.servicePort`           | Service port to be used                                                                                     | `minio-console`          |
+| `apiIngress.annotations`           | Ingress annotations                                                                                         | `{}`                     |
+| `apiIngress.tls`                   | Enable TLS configuration for the hostname defined at `apiIngress.hostname` parameter                        | `false`                  |
+| `apiIngress.extraHosts`            | The list of additional hostnames to be covered with this ingress record.                                    | `[]`                     |
+| `apiIngress.extraPaths`            | Any additional paths that may need to be added to the ingress under the main host                           | `[]`                     |
+| `apiIngress.extraTls`              | The tls configuration for additional hostnames to be covered with this ingress record.                      | `[]`                     |
+| `apiIngress.secrets`               | If you're providing your own certificates, please use this to add the certificates as secrets               | `[]`                     |
 | `networkPolicy.enabled`            | Enable the default NetworkPolicy policy                                                                     | `false`                  |
 | `networkPolicy.allowExternal`      | Don't require client label for connections                                                                  | `true`                   |
 
