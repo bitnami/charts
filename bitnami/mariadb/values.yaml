@@ -450,11 +450,11 @@ primary:
     ## @param primary.service.type MariaDB Primary Kubernetes service type
     ##
     type: ClusterIP
-    ## @param primary.service.port MariaDB Primary Kubernetes service port
+    ## @param primary.service.ports.mysql MariaDB Primary Kubernetes service port
     ##
     ports:
       mysql: 3306
-    ## @param primary.service.nodePort MariaDB Primary Kubernetes service node port
+    ## @param primary.service.nodePorts.mysql MariaDB Primary Kubernetes service node port
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     ##
     nodePorts:
@@ -477,10 +477,6 @@ primary:
     ##   - 10.10.10.0/24
     ##
     loadBalancerSourceRanges: []
-    ## @param primary.service.externalTrafficPolicy Service external traffic policy
-    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
-    ##
-    externalTrafficPolicy: Cluster
     ## @param primary.service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
     ##
     extraPorts: []
@@ -816,11 +812,11 @@ secondary:
     ## @param secondary.service.type MariaDB secondary Kubernetes service type
     ##
     type: ClusterIP
-    ## @param secondary.service.port MariaDB secondary Kubernetes service port
+    ## @param secondary.service.ports.mysql MariaDB secondary Kubernetes service port
     ##
     ports:
       mysql: 3306
-    ## @param secondary.service.nodePort MariaDB secondary Kubernetes service node port
+    ## @param secondary.service.nodePorts.mysql MariaDB secondary Kubernetes service node port
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     ##
     nodePorts:
@@ -845,10 +841,6 @@ secondary:
     ##   - 10.10.10.0/24
     ##
     loadBalancerSourceRanges: []
-    ## @param secondary.service.externalTrafficPolicy Service external traffic policy
-    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
-    ##
-    externalTrafficPolicy: Cluster
     ## @param secondary.service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
     ##
     extraPorts: []
