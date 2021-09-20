@@ -28,6 +28,9 @@ spec:
   ingressClassName: {{ .Values.ingress.ingressClassName | quote }}
   {{- end }}
   rules:
+    {{- if .Values.ingress.rulesOverride }}
+    {{- toYaml .Values.ingress.rulesOverride | nindent 4 }}
+    {{- else }}
     {{- if .Values.ingress.hostname }}
     - host: {{ .Values.ingress.hostname | quote }}
       http:
@@ -51,6 +54,7 @@ spec:
             {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (printf "%s-default-backend" (include "common.names.fullname" $)) "servicePort" "http" "context" $)  | nindent 14 }}
     {{- end }}
+  {{- end }}
   {{- if or (and .Values.ingress.tls (or .Values.ingress.certManager .Values.ingress.selfSigned)) .Values.ingress.extraTls }}
   tls:
     {{- if and .Values.ingress.tls (or .Values.ingress.certManager .Values.ingress.selfSigned) }}

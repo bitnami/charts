@@ -71,7 +71,7 @@ spec:
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: envoy
   type: {{ .Values.envoy.service.type }}
-{{- if .Values.prometheus.serviceMonitor.enabled }}
+{{- if .Values.metrics.serviceMonitor.enabled }}
 ---
 apiVersion: v1
 kind: Service

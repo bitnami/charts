@@ -158,7 +158,7 @@ spec:
               protocol: TCP
           {{- if .Values.defaultBackend.resources }}
           resources: {{- toYaml .Values.defaultBackend.resources | nindent 12 }}
-          {{- if .Values.contour.extraVolumeMounts }}
+          {{- if .Values.defaultBackend.extraVolumeMounts }}
           volumeMounts: {{- include "common.tplvalues.render" ( dict "value" .Values.contour.extraVolumeMounts "context" $ ) | nindent 12 }}
           {{- end }}
           {{- end }}

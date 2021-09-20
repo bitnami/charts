@@ -1,11 +1,11 @@
-{{- if and .Values.prometheus.serviceMonitor.enabled .Values.envoy.enabled }}
+{{- if and .Values.metrics.serviceMonitor.enabled .Values.envoy.enabled }}
 ---
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: {{ include "common.names.fullname" . }}-envoy
-  {{- if .Values.prometheus.serviceMonitor.namespace }}
-  namespace: {{ .Values.prometheus.serviceMonitor.namespace }}
+  {{- if .Values.metrics.serviceMonitor.namespace }}
+  namespace: {{ .Values.metrics.serviceMonitor.namespace }}
   {{- else }}
   namespace: {{ .Release.Namespace }}
   {{- end }}
@@ -18,7 +18,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  jobLabel: {{ .Values.prometheus.serviceMonitor.jobLabel | quote }}
+  jobLabel: {{ .Values.metrics.serviceMonitor.jobLabel | quote }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: envoy
@@ -31,8 +31,8 @@ spec:
   endpoints:
     - port: metrics
       path: /stats/prometheus
-      {{- if .Values.prometheus.serviceMonitor.interval }}
-      interval: {{ .Values.prometheus.serviceMonitor.interval }}
+      {{- if .Values.metrics.serviceMonitor.interval }}
+      interval: {{ .Values.metrics.serviceMonitor.interval }}
       {{- end }}
       {{- if .Values.metrics.serviceMonitor.scrapeTimeout }}
       scrapeTimeout: {{ .Values.metrics.serviceMonitor.scrapeTimeout }}
@@ -40,10 +40,10 @@ spec:
       {{- if .Values.metrics.serviceMonitor.honorLabels }}
       honorLabels: {{ .Values.metrics.serviceMonitor.honorLabels }}
       {{- end }}
-      {{- if .Values.prometheus.serviceMonitor.metricRelabelings }}
-      metricRelabelings: {{ toYaml .Values.prometheus.serviceMonitor.metricRelabelings | nindent 6 }}
+      {{- if .Values.metrics.serviceMonitor.metricRelabelings }}
+      metricRelabelings: {{ toYaml .Values.metrics.serviceMonitor.metricRelabelings | nindent 6 }}
       {{- end }}
-      {{- if .Values.prometheus.serviceMonitor.relabelings }}
-      relabelings: {{ toYaml .Values.prometheus.serviceMonitor.relabelings | nindent 6 }}
+      {{- if .Values.metrics.serviceMonitor.relabelings }}
+      relabelings: {{ toYaml .Values.metrics.serviceMonitor.relabelings | nindent 6 }}
     {{- end }}
 {{- end }}
