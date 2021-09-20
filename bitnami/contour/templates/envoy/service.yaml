@@ -10,7 +10,10 @@ metadata:
     {{- if .Values.envoy.service.labels }}
     {{- include "common.tplvalues.render" (dict "value" .Values.envoy.service.labels "context" $) | nindent 4 }}
     {{- end }}
-  annotations:
+      {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+annotations:
     {{- if (ne (index .Values.envoy.service.annotations "service.beta.kubernetes.io/aws-load-balancer-type" | toString ) "nlb") }}
     # This annotation puts the AWS ELB into "TCP" mode so that it does not
     # do HTTP negotiation for HTTPS connections at the ELB edge.
@@ -23,6 +26,9 @@ metadata:
     {{- end }}
     {{- if .Values.envoy.service.annotations }}
     {{- include "common.tplvalues.render" (dict "value" .Values.envoy.service.annotations "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
     {{- end }}
 spec:
   {{- if .Values.envoy.service.externalTrafficPolicy }}
