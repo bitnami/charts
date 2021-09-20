@@ -19,14 +19,10 @@ spec:
     matchLabels: {{ include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: secondary
   serviceName: {{ include "mariadb.secondary.fullname" . }}
-  updateStrategy:
-    type: {{ .Values.secondary.updateStrategy }}
-    {{- if (eq "Recreate" .Values.secondary.updateStrategy) }}
-    rollingUpdate: null
-    {{- else if .Values.secondary.rollingUpdatePartition }}
-    rollingUpdate:
-      partition: {{ .Values.secondary.rollingUpdatePartition }}
-    {{- end }}
+  podManagementPolicy: {{ .Values.secondary.podManagementPolicy }}
+  {{- if .Values.secondary.updateStrategy }}
+  updateStrategy: {{- toYaml .Values.secondary.updateStrategy | nindent 4 }}
+  {{- end }}
   template:
     metadata:
       annotations:
@@ -38,6 +34,9 @@ spec:
         {{- end }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: secondary
+        {{- if .Values.secondary.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.secondary.podLabels "context" $) | nindent 8 }}
+        {{- end }}
         {{- if .Values.commonLabels }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
         {{- end }}
@@ -119,6 +118,9 @@ spec:
           {{- else if .Values.secondary.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.secondary.args "context" $) | nindent 12 }}
           {{- end }}
+          {{- if .Values.secondary.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.secondary.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
           env:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
@@ -180,6 +182,21 @@ spec:
             - name: mysql
               containerPort: 3306
           {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.secondary.startupProbe.enabled }}
+          startupProbe: {{- omit .Values.secondary.startupProbe "enabled" | toYaml | nindent 12 }}
+            exec:
+              command:
+                - /bin/bash
+                - -ec
+                - |
+                  password_aux="${MARIADB_MASTER_ROOT_PASSWORD:-}"
+                  if [[ -f "${MARIADB_MASTER_ROOT_PASSWORD_FILE:-}" ]]; then
+                      password_aux=$(cat "$MARIADB_MASTER_ROOT_PASSWORD_FILE")
+                  fi
+                  mysqladmin status -uroot -p"${password_aux}"
+          {{- else if .Values.secondary.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.secondary.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
           {{- if .Values.secondary.livenessProbe.enabled }}
           livenessProbe: {{- omit .Values.secondary.livenessProbe "enabled" | toYaml | nindent 12 }}
             exec:

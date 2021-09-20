@@ -18,6 +18,9 @@ global:
 
 ## @section Common parameters
 
+## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
+##
+kubeVersion: ""
 ## @param nameOverride String to partially override mariadb.fullname
 ##
 nameOverride: ""
@@ -157,6 +160,9 @@ primary:
   ## @param primary.args Override default container args on MariaDB Primary container(s) (useful when using custom images)
   ##
   args: []
+  ## @param primary.lifecycleHooks for the MariaDB Primary container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
   ## @param primary.hostAliases Add deployment host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -206,6 +212,10 @@ primary:
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
+  ## @param primary.podLabels Extra labels for MariaDB primary pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
   ## @param primary.podAffinityPreset MariaDB primary pod affinity preset. Ignored if `primary.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
@@ -246,6 +256,10 @@ primary:
   ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
+  ## @param primary.schedulerName Name of the k8s scheduler (other than default)
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
   ## @param primary.topologySpreadConstraints Topology Spread Constraints for MariaDB primary pods assignment
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
   ## E.g.
@@ -271,10 +285,12 @@ primary:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param primary.containerSecurityContext.enabled MariaDB primary container securityContext
   ## @param primary.containerSecurityContext.runAsUser User ID for the MariaDB primary container
+  ## @param primary.containerSecurityContext.runAsNonRoot Set Controller container's Security Context runAsNonRoot
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
+    runAsNonRoot: true
   ## MariaDB primary container's resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -295,8 +311,22 @@ primary:
     ##    cpu: 100m
     ##    memory: 256Mi
     requests: {}
-  ## Configure extra options for liveness probe
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## Configure extra options for MariaDB primary containers' liveness, readiness and startup probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+  ## @param primary.startupProbe.enabled Enable startupProbe
+  ## @param primary.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param primary.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param primary.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param primary.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param primary.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 120
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 3
+    successThreshold: 1
   ## @param primary.livenessProbe.enabled Enable livenessProbe
   ## @param primary.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
   ## @param primary.livenessProbe.periodSeconds Period seconds for livenessProbe
@@ -311,8 +341,6 @@ primary:
     timeoutSeconds: 1
     failureThreshold: 3
     successThreshold: 1
-  ## Configure extra options for readiness probe
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param primary.readinessProbe.enabled Enable readinessProbe
   ## @param primary.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
   ## @param primary.readinessProbe.periodSeconds Period seconds for readinessProbe
@@ -327,6 +355,9 @@ primary:
     timeoutSeconds: 1
     failureThreshold: 3
     successThreshold: 1
+  ## @param primary.customStartupProbe Override default startup probe for MariaDB primary containers
+  ##
+  customStartupProbe: {}
   ## @param primary.customLivenessProbe Override default liveness probe for MariaDB primary containers
   ##
   customLivenessProbe: {}
@@ -421,11 +452,13 @@ primary:
     type: ClusterIP
     ## @param primary.service.port MariaDB Primary Kubernetes service port
     ##
-    port: 3306
+    ports:
+      mysql: 3306
     ## @param primary.service.nodePort MariaDB Primary Kubernetes service node port
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     ##
-    nodePort: ""
+    nodePorts:
+      mysql: ""
     ## @param primary.service.clusterIP MariaDB Primary Kubernetes service clusterIP IP
     ##
     clusterIP: ""
@@ -440,16 +473,33 @@ primary:
     ##   - 10.10.10.0/24
     ##
     loadBalancerSourceRanges: []
+    ## @param primary.service.externalTrafficPolicy Service external traffic policy
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param primary.service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
+    ##
+    extraPorts: []
     ## @param primary.service.annotations Provide any additional annotations which may be required
     ##
     annotations: {}
+    ## @param primary.service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+    ## If "ClientIP", consecutive client requests will be directed to the same Pod
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+    ##
+    sessionAffinity: None
+    ## @param primary.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    sessionAffinityConfig: {}
   ## MariaDB primary Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
   ##
   pdb:
-    ## @param primary.pdb.enabled Enable/disable a Pod Disruption Budget creation for MariaDB primary pods
+    ## @param primary.pdb.create Enable/disable a Pod Disruption Budget creation for MariaDB primary pods
     ##
-    enabled: false
+    create: false
     ## @param primary.pdb.minAvailable Minimum number/percentage of MariaDB primary pods that must still be available after the eviction
     ##
     minAvailable: 1
@@ -474,6 +524,9 @@ secondary:
   ## @param secondary.args Override default container args on MariaDB Secondary container(s) (useful when using custom images)
   ##
   args: []
+  ## @param secondary.lifecycleHooks for the MariaDB Secondary container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
   ## @param secondary.hostAliases Add deployment host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -521,6 +574,10 @@ secondary:
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
+  ## @param secondary.podLabels Extra labels for MariaDB secondary pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
   ## @param secondary.podAffinityPreset MariaDB secondary pod affinity preset. Ignored if `secondary.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
@@ -574,6 +631,14 @@ secondary:
   ## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
   ##
   priorityClassName: ""
+  ## @param secondary.schedulerName Name of the k8s scheduler (other than default)
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param secondary.podManagementPolicy podManagementPolicy to manage scaling operation of MariaDB secondary pods
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
+  ##
+  podManagementPolicy: ""
   ## MariaDB secondary Pod security context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param secondary.podSecurityContext.enabled Enable security context for MariaDB secondary pods
@@ -586,10 +651,12 @@ secondary:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param secondary.containerSecurityContext.enabled MariaDB secondary container securityContext
   ## @param secondary.containerSecurityContext.runAsUser User ID for the MariaDB secondary container
+  ## @param secondary.containerSecurityContext.runAsNonRoot Set Controller container's Security Context runAsNonRoot
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
+    runAsNonRoot: true
   ## MariaDB secondary container's resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -610,8 +677,22 @@ secondary:
     ##    cpu: 100m
     ##    memory: 256Mi
     requests: {}
-  ## Configure extra options for liveness probe
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## Configure extra options for MariaDB Secondary containers' liveness, readiness and startup probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+  ## @param secondary.startupProbe.enabled Enable startupProbe
+  ## @param secondary.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param secondary.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param secondary.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param secondary.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param secondary.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: true
+    initialDelaySeconds: 120
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 3
+    successThreshold: 1
   ## @param secondary.livenessProbe.enabled Enable livenessProbe
   ## @param secondary.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
   ## @param secondary.livenessProbe.periodSeconds Period seconds for livenessProbe
@@ -626,8 +707,6 @@ secondary:
     timeoutSeconds: 1
     failureThreshold: 3
     successThreshold: 1
-  ## Configure extra options for readiness probe
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param secondary.readinessProbe.enabled Enable readinessProbe
   ## @param secondary.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
   ## @param secondary.readinessProbe.periodSeconds Period seconds for readinessProbe
@@ -642,6 +721,9 @@ secondary:
     timeoutSeconds: 1
     failureThreshold: 3
     successThreshold: 1
+  ## @param secondary.customStartupProbe Override default startup probe for MariaDB secondary containers
+  ##
+  customStartupProbe: {}
   ## @param secondary.customLivenessProbe Override default liveness probe for MariaDB secondary containers
   ##
   customLivenessProbe: {}
@@ -732,11 +814,13 @@ secondary:
     type: ClusterIP
     ## @param secondary.service.port MariaDB secondary Kubernetes service port
     ##
-    port: 3306
+    ports:
+      mysql: 3306
     ## @param secondary.service.nodePort MariaDB secondary Kubernetes service node port
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     ##
-    nodePort: ""
+    nodePorts:
+      mysql: ""
     ## @param secondary.service.clusterIP MariaDB secondary Kubernetes service clusterIP IP
     ## e.g:
     ## clusterIP: None
@@ -753,16 +837,33 @@ secondary:
     ##   - 10.10.10.0/24
     ##
     loadBalancerSourceRanges: []
+    ## @param secondary.service.externalTrafficPolicy Service external traffic policy
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param secondary.service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
+    ##
+    extraPorts: []
     ## @param secondary.service.annotations Provide any additional annotations which may be required
     ##
     annotations: {}
+    ## @param secondary.service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+    ## If "ClientIP", consecutive client requests will be directed to the same Pod
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+    ##
+    sessionAffinity: None
+    ## @param secondary.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    sessionAffinityConfig: {}
   ## MariaDB secondary Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
   ##
   pdb:
-    ## @param secondary.pdb.enabled Enable/disable a Pod Disruption Budget creation for MariaDB secondary pods
+    ## @param secondary.pdb.create Enable/disable a Pod Disruption Budget creation for MariaDB secondary pods
     ##
-    enabled: false
+    create: false
     ## @param secondary.pdb.minAvailable Minimum number/percentage of MariaDB secondary pods that should remain scheduled
     ##
     minAvailable: 1
@@ -789,6 +890,9 @@ serviceAccount:
   ## @param serviceAccount.annotations Annotations for MariaDB Service Account
   ##
   annotations: {}
+  ## @param serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+  ##
+  automountServiceAccountToken: true
 ## Role Based Access
 ## ref: https://kubernetes.io/docs/admin/authorization/rbac/
 ##
@@ -965,6 +1069,9 @@ metrics:
     ## @param metrics.serviceMonitor.namespace Namespace which Prometheus is running in
     ##
     namespace: ""
+    ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
+    ##
+    jobLabel: ""
     ## @param metrics.serviceMonitor.interval Interval at which metrics should be scraped
     ##
     interval: 30s
@@ -973,16 +1080,24 @@ metrics:
     ## scrapeTimeout: 30s
     ##
     scrapeTimeout: ""
-    ## @param metrics.serviceMonitor.relabellings Specify Metric Relabellings to add to the scrape endpoint
+    ## @param metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
     ##
-    relabellings: ""
-    ## @param metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels.
+    relabelings: []
+    ## @param metrics.serviceMonitor.metricRelabelings MetricRelabelConfigs to apply to samples before ingestion
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+    ##
+    metricRelabelings: []
+    ## @param metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
     ##
     honorLabels: false
     ## @param metrics.serviceMonitor.release Used to pass Labels release that sometimes should be custom for Prometheus Operator
     ##
     release: ""
-    ## @param metrics.serviceMonitor.additionalLabels Used to pass Labels that are required by the Installed Prometheus Operator
-    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
+    ## @param metrics.serviceMonitor.selector ServiceMonitor selector labels
+    ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
     ##
-    additionalLabels: {}
+    ## selector:
+    ##   prometheus: my-prometheus
+    ##
+    selector: {}

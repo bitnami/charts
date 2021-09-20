@@ -19,23 +19,31 @@ metadata:
     {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.annotations "context" $ ) | nindent 4 }}
     {{- end }}
 spec:
-  type: {{ .Values.primary.service.type }}
-  {{- if and (eq .Values.primary.service.type "ClusterIP") .Values.primary.service.clusterIP }}
+  {{- if and .Values.primary.service.clusterIP (eq .Values.primary.service.type "ClusterIP") }}
   clusterIP: {{ .Values.primary.service.clusterIP }}
   {{- end }}
-  {{- if and .Values.primary.service.loadBalancerIP (eq .Values.primary.service.type "LoadBalancer") }}
+  {{- if (or (eq .Values.primary.service.type "LoadBalancer") (eq .Values.primary.service.type "NodePort")) }}
+  externalTrafficPolicy: {{ .Values.primary.service.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{ if eq .Values.primary.service.type "LoadBalancer" }}
+  loadBalancerSourceRanges: {{ .Values.primary.service.loadBalancerSourceRanges }}
+  {{ end }}
+  {{- if (and (eq .Values.primary.service.type "LoadBalancer") (not (empty .Values.primary.service.loadBalancerIP))) }}
   loadBalancerIP: {{ .Values.primary.service.loadBalancerIP }}
   {{- end }}
-  {{- if and (eq .Values.primary.service.type "LoadBalancer") .Values.primary.service.loadBalancerSourceRanges }}
-  loadBalancerSourceRanges: {{- toYaml .Values.primary.service.loadBalancerSourceRanges | nindent 4 }}
+  {{- if .Values.primary.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.primary.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.primary.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.primary.service.sessionAffinityConfig "context" $) | nindent 4 }}
   {{- end }}
   ports:
     - name: mysql
-      port: {{ .Values.primary.service.port }}
+      port: {{ .Values.primary.service.ports.mysql }}
       protocol: TCP
       targetPort: mysql
-      {{- if (and (or (eq .Values.primary.service.type "NodePort") (eq .Values.primary.service.type "LoadBalancer")) .Values.primary.service.nodePort) }}
-      nodePort: {{ .Values.primary.service.nodePort }}
+      {{- if (and (or (eq .Values.primary.service.type "NodePort") (eq .Values.primary.service.type "LoadBalancer")) .Values.primary.service.nodePorts.mysql) }}
+      nodePort: {{ .Values.primary.service.nodePorts.mysql }}
       {{- else if eq .Values.primary.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
@@ -44,6 +52,9 @@ spec:
       port: 9104
       protocol: TCP
       targetPort: metrics
+    {{- end }}
+    {{- if .Values.primary.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.primary.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
   selector: {{ include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: primary
