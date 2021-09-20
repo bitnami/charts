@@ -124,7 +124,7 @@ data:
     else
         export REDIS_REPLICATION_MODE="slave"
 
-        {{- if and .Values.sentinel.automatedClusterRecovery (le .Values.sentinel.downAfterMilliseconds 2000) }}
+        {{- if and .Values.sentinel.automateClusterRecovery (le .Values.sentinel.downAfterMilliseconds 2000) }}
         retry_count=1
         while validate_quorum
         do
