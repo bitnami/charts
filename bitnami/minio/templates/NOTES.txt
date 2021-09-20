@@ -55,8 +55,8 @@ To access the MinIO&reg; web UI:
 
 {{- else if contains "ClusterIP"  .Values.service.type }}
 
-   echo "MinIO&reg; web URL: http://127.0.0.1:9001/minio"
-   kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "common.names.fullname" . }} 9001:{{ .Values.service.ports.console }}
+   echo "MinIO&reg; web URL: http://127.0.0.1:{{ .Values.containerPorts.console }}/minio"
+   kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "common.names.fullname" . }} {{ .Values.containerPorts.console }}:{{ .Values.service.ports.console }}
 
 {{- else if contains "NodePort" .Values.service.type }}
 

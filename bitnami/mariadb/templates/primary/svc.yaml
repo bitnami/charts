@@ -30,6 +30,7 @@ spec:
   {{ end }}
   {{- if (and (eq .Values.primary.service.type "LoadBalancer") (not (empty .Values.primary.service.loadBalancerIP))) }}
   loadBalancerIP: {{ .Values.primary.service.loadBalancerIP }}
+  externalTrafficPolicy: {{ .Values.primary.service.externalTrafficPolicy | quote }}
   {{- end }}
   {{- if .Values.primary.service.sessionAffinity }}
   sessionAffinity: {{ .Values.primary.service.sessionAffinity }}
