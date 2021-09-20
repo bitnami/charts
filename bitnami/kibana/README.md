@@ -11,7 +11,7 @@ $ helm install my-release bitnami/kibana --set elasticsearch.hosts[0]=<Hostname 
 
 ## Introduction
 
-This chart bootstraps a [kibana](https://github.com/bitnami/bitnami-docker-kibana) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Kibana](https://github.com/bitnami/bitnami-docker-kibana) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
 
@@ -24,7 +24,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 ## Installing the Chart
 
-This chart requires a Elasticsearch instance to work. You can use an already existing Elasticsearch instance.
+This chart requires an Elasticsearch instance to work. You can use an already existing Elasticsearch instance.
 
  To install the chart with the release name `my-release`:
 
@@ -36,7 +36,7 @@ $ helm install my-release \
   bitnami/kibana
 ```
 
-These commands deploy kibana on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
+These commands deploy Kibana on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
 > **Tip**: List all releases using `helm list`
 
@@ -76,7 +76,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
 | `image.registry`                       | Kibana image registry                                                                                                                                     | `docker.io`              |
 | `image.repository`                     | Kibana image repository                                                                                                                                   | `bitnami/kibana`         |
-| `image.tag`                            | Kibana image tag (immutable tags are recommended)                                                                                                         | `7.14.1-debian-10-r0`    |
+| `image.tag`                            | Kibana image tag (immutable tags are recommended)                                                                                                         | `7.14.1-debian-10-r1`    |
 | `image.pullPolicy`                     | Kibana image pull policy                                                                                                                                  | `IfNotPresent`           |
 | `image.pullSecrets`                    | Specify docker-registry secret names as an array                                                                                                          | `[]`                     |
 | `replicaCount`                         | Number of replicas of the Kibana Pod                                                                                                                      | `1`                      |
@@ -96,7 +96,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                  |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `docker.io`              |
 | `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                                                              | `bitnami/bitnami-shell`  |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `10-debian-10-r180`      |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `10-debian-10-r187`      |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `Always`                 |
 | `volumePermissions.image.pullSecrets`  | Init container volume-permissions image pull secrets                                                                                                      | `[]`                     |
 | `volumePermissions.resources`          | Volume Permissions resources                                                                                                                              | `{}`                     |
@@ -223,7 +223,7 @@ $ helm install my-release -f values.yaml bitnami/kibana
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling vs Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -231,9 +231,9 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ### Change Kibana version
 
-To modify the Kibana version used in this chart you can specify a [valid image tag](https://hub.docker.com/r/bitnami/kibana/tags/) using the `image.tag` parameter. For example, `image.tag=X.Y.Z`. This approach is also applicable to other images like exporters.
+To modify the application version used in this chart, specify a different version of the image using the `image.tag` parameter and/or a different repository using the `image.repository` parameter. Refer to the [chart documentation for more information on these parameters and how to use them with images from a private registry](https://docs.bitnami.com/kubernetes/apps/kibana/configuration/change-image-version/).
 
-### Using custom configuration
+### Use custom configuration
 
 The Bitnami Kibana chart supports using custom configuration settings. For example, to mount a custom `kibana.yml` you can create a ConfigMap like the following:
 
@@ -257,7 +257,7 @@ extraConfiguration:
   "server.pingTimeout": 1500
 ```
 
-### Adding extra environment variables
+### Add extra environment variables
 
 In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property.
 
@@ -269,20 +269,13 @@ extraEnvVars:
 
 Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values.
 
-### Using custom init scripts
+### Use custom initialization scripts
 
-For advanced operations, the Bitnami Kibana charts allows using custom init scripts that will be mounted in `/docker-entrypoint.init-db`. You can use a ConfigMap or a Secret (in case of sensitive data) for mounting these extra scripts. Then use the `initScriptsCM` and `initScriptsSecret` values.
+For advanced operations, the Bitnami Kibana chart allows using custom initialization scripts that will be mounted in `/docker-entrypoint.init-db`. Mount these extra scripts using a ConfigMap or a Secret (in case of sensitive data) and specify them via the `initScriptsCM` and `initScriptsSecret` chart parameters. Refer to the [chart documentation on custom initialization scripts](https://docs.bitnami.com/kubernetes/apps/kibana/administration/use-custom-init-scripts/) for an example.
 
-```console
-elasticsearch.hosts[0]=elasticsearch-host
-elasticsearch.port=9200
-initScriptsCM=special-scripts
-initScriptsSecret=special-scripts-sensitive
-```
+### Install plugins
 
-### Installing plugins
-
-The Bitnami Kibana chart allows you to install a set of plugins at deployment time using the `plugins` value:
+The Bitnami Kibana chart allows you to install a set of plugins at deployment time using the `plugins` chart parameter. Refer to the [chart documentation on installing plugins](https://docs.bitnami.com/kubernetes/apps/kibana/configuration/install-plugins/) for an example.
 
 ```console
 elasticsearch.hosts[0]=elasticsearch-host
@@ -292,43 +285,21 @@ plugins[0]=https://github.com/fbaligand/kibana-enhanced-table/releases/download/
 
 > **NOTE** Make sure that the plugin is available for the Kibana version you are deploying
 
-### Importing saved objects
+### Import saved objects
 
-If you have visualizations and dashboards (in NDJSON format) that you want to import to Kibana. You can create a ConfigMap that includes them and then install the chart with the `savedObjects.configmap` value: `savedObjects.configmap=my-import`
+If you have visualizations and dashboards (in NDJSON format) to import to Kibana, create a ConfigMap that includes them and then install the chart with the `savedObjects.configmap` or  `savedObjects.urls` parameters. Refer to the [chart documentation on importing saved objects](https://docs.bitnami.com/kubernetes/apps/kibana/configuration/import-saved-objects/) for an example.
 
-Alternatively, if it is available via URL, you can install the chart as follows: `savedObjects.urls[0]=www.my-site.com/import.ndjson`
+### Use Sidecars and Init Containers
 
-### Sidecars and Init Containers
+If additional containers are needed in the same pod (such as additional metrics or logging exporters), they can be defined using the `sidecars` config parameter. Similarly, extra init containers can be added using the `initContainers` parameter.
 
-If you have a need for additional containers to run within the same pod as Kibana (e.g. an additional metrics or logging exporter), you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
-
-```yaml
-sidecars:
-- name: your-image-name
-  image: your-image
-  imagePullPolicy: Always
-  ports:
-  - name: portname
-   containerPort: 1234
-```
-
-Similarly, you can add extra init containers using the `initContainers` parameter.
-
-```yaml
-initContainers:
-- name: your-image-name
-  image: your-image
-  imagePullPolicy: Always
-  ports:
-  - name: portname
-   containerPort: 1234
-```
+Refer to the chart documentation for more information on, and examples of, configuring and using [sidecars and init containers](https://docs.bitnami.com/kubernetes/apps/kibana/configuration/configure-sidecar-init-containers/).
 
 #### Add a sample Elasticsearch container as sidecar
 
-This chart requires an Elasticsearch instance to work. For production, you can use an already existing Elasticsearch instance or deploy the [Elasticsearch chart](https://github.com/bitnami/charts/tree/master/bitnami/elasticsearch) with the [`global.kibanaEnabled=true` parameter](https://github.com/bitnami/charts/tree/master/bitnami/elasticsearch#enable-bundled-kibana).
+This chart requires an Elasticsearch instance to work. For production, the options are to use an already existing Elasticsearch instance or deploy the [Elasticsearch chart](https://github.com/bitnami/charts/tree/master/bitnami/elasticsearch) with the [`global.kibanaEnabled=true` parameter](https://github.com/bitnami/charts/tree/master/bitnami/elasticsearch#enable-bundled-kibana).
 
-For the purpose of testing, you can use a sidecar Elasticsearch container setting the following parameters during the Kibana chart installation:
+For testing purposes, use a sidecar Elasticsearch container setting the following parameters during the Kibana chart installation:
 
 ```
 elasticsearch.hosts[0]=localhost
@@ -340,11 +311,11 @@ sidecars[0].ports[0].name=http
 sidecars[0].ports[0].containerPort=9200
 ```
 
-### Setting Pod's affinity
+### Set Pod affinity
 
-This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+This chart allows you to set custom Pod affinity using the `affinity` parameter. Find more information about Pod affinity in the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+As an alternative, you can use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
 ## Persistence
 
@@ -352,7 +323,7 @@ The [Bitnami Kibana](https://github.com/bitnami/bitnami-docker-kibana) image can
 
 The chart mounts a [Persistent Volume](http://kubernetes.io/docs/user-guide/persistent-volumes/) at this location. The volume is created using dynamic volume provisioning.
 
-### Adding extra volumes
+### Add extra volumes
 
 The Bitnami Kibana chart supports mounting extra volumes (either PVCs, secrets or configmaps) by using the `extraVolumes` and `extraVolumeMounts` property. This can be combined with advanced operations like adding extra init containers and sidecars.
 
@@ -395,24 +366,9 @@ This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs
 
 ### To 6.0.0
 
-[On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
+[On November 13, 2020, Helm v2 support formally ended](https://github.com/helm/charts#status-of-the-project). This major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
 
-**What changes were introduced in this major version?**
-
-- Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
-- The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
-
-**Considerations when upgrading to this version**
-
-- If you want to upgrade to this version from a previous one installed with Helm v3, you shouldn't face any issues
-- If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
-- If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3
-
-**Useful links**
-
-- https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
-- https://helm.sh/docs/topics/v2_v3_migration/
-- https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
+[Learn more about this change and related upgrade considerations](https://docs.bitnami.com/kubernetes/apps/kibana/administration/upgrade-helm3/).
 
 ### To 5.0.0
 

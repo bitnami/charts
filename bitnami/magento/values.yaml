@@ -170,6 +170,13 @@ extraVolumes: []
 ## @param extraVolumeMounts Array of extra volume mounts to be added to the container (evaluated as template). Normally used with `extraVolumes`
 ##
 extraVolumeMounts: []
+## @param extraContainerPorts Array of additional container ports for the Magento container
+## e.g:
+## extraContainerPorts:
+##   - name: myservice
+##     containerPort: 9090
+##
+extraContainerPorts: []
 ## @param initContainers Add additional init containers to the pod (evaluated as a template)
 ##
 initContainers: []

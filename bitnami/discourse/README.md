@@ -464,6 +464,10 @@ Find more information about how to deal with common errors related to Bitnami’
 
 ## Upgrading
 
+### To 5.0.0
+
+This major update the Redis&trade; subchart to its newest major, 15.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1500) you can find more info about the specific changes.
+
 ### To 4.0.0
 
 The [Bitnami Discourse](https://github.com/bitnami/bitnami-docker-discourse) image was refactored and now the source code is published in GitHub in the [`rootfs`](https://github.com/bitnami/bitnami-docker-discourse/tree/master/2/debian-10/rootfs) folder of the container image repository.

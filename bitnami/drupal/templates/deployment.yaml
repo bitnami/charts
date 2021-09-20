@@ -171,7 +171,7 @@ spec:
             - name: DRUPAL_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "common.names.fullname" . }}
+                  name: {{ include "drupal.secretName" . }}
                   key: drupal-password
             - name: DRUPAL_EMAIL
               value: {{ .Values.drupalEmail | quote }}
@@ -191,7 +191,7 @@ spec:
             - name: SMTP_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "common.names.fullname" . }}
+                  name: {{ include "drupal.secretName" . }}
                   key: smtp-password
             {{- end }}
             {{- if .Values.smtpProtocol }}
