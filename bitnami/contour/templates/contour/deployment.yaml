@@ -71,13 +71,17 @@ spec:
       {{- end }}
       containers:
         - name: contour
-          {{- if .Values.contour.command }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.contour.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.contour.command "context" $) | nindent 12 }}
           {{- else }}
           command:
             - contour
           {{- end }}
-          {{- if .Values.contour.args }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.contour.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.contour.args "context" $) | nindent 12 }}
           {{- else }}
           args:
@@ -85,6 +89,7 @@ spec:
             - --incluster
             - --xds-address=0.0.0.0
             - --xds-port={{ .Values.contour.containerPorts.xds }}
+            - --http-port={{ .Values.contour.containerPorts.metrics }}
             - --envoy-service-http-port={{ .Values.envoy.containerPorts.http }}
             - --envoy-service-https-port={{ .Values.envoy.containerPorts.https }}
             - --contour-cafile=/certs/ca.crt
@@ -104,9 +109,10 @@ spec:
             - containerPort: {{ .Values.contour.containerPorts.xds }}
               name: xds
               protocol: TCP
-            - containerPort: 8000
+            - containerPort: {{ .Values.contour.containerPorts.metrics }}
               name: metrics
               protocol: TCP
+          {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.contour.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.contour.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
@@ -114,7 +120,7 @@ spec:
           livenessProbe:
             httpGet:
               path: /healthz
-              port: 8000
+              port: {{ .Values.contour.containerPorts.metrics }}
             initialDelaySeconds: {{ .Values.contour.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.contour.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.contour.livenessProbe.timeoutSeconds }}
@@ -125,8 +131,9 @@ spec:
           {{- end }}
           {{- if .Values.contour.readinessProbe.enabled }}
           readinessProbe:
-            tcpSocket:
-              port: 8001
+            httpGet:
+              path: /healthz
+              port: {{ .Values.contour.containerPorts.metrics }}
             initialDelaySeconds: {{ .Values.contour.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.contour.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.contour.readinessProbe.timeoutSeconds }}
@@ -139,7 +146,7 @@ spec:
           startupProbe:
             httpGet:
               path: /healthz
-              port: 8000
+              port: {{ .Values.contour.containerPorts.metrics }}
             initialDelaySeconds: {{ .Values.contour.startupProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.contour.startupProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.contour.startupProbe.timeoutSeconds }}
@@ -147,6 +154,7 @@ spec:
             failureThreshold: {{ .Values.contour.startupProbe.failureThreshold }}
           {{- else if .Values.contour.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.contour.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
           {{- end }}
           resources: {{ toYaml .Values.contour.resources | nindent 12 }}
           volumeMounts:
@@ -170,6 +178,8 @@ spec:
                 fieldRef:
                   apiVersion: v1
                   fieldPath: metadata.name
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" (or .Values.contour.image.debug .Values.diagnosticMode.enabled) | quote }}
             {{- if .Values.contour.extraEnvVars }}
               {{- include "common.tplvalues.render" (dict "value" .Values.contour.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}

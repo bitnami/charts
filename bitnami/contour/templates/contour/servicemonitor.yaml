@@ -22,6 +22,9 @@ spec:
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: contour
+    {{- if .Values.metrics.serviceMonitor.selector }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.metrics.serviceMonitor.selector "context" $) | nindent 4 }}
+    {{- end }}
   namespaceSelector:
     matchNames:
       - {{ .Release.Namespace }}
@@ -29,6 +32,12 @@ spec:
     - port: metrics
       {{- if .Values.prometheus.serviceMonitor.interval }}
       interval: {{ .Values.prometheus.serviceMonitor.interval }}
+      {{- end }}
+      {{- if .Values.metrics.serviceMonitor.scrapeTimeout }}
+      scrapeTimeout: {{ .Values.metrics.serviceMonitor.scrapeTimeout }}
+      {{- end }}
+      {{- if .Values.metrics.serviceMonitor.honorLabels }}
+      honorLabels: {{ .Values.metrics.serviceMonitor.honorLabels }}
       {{- end }}
       {{- if .Values.prometheus.serviceMonitor.metricRelabelings }}
       metricRelabelings: {{ toYaml .Values.prometheus.serviceMonitor.metricRelabelings | nindent 6 }}

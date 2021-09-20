@@ -94,6 +94,7 @@ contour:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
+    debug: false
   ## @param replicaCount Number of Contour Pod replicas
   ##
   replicaCount: 2
@@ -106,6 +107,7 @@ contour:
   ##
   containerPorts:
     xds: 8001
+    metrics: 8000
   ## @param contour.hostAliases [array] Add deployment host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -287,9 +289,49 @@ contour:
   tlsExistingSecret: ""
   ## Contour Service properties
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#multi-port-services
-  ## @param contour.service.extraPorts [array] Extra ports to expose (normally used with the `sidecar` value)
   ##
   service:
+    ## @param service.type WordPress service type
+    ##
+    type: ClusterIP
+    ## @param service.port WordPress service HTTP port
+    ##
+    ports:
+      xds: 80
+      metrics:
+    ## Node ports to expose
+    ## @param service.nodePorts.http Node port for HTTP
+    ## @param service.nodePorts.https Node port for HTTPS
+    ## NOTE: choose port between <30000-32767>
+    ##
+    nodePorts:
+      xds: ""
+      metrics: ""
+    ## @param service.clusterIP WordPress service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param service.loadBalancerIP WordPress service Load Balancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerIP: ""
+    ## @param service.loadBalancerSourceRanges WordPress service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param service.externalTrafficPolicy WordPress service external traffic policy
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param service.annotations Additional custom annotations for WordPress service
+    ##
+    annotations: {}
+    ## @param service.extraPorts Extra port to expose on WordPress service
+    ##
     extraPorts: []
   ## @param contour.initContainers [array] Attach additional init containers to Contour pods
   ## For example:
