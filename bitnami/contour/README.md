@@ -53,16 +53,15 @@ $ helm uninstall my-release
 ### Global parameters
 
 | Name                      | Description                                     | Value |
-| ------------------------- | ----------------------------------------------- | ----- |
+|---------------------------|-------------------------------------------------|-------|
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                     | Description                                                                             | Value   |
-| ------------------------ | --------------------------------------------------------------------------------------- | ------- |
+|--------------------------|-----------------------------------------------------------------------------------------|---------|
 | `nameOverride`           | String to partially override contour.fullname include (will maintain the release name)  | `""`    |
 | `fullnameOverride`       | String to fully override contour.fullname template                                      | `""`    |
 | `kubeVersion`            | Force target Kubernetes version (using Helm capabilities if not set)                    | `""`    |
@@ -73,11 +72,10 @@ $ helm uninstall my-release
 | `diagnosticMode.command` | Command to override all containers in the deployment                                    | `[]`    |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `[]`    |
 
-
 ### Contour parameters
 
 | Name                                            | Description                                                                                                                        | Value                 |
-| ----------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
+|-------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------|-----------------------|
 | `existingConfigMap`                             | Specifies the name of an externally-defined ConfigMap to use as the configuration (this is mutually exclusive with `configInline`) | `""`                  |
 | `configInline`                                  | Specifies Contour's configuration directly in YAML format                                                                          | `{}`                  |
 | `contour.enabled`                               | Contour Deployment creation.                                                                                                       | `true`                |
@@ -160,11 +158,10 @@ $ helm uninstall my-release
 | `contour.extraEnvVarsSecret`                    | Secret containing extra env vars to be added to all Contour containers                                                             | `""`                  |
 | `contour.ingressClass`                          | Name of the ingress class to route through this controller                                                                         | `contour`             |
 
-
 ### Envoy parameters
 
 | Name                                                | Description                                                                                                           | Value                 |
-| --------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | --------------------- |
+|-----------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------|-----------------------|
 | `envoy.enabled`                                     | Envoy Proxy creation                                                                                                  | `true`                |
 | `envoy.image.registry`                              | Envoy Proxy image registry                                                                                            | `docker.io`           |
 | `envoy.image.repository`                            | Envoy Proxy image repository                                                                                          | `bitnami/envoy`       |
@@ -261,11 +258,10 @@ $ helm uninstall my-release
 | `envoy.extraEnvVarsCM`                              | ConfigMap containing extra env vars to be added to all Envoy containers                                               | `""`                  |
 | `envoy.extraEnvVarsSecret`                          | Secret containing extra env vars to be added to all Envoy containers                                                  | `""`                  |
 
-
 ### Default backend parameters
 
 | Name                                                | Description                                                                                          | Value                    |
-| --------------------------------------------------- | ---------------------------------------------------------------------------------------------------- | ------------------------ |
+|-----------------------------------------------------|------------------------------------------------------------------------------------------------------|--------------------------|
 | `defaultBackend.enabled`                            | Enable a default backend based on NGINX                                                              | `false`                  |
 | `defaultBackend.image.registry`                     | Default backend image registry                                                                       | `docker.io`              |
 | `defaultBackend.image.repository`                   | Default backend image name                                                                           | `bitnami/nginx`          |
@@ -348,11 +344,10 @@ $ helm uninstall my-release
 | `ingress.extraTls`                                  | The tls configuration for additional hostnames to be covered with this ingress record.               | `[]`                     |
 | `ingress.secrets`                                   | If you're providing your own certificates, please use this to add the certificates as secrets        | `[]`                     |
 
-
 ### Metrics parameters
 
 | Name                                       | Description                                                                                                                          | Value                    |
-| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------ | ------------------------ |
+|--------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------|--------------------------|
 | `metrics.serviceMonitor.namespace`         | Specify if the servicemonitors will be deployed into a different namespace (blank deploys into same namespace as chart)              | `""`                     |
 | `metrics.serviceMonitor.enabled`           | Specify if a servicemonitor will be deployed for prometheus-operator.                                                                | `false`                  |
 | `metrics.serviceMonitor.jobLabel`          | Specify the jobLabel to use for the prometheus-operator                                                                              | `app.kubernetes.io/name` |
@@ -363,15 +358,13 @@ $ helm uninstall my-release
 | `metrics.serviceMonitor.scrapeTimeout`     | The timeout after which the scrape is ended                                                                                          | `""`                     |
 | `metrics.serviceMonitor.selector`          | Specify honorLabels parameter to add the scrape endpoint                                                                             | `{}`                     |
 
-
 ### Other parameters
 
 | Name                | Description                                                                                                          | Value  |
-| ------------------- | -------------------------------------------------------------------------------------------------------------------- | ------ |
+|---------------------|----------------------------------------------------------------------------------------------------------------------|--------|
 | `rbac.create`       | Create the RBAC roles for API accessibility                                                                          | `true` |
 | `rbac.rules`        | Custom RBAC rules to set                                                                                             | `[]`   |
 | `tlsExistingSecret` | Name of the existingSecret to be use in both contour and envoy. If it is not nil `contour.certgen` will be disabled. | `""`   |
-
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -496,6 +489,17 @@ Find more information about how to deal with common errors related to Bitnami’
 
 Please carefully read through the guide "Upgrading Contour" at https://projectcontour.io/resources/upgrading/.
 
+### To 6.0.0
+
+This major release renames several values in this chart and adds missing features, in order to be inline with the rest of assets in the Bitnami charts repository.
+
+Affected values:
+
+- `prometheus` renamed as `metrics`.
+- `serviceMonitor.labels` renamed as `serviceMonitor.selector`.
+- `service.port` renamed as `service.ports.xds`.
+- `service.nodePort` renamed as `service.nodePorts.xds`.
+- `contour.updateStrategy` and `worker.updateStrategy` changed from String type (previously default to 'rollingUpdate') to Object type, allowing users to configure other updateStrategy parameters, similar to other charts.
 ### To 5.2.0
 
 This version bumps the Envoy container from 1.17.X to 1.19.X; this Envoy version is officially supported by Contour since 1.18.0, see https://github.com/projectcontour/contour/releases/tag/v1.18.0
