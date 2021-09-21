@@ -78,7 +78,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------- | ---------------------------------------------------------------------------------------------------------- | ------------------------ |
 | `image.registry`          | MinIO&reg; image registry                                                                                  | `docker.io`              |
 | `image.repository`        | MinIO&reg; image repository                                                                                | `bitnami/minio`          |
-| `image.tag`               | MinIO&reg; image tag (immutable tags are recommended)                                                      | `2021.9.9-debian-10-r8`  |
+| `image.tag`               | MinIO&reg; image tag (immutable tags are recommended)                                                      | `2021.9.18-debian-10-r0` |
 | `image.pullPolicy`        | Image pull policy                                                                                          | `IfNotPresent`           |
 | `image.pullSecrets`       | Specify docker-registry secret names as an array                                                           | `[]`                     |
 | `image.debug`             | Specify if debug logs should be enabled                                                                    | `false`                  |
