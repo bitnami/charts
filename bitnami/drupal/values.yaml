@@ -301,7 +301,7 @@ containerSecurityContext:
 ## @param startupProbe.successThreshold Success threshold for startupProbe
 ##
 startupProbe:
-  enabled: true
+  enabled: false
   path: /user/login
   initialDelaySeconds: 600
   periodSeconds: 10
