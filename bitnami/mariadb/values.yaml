@@ -200,10 +200,14 @@ primary:
   ## NOTE: When it's set the 'configuration' parameter is ignored
   ##
   existingConfiguration: ""
-  ## @param primary.updateStrategy Update strategy type for the MariaDB primary statefulset
+  ## @param primary.updateStrategy.type MariaDB primary statefulset strategy type
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
-  updateStrategy: RollingUpdate
+  updateStrategy:
+    ## StrategyType
+    ## Can be set to RollingUpdate or OnDelete
+    ##
+    type: RollingUpdate
   ## @param primary.rollingUpdatePartition Partition update strategy for Mariadb Primary statefulset
   ## https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#partitions
   ##
@@ -562,10 +566,14 @@ secondary:
   ## NOTE: When it's set the 'configuration' parameter is ignored
   ##
   existingConfiguration: ""
-  ## @param secondary.updateStrategy Update strategy type for the MariaDB secondary statefulset
+  ## @param secondary.updateStrategy.type MariaDB secondary statefulset strategy type
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
-  updateStrategy: RollingUpdate
+  updateStrategy:
+    ## StrategyType
+    ## Can be set to RollingUpdate or OnDelete
+    ##
+    type: RollingUpdate
   ## @param secondary.rollingUpdatePartition Partition update strategy for Mariadb Secondary statefulset
   ## https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#partitions
   ##
