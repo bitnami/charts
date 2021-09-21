@@ -301,7 +301,7 @@ containerSecurityContext:
 ## @param startup.failureThreshold Failure threshold for startup
 ## @param startup.successThreshold Success threshold for startup
 ##
-startup:
+startupProbe:
   enabled: false
   initialDelaySeconds: 120
   periodSeconds: 10
