@@ -14,24 +14,24 @@ metadata:
   {{- end }}
 rules:
   - apiGroups:
-    - argoproj.io
+      - argoproj.io
     resources:
-    - workflows
-    - workflows/finalizers
-    - workflowtasksets
-    - workflowtasksets/finalizers
-    - workfloweventbindings
-    - workfloweventbindings/finalizers
-    - workflowtemplates
-    - workflowtemplates/finalizers
-    - cronworkflows
-    - cronworkflows/finalizers
-    - clusterworkflowtemplates
-    - clusterworkflowtemplates/finalizers
+      - workflows
+      - workflows/finalizers
+      - workflowtasksets
+      - workflowtasksets/finalizers
+      - workfloweventbindings
+      - workfloweventbindings/finalizers
+      - workflowtemplates
+      - workflowtemplates/finalizers
+      - cronworkflows
+      - cronworkflows/finalizers
+      - clusterworkflowtemplates
+      - clusterworkflowtemplates/finalizers
     verbs:
-    - get
-    - list
-    - watch
+      - get
+      - list
+      - watch
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole

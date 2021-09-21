@@ -26,9 +26,9 @@ roleRef:
   {{- end }}
   name: {{ include "argo-workflows.server.fullname" . }}
 subjects:
-- kind: ServiceAccount
-  name: {{ include "argo-workflows.server.serviceAccountName" . }}
-  namespace: {{ .Release.Namespace | quote }}
+  - kind: ServiceAccount
+    name: {{ include "argo-workflows.server.serviceAccountName" . }}
+    namespace: {{ .Release.Namespace | quote }}
 
 {{- if .Values.server.clusterWorkflowTemplates.enabled }}
 ---
@@ -51,8 +51,8 @@ roleRef:
   kind: ClusterRole
   name: {{ include "argo-workflows.server.fullname" . }}-cluster-template
 subjects:
-- kind: ServiceAccount
-  name: {{ include "argo-workflows.server.serviceAccountName" . }}
-  namespace: {{ .Release.Namespace | quote }}
+  - kind: ServiceAccount
+    name: {{ include "argo-workflows.server.serviceAccountName" . }}
+    namespace: {{ .Release.Namespace | quote }}
 {{- end -}}
 {{- end -}}

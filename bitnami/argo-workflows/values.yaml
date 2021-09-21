@@ -2,7 +2,6 @@
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
 ## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
-
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
 ## @param global.storageClass Global StorageClass for Persistent Volume(s)
@@ -248,10 +247,6 @@ server:
     ## If not set and create is true, a name is generated using the common.names.fullname template
     ##
     name: ""
-
-  ## @param server.existingConfigmap The name of an existing ConfigMap with your custom configuration for server
-  ##
-  existingConfigmap:
   ## @param server.command Override default container command (useful when using custom images)
   ##
   command: []
@@ -704,15 +699,13 @@ controller:
     maxUnavailable: 1
   ## Service Account configuration
   ## @param controller.serviceAccount.create Specifies whether a ServiceAccount should be created
-  ## @param controller.existingConfigmap The name of an existing ConfigMap with your custom configuration for controller
+  ## @param controller.serviceAccount.name Name for the service account
   ##
   serviceAccount:
     create: true
     ## If not set and create is true, a name is generated using the common.names.fullname template
     ##
     name: ""
-##
-  existingConfigmap:
   ## @param controller.command Override default container command (useful when using custom images)
   ##
   command: []
