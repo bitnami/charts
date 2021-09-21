@@ -116,6 +116,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `replicaCount`                          | Number of Ghost replicas to deploy                                                        | `1`             |
 | `updateStrategy.type`                   | Ghost deployment strategy type                                                            | `RollingUpdate` |
 | `priorityClassName`                     | Ghost pod priority class name                                                             | `""`            |
+| `schedulerName`                         | Name of the k8s scheduler (other than default)                                            | `""`            |
+| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment                                            | `[]`            |
 | `hostAliases`                           | Ghost pod host aliases                                                                    | `[]`            |
 | `extraVolumes`                          | Optionally specify extra list of additional volumes for Ghost pods                        | `[]`            |
 | `extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for Ghost container(s)           | `[]`            |
@@ -141,6 +143,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `containerSecurityContext.enabled`      | Enabled Ghost containers' Security Context                                                | `true`          |
 | `containerSecurityContext.runAsUser`    | Set Ghost container's Security Context runAsUser                                          | `1001`          |
 | `containerSecurityContext.runAsNonRoot` | Set Ghost container's Security Context runAsNonRoot                                       | `true`          |
+| `startup.enabled`                       | Enable startup                                                                            | `false`         |
+| `startup.initialDelaySeconds`           | Initial delay seconds for startup                                                         | `120`           |
+| `startup.periodSeconds`                 | Period seconds for startup                                                                | `10`            |
+| `startup.timeoutSeconds`                | Timeout seconds for startup                                                               | `5`             |
+| `startup.failureThreshold`              | Failure threshold for startup                                                             | `6`             |
+| `startup.successThreshold`              | Success threshold for startup                                                             | `1`             |
 | `livenessProbe.enabled`                 | Enable livenessProbe                                                                      | `true`          |
 | `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                   | `120`           |
 | `livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                          | `10`            |
@@ -162,8 +170,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                               | Description                                                                                           | Value                    |
 | ---------------------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------ |
 | `service.type`                     | Ghost service type                                                                                    | `LoadBalancer`           |
-| `service.port`                     | Ghost service HTTP port                                                                               | `80`                     |
-| `service.httpsPort`                | Ghost service HTTPS port                                                                              | `443`                    |
+| `service.ports.http`               | Ghost service HTTP port                                                                               | `80`                     |
+| `service.ports.https`              | Ghost service HTTPS port                                                                              | `443`                    |
 | `service.nodePorts.http`           | Node port for HTTP                                                                                    | `""`                     |
 | `service.nodePorts.https`          | Node port for HTTPS                                                                                   | `""`                     |
 | `service.clusterIP`                | Ghost service Cluster IP                                                                              | `""`                     |
@@ -172,6 +180,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.externalTrafficPolicy`    | Ghost service external traffic policy                                                                 | `Cluster`                |
 | `service.annotations`              | Additional custom annotations for Ghost service                                                       | `{}`                     |
 | `service.extraPorts`               | Extra port to expose on Ghost service                                                                 | `[]`                     |
+| `service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                  | `None`                   |
+| `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                           | `{}`                     |
 | `ingress.enabled`                  | Enable ingress record generation for Ghost                                                            | `false`                  |
 | `ingress.pathType`                 | Ingress path type                                                                                     | `ImplementationSpecific` |
 | `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                         | `""`                     |
@@ -185,6 +195,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.extraPaths`               | An array with additional arbitrary paths that may need to be added to the ingress under the main host | `[]`                     |
 | `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                   | `[]`                     |
 | `ingress.secrets`                  | Custom TLS certificates as secrets                                                                    | `[]`                     |
+| `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                         | `""`                     |
 
 
 ### Persistence Parameters
