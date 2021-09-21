@@ -341,6 +341,17 @@ Find more information about how to deal with common errors related to Bitnami’
 
 ## Upgrading
 
+### To 15.0.0
+
+This major release renames several values in this chart and adds missing features, in order to be inline with the rest of assets in the Bitnami charts repository.
+
+Affected values:
+
+- `service.port` renamed as `service.ports.http`.
+- `service.httpsPort` renamed as `service.port.https`.
+
+Additionally, updates the MariaDB subchart to it newest major, 10.0.0, which contains similar changes.
+
 ### To 14.0.0
 
 Due to recent changes in the container image (see [Notable changes](https://github.com/bitnami/bitnami-docker-ghost#notable-changes)), the major version of the chart has been bumped preemptively.
