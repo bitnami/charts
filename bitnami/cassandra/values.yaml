@@ -2,6 +2,7 @@
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
 ## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
@@ -17,6 +18,7 @@ global:
   storageClass: ""
 
 ## @section Common parameters
+##
 
 ## @param nameOverride String to partially override common.names.fullname
 ##
@@ -24,6 +26,9 @@ nameOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname
 ##
 fullnameOverride: ""
+## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
+##
+kubeVersion: ""
 ## @param commonLabels Labels to add to all deployed objects (sub-charts are not considered)
 ##
 commonLabels: {}
@@ -53,6 +58,7 @@ diagnosticMode:
     - infinity
 
 ## @section Cassandra parameters
+##
 
 ## Bitnami Cassandra image
 ## ref: https://hub.docker.com/r/bitnami/cassandra/tags/
@@ -110,6 +116,7 @@ dbUser:
   ##   ##
   ##   keyMapping:
   ##     cassandra-password: myCassandraPasswordKey
+  ##
   existingSecret: ""
 
 ## @param initDBConfigMap ConfigMap with cql scripts. Useful for creating a keyspace and pre-populating data
@@ -131,6 +138,7 @@ existingConfiguration: ""
 ## @param cluster.internodeEncryption DEPRECATED: use tls.internode and tls.client instead. Encryption values.
 ## @param cluster.clientEncryption Client Encryption
 ## @param cluster.extraSeeds For an external/second cassandra ring.
+## @param cluster.enableUDF Enable User defined functions
 ##
 cluster:
   name: cassandra
@@ -147,7 +155,10 @@ cluster:
   ## extraSeeds:
   ##   - hostname/IP
   ##   - hostname/IP
+  ##
   extraSeeds: []
+  enableUDF: false
+
 ## JVM Settings
 ## @param jvm.extraOpts Set the value for Java Virtual Machine extra options
 ## @param jvm.maxHeapSize Set Java Virtual Machine maximum heap size (MAX_HEAP_SIZE). Calculated automatically if `nil`
@@ -160,6 +171,7 @@ jvm:
   ## - calculate 1/2 ram and cap to 1024MB
   ## - calculate 1/4 ram and cap to 8192MB
   ## - pick the max
+  ##
   maxHeapSize: ""
   ## newHeapSize:
   ## A good guideline is 100 MB per CPU core.
@@ -187,22 +199,20 @@ extraEnvVarsCM: ""
 extraEnvVarsSecret: ""
 
 ## @section Statefulset parameters
+##
 
 ## @param replicaCount Number of Cassandra replicas
 ##
 replicaCount: 1
-## @param updateStrategy updateStrategy for Cassandra statefulset
+## @param updateStrategy.type updateStrategy for Cassandra statefulset
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
 ##
-updateStrategy: RollingUpdate
+updateStrategy:
+  type: RollingUpdate
 ## @param hostAliases Add deployment host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
 hostAliases: []
-## @param rollingUpdatePartition Partition update strategy
-## https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#partitions
-##
-rollingUpdatePartition: ""
 ## @param podManagementPolicy StatefulSet pod management policy
 ##
 podManagementPolicy: OrderedReady
@@ -272,11 +282,13 @@ podSecurityContext:
 ## Configure Container Security Context (only main container)
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ## @param containerSecurityContext.enabled Enabled Cassandra containers' Security Context
-## @param containerSecurityContext.runAsUser et Cassandra container's Security Context runAsUser
+## @param containerSecurityContext.runAsUser Set Cassandra container's Security Context runAsUser
+## @param containerSecurityContext.runAsNonRoot Force the container to be run as non root
 ##
 containerSecurityContext:
   enabled: true
   runAsUser: 1001
+  runAsNonRoot: true
 ## Cassandra pods' resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ## Minimum memory for development is 4GB and 2 CPU cores
@@ -295,11 +307,13 @@ resources:
   ## limits:
   ##    cpu: 2
   ##    memory: 4Gi
+  ##
   limits: {}
   ## Examples:
   ## requests:
   ##    cpu: 2
   ##    memory: 4Gi
+  ##
   requests: {}
 ## Configure extra options for Cassandra containers' liveness and readiness probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
@@ -331,12 +345,38 @@ readinessProbe:
   timeoutSeconds: 5
   successThreshold: 1
   failureThreshold: 5
+## Configure extra options for startup probe
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
+## @param startupProbe.enabled Enable startupProbe
+## @param startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+## @param startupProbe.periodSeconds Period seconds for startupProbe
+## @param startupProbe.timeoutSeconds Timeout seconds for startupProbe
+## @param startupProbe.failureThreshold Failure threshold for startupProbe
+## @param startupProbe.successThreshold Success threshold for startupProbe
+##
+startupProbe:
+  enabled: false
+  initialDelaySeconds: 0
+  periodSeconds: 10
+  timeoutSeconds: 5
+  successThreshold: 1
+  failureThreshold: 60
 ## @param customLivenessProbe Custom livenessProbe that overrides the default one
 ##
 customLivenessProbe: {}
 ## @param customReadinessProbe Custom readinessProbe that overrides the default one
 ##
 customReadinessProbe: {}
+## @param customStartupProbe [object] Override default startup probe
+##
+customStartupProbe: {}
+## @param lifecycleHooks [object] Override default etcd container hooks
+##
+lifecycleHooks: {}
+## @param schedulerName Alternative scheduler
+## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+##
+schedulerName: ""
 ## @param extraVolumes Optionally specify extra list of additional volumes for cassandra container
 ##
 extraVolumes: []
@@ -380,6 +420,7 @@ containerPorts:
   cql: 9042
 
 ## @section RBAC parameters
+##
 
 ## Cassandra pods ServiceAccount
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
@@ -395,8 +436,12 @@ serviceAccount:
   ## @param serviceAccount.annotations Annotations for Cassandra Service Account
   ##
   annotations: {}
+  ## @param serviceAccount.automountServiceAccountToken Automount API credentials for a service account.
+  ##
+  automountServiceAccountToken: true
 
 ## @section Traffic Exposure Parameters
+##
 
 ## Cassandra service parameters
 ##
@@ -404,12 +449,12 @@ service:
   ## @param service.type Cassandra service type
   ##
   type: ClusterIP
-  ## @param service.port Cassandra service CQL Port
+  ## @param service.ports.cql Cassandra service CQL Port
+  ## @param service.ports.metrics Cassandra service metrics port
   ##
-  port: 9042
-  ## @param service.metricsPort Cassandra service metrics port
-  ##
-  metricsPort: 8080
+  ports:
+    cql: 9042
+    metrics: 8080
   ## Node ports to expose
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ## @param service.nodePorts.cql Node port for CQL
@@ -418,10 +463,29 @@ service:
   nodePorts:
     cql: ""
     metrics: ""
+  ## @param service.extraPorts Extra ports to expose in the service (normally used with the `sidecar` value)
+  ##
+  extraPorts: []
   ## @param service.loadBalancerIP LoadBalancerIP if service type is `LoadBalancer`
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
   ##
   loadBalancerIP: ""
+  ## @param service.loadBalancerSourceRanges Service Load Balancer sources
+  ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+  ## e.g:
+  ## loadBalancerSourceRanges:
+  ##   - 10.10.10.0/24
+  ##
+  loadBalancerSourceRanges: []
+  ## @param service.clusterIP Service Cluster IP
+  ## e.g.:
+  ## clusterIP: None
+  ##
+  clusterIP: ""
+  ## @param service.externalTrafficPolicy Service external traffic policy
+  ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+  ##
+  externalTrafficPolicy: Cluster
   ## @param service.annotations Provide any additional annotations which may be required.
   ## This can be used to set the LoadBalancer service type to internal only.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
@@ -443,6 +507,7 @@ networkPolicy:
   allowExternal: true
 
 ## @section Persistence parameters
+##
 
 ## Enable persistence using Persistent Volume Claims
 ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
@@ -489,6 +554,7 @@ persistence:
   # commitLogMountPath: /bitnami/cassandra/commitlog
 
 ## @section Volume Permissions parameters
+##
 
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
@@ -530,11 +596,13 @@ volumePermissions:
     ## limits:
     ##    cpu: 100m
     ##    memory: 128Mi
+    ##
     limits: {}
     ## Examples:
     ## requests:
     ##    cpu: 100m
     ##    memory: 128Mi
+    ##
     requests: {}
   ## Init container Security Context
   ## Note: the chown of the data folder is done to securityContext.runAsUser
@@ -551,6 +619,7 @@ volumePermissions:
     runAsUser: 0
 
 ## @section Metrics parameters
+##
 
 ## Cassandra Prometheus exporter configuration
 ##
@@ -593,18 +662,20 @@ metrics:
     ## limits:
     ##    cpu: 100m
     ##    memory: 128Mi
+    ##
     limits: {}
     ## Examples:
     ## requests:
     ##    cpu: 100m
     ##    memory: 128Mi
+    ##
     requests: {}
   ## @param metrics.podAnnotations [object] Metrics exporter pod Annotation and Labels
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations:
-    prometheus.io/scrape: 'true'
-    prometheus.io/port: '8080'
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "8080"
   ## Prometheus Operator ServiceMonitor configuration
   ##
   serviceMonitor:
@@ -633,6 +704,21 @@ metrics:
     ##   prometheus: my-prometheus
     ##
     selector: {}
+    ## @param metrics.serviceMonitor.metricRelabelings Specify Metric Relabelings to add to the scrape endpoint
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+    ##
+    metricRelabelings: []
+    ## @param metrics.serviceMonitor.honorLabels Specify honorLabels parameter to add the scrape endpoint
+    ##
+    honorLabels: false
+    ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
+    ##
+    jobLabel: ""
+    ## @param metrics.serviceMonitor.additionalLabels Used to pass Labels that are required by the installed Prometheus Operator
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
+    ##
+    additionalLabels: {}
+
   ## Metrics container ports to open
   ## If hostNetwork true: the hostPort is set identical to the containerPort
   ## @param metrics.containerPorts.http HTTP Port on the Host and Container
@@ -643,6 +729,7 @@ metrics:
     jmx: 5555
 
 ## @section TLS/SSL parameters
+##
 
 ## TLS/SSL parameters
 ## @param tls.internodeEncryption Set internode encryption
@@ -654,6 +741,8 @@ metrics:
 ## @param tls.truststorePassword Password for the truststore, if needed.
 ## @param tls.resources.limits The resources limits for the TLS init container
 ## @param tls.resources.requests The requested resources for the TLS init container
+## @param tls.certificatesSecret Secret with the TLS certificates.
+## @param tls.tlsEncryptionSecretName Secret with the encryption of the TLS certificates
 ##
 tls:
   internodeEncryption: none
@@ -663,6 +752,8 @@ tls:
   passwordsSecret: ""
   keystorePassword: ""
   truststorePassword: ""
+  certificatesSecret: ""
+  tlsEncryptionSecretName: ""
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -673,9 +764,11 @@ tls:
     ## limits:
     ##    cpu: 100m
     ##    memory: 128Mi
+    ##
     limits: {}
     ## Examples:
     ## requests:
     ##    cpu: 100m
     ##    memory: 128Mi
+    ##
     requests: {}

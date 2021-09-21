@@ -24,6 +24,9 @@ spec:
     - host: {{ .Values.ingress.hostname }}
       http:
         paths:
+          {{- if .Values.ingress.extraPaths }}
+          {{- include "common.tplvalues.render" (dict "value"  .Values.ingress.extraPaths "context" $) | nindent 10 }}
+          {{- end }}
           - path: {{ .Values.ingress.path }}
             {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
             pathType: {{ .Values.ingress.pathType }}
@@ -42,9 +45,9 @@ spec:
     {{- end }}
   {{- if or .Values.ingress.tls .Values.ingress.extraTls }}
   tls:
-    {{- if .Values.ingress.tls }}
+    {{- if and .Values.ingress.tls (or .Values.ingress.certManager .Values.ingress.selfSigned) }}
     - hosts:
-        - {{ .Values.ingress.hostname }}
+        - {{ .Values.ingress.hostname | quote }}
       secretName: {{ printf "%s-tls" .Values.ingress.hostname }}
     {{- end }}
     {{- if .Values.ingress.extraTls }}
