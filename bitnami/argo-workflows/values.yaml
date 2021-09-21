@@ -153,21 +153,21 @@ server:
     ## @param server.auth.enabled Enable authentication
     ##
     enabled: true
-    ## @param server.auth.enabled Set authentication mode. Either `server`, `client` or `sso`.
+    ## @param server.auth.mode Set authentication mode. Either `server`, `client` or `sso`.
     ##
     mode: client
     ## SSO configuration when SSO is specified as a server auth mode.
     ## All the values are required. SSO is activated by adding --auth-mode=sso to the server command line.
-    ## @param server.sso.enabled Enable SSO configuration for the server auth mode
-    ## @param server.sso.issuer Root URL for the OIDC identity provider
-    ## @param server.sso.clientId.name Name of the secret containing the OIDC client ID
-    ## @param server.sso.clientId.key Key in the secret to obtain the OIDC client ID
-    ## @param server.sso.clientSecret Name of the secret containing the OIDC client secret
-    ## @param server.sso.clientSecret.key Key in the secret to obtain the OIDC client secret
-    ## @param server.sso.redirectUrl The OIDC redirect URL. Should be in the form <argo-root-url>/oauth2/callback.
-    ## @param server.sso.rbac.enabled Create RBAC resources for SSO
-    ## @param server.sso.secretWhitelist Restricts the secrets that the server can read
-    ## @param server.sso.scopes Scopes requested from the SSO ID provider
+    ## @param server.auth.sso.enabled Enable SSO configuration for the server auth mode
+    ## @param server.auth.sso.issuer Root URL for the OIDC identity provider
+    ## @param server.auth.sso.clientId.name Name of the secret containing the OIDC client ID
+    ## @param server.auth.sso.clientId.key Key in the secret to obtain the OIDC client ID
+    ## @param server.auth.sso.clientSecret.name Name of the secret containing the OIDC client secret
+    ## @param server.auth.sso.clientSecret.key Key in the secret to obtain the OIDC client secret
+    ## @param server.auth.sso.redirectUrl The OIDC redirect URL. Should be in the form <argo-root-url>/oauth2/callback.
+    ## @param server.auth.sso.rbac.enabled Create RBAC resources for SSO
+    ## @param server.auth.sso.secretWhitelist Restricts the secrets that the server can read
+    ## @param server.auth.sso.scopes Scopes requested from the SSO ID provider
     ##
     sso:
       enabled: false
@@ -213,8 +213,8 @@ server:
   ## Pod disruption budget configuration
   ## Ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
   ## @param server.pdb.enabled Create Pod Disruption Budget for the server component
-  ## @param server.minAvailable Sets the min number of pods availables for the Pod Disruption Budget
-  ## @param server.maxAvailable Sets the max number of pods unavailable for the Pod Disruption Budget
+  ## @param server.pdb.minAvailable Sets the min number of pods availables for the Pod Disruption Budget
+  ## @param server.pdb.maxUnavailable Sets the max number of pods unavailable for the Pod Disruption Budget
   ##
   pdb:
     enabled: false
@@ -229,11 +229,12 @@ server:
 
   ## Base URL for client resources
   ## Ref: https://github.com/argoproj/argo-workflows/issues/716#issuecomment-433213190
+  ## @param server.baseHref Base href of the Argo Workflows deployment
   ##
   baseHref: /
 
   ## Server container port
-  ## @param server.containerPort argo Server container port
+  ## @param server.ports.container argo Server container port
   ports:
     container: 2746
 
@@ -501,14 +502,14 @@ controller:
     runAsUser: 1001
 
   ## Server container port
-  ## @param server.containerPort argo Server container port
+  ## @param controller.ports.container Argo Workflows controller container port
   ports:
     container: 6060
 
   ## Controller persistence parameters. It can also be connected to an existing postgresql. Check
   ## @param controller.persistence.enabled Enabled controller persistence
   ## @param controller.persistence.connectionPool.maxIdleConns Msximun number of postgresql connections
-  ## @param controller.persistence.connectionPool.maxopenConns Maximun number of open connections
+  ## @param controller.persistence.connectionPool.maxOpenConns Maximun number of open connections
   ## @param controller.persistence.nodeStatusOffLoad Save the entire workflow into etcd and DB
   ## @param controller.persistence.archive Enable archiving old workflows
   ## @param controller.persistence.postgresql.enabled Enable Postgresql persistence
@@ -519,7 +520,7 @@ controller:
   ## @param controller.persistence.postgresql.userNameSecret.name Name of the secret containing the postgresql username
   ## @param controller.persistence.postgresql.userNameSecret.key Key of the secret containing the postgresql username
   ## @param controller.persistence.postgresql.passwordSecret.name Name of the secret containing the postgresql password
-  ## @param controller.persistence.postgresql.passwordSecret.name Key of the secret containing the postgresql password
+  ## @param controller.persistence.postgresql.passwordSecret.key Key of the secret containing the postgresql password
   ## @param controller.persistence.mysql.enabled Enable MySQL persistence
   ## @param controller.persistence.mysql.host Host to use mysql persistence
   ## @param controller.persistence.mysql.port Port for Postgresql
@@ -528,7 +529,7 @@ controller:
   ## @param controller.persistence.mysql.userNameSecret.name Name of the secret containing the mysql username
   ## @param controller.persistence.mysql.userNameSecret.key Key of the secret containing the mysql username
   ## @param controller.persistence.mysql.passwordSecret.name Name of the secret containing the mysql password
-  ## @param controller.persistence.mysql.passwordSecret.name Key of the secret containing the mysql password
+  ## @param controller.persistence.mysql.passwordSecret.key Key of the secret containing the mysql password
   ##
   persistence:
     enabled: false
@@ -626,7 +627,7 @@ controller:
   ## @param controller.metrics.port Port to expose controller metrics
   ## @param controller.metrics.servicePort Service port to expose controller metrics
   ## @param controller.metrics.servicePortName Name of the service port that expose controller metrics
-  ## @param controller.serviceMonitor.enabled Enable prometheus service monitor configuration
+  ## @param controller.metrics.serviceMonitor.enabled Enable prometheus service monitor configuration
   ##
   metrics:
     enabled: false
@@ -668,7 +669,7 @@ controller:
   podWorkers: 32
   ## Workflows restrictions. Only for versions 2.9 or greater.
   ## Ref: https://argoproj.github.io/argo-workflows/workflow-restrictions/
-  ## @param controller.workfloRestrictions Workflows restrictions for the controller
+  ## @param controller.workflowRestrictions Workflows restrictions for the controller
   ##
   workflowRestrictions: {}
   ## Workflows custom links
@@ -682,7 +683,7 @@ controller:
     - default
   ## Logging level for the controller
   ## @param controller.logging.level Level for the controller logging
-  ## @param contrller.logging.globalLevel Global logging level for the controller
+  ## @param controller.logging.globalLevel Global logging level for the controller
   ##
   logging:
     level: info
@@ -690,8 +691,8 @@ controller:
   ## Pod disruption budget configuration
   ## Ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
   ## @param controller.pdb.enabled Create Pod Disruption Budget for the controller component
-  ## @param controller.minAvailable Sets the min number of pods availables for the Pod Disruption Budget
-  ## @param controller.maxAvailable Sets the max number of pods unavailable for the Pod Disruption Budget
+  ## @param controller.pdb.minAvailable Sets the min number of pods availables for the Pod Disruption Budget
+  ## @param controller.pdb.maxUnavailable Sets the max number of pods unavailable for the Pod Disruption Budget
   ##
   pdb:
     enabled: false
@@ -865,7 +866,6 @@ executor:
   ## @param executor.image.tag executor image tag (immutable tags are recommended)
   ## @param executor.image.pullPolicy executor image pull policy
   ## @param executor.image.pullSecrets executor image pull secrets
-  ## @param executor.image.debug Enable executor image debug mode
   ##
   image:
     registry: docker.io
@@ -1011,15 +1011,15 @@ ingress:
 
 workflows:
   ## Service account configuration for workflows
-  ## @param workflow.serviceAccount.create Whether to create a service account to run workflows
-  ## @param workflow.serviceAccount.name Service account name to run workflows
+  ## @param workflows.serviceAccount.create Whether to create a service account to run workflows
+  ## @param workflows.serviceAccount.name Service account name to run workflows
   ##
   serviceAccount:
     create: false
     name:
   ## Create RBAC resources to run workflows.
   ## A Role and Role Bindding are created per namespace in controller.workflowNamespaces
-  ## @param workflow.rbac.create Whether to create RBAC resource to run workflows
+  ## @param workflows.rbac.create Whether to create RBAC resource to run workflows
   ##
   rbac:
     create: true
