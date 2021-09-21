@@ -592,7 +592,7 @@ Find more information about how to deal with common errors related to Bitnami’
 
 ## Notable changes
 
-### To 11.0.0
+### To 12.0.0
 
 This major release renames several values in this chart and adds missing features, in order to be inline with the rest of assets in the Bitnami charts repository.
 
@@ -607,6 +607,10 @@ Affected values:
 - Removed value `worker.rollingUpdatePartition`, now configured using `worker.updateStrategy` setting `worker.updateStrategy.rollingUpdate.partition`.
 
 Additionally also updates the Redis&trade; subchart to it newest major, 14.0.0, which contains similar changes.
+
+### To 11.0.0
+
+This major update the Redis&trade; subchart to its newest major, 15.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1500) you can find more info about the specific changes.
 
 ### To 10.0.0
 
@@ -707,10 +711,6 @@ $ kubectl delete pod airflow-postgresql-0
 - https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
 - https://helm.sh/docs/topics/v2_v3_migration/
 - https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
-
-### To 11.0.0
-
-This major update the Redis&trade; subchart to its newest major, 15.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1500) you can find more info about the specific changes.
 
 ### To 6.5.0
 
