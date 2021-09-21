@@ -93,8 +93,6 @@ spec:
             - name: web
               containerPort: {{ .Values.server.ports.container }}
           env:
-            - name: BITNAMI_DEBUG
-              value: {{ ternary "true" "false" (or .Values.server.image.debug .Values.diagnosticMode.enabled) | quote }}
             - name: IN_CLUSTER
               value: "true"
             - name: ARGO_NAMESPACE
