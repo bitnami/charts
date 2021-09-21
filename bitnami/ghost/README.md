@@ -143,12 +143,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `containerSecurityContext.enabled`      | Enabled Ghost containers' Security Context                                                | `true`          |
 | `containerSecurityContext.runAsUser`    | Set Ghost container's Security Context runAsUser                                          | `1001`          |
 | `containerSecurityContext.runAsNonRoot` | Set Ghost container's Security Context runAsNonRoot                                       | `true`          |
-| `startup.enabled`                       | Enable startup                                                                            | `false`         |
-| `startup.initialDelaySeconds`           | Initial delay seconds for startup                                                         | `120`           |
-| `startup.periodSeconds`                 | Period seconds for startup                                                                | `10`            |
-| `startup.timeoutSeconds`                | Timeout seconds for startup                                                               | `5`             |
-| `startup.failureThreshold`              | Failure threshold for startup                                                             | `6`             |
-| `startup.successThreshold`              | Success threshold for startup                                                             | `1`             |
+| `startupProbe.enabled`                  | Enable startupProbe                                                                       | `false`         |
+| `startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                    | `120`           |
+| `startupProbe.periodSeconds`            | Period seconds for startupProbe                                                           | `10`            |
+| `startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                          | `5`             |
+| `startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                        | `6`             |
+| `startupProbe.successThreshold`         | Success threshold for startupProbe                                                        | `1`             |
 | `livenessProbe.enabled`                 | Enable livenessProbe                                                                      | `true`          |
 | `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                   | `120`           |
 | `livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                          | `10`            |

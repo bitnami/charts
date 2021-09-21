@@ -294,12 +294,12 @@ containerSecurityContext:
   runAsNonRoot: true
 ## Configure extra options for Ghost containers' liveness, readiness and startup probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
-## @param startup.enabled Enable startup
-## @param startup.initialDelaySeconds Initial delay seconds for startup
-## @param startup.periodSeconds Period seconds for startup
-## @param startup.timeoutSeconds Timeout seconds for startup
-## @param startup.failureThreshold Failure threshold for startup
-## @param startup.successThreshold Success threshold for startup
+## @param startupProbe.enabled Enable startupProbe
+## @param startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+## @param startupProbe.periodSeconds Period seconds for startupProbe
+## @param startupProbe.timeoutSeconds Timeout seconds for startupProbe
+## @param startupProbe.failureThreshold Failure threshold for startupProbe
+## @param startupProbe.successThreshold Success threshold for startupProbe
 ##
 startupProbe:
   enabled: false
