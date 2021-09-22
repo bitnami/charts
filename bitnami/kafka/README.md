@@ -466,6 +466,28 @@ zookeeper.auth.clientUser=zookeeperUser
 zookeeper.auth.clientPassword=zookeeperPassword
 ```
 
+You can deploy the chart with AclAuthorizer using the following parameters:
+
+```console
+replicaCount=2
+auth.clientProtocol=sasl
+auth.interBrokerProtocol=sasl_tls
+auth.certificatesSecret=kafka-jks
+auth.certificatesPassword=jksPassword
+auth.sasl.jaas.clientUsers[0]=brokerUser
+auth.sasl.jaas.clientPasswords[0]=brokerPassword
+auth.jaas.zookeeperUser=zookeeperUser
+auth.jaas.zookeeperPassword=zookeeperPassword
+zookeeper.auth.enabled=true
+zookeeper.auth.serverUsers=zookeeperUser
+zookeeper.auth.serverPasswords=zookeeperPassword
+zookeeper.auth.clientUser=zookeeperUser
+zookeeper.auth.clientPassword=zookeeperPassword
+authorizerClassName=kafka.security.authorizer.AclAuthorizer
+allowEveryoneIfNoAclFound=false
+superUsers=User:admin
+```
+
 If you also enable exposing metrics using the Kafka expoter, and you are using `sasl_tls`, `tls`, or `mtls` authentication protocols, you need to mount the CA certificated used to sign the brokers certificates in the exporter so it can validate the Kafka brokers. To do so, create a secret containing the CA, and set the `metrics.certificatesSecret` parameter. As an alternative, you can skip TLS validation using extra flags:
 
 ```console
