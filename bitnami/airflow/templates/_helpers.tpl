@@ -460,14 +460,3 @@ Ref: https://github.com/bitnami/charts/pull/6096#issuecomment-856499047
 {{- .Values.executor -}}
 {{- end -}}
 {{- end -}}
-
-{{/*
-Returns whether the deprecated ingress.*.certManager boolean parameter is used or not
-This helper is needed in order to guarantee backwards-compatibility
-Ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
-*/}}
-{{- define "airflow.ingress.certManager.isLegacy" -}}
-{{- if typeIs "bool" .Values.ingress.certManager }}
-    {{- true -}}
-{{- end -}}
-{{- end -}}
