@@ -468,6 +468,6 @@ Ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
 */}}
 {{- define "airflow.ingress.certManager.isLegacy" -}}
 {{- if typeIs "bool" .Values.ingress.certManager }}
-  true
-{{- else -}}{{- end -}}
+    {{- true -}}
+{{- end -}}
 {{- end -}}
