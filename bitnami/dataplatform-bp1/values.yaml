@@ -65,7 +65,7 @@ dataplatform:
     image:
       registry: docker.io
       repository: bitnami/dataplatform-exporter
-      tag: latest
+      tag: 0.0.11-scratch-r1
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -344,7 +344,7 @@ dataplatform:
     image:
       registry: docker.io
       repository: bitnami/dataplatform-emitter
-      tag: latest
+      tag: 0.0.10-scratch-r0
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
