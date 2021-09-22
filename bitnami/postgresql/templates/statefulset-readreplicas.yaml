@@ -18,7 +18,7 @@ metadata:
   {{- end }}
   namespace: {{ .Release.Namespace }}
 spec:
-  serviceName: {{ template "common.names.fullname" . }}-headless
+  serviceName: {{- if .Values.service.headless }} {{ template "common.names.fullname" . }}-headless {{- else }} {{ template "common.names.fullname" . }} {{- end }}
   replicas: {{ .Values.replication.readReplicas }}
   selector:
     matchLabels:

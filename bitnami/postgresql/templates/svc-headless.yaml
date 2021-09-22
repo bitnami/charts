@@ -1,3 +1,4 @@
+{{- if .Values.service.headless }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -26,3 +27,4 @@ spec:
       targetPort: tcp-postgresql
   selector:
   {{- include "common.labels.matchLabels" . | nindent 4 }}
+{{- end }}

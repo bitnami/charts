@@ -445,6 +445,9 @@ service:
   ## - 10.10.10.0/24
   ##
   loadBalancerSourceRanges: []
+  ## @param service.headless determines if a headless service will be created
+  ##
+  headless: true  
 ## Start primary and read(s) pod(s) without limitations on shm memory.
 ## By default docker and containerd (and possibly other container runtimes)
 ## limit `/dev/shm` to `64M` (see e.g. the
