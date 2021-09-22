@@ -163,12 +163,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.ports.https`              | Service HTTPS port                                                                            | `443`                    |
 | `service.nodePorts.http`           | Node port for HTTP                                                                            | `""`                     |
 | `service.nodePorts.https`          | Node port for HTTPS                                                                           | `""`                     |
-| `service.clusterIP`                | %%MAIN_CONTAINER_NAME%% service Cluster IP                                                    | `""`                     |
+| `service.clusterIP`                | Joomla! service Cluster IP                                                                    | `""`                     |
 | `service.loadBalancerIP`           | loadBalancerIP for the Joomla Service (optional, cloud specific)                              | `""`                     |
-| `service.loadBalancerSourceRanges` | %%MAIN_CONTAINER_NAME%% service Load Balancer sources                                         | `[]`                     |
+| `service.loadBalancerSourceRanges` | Joomla! service Load Balancer sources                                                         | `[]`                     |
 | `service.externalTrafficPolicy`    | Enable client source IP preservation                                                          | `Cluster`                |
 | `service.extraPorts`               | Extra ports to expose (normally used with the `sidecar` value)                                | `[]`                     |
-| `service.annotations`              | Additional custom annotations for %%MAIN_CONTAINER_NAME%% service                             | `{}`                     |
+| `service.annotations`              | Additional custom annotations for Joomla! service                                             | `{}`                     |
 | `service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                          | `None`                   |
 | `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                   | `{}`                     |
 | `ingress.enabled`                  | Enable ingress controller resource                                                            | `false`                  |
