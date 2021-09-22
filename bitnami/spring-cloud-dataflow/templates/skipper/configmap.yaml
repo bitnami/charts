@@ -96,4 +96,6 @@ data:
         {{- end }}
         testOnBorrow: true
         validationQuery: "SELECT 1"
+      flyway:
+        enabled: {{ .Values.flyway.enabled }}
 {{ end }}
