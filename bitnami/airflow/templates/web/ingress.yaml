@@ -12,7 +12,11 @@ metadata:
       {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
     {{- end }}
     {{- if .Values.ingress.certManager }}
+    {{- if include "airflow.ingress.certManager.isLegacy" . }}
     kubernetes.io/tls-acme: "true"
+    {{- else }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.ingress.certManager "context" $) | nindent 4 }}
+    {{- end }}
     {{- end }}
     {{- range $key, $value := .Values.ingress.annotations }}
     {{ $key }}: {{ include "common.tplvalues.render" (dict "value" $value "context" $) | quote }}
