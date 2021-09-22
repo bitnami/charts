@@ -1093,12 +1093,11 @@ mariadb:
       GRANT ALL ON skipper.* to 'skipper'@'%';
       FLUSH PRIVILEGES;
 ## Flyway Configuration
+## @param flyway.enabled Enable/disable flyway running Dataflow and Skipper Database creation scripts on startup
 ## All database creation scripts are ignored on startup when flyway.enabled is set to false
 ## This feature can be used in scenario, where Database tables are already present in Mariadb or ExternalDatabase.
 ##
 flyway:
-  ## @param flyway.enabled Enable/disable flyway
-  ##
   enabled: true
 ## External Database Configuration
 ## All of these values are ignored when mariadb.enabled is set to true
