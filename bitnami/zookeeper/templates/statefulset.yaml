@@ -291,7 +291,7 @@ spec:
             - name: ZOO_SNAPCOUNT
               value: {{ .Values.snapCount | quote }}
             - name: ZOO_MAX_CLIENT_CNXNS
-              value: {{ .Values.maxClientCnxns | quote }}           
+              value: {{ .Values.maxClientCnxns | quote }}
             - name: ZOO_4LW_COMMANDS_WHITELIST
               value: {{ .Values.fourlwCommandsWhitelist | quote }}
             - name: ZOO_LISTEN_ALLIPS_ENABLED
