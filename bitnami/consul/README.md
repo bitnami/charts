@@ -153,25 +153,24 @@ $ helm delete --purge my-release
 
 ### Exposure parameters
 
-| Name                     | Description                                                                                   | Value                    |
-| ------------------------ | --------------------------------------------------------------------------------------------- | ------------------------ |
-| `service.enabled`        | Use a service to access HashiCorp Consul Ui                                                   | `true`                   |
-| `service.port`           | HashiCorp Consul UI svc port                                                                  | `80`                     |
-| `service.type`           | HashiCorp Consul UI Service Type                                                              | `ClusterIP`              |
-| `service.nodePort`       | Node port for HashiCorp Consul UI                                                             | `""`                     |
-| `service.loadBalancerIP` | HashiCorp Consul UI service Load Balancer IP                                                  | `""`                     |
-| `service.annotations`    | Annotations for HashiCorp Consul UI service                                                   | `{}`                     |
-| `ingress.enabled`        | Enable ingress resource for Management console                                                | `false`                  |
-| `ingress.path`           | Path for the default host                                                                     | `/`                      |
-| `ingress.apiVersion`     | Override API Version (automatically detected if not set)                                      | `""`                     |
-| `ingress.pathType`       | Ingress path type                                                                             | `ImplementationSpecific` |
-| `ingress.certManager`    | Add annotations for cert-manager                                                              | `false`                  |
-| `ingress.hostname`       | Default host for the ingress resource, a host pointing to this will be created                | `consul-ui.local`        |
-| `ingress.annotations`    | Ingress annotations done as key:value pairs                                                   | `{}`                     |
-| `ingress.tls`            | Enable TLS configuration for the hostname defined at ingress.hostname parameter               | `false`                  |
-| `ingress.extraHosts`     | An array with additional hostname(s) to be covered with the ingress record                    | `[]`                     |
-| `ingress.extraTls`       | TLS configuration for additional hostname(s) to be covered with this ingress record           | `[]`                     |
-| `ingress.secrets`        | If you're providing your own certificates, please use this to add the certificates as secrets | `[]`                     |
+| Name                     | Description                                                                                                                      | Value                    |
+| ------------------------ | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.enabled`        | Use a service to access HashiCorp Consul Ui                                                                                      | `true`                   |
+| `service.port`           | HashiCorp Consul UI svc port                                                                                                     | `80`                     |
+| `service.type`           | HashiCorp Consul UI Service Type                                                                                                 | `ClusterIP`              |
+| `service.nodePort`       | Node port for HashiCorp Consul UI                                                                                                | `""`                     |
+| `service.loadBalancerIP` | HashiCorp Consul UI service Load Balancer IP                                                                                     | `""`                     |
+| `service.annotations`    | Annotations for HashiCorp Consul UI service                                                                                      | `{}`                     |
+| `ingress.enabled`        | Enable ingress resource for Management console                                                                                   | `false`                  |
+| `ingress.path`           | Path for the default host                                                                                                        | `/`                      |
+| `ingress.apiVersion`     | Override API Version (automatically detected if not set)                                                                         | `""`                     |
+| `ingress.pathType`       | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.hostname`       | Default host for the ingress resource, a host pointing to this will be created                                                   | `consul-ui.local`        |
+| `ingress.annotations`    | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.tls`            | Enable TLS configuration for the hostname defined at ingress.hostname parameter                                                  | `false`                  |
+| `ingress.extraHosts`     | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                     |
+| `ingress.extraTls`       | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
+| `ingress.secrets`        | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
 
 
 ### Persistence parameters
