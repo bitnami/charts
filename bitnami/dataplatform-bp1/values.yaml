@@ -293,9 +293,7 @@ dataplatform:
       ## @param dataplatform.exporter.service.type Service type for default Data Platform Prometheus exporter service
       ##
       type: ClusterIP
-      ## @param dataplatform.exporter.service.annotations.prometheus.io/scrape Enable Data Platform Prometheus exporter
-      ## @param dataplatform.exporter.service.annotations.prometheus.io/port Data Platform Prometheus exporter port
-      ## @param dataplatform.exporter.service.annotations.prometheus.io/path Data Platform Prometheus exporter metrics path
+      ## @param dataplatform.exporter.service.annotations [object] Metrics exporter service annotations
       ##
       annotations:
         prometheus.io/scrape: "true"
