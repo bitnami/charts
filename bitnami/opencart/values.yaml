@@ -277,7 +277,7 @@ podSecurityContext:
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ## @param containerSecurityContext.enabled Enable OpenCart containers' Security Context
 ## @param containerSecurityContext.runAsUser OpenCart containers' Security Context runAsUser
-## @param containerSecurityContext.runAsUser OpenCart containers' Security Context runAsNonRoot
+## @param containerSecurityContext.runAsNonRoot OpenCart containers' Security Context runAsNonRoot
 ##
 containerSecurityContext:
   enabled: true
