@@ -369,6 +369,18 @@ Find more information about how to deal with common errors related to Bitnami’
 
 ## Upgrading
 
+### To 12.0.0
+
+This major release renames several values in this chart and adds missing features, in order to be inline with the rest of assets in the Bitnami charts repository.
+
+Affected values:
+
+- `service.port` was deprecated. We recommend using `service.ports.http` instead.
+- `service.httpsPort` was deprecated. We recommend using `service.ports.https` instead.
+- `metrics.serviceMonitor.additionalLabels` renamed as `metrics.serviceMonitor.selector`.
+
+Additionally updates the MariaDB subchart to it newest major, 10.0.0, which contains similar changes.
+
 ### To 10.0.0
 
 The [Bitnami Osclass](https://github.com/bitnami/bitnami-docker-osclass) image was migrated to a "non-root" user approach. Previously the container ran as the `root` user and the Apache daemon was started as the `daemon` user. From now on, both the container and the Apache daemon run as user `1001`. You can revert this behavior by setting the parameters `containerSecurityContext.runAsUser` to `root`.
