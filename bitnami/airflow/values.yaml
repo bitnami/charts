@@ -209,7 +209,7 @@ web:
   image:
     registry: docker.io
     repository: bitnami/airflow
-    tag: 2.1.4-debian-10-r3
+    tag: 2.1.4-debian-10-r4
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -398,7 +398,7 @@ scheduler:
   image:
     registry: docker.io
     repository: bitnami/airflow-scheduler
-    tag: 2.1.4-debian-10-r3
+    tag: 2.1.4-debian-10-r4
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -530,7 +530,7 @@ worker:
   image:
     registry: docker.io
     repository: bitnami/airflow-worker
-    tag: tag: 2.1.4-debian-10-r3
+    tag: 2.1.4-debian-10-r4
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
