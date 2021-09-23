@@ -452,8 +452,7 @@ serviceAccount:
 ##     ports:
 ##       - name: portname
 ##         containerPort: 1234
-sidecar: []
-
+sidecars: []
 
 networkPolicy:
   ## @param networkPolicy.enabled Specifies whether a NetworkPolicy should be created
