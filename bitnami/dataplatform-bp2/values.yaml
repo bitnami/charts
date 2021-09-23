@@ -65,7 +65,7 @@ dataplatform:
     image:
       registry: docker.io
       repository: bitnami/dataplatform-exporter
-      tag: 0.0.11-scratch-r0
+      tag: 0.0.11-scratch-r1
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -293,9 +293,7 @@ dataplatform:
       ## @param dataplatform.exporter.service.type Service type for default Data Platform Prometheus exporter service
       ##
       type: ClusterIP
-      ## @param dataplatform.exporter.service.annotations.prometheus.io/scrape Enable Data Platform Prometheus exporter
-      ## @param dataplatform.exporter.service.annotations.prometheus.io/port Data Platform Prometheus exporter port
-      ## @param dataplatform.exporter.service.annotations.prometheus.io/path Data Platform Prometheus exporter metrics path
+      ## @param dataplatform.exporter.service.annotations [object] Exporter service annotations
       ##
       annotations:
         prometheus.io/scrape: "true"
@@ -344,7 +342,7 @@ dataplatform:
     image:
       registry: docker.io
       repository: bitnami/dataplatform-emitter
-      tag: 0.0.10-scratch-r1
+      tag: 0.0.10-scratch-r2
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
