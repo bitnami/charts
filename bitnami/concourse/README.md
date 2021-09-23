@@ -261,38 +261,37 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Traffic exposure parameters
 
-| Name                                             | Description                                                                                                   | Value                    |
-| ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `service.web.type`                               | For minikube, set this to ClusterIP, elsewhere use LoadBalancer or NodePort                                   | `LoadBalancer`           |
-| `service.web.port`                               | Service HTTP port                                                                                             | `80`                     |
-| `service.web.tlsPort`                            | Service HTTPS port                                                                                            | `443`                    |
-| `service.web.clusterIP`                          | When using `service.web.type: ClusterIP`, sets the user-specified cluster IP.                                 | `""`                     |
-| `service.web.loadBalancerIP`                     | When using `service.web.type: LoadBalancer`, sets the user-specified load balancer IP.                        | `""`                     |
-| `service.web.labels`                             | Additional Labels to be added to the web api service.                                                         | `{}`                     |
-| `service.web.annotations`                        | Annotations to be added to the web api service.                                                               | `{}`                     |
-| `service.web.loadBalancerSourceRanges`           | When using `service.web.type: LoadBalancer`, restrict access to the load balancer to particular IPs           | `[]`                     |
-| `service.web.nodePort`                           | When using `service.web.type: NodePort`, sets the nodePort for api                                            | `""`                     |
-| `service.web.tlsnodePort`                        | When using `service.web.type: NodePort`, sets the nodePort for api tls                                        | `""`                     |
-| `service.web.externalTrafficPolicy`              | Set service externalTraffic policy                                                                            | `""`                     |
-| `service.workerGateway.type`                     | For minikube, set this to ClusterIP, elsewhere use LoadBalancer or NodePort                                   | `ClusterIP`              |
-| `service.workerGateway.clusterIP`                | When using `service.workerGateway.type: ClusterIP`, sets the user-specified cluster IP.                       | `""`                     |
-| `service.workerGateway.port`                     | Service HTTP port                                                                                             | `2222`                   |
-| `service.workerGateway.loadBalancerIP`           | When using `service.workerGateway.type: LoadBalancer`, sets the user-specified load balancer IP.              | `""`                     |
-| `service.workerGateway.labels`                   | Additional Labels to be added to the web workerGateway service.                                               | `{}`                     |
-| `service.workerGateway.annotations`              | Annotations to be added to the web workerGateway service.                                                     | `{}`                     |
-| `service.workerGateway.loadBalancerSourceRanges` | When using `service.workerGateway.type: LoadBalancer`, restrict access to the load balancer to particular IPs | `[]`                     |
-| `service.workerGateway.nodePort`                 | When using `service.workerGateway.type: NodePort`, sets the nodePort for tsa                                  | `""`                     |
-| `ingress.enabled`                                | Ingress configuration enabled                                                                                 | `false`                  |
-| `ingress.certManager`                            | Add annotations for cert-manager                                                                              | `false`                  |
-| `ingress.annotations`                            | Annotations to be added to the web ingress.                                                                   | `{}`                     |
-| `ingress.hostname`                               | Hostename for the Ingress object                                                                              | `concourse.local`        |
-| `ingress.path`                                   | The Path to Concourse                                                                                         | `/`                      |
-| `ingress.rulesOverride`                          | Ingress rules override                                                                                        | `[]`                     |
-| `ingress.tls`                                    | TLS configuration.                                                                                            | `false`                  |
-| `ingress.pathType`                               | Ingress Path type                                                                                             | `ImplementationSpecific` |
-| `ingress.extraHosts`                             | The list of additional hostnames to be covered with this ingress record.                                      | `[]`                     |
-| `ingress.extraTls`                               | The tls configuration for additional hostnames to be covered with this ingress record.                        | `[]`                     |
-| `ingress.secrets`                                | If you're providing your own certificates, please use this to add the certificates as secrets                 | `[]`                     |
+| Name                                             | Description                                                                                                                      | Value                    |
+| ------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.web.type`                               | For minikube, set this to ClusterIP, elsewhere use LoadBalancer or NodePort                                                      | `LoadBalancer`           |
+| `service.web.port`                               | Service HTTP port                                                                                                                | `80`                     |
+| `service.web.tlsPort`                            | Service HTTPS port                                                                                                               | `443`                    |
+| `service.web.clusterIP`                          | When using `service.web.type: ClusterIP`, sets the user-specified cluster IP.                                                    | `""`                     |
+| `service.web.loadBalancerIP`                     | When using `service.web.type: LoadBalancer`, sets the user-specified load balancer IP.                                           | `""`                     |
+| `service.web.labels`                             | Additional Labels to be added to the web api service.                                                                            | `{}`                     |
+| `service.web.annotations`                        | Annotations to be added to the web api service.                                                                                  | `{}`                     |
+| `service.web.loadBalancerSourceRanges`           | When using `service.web.type: LoadBalancer`, restrict access to the load balancer to particular IPs                              | `[]`                     |
+| `service.web.nodePort`                           | When using `service.web.type: NodePort`, sets the nodePort for api                                                               | `""`                     |
+| `service.web.tlsnodePort`                        | When using `service.web.type: NodePort`, sets the nodePort for api tls                                                           | `""`                     |
+| `service.web.externalTrafficPolicy`              | Set service externalTraffic policy                                                                                               | `""`                     |
+| `service.workerGateway.type`                     | For minikube, set this to ClusterIP, elsewhere use LoadBalancer or NodePort                                                      | `ClusterIP`              |
+| `service.workerGateway.clusterIP`                | When using `service.workerGateway.type: ClusterIP`, sets the user-specified cluster IP.                                          | `""`                     |
+| `service.workerGateway.port`                     | Service HTTP port                                                                                                                | `2222`                   |
+| `service.workerGateway.loadBalancerIP`           | When using `service.workerGateway.type: LoadBalancer`, sets the user-specified load balancer IP.                                 | `""`                     |
+| `service.workerGateway.labels`                   | Additional Labels to be added to the web workerGateway service.                                                                  | `{}`                     |
+| `service.workerGateway.annotations`              | Annotations to be added to the web workerGateway service.                                                                        | `{}`                     |
+| `service.workerGateway.loadBalancerSourceRanges` | When using `service.workerGateway.type: LoadBalancer`, restrict access to the load balancer to particular IPs                    | `[]`                     |
+| `service.workerGateway.nodePort`                 | When using `service.workerGateway.type: NodePort`, sets the nodePort for tsa                                                     | `""`                     |
+| `ingress.enabled`                                | Ingress configuration enabled                                                                                                    | `false`                  |
+| `ingress.annotations`                            | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.hostname`                               | Hostename for the Ingress object                                                                                                 | `concourse.local`        |
+| `ingress.path`                                   | The Path to Concourse                                                                                                            | `/`                      |
+| `ingress.rulesOverride`                          | Ingress rules override                                                                                                           | `[]`                     |
+| `ingress.tls`                                    | TLS configuration.                                                                                                               | `false`                  |
+| `ingress.pathType`                               | Ingress Path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.extraHosts`                             | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
+| `ingress.extraTls`                               | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
+| `ingress.secrets`                                | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
 
 
 ### Init Container Parameters
