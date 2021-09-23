@@ -893,6 +893,10 @@ ingress:
   enabled: false
   apiVersion: ""
   pathType: ImplementationSpecific
+  ## DEPRECATED: Use ingress.annotations instead of ingress.certManager
+  ## certManager: false
+  ##
+
   ## For a full list of possible ingress annotations, please see
   ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
   ## Use this parameter to set the required annotations for cert-manager, see
