@@ -112,7 +112,7 @@ The following table lists the helpers available in the library which are scoped 
 
 | Helper identifier             | Description                           | Expected Input                                                                                                      |
 |-------------------------------|---------------------------------------|---------------------------------------------------------------------------------------------------------------------|
-| `common.affinities.node.soft` | Return a soft nodeAffinity definition | `dict "persistence" .Values.path.to.the.persistence "global" $`, see [Persistence](#persistence) for the structure. |
+| `common.storage.class` | Return  the proper Storage Class | `dict "persistence" .Values.path.to.the.persistence "global" $`, see [Persistence](#persistence) for the structure. |
 
 ### TplValues
 

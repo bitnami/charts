@@ -10,6 +10,9 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
+  {{- if  (eq .Values.ingress.controller "gce") }}
+  type: NodePort
+  {{- end }}
   ports:
     - name: http
       port: {{ include "harbor.portal.servicePort" . }}
