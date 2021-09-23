@@ -157,17 +157,13 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
-<<<<<<< Updated upstream
 ### Enable RBAC security
-### Enable security for Metrics Server.
-
-#### Configuring RBAC
 
 In order to enable Role-Based Access Control (RBAC) for Metrics Server, use the following parameter: `rbac.create=true`.
 
-#### Configuring certificates
+### Configure certificates
 
-If you are providing your own certificates for the API Service, set `insecureSkipTLSVerify` to `false`, and provide a `caBundle` consisting of the certificate chain.
+If you are providing your own certificates for the API Service, set `insecureSkipTLSVerify` to `"false"`, and provide a `caBundle` consisting of the base64-encoded certificate chain.
 
 ### Set Pod affinity
 
