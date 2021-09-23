@@ -103,12 +103,12 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | ----------------------------- | ----------------------------------------------------------------------------------------- | ------------------- |
 | `image.registry`              | Thanos image registry                                                                     | `docker.io`         |
 | `image.repository`            | Thanos image repository                                                                   | `bitnami/thanos`    |
-| `image.tag`                   | Thanos image tag (immutable tags are recommended)                                         | `0.22.0-scratch-r3` |
+| `image.tag`                   | Thanos image tag (immutable tags are recommended)                                         | `0.22.0-scratch-r4` |
 | `image.pullPolicy`            | Thanos image pull policy                                                                  | `IfNotPresent`      |
 | `image.pullSecrets`           | Specify docker-registry secret names as an array                                          | `[]`                |
-| `objstoreConfig`              | The [objstore configuration](https://thanos.io/storage.md/)                               | `""`                |
-| `indexCacheConfig`            | The [index cache configuration](https://thanos.io/components/store.md/)                   | `""`                |
-| `bucketCacheConfig`           | The [bucket cache configuration](https://thanos.io/components/store.md/)                  | `""`                |
+| `objstoreConfig`              | The [objstore configuration](https://thanos.io/tip/thanos/storage.md/)                               | `""`                |
+| `indexCacheConfig`            | The [index cache configuration](https://thanos.io/tip/components/store.md/)                   | `""`                |
+| `bucketCacheConfig`           | The [bucket cache configuration](https://thanos.io/tip/components/store.md/)                  | `""`                |
 | `existingObjstoreSecret`      | Secret with Objstore Configuration                                                        | `""`                |
 | `existingObjstoreSecretItems` | Optional item list for specifying a custom Secret key. If so, path should be objstore.yml | `[]`                |
 | `existingServiceAccount`      | Provide a common service account to be shared with all components                         | `""`                |
@@ -805,7 +805,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `volumePermissions.enabled`           | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`    | Init container volume-permissions image registry                                                                     | `docker.io`             |
 | `volumePermissions.image.repository`  | Init container volume-permissions image repository                                                                   | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                                          | `10-debian-10-r188`     |
+| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                                          | `10-debian-10-r194`     |
 | `volumePermissions.image.pullPolicy`  | Init container volume-permissions image pull policy                                                                  | `Always`                |
 | `volumePermissions.image.pullSecrets` | Specify docker-registry secret names as an array                                                                     | `[]`                    |
 

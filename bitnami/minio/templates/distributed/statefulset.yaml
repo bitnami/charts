@@ -170,6 +170,8 @@ spec:
             {{- if .Values.tls.mountPath }}
             - name: MINIO_CERTSDIR
               value: {{ .Values.tls.mountPath | quote }}
+            - name: MINIO_CONSOLE_PORT_NUMBER
+              value: {{ .Values.containerPorts.console | quote }}
             {{- end }}
             {{- if .Values.extraEnv }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnv "context" $) | nindent 12 }}
