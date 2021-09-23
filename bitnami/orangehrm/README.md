@@ -71,79 +71,93 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### OrangeHRM parameters
 
-| Name                                 | Description                                                                                  | Value                    |
-| ------------------------------------ | -------------------------------------------------------------------------------------------- | ------------------------ |
-| `image.registry`                     | OrangeHRM image registry                                                                     | `docker.io`              |
-| `image.repository`                   | OrangeHRM image repository                                                                   | `bitnami/orangehrm`      |
-| `image.tag`                          | OrangeHRM Image tag (immutable tags are recommended)                                         | `4.8.0-0-debian-10-r138` |
-| `image.pullPolicy`                   | OrangeHRM image pull policy                                                                  | `IfNotPresent`           |
-| `image.pullSecrets`                  | Specify docker-registry secret names as an array                                             | `[]`                     |
-| `image.debug`                        | Specify if debug logs should be enabled                                                      | `false`                  |
-| `hostAliases`                        | Deployment pod host aliases                                                                  | `[]`                     |
-| `replicaCount`                       | Number of OrangeHRM Pods to run (requires ReadWriteMany PVC support)                         | `1`                      |
-| `orangehrmSkipInstall`               | Skip OrangeHRM installation wizard. Useful for migrations and restoring from SQL dump        | `false`                  |
-| `orangehrmUsername`                  | User of the application                                                                      | `admin`                  |
-| `orangehrmPassword`                  | Application password                                                                         | `""`                     |
-| `orangehrmEnforcePasswordStrength`   | Whether the OrangeHRM password validation should use strong or medium level                  | `true`                   |
-| `allowEmptyPassword`                 | Allow DB blank passwords                                                                     | `true`                   |
-| `command`                            | Override default container command (useful when using custom images)                         | `[]`                     |
-| `args`                               | Override default container args (useful when using custom images)                            | `[]`                     |
-| `updateStrategy.type`                | Update strategy - only really applicable for deployments with RWO PVs attached               | `RollingUpdate`          |
-| `extraEnvVars`                       | An array to add extra env vars                                                               | `[]`                     |
-| `extraEnvVarsCM`                     | ConfigMap with extra environment variables                                                   | `""`                     |
-| `extraEnvVarsSecret`                 | Secret with extra environment variables                                                      | `""`                     |
-| `extraVolumes`                       | Array of extra volumes to be added to the deployment. Requires setting `extraVolumeMounts`   | `[]`                     |
-| `extraVolumeMounts`                  | Array of extra volume mounts to be added to the container. Normally used with `extraVolumes` | `[]`                     |
-| `initContainers`                     | Extra init containers to add to the deployment                                               | `[]`                     |
-| `sidecars`                           | Extra sidecar containers to add to the deployment                                            | `[]`                     |
-| `tolerations`                        | Tolerations for pod assignment                                                               | `[]`                     |
-| `existingSecret`                     | Use existing secret for the application password                                             | `""`                     |
-| `smtpHost`                           | SMTP host                                                                                    | `""`                     |
-| `smtpPort`                           | SMTP port                                                                                    | `""`                     |
-| `smtpUser`                           | SMTP user                                                                                    | `""`                     |
-| `smtpPassword`                       | SMTP password. Ignored if `smtpExistingSecret` is set                                        | `""`                     |
-| `smtpProtocol`                       | SMTP Protocol (options: ssl, none)                                                           | `""`                     |
-| `smtpExistingSecret`                 | Use an existing secret for the SMTP Password                                                 | `""`                     |
-| `containerPorts`                     | Container ports                                                                              | `{}`                     |
-| `sessionAffinity`                    | Control where client requests go, to the same pod or round-robin                             | `None`                   |
-| `persistence.enabled`                | Enable persistence using PVC                                                                 | `true`                   |
-| `persistence.storageClass`           | OrangeHRM Data Persistent Volume Storage Class                                               | `""`                     |
-| `persistence.accessMode`             | PVC Access Mode for OrangeHRM volume                                                         | `ReadWriteOnce`          |
-| `persistence.size`                   | PVC Storage Request for OrangeHRM volume                                                     | `8Gi`                    |
-| `persistence.existingClaim`          | A manually managed Persistent Volume Claim                                                   | `""`                     |
-| `persistence.hostPath`               | If defined, the orangehrm-data volume will mount to the specified hostPath                   | `""`                     |
-| `persistence.subPath`                | volumeMount subPath, use it for compatibility with previous versions of the chart            | `orangehrm`              |
-| `podAffinityPreset`                  | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`          | `""`                     |
-| `podAntiAffinityPreset`              | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`     | `soft`                   |
-| `nodeAffinityPreset.type`            | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`    | `""`                     |
-| `nodeAffinityPreset.key`             | Node label key to match Ignored if `affinity` is set.                                        | `""`                     |
-| `nodeAffinityPreset.values`          | Node label values to match. Ignored if `affinity` is set.                                    | `[]`                     |
-| `affinity`                           | Affinity for pod assignment                                                                  | `{}`                     |
-| `nodeSelector`                       | Node labels for pod assignment. Evaluated as a template.                                     | `{}`                     |
-| `resources.requests`                 | The requested resources for the container                                                    | `{}`                     |
-| `podSecurityContext.enabled`         | Enable OrangeHRM pods' Security Context                                                      | `true`                   |
-| `podSecurityContext.fsGroup`         | OrangeHRM pods' group ID                                                                     | `1001`                   |
-| `containerSecurityContext.enabled`   | Enable OrangeHRM containers' Security Context                                                | `true`                   |
-| `containerSecurityContext.runAsUser` | OrangeHRM containers' Security Context                                                       | `1001`                   |
-| `livenessProbe.enabled`              | Enable livenessProbe                                                                         | `true`                   |
-| `livenessProbe.path`                 | Request path for livenessProbe                                                               | `/symfony/web/index.php` |
-| `livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                      | `120`                    |
-| `livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                             | `10`                     |
-| `livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                            | `5`                      |
-| `livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                          | `6`                      |
-| `livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                          | `1`                      |
-| `readinessProbe.enabled`             | Enable readinessProbe                                                                        | `true`                   |
-| `readinessProbe.path`                | Request path for readinessProbe                                                              | `/symfony/web/index.php` |
-| `readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                     | `30`                     |
-| `readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                            | `5`                      |
-| `readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                           | `3`                      |
-| `readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                         | `6`                      |
-| `readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                         | `1`                      |
-| `customLivenessProbe`                | Override default liveness probe                                                              | `{}`                     |
-| `customReadinessProbe`               | Override default readiness probe                                                             | `{}`                     |
-| `lifecycleHooks`                     | LifecycleHooks for the container to automate configuration before or after startup           | `{}`                     |
-| `podAnnotations`                     | Pod annotations                                                                              | `{}`                     |
-| `podLabels`                          | Pod extra labels                                                                             | `{}`                     |
+| Name                                    | Description                                                                                  | Value                    |
+| --------------------------------------- | -------------------------------------------------------------------------------------------- | ------------------------ |
+| `image.registry`                        | OrangeHRM image registry                                                                     | `docker.io`              |
+| `image.repository`                      | OrangeHRM image repository                                                                   | `bitnami/orangehrm`      |
+| `image.tag`                             | OrangeHRM Image tag (immutable tags are recommended)                                         | `4.8.0-0-debian-10-r138` |
+| `image.pullPolicy`                      | OrangeHRM image pull policy                                                                  | `IfNotPresent`           |
+| `image.pullSecrets`                     | Specify docker-registry secret names as an array                                             | `[]`                     |
+| `image.debug`                           | Specify if debug logs should be enabled                                                      | `false`                  |
+| `hostAliases`                           | Deployment pod host aliases                                                                  | `[]`                     |
+| `replicaCount`                          | Number of OrangeHRM Pods to run (requires ReadWriteMany PVC support)                         | `1`                      |
+| `orangehrmSkipInstall`                  | Skip OrangeHRM installation wizard. Useful for migrations and restoring from SQL dump        | `false`                  |
+| `orangehrmUsername`                     | User of the application                                                                      | `admin`                  |
+| `orangehrmPassword`                     | Application password                                                                         | `""`                     |
+| `orangehrmEnforcePasswordStrength`      | Whether the OrangeHRM password validation should use strong or medium level                  | `true`                   |
+| `allowEmptyPassword`                    | Allow DB blank passwords                                                                     | `true`                   |
+| `command`                               | Override default container command (useful when using custom images)                         | `[]`                     |
+| `args`                                  | Override default container args (useful when using custom images)                            | `[]`                     |
+| `updateStrategy.type`                   | Update strategy - only really applicable for deployments with RWO PVs attached               | `RollingUpdate`          |
+| `extraEnvVars`                          | An array to add extra env vars                                                               | `[]`                     |
+| `extraEnvVarsCM`                        | ConfigMap with extra environment variables                                                   | `""`                     |
+| `extraEnvVarsSecret`                    | Secret with extra environment variables                                                      | `""`                     |
+| `extraVolumes`                          | Array of extra volumes to be added to the deployment. Requires setting `extraVolumeMounts`   | `[]`                     |
+| `extraVolumeMounts`                     | Array of extra volume mounts to be added to the container. Normally used with `extraVolumes` | `[]`                     |
+| `initContainers`                        | Extra init containers to add to the deployment                                               | `[]`                     |
+| `sidecars`                              | Extra sidecar containers to add to the deployment                                            | `[]`                     |
+| `tolerations`                           | Tolerations for pod assignment                                                               | `[]`                     |
+| `priorityClassName`                     | OrangeHRM pods' priorityClassName                                                            | `""`                     |
+| `schedulerName`                         | Name of the k8s scheduler (other than default)                                               | `""`                     |
+| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment                                               | `[]`                     |
+| `existingSecret`                        | Use existing secret for the application password                                             | `""`                     |
+| `smtpHost`                              | SMTP host                                                                                    | `""`                     |
+| `smtpPort`                              | SMTP port                                                                                    | `""`                     |
+| `smtpUser`                              | SMTP user                                                                                    | `""`                     |
+| `smtpPassword`                          | SMTP password. Ignored if `smtpExistingSecret` is set                                        | `""`                     |
+| `smtpProtocol`                          | SMTP Protocol (options: ssl, none)                                                           | `""`                     |
+| `smtpExistingSecret`                    | Use an existing secret for the SMTP Password                                                 | `""`                     |
+| `containerPorts`                        | Container ports                                                                              | `{}`                     |
+| `sessionAffinity`                       | Control where client requests go, to the same pod or round-robin                             | `None`                   |
+| `persistence.enabled`                   | Enable persistence using PVC                                                                 | `true`                   |
+| `persistence.storageClass`              | OrangeHRM Data Persistent Volume Storage Class                                               | `""`                     |
+| `persistence.accessModes`               | PVC Access Mode for OrangeHRM volume                                                         | `[]`                     |
+| `persistence.size`                      | PVC Storage Request for OrangeHRM volume                                                     | `8Gi`                    |
+| `persistence.existingClaim`             | A manually managed Persistent Volume Claim                                                   | `""`                     |
+| `persistence.hostPath`                  | If defined, the orangehrm-data volume will mount to the specified hostPath                   | `""`                     |
+| `persistence.subPath`                   | volumeMount subPath, use it for compatibility with previous versions of the chart            | `orangehrm`              |
+| `persistence.annotations`               | Persistent Volume Claim annotations                                                          | `{}`                     |
+| `podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`          | `""`                     |
+| `podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`     | `soft`                   |
+| `nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`    | `""`                     |
+| `nodeAffinityPreset.key`                | Node label key to match Ignored if `affinity` is set.                                        | `""`                     |
+| `nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set.                                    | `[]`                     |
+| `affinity`                              | Affinity for pod assignment                                                                  | `{}`                     |
+| `nodeSelector`                          | Node labels for pod assignment. Evaluated as a template.                                     | `{}`                     |
+| `resources.requests`                    | The requested resources for the container                                                    | `{}`                     |
+| `resources.limits`                      | The resources limits for the container                                                       | `{}`                     |
+| `podSecurityContext.enabled`            | Enable OrangeHRM pods' Security Context                                                      | `true`                   |
+| `podSecurityContext.fsGroup`            | OrangeHRM pods' group ID                                                                     | `1001`                   |
+| `containerSecurityContext.enabled`      | Enable OrangeHRM containers' Security Context                                                | `true`                   |
+| `containerSecurityContext.runAsUser`    | OrangeHRM containers' Security Context runAsUser                                             | `1001`                   |
+| `containerSecurityContext.runAsNonRoot` | OrangeHRM containers' Security Context runAsNonRoot                                          | `true`                   |
+| `startupProbe.enabled`                  | Enable startupProbe                                                                          | `false`                  |
+| `startupProbe.path`                     | Request path for startupProbe                                                                | `/symfony/web/index.php` |
+| `startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                       | `120`                    |
+| `startupProbe.periodSeconds`            | Period seconds for startupProbe                                                              | `10`                     |
+| `startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                             | `5`                      |
+| `startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                           | `6`                      |
+| `startupProbe.successThreshold`         | Success threshold for startupProbe                                                           | `1`                      |
+| `livenessProbe.enabled`                 | Enable livenessProbe                                                                         | `true`                   |
+| `livenessProbe.path`                    | Request path for livenessProbe                                                               | `/symfony/web/index.php` |
+| `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                      | `120`                    |
+| `livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                             | `10`                     |
+| `livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                            | `5`                      |
+| `livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                          | `6`                      |
+| `livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                          | `1`                      |
+| `readinessProbe.enabled`                | Enable readinessProbe                                                                        | `true`                   |
+| `readinessProbe.path`                   | Request path for readinessProbe                                                              | `/symfony/web/index.php` |
+| `readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                     | `30`                     |
+| `readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                            | `5`                      |
+| `readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                           | `3`                      |
+| `readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                         | `6`                      |
+| `readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                         | `1`                      |
+| `customStartupProbe`                    | Override default startup probe                                                               | `{}`                     |
+| `customLivenessProbe`                   | Override default liveness probe                                                              | `{}`                     |
+| `customReadinessProbe`                  | Override default readiness probe                                                             | `{}`                     |
+| `lifecycleHooks`                        | LifecycleHooks for the container to automate configuration before or after startup           | `{}`                     |
+| `podAnnotations`                        | Pod annotations                                                                              | `{}`                     |
+| `podLabels`                             | Pod extra labels                                                                             | `{}`                     |
 
 
 ### Traffic Exposure Parameters
@@ -151,8 +165,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                               | Description                                                                                                | Value                    |
 | ---------------------------------- | ---------------------------------------------------------------------------------------------------------- | ------------------------ |
 | `service.type`                     | Kubernetes Service type                                                                                    | `LoadBalancer`           |
-| `service.port`                     | Service HTTP port                                                                                          | `80`                     |
-| `service.httpsPort`                | Service HTTPS port                                                                                         | `443`                    |
+| `service.ports.http`               | Service HTTP port                                                                                          | `80`                     |
+| `service.ports.https`              | Service HTTPS port                                                                                         | `443`                    |
 | `service.httpsTargetPort`          | Service Target HTTPS port                                                                                  | `https`                  |
 | `service.clusterIP`                | OrangeHRM service cluster IP                                                                               | `""`                     |
 | `service.loadBalancerSourceRanges` | Control hosts connecting to "LoadBalancer" only                                                            | `[]`                     |
@@ -162,6 +176,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.externalTrafficPolicy`    | Enable client source IP preservation                                                                       | `Cluster`                |
 | `service.annotations`              | Provide any additional annotations that may be required (evaluated as a template)                          | `{}`                     |
 | `service.extraPorts`               | Extra ports to expose in the service (normally used with the `sidecar` value)                              | `[]`                     |
+| `service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                       | `None`                   |
+| `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                | `{}`                     |
 | `ingress.enabled`                  | Set to true to enable ingress record generation                                                            | `false`                  |
 | `ingress.certManager`              | Set this to true in order to add the corresponding annotations for cert-manager                            | `false`                  |
 | `ingress.pathType`                 | Ingress path type                                                                                          | `ImplementationSpecific` |
@@ -174,6 +190,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.extraPaths`               | Any additional arbitrary paths that may need to be added to the ingress under the main host.               | `[]`                     |
 | `ingress.extraTls`                 | The tls configuration for additional hostnames to be covered with this ingress record.                     | `[]`                     |
 | `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets              | `[]`                     |
+| `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                              | `""`                     |
 
 
 ### Database parameters
@@ -197,6 +214,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.user`                     | Existing username in the external db                                                     | `bn_orangehrm`      |
 | `externalDatabase.password`                 | Password for the above username                                                          | `""`                |
 | `externalDatabase.database`                 | Name of the existing database                                                            | `bitnami_orangehrm` |
+| `externalDatabase.existingSecret`           | Name of an existing secret resource containing the DB password                           | `""`                |
 
 
 ### Volume Permissions parameters
