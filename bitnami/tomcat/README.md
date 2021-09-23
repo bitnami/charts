@@ -133,6 +133,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `affinity`                           | Affinity for pod assignment. Evaluated as a template.                                             | `{}`            |
 | `nodeSelector`                       | Node labels for pod assignment. Evaluated as a template.                                          | `{}`            |
 | `tolerations`                        | Tolerations for pod assignment. Evaluated as a template.                                          | `[]`            |
+| `topologySpreadConstraints`          | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template  | `[]`            |
 | `extraVolumes`                       | Optionally specify extra list of additional volumes for Tomcat pods in Deployment                 | `[]`            |
 | `extraVolumeClaimTemplates`          | Optionally specify extra list of additional volume claim templates for Tomcat pods in StatefulSet | `[]`            |
 | `extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for Tomcat container(s)                  | `[]`            |
