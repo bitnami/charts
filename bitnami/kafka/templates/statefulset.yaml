@@ -330,8 +330,6 @@ spec:
               value: {{ .Values.allowEveryoneIfNoAclFound | quote }}
             - name: KAFKA_CFG_SUPER_USERS
               value: {{ .Values.superUsers | quote }}
-            - name: KAFKA_CFG_ZOOKEEPER_SET_ACL
-              value: {{ .Values.zookeeperSetAcl | quote }}
             {{- if .Values.extraEnvVars }}
             {{ include "common.tplvalues.render" ( dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
