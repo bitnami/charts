@@ -167,115 +167,113 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Argo CD server Parameters
 
-| Name                                                 | Description                                                                                      | Value                    |
-| ---------------------------------------------------- | ------------------------------------------------------------------------------------------------ | ------------------------ |
-| `server.replicaCount`                                | Number of Argo CD server replicas to deploy                                                      | `1`                      |
-| `server.livenessProbe.enabled`                       | Enable livenessProbe on Argo CD server nodes                                                     | `true`                   |
-| `server.livenessProbe.initialDelaySeconds`           | Initial delay seconds for livenessProbe                                                          | `10`                     |
-| `server.livenessProbe.periodSeconds`                 | Period seconds for livenessProbe                                                                 | `10`                     |
-| `server.livenessProbe.timeoutSeconds`                | Timeout seconds for livenessProbe                                                                | `1`                      |
-| `server.livenessProbe.failureThreshold`              | Failure threshold for livenessProbe                                                              | `3`                      |
-| `server.livenessProbe.successThreshold`              | Success threshold for livenessProbe                                                              | `1`                      |
-| `server.readinessProbe.enabled`                      | Enable readinessProbe on Argo CD server nodes                                                    | `true`                   |
-| `server.readinessProbe.initialDelaySeconds`          | Initial delay seconds for readinessProbe                                                         | `10`                     |
-| `server.readinessProbe.periodSeconds`                | Period seconds for readinessProbe                                                                | `10`                     |
-| `server.readinessProbe.timeoutSeconds`               | Timeout seconds for readinessProbe                                                               | `1`                      |
-| `server.readinessProbe.failureThreshold`             | Failure threshold for readinessProbe                                                             | `3`                      |
-| `server.readinessProbe.successThreshold`             | Success threshold for readinessProbe                                                             | `1`                      |
-| `server.customLivenessProbe`                         | Custom livenessProbe that overrides the default one                                              | `{}`                     |
-| `server.customReadinessProbe`                        | Custom readinessProbe that overrides the default one                                             | `{}`                     |
-| `server.resources.limits`                            | The resources limits for the Argo CD server containers                                           | `{}`                     |
-| `server.resources.requests`                          | The requested resources for the Argo CD server containers                                        | `{}`                     |
-| `server.podSecurityContext.enabled`                  | Enabled Argo CD server pods' Security Context                                                    | `true`                   |
-| `server.podSecurityContext.fsGroup`                  | Set Argo CD server pod's Security Context fsGroup                                                | `1001`                   |
-| `server.containerSecurityContext.enabled`            | Enabled Argo CD server containers' Security Context                                              | `true`                   |
-| `server.containerSecurityContext.runAsUser`          | Set Argo CD server containers' Security Context runAsUser                                        | `1001`                   |
-| `server.autoscaling.enabled`                         | Enable Argo CD server deployment autoscaling                                                     | `false`                  |
-| `server.autoscaling.minReplicas`                     | Argo CD server deployment autoscaling minimum number of replicas                                 | `1`                      |
-| `server.autoscaling.maxReplicas`                     | Argo CD server deployment autoscaling maximum number of replicas                                 | `5`                      |
-| `server.autoscaling.targetCPU`                       | Argo CD server deployment autoscaling target CPU percentage                                      | `50`                     |
-| `server.autoscaling.targetMemory`                    | Argo CD server deployment autoscaling target CPU memory                                          | `50`                     |
-| `server.insecure`                                    | Disable HTTPS redirection for Argo CD server                                                     | `false`                  |
-| `server.logFormat`                                   | ArgoCD server logs format. Options: [text, json]                                                 | `text`                   |
-| `server.logLevel`                                    | ArgoCD server logs level                                                                         | `info`                   |
-| `server.configEnabled`                               | Enable Argo CD server config                                                                     | `true`                   |
-| `server.url`                                         | Argo CD server base URL. Required when configuring SSO. Required when enabling dex.              | `""`                     |
-| `server.config`                                      | Argo CD server configuration that will end on the argocd-cm Config Map                           | `""`                     |
-| `server.ingress.enabled`                             | Enable the creation of an ingress for the Argo CD server                                         | `false`                  |
-| `server.ingress.certManager`                         | Set to true to add certmanager annotations for Argo CD server ingress                            | `false`                  |
-| `server.ingress.pathType`                            | Path type for the Argo CD server ingress                                                         | `ImplementationSpecific` |
-| `server.ingress.apiVersion`                          | Ingress API version for the Argo CD server ingress                                               | `""`                     |
-| `server.ingress.hostname`                            | Ingress hostname for the Argo CD server ingress                                                  | `argocd.server.local`    |
-| `server.ingress.annotations`                         | Annotations for the Argo CD server ingress                                                       | `{}`                     |
-| `server.ingress.tls`                                 | Enable TLS for the Argo CD server ingress                                                        | `false`                  |
-| `server.ingress.extraHosts`                          | Extra hosts array for the Argo CD server ingress                                                 | `[]`                     |
-| `server.ingress.path`                                | Path array for the Argo CD server ingress                                                        | `/`                      |
-| `server.ingress.extraPaths`                          | Extra paths for the Argo CD server ingress                                                       | `[]`                     |
-| `server.ingress.extraTls`                            | Extra TLS configuration for the Argo CD server ingress                                           | `[]`                     |
-| `server.ingress.secrets`                             | Secrets array to mount into the Ingress                                                          | `[]`                     |
-| `server.ingress.selfSigned`                          | Create a TLS secret for this ingress record using self-signed certificates generated by Helm     | `false`                  |
-| `server.metrics.enabled`                             | Enable metrics for the Argo CD server                                                            | `false`                  |
-| `server.metrics.service.type`                        | Argo CD server service type                                                                      | `ClusterIP`              |
-| `server.metrics.service.port`                        | Argo CD server metrics service port                                                              | `8084`                   |
-| `server.metrics.service.nodePort`                    | Node port for Argo CD server metrics service                                                     | `""`                     |
-| `server.metrics.service.loadBalancerIP`              | Argo CD server service Load Balancer IP                                                          | `""`                     |
-| `server.metrics.service.loadBalancerSourceRanges`    | Argo CD server service Load Balancer sources                                                     | `[]`                     |
-| `server.metrics.service.externalTrafficPolicy`       | Argo CD server service external traffic policy                                                   | `Cluster`                |
-| `server.metrics.service.annotations`                 | Additional custom annotations for Argo CD server service                                         | `{}`                     |
-| `server.metrics.serviceMonitor.enabled`              | Enable service monirot for Argo CD server                                                        | `false`                  |
-| `server.metrics.serviceMonitor.interval`             | Interval for the Argo CD server service monitor                                                  | `30s`                    |
-| `server.ingressGrpc.enabled`                         | Enable the creation of an ingress for the Argo CD gRPC server                                    | `false`                  |
-| `server.ingressGrpc.certManager`                     | Set to true to add certmanager annotations for Argo CD gRPC server ingress                       | `false`                  |
-| `server.ingressGrpc.pathType`                        | Path type for the Argo CD gRPC server ingress                                                    | `ImplementationSpecific` |
-| `server.ingressGrpc.apiVersion`                      | Ingress API version for the Argo CD gRPC server ingress                                          | `""`                     |
-| `server.ingressGrpc.hostname`                        | Ingress hostname for the Argo CD gRPC server ingress                                             | `argocd.server.local`    |
-| `server.ingressGrpc.annotations`                     | Annotations for the Argo CD gRPC server ingress                                                  | `{}`                     |
-| `server.ingressGrpc.tls`                             | Enable TLS for the Argo CD server ingress                                                        | `false`                  |
-| `server.ingressGrpc.extraHosts`                      | Extra hosts array for the Argo CD gRPC server ingress                                            | `[]`                     |
-| `server.ingressGrpc.path`                            | Path array for the Argo CD gRPC server ingress                                                   | `/`                      |
-| `server.ingressGrpc.extraPaths`                      | Extra paths for the Argo CD gRPC server ingress                                                  | `[]`                     |
-| `server.ingressGrpc.extraTls`                        | Extra TLS configuration for the Argo CD gRPC server ingress                                      | `[]`                     |
-| `server.ingressGrpc.secrets`                         | Secrets array to mount into the Ingress                                                          | `[]`                     |
-| `server.ingressGrpc.selfSigned`                      | Create a TLS secret for this ingress record using self-signed certificates generated by Helm     | `false`                  |
-| `server.containerPorts.http`                         | Argo CD server HTTP container port                                                               | `8080`                   |
-| `server.containerPorts.https`                        | Argo CD server HTTPS container port                                                              | `8443`                   |
-| `server.containerPorts.metrics`                      | Argo CD server metrics container port                                                            | `8083`                   |
-| `server.service.type`                                | Argo CD service type                                                                             | `ClusterIP`              |
-| `server.service.ports.http`                          | HTTP port for the gRPC ingress when enabled                                                      | `80`                     |
-| `server.service.ports.https`                         | HTTPS port for the gRPC ingress when enabled                                                     | `443`                    |
-| `server.service.nodePorts.http`                      | Node port for HTTP                                                                               | `""`                     |
-| `server.service.nodePorts.https`                     | Node port for HTTPS                                                                              | `""`                     |
-| `server.service.loadBalancerIP`                      | Argo CD service Load Balancer IP                                                                 | `""`                     |
-| `server.service.loadBalancerSourceRanges`            | Argo CD service Load Balancer sources                                                            | `[]`                     |
-| `server.service.externalTrafficPolicy`               | Argo CD service external traffic policy                                                          | `Cluster`                |
-| `server.service.annotations`                         | Additional custom annotations for Argo CD service                                                | `{}`                     |
-| `server.command`                                     | Override default container command (useful when using custom images)                             | `[]`                     |
-| `server.args`                                        | Override default container args (useful when using custom images)                                | `[]`                     |
-| `server.extraArgs`                                   | concat to the default args                                                                       | `[]`                     |
-| `server.hostAliases`                                 | Argo CD server pods host aliases                                                                 | `[]`                     |
-| `server.podLabels`                                   | Extra labels for Argo CD server pods                                                             | `{}`                     |
-| `server.podAnnotations`                              | Annotations for Argo CD server pods                                                              | `{}`                     |
-| `server.podAffinityPreset`                           | Pod affinity preset. Ignored if `server.affinity` is set. Allowed values: `soft` or `hard`       | `""`                     |
-| `server.podAntiAffinityPreset`                       | Pod anti-affinity preset. Ignored if `server.affinity` is set. Allowed values: `soft` or `hard`  | `soft`                   |
-| `server.nodeAffinityPreset.type`                     | Node affinity preset type. Ignored if `server.affinity` is set. Allowed values: `soft` or `hard` | `""`                     |
-| `server.nodeAffinityPreset.key`                      | Node label key to match. Ignored if `server.affinity` is set                                     | `""`                     |
-| `server.nodeAffinityPreset.values`                   | Node label values to match. Ignored if `server.affinity` is set                                  | `[]`                     |
-| `server.affinity`                                    | Affinity for Argo CD server pods assignment                                                      | `{}`                     |
-| `server.nodeSelector`                                | Node labels for Argo CD server pods assignment                                                   | `{}`                     |
-| `server.tolerations`                                 | Tolerations for Argo CD server pods assignment                                                   | `[]`                     |
-| `server.updateStrategy.type`                         | Argo CD server statefulset strategy type                                                         | `RollingUpdate`          |
-| `server.priorityClassName`                           | Argo CD server pods' priorityClassName                                                           | `""`                     |
-| `server.lifecycleHooks`                              | for the Argo CD server container(s) to automate configuration before or after startup            | `{}`                     |
-| `server.extraEnvVars`                                | Array with extra environment variables to add to Argo CD server nodes                            | `[]`                     |
-| `server.extraEnvVarsCM`                              | Name of existing ConfigMap containing extra env vars for Argo CD server nodes                    | `""`                     |
-| `server.extraEnvVarsSecret`                          | Name of existing Secret containing extra env vars for Argo CD server nodes                       | `""`                     |
-| `server.extraVolumes`                                | Optionally specify extra list of additional volumes for the Argo CD server pod(s)                | `[]`                     |
-| `server.extraVolumeMounts`                           | Optionally specify extra list of additional volumeMounts for the Argo CD server container(s)     | `[]`                     |
-| `server.sidecars`                                    | Add additional sidecar containers to the Argo CD server pod(s)                                   | `[]`                     |
-| `server.initContainers`                              | Add additional init containers to the Argo CD server pod(s)                                      | `[]`                     |
-| `server.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                             | `true`                   |
-| `server.serviceAccount.name`                         | The name of the ServiceAccount to use.                                                           | `""`                     |
-| `server.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                   | `true`                   |
+| Name                                                 | Description                                                                                                                     | Value                    |
+| ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `server.replicaCount`                                | Number of Argo CD server replicas to deploy                                                                                     | `1`                      |
+| `server.livenessProbe.enabled`                       | Enable livenessProbe on Argo CD server nodes                                                                                    | `true`                   |
+| `server.livenessProbe.initialDelaySeconds`           | Initial delay seconds for livenessProbe                                                                                         | `10`                     |
+| `server.livenessProbe.periodSeconds`                 | Period seconds for livenessProbe                                                                                                | `10`                     |
+| `server.livenessProbe.timeoutSeconds`                | Timeout seconds for livenessProbe                                                                                               | `1`                      |
+| `server.livenessProbe.failureThreshold`              | Failure threshold for livenessProbe                                                                                             | `3`                      |
+| `server.livenessProbe.successThreshold`              | Success threshold for livenessProbe                                                                                             | `1`                      |
+| `server.readinessProbe.enabled`                      | Enable readinessProbe on Argo CD server nodes                                                                                   | `true`                   |
+| `server.readinessProbe.initialDelaySeconds`          | Initial delay seconds for readinessProbe                                                                                        | `10`                     |
+| `server.readinessProbe.periodSeconds`                | Period seconds for readinessProbe                                                                                               | `10`                     |
+| `server.readinessProbe.timeoutSeconds`               | Timeout seconds for readinessProbe                                                                                              | `1`                      |
+| `server.readinessProbe.failureThreshold`             | Failure threshold for readinessProbe                                                                                            | `3`                      |
+| `server.readinessProbe.successThreshold`             | Success threshold for readinessProbe                                                                                            | `1`                      |
+| `server.customLivenessProbe`                         | Custom livenessProbe that overrides the default one                                                                             | `{}`                     |
+| `server.customReadinessProbe`                        | Custom readinessProbe that overrides the default one                                                                            | `{}`                     |
+| `server.resources.limits`                            | The resources limits for the Argo CD server containers                                                                          | `{}`                     |
+| `server.resources.requests`                          | The requested resources for the Argo CD server containers                                                                       | `{}`                     |
+| `server.podSecurityContext.enabled`                  | Enabled Argo CD server pods' Security Context                                                                                   | `true`                   |
+| `server.podSecurityContext.fsGroup`                  | Set Argo CD server pod's Security Context fsGroup                                                                               | `1001`                   |
+| `server.containerSecurityContext.enabled`            | Enabled Argo CD server containers' Security Context                                                                             | `true`                   |
+| `server.containerSecurityContext.runAsUser`          | Set Argo CD server containers' Security Context runAsUser                                                                       | `1001`                   |
+| `server.autoscaling.enabled`                         | Enable Argo CD server deployment autoscaling                                                                                    | `false`                  |
+| `server.autoscaling.minReplicas`                     | Argo CD server deployment autoscaling minimum number of replicas                                                                | `1`                      |
+| `server.autoscaling.maxReplicas`                     | Argo CD server deployment autoscaling maximum number of replicas                                                                | `5`                      |
+| `server.autoscaling.targetCPU`                       | Argo CD server deployment autoscaling target CPU percentage                                                                     | `50`                     |
+| `server.autoscaling.targetMemory`                    | Argo CD server deployment autoscaling target CPU memory                                                                         | `50`                     |
+| `server.insecure`                                    | Disable HTTPS redirection for Argo CD server                                                                                    | `false`                  |
+| `server.logFormat`                                   | ArgoCD server logs format. Options: [text, json]                                                                                | `text`                   |
+| `server.logLevel`                                    | ArgoCD server logs level                                                                                                        | `info`                   |
+| `server.configEnabled`                               | Enable Argo CD server config                                                                                                    | `true`                   |
+| `server.url`                                         | Argo CD server base URL. Required when configuring SSO. Required when enabling dex.                                             | `""`                     |
+| `server.config`                                      | Argo CD server configuration that will end on the argocd-cm Config Map                                                          | `""`                     |
+| `server.ingress.enabled`                             | Enable the creation of an ingress for the Argo CD server                                                                        | `false`                  |
+| `server.ingress.pathType`                            | Path type for the Argo CD server ingress                                                                                        | `ImplementationSpecific` |
+| `server.ingress.apiVersion`                          | Ingress API version for the Argo CD server ingress                                                                              | `""`                     |
+| `server.ingress.hostname`                            | Ingress hostname for the Argo CD server ingress                                                                                 | `argocd.server.local`    |
+| `server.ingress.annotations`                         | Annotations for the Argo CD server ingress. To enable certificate autogeneration, place here your cert-manager annotations.     | `{}`                     |
+| `server.ingress.tls`                                 | Enable TLS for the Argo CD server ingress                                                                                       | `false`                  |
+| `server.ingress.extraHosts`                          | Extra hosts array for the Argo CD server ingress                                                                                | `[]`                     |
+| `server.ingress.path`                                | Path array for the Argo CD server ingress                                                                                       | `/`                      |
+| `server.ingress.extraPaths`                          | Extra paths for the Argo CD server ingress                                                                                      | `[]`                     |
+| `server.ingress.extraTls`                            | Extra TLS configuration for the Argo CD server ingress                                                                          | `[]`                     |
+| `server.ingress.secrets`                             | Secrets array to mount into the Ingress                                                                                         | `[]`                     |
+| `server.ingress.selfSigned`                          | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                    | `false`                  |
+| `server.metrics.enabled`                             | Enable metrics for the Argo CD server                                                                                           | `false`                  |
+| `server.metrics.service.type`                        | Argo CD server service type                                                                                                     | `ClusterIP`              |
+| `server.metrics.service.port`                        | Argo CD server metrics service port                                                                                             | `8084`                   |
+| `server.metrics.service.nodePort`                    | Node port for Argo CD server metrics service                                                                                    | `""`                     |
+| `server.metrics.service.loadBalancerIP`              | Argo CD server service Load Balancer IP                                                                                         | `""`                     |
+| `server.metrics.service.loadBalancerSourceRanges`    | Argo CD server service Load Balancer sources                                                                                    | `[]`                     |
+| `server.metrics.service.externalTrafficPolicy`       | Argo CD server service external traffic policy                                                                                  | `Cluster`                |
+| `server.metrics.service.annotations`                 | Additional custom annotations for Argo CD server service                                                                        | `{}`                     |
+| `server.metrics.serviceMonitor.enabled`              | Enable service monirot for Argo CD server                                                                                       | `false`                  |
+| `server.metrics.serviceMonitor.interval`             | Interval for the Argo CD server service monitor                                                                                 | `30s`                    |
+| `server.ingressGrpc.enabled`                         | Enable the creation of an ingress for the Argo CD gRPC server                                                                   | `false`                  |
+| `server.ingressGrpc.pathType`                        | Path type for the Argo CD gRPC server ingress                                                                                   | `ImplementationSpecific` |
+| `server.ingressGrpc.apiVersion`                      | Ingress API version for the Argo CD gRPC server ingress                                                                         | `""`                     |
+| `server.ingressGrpc.hostname`                        | Ingress hostname for the Argo CD gRPC server ingress                                                                            | `argocd.server.local`    |
+| `server.ingressGrpc.annotations`                     | Annotations for the Argo CD gRPC server ingress. To enable certificate autogeneration, place here your cert-manager annotations | `{}`                     |
+| `server.ingressGrpc.tls`                             | Enable TLS for the Argo CD server ingress                                                                                       | `false`                  |
+| `server.ingressGrpc.extraHosts`                      | Extra hosts array for the Argo CD gRPC server ingress                                                                           | `[]`                     |
+| `server.ingressGrpc.path`                            | Path array for the Argo CD gRPC server ingress                                                                                  | `/`                      |
+| `server.ingressGrpc.extraPaths`                      | Extra paths for the Argo CD gRPC server ingress                                                                                 | `[]`                     |
+| `server.ingressGrpc.extraTls`                        | Extra TLS configuration for the Argo CD gRPC server ingress                                                                     | `[]`                     |
+| `server.ingressGrpc.secrets`                         | Secrets array to mount into the Ingress                                                                                         | `[]`                     |
+| `server.ingressGrpc.selfSigned`                      | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                    | `false`                  |
+| `server.containerPorts.http`                         | Argo CD server HTTP container port                                                                                              | `8080`                   |
+| `server.containerPorts.https`                        | Argo CD server HTTPS container port                                                                                             | `8443`                   |
+| `server.containerPorts.metrics`                      | Argo CD server metrics container port                                                                                           | `8083`                   |
+| `server.service.type`                                | Argo CD service type                                                                                                            | `ClusterIP`              |
+| `server.service.ports.http`                          | HTTP port for the gRPC ingress when enabled                                                                                     | `80`                     |
+| `server.service.ports.https`                         | HTTPS port for the gRPC ingress when enabled                                                                                    | `443`                    |
+| `server.service.nodePorts.http`                      | Node port for HTTP                                                                                                              | `""`                     |
+| `server.service.nodePorts.https`                     | Node port for HTTPS                                                                                                             | `""`                     |
+| `server.service.loadBalancerIP`                      | Argo CD service Load Balancer IP                                                                                                | `""`                     |
+| `server.service.loadBalancerSourceRanges`            | Argo CD service Load Balancer sources                                                                                           | `[]`                     |
+| `server.service.externalTrafficPolicy`               | Argo CD service external traffic policy                                                                                         | `Cluster`                |
+| `server.service.annotations`                         | Additional custom annotations for Argo CD service                                                                               | `{}`                     |
+| `server.command`                                     | Override default container command (useful when using custom images)                                                            | `[]`                     |
+| `server.args`                                        | Override default container args (useful when using custom images)                                                               | `[]`                     |
+| `server.extraArgs`                                   | concat to the default args                                                                                                      | `[]`                     |
+| `server.hostAliases`                                 | Argo CD server pods host aliases                                                                                                | `[]`                     |
+| `server.podLabels`                                   | Extra labels for Argo CD server pods                                                                                            | `{}`                     |
+| `server.podAnnotations`                              | Annotations for Argo CD server pods                                                                                             | `{}`                     |
+| `server.podAffinityPreset`                           | Pod affinity preset. Ignored if `server.affinity` is set. Allowed values: `soft` or `hard`                                      | `""`                     |
+| `server.podAntiAffinityPreset`                       | Pod anti-affinity preset. Ignored if `server.affinity` is set. Allowed values: `soft` or `hard`                                 | `soft`                   |
+| `server.nodeAffinityPreset.type`                     | Node affinity preset type. Ignored if `server.affinity` is set. Allowed values: `soft` or `hard`                                | `""`                     |
+| `server.nodeAffinityPreset.key`                      | Node label key to match. Ignored if `server.affinity` is set                                                                    | `""`                     |
+| `server.nodeAffinityPreset.values`                   | Node label values to match. Ignored if `server.affinity` is set                                                                 | `[]`                     |
+| `server.affinity`                                    | Affinity for Argo CD server pods assignment                                                                                     | `{}`                     |
+| `server.nodeSelector`                                | Node labels for Argo CD server pods assignment                                                                                  | `{}`                     |
+| `server.tolerations`                                 | Tolerations for Argo CD server pods assignment                                                                                  | `[]`                     |
+| `server.updateStrategy.type`                         | Argo CD server statefulset strategy type                                                                                        | `RollingUpdate`          |
+| `server.priorityClassName`                           | Argo CD server pods' priorityClassName                                                                                          | `""`                     |
+| `server.lifecycleHooks`                              | for the Argo CD server container(s) to automate configuration before or after startup                                           | `{}`                     |
+| `server.extraEnvVars`                                | Array with extra environment variables to add to Argo CD server nodes                                                           | `[]`                     |
+| `server.extraEnvVarsCM`                              | Name of existing ConfigMap containing extra env vars for Argo CD server nodes                                                   | `""`                     |
+| `server.extraEnvVarsSecret`                          | Name of existing Secret containing extra env vars for Argo CD server nodes                                                      | `""`                     |
+| `server.extraVolumes`                                | Optionally specify extra list of additional volumes for the Argo CD server pod(s)                                               | `[]`                     |
+| `server.extraVolumeMounts`                           | Optionally specify extra list of additional volumeMounts for the Argo CD server container(s)                                    | `[]`                     |
+| `server.sidecars`                                    | Add additional sidecar containers to the Argo CD server pod(s)                                                                  | `[]`                     |
+| `server.initContainers`                              | Add additional init containers to the Argo CD server pod(s)                                                                     | `[]`                     |
+| `server.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                            | `true`                   |
+| `server.serviceAccount.name`                         | The name of the ServiceAccount to use.                                                                                          | `""`                     |
+| `server.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                                  | `true`                   |
 
 
 ### Argo CD repo server Parameters
