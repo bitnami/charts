@@ -91,7 +91,7 @@ spec:
             - gateway
             - {{ .Values.gateway.type }}
             - --console-address 
-            - {{ .Values.containerPorts.console }}
+            - :{{ .Values.containerPorts.console }}
             {{- if eq .Values.gateway.type "gcs" }}
             - {{ .Values.gateway.auth.gcs.projectID }}
             {{- else if eq .Values.gateway.type "nas" }}
