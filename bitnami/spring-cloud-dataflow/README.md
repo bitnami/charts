@@ -322,6 +322,7 @@ helm uninstall my-release
 | `mariadb.auth.forcePassword`              | Force users to specify required passwords in the database                                           | `false`      |
 | `mariadb.auth.usePasswordFiles`           | Mount credentials as a file instead of using an environment variable                                | `false`      |
 | `mariadb.initdbScripts`                   | Specify dictionary of scripts to be run at first boot                                               | `{}`         |
+| `flyway.enabled`                          | Enable/disable flyway running Dataflow and Skipper Database creation scripts on startup             | `true`       |
 | `externalDatabase.host`                   | Host of the external database                                                                       | `localhost`  |
 | `externalDatabase.port`                   | External database port number                                                                       | `3306`       |
 | `externalDatabase.driver`                 | The fully qualified name of the JDBC Driver class                                                   | `""`         |
