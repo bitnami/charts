@@ -196,7 +196,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `apiIngress.hostname`              | Default host for the ingress resource                                                                       | `minio.local`            |
 | `apiIngress.path`                  | The Path to MinIO&reg;. You may need to set this to '/*' in order to use this with ALB ingress controllers. | `/`                      |
 | `apiIngress.pathType`              | Ingress path type                                                                                           | `ImplementationSpecific` |
-| `apiIngress.servicePort`           | Service port to be used                                                                                     | `minio-console`          |
+| `apiIngress.servicePort`           | Service port to be used                                                                                     | `minio-api`              |
 | `apiIngress.annotations`           | Ingress annotations                                                                                         | `{}`                     |
 | `apiIngress.tls`                   | Enable TLS configuration for the hostname defined at `apiIngress.hostname` parameter                        | `false`                  |
 | `apiIngress.extraHosts`            | The list of additional hostnames to be covered with this ingress record.                                    | `[]`                     |
