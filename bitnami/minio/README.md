@@ -209,15 +209,15 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Persistence parameters
 
-| Name                        | Description                                                          | Value   |
-| --------------------------- | -------------------------------------------------------------------- | ------- |
-| `persistence.enabled`       | Enable MinIO&reg; data persistence using PVC. If false, use emptyDir | `true`  |
-| `persistence.storageClass`  | PVC Storage Class for MinIO&reg; data volume                         | `""`    |
-| `persistence.mountPath`     | Data volume mount path                                               | `/data` |
-| `persistence.accessModes`   | PVC Access Modes for MinIO&reg; data volume                          | `[]`    |
-| `persistence.size`          | PVC Storage Request for MinIO&reg; data volume                       | `8Gi`   |
-| `persistence.annotations`   | Annotations for the PVC                                              | `{}`    |
-| `persistence.existingClaim` | Name of an existing PVC to use (only in `standalone` mode)           | `""`    |
+| Name                        | Description                                                          | Value               |
+| --------------------------- | -------------------------------------------------------------------- | ------------------- |
+| `persistence.enabled`       | Enable MinIO&reg; data persistence using PVC. If false, use emptyDir | `true`              |
+| `persistence.storageClass`  | PVC Storage Class for MinIO&reg; data volume                         | `""`                |
+| `persistence.mountPath`     | Data volume mount path                                               | `/data`             |
+| `persistence.accessModes`   | PVC Access Modes for MinIO&reg; data volume                          | `["ReadWriteOnce"]` |
+| `persistence.size`          | PVC Storage Request for MinIO&reg; data volume                       | `8Gi`               |
+| `persistence.annotations`   | Annotations for the PVC                                              | `{}`                |
+| `persistence.existingClaim` | Name of an existing PVC to use (only in `standalone` mode)           | `""`                |
 
 
 ### Volume Permissions parameters

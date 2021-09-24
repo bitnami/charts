@@ -55,15 +55,15 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common parameters
 
-| Name                     | Description                                                                                  | Value   |
-| ------------------------ | -------------------------------------------------------------------------------------------- | ------- |
-| `kubeVersion`            | Force target Kubernetes version (using Helm capabilities if not set)                         | `""`    |
-| `nameOverride`           | String to partially override common.names.fullname template (will maintain the release name) | `""`    |
-| `fullnameOverride`       | String to fully override common.names.fullname template                                      | `""`    |
-| `extraDeploy`            | Array of extra objects to deploy with the release                                            | `[]`    |
-| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)      | `false` |
-| `diagnosticMode.command` | Command to override all containers in the deployment                                         | `[]`    |
-| `diagnosticMode.args`    | Args to override all containers in the deployment                                            | `[]`    |
+| Name                     | Description                                                                                  | Value          |
+| ------------------------ | -------------------------------------------------------------------------------------------- | -------------- |
+| `kubeVersion`            | Force target Kubernetes version (using Helm capabilities if not set)                         | `""`           |
+| `nameOverride`           | String to partially override common.names.fullname template (will maintain the release name) | `""`           |
+| `fullnameOverride`       | String to fully override common.names.fullname template                                      | `""`           |
+| `extraDeploy`            | Array of extra objects to deploy with the release                                            | `[]`           |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)      | `false`        |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                         | `["sleep"]`    |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                            | `["infinity"]` |
 
 
 ### Spark parameters
@@ -72,7 +72,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ------------------------------------------------ | --------------------- |
 | `image.registry`    | Spark image registry                             | `docker.io`           |
 | `image.repository`  | Spark image repository                           | `bitnami/spark`       |
-| `image.tag`         | Spark image tag (immutable tags are recommended) | `3.1.2-debian-10-r70` |
+| `image.tag`         | Spark image tag (immutable tags are recommended) | `3.1.2-debian-10-r99` |
 | `image.pullPolicy`  | Spark image pull policy                          | `IfNotPresent`        |
 | `image.pullSecrets` | Specify docker-registry secret names as an array | `[]`                  |
 | `image.debug`       | Enable image debug mode                          | `false`               |

@@ -82,7 +82,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `memcachedPassword`                           | Memcached admin password                                                                        | `""`                         |
 | `replicaCount`                                | Number of containers                                                                            | `1`                          |
 | `command`                                     | Default container command (useful when using custom images)                                     | `[]`                         |
-| `arguments`                                   | Default container args (useful when using custom images)                                        | `[]`                         |
+| `arguments`                                   | Default container args (useful when using custom images)                                        | `["/run.sh"]`                |
 | `extraEnv`                                    | Additional env vars to pass                                                                     | `[]`                         |
 | `podDisruptionBudget.create`                  | Specifies whether a Pod disruption budget should be created                                     | `false`                      |
 | `podDisruptionBudget.minAvailable`            | Minimum number of pods that need to be available                                                | `""`                         |
@@ -124,7 +124,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.enabled`                         | Enable persistence using PVC (Requires architecture: "high-availability")                       | `false`                      |
 | `persistence.storageClass`                    | PVC Storage Class for Memcached volume                                                          | `""`                         |
 | `persistence.annotations`                     | Persistent Volume Claim annotations                                                             | `{}`                         |
-| `persistence.accessModes`                     | Persistent Volume Access Mode                                                                   | `[]`                         |
+| `persistence.accessModes`                     | Persistent Volume Access Mode                                                                   | `["ReadWriteOnce"]`          |
 | `persistence.size`                            | PVC Storage Request for Memcached volume                                                        | `8Gi`                        |
 | `metrics.enabled`                             | Start a side-car prometheus exporter                                                            | `false`                      |
 | `metrics.image.registry`                      | Memcached exporter image registry                                                               | `docker.io`                  |
