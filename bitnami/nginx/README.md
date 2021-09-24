@@ -207,37 +207,36 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Traffic Exposure parameters
 
-| Name                            | Description                                                                                            | Value                    |
-| ------------------------------- | ------------------------------------------------------------------------------------------------------ | ------------------------ |
-| `service.type`                  | Service type                                                                                           | `LoadBalancer`           |
-| `service.port`                  | Service HTTP port                                                                                      | `80`                     |
-| `service.httpsPort`             | Service HTTPS port                                                                                     | `443`                    |
-| `service.nodePorts`             | Specify the nodePort(s) value(s) for the LoadBalancer and NodePort service types.                      | `{}`                     |
-| `service.targetPort`            | Target port reference value for the Loadbalancer service types can be specified explicitly.            | `{}`                     |
-| `service.loadBalancerIP`        | LoadBalancer service IP address                                                                        | `""`                     |
-| `service.annotations`           | Service annotations                                                                                    | `{}`                     |
-| `service.externalTrafficPolicy` | Enable client source IP preservation                                                                   | `Cluster`                |
-| `ingress.enabled`               | Set to true to enable ingress record generation                                                        | `false`                  |
-| `ingress.certManager`           | Set this to true in order to add the corresponding annotations for cert-manager                        | `false`                  |
-| `ingress.pathType`              | Ingress path type                                                                                      | `ImplementationSpecific` |
-| `ingress.apiVersion`            | Force Ingress API version (automatically detected if not set)                                          | `""`                     |
-| `ingress.hostname`              | Default host for the ingress resource                                                                  | `nginx.local`            |
-| `ingress.path`                  | The Path to Nginx. You may need to set this to '/*' in order to use this with ALB ingress controllers. | `/`                      |
-| `ingress.annotations`           | Ingress annotations                                                                                    | `{}`                     |
-| `ingress.tls`                   | Create TLS Secret                                                                                      | `false`                  |
-| `ingress.extraHosts`            | The list of additional hostnames to be covered with this ingress record.                               | `[]`                     |
-| `ingress.extraPaths`            | Any additional arbitrary paths that may need to be added to the ingress under the main host.           | `[]`                     |
-| `ingress.extraTls`              | The tls configuration for additional hostnames to be covered with this ingress record.                 | `[]`                     |
-| `ingress.secrets`               | If you're providing your own certificates, please use this to add the certificates as secrets          | `[]`                     |
-| `healthIngress.enabled`         | Set to true to enable health ingress record generation                                                 | `false`                  |
-| `healthIngress.certManager`     | Set this to true in order to add the corresponding annotations for cert-manager                        | `false`                  |
-| `healthIngress.pathType`        | Ingress path type                                                                                      | `ImplementationSpecific` |
-| `healthIngress.hostname`        | When the health ingress is enabled, a host pointing to this will be created                            | `example.local`          |
-| `healthIngress.annotations`     | Health Ingress annotations                                                                             | `{}`                     |
-| `healthIngress.tls`             | Enable TLS configuration for the hostname defined at `healthIngress.hostname` parameter                | `false`                  |
-| `healthIngress.extraHosts`      | The list of additional hostnames to be covered with this health ingress record                         | `[]`                     |
-| `healthIngress.extraTls`        | TLS configuration for additional hostnames to be covered                                               | `[]`                     |
-| `healthIngress.secrets`         | TLS Secret configuration                                                                               | `[]`                     |
+| Name                            | Description                                                                                                                      | Value                    |
+| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.type`                  | Service type                                                                                                                     | `LoadBalancer`           |
+| `service.port`                  | Service HTTP port                                                                                                                | `80`                     |
+| `service.httpsPort`             | Service HTTPS port                                                                                                               | `443`                    |
+| `service.nodePorts`             | Specify the nodePort(s) value(s) for the LoadBalancer and NodePort service types.                                                | `{}`                     |
+| `service.targetPort`            | Target port reference value for the Loadbalancer service types can be specified explicitly.                                      | `{}`                     |
+| `service.loadBalancerIP`        | LoadBalancer service IP address                                                                                                  | `""`                     |
+| `service.annotations`           | Service annotations                                                                                                              | `{}`                     |
+| `service.externalTrafficPolicy` | Enable client source IP preservation                                                                                             | `Cluster`                |
+| `ingress.enabled`               | Set to true to enable ingress record generation                                                                                  | `false`                  |
+| `ingress.pathType`              | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.apiVersion`            | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
+| `ingress.hostname`              | Default host for the ingress resource                                                                                            | `nginx.local`            |
+| `ingress.path`                  | The Path to Nginx. You may need to set this to '/*' in order to use this with ALB ingress controllers.                           | `/`                      |
+| `ingress.annotations`           | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.tls`                   | Create TLS Secret                                                                                                                | `false`                  |
+| `ingress.extraHosts`            | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
+| `ingress.extraPaths`            | Any additional arbitrary paths that may need to be added to the ingress under the main host.                                     | `[]`                     |
+| `ingress.extraTls`              | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
+| `ingress.secrets`               | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
+| `healthIngress.enabled`         | Set to true to enable health ingress record generation                                                                           | `false`                  |
+| `healthIngress.certManager`     | Set this to true in order to add the corresponding annotations for cert-manager                                                  | `false`                  |
+| `healthIngress.pathType`        | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `healthIngress.hostname`        | When the health ingress is enabled, a host pointing to this will be created                                                      | `example.local`          |
+| `healthIngress.annotations`     | Health Ingress annotations                                                                                                       | `{}`                     |
+| `healthIngress.tls`             | Enable TLS configuration for the hostname defined at `healthIngress.hostname` parameter                                          | `false`                  |
+| `healthIngress.extraHosts`      | The list of additional hostnames to be covered with this health ingress record                                                   | `[]`                     |
+| `healthIngress.extraTls`        | TLS configuration for additional hostnames to be covered                                                                         | `[]`                     |
+| `healthIngress.secrets`         | TLS Secret configuration                                                                                                         | `[]`                     |
 
 
 ### Metrics parameters
