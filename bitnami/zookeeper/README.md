@@ -157,7 +157,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `readinessProbe.probeCommandTimeout` | Probe command timeout for readinessProbe                                                                                                                                                          | `2`             |
 | `customLivenessProbe`                | Override default liveness probe                                                                                                                                                                   | `{}`            |
 | `customReadinessProbe`               | Override default readiness probe                                                                                                                                                                  | `{}`            |
-
+| `sidecars`                           | Extra containers to the pod                                                                                                                                                                       | `[]`            |
+     
 
 ### Traffic Exposure parameters
 
@@ -314,6 +315,18 @@ customReadinessProbe:
   successThreshold: 1
   failureThreshold: 6
 ```
+
+You can also set the log4j logging level and what log appenders are turned on, by using `ZOO_LOG4J_PROP` set inside of conf/log4j.properties as zookeeper.root.logger by default to
+
+```console
+zookeeper.root.logger=INFO, CONSOLE
+```
+the available appender is 
+
+- CONSOLE 
+- ROLLINGFILE
+- RFAAUDIT
+- TRACEFILE
 
 ## Persistence
 

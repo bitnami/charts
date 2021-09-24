@@ -384,7 +384,7 @@ spec:
           emptyDir: {}
         {{- end }}
         {{- if .Values.readReplicas.extraVolumes }}
-        {{- toYaml .Values.readReplicas.extraVolumes | nindent 8 }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.readReplicas.extraVolumes "context" $ ) | nindent 8 }}
         {{- end }}
   updateStrategy:
     type: {{ .Values.updateStrategy.type }}
