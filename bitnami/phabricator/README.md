@@ -192,24 +192,24 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Database parameters
 
-| Name                                        | Description                                                                                                        | Value              |
-| ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | ------------------ |
-| `mariadb.enabled`                           | Whether to use the MariaDB chart                                                                                   | `true`             |
-| `mariadb.architecture`                      | MariaDB architecture. Allowed values: `standalone` or `replication`                                                | `standalone`       |
-| `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                                                                               | `""`               |
-| `mariadb.primary.configuration`             | MariaDB Primary configuration to be injected as ConfigMap                                                          | `""`               |
-| `mariadb.primary.extraFlags`                | Additional command line flags                                                                                      | `--local-infile=0` |
-| `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                                                                              | `true`             |
-| `mariadb.primary.persistence.storageClass`  | mariadb data Persistent Volume Storage Class                                                                       | `""`               |
-| `mariadb.primary.persistence.accessModes`   | Database Persistent Volume Access Modes                                                                            | `[]`               |
-| `mariadb.primary.persistence.size`          | Database Persistent Volume Size                                                                                    | `8Gi`              |
-| `mariadb.primary.persistence.hostPath`      | Host mount path for MariaDB volume in case you want to use local host path volumes (not recommended in production) | `""`               |
-| `mariadb.primary.persistence.existingClaim` | Enable persistence using an existing PVC                                                                           | `""`               |
-| `externalDatabase.existingSecret`           | Name of the database existing Secret Object                                                                        | `""`               |
-| `externalDatabase.host`                     | Host of the existing database                                                                                      | `localhost`        |
-| `externalDatabase.port`                     | Port of the existing database                                                                                      | `3306`             |
-| `externalDatabase.rootUser`                 | Username in the external db with root privileges                                                                   | `root`             |
-| `externalDatabase.rootPassword`             | Password for the above username                                                                                    | `""`               |
+| Name                                        | Description                                                                                                        | Value               |
+| ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | ------------------- |
+| `mariadb.enabled`                           | Whether to use the MariaDB chart                                                                                   | `true`              |
+| `mariadb.architecture`                      | MariaDB architecture. Allowed values: `standalone` or `replication`                                                | `standalone`        |
+| `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                                                                               | `""`                |
+| `mariadb.primary.configuration`             | MariaDB Primary configuration to be injected as ConfigMap                                                          | `""`                |
+| `mariadb.primary.extraFlags`                | Additional command line flags                                                                                      | `--local-infile=0`  |
+| `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                                                                              | `true`              |
+| `mariadb.primary.persistence.storageClass`  | mariadb data Persistent Volume Storage Class                                                                       | `""`                |
+| `mariadb.primary.persistence.accessModes`   | Database Persistent Volume Access Modes                                                                            | `["ReadWriteOnce"]` |
+| `mariadb.primary.persistence.size`          | Database Persistent Volume Size                                                                                    | `8Gi`               |
+| `mariadb.primary.persistence.hostPath`      | Host mount path for MariaDB volume in case you want to use local host path volumes (not recommended in production) | `""`                |
+| `mariadb.primary.persistence.existingClaim` | Enable persistence using an existing PVC                                                                           | `""`                |
+| `externalDatabase.existingSecret`           | Name of the database existing Secret Object                                                                        | `""`                |
+| `externalDatabase.host`                     | Host of the existing database                                                                                      | `localhost`         |
+| `externalDatabase.port`                     | Port of the existing database                                                                                      | `3306`              |
+| `externalDatabase.rootUser`                 | Username in the external db with root privileges                                                                   | `root`              |
+| `externalDatabase.rootPassword`             | Password for the above username                                                                                    | `""`                |
 
 
 ### Volume Permissions parameters

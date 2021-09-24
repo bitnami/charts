@@ -442,6 +442,18 @@ serviceAccount:
 ## Network policies
 ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
 ##
+
+## @param sidecars Extra containers to the pod
+## For example:
+## sidecars:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
+sidecars: []
+
 networkPolicy:
   ## @param networkPolicy.enabled Specifies whether a NetworkPolicy should be created
   ##

@@ -66,8 +66,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `commonLabels`           | Add labels to all the deployed resources                                                     | `{}`            |
 | `commonAnnotations`      | Add annotations to all the deployed resources                                                | `{}`            |
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)      | `false`         |
-| `diagnosticMode.command` | Command to override all containers in the deployment                                         | `[]`            |
-| `diagnosticMode.args`    | Args to override all containers in the deployment                                            | `[]`            |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                         | `["sleep"]`     |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                            | `["infinity"]`  |
 
 
 ### Zookeeper chart parameters
@@ -157,7 +157,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `readinessProbe.probeCommandTimeout` | Probe command timeout for readinessProbe                                                                                                                                                          | `2`             |
 | `customLivenessProbe`                | Override default liveness probe                                                                                                                                                                   | `{}`            |
 | `customReadinessProbe`               | Override default readiness probe                                                                                                                                                                  | `{}`            |
-
+| `sidecars`                           | Extra containers to the pod                                                                                                                                                                       | `[]`            |
+     
 
 ### Traffic Exposure parameters
 
@@ -183,18 +184,18 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Persistence parameters
 
-| Name                                   | Description                                                                    | Value  |
-| -------------------------------------- | ------------------------------------------------------------------------------ | ------ |
-| `persistence.existingClaim`            | Provide an existing `PersistentVolumeClaim`                                    | `""`   |
-| `persistence.enabled`                  | Enable Zookeeper data persistence using PVC                                    | `true` |
-| `persistence.storageClass`             | PVC Storage Class for ZooKeeper data volume                                    | `""`   |
-| `persistence.accessModes`              | PVC Access modes                                                               | `[]`   |
-| `persistence.size`                     | PVC Storage Request for ZooKeeper data volume                                  | `8Gi`  |
-| `persistence.annotations`              | Annotations for the PVC                                                        | `{}`   |
-| `persistence.selector`                 | Selector to match an existing Persistent Volume for Zookeeper's data PVC       | `{}`   |
-| `persistence.dataLogDir.size`          | PVC Storage Request for ZooKeeper's Data log directory                         | `8Gi`  |
-| `persistence.dataLogDir.existingClaim` | Provide an existing `PersistentVolumeClaim` for Zookeeper's Data log directory | `""`   |
-| `persistence.dataLogDir.selector`      | Selector to match an existing Persistent Volume for Zookeeper's Data log PVC   | `{}`   |
+| Name                                   | Description                                                                    | Value               |
+| -------------------------------------- | ------------------------------------------------------------------------------ | ------------------- |
+| `persistence.existingClaim`            | Provide an existing `PersistentVolumeClaim`                                    | `""`                |
+| `persistence.enabled`                  | Enable Zookeeper data persistence using PVC                                    | `true`              |
+| `persistence.storageClass`             | PVC Storage Class for ZooKeeper data volume                                    | `""`                |
+| `persistence.accessModes`              | PVC Access modes                                                               | `["ReadWriteOnce"]` |
+| `persistence.size`                     | PVC Storage Request for ZooKeeper data volume                                  | `8Gi`               |
+| `persistence.annotations`              | Annotations for the PVC                                                        | `{}`                |
+| `persistence.selector`                 | Selector to match an existing Persistent Volume for Zookeeper's data PVC       | `{}`                |
+| `persistence.dataLogDir.size`          | PVC Storage Request for ZooKeeper's Data log directory                         | `8Gi`               |
+| `persistence.dataLogDir.existingClaim` | Provide an existing `PersistentVolumeClaim` for Zookeeper's Data log directory | `""`                |
+| `persistence.dataLogDir.selector`      | Selector to match an existing Persistent Volume for Zookeeper's Data log PVC   | `{}`                |
 
 
 ### Volume Permissions parameters
@@ -314,6 +315,18 @@ customReadinessProbe:
   successThreshold: 1
   failureThreshold: 6
 ```
+
+You can also set the log4j logging level and what log appenders are turned on, by using `ZOO_LOG4J_PROP` set inside of conf/log4j.properties as zookeeper.root.logger by default to
+
+```console
+zookeeper.root.logger=INFO, CONSOLE
+```
+the available appender is 
+
+- CONSOLE 
+- ROLLINGFILE
+- RFAAUDIT
+- TRACEFILE
 
 ## Persistence
 

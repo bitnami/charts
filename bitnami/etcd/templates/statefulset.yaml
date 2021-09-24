@@ -216,6 +216,8 @@ spec:
             {{- if .Values.startFromSnapshot.enabled }}
             - name: ETCD_INIT_SNAPSHOT_FILENAME
               value: {{ .Values.startFromSnapshot.snapshotFilename | quote }}
+            - name: ETCD_INIT_SNAPSHOTS_DIR
+              value: {{ ternary "/snapshots" "/init-snapshot" (and .Values.disasterRecovery.enabled (not .Values.disasterRecovery.pvc.existingClaim)) | quote }}
             {{- end }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}

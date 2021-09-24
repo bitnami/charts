@@ -142,7 +142,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sidecars`                           | Add additional sidecar containers to the Jasperreports pods                               | `[]`                       |
 | `persistence.enabled`                | Enable persistence using PVC                                                              | `true`                     |
 | `persistence.storageClass`           | PVC Storage Class for Jasperreports volume                                                | `""`                       |
-| `persistence.accessModes`            | Persistent Volume Access Mode                                                             | `[]`                       |
+| `persistence.accessModes`            | Persistent Volume Access Mode                                                             | `["ReadWriteOnce"]`        |
 | `persistence.size`                   | PVC Storage Request for Jasperreports volume                                              | `8Gi`                      |
 | `persistence.existingClaim`          | An Existing PVC name for Jasperreports volume                                             | `""`                       |
 
@@ -183,7 +183,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `mariadb.auth.password`                     | Password for the database                            | `""`                    |
 | `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                | `true`                  |
 | `mariadb.primary.persistence.storageClass`  | PVC Storage Class                                    | `""`                    |
-| `mariadb.primary.persistence.accessModes`   | Access mode of persistent volume                     | `[]`                    |
+| `mariadb.primary.persistence.accessModes`   | Access mode of persistent volume                     | `["ReadWriteOnce"]`     |
 | `mariadb.primary.persistence.size`          | Database Persistent Volume Size                      | `8Gi`                   |
 | `mariadb.primary.persistence.hostPath`      | Host mount path for MariaDB volume                   | `""`                    |
 | `mariadb.primary.persistence.existingClaim` | Enable persistence using an existing PVC             | `""`                    |
