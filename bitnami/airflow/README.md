@@ -89,71 +89,72 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Airflow common parameters
 
-| Name                     | Description                                                                                                                                     | Value            |
-| ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
-| `auth.existingSecret`    | Name of an existing secret containing password and fernet key ('airflow-password and 'airflow-fernetKey' keys)                                  | `""`             |
-| `auth.fernetKey`         | Fernet key to secure connections                                                                                                                | `""`             |
-| `auth.forcePassword`     | Force users to specify a password                                                                                                               | `false`          |
-| `auth.password`          | Password to access web UI                                                                                                                       | `""`             |
-| `auth.username`          | Username to access web UI                                                                                                                       | `user`           |
-| `configurationConfigMap` | Name of an existing config map containing the Airflow config file                                                                               | `""`             |
-| `executor`               | Airflow executor, it should be one of 'SequentialExecutor', 'LocalExecutor', 'CeleryExecutor', 'KubernetesExecutor', 'CeleryKubernetesExecutor' | `CeleryExecutor` |
-| `dagsConfigMap`          | Name of an existing config map containing all the DAGs files you want to load in Airflow                                                        | `""`             |
-| `loadExamples`           | Switch to load some Airflow examples                                                                                                            | `false`          |
+| Name                     | Description                                                                                                                                      | Value            |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------- |
+| `auth.existingSecret`    | Name of an existing secret containing password, fernet key and secret key ('airflow-password', 'airflow-fernetKey' and 'airflow-secretKey' keys) | `""`             |
+| `auth.fernetKey`         | Fernet key to secure connections                                                                                                                 | `""`             |
+| `auth.forcePassword`     | Force users to specify a password                                                                                                                | `false`          |
+| `auth.password`          | Password to access web UI                                                                                                                        | `""`             |
+| `auth.username`          | Username to access web UI                                                                                                                        | `user`           |
+| `auth.secretKey`         | Secret key to run your flask app                                                                                                                 | `""`             |
+| `configurationConfigMap` | Name of an existing config map containing the Airflow config file                                                                                | `""`             |
+| `executor`               | Airflow executor, it should be one of 'SequentialExecutor', 'LocalExecutor', 'CeleryExecutor', 'KubernetesExecutor', 'CeleryKubernetesExecutor'  | `CeleryExecutor` |
+| `dagsConfigMap`          | Name of an existing config map containing all the DAGs files you want to load in Airflow                                                         | `""`             |
+| `loadExamples`           | Switch to load some Airflow examples                                                                                                             | `false`          |
 
 
 ### Airflow web parameters
 
-| Name                                     | Description                                                                 | Value                 |
-| ---------------------------------------- | --------------------------------------------------------------------------- | --------------------- |
-| `web.image.registry`                     | Airflow image registry                                                      | `docker.io`           |
-| `web.image.repository`                   | Airflow image repository                                                    | `bitnami/airflow`     |
-| `web.image.tag`                          | Airflow image tag (immutable tags are recommended)                          | `2.1.3-debian-10-r10` |
-| `web.image.pullPolicy`                   | Airflow image pull policy                                                   | `IfNotPresent`        |
-| `web.image.pullSecrets`                  | Airflow image pull secrets                                                  | `[]`                  |
-| `web.image.debug`                        | Enable image debug mode                                                     | `false`               |
-| `web.replicaCount`                       | Number of web replicas                                                      | `1`                   |
-| `web.hostAliases`                        | Deployment pod host aliases                                                 | `[]`                  |
-| `web.baseUrl`                            | URL used to access to airflow web ui                                        | `""`                  |
-| `web.configMap`                          | Name of an existing config map containing the Airflow webserver config file | `""`                  |
-| `web.command`                            | Override default container command (useful when using custom images)        | `[]`                  |
-| `web.args`                               | Override default container args (useful when using custom images)           | `[]`                  |
-| `web.podLabels`                          | Add extra labels to the web's pods                                          | `{}`                  |
-| `web.podAnnotations`                     | Add extra annotations to the web's pods                                     | `{}`                  |
-| `web.containerPort`                      | Container port to be used for exposing http server                          | `8080`                |
-| `web.extraVolumeMounts`                  | Add extra volume mounts                                                     | `[]`                  |
-| `web.extraVolumes`                       | Add extra volumes                                                           | `[]`                  |
-| `web.extraEnvVars`                       | Array containing extra environment variables                                | `[]`                  |
-| `web.extraEnvVarsCM`                     | ConfigMap containing extra environment variables                            | `""`                  |
-| `web.extraEnvVarsSecret`                 | Secret containing extra environment variables (in case of sensitive data)   | `""`                  |
-| `web.resources.limits`                   | The resources limits for the Web container                                  | `{}`                  |
-| `web.resources.requests`                 | The requested resources for the Web container                               | `{}`                  |
-| `web.livenessProbe.enabled`              | Enable livenessProbe                                                        | `true`                |
-| `web.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                     | `180`                 |
-| `web.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                            | `20`                  |
-| `web.livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                           | `5`                   |
-| `web.livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                         | `6`                   |
-| `web.livenessProbe.successThreshold`     | Success threshold for livenessProbe                                         | `1`                   |
-| `web.readinessProbe.enabled`             | Enable readinessProbe                                                       | `true`                |
-| `web.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                    | `30`                  |
-| `web.readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                           | `10`                  |
-| `web.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                          | `5`                   |
-| `web.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                        | `6`                   |
-| `web.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                        | `1`                   |
-| `web.customLivenessProbe`                | Custom liveness probe for the Web component                                 | `{}`                  |
-| `web.customReadinessProbe`               | Custom rediness probe for the Web component                                 | `{}`                  |
-| `web.podDisruptionBudget.enabled`        | Enable PodDisruptionBudget for web pods                                     | `false`               |
-| `web.podDisruptionBudget.minAvailable`   | Minimum available instances; ignored if there is no PodDisruptionBudget     | `1`                   |
-| `web.podDisruptionBudget.maxUnavailable` | Maximum available instances; ignored if there is no PodDisruptionBudget     | `""`                  |
-| `web.sidecars`                           | Add sidecars to the Web pods                                                | `[]`                  |
-| `web.initContainers`                     | Add initContainers to the Web pods                                          | `[]`                  |
-| `web.priorityClassName`                  | Priority Class Name                                                         | `""`                  |
-| `web.nodeSelector`                       | Node labels for pod assignment                                              | `{}`                  |
-| `service.type`                           | Airflow service type                                                        | `ClusterIP`           |
-| `service.port`                           | Airflow service HTTP port                                                   | `8080`                |
-| `service.nodePort`                       | Airflow service NodePort                                                    | `""`                  |
-| `service.loadBalancerIP`                 | loadBalancerIP if service type is `LoadBalancer` (optional, cloud specific) | `""`                  |
-| `service.annotations`                    | Additional custom annotations for Airflow service                           | `{}`                  |
+| Name                                     | Description                                                                 | Value                |
+| ---------------------------------------- | --------------------------------------------------------------------------- | -------------------- |
+| `web.image.registry`                     | Airflow image registry                                                      | `docker.io`          |
+| `web.image.repository`                   | Airflow image repository                                                    | `bitnami/airflow`    |
+| `web.image.tag`                          | Airflow image tag (immutable tags are recommended)                          | `2.1.4-debian-10-r4` |
+| `web.image.pullPolicy`                   | Airflow image pull policy                                                   | `IfNotPresent`       |
+| `web.image.pullSecrets`                  | Airflow image pull secrets                                                  | `[]`                 |
+| `web.image.debug`                        | Enable image debug mode                                                     | `false`              |
+| `web.replicaCount`                       | Number of web replicas                                                      | `1`                  |
+| `web.hostAliases`                        | Deployment pod host aliases                                                 | `[]`                 |
+| `web.baseUrl`                            | URL used to access to airflow web ui                                        | `""`                 |
+| `web.configMap`                          | Name of an existing config map containing the Airflow webserver config file | `""`                 |
+| `web.command`                            | Override default container command (useful when using custom images)        | `[]`                 |
+| `web.args`                               | Override default container args (useful when using custom images)           | `[]`                 |
+| `web.podLabels`                          | Add extra labels to the web's pods                                          | `{}`                 |
+| `web.podAnnotations`                     | Add extra annotations to the web's pods                                     | `{}`                 |
+| `web.containerPort`                      | Container port to be used for exposing http server                          | `8080`               |
+| `web.extraVolumeMounts`                  | Add extra volume mounts                                                     | `[]`                 |
+| `web.extraVolumes`                       | Add extra volumes                                                           | `[]`                 |
+| `web.extraEnvVars`                       | Array containing extra environment variables                                | `[]`                 |
+| `web.extraEnvVarsCM`                     | ConfigMap containing extra environment variables                            | `""`                 |
+| `web.extraEnvVarsSecret`                 | Secret containing extra environment variables (in case of sensitive data)   | `""`                 |
+| `web.resources.limits`                   | The resources limits for the Web container                                  | `{}`                 |
+| `web.resources.requests`                 | The requested resources for the Web container                               | `{}`                 |
+| `web.livenessProbe.enabled`              | Enable livenessProbe                                                        | `true`               |
+| `web.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                     | `180`                |
+| `web.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                            | `20`                 |
+| `web.livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                           | `5`                  |
+| `web.livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                         | `6`                  |
+| `web.livenessProbe.successThreshold`     | Success threshold for livenessProbe                                         | `1`                  |
+| `web.readinessProbe.enabled`             | Enable readinessProbe                                                       | `true`               |
+| `web.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                    | `30`                 |
+| `web.readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                           | `10`                 |
+| `web.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                          | `5`                  |
+| `web.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                        | `6`                  |
+| `web.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                        | `1`                  |
+| `web.customLivenessProbe`                | Custom liveness probe for the Web component                                 | `{}`                 |
+| `web.customReadinessProbe`               | Custom rediness probe for the Web component                                 | `{}`                 |
+| `web.podDisruptionBudget.enabled`        | Enable PodDisruptionBudget for web pods                                     | `false`              |
+| `web.podDisruptionBudget.minAvailable`   | Minimum available instances; ignored if there is no PodDisruptionBudget     | `1`                  |
+| `web.podDisruptionBudget.maxUnavailable` | Maximum available instances; ignored if there is no PodDisruptionBudget     | `""`                 |
+| `web.sidecars`                           | Add sidecars to the Web pods                                                | `[]`                 |
+| `web.initContainers`                     | Add initContainers to the Web pods                                          | `[]`                 |
+| `web.priorityClassName`                  | Priority Class Name                                                         | `""`                 |
+| `web.nodeSelector`                       | Node labels for pod assignment                                              | `{}`                 |
+| `service.type`                           | Airflow service type                                                        | `ClusterIP`          |
+| `service.port`                           | Airflow service HTTP port                                                   | `8080`               |
+| `service.nodePort`                       | Airflow service NodePort                                                    | `""`                 |
+| `service.loadBalancerIP`                 | loadBalancerIP if service type is `LoadBalancer` (optional, cloud specific) | `""`                 |
+| `service.annotations`                    | Additional custom annotations for Airflow service                           | `{}`                 |
 
 
 ### Airflow scheduler parameters
@@ -162,7 +163,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------------- | ----------------------------------------------------------------------- | --------------------------- |
 | `scheduler.image.registry`                   | Airflow Scheduler image registry                                        | `docker.io`                 |
 | `scheduler.image.repository`                 | Airflow Scheduler image repository                                      | `bitnami/airflow-scheduler` |
-| `scheduler.image.tag`                        | Airflow Scheduler image tag (immutable tags are recommended)            | `2.1.3-debian-10-r18`       |
+| `scheduler.image.tag`                        | Airflow Scheduler image tag (immutable tags are recommended)            | `2.1.4-debian-10-r4`        |
 | `scheduler.image.pullPolicy`                 | Airflow Scheduler image pull policy                                     | `IfNotPresent`              |
 | `scheduler.image.pullSecrets`                | Airflow Scheduler image pull secrets                                    | `[]`                        |
 | `scheduler.image.debug`                      | Enable image debug mode                                                 | `false`                     |
@@ -195,7 +196,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ------------------------ |
 | `worker.image.registry`                     | Airflow Worker image registry                                                                                        | `docker.io`              |
 | `worker.image.repository`                   | Airflow Worker image repository                                                                                      | `bitnami/airflow-worker` |
-| `worker.image.tag`                          | Airflow Worker image tag (immutable tags are recommended)                                                            | `2.1.3-debian-10-r19`    |
+| `worker.image.tag`                          | Airflow Worker image tag (immutable tags are recommended)                                                            | `2.1.4-debian-10-r4`     |
 | `worker.image.pullPolicy`                   | Airflow Worker image pull policy                                                                                     | `IfNotPresent`           |
 | `worker.image.pullSecrets`                  | Airflow Worker image pull secrets                                                                                    | `[]`                     |
 | `worker.image.debug`                        | Enable image debug mode                                                                                              | `false`                  |
@@ -253,7 +254,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------ | -------------------------------------------------------------------------------------- | ---------------------- |
 | `git.image.registry`           | Git image registry                                                                     | `docker.io`            |
 | `git.image.repository`         | Git image repository                                                                   | `bitnami/git`          |
-| `git.image.tag`                | Git image tag (immutable tags are recommended)                                         | `2.33.0-debian-10-r28` |
+| `git.image.tag`                | Git image tag (immutable tags are recommended)                                         | `2.33.0-debian-10-r32` |
 | `git.image.pullPolicy`         | Git image pull policy                                                                  | `IfNotPresent`         |
 | `git.image.pullSecrets`        | Git image pull secrets                                                                 | `[]`                   |
 | `git.dags.enabled`             | Enable in order to download DAG files from git repositories.                           | `false`                |
@@ -345,7 +346,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                      | Start a side-car prometheus exporter                                      | `false`                       |
 | `metrics.image.registry`               | Airflow Exporter image registry                                           | `docker.io`                   |
 | `metrics.image.repository`             | Airflow Exporter image repository                                         | `bitnami/airflow-exporter`    |
-| `metrics.image.tag`                    | Airflow Exporter image tag (immutable tags are recommended)               | `0.20210126.0-debian-10-r213` |
+| `metrics.image.tag`                    | Airflow Exporter image tag (immutable tags are recommended)               | `0.20210126.0-debian-10-r217` |
 | `metrics.image.pullPolicy`             | Airflow Exporter image pull policy                                        | `IfNotPresent`                |
 | `metrics.image.pullSecrets`            | Airflow Exporter image pull secrets                                       | `[]`                          |
 | `metrics.hostAliases`                  | Deployment pod host aliases                                               | `[]`                          |
@@ -370,6 +371,7 @@ $ helm install my-release \
                --set auth.username=my-user \
                --set auth.password=my-passsword \
                --set auth.fernetKey=my-fernet-key \
+               --set auth.secretKey=my-secret-key \
                bitnami/airflow
 ```
 
@@ -398,6 +400,10 @@ Bitnami will release a new chart updating its containers if a new version of the
 A Fernet key is required in order to encrypt password within connections. The Fernet key must be a base64-encoded 32-byte key.
 
 Learn how to generate one [here](https://bcb.github.io/airflow/fernet-key)
+
+### Generate a Secret key
+
+Secret key used to run your flask app. It should be as random as possible. However, when running more than 1 instances of webserver, make sure all of them use the same secret_key otherwise one of them will error with “CSRF session token is missing”.
 
 ### Load DAG files
 
@@ -464,6 +470,7 @@ type: Opaque
 data:
   airflow-password: "Smo1QTJLdGxXMg=="
   airflow-fernetKey: "YVRZeVJVWnlXbU4wY1dOalVrdE1SV3cxWWtKeFIzWkVRVTVrVjNaTFR6WT0="
+  airflow-secretKey: "a25mQ1FHTUh3MnFRSk5KMEIyVVU2YmN0VGRyYTVXY08="
   postgresql-password: "cG9zdGdyZXMK"
   redis-password: "cmVkaXMK"
 ```
@@ -605,7 +612,8 @@ $ helm install airflow bitnami/airflow \
 
 ```console
 $ export AIRFLOW_PASSWORD=$(kubectl get secret --namespace default airflow -o jsonpath="{.data.airflow-password}" | base64 --decode)
-$ export AIRFLOW_FERNETKEY=$(kubectl get secret --namespace default airflow -o jsonpath="{.data.airflow-fernetKey}" | base64 --decode)
+$ export AIRFLOW_FERNET_KEY=$(kubectl get secret --namespace default airflow -o jsonpath="{.data.airflow-fernetKey}" | base64 --decode)
+$ export AIRFLOW_SECRET_KEY=$(kubectl get secret --namespace default airflow -o jsonpath="{.data.airflow-secretKey}" | base64 --decode)
 $ export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default airflow-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
 $ export REDIS_PASSWORD=$(kubectl get secret --namespace default airflow-redis -o jsonpath="{.data.redis-password}" | base64 --decode)
 $ export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=airflow,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
@@ -631,7 +639,8 @@ $ helm upgrade airflow bitnami/airflow \
     --set loadExamples=true \
     --set web.baseUrl=http://127.0.0.1:8080 \
     --set auth.password=$AIRFLOW_PASSWORD \
-    --set auth.fernetKey=$AIRFLOW_FERNETKEY \
+    --set auth.fernetKey=$AIRFLOW_FERNET_KEY \
+    --set auth.secretKey=$AIRFLOW_SECRET_KEY \
     --set postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD \
     --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC \
     --set redis.password=$REDIS_PASSWORD \

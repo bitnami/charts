@@ -244,6 +244,10 @@ spec:
             - name: MONGODB_DATABASE
               value: {{ .Values.auth.database | quote }}
             {{- end }}
+            {{- if .Values.metrics.username }}
+            - name: MONGODB_METRICS_USERNAME
+              value: {{ .Values.metrics.username | quote }}
+            {{- end }}
             {{- if .Values.auth.enabled }}
             {{- if and .Values.auth.username .Values.auth.database }}
             - name: MONGODB_PASSWORD
@@ -251,6 +255,13 @@ spec:
                 secretKeyRef:
                   name: {{ include "mongodb.secretName" . }}
                   key: mongodb-password
+            {{- end }}
+            {{- if .Values.metrics.username }}
+            - name: MONGODB_METRICS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "mongodb.secretName" . }}
+                  key: mongodb-metrics-password
             {{- end }}
             - name: MONGODB_ROOT_PASSWORD
               valueFrom:
@@ -401,6 +412,7 @@ spec:
           {{- end }}
           env:
           {{- if .Values.auth.enabled }}
+          {{- if not .Values.metrics.username }}
           - name: MONGODB_ROOT_USER
             value: {{ .Values.auth.rootUser | quote }}
           - name: MONGODB_ROOT_PASSWORD
@@ -408,6 +420,15 @@ spec:
               secretKeyRef:
                 name: {{ include "mongodb.secretName" . }}
                 key: mongodb-root-password
+          {{- else }}
+          - name: MONGODB_METRICS_USERNAME
+            value: {{ .Values.metrics.username | quote }}
+          - name: MONGODB_METRICS_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "mongodb.secretName" . }}
+                key: mongodb-metrics-password
+          {{- end }}
           {{- end }}
           volumeMounts:
           {{- if .Values.tls.enabled }}
