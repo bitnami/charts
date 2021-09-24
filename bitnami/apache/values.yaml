@@ -132,6 +132,9 @@ tolerations: []
 ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
 ##
 topologySpreadConstraints: []
+## @param extraPodSpec Optionally specify extra PodSpec
+##
+extraPodSpec: {}
 ## Get the server static content from a git repository
 ## @param cloneHtdocsFromGit.enabled Get the server static content from a git repository
 ## @param cloneHtdocsFromGit.repository Repository to clone static content from
