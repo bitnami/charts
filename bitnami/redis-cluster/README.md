@@ -78,16 +78,16 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Redis&trade; Cluster Common parameters
 
-| Name                     | Description                                                                                  | Value   |
-| ------------------------ | -------------------------------------------------------------------------------------------- | ------- |
-| `nameOverride`           | String to partially override common.names.fullname template (will maintain the release name) | `""`    |
-| `fullnameOverride`       | String to fully override common.names.fullname template                                      | `""`    |
-| `commonAnnotations`      | Annotations to add to all deployed objects                                                   | `{}`    |
-| `commonLabels`           | Labels to add to all deployed objects                                                        | `{}`    |
-| `extraDeploy`            | Array of extra objects to deploy with the release (evaluated as a template)                  | `[]`    |
-| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)      | `false` |
-| `diagnosticMode.command` | Command to override all containers in the deployment                                         | `[]`    |
-| `diagnosticMode.args`    | Args to override all containers in the deployment                                            | `[]`    |
+| Name                     | Description                                                                                  | Value          |
+| ------------------------ | -------------------------------------------------------------------------------------------- | -------------- |
+| `nameOverride`           | String to partially override common.names.fullname template (will maintain the release name) | `""`           |
+| `fullnameOverride`       | String to fully override common.names.fullname template                                      | `""`           |
+| `commonAnnotations`      | Annotations to add to all deployed objects                                                   | `{}`           |
+| `commonLabels`           | Labels to add to all deployed objects                                                        | `{}`           |
+| `extraDeploy`            | Array of extra objects to deploy with the release (evaluated as a template)                  | `[]`           |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)      | `false`        |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                         | `["sleep"]`    |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                            | `["infinity"]` |
 
 
 ### Redis&trade; Cluster Common parameters
@@ -140,7 +140,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.path`                      | Path to mount the volume at, to use other images Redis&trade; images.                                                                               | `/bitnami/redis/data`   |
 | `persistence.subPath`                   | The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services                                             | `""`                    |
 | `persistence.storageClass`              | Storage class of backing PVC                                                                                                                        | `""`                    |
-| `persistence.accessModes`               | Persistent Volume Access Modes                                                                                                                      | `[]`                    |
+| `persistence.accessModes`               | Persistent Volume Access Modes                                                                                                                      | `["ReadWriteOnce"]`     |
 | `persistence.size`                      | Size of data volume                                                                                                                                 | `8Gi`                   |
 | `persistence.matchLabels`               | Persistent Volume selectors                                                                                                                         | `{}`                    |
 | `persistence.matchExpressions`          | matchExpressions Persistent Volume selectors                                                                                                        | `{}`                    |

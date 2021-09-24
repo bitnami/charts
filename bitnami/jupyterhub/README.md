@@ -351,12 +351,12 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Single User Persistence parameters
 
-| Name                                  | Description                                                | Value  |
-| ------------------------------------- | ---------------------------------------------------------- | ------ |
-| `singleuser.persistence.enabled`      | Enable persistent volume creation on Single User instances | `true` |
-| `singleuser.persistence.storageClass` | Persistent Volumes storage class                           | `""`   |
-| `singleuser.persistence.accessModes`  | Persistent Volumes access modes                            | `[]`   |
-| `singleuser.persistence.size`         | Persistent Volumes size                                    | `10Gi` |
+| Name                                  | Description                                                | Value               |
+| ------------------------------------- | ---------------------------------------------------------- | ------------------- |
+| `singleuser.persistence.enabled`      | Enable persistent volume creation on Single User instances | `true`              |
+| `singleuser.persistence.storageClass` | Persistent Volumes storage class                           | `""`                |
+| `singleuser.persistence.accessModes`  | Persistent Volumes access modes                            | `["ReadWriteOnce"]` |
+| `singleuser.persistence.size`         | Persistent Volumes size                                    | `10Gi`              |
 
 
 ### Traffic exposure parameters

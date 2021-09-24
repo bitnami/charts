@@ -126,7 +126,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `readinessProbe.successThreshold`      | Success threshold for readinessProbe                                                                  | `1`                     |
 | `persistence.enabled`                  | Use a PVC to persist data                                                                             | `false`                 |
 | `persistence.mountPath`                | Path to mount the volume at                                                                           | `/bitnami/mxnet`        |
-| `persistence.accessModes`              | Persistent Volume Access Mode                                                                         | `[]`                    |
+| `persistence.accessModes`              | Persistent Volume Access Mode                                                                         | `["ReadWriteOnce"]`     |
 | `persistence.size`                     | Size of data volume                                                                                   | `8Gi`                   |
 | `persistence.annotations`              | Persistent Volume annotations                                                                         | `{}`                    |
 | `sidecars`                             | Attach additional containers to the pods (scheduler, worker and server nodes)                         | `[]`                    |

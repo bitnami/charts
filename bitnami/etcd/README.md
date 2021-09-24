@@ -67,8 +67,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `clusterDomain`          | Default Kubernetes cluster domain                                                            | `cluster.local` |
 | `extraDeploy`            | Array of extra objects to deploy with the release                                            | `[]`            |
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)      | `false`         |
-| `diagnosticMode.command` | Command to override all containers in the deployment                                         | `[]`            |
-| `diagnosticMode.args`    | Args to override all containers in the deployment                                            | `[]`            |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                         | `["sleep"]`     |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                            | `["infinity"]`  |
 
 
 ### etcd parameters
@@ -77,7 +77,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------- | ----------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`                      | etcd image registry                                                                             | `docker.io`           |
 | `image.repository`                    | etcd image name                                                                                 | `bitnami/etcd`        |
-| `image.tag`                           | etcd image tag                                                                                  | `3.5.0-debian-10-r64` |
+| `image.tag`                           | etcd image tag                                                                                  | `3.5.0-debian-10-r93` |
 | `image.pullPolicy`                    | etcd image pull policy                                                                          | `IfNotPresent`        |
 | `image.pullSecrets`                   | etcd image pull secrets                                                                         | `[]`                  |
 | `image.debug`                         | Enable image debug mode                                                                         | `false`               |
@@ -191,14 +191,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Persistence parameters
 
-| Name                       | Description                                                     | Value  |
-| -------------------------- | --------------------------------------------------------------- | ------ |
-| `persistence.enabled`      | If true, use a Persistent Volume Claim. If false, use emptyDir. | `true` |
-| `persistence.storageClass` | Persistent Volume Storage Class                                 | `""`   |
-| `persistence.annotations`  | Annotations for the PVC                                         | `{}`   |
-| `persistence.accessModes`  | Persistent Volume Access Modes                                  | `[]`   |
-| `persistence.size`         | PVC Storage Request for etcd data volume                        | `8Gi`  |
-| `persistence.selector`     | Selector to match an existing Persistent Volume                 | `{}`   |
+| Name                       | Description                                                     | Value               |
+| -------------------------- | --------------------------------------------------------------- | ------------------- |
+| `persistence.enabled`      | If true, use a Persistent Volume Claim. If false, use emptyDir. | `true`              |
+| `persistence.storageClass` | Persistent Volume Storage Class                                 | `""`                |
+| `persistence.annotations`  | Annotations for the PVC                                         | `{}`                |
+| `persistence.accessModes`  | Persistent Volume Access Modes                                  | `["ReadWriteOnce"]` |
+| `persistence.size`         | PVC Storage Request for etcd data volume                        | `8Gi`               |
+| `persistence.selector`     | Selector to match an existing Persistent Volume                 | `{}`                |
 
 
 ### Volume Permissions parameters
@@ -208,7 +208,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                     | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                         | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                          | `10-debian-10-r172`     |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                          | `10-debian-10-r202`     |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                  | `Always`                |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                     | `[]`                    |
 | `volumePermissions.resources.limits`   | Init container volume-permissions resource  limits                                                                   | `{}`                    |
