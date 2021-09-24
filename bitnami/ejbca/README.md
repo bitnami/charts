@@ -58,16 +58,16 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common parameters
 
-| Name                     | Description                                                                             | Value   |
-| ------------------------ | --------------------------------------------------------------------------------------- | ------- |
-| `kubeVersion`            | Force target Kubernetes version (using Helm capabilities if not set)                    | `""`    |
-| `nameOverride`           | String to partially override ebjca.fullname template (will maintain the release name)   | `""`    |
-| `fullnameOverride`       | String to fully override ebjca.fullname template                                        | `""`    |
-| `commonLabels`           | Add labels to all the deployed resources                                                | `{}`    |
-| `commonAnnotations`      | Annotations to be added to all deployed resources                                       | `{}`    |
-| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false` |
-| `diagnosticMode.command` | Command to override all containers in the deployment                                    | `[]`    |
-| `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `[]`    |
+| Name                     | Description                                                                             | Value          |
+| ------------------------ | --------------------------------------------------------------------------------------- | -------------- |
+| `kubeVersion`            | Force target Kubernetes version (using Helm capabilities if not set)                    | `""`           |
+| `nameOverride`           | String to partially override ebjca.fullname template (will maintain the release name)   | `""`           |
+| `fullnameOverride`       | String to fully override ebjca.fullname template                                        | `""`           |
+| `commonLabels`           | Add labels to all the deployed resources                                                | `{}`           |
+| `commonAnnotations`      | Annotations to be added to all deployed resources                                       | `{}`           |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`        |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`    |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]` |
 
 
 ### EJBCA parameters

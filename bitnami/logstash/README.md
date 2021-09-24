@@ -63,8 +63,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `clusterDomain`          | Default Kubernetes cluster domain                                                        | `cluster.local` |
 | `extraDeploy`            | Array of extra objects to deploy with the release (evaluated as a template).             | `[]`            |
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)  | `false`         |
-| `diagnosticMode.command` | Command to override all containers in the deployment                                     | `[]`            |
-| `diagnosticMode.args`    | Args to override all containers in the deployment                                        | `[]`            |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                     | `["sleep"]`     |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                        | `["infinity"]`  |
 
 
 ### Logstash parameters
@@ -135,7 +135,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.enabled`                         | Enable Logstash data persistence using PVC                                                                           | `false`                     |
 | `persistence.existingClaim`                   | A manually managed Persistent Volume and Claim                                                                       | `""`                        |
 | `persistence.storageClass`                    | PVC Storage Class for Logstash data volume                                                                           | `""`                        |
-| `persistence.accessModes`                     | PVC Access Mode for Logstash data volume                                                                             | `[]`                        |
+| `persistence.accessModes`                     | PVC Access Mode for Logstash data volume                                                                             | `["ReadWriteOnce"]`         |
 | `persistence.size`                            | PVC Storage Request for Logstash data volume                                                                         | `2Gi`                       |
 | `persistence.annotations`                     | Annotations for the PVC                                                                                              | `{}`                        |
 | `persistence.mountPath`                       | Mount path of the Logstash data volume                                                                               | `/bitnami/logstash/data`    |
