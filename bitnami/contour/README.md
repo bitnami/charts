@@ -390,11 +390,16 @@ By default, Contour is launched with a AWS Classic ELB. To launch contour backed
 
 ```yaml
 envoy:
-  hostNetwork: true
-  dnsPolicy: ClusterFirstWithHostNet
   service:
     annotations:
       service.beta.kubernetes.io/aws-load-balancer-type: nlb
+      service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "https"
+      service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout: "3600"
+      service.beta.kubernetes.io/aws-load-balancer-ssl-cert: arn:aws:acm: arn:aws:acm:XX-XXXX-X:XXXXXXXXX:certificate/XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXX
+
+  containerPorts:
+    http: 80
+    https: 80
 ```
 
 ### Setting Pod's affinity

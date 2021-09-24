@@ -157,11 +157,12 @@ tolerations: []
 ## @section Airflow common parameters
 
 ## Authentication
-## @param auth.existingSecret Name of an existing secret containing password and fernet key ('airflow-password and 'airflow-fernetKey' keys)
+## @param auth.existingSecret Name of an existing secret containing password, fernet key and secret key ('airflow-password', 'airflow-fernetKey' and 'airflow-secretKey' keys)
 ## @param auth.fernetKey Fernet key to secure connections
 ## @param auth.forcePassword Force users to specify a password
 ## @param auth.password Password to access web UI
 ## @param auth.username Username to access web UI
+## @param auth.secretKey Secret key to run your flask app
 ##
 auth:
   existingSecret: ""
@@ -176,6 +177,10 @@ auth:
   forcePassword: false
   password: ""
   username: user
+  ## More info about the secret key at:
+  ## - https://airflow.apache.org/docs/apache-airflow/stable/configurations-ref.html#secret-key
+  ##
+  secretKey: ""
 ## @param configurationConfigMap Name of an existing config map containing the Airflow config file
 ##
 configurationConfigMap: ""
@@ -204,7 +209,7 @@ web:
   image:
     registry: docker.io
     repository: bitnami/airflow
-    tag: 2.1.4-debian-10-r0
+    tag: 2.1.4-debian-10-r4
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -393,7 +398,7 @@ scheduler:
   image:
     registry: docker.io
     repository: bitnami/airflow-scheduler
-    tag: 2.1.3-debian-10-r23
+    tag: 2.1.4-debian-10-r4
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -525,7 +530,7 @@ worker:
   image:
     registry: docker.io
     repository: bitnami/airflow-worker
-    tag: 2.1.3-debian-10-r23
+    tag: 2.1.4-debian-10-r4
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images

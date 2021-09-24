@@ -540,7 +540,7 @@ apiIngress:
   ## @param apiIngress.servicePort Service port to be used
   ## Default is http. Alternative is https.
   ##
-  servicePort: minio-console
+  servicePort: minio-api
   ## @param apiIngress.annotations Ingress annotations
   ## For a full list of possible ingress annotations, please see
   ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md

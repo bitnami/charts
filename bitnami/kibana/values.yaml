@@ -41,7 +41,7 @@ fullnameOverride: ""
 image:
   registry: docker.io
   repository: bitnami/kibana
-  tag: 7.14.1-debian-10-r1
+  tag: 7.14.2-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -137,7 +137,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r187
+    tag: 10-debian-10-r199
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
