@@ -177,26 +177,26 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Database parameters
 
-| Name                                        | Description                                                                          | Value           |
-| ------------------------------------------- | ------------------------------------------------------------------------------------ | --------------- |
-| `mariadb.enabled`                           | Whether to deploy a mariadb server to satisfy the applications database requirements | `true`          |
-| `mariadb.architecture`                      | MariaDB architecture. Allowed values: `standalone` or `replication`                  | `standalone`    |
-| `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                                                 | `""`            |
-| `mariadb.auth.database`                     | Database name to create                                                              | `bitnami_phpbb` |
-| `mariadb.auth.username`                     | Database user to create                                                              | `bn_phpbb`      |
-| `mariadb.auth.password`                     | Password for the database                                                            | `""`            |
-| `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                                                | `true`          |
-| `mariadb.primary.persistence.storageClass`  | MariaDB primary persistent volume storage Class                                      | `""`            |
-| `mariadb.primary.persistence.accessModes`   | PVC Access Modes for phpBB volume                                                    | `[]`            |
-| `mariadb.primary.persistence.size`          | Database Persistent Volume Size                                                      | `8Gi`           |
-| `mariadb.primary.persistence.hostPath`      | Host mount path for MariaDB volume                                                   | `""`            |
-| `mariadb.primary.persistence.existingClaim` | Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas             | `""`            |
-| `externalDatabase.existingSecret`           | Use existing secret (ignores previous password)                                      | `""`            |
-| `externalDatabase.host`                     | Host of the existing database                                                        | `""`            |
-| `externalDatabase.port`                     | Port of the existing database                                                        | `3306`          |
-| `externalDatabase.user`                     | Existing username in the external db                                                 | `bn_phpbb`      |
-| `externalDatabase.password`                 | Password for the above username                                                      | `""`            |
-| `externalDatabase.database`                 | Name of the existing database                                                        | `bitnami_phpbb` |
+| Name                                        | Description                                                                          | Value               |
+| ------------------------------------------- | ------------------------------------------------------------------------------------ | ------------------- |
+| `mariadb.enabled`                           | Whether to deploy a mariadb server to satisfy the applications database requirements | `true`              |
+| `mariadb.architecture`                      | MariaDB architecture. Allowed values: `standalone` or `replication`                  | `standalone`        |
+| `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                                                 | `""`                |
+| `mariadb.auth.database`                     | Database name to create                                                              | `bitnami_phpbb`     |
+| `mariadb.auth.username`                     | Database user to create                                                              | `bn_phpbb`          |
+| `mariadb.auth.password`                     | Password for the database                                                            | `""`                |
+| `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                                                | `true`              |
+| `mariadb.primary.persistence.storageClass`  | MariaDB primary persistent volume storage Class                                      | `""`                |
+| `mariadb.primary.persistence.accessModes`   | PVC Access Modes for phpBB volume                                                    | `["ReadWriteOnce"]` |
+| `mariadb.primary.persistence.size`          | Database Persistent Volume Size                                                      | `8Gi`               |
+| `mariadb.primary.persistence.hostPath`      | Host mount path for MariaDB volume                                                   | `""`                |
+| `mariadb.primary.persistence.existingClaim` | Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas             | `""`                |
+| `externalDatabase.existingSecret`           | Use existing secret (ignores previous password)                                      | `""`                |
+| `externalDatabase.host`                     | Host of the existing database                                                        | `""`                |
+| `externalDatabase.port`                     | Port of the existing database                                                        | `3306`              |
+| `externalDatabase.user`                     | Existing username in the external db                                                 | `bn_phpbb`          |
+| `externalDatabase.password`                 | Password for the above username                                                      | `""`                |
+| `externalDatabase.database`                 | Name of the existing database                                                        | `bitnami_phpbb`     |
 
 
 ### Metrics parameters

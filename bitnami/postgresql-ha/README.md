@@ -86,7 +86,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
 | `postgresqlImage.registry`                      | PostgreSQL with Repmgr image registry                                                                                                                                                                         | `docker.io`                 |
 | `postgresqlImage.repository`                    | PostgreSQL with Repmgr image repository                                                                                                                                                                       | `bitnami/postgresql-repmgr` |
-| `postgresqlImage.tag`                           | PostgreSQL with Repmgr image tag                                                                                                                                                                              | `11.13.0-debian-10-r33`     |
+| `postgresqlImage.tag`                           | PostgreSQL with Repmgr image tag                                                                                                                                                                              | `11.13.0-debian-10-r40`     |
 | `postgresqlImage.pullPolicy`                    | PostgreSQL with Repmgr image pull policy                                                                                                                                                                      | `IfNotPresent`              |
 | `postgresqlImage.pullSecrets`                   | Specify docker-registry secret names as an array                                                                                                                                                              | `[]`                        |
 | `postgresqlImage.debug`                         | Specify if debug logs should be enabled                                                                                                                                                                       | `false`                     |
@@ -204,7 +204,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | -------------------- |
 | `pgpoolImage.registry`                      | Pgpool image registry                                                                                              | `docker.io`          |
 | `pgpoolImage.repository`                    | Pgpool image repository                                                                                            | `bitnami/pgpool`     |
-| `pgpoolImage.tag`                           | Pgpool image tag                                                                                                   | `4.2.5-debian-10-r1` |
+| `pgpoolImage.tag`                           | Pgpool image tag                                                                                                   | `4.2.5-debian-10-r8` |
 | `pgpoolImage.pullPolicy`                    | Pgpool image pull policy                                                                                           | `IfNotPresent`       |
 | `pgpoolImage.pullSecrets`                   | Specify docker-registry secret names as an array                                                                   | `[]`                 |
 | `pgpoolImage.debug`                         | Specify if debug logs should be enabled                                                                            | `false`              |
@@ -321,7 +321,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | -------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
 | `metricsImage.registry`                      | PostgreSQL Prometheus exporter image registry                                                                                                             | `docker.io`                 |
 | `metricsImage.repository`                    | PostgreSQL Prometheus exporter image repository                                                                                                           | `bitnami/postgres-exporter` |
-| `metricsImage.tag`                           | PostgreSQL Prometheus exporter image tag                                                                                                                  | `0.10.0-debian-10-r61`      |
+| `metricsImage.tag`                           | PostgreSQL Prometheus exporter image tag                                                                                                                  | `0.10.0-debian-10-r68`      |
 | `metricsImage.pullPolicy`                    | PostgreSQL Prometheus exporter image pull policy                                                                                                          | `IfNotPresent`              |
 | `metricsImage.pullSecrets`                   | Specify docker-registry secret names as an array                                                                                                          | `[]`                        |
 | `metricsImage.debug`                         | Specify if debug logs should be enabled                                                                                                                   | `false`                     |
@@ -366,7 +366,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | --------------------------------------------- | --------------------------------------------------- | ----------------------- |
 | `volumePermissionsImage.registry`             | Init container volume-permissions image registry    | `docker.io`             |
 | `volumePermissionsImage.repository`           | Init container volume-permissions image repository  | `bitnami/bitnami-shell` |
-| `volumePermissionsImage.tag`                  | Init container volume-permissions image tag         | `10-debian-10-r193`     |
+| `volumePermissionsImage.tag`                  | Init container volume-permissions image tag         | `10-debian-10-r200`     |
 | `volumePermissionsImage.pullPolicy`           | Init container volume-permissions image pull policy | `Always`                |
 | `volumePermissionsImage.pullSecrets`          | Specify docker-registry secret names as an array    | `[]`                    |
 | `volumePermissions.enabled`                   | Enable init container to adapt volume permissions   | `false`                 |
@@ -383,7 +383,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `persistence.existingClaim` | A manually managed Persistent Volume and Claim                                          | `""`                  |
 | `persistence.storageClass`  | Persistent Volume Storage Class                                                         | `""`                  |
 | `persistence.mountPath`     | The path the volume will be mounted at, useful when using different PostgreSQL images.  | `/bitnami/postgresql` |
-| `persistence.accessModes`   | List of access modes of data volume                                                     | `[]`                  |
+| `persistence.accessModes`   | List of access modes of data volume                                                     | `["ReadWriteOnce"]`   |
 | `persistence.size`          | Persistent Volume Claim size                                                            | `8Gi`                 |
 | `persistence.annotations`   | Persistent Volume Claim annotations                                                     | `{}`                  |
 | `persistence.selector`      | Selector to match an existing Persistent Volume (this value is evaluated as a template) | `{}`                  |

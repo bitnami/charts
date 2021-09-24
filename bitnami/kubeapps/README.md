@@ -477,7 +477,7 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | Name                                                 | Description                                                                                                             | Value                   |
 | ---------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ----------------------- |
 | `kubeappsapis.unsafeUseDemoSA`                       | If true, replace the user's credentials by a full-granted demo service account. Just intended for development purposes. | `false`                 |
-| `kubeappsapis.enabledPlugins`                        | Enabled plugins for the Kubeapps-APIs service                                                                           | `[]`                    |
+| `kubeappsapis.enabledPlugins`                        | Enabled plugins for the Kubeapps-APIs service                                                                           | `["helm"]`              |
 | `kubeappsapis.image.registry`                        | Kubeapps-APIs image registry                                                                                            | `docker.io`             |
 | `kubeappsapis.image.repository`                      | Kubeapps-APIs image repository                                                                                          | `bitnami/kubeapps-apis` |
 | `kubeappsapis.image.tag`                             | Kubeapps-APIs image tag (immutable tags are recommended)                                                                | `2.4.0-debian-10-r18`   |
