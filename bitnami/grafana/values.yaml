@@ -291,6 +291,7 @@ resources:
 ##
 livenessProbe:
   enabled: true
+  scheme: HTTP
   initialDelaySeconds: 120
   periodSeconds: 10
   timeoutSeconds: 5
@@ -307,6 +308,7 @@ livenessProbe:
 ##
 readinessProbe:
   enabled: true
+  scheme: HTTP
   initialDelaySeconds: 30
   periodSeconds: 10
   timeoutSeconds: 5
