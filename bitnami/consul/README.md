@@ -70,8 +70,8 @@ $ helm delete --purge my-release
 | `clusterDomain`          | Kubernetes cluster domain name                                                          | `cluster.local` |
 | `extraDeploy`            | Array of extra objects to deploy with the release                                       | `[]`            |
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
-| `diagnosticMode.command` | Command to override all containers in the deployment                                    | `[]`            |
-| `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `[]`            |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`     |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]`  |
 
 
 ### HashiCorp Consul parameters
@@ -176,13 +176,13 @@ $ helm delete --purge my-release
 
 ### Persistence parameters
 
-| Name                       | Description                                                                                               | Value  |
-| -------------------------- | --------------------------------------------------------------------------------------------------------- | ------ |
-| `persistence.enabled`      | Enable HashiCorp Consul data persistence using PVC, use a Persistent Volume Claim, If false, use emptyDir | `true` |
-| `persistence.storageClass` | Persistent Volume storage class                                                                           | `""`   |
-| `persistence.annotations`  | Persistent Volume Claim annotations                                                                       | `{}`   |
-| `persistence.accessModes`  | Persistent Volume Access Mode                                                                             | `[]`   |
-| `persistence.size`         | PVC Storage Request for HashiCorp Consul data volume                                                      | `8Gi`  |
+| Name                       | Description                                                                                               | Value               |
+| -------------------------- | --------------------------------------------------------------------------------------------------------- | ------------------- |
+| `persistence.enabled`      | Enable HashiCorp Consul data persistence using PVC, use a Persistent Volume Claim, If false, use emptyDir | `true`              |
+| `persistence.storageClass` | Persistent Volume storage class                                                                           | `""`                |
+| `persistence.annotations`  | Persistent Volume Claim annotations                                                                       | `{}`                |
+| `persistence.accessModes`  | Persistent Volume Access Mode                                                                             | `["ReadWriteOnce"]` |
+| `persistence.size`         | PVC Storage Request for HashiCorp Consul data volume                                                      | `8Gi`               |
 
 
 ### Volume Permissions parameters

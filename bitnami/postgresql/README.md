@@ -71,15 +71,15 @@ $ kubectl delete pvc -l release=my-release
 
 ### Common parameters
 
-| Name                     | Description                                                                                  | Value   |
-| ------------------------ | -------------------------------------------------------------------------------------------- | ------- |
-| `nameOverride`           | String to partially override common.names.fullname template (will maintain the release name) | `""`    |
-| `fullnameOverride`       | String to fully override common.names.fullname template                                      | `""`    |
-| `extraDeploy`            | Array of extra objects to deploy with the release (evaluated as a template)                  | `[]`    |
-| `commonAnnotations`      | Add annotations to all the deployed resources                                                | `{}`    |
-| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)      | `false` |
-| `diagnosticMode.command` | Command to override all containers in the deployment                                         | `[]`    |
-| `diagnosticMode.args`    | Args to override all containers in the deployment                                            | `[]`    |
+| Name                     | Description                                                                                  | Value          |
+| ------------------------ | -------------------------------------------------------------------------------------------- | -------------- |
+| `nameOverride`           | String to partially override common.names.fullname template (will maintain the release name) | `""`           |
+| `fullnameOverride`       | String to fully override common.names.fullname template                                      | `""`           |
+| `extraDeploy`            | Array of extra objects to deploy with the release (evaluated as a template)                  | `[]`           |
+| `commonAnnotations`      | Add annotations to all the deployed resources                                                | `{}`           |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)      | `false`        |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                         | `["sleep"]`    |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                            | `["infinity"]` |
 
 
 ### PostgreSQL parameters
@@ -88,14 +88,14 @@ $ kubectl delete pvc -l release=my-release
 | --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
 | `image.registry`                              | PostgreSQL image registry                                                                                                                                 | `docker.io`                 |
 | `image.repository`                            | PostgreSQL image repository                                                                                                                               | `bitnami/postgresql`        |
-| `image.tag`                                   | PostgreSQL image tag (immutable tags are recommended)                                                                                                     | `11.13.0-debian-10-r33`     |
+| `image.tag`                                   | PostgreSQL image tag (immutable tags are recommended)                                                                                                     | `11.13.0-debian-10-r40`     |
 | `image.pullPolicy`                            | PostgreSQL image pull policy                                                                                                                              | `IfNotPresent`              |
 | `image.pullSecrets`                           | Specify image pull secrets                                                                                                                                | `[]`                        |
 | `image.debug`                                 | Specify if debug values should be set                                                                                                                     | `false`                     |
 | `volumePermissions.enabled`                   | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                     |
 | `volumePermissions.image.registry`            | Init container volume-permissions image registry                                                                                                          | `docker.io`                 |
 | `volumePermissions.image.repository`          | Init container volume-permissions image repository                                                                                                        | `bitnami/bitnami-shell`     |
-| `volumePermissions.image.tag`                 | Init container volume-permissions image tag (immutable tags are recommended)                                                                              | `10-debian-10-r193`         |
+| `volumePermissions.image.tag`                 | Init container volume-permissions image tag (immutable tags are recommended)                                                                              | `10-debian-10-r200`         |
 | `volumePermissions.image.pullPolicy`          | Init container volume-permissions image pull policy                                                                                                       | `Always`                    |
 | `volumePermissions.image.pullSecrets`         | Init container volume-permissions image pull secrets                                                                                                      | `[]`                        |
 | `volumePermissions.securityContext.runAsUser` | User ID for the init container                                                                                                                            | `0`                         |
@@ -190,7 +190,7 @@ $ kubectl delete pvc -l release=my-release
 | `persistence.mountPath`                       | The path the volume will be mounted at, useful when using different                                                                                       | `/bitnami/postgresql`       |
 | `persistence.subPath`                         | The subdirectory of the volume to mount to                                                                                                                | `""`                        |
 | `persistence.storageClass`                    | PVC Storage Class for PostgreSQL volume                                                                                                                   | `""`                        |
-| `persistence.accessModes`                     | PVC Access Mode for PostgreSQL volume                                                                                                                     | `[]`                        |
+| `persistence.accessModes`                     | PVC Access Mode for PostgreSQL volume                                                                                                                     | `["ReadWriteOnce"]`         |
 | `persistence.size`                            | PVC Storage Request for PostgreSQL volume                                                                                                                 | `8Gi`                       |
 | `persistence.annotations`                     | Annotations for the PVC                                                                                                                                   | `{}`                        |
 | `persistence.selector`                        | Selector to match an existing Persistent Volume (this value is evaluated as a template)                                                                   | `{}`                        |
@@ -288,7 +288,7 @@ $ kubectl delete pvc -l release=my-release
 | `metrics.prometheusRule.rules`                | (https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/) to be created                                                                | `[]`                        |
 | `metrics.image.registry`                      | PostgreSQL Exporter image registry                                                                                                                        | `docker.io`                 |
 | `metrics.image.repository`                    | PostgreSQL Exporter image repository                                                                                                                      | `bitnami/postgres-exporter` |
-| `metrics.image.tag`                           | PostgreSQL Exporter image tag (immutable tags are recommended)                                                                                            | `0.10.0-debian-10-r61`      |
+| `metrics.image.tag`                           | PostgreSQL Exporter image tag (immutable tags are recommended)                                                                                            | `0.10.0-debian-10-r68`      |
 | `metrics.image.pullPolicy`                    | PostgreSQL Exporter image pull policy                                                                                                                     | `IfNotPresent`              |
 | `metrics.image.pullSecrets`                   | Specify image pull secrets                                                                                                                                | `[]`                        |
 | `metrics.customMetrics`                       | Define additional custom metrics                                                                                                                          | `{}`                        |
