@@ -87,7 +87,7 @@ tomcatPassword: ""
 ## ref: https://github.com/bitnami/charts/tree/master/bitnami/tomcat#configuration
 ##
 tomcatAllowRemoteManagement: 0
-## @param catalinaOpts Java runtime option used by tomcat JVM    
+## @param catalinaOpts Java runtime option used by tomcat JVM
 ##
 catalinaOpts: ""
 ## @param command Override default container command (useful when using custom images)
@@ -484,7 +484,7 @@ volumePermissions:
 ##
 metrics:
   ## Prometheus JMX Exporter: exposes the majority of tomcat jvm metrics
-  ##  
+  ## 
   jmx:
     ## @param metrics.jmx.enabled Whether or not to expose JMX metrics to Prometheus
     ##
@@ -518,7 +518,7 @@ metrics:
       pullSecrets: []
     ## @param metrics.jmx.config [string] Configuration file for JMX exporter
     ## Specify content for jmx-tomcat-prometheus.yml. Evaluated as a template
-    ##    
+    ## 
     config: |
       ---
       jmxUrl: service:jmx:rmi:///jndi/rmi://127.0.0.1:5555/jmxrmi
@@ -526,7 +526,7 @@ metrics:
       ssl: false
       lowercaseOutputName: true
       lowercaseOutputLabelNames: true
-      attrNameSnakeCase: true       
+      attrNameSnakeCase: true
     ## Prometheus JMX Exporter' resource requests and limits
     ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
     ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -548,24 +548,24 @@ metrics:
       ##    memory: 128Mi
       requests: {}
     ## @param metrics.jmx.portName specify the port name used by jmx_exporter
-    ##  
+    ##
     portName: metrics
     ## @param metrics.jmx.port specify the port bind by jmx_exporter
     ##
     port: 5556
     ## @param metrics.jmx.existingConfigmap Name of existing ConfigMap with JMX exporter configuration
     ## NOTE: This will override metrics.jmx.config
-    ##      
+    ##
     existingConfigmap: ""
   ## Prometheus pod Monitor
   ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#podmonitorspec
-  ##    
+  ## 
   podMonitor:
     ## @param metrics.podMonitor.podTargetLabels Used to keep given pod's labels in target
     ## e.g:
     ## - app.kubernetes.io/name
     ##
-    podTargetLabels: []    
+    podTargetLabels: []
     ## @param metrics.podMonitor.enabled Create PodMonitor Resource for scraping metrics using PrometheusOperator
     ##
     enabled: false
