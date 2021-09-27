@@ -480,14 +480,13 @@ forwarder:
       path: /opt/bitnami/fluentd/logs/buffers
   ## @param forwarder.lifecycle Additional lifecycles to add to the pods
   ## For example:
-  ## lifecycle:
-  ##   - postStart:
-  ##       exec:
-  ##         command: ["/bin/sh", "-c", "echo Hello from the postStart handler > /usr/share/message"]
-  ##   - preStop:
-  ##       exec:
-  ##         command: ["/bin/sh","-c","nginx -s quit; while killall -0 nginx; do sleep 1; done"]
-  lifecycle: []
+  ## postStart:
+  ##   exec:
+  ##     command: ["/bin/sh", "-c", "echo Hello from the postStart handler > /usr/share/message"]
+  ## preStop:
+  ##   exec:
+  ##     command: ["/bin/sh","-c","nginx -s quit; while killall -0 nginx; do sleep 1; done"]
+  lifecycle: {}
   ## @param forwarder.initContainers Additional init containers to add to the pods
   ## For example:
   ## initContainers:
@@ -953,14 +952,13 @@ aggregator:
     size: 10Gi
   ## @param aggregator.lifecycle Additional lifecycles to add to the pods
   ## For example:
-  ## lifecycle:
-  ##   - postStart:
-  ##       exec:
-  ##         command: ["/bin/sh", "-c", "echo Hello from the postStart handler > /usr/share/message"]
-  ##   - preStop:
-  ##       exec:
-  ##         command: ["/bin/sh","-c","nginx -s quit; while killall -0 nginx; do sleep 1; done"]
-  lifecycle: []
+  ## postStart:
+  ##   exec:
+  ##     command: ["/bin/sh", "-c", "echo Hello from the postStart handler > /usr/share/message"]
+  ## preStop:
+  ##   exec:
+  ##     command: ["/bin/sh","-c","nginx -s quit; while killall -0 nginx; do sleep 1; done"]
+  lifecycle: {}
   ## @param aggregator.initContainers Add init containers to aggregator pods
   ## Example
   ##
