@@ -13,7 +13,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  podTargetLabels: {{ toYaml .Values.metrics.podMonitor.podTargetLabels | nindent 4}}
+  podTargetLabels: {{ toYaml .Values.metrics.podMonitor.podTargetLabels | nindent 4 }}
   podMetricsEndpoints:
     - port: "{{ .Values.metrics.jmx.portName |default "metrics" }}"
       path: /metrics
