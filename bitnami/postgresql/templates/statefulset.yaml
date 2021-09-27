@@ -578,7 +578,7 @@ spec:
           emptyDir: {}
         {{- end }}
         {{- if .Values.primary.extraVolumes }}
-        {{- toYaml .Values.primary.extraVolumes | nindent 8 }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.primary.extraVolumes "context" $ ) | nindent 8 }}
         {{- end }}
         {{- if and .Values.metrics.enabled .Values.metrics.customMetrics }}
         - name: custom-metrics

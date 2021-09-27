@@ -61,13 +61,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `clusterDomain`    | Kubernetes Cluster Domain                                                                    | `cluster.local` |
 
 
-### etcd parameters
+### external-dns parameters
 
 | Name                                          | Description                                                                                                                                                                  | Value                     |
 | --------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
 | `image.registry`                              | ExternalDNS image registry                                                                                                                                                   | `docker.io`               |
 | `image.repository`                            | ExternalDNS image repository                                                                                                                                                 | `bitnami/external-dns`    |
-| `image.tag`                                   | ExternalDNS Image tag (immutable tags are recommended)                                                                                                                       | `0.9.0-debian-10-r20`     |
+| `image.tag`                                   | ExternalDNS Image tag (immutable tags are recommended)                                                                                                                       | `0.9.0-debian-10-r50`     |
 | `image.pullPolicy`                            | ExternalDNS image pull policy                                                                                                                                                | `IfNotPresent`            |
 | `image.pullSecrets`                           | ExternalDNS image pull secrets                                                                                                                                               | `[]`                      |
 | `hostAliases`                                 | Deployment pod host aliases                                                                                                                                                  | `[]`                      |

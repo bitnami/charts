@@ -68,13 +68,20 @@
           }
         },
         "certManager": {
-          "type": "boolean",
+          "type": "object",
           "form": true,
           "title": "Use cert-manager to auto-generate the TLS certificate",
           "description": "Add the corresponding annotations for cert-manager to auto-generate the TLS certificate",
           "hidden": {
             "value": false,
             "path": "ingress/enabled"
+          },
+          "properties": {
+            "clusterIssuer": {
+              "type": "string",
+              "title": "Cert-manager cluster issuer",
+              "form": true
+            }
           }
         }
       }

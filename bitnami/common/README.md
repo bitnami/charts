@@ -93,7 +93,7 @@ The following table lists the helpers available in the library which are scoped 
 
 ### Names
 
-| Helper identifier       | Description                                                | Expected Inpput   |
+| Helper identifier       | Description                                                | Expected Input   |
 |-------------------------|------------------------------------------------------------|-------------------|
 | `common.names.name`     | Expand the name of the chart or use `.Values.nameOverride` | `.` Chart context |
 | `common.names.fullname` | Create a default fully qualified app name.                 | `.` Chart context |
@@ -112,7 +112,7 @@ The following table lists the helpers available in the library which are scoped 
 
 | Helper identifier             | Description                           | Expected Input                                                                                                      |
 |-------------------------------|---------------------------------------|---------------------------------------------------------------------------------------------------------------------|
-| `common.affinities.node.soft` | Return a soft nodeAffinity definition | `dict "persistence" .Values.path.to.the.persistence "global" $`, see [Persistence](#persistence) for the structure. |
+| `common.storage.class` | Return  the proper Storage Class | `dict "persistence" .Values.path.to.the.persistence "global" $`, see [Persistence](#persistence) for the structure. |
 
 ### TplValues
 

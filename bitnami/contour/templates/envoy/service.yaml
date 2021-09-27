@@ -44,7 +44,7 @@ spec:
     - name: http
       port: {{ .Values.envoy.service.ports.http }}
       protocol: TCP
-      targetPort: http
+      targetPort: {{ .Values.envoy.containerPorts.http }}
       {{- if and (or (eq .Values.envoy.service.type "NodePort") (eq .Values.envoy.service.type "LoadBalancer")) (not (empty .Values.envoy.service.nodePorts.http)) }}
       nodePort: {{ .Values.envoy.service.nodePorts.http }}
       {{- else if eq .Values.envoy.service.type "ClusterIP" }}
@@ -53,7 +53,7 @@ spec:
     - name: https
       port: {{ .Values.envoy.service.ports.https }}
       protocol: TCP
-      targetPort: https
+      targetPort: {{ .Values.envoy.containerPorts.https }}
       {{- if and (or (eq .Values.envoy.service.type "NodePort") (eq .Values.envoy.service.type "LoadBalancer")) (not (empty .Values.envoy.service.nodePorts.https)) }}
       nodePort: {{ .Values.envoy.service.nodePorts.https }}
       {{- else if eq .Values.envoy.service.type "ClusterIP" }}

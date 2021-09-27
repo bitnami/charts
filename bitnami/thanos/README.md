@@ -103,7 +103,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | ----------------------------- | ----------------------------------------------------------------------------------------- | ------------------- |
 | `image.registry`              | Thanos image registry                                                                     | `docker.io`         |
 | `image.repository`            | Thanos image repository                                                                   | `bitnami/thanos`    |
-| `image.tag`                   | Thanos image tag (immutable tags are recommended)                                         | `0.22.0-scratch-r2` |
+| `image.tag`                   | Thanos image tag (immutable tags are recommended)                                         | `0.22.0-scratch-r4` |
 | `image.pullPolicy`            | Thanos image pull policy                                                                  | `IfNotPresent`      |
 | `image.pullSecrets`           | Specify docker-registry secret names as an array                                          | `[]`                |
 | `objstoreConfig`              | The [objstore configuration](https://thanos.io/storage.md/)                               | `""`                |
@@ -124,7 +124,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `query.serviceAccount.annotations`                        | Annotations for Thanos Query Service Account                                                                              | `{}`                     |
 | `query.serviceAccount.existingServiceAccount`             | Provide an existing service account for query                                                                             | `""`                     |
 | `query.hostAliases`                                       | Deployment pod host aliases                                                                                               | `[]`                     |
-| `query.replicaLabel`                                      | Replica indicator(s) along which data is deduplicated                                                                     | `[]`                     |
+| `query.replicaLabel`                                      | Replica indicator(s) along which data is deduplicated                                                                     | `["replica"]`            |
 | `query.dnsDiscovery.enabled`                              | Enable store APIs discovery via DNS                                                                                       | `true`                   |
 | `query.dnsDiscovery.sidecarsService`                      | Sidecars service name to discover them using DNS discovery                                                                | `""`                     |
 | `query.dnsDiscovery.sidecarsNamespace`                    | Sidecars namespace to discover them using DNS discovery                                                                   | `""`                     |
@@ -467,7 +467,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `compactor.persistence.enabled`                               | Enable data persistence                                                                                              | `true`                   |
 | `compactor.persistence.existingClaim`                         | Use a existing PVC which must be created manually before bound                                                       | `""`                     |
 | `compactor.persistence.storageClass`                          | Specify the `storageClass` used to provision the volume                                                              | `""`                     |
-| `compactor.persistence.accessModes`                           | Access modes of data volume                                                                                          | `[]`                     |
+| `compactor.persistence.accessModes`                           | Access modes of data volume                                                                                          | `["ReadWriteOnce"]`      |
 | `compactor.persistence.size`                                  | Size of data volume                                                                                                  | `8Gi`                    |
 
 
@@ -543,7 +543,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `storegateway.persistence.enabled`                               | Enable data persistence                                                                                                                  | `true`                      |
 | `storegateway.persistence.existingClaim`                         | Use a existing PVC which must be created manually before bound                                                                           | `""`                        |
 | `storegateway.persistence.storageClass`                          | Specify the `storageClass` used to provision the volume                                                                                  | `""`                        |
-| `storegateway.persistence.accessModes`                           | Access modes of data volume                                                                                                              | `[]`                        |
+| `storegateway.persistence.accessModes`                           | Access modes of data volume                                                                                                              | `["ReadWriteOnce"]`         |
 | `storegateway.persistence.size`                                  | Size of data volume                                                                                                                      | `8Gi`                       |
 | `storegateway.autoscaling.enabled`                               | Enable autoscaling for Thanos Store Gateway                                                                                              | `false`                     |
 | `storegateway.autoscaling.minReplicas`                           | Minimum number of Thanos Store Gateway replicas                                                                                          | `""`                        |
@@ -648,7 +648,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `ruler.persistence.enabled`                               | Enable data persistence                                                                                      | `true`                   |
 | `ruler.persistence.existingClaim`                         | Use a existing PVC which must be created manually before bound                                               | `""`                     |
 | `ruler.persistence.storageClass`                          | Specify the `storageClass` used to provision the volume                                                      | `""`                     |
-| `ruler.persistence.accessModes`                           | Access modes of data volume                                                                                  | `[]`                     |
+| `ruler.persistence.accessModes`                           | Access modes of data volume                                                                                  | `["ReadWriteOnce"]`      |
 | `ruler.persistence.size`                                  | Size of data volume                                                                                          | `8Gi`                    |
 | `ruler.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                              | `false`                  |
 | `ruler.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                               | `1`                      |
@@ -763,7 +763,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `receive.persistence.enabled`                               | Enable data persistence                                                                                                            | `true`                   |
 | `receive.persistence.existingClaim`                         | Use a existing PVC which must be created manually before bound                                                                     | `""`                     |
 | `receive.persistence.storageClass`                          | Specify the `storageClass` used to provision the volume                                                                            | `""`                     |
-| `receive.persistence.accessModes`                           | Access modes of data volume                                                                                                        | `[]`                     |
+| `receive.persistence.accessModes`                           | Access modes of data volume                                                                                                        | `["ReadWriteOnce"]`      |
 | `receive.persistence.size`                                  | Size of data volume                                                                                                                | `8Gi`                    |
 | `receive.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                    | `false`                  |
 | `receive.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                     | `1`                      |
@@ -805,7 +805,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `volumePermissions.enabled`           | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`    | Init container volume-permissions image registry                                                                     | `docker.io`             |
 | `volumePermissions.image.repository`  | Init container volume-permissions image repository                                                                   | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                                          | `10-debian-10-r159`     |
+| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                                          | `10-debian-10-r194`     |
 | `volumePermissions.image.pullPolicy`  | Init container volume-permissions image pull policy                                                                  | `Always`                |
 | `volumePermissions.image.pullSecrets` | Specify docker-registry secret names as an array                                                                     | `[]`                    |
 
@@ -1017,6 +1017,10 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 6.0.0
+
+This major updates the MinIO&reg; subchart to its newest major, 8.0.0, which now has two separated services for MinIO&reg; Console and MinIO&reg; API. Check [MinIO&reg; Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/minio#to-800) for more information.
 
 ### To 5.4.0
 

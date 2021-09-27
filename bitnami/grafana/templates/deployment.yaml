@@ -114,7 +114,11 @@ spec:
             {{- end }}
             {{- range .Values.dashboardsConfigMaps }}
             - name: {{ .configMapName }}
+            {{- if .folderName }}
+              mountPath: /opt/bitnami/grafana/dashboards/{{ .folderName }}/{{ .fileName }}
+            {{- else }}
               mountPath: /opt/bitnami/grafana/dashboards/{{ .fileName }}
+            {{- end }}
               subPath: {{ .fileName }}
             {{- end }}
             {{- if .Values.datasources.secretName }}
