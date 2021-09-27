@@ -10,12 +10,12 @@ dependencies:
   version: 17.0.3
 - name: logstash
   repository: https://charts.bitnami.com/bitnami
-  version: 3.6.6
+  version: 3.6.7
 - name: wavefront
   repository: https://charts.bitnami.com/bitnami
-  version: 3.1.11
+  version: 3.1.12
 - name: common
   repository: https://charts.bitnami.com/bitnami
-  version: 1.9.0
-digest: sha256:bb19026f61e735f759f095fe169c51a257d67995cc3f1a4ae135f83551c76484
-generated: "2021-09-22T15:00:44.573024788Z"
+  version: 1.9.1
+digest: sha256:7c415f9c997d39e32e33fc5b529c554a8f98b288f7e1227d16913950596cffc2
+generated: "2021-09-23T07:44:29.936487547Z"
