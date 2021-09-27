@@ -547,7 +547,7 @@ metrics:
       ##    cpu: 100m
       ##    memory: 128Mi
       requests: {}
-    ## @param metrics.jmx.port specify the port name used by jmx_exporter
+    ## @param metrics.jmx.portName specify the port name used by jmx_exporter
     ##  
     portName: metrics
     ## @param metrics.jmx.port specify the port bind by jmx_exporter
