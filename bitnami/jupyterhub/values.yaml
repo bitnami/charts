@@ -526,7 +526,7 @@ hub:
     serviceMonitor:
       ## @param hub.metrics.serviceMonitor.enabled If the operator is installed in your cluster, set to true to create a Service Monitor Entry
       ##
-      enabled: true
+      enabled: false
       ## @param hub.metrics.serviceMonitor.namespace Namespace which Prometheus is running in
       ##
       namespace: ""
@@ -992,7 +992,7 @@ proxy:
     serviceMonitor:
       ## @param proxy.metrics.serviceMonitor.enabled If the operator is installed in your cluster, set to true to create a Service Monitor Entry
       ##
-      enabled: true
+      enabled: false
       ## @param proxy.metrics.serviceMonitor.namespace Namespace which Prometheus is running in
       ##
       namespace: ""
