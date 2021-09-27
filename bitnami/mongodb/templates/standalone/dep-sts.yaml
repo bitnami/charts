@@ -159,7 +159,7 @@ spec:
               DNS.4 = localhost
               DNS.5 = 127.0.0.1
               {{- if .Values.tls.extraDnsNames }}
-              {{- range $index, $dnsName := .Values.testempty }}
+              {{- range $index, $dnsName := .Values.extraDnsNames }}
               - {{ $dnsName }}
               {{- end }}
               {{- end }}
