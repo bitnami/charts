@@ -59,6 +59,9 @@ spec:
       {{- if .Values.data.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.data.tolerations "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.data.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.data.topologySpreadConstraints "context" $) | nindent 8 }}
+      {{- end }}
       serviceAccountName: {{ template "elasticsearch.data.serviceAccountName" . }}
       {{- if .Values.data.securityContext.enabled }}
       securityContext:
