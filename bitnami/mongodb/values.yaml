@@ -179,6 +179,8 @@ tls:
   ## @param tls.image.tag Init container TLS certs setup image tag (immutable tags are recommended)
   ## @param tls.image.pullPolicy Init container TLS certs setup image pull policy
   ##
+  extraDnsNames: []
+  
   image:
     registry: docker.io
     repository: bitnami/nginx
