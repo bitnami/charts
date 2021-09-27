@@ -84,7 +84,7 @@ spec:
             - --error-target=http://{{ template "common.names.fullname" . }}-hub:{{ .Values.hub.service.port }}/hub/error
             - --port={{ .Values.proxy.containerPort.http }}
             {{- if .Values.proxy.metrics.serviceMonitor.enabled }}
-            - --metrics-ip=0.0.0.0
+            - "--metrics-ip=::"
             - --metrics-port={{ .Values.proxy.containerPort.metrics }}
             {{- end }}
             {{- if .Values.proxy.image.debug }}
