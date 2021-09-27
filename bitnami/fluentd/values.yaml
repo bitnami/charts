@@ -479,7 +479,8 @@ forwarder:
     hostPath:
       path: /opt/bitnami/fluentd/logs/buffers
   ## @param forwarder.lifecycle Additional lifecycles to add to the pods
-  ## For example:
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/attach-handler-lifecycle-event/
+  ## e.g:
   ## postStart:
   ##   exec:
   ##     command: ["/bin/sh", "-c", "echo Hello from the postStart handler > /usr/share/message"]
@@ -951,7 +952,8 @@ aggregator:
     accessMode: ReadWriteOnce
     size: 10Gi
   ## @param aggregator.lifecycle Additional lifecycles to add to the pods
-  ## For example:
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/attach-handler-lifecycle-event/
+  ## e.g:
   ## postStart:
   ##   exec:
   ##     command: ["/bin/sh", "-c", "echo Hello from the postStart handler > /usr/share/message"]
