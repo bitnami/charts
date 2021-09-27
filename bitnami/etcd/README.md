@@ -77,7 +77,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------- | ----------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`                      | etcd image registry                                                                             | `docker.io`           |
 | `image.repository`                    | etcd image name                                                                                 | `bitnami/etcd`        |
-| `image.tag`                           | etcd image tag                                                                                  | `3.5.0-debian-10-r93` |
+| `image.tag`                           | etcd image tag                                                                                  | `3.5.0-debian-10-r94` |
 | `image.pullPolicy`                    | etcd image pull policy                                                                          | `IfNotPresent`        |
 | `image.pullSecrets`                   | etcd image pull secrets                                                                         | `[]`                  |
 | `image.debug`                         | Enable image debug mode                                                                         | `false`               |
