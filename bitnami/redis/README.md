@@ -84,8 +84,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `clusterDomain`          | Kubernetes cluster domain name                                                          | `cluster.local` |
 | `extraDeploy`            | Array of extra objects to deploy with the release                                       | `[]`            |
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
-| `diagnosticMode.command` | Command to override all containers in the deployment                                    | `[]`            |
-| `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `[]`            |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`     |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]`  |
 
 
 ### Redis&trade; Image parameters
@@ -565,6 +565,10 @@ Find more information about how to deal with common errors related to Bitnami’
 ## Upgrading
 
 A major chart version change (like v1.2.3 -> v2.0.0) indicates that there is an incompatible breaking change needing manual actions.
+
+### To 15.0.0
+
+The parameter to enable the usage of StaticIDs was removed. The behavior is to [always use StaticIDs](https://github.com/bitnami/charts/pull/7278).
 
 ### To 14.8.0
 

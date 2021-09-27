@@ -75,7 +75,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/redis
-  tag: 6.2.5-debian-10-r34
+  tag: 6.2.5-debian-10-r63
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -779,7 +779,7 @@ sentinel:
   image:
     registry: docker.io
     repository: bitnami/redis-sentinel
-    tag: 6.2.5-debian-10-r34
+    tag: 6.2.5-debian-10-r63
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1108,7 +1108,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/redis-exporter
-    tag: 1.26.0-debian-10-r5
+    tag: 1.27.1-debian-10-r4
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1288,7 +1288,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r174
+    tag: 10-debian-10-r203
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1334,7 +1334,7 @@ sysctl:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r174
+    tag: 10-debian-10-r203
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

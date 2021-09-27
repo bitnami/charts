@@ -197,6 +197,9 @@ spec:
               containerPort: {{ .Values.containerPorts.http }}
             - name: https
               containerPort: {{ .Values.containerPorts.https }}
+            {{- if .Values.extraContainerPorts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraContainerPorts "context" $) | nindent 12 }}
+            {{- end }}
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
             httpGet:

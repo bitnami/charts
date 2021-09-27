@@ -49,14 +49,14 @@ To access the MinIO&reg; web UI:
    NOTE: It may take a few minutes for the LoadBalancer IP to be available.
          Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ include "common.names.fullname" . }}'
 
-   {{- $port:=.Values.service.port | toString }}
+   {{- $port:=.Values.service.ports.console | toString }}
    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
-   echo "MinIO&reg; web URL: http://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.service.port }}{{ end }}/minio"
+   echo "MinIO&reg; web URL: http://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.service.ports.console }}{{ end }}/minio"
 
 {{- else if contains "ClusterIP"  .Values.service.type }}
 
-   echo "MinIO&reg; web URL: http://127.0.0.1:9000/minio"
-   kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "common.names.fullname" . }} 9000:{{ .Values.service.port }}
+   echo "MinIO&reg; web URL: http://127.0.0.1:{{ .Values.containerPorts.console }}/minio"
+   kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "common.names.fullname" . }} {{ .Values.containerPorts.console }}:{{ .Values.service.ports.console }}
 
 {{- else if contains "NodePort" .Values.service.type }}
 

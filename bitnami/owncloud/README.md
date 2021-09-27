@@ -73,7 +73,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------ | ------------------------------------------------------------------------------------------------------------ | ---------------------- |
 | `image.registry`                     | ownCloud image registry                                                                                      | `docker.io`            |
 | `image.repository`                   | ownCloud image repository                                                                                    | `bitnami/owncloud`     |
-| `image.tag`                          | ownCloud Image tag (immutable tags are recommended)                                                          | `10.8.0-debian-10-r20` |
+| `image.tag`                          | ownCloud Image tag (immutable tags are recommended)                                                          | `10.8.0-debian-10-r36` |
 | `image.pullPolicy`                   | ownCloud image pull policy                                                                                   | `IfNotPresent`         |
 | `image.pullSecrets`                  | Specify docker-registry secret names as an array                                                             | `[]`                   |
 | `image.debug`                        | Specify if debug logs should be enabled                                                                      | `false`                |
@@ -150,25 +150,25 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Database parameters
 
-| Name                                        | Description                                                                              | Value              |
-| ------------------------------------------- | ---------------------------------------------------------------------------------------- | ------------------ |
-| `mariadb.enabled`                           | Whether to deploy a mariadb server to satisfy the applications database requirements     | `true`             |
-| `mariadb.architecture`                      | MariaDB architecture. Allowed values: `standalone` or `replication`                      | `standalone`       |
-| `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                                                     | `""`               |
-| `mariadb.auth.database`                     | Database name to create                                                                  | `bitnami_owncloud` |
-| `mariadb.auth.username`                     | Database user to create                                                                  | `bn_owncloud`      |
-| `mariadb.auth.password`                     | Password for the database                                                                | `""`               |
-| `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                                                    | `true`             |
-| `mariadb.primary.persistence.storageClass`  | MariaDB primary persistent volume storage Class                                          | `""`               |
-| `mariadb.primary.persistence.accessModes`   | Database Persistent Volume Access Modes                                                  | `[]`               |
-| `mariadb.primary.persistence.size`          | Database Persistent Volume Size                                                          | `8Gi`              |
-| `mariadb.primary.persistence.hostPath`      | Set path in case you want to use local host path volumes (not recommended in production) | `""`               |
-| `mariadb.primary.persistence.existingClaim` | Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas                 | `""`               |
-| `externalDatabase.host`                     | Host of the existing database                                                            | `""`               |
-| `externalDatabase.port`                     | Port of the existing database                                                            | `3306`             |
-| `externalDatabase.user`                     | Existing username in the external db                                                     | `bn_owncloud`      |
-| `externalDatabase.password`                 | Password for the above username                                                          | `""`               |
-| `externalDatabase.database`                 | Name of the existing database                                                            | `bitnami_owncloud` |
+| Name                                        | Description                                                                              | Value               |
+| ------------------------------------------- | ---------------------------------------------------------------------------------------- | ------------------- |
+| `mariadb.enabled`                           | Whether to deploy a mariadb server to satisfy the applications database requirements     | `true`              |
+| `mariadb.architecture`                      | MariaDB architecture. Allowed values: `standalone` or `replication`                      | `standalone`        |
+| `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                                                     | `""`                |
+| `mariadb.auth.database`                     | Database name to create                                                                  | `bitnami_owncloud`  |
+| `mariadb.auth.username`                     | Database user to create                                                                  | `bn_owncloud`       |
+| `mariadb.auth.password`                     | Password for the database                                                                | `""`                |
+| `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                                                    | `true`              |
+| `mariadb.primary.persistence.storageClass`  | MariaDB primary persistent volume storage Class                                          | `""`                |
+| `mariadb.primary.persistence.accessModes`   | Database Persistent Volume Access Modes                                                  | `["ReadWriteOnce"]` |
+| `mariadb.primary.persistence.size`          | Database Persistent Volume Size                                                          | `8Gi`               |
+| `mariadb.primary.persistence.hostPath`      | Set path in case you want to use local host path volumes (not recommended in production) | `""`                |
+| `mariadb.primary.persistence.existingClaim` | Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas                 | `""`                |
+| `externalDatabase.host`                     | Host of the existing database                                                            | `""`                |
+| `externalDatabase.port`                     | Port of the existing database                                                            | `3306`              |
+| `externalDatabase.user`                     | Existing username in the external db                                                     | `bn_owncloud`       |
+| `externalDatabase.password`                 | Password for the above username                                                          | `""`                |
+| `externalDatabase.database`                 | Name of the existing database                                                            | `bitnami_owncloud`  |
 
 
 ### Persistence parameters
@@ -190,7 +190,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image repository                                                                                                        | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                                                                              | `10-debian-10-r171`     |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                                                                              | `10-debian-10-r188`     |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `Always`                |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                                          | `[]`                    |
 | `volumePermissions.resources.limits`   | The resources limits for the container                                                                                                                    | `{}`                    |
@@ -228,7 +228,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`             | Start a side-car prometheus exporter                       | `false`                   |
 | `metrics.image.registry`      | Apache exporter image registry                             | `docker.io`               |
 | `metrics.image.repository`    | Apache exporter image repository                           | `bitnami/apache-exporter` |
-| `metrics.image.tag`           | Apache exporter image tag (immutable tags are recommended) | `0.10.0-debian-10-r26`    |
+| `metrics.image.tag`           | Apache exporter image tag (immutable tags are recommended) | `0.10.0-debian-10-r42`    |
 | `metrics.image.pullPolicy`    | Image pull policy                                          | `IfNotPresent`            |
 | `metrics.image.pullSecrets`   | Specify docker-registry secret names as an array           | `[]`                      |
 | `metrics.resources`           | Metrics exporter resource requests and limits              | `{}`                      |
@@ -255,7 +255,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `certificates.extraEnvVarsSecret`                    | Secret with extra environment variables                              | `""`                                     |
 | `certificates.image.registry`                        | Container sidecar registry                                           | `docker.io`                              |
 | `certificates.image.repository`                      | Container sidecar image repository                                   | `bitnami/bitnami-shell`                  |
-| `certificates.image.tag`                             | Container sidecar image tag (immutable tags are recommended)         | `10-debian-10-r171`                      |
+| `certificates.image.tag`                             | Container sidecar image tag (immutable tags are recommended)         | `10-debian-10-r188`                      |
 | `certificates.image.pullPolicy`                      | Container sidecar image pull policy                                  | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Container sidecar image pull secrets                                 | `[]`                                     |
 

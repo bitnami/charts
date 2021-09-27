@@ -153,12 +153,12 @@ This solution allows to easily deploy multiple RabbitMQ instances compared to th
 | ------------------------------------ | ------------------------------------------------------------------------------------------------------- | ----------------------------------- |
 | `image.registry`                     | RabbitMQ Cluster Operator image registry                                                                | `docker.io`                         |
 | `image.repository`                   | RabbitMQ Cluster Operator image repository                                                              | `bitnami/rabbitmq-cluster-operator` |
-| `image.tag`                          | RabbitMQ Cluster Operator image tag (immutable tags are recommended)                                    | `1.8.2-scratch-r0`                  |
+| `image.tag`                          | RabbitMQ Cluster Operator image tag (immutable tags are recommended)                                    | `1.8.3-scratch-r0`                  |
 | `image.pullPolicy`                   | RabbitMQ Cluster Operator image pull policy                                                             | `IfNotPresent`                      |
 | `image.pullSecrets`                  | RabbitMQ Cluster Operator image pull secrets                                                            | `[]`                                |
 | `rabbitmqImage.registry`             | RabbitMQ Image registry                                                                                 | `docker.io`                         |
 | `rabbitmqImage.repository`           | RabbitMQ Image repository                                                                               | `bitnami/rabbitmq`                  |
-| `rabbitmqImage.tag`                  | RabbitMQ Image tag (immutable tags are recommended)                                                     | `3.8.22-debian-10-r5`               |
+| `rabbitmqImage.tag`                  | RabbitMQ Image tag (immutable tags are recommended)                                                     | `3.8.22-debian-10-r10`              |
 | `rabbitmqImage.pullSecrets`          | RabbitMQ Image pull secrets                                                                             | `[]`                                |
 | `replicaCount`                       | Number of RabbitMQ Cluster Operator replicas to deploy                                                  | `1`                                 |
 | `livenessProbe.enabled`              | Enable livenessProbe on RabbitMQ Cluster Operator nodes                                                 | `true`                              |
@@ -289,7 +289,7 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 ### Sidecars
 
-If additional containers are needed in the same pod as rabbitmq-cluster-operator (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter. If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/apps/rabbitmq-cluster-operator/administration/configure-use-sidecars/).
+If additional containers are needed in the same pod as rabbitmq-cluster-operator (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter. If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/infrastructure/rabbitmq-cluster-operator/administration/configure-use-sidecars/).
 
 ### Pod affinity
 
