@@ -862,27 +862,27 @@ proxy:
       ##
       externalTrafficPolicy: Cluster
     metrics:
-      ## @param proxy.service.api.type API service type
+      ## @param proxy.service.metrics.type Metrics service type
       ##
       type: ClusterIP
-      ## @param proxy.service.api.port API service port
+      ## @param proxy.service.metrics.port Metrics service port
       ##
       port: 8002
-      ## @param proxy.service.api.loadBalancerIP API service LoadBalancer IP (optional, cloud specific)
+      ## @param proxy.service.metrics.loadBalancerIP Metrics service LoadBalancer IP (optional, cloud specific)
       ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
       ##
       loadBalancerIP: ""
-      ## @param proxy.service.api.loadBalancerSourceRanges loadBalancerIP source ranges for the Service
+      ## @param proxy.service.metrics.loadBalancerSourceRanges loadBalancerIP source ranges for the Service
       ##
       loadBalancerSourceRanges: []
-      ## @param proxy.service.api.nodePorts.http NodePort for the HTTP endpoint
+      ## @param proxy.service.metrics.nodePorts.http NodePort for the HTTP endpoint
       ## nodePorts:
       ##   http: <to set explicitly, choose port between 30000-32767>
       ##   https: <to set explicitly, choose port between 30000-32767>
       ##
       nodePorts:
         http: ""
-      ## @param proxy.service.api.externalTrafficPolicy External traffic policy for the service
+      ## @param proxy.service.metrics.externalTrafficPolicy External traffic policy for the service
       ## Enable client source IP preservation
       ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
       ##
