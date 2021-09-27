@@ -139,6 +139,7 @@ $ helm delete --purge my-release
 | `master.affinity`                           | Master-eligible Affinity for pod assignment                                                                                                                                                                                             | `{}`                |
 | `master.nodeSelector`                       | Master-eligible Node labels for pod assignment                                                                                                                                                                                          | `{}`                |
 | `master.tolerations`                        | Master-eligible Tolerations for pod assignment                                                                                                                                                                                          | `[]`                |
+| `master.topologySpreadConstraints`            | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template  | `[]`            |
 | `master.resources.limits`                   | The resources limits for the container                                                                                                                                                                                                  | `{}`                |
 | `master.resources.requests`                 | The requested resources for the container                                                                                                                                                                                               | `{}`                |
 | `master.startupProbe.enabled`               | Enable/disable the startup probe (master nodes pod)                                                                                                                                                                                     | `false`             |
@@ -209,6 +210,7 @@ $ helm delete --purge my-release
 | `coordinating.affinity`                           | Coordinating Affinity for pod assignment                                                                                  | `{}`            |
 | `coordinating.nodeSelector`                       | Coordinating Node labels for pod assignment                                                                               | `{}`            |
 | `coordinating.tolerations`                        | Coordinating Tolerations for pod assignment                                                                               | `[]`            |
+| `coordinating.topologySpreadConstraints`            | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template  | `[]`            |
 | `coordinating.resources.limits`                   | The resources limits for the container                                                                                    | `{}`            |
 | `coordinating.resources.requests`                 | The requested resources for the container                                                                                 | `{}`            |
 | `coordinating.startupProbe.enabled`               | Enable/disable the startup probe (coordinating nodes pod)                                                                 | `false`         |
@@ -273,6 +275,7 @@ $ helm delete --purge my-release
 | `data.affinity`                              | Data Affinity for pod assignment                                                                                                                  | `{}`                |
 | `data.nodeSelector`                          | Data Node labels for pod assignment                                                                                                               | `{}`                |
 | `data.tolerations`                           | Data Tolerations for pod assignment                                                                                                               | `[]`                |
+| `data.topologySpreadConstraints`            | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template  | `[]`            |
 | `data.resources.limits`                      | The resources limits for the container                                                                                                            | `{}`                |
 | `data.resources.requests`                    | The requested resources for the container                                                                                                         | `{}`                |
 | `data.startupProbe.enabled`                  | Enable/disable the startup probe (data nodes pod)                                                                                                 | `false`             |
@@ -340,6 +343,7 @@ $ helm delete --purge my-release
 | `ingest.affinity`                           | Ingest Affinity for pod assignment                                                                             | `{}`            |
 | `ingest.nodeSelector`                       | Ingest Node labels for pod assignment                                                                          | `{}`            |
 | `ingest.tolerations`                        | Ingest Tolerations for pod assignment                                                                          | `[]`            |
+| `ingest.topologySpreadConstraints`            | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template  | `[]`            |
 | `ingest.resources.limits`                   | The resources limits for the container                                                                         | `{}`            |
 | `ingest.resources.requests`                 | The requested resources for the container                                                                      | `{}`            |
 | `ingest.startupProbe.enabled`               | Enable/disable the startup probe (ingest nodes pod)                                                            | `false`         |
@@ -404,6 +408,7 @@ $ helm delete --purge my-release
 | `curator.affinity`                           | Curator Affinity for pod assignment                                                               | `{}`                            |
 | `curator.nodeSelector`                       | Curator Node labels for pod assignment                                                            | `{}`                            |
 | `curator.tolerations`                        | Curator Tolerations for pod assignment                                                            | `[]`                            |
+| `curator.topologySpreadConstraints`            | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template  | `[]`            |
 | `curator.rbac.enabled`                       | Enable RBAC resources                                                                             | `false`                         |
 | `curator.serviceAccount.create`              | Create a default serviceaccount for elasticsearch curator                                         | `true`                          |
 | `curator.serviceAccount.name`                | Name for elasticsearch curator serviceaccount                                                     | `""`                            |
@@ -446,6 +451,7 @@ $ helm delete --purge my-release
 | `metrics.affinity`                           | Metrics Affinity for pod assignment                                                                       | `{}`                             |
 | `metrics.nodeSelector`                       | Metrics Node labels for pod assignment                                                                    | `{}`                             |
 | `metrics.tolerations`                        | Metrics Tolerations for pod assignment                                                                    | `[]`                             |
+| `metrics.topologySpreadConstraints`            | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template  | `[]`            |
 | `metrics.resources.limits`                   | The resources limits for the container                                                                    | `{}`                             |
 | `metrics.resources.requests`                 | The requested resources for the container                                                                 | `{}`                             |
 | `metrics.livenessProbe.enabled`              | Enable/disable the liveness probe (metrics pod)                                                           | `true`                           |
