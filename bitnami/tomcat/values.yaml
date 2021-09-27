@@ -484,12 +484,12 @@ volumePermissions:
 ##
 metrics:
   ## Prometheus JMX Exporter: exposes the majority of tomcat jvm metrics
-  ## 
+  ##
   jmx:
     ## @param metrics.jmx.enabled Whether or not to expose JMX metrics to Prometheus
     ##
     enabled: false
-    ## @param metrics.jmx.catalinaOpts custom option used to enabled JMX on tomcat jvm evaluated as template 
+    ## @param metrics.jmx.catalinaOpts custom option used to enabled JMX on tomcat jvm evaluated as template
     ##
     catalinaOpts: -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=5555 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.local.only=true
     ## Bitnami JMX exporter image
@@ -518,7 +518,7 @@ metrics:
       pullSecrets: []
     ## @param metrics.jmx.config [string] Configuration file for JMX exporter
     ## Specify content for jmx-tomcat-prometheus.yml. Evaluated as a template
-    ## 
+    ##
     config: |
       ---
       jmxUrl: service:jmx:rmi:///jndi/rmi://127.0.0.1:5555/jmxrmi
@@ -559,7 +559,7 @@ metrics:
     existingConfigmap: ""
   ## Prometheus pod Monitor
   ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#podmonitorspec
-  ## 
+  ##
   podMonitor:
     ## @param metrics.podMonitor.podTargetLabels Used to keep given pod's labels in target
     ## e.g:
