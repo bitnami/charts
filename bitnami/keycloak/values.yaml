@@ -473,7 +473,7 @@ resources:
 startupProbe:
   enabled: false
   httpGet:
-    path: /auth/realms/master
+    path: /auth/
     port: http
   initialDelaySeconds: 30
   periodSeconds: 5

@@ -163,7 +163,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `resources.limits`                      | The resources limits for the Keycloak container                                           | `{}`                  |
 | `resources.requests`                    | The requested resources for the Keycloak container                                        | `{}`                  |
 | `startupProbe.enabled`                  | Enable startupProbe                                                                       | `false`               |
-| `startupProbe.httpGet.path`             | Request path for startupProbe                                                             | `/auth/realms/master` |
+| `startupProbe.httpGet.path`             | Request path for startupProbe                                                             | `/auth/`              |
 | `startupProbe.httpGet.port`             | Port for startupProbe                                                                     | `http`                |
 | `startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                    | `30`                  |
 | `startupProbe.periodSeconds`            | Period seconds for startupProbe                                                           | `5`                   |
