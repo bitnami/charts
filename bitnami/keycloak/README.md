@@ -168,7 +168,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                    | `30`                  |
 | `startupProbe.periodSeconds`            | Period seconds for startupProbe                                                           | `5`                   |
 | `startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                          | `1`                   |
-| `startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                        | `60`                 |
+| `startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                        | `60`                  |
 | `startupProbe.successThreshold`         | Success threshold for startupProbe                                                        | `1`                   |
 | `livenessProbe.enabled`                 | Enable livenessProbe                                                                      | `true`                |
 | `livenessProbe.httpGet.path`            | Request path for livenessProbe                                                            | `/auth/`              |
