@@ -162,7 +162,9 @@ hub:
       services: {}
       allowNamedServers: false
       namedServerLimitPerUser:
-      authenticatePrometheus:
+      {{- if .Values.hub.metrics.serviceMonitor.enabled }}
+      authenticatePrometheus: {{ .Values.hub.metrics.authenticatePrometheus }}
+      {{- end }}
       redirectToServer:
       shutdownOnLogout:
     singleuser:
@@ -512,6 +514,43 @@ hub:
     ##
     externalTrafficPolicy: Cluster
 
+  ## @section Hub Metrics parameters
+
+  metrics:
+    ## @param hub.metrics.authenticatePrometheus Use authentication for Prometheus
+    ## To allow public access without authentication for prometheus metrics set environment as follows.
+    ##
+    authenticatePrometheus: false
+    ## Prometheus Operator ServiceMonitor configuration
+    ##
+    serviceMonitor:
+      ## @param hub.metrics.serviceMonitor.enabled If the operator is installed in your cluster, set to true to create a Service Monitor Entry
+      ##
+      enabled: true
+      ## @param hub.metrics.serviceMonitor.namespace Namespace which Prometheus is running in
+      ##
+      namespace: ""
+      ## @param hub.metrics.serviceMonitor.path HTTP path to scrape for metrics
+      ##
+      path: /hub/metrics
+      ## @param hub.metrics.serviceMonitor.interval Interval at which metrics should be scraped
+      ##
+      interval: 30s
+      ## @param hub.metrics.serviceMonitor.scrapeTimeout Specify the timeout after which the scrape is ended
+      ## e.g:
+      ## scrapeTimeout: 30s
+      scrapeTimeout: ""
+      ## @param hub.metrics.serviceMonitor.relabellings Specify Metric Relabellings to add to the scrape endpoint
+      ##
+      relabellings: []
+      ## @param hub.metrics.serviceMonitor.honorLabels Specify honorLabels parameter to add the scrape endpoint
+      ##
+      honorLabels: false
+      ## @param hub.metrics.serviceMonitor.additionalLabels Used to pass Labels that are required by the installed Prometheus Operator
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
+      ##
+      additionalLabels: {}
+
 ## @section Proxy deployment parameters
 
 ## Proxy deployment parameters
@@ -822,6 +861,32 @@ proxy:
       ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
       ##
       externalTrafficPolicy: Cluster
+    metrics:
+      ## @param proxy.service.api.type API service type
+      ##
+      type: ClusterIP
+      ## @param proxy.service.api.port API service port
+      ##
+      port: 8002
+      ## @param proxy.service.api.loadBalancerIP API service LoadBalancer IP (optional, cloud specific)
+      ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+      ##
+      loadBalancerIP: ""
+      ## @param proxy.service.api.loadBalancerSourceRanges loadBalancerIP source ranges for the Service
+      ##
+      loadBalancerSourceRanges: []
+      ## @param proxy.service.api.nodePorts.http NodePort for the HTTP endpoint
+      ## nodePorts:
+      ##   http: <to set explicitly, choose port between 30000-32767>
+      ##   https: <to set explicitly, choose port between 30000-32767>
+      ##
+      nodePorts:
+        http: ""
+      ## @param proxy.service.api.externalTrafficPolicy External traffic policy for the service
+      ## Enable client source IP preservation
+      ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+      ##
+      externalTrafficPolicy: Cluster
     public:
       ## @param proxy.service.public.type Public service type
       ##
@@ -915,6 +980,39 @@ proxy:
     ##   certificate:
     ##
     secrets: []
+
+  ## @section Proxy Metrics parameters
+
+  metrics:
+    ## Prometheus Operator ServiceMonitor configuration
+    ##
+    serviceMonitor:
+      ## @param proxy.metrics.serviceMonitor.enabled If the operator is installed in your cluster, set to true to create a Service Monitor Entry
+      ##
+      enabled: true
+      ## @param proxy.metrics.serviceMonitor.namespace Namespace which Prometheus is running in
+      ##
+      namespace: ""
+      ## @param proxy.metrics.serviceMonitor.path HTTP path to scrape for metrics
+      ##
+      path: /metrics
+      ## @param proxy.metrics.serviceMonitor.interval Interval at which metrics should be scraped
+      ##
+      interval: 30s
+      ## @param proxy.metrics.serviceMonitor.scrapeTimeout Specify the timeout after which the scrape is ended
+      ## e.g:
+      ## scrapeTimeout: 30s
+      scrapeTimeout: ""
+      ## @param proxy.metrics.serviceMonitor.relabellings Specify Metric Relabellings to add to the scrape endpoint
+      ##
+      relabellings: []
+      ## @param proxy.metrics.serviceMonitor.honorLabels Specify honorLabels parameter to add the scrape endpoint
+      ##
+      honorLabels: false
+      ## @param proxy.metrics.serviceMonitor.additionalLabels Used to pass Labels that are required by the installed Prometheus Operator
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
+      ##
+      additionalLabels: {}
 
 ## @section Image puller deployment parameters
 
