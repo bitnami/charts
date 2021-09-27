@@ -561,7 +561,7 @@ metrics:
   ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#podmonitorspec
   ##    
   podMonitor:
-    ## @param metrics.serviceMonitor.podTargetLabels Used to keep given pod's labels in target
+    ## @param metrics.podMonitor.podTargetLabels Used to keep given pod's labels in target
     ## e.g:
     ## - app.kubernetes.io/name
     ##
