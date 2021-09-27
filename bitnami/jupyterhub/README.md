@@ -219,6 +219,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `proxy.pdb.minAvailable`                      | Set minimum available proxy instances                                                     | `""`                              |
 | `proxy.pdb.maxUnavailable`                    | Set maximum available proxy instances                                                     | `""`                              |
 | `proxy.containerPort.api`                     | Proxy api container port                                                                  | `8001`                            |
+| `proxy.containerPort.metrics`                 | Proxy metrics container port                                                              | `8002`                            |
 | `proxy.containerPort.http`                    | Proxy http container port                                                                 | `8000`                            |
 | `proxy.priorityClassName`                     | Proxy pod priority class name                                                             | `""`                              |
 | `proxy.resources.limits`                      | The resources limits for the container                                                    | `{}`                              |

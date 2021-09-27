@@ -659,8 +659,11 @@ proxy:
   ##
   containerPort:
     ## @param proxy.containerPort.api Proxy api container port
-    ##
+    ##Ò
     api: 8001
+    ## @param proxy.containerPort.metrics Proxy metrics container port
+    ##
+    metrics: 8002
     ## @param proxy.containerPort.http Proxy http container port
     ##
     http: 8000
