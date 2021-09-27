@@ -372,6 +372,19 @@ Find more information about how to deal with common errors related to Bitnami’
 
 ## Upgrading
 
+### To 10.0.0
+
+This major release renames several values in this chart and adds missing features, in order to be inline with the rest of assets in the Bitnami charts repository.
+
+Affected values:
+
+- `service.port` was deprecated. We recommend using `service.ports.http` instead.
+- `service.httpsPort` was deprecated. We recommend using `service.ports.https` instead.
+- `ingress.hosts` was renamed as `ingress.extraHosts`.
+
+
+Additionally updates the MariaDB subchart to it newest major, 10.0.0, which contains similar changes.
+
 ### To 9.0.0
 
 In this major there were three main changes introduced:
