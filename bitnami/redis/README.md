@@ -283,6 +283,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sentinel.image.debug`                        | Enable image debug mode                                                                             | `false`                  |
 | `sentinel.masterSet`                          | Master set name                                                                                     | `mymaster`               |
 | `sentinel.quorum`                             | Sentinel Quorum                                                                                     | `2`                      |
+| `sentinel.automateClusterRecovery`            | Automate cluster recovery when Sentinel won't automatically failover to the last available replica  | `false`                  |
 | `sentinel.downAfterMilliseconds`              | Timeout for detecting a Redis&trade; node is down                                                   | `60000`                  |
 | `sentinel.failoverTimeout`                    | Timeout for performing a election failover                                                          | `18000`                  |
 | `sentinel.parallelSyncs`                      | Number of replicas that can be reconfigured in parallel to use the new master after a failover      | `1`                      |
