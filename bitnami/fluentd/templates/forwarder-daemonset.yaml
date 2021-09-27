@@ -64,8 +64,7 @@ spec:
           image: {{ include "fluentd.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           {{- if .Values.forwarder.lifecycle }}
-          lifecycle:
-          {{- include "common.tplvalues.render" ( dict "value" .Values.forwarder.lifecycle "context" $ ) | nindent 8 }}
+          lifecycle: {{- include "common.tplvalues.render" ( dict "value" .Values.forwarder.lifecycle "context" $ ) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
