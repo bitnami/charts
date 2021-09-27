@@ -62,7 +62,7 @@ host. To configure Phabricator with the URL of your service:
   kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "common.names.fullname" . }} 443:{{ .Values.service.httpsPort }}
   {{- else }}
   echo "Phabricator URL: http://127.0.0.1/"
-  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "common.names.fullname" . }} 80:{{ .Values.service.port }}
+  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "common.names.fullname" . }} 80:{{ coalesce .Values.service.ports.http .Values.service.port }}
   {{- end }}
 
 {{- else }}
@@ -71,8 +71,8 @@ host. To configure Phabricator with the URL of your service:
   {{- $port:=.Values.service.httpsPort | toString }}
   echo "Phabricator URL: https://{{ include "phabricator.host" . }}{{- if ne $port "443" }}:{{ .Values.service.httpsPort }}{{ end }}/"
   {{- else }}
-  {{- $port:=.Values.service.port | toString }}
-  echo "Phabricator URL: http://{{ include "phabricator.host" . }}{{- if ne $port "80" }}:{{ .Values.service.port }}{{ end }}/"
+  {{- $port:=(coalesce .Values.service.ports.http .Values.service.port) | toString }}
+  echo "Phabricator URL: http://{{ include "phabricator.host" . }}{{- if ne $port "80" }}:{{ coalesce .Values.service.ports.http .Values.service.port }}{{ end }}/"
   {{- end }}
 
 {{- end }}

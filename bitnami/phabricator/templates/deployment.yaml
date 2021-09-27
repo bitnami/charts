@@ -44,6 +44,13 @@ spec:
         podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
+      {{- if .Values.schedulerName }}
+      schedulerName: {{ .Values.schedulerName }}
+      {{- end }}
+      {{- if .Values.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      priorityClassName: {{ .Values.priorityClassName | quote }}
       {{- if .Values.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
@@ -88,6 +95,9 @@ spec:
           {{- if .Values.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
           {{- end }}
+          {{- if .Values.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
           env:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.image.debug | quote }}
@@ -105,9 +115,9 @@ spec:
             - name: PHABRICATOR_HOST
               value: {{ include "phabricator.host" . | quote }}
             - name: PHABRICATOR_EXTERNAL_HTTP_PORT_NUMBER
-              value: {{ .Values.service.port | quote }}
+              value: {{ (coalesce .Values.service.ports.http .Values.service.port) | quote }}
             - name: PHABRICATOR_EXTERNAL_HTTPS_PORT_NUMBER
-              value: {{ .Values.service.httpsPort | quote }}
+              value: {{ (coalesce .Values.service.ports.https .Values.service.httpsPort) | quote }}
             {{- if .Values.phabricatorAlternateFileDomain }}
             - name: PHABRICATOR_ALTERNATE_FILE_DOMAIN
               value: {{ .Values.phabricatorAlternateFileDomain | quote }}
