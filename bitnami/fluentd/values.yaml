@@ -478,6 +478,16 @@ forwarder:
     ##
     hostPath:
       path: /opt/bitnami/fluentd/logs/buffers
+  ## @param forwarder.lifecycle Additional lifecycles to add to the pods
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/attach-handler-lifecycle-event/
+  ## e.g:
+  ## postStart:
+  ##   exec:
+  ##     command: ["/bin/sh", "-c", "echo Hello from the postStart handler > /usr/share/message"]
+  ## preStop:
+  ##   exec:
+  ##     command: ["/bin/sh","-c","nginx -s quit; while killall -0 nginx; do sleep 1; done"]
+  lifecycle: {}
   ## @param forwarder.initContainers Additional init containers to add to the pods
   ## For example:
   ## initContainers:
@@ -941,6 +951,16 @@ aggregator:
     storageClass: ""
     accessMode: ReadWriteOnce
     size: 10Gi
+  ## @param aggregator.lifecycle Additional lifecycles to add to the pods
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/attach-handler-lifecycle-event/
+  ## e.g:
+  ## postStart:
+  ##   exec:
+  ##     command: ["/bin/sh", "-c", "echo Hello from the postStart handler > /usr/share/message"]
+  ## preStop:
+  ##   exec:
+  ##     command: ["/bin/sh","-c","nginx -s quit; while killall -0 nginx; do sleep 1; done"]
+  lifecycle: {}
   ## @param aggregator.initContainers Add init containers to aggregator pods
   ## Example
   ##

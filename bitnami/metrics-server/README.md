@@ -69,7 +69,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------ |
 | `image.registry`                                  | Metrics Server image registry                                                                                                                                            | `docker.io`              |
 | `image.repository`                                | Metrics Server image repository                                                                                                                                          | `bitnami/metrics-server` |
-| `image.tag`                                       | Metrics Server image tag (immutable tags are recommended)                                                                                                                | `0.5.0-debian-10-r112`   |
+| `image.tag`                                       | Metrics Server image tag (immutable tags are recommended)                                                                                                                | `0.5.1-debian-10-r0`     |
 | `image.pullPolicy`                                | Metrics Server image pull policy                                                                                                                                         | `IfNotPresent`           |
 | `image.pullSecrets`                               | Metrics Server image pull secrets                                                                                                                                        | `[]`                     |
 | `hostAliases`                                     | Add deployment host aliases                                                                                                                                              | `[]`                     |
@@ -80,6 +80,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.name`                             | The name of the ServiceAccount to create                                                                                                                                 | `""`                     |
 | `serviceAccount.automountServiceAccountToken`     | Automount API credentials for a service account                                                                                                                          | `true`                   |
 | `apiService.create`                               | Specifies whether the v1beta1.metrics.k8s.io API service should be created. You can check if it is needed with `kubectl get --raw "/apis/metrics.k8s.io/v1beta1/nodes"`. | `false`                  |
+| `apiService.insecureSkipTLSVerify`                | Specifies whether to skip validating certs served by metrics-server. Set to `"false"` (quotes _required_) if you have your own certificates.                             | `true`                   |
+| `apiService.caBundle`                             | A certificate authority chain of concatenated certificates, base64 encoded.                                                                                              | `""`                     |
 | `securePort`                                      | Port where metrics-server will be running                                                                                                                                | `8443`                   |
 | `hostNetwork`                                     | Enable hostNetwork mode                                                                                                                                                  | `false`                  |
 | `command`                                         | Override default container command (useful when using custom images)                                                                                                     | `["metrics-server"]`     |
@@ -158,6 +160,10 @@ Bitnami will release a new chart updating its containers if a new version of the
 ### Enable RBAC security
 
 In order to enable Role-Based Access Control (RBAC) for Metrics Server, use the following parameter: `rbac.create=true`.
+
+### Configure certificates
+
+If you are providing your own certificates for the API Service, set `insecureSkipTLSVerify` to `"false"`, and provide a `caBundle` consisting of the base64-encoded certificate chain.
 
 ### Set Pod affinity
 
