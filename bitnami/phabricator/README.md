@@ -76,7 +76,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------- | -------------------------------------------------------------------- | ------------------------- |
 | `image.registry`                 | Phabricator image registry                                           | `docker.io`               |
 | `image.repository`               | Phabricator image repository                                         | `bitnami/phabricator`     |
-| `image.tag`                      | Phabricator image tag (immutable tags are recommended)               | `2021.26.0-debian-10-r56` |
+| `image.tag`                      | Phabricator image tag (immutable tags are recommended)               | `2021.26.0-debian-10-r85` |
 | `image.pullPolicy`               | Image pull policy                                                    | `IfNotPresent`            |
 | `image.pullSecrets`              | Specify docker-registry secret names as an array                     | `[]`                      |
 | `image.debug`                    | Specify if debug logs should be enabled                              | `false`                   |
@@ -192,24 +192,24 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Database parameters
 
-| Name                                        | Description                                                                                                        | Value              |
-| ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | ------------------ |
-| `mariadb.enabled`                           | Whether to use the MariaDB chart                                                                                   | `true`             |
-| `mariadb.architecture`                      | MariaDB architecture. Allowed values: `standalone` or `replication`                                                | `standalone`       |
-| `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                                                                               | `""`               |
-| `mariadb.primary.configuration`             | MariaDB Primary configuration to be injected as ConfigMap                                                          | `""`               |
-| `mariadb.primary.extraFlags`                | Additional command line flags                                                                                      | `--local-infile=0` |
-| `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                                                                              | `true`             |
-| `mariadb.primary.persistence.storageClass`  | mariadb data Persistent Volume Storage Class                                                                       | `""`               |
-| `mariadb.primary.persistence.accessModes`   | Database Persistent Volume Access Modes                                                                            | `[]`               |
-| `mariadb.primary.persistence.size`          | Database Persistent Volume Size                                                                                    | `8Gi`              |
-| `mariadb.primary.persistence.hostPath`      | Host mount path for MariaDB volume in case you want to use local host path volumes (not recommended in production) | `""`               |
-| `mariadb.primary.persistence.existingClaim` | Enable persistence using an existing PVC                                                                           | `""`               |
-| `externalDatabase.existingSecret`           | Name of the database existing Secret Object                                                                        | `""`               |
-| `externalDatabase.host`                     | Host of the existing database                                                                                      | `localhost`        |
-| `externalDatabase.port`                     | Port of the existing database                                                                                      | `3306`             |
-| `externalDatabase.rootUser`                 | Username in the external db with root privileges                                                                   | `root`             |
-| `externalDatabase.rootPassword`             | Password for the above username                                                                                    | `""`               |
+| Name                                        | Description                                                                                                        | Value               |
+| ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | ------------------- |
+| `mariadb.enabled`                           | Whether to use the MariaDB chart                                                                                   | `true`              |
+| `mariadb.architecture`                      | MariaDB architecture. Allowed values: `standalone` or `replication`                                                | `standalone`        |
+| `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                                                                               | `""`                |
+| `mariadb.primary.configuration`             | MariaDB Primary configuration to be injected as ConfigMap                                                          | `""`                |
+| `mariadb.primary.extraFlags`                | Additional command line flags                                                                                      | `--local-infile=0`  |
+| `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                                                                              | `true`              |
+| `mariadb.primary.persistence.storageClass`  | mariadb data Persistent Volume Storage Class                                                                       | `""`                |
+| `mariadb.primary.persistence.accessModes`   | Database Persistent Volume Access Modes                                                                            | `["ReadWriteOnce"]` |
+| `mariadb.primary.persistence.size`          | Database Persistent Volume Size                                                                                    | `8Gi`               |
+| `mariadb.primary.persistence.hostPath`      | Host mount path for MariaDB volume in case you want to use local host path volumes (not recommended in production) | `""`                |
+| `mariadb.primary.persistence.existingClaim` | Enable persistence using an existing PVC                                                                           | `""`                |
+| `externalDatabase.existingSecret`           | Name of the database existing Secret Object                                                                        | `""`                |
+| `externalDatabase.host`                     | Host of the existing database                                                                                      | `localhost`         |
+| `externalDatabase.port`                     | Port of the existing database                                                                                      | `3306`              |
+| `externalDatabase.rootUser`                 | Username in the external db with root privileges                                                                   | `root`              |
+| `externalDatabase.rootPassword`             | Password for the above username                                                                                    | `""`                |
 
 
 ### Volume Permissions parameters
@@ -219,7 +219,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory ( | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                              | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image repository                            | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)  | `10-debian-10-r172`     |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)  | `10-debian-10-r202`     |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                           | `Always`                |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                              | `[]`                    |
 | `volumePermissions.resources.limits`   | The resources limits for the container                                        | `{}`                    |
@@ -233,7 +233,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`            | Start a side-car prometheus exporter                       | `false`                   |
 | `metrics.image.registry`     | Apache exporter image registry                             | `docker.io`               |
 | `metrics.image.repository`   | Apache exporter image repository                           | `bitnami/apache-exporter` |
-| `metrics.image.tag`          | Apache exporter image tag (immutable tags are recommended) | `0.10.0-debian-10-r26`    |
+| `metrics.image.tag`          | Apache exporter image tag (immutable tags are recommended) | `0.10.1-debian-10-r4`     |
 | `metrics.image.pullPolicy`   | Image pull policy                                          | `IfNotPresent`            |
 | `metrics.image.pullSecrets`  | Specify docker-registry secret names as an array           | `[]`                      |
 | `metrics.podAnnotations`     | Additional annotations for Metrics exporter pod            | `{}`                      |

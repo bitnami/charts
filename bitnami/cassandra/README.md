@@ -66,8 +66,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `clusterDomain`          | Kubernetes cluster domain name                                                          | `cluster.local` |
 | `extraDeploy`            | Array of extra objects to deploy with the release                                       | `[]`            |
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
-| `diagnosticMode.command` | Command to override all containers in the deployment                                    | `[]`            |
-| `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `[]`            |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`     |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]`  |
 
 
 ### Cassandra parameters
@@ -193,7 +193,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.storageClass`       | PVC Storage Class for Cassandra data volume                                                        | `""`                 |
 | `persistence.commitStorageClass` | PVC Storage Class for Cassandra Commit Log volume                                                  | `""`                 |
 | `persistence.annotations`        | Persistent Volume Claim annotations                                                                | `{}`                 |
-| `persistence.accessModes`        | Persistent Volume Access Mode                                                                      | `[]`                 |
+| `persistence.accessModes`        | Persistent Volume Access Mode                                                                      | `["ReadWriteOnce"]`  |
 | `persistence.size`               | PVC Storage Request for Cassandra data volume                                                      | `8Gi`                |
 | `persistence.mountPath`          | The path the data volume will be mounted at                                                        | `/bitnami/cassandra` |
 

@@ -4,7 +4,7 @@
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "kubeapps.imagePullSecrets" -}}
-{{ include "common.images.pullSecrets" (dict "images" (list .Values.frontend.image .Values.dashboard.image .Values.apprepository.image .Values.apprepository.syncImage .Values.assetsvc.image .Values.kubeops.image .Values.authProxy.image .Values.pinnipedProxy.image .Values.testImage) "global" .Values.global) }}
+{{ include "common.images.pullSecrets" (dict "images" (list .Values.frontend.image .Values.dashboard.image .Values.apprepository.image .Values.apprepository.syncImage .Values.assetsvc.image .Values.kubeops.image .Values.authProxy.image .Values.pinnipedProxy.image .Values.kubeappsapis.image .Values.testImage) "global" .Values.global) }}
 {{- end -}}
 
 {{/*
@@ -211,7 +211,7 @@ kubeapps: ingress.tls
     to be used by the Ingress Controller.
     Please use any of these alternatives:
       - Use the `ingress.extraTls` and `ingress.secrets` parameters to provide your custom TLS certificates.
-      - Relay on cert-manager to create it by setting `ingress.certManager=true`
+      - Relay on cert-manager to create it by configuring `ingress.certManager.clusterIssuer`
       - Relay on Helm to create self-signed certificates by setting `ingress.selfSigned=true`
 {{- end -}}
 {{- end -}}
@@ -227,4 +227,5 @@ Check if there are rolling tags in the images
 {{- include "common.warnings.rollingTag" .Values.kubeops.image }}
 {{- include "common.warnings.rollingTag" .Values.authProxy.image }}
 {{- include "common.warnings.rollingTag" .Values.pinnipedProxy.image }}
+{{- include "common.warnings.rollingTag" .Values.kubeappsapis.image }}
 {{- end -}}

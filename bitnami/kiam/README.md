@@ -75,7 +75,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ------------------------------------------------ | ---------------------- |
 | `image.registry`    | kiam image registry                              | `docker.io`            |
 | `image.repository`  | kiam image name                                  | `bitnami/kiam`         |
-| `image.tag`         | kiam image tag                                   | `3.6.0-debian-10-r287` |
+| `image.tag`         | kiam image tag                                   | `3.6.0-debian-10-r316` |
 | `image.pullPolicy`  | kiam image pull policy                           | `IfNotPresent`         |
 | `image.pullSecrets` | Specify docker-registry secret names as an array | `[]`                   |
 

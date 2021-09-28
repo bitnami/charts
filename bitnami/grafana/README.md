@@ -156,7 +156,7 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | ---------------------------------- | --------------------------------------------------------------------------------- | -------------------- |
 | `image.registry`                   | Grafana image registry                                                            | `docker.io`          |
 | `image.repository`                 | Grafana image repository                                                          | `bitnami/grafana`    |
-| `image.tag`                        | Grafana image tag (immutable tags are recommended)                                | `8.1.3-debian-10-r0` |
+| `image.tag`                        | Grafana image tag (immutable tags are recommended)                                | `8.1.5-debian-10-r0` |
 | `image.pullPolicy`                 | Grafana image pull policy                                                         | `IfNotPresent`       |
 | `image.pullSecrets`                | Grafana image pull secrets                                                        | `[]`                 |
 | `hostAliases`                      | Add deployment host aliases                                                       | `[]`                 |
@@ -211,12 +211,14 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `resources.limits`                   | The resources limits for Grafana containers                                               | `{}`            |
 | `resources.requests`                 | The requested resources for Grafana containers                                            | `{}`            |
 | `livenessProbe.enabled`              | Enable livenessProbe                                                                      | `true`          |
+| `livenessProbe.scheme`               | Scheme for livenessProbe                                                                  | `HTTP`          |
 | `livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                   | `120`           |
 | `livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                          | `10`            |
 | `livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                         | `5`             |
 | `livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                       | `6`             |
 | `livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                       | `1`             |
 | `readinessProbe.enabled`             | Enable readinessProbe                                                                     | `true`          |
+| `readinessProbe.scheme`              | Scheme for readinessProbe                                                                 | `HTTP`          |
 | `readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                  | `30`            |
 | `readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                         | `10`            |
 | `readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                        | `5`             |
@@ -292,7 +294,7 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `imageRenderer.enabled`                              | Enable using a remote rendering service to render PNG images                                           | `false`                          |
 | `imageRenderer.image.registry`                       | Grafana Image Renderer image registry                                                                  | `docker.io`                      |
 | `imageRenderer.image.repository`                     | Grafana Image Renderer image repository                                                                | `bitnami/grafana-image-renderer` |
-| `imageRenderer.image.tag`                            | Grafana Image Renderer image tag (immutable tags are recommended)                                      | `3.1.0-debian-10-r6`             |
+| `imageRenderer.image.tag`                            | Grafana Image Renderer image tag (immutable tags are recommended)                                      | `3.2.0-debian-10-r4`             |
 | `imageRenderer.image.pullPolicy`                     | Grafana Image Renderer image pull policy                                                               | `IfNotPresent`                   |
 | `imageRenderer.image.pullSecrets`                    | Grafana image Renderer pull secrets                                                                    | `[]`                             |
 | `imageRenderer.replicaCount`                         | Number of Grafana Image Renderer Pod replicas                                                          | `1`                              |

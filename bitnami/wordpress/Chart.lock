@@ -1,12 +1,12 @@
 dependencies:
 - name: mariadb
   repository: https://charts.bitnami.com/bitnami
-  version: 9.5.1
+  version: 9.6.0
 - name: memcached
   repository: https://charts.bitnami.com/bitnami
-  version: 5.14.2
+  version: 5.15.1
 - name: common
   repository: https://charts.bitnami.com/bitnami
-  version: 1.9.0
-digest: sha256:f16ec273d666c52ae06a37739050cecd9be92717b8f711c0e51c26f2b39645bd
-generated: "2021-09-14T17:22:32.029547335Z"
+  version: 1.9.1
+digest: sha256:e4610a10040e335781fe14c9aa5f2955515da01856bc746ea2e9e0a3045a923f
+generated: "2021-09-23T08:22:02.655023638Z"
