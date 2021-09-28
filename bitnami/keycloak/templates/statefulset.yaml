@@ -275,6 +275,11 @@ spec:
             - name: http-management
               containerPort: 9990
               protocol: TCP
+          {{- if .Values.startupProbe.enabled }}
+          startupProbe: {{- omit .Values.startupProbe "enabled" | toYaml | nindent 12 }}
+          {{- else if .Values.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe: {{- omit .Values.livenessProbe "enabled" | toYaml | nindent 12 }}
           {{- else if .Values.customLivenessProbe }}
