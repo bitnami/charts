@@ -351,7 +351,7 @@ If not using ClusterIP, or if a host or LoadBalancerIP is not defined, the value
 {{- $host := include "airflow.serviceIP" . -}}
 
 {{- $port := "" -}}
-{{- $servicePortString := printf "%v" .Values.service.ports.http -}}
+{{- $servicePortString := printf "%v" (coalesce .Values.service.ports.http .Values.service.port) -}}
 {{- if and (not (eq $servicePortString "80")) (not (eq $servicePortString "443")) -}}
   {{- $port = printf ":%s" $servicePortString -}}
 {{- end -}}

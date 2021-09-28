@@ -66,8 +66,8 @@ host. To configure Airflow with the URL of your service:
 
 {{- else if eq .Values.service.type "ClusterIP" }}
 
-  echo URL  : http://127.0.0.1:{{ default "8080" .Values.service.ports.http }}
-  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "common.names.fullname" . }} {{ default "8080" .Values.service.ports.http }}:8080
+  echo URL  : http://127.0.0.1:{{ default "8080" (coalesce .Values.service.ports.http .Values.service.port) }}
+  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "common.names.fullname" . }} {{ default "8080" (coalesce .Values.service.ports.http .Values.service.port) }}:8080
 
 {{- else if eq .Values.service.type "NodePort" }}
   export AIRFLOW_HOST=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")

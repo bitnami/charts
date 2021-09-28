@@ -63,7 +63,7 @@ data:
             - name: AIRFLOW_WEBSERVER_HOST
               value: {{ include "common.names.fullname" . }}
             - name: AIRFLOW_WEBSERVER_PORT_NUMBER
-              value: {{ .Values.service.ports.http | quote }}
+              value: {{ coalesce .Values.service.ports.http .Values.service.port | quote }}
             {{- if .Values.extraEnvVars }}
               {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -120,7 +120,7 @@ data:
             - name: AIRFLOW_WEBSERVER_HOST
               value: {{ include "common.names.fullname" . }}
             - name: AIRFLOW_WEBSERVER_PORT_NUMBER
-              value: {{ .Values.service.ports.http | quote }}
+              value: {{ coalesce .Values.service.ports.http .Values.service.port | quote }}
             {{- if .Values.extraEnvVars }}
               {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}

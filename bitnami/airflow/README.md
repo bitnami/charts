@@ -601,7 +601,7 @@ Affected values:
 - `PodDisruptionBudget` renamed as `pdb`.
 - `ingress.hosts` value have been replaced with `ingress.hostname`, `ingress.path` and `ingress.tls`. In addition, variables `extraHosts`, `extraPaths` and `extraTls` have been added to accept custom configurations.
 - `serviceMonitor.labels` renamed as `serviceMonitor.selector`.
-- `service.port` renamed as `service.port.http`.
+- `service.port` has been deprecated, we recommend using `service.ports.http` instead.
 - `service.nodePort` renamed as `service.nodePorts.http`.
 - `worker.updateStrategy` changed from String type (previously default to 'rollingUpdate') to Object type, allowing users to configure other updateStrategy parameters, similar to other charts.
 - Removed value `worker.rollingUpdatePartition`, now configured using `worker.updateStrategy` setting `worker.updateStrategy.rollingUpdate.partition`.
