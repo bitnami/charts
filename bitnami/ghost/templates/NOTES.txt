@@ -63,9 +63,9 @@ host. To configure Ghost with the URL of your service:
 
 {{- if eq .Values.service.type "ClusterIP" }}
 
-  echo Blog URL  : http://127.0.0.1:{{ default "80" .Values.service.ports.http }}{{ .Values.ghostPath }}
-  echo Admin URL : http://127.0.0.1:{{ default "80" .Values.service.ports.http }}{{ default "/" .Values.ghostPath }}ghost
-  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "common.names.fullname" . }} {{ default "80" .Values.service.ports.http }}:{{ default "80" .Values.service.ports.http }}
+  echo Blog URL  : http://127.0.0.1:{{ default "80" (coalesce .Values.service.ports.http .Values.service.port) }}{{ .Values.ghostPath }}
+  echo Admin URL : http://127.0.0.1:{{ default "80" (coalesce .Values.service.ports.http .Values.service.port) }}{{ default "/" .Values.ghostPath }}ghost
+  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "common.names.fullname" . }} {{ default "80" (coalesce .Values.service.ports.http .Values.service.port) }}:{{ default "80" (coalesce .Values.service.ports.http .Values.service.port) }}
 
 {{- else if eq .Values.service.type "NodePort" }}
 

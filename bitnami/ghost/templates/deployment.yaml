@@ -143,9 +143,9 @@ spec:
             - name: GHOST_ENABLE_HTTPS
               value: {{ ternary "yes" "no" .Values.ghostEnableHttps | quote }}
             - name: GHOST_EXTERNAL_HTTP_PORT_NUMBER
-              value: {{ .Values.service.ports.http | quote }}
+              value: {{ coalesce .Values.service.ports.http .Values.service.port| quote }}
             - name: GHOST_EXTERNAL_HTTPS_PORT_NUMBER
-              value: {{ .Values.service.ports.https | quote }}
+              value: {{ coalesce .Values.service.ports.https .Values.service.httpsPort| quote }}
             - name: GHOST_SKIP_BOOTSTRAP
               value: {{ ternary "yes" "no" .Values.ghostSkipInstall  | quote }}
             {{- if .Values.smtpHost }}

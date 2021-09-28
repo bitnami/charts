@@ -40,7 +40,7 @@ spec:
   ports:
     {{- if .Values.ghostEnableHttps }}
     - name: https
-      port: {{ .Values.service.ports.https }}
+      port: {{ coalesce .Values.service.ports.https .Values.service.httpsPort }}
       protocol: TCP
       targetPort: https
       {{- if (and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.https))) }}
@@ -50,7 +50,7 @@ spec:
       {{- end }}
     {{- else }}
     - name: http
-      port: {{ .Values.service.ports.http }}
+      port: {{ coalesce .Values.service.ports.http .Values.service.port }}
       protocol: TCP
       targetPort: http
       {{- if (and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.http))) }}
