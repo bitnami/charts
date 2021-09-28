@@ -89,17 +89,18 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Airflow common parameters
 
-| Name                     | Description                                                                                                                                     | Value            |
-| ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
-| `auth.existingSecret`    | Name of an existing secret containing password and fernet key ('airflow-password and 'airflow-fernetKey' keys)                                  | `""`             |
-| `auth.fernetKey`         | Fernet key to secure connections                                                                                                                | `""`             |
-| `auth.forcePassword`     | Force users to specify a password                                                                                                               | `false`          |
-| `auth.password`          | Password to access web UI                                                                                                                       | `""`             |
-| `auth.username`          | Username to access web UI                                                                                                                       | `user`           |
-| `configurationConfigMap` | Name of an existing config map containing the Airflow config file                                                                               | `""`             |
-| `executor`               | Airflow executor, it should be one of 'SequentialExecutor', 'LocalExecutor', 'CeleryExecutor', 'KubernetesExecutor', 'CeleryKubernetesExecutor' | `CeleryExecutor` |
-| `dagsConfigMap`          | Name of an existing config map containing all the DAGs files you want to load in Airflow                                                        | `""`             |
-| `loadExamples`           | Switch to load some Airflow examples                                                                                                            | `false`          |
+| Name                     | Description                                                                                                                                      | Value            |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------- |
+| `auth.existingSecret`    | Name of an existing secret containing password, fernet key and secret key ('airflow-password', 'airflow-fernetKey' and 'airflow-secretKey' keys) | `""`             |
+| `auth.fernetKey`         | Fernet key to secure connections                                                                                                                 | `""`             |
+| `auth.forcePassword`     | Force users to specify a password                                                                                                                | `false`          |
+| `auth.password`          | Password to access web UI                                                                                                                        | `""`             |
+| `auth.username`          | Username to access web UI                                                                                                                        | `user`           |
+| `auth.secretKey`         | Secret key to run your flask app                                                                                                                 | `""`             |
+| `configurationConfigMap` | Name of an existing config map containing the Airflow config file                                                                                | `""`             |
+| `executor`               | Airflow executor, it should be one of 'SequentialExecutor', 'LocalExecutor', 'CeleryExecutor', 'KubernetesExecutor', 'CeleryKubernetesExecutor'  | `CeleryExecutor` |
+| `dagsConfigMap`          | Name of an existing config map containing all the DAGs files you want to load in Airflow                                                         | `""`             |
+| `loadExamples`           | Switch to load some Airflow examples                                                                                                             | `false`          |
 
 
 ### Airflow web parameters
@@ -108,7 +109,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ---------------------------------------- | --------------------------------------------------------------------------- | -------------------- |
 | `web.image.registry`                     | Airflow image registry                                                      | `docker.io`          |
 | `web.image.repository`                   | Airflow image repository                                                    | `bitnami/airflow`    |
-| `web.image.tag`                          | Airflow image tag (immutable tags are recommended)                          | `2.1.4-debian-10-r0` |
+| `web.image.tag`                          | Airflow image tag (immutable tags are recommended)                          | `2.1.4-debian-10-r4` |
 | `web.image.pullPolicy`                   | Airflow image pull policy                                                   | `IfNotPresent`       |
 | `web.image.pullSecrets`                  | Airflow image pull secrets                                                  | `[]`                 |
 | `web.image.debug`                        | Enable image debug mode                                                     | `false`              |
@@ -162,7 +163,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------------- | ----------------------------------------------------------------------- | --------------------------- |
 | `scheduler.image.registry`                   | Airflow Scheduler image registry                                        | `docker.io`                 |
 | `scheduler.image.repository`                 | Airflow Scheduler image repository                                      | `bitnami/airflow-scheduler` |
-| `scheduler.image.tag`                        | Airflow Scheduler image tag (immutable tags are recommended)            | `2.1.3-debian-10-r23`       |
+| `scheduler.image.tag`                        | Airflow Scheduler image tag (immutable tags are recommended)            | `2.1.4-debian-10-r4`        |
 | `scheduler.image.pullPolicy`                 | Airflow Scheduler image pull policy                                     | `IfNotPresent`              |
 | `scheduler.image.pullSecrets`                | Airflow Scheduler image pull secrets                                    | `[]`                        |
 | `scheduler.image.debug`                      | Enable image debug mode                                                 | `false`                     |
@@ -195,7 +196,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ------------------------ |
 | `worker.image.registry`                     | Airflow Worker image registry                                                                                        | `docker.io`              |
 | `worker.image.repository`                   | Airflow Worker image repository                                                                                      | `bitnami/airflow-worker` |
-| `worker.image.tag`                          | Airflow Worker image tag (immutable tags are recommended)                                                            | `2.1.3-debian-10-r23`    |
+| `worker.image.tag`                          | Airflow Worker image tag (immutable tags are recommended)                                                            | `2.1.4-debian-10-r4`     |
 | `worker.image.pullPolicy`                   | Airflow Worker image pull policy                                                                                     | `IfNotPresent`           |
 | `worker.image.pullSecrets`                  | Airflow Worker image pull secrets                                                                                    | `[]`                     |
 | `worker.image.debug`                        | Enable image debug mode                                                                                              | `false`                  |
@@ -370,6 +371,7 @@ $ helm install my-release \
                --set auth.username=my-user \
                --set auth.password=my-passsword \
                --set auth.fernetKey=my-fernet-key \
+               --set auth.secretKey=my-secret-key \
                bitnami/airflow
 ```
 
@@ -398,6 +400,10 @@ Bitnami will release a new chart updating its containers if a new version of the
 A Fernet key is required in order to encrypt password within connections. The Fernet key must be a base64-encoded 32-byte key.
 
 Learn how to generate one [here](https://bcb.github.io/airflow/fernet-key)
+
+### Generate a Secret key
+
+Secret key used to run your flask app. It should be as random as possible. However, when running more than 1 instances of webserver, make sure all of them use the same secret_key otherwise one of them will error with “CSRF session token is missing”.
 
 ### Load DAG files
 
@@ -464,6 +470,7 @@ type: Opaque
 data:
   airflow-password: "Smo1QTJLdGxXMg=="
   airflow-fernetKey: "YVRZeVJVWnlXbU4wY1dOalVrdE1SV3cxWWtKeFIzWkVRVTVrVjNaTFR6WT0="
+  airflow-secretKey: "a25mQ1FHTUh3MnFRSk5KMEIyVVU2YmN0VGRyYTVXY08="
   postgresql-password: "cG9zdGdyZXMK"
   redis-password: "cmVkaXMK"
 ```
@@ -605,7 +612,8 @@ $ helm install airflow bitnami/airflow \
 
 ```console
 $ export AIRFLOW_PASSWORD=$(kubectl get secret --namespace default airflow -o jsonpath="{.data.airflow-password}" | base64 --decode)
-$ export AIRFLOW_FERNETKEY=$(kubectl get secret --namespace default airflow -o jsonpath="{.data.airflow-fernetKey}" | base64 --decode)
+$ export AIRFLOW_FERNET_KEY=$(kubectl get secret --namespace default airflow -o jsonpath="{.data.airflow-fernetKey}" | base64 --decode)
+$ export AIRFLOW_SECRET_KEY=$(kubectl get secret --namespace default airflow -o jsonpath="{.data.airflow-secretKey}" | base64 --decode)
 $ export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default airflow-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
 $ export REDIS_PASSWORD=$(kubectl get secret --namespace default airflow-redis -o jsonpath="{.data.redis-password}" | base64 --decode)
 $ export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=airflow,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
@@ -631,7 +639,8 @@ $ helm upgrade airflow bitnami/airflow \
     --set loadExamples=true \
     --set web.baseUrl=http://127.0.0.1:8080 \
     --set auth.password=$AIRFLOW_PASSWORD \
-    --set auth.fernetKey=$AIRFLOW_FERNETKEY \
+    --set auth.fernetKey=$AIRFLOW_FERNET_KEY \
+    --set auth.secretKey=$AIRFLOW_SECRET_KEY \
     --set postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD \
     --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC \
     --set redis.password=$REDIS_PASSWORD \

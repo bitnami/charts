@@ -78,7 +78,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------- | ---------------------------------------------------------------------------------------------------------- | ------------------------ |
 | `image.registry`          | MinIO&reg; image registry                                                                                  | `docker.io`              |
 | `image.repository`        | MinIO&reg; image repository                                                                                | `bitnami/minio`          |
-| `image.tag`               | MinIO&reg; image tag (immutable tags are recommended)                                                      | `2021.9.9-debian-10-r8`  |
+| `image.tag`               | MinIO&reg; image tag (immutable tags are recommended)                                                      | `2021.9.18-debian-10-r0` |
 | `image.pullPolicy`        | Image pull policy                                                                                          | `IfNotPresent`           |
 | `image.pullSecrets`       | Specify docker-registry secret names as an array                                                           | `[]`                     |
 | `image.debug`             | Specify if debug logs should be enabled                                                                    | `false`                  |
@@ -196,7 +196,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `apiIngress.hostname`              | Default host for the ingress resource                                                                       | `minio.local`            |
 | `apiIngress.path`                  | The Path to MinIO&reg;. You may need to set this to '/*' in order to use this with ALB ingress controllers. | `/`                      |
 | `apiIngress.pathType`              | Ingress path type                                                                                           | `ImplementationSpecific` |
-| `apiIngress.servicePort`           | Service port to be used                                                                                     | `minio-console`          |
+| `apiIngress.servicePort`           | Service port to be used                                                                                     | `minio-api`              |
 | `apiIngress.annotations`           | Ingress annotations                                                                                         | `{}`                     |
 | `apiIngress.tls`                   | Enable TLS configuration for the hostname defined at `apiIngress.hostname` parameter                        | `false`                  |
 | `apiIngress.extraHosts`            | The list of additional hostnames to be covered with this ingress record.                                    | `[]`                     |
@@ -209,15 +209,15 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Persistence parameters
 
-| Name                        | Description                                                          | Value   |
-| --------------------------- | -------------------------------------------------------------------- | ------- |
-| `persistence.enabled`       | Enable MinIO&reg; data persistence using PVC. If false, use emptyDir | `true`  |
-| `persistence.storageClass`  | PVC Storage Class for MinIO&reg; data volume                         | `""`    |
-| `persistence.mountPath`     | Data volume mount path                                               | `/data` |
-| `persistence.accessModes`   | PVC Access Modes for MinIO&reg; data volume                          | `[]`    |
-| `persistence.size`          | PVC Storage Request for MinIO&reg; data volume                       | `8Gi`   |
-| `persistence.annotations`   | Annotations for the PVC                                              | `{}`    |
-| `persistence.existingClaim` | Name of an existing PVC to use (only in `standalone` mode)           | `""`    |
+| Name                        | Description                                                          | Value               |
+| --------------------------- | -------------------------------------------------------------------- | ------------------- |
+| `persistence.enabled`       | Enable MinIO&reg; data persistence using PVC. If false, use emptyDir | `true`              |
+| `persistence.storageClass`  | PVC Storage Class for MinIO&reg; data volume                         | `""`                |
+| `persistence.mountPath`     | Data volume mount path                                               | `/data`             |
+| `persistence.accessModes`   | PVC Access Modes for MinIO&reg; data volume                          | `["ReadWriteOnce"]` |
+| `persistence.size`          | PVC Storage Request for MinIO&reg; data volume                       | `8Gi`               |
+| `persistence.annotations`   | Annotations for the PVC                                              | `{}`                |
+| `persistence.existingClaim` | Name of an existing PVC to use (only in `standalone` mode)           | `""`                |
 
 
 ### Volume Permissions parameters

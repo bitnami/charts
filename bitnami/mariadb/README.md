@@ -69,8 +69,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `schedulerName`          | Name of the scheduler (other than default) to dispatch pods                             | `""`            |
 | `extraDeploy`            | Array of extra objects to deploy with the release (evaluated as a template)             | `[]`            |
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
-| `diagnosticMode.command` | Command to override all containers in the deployment                                    | `[]`            |
-| `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `[]`            |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`     |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]`  |
 
 
 ### MariaDB common parameters

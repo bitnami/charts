@@ -64,8 +64,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `clusterDomain`          | Kubernetes Cluster Domain                                                                    | `cluster.local` |
 | `extraDeploy`            | Array of extra objects to deploy with the release                                            | `[]`            |
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)      | `false`         |
-| `diagnosticMode.command` | Command to override all containers in the deployment                                         | `[]`            |
-| `diagnosticMode.args`    | Args to override all containers in the deployment                                            | `[]`            |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                         | `["sleep"]`     |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                            | `["infinity"]`  |
 
 
 ### NATS parameters
@@ -74,7 +74,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ---------------------- | ------------------------------------------------------------------------------ | -------------------- |
 | `image.registry`       | NATS image registry                                                            | `docker.io`          |
 | `image.repository`     | NATS image repository                                                          | `bitnami/nats`       |
-| `image.tag`            | NATS image tag (immutable tags are recommended)                                | `2.5.0-debian-10-r0` |
+| `image.tag`            | NATS image tag (immutable tags are recommended)                                | `2.6.1-debian-10-r0` |
 | `image.pullPolicy`     | Image pull policy                                                              | `IfNotPresent`       |
 | `image.pullSecrets`    | Specify docker-registry secret names as an array                               | `[]`                 |
 | `auth.enabled`         | Switch to enable/disable client authentication                                 | `true`               |
@@ -194,7 +194,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                  | Enable Prometheus metrics via exporter side-car                                                        | `false`                 |
 | `metrics.image.registry`           | Prometheus metrics exporter image registry                                                             | `docker.io`             |
 | `metrics.image.repository`         | Prometheus metrics exporter image repository                                                           | `bitnami/nats-exporter` |
-| `metrics.image.tag`                | Prometheus metrics exporter image tag (immutable tags are recommended)                                 | `0.8.0-debian-10-r71`   |
+| `metrics.image.tag`                | Prometheus metrics exporter image tag (immutable tags are recommended)                                 | `0.8.0-debian-10-r85`   |
 | `metrics.image.pullPolicy`         | Prometheus metrics image pull policy                                                                   | `IfNotPresent`          |
 | `metrics.image.pullSecrets`        | Prometheus metrics image pull secrets                                                                  | `[]`                    |
 | `metrics.resources`                | Metrics exporter resource requests and limits                                                          | `{}`                    |

@@ -67,8 +67,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `clusterDomain`          | Cluster Domain                                                                               | `cluster.local` |
 | `extraDeploy`            | Array of extra objects to deploy with the release                                            | `[]`            |
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)      | `false`         |
-| `diagnosticMode.command` | Command to override all containers in the deployment                                         | `[]`            |
-| `diagnosticMode.args`    | Args to override all containers in the deployment                                            | `[]`            |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                         | `["sleep"]`     |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                            | `["infinity"]`  |
 
 
 ### Fluentd parameters
@@ -144,6 +144,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `forwarder.rbac.pspEnabled`                                    | Specify whether the bundled Pod Security Policy should be created and bound with RBAC                           | `false`                                                    |
 | `forwarder.persistence.enabled`                                | Enable persistence volume for the forwarder                                                                     | `false`                                                    |
 | `forwarder.persistence.hostPath.path`                          | Directory from the host node's filesystem to mount as hostPath volume for persistence.                          | `/opt/bitnami/fluentd/logs/buffers`                        |
+| `forwarder.lifecycle`                                          | Additional lifecycles to add to the pods                                                                        | `{}`                                                       |
 | `forwarder.initContainers`                                     | Additional init containers to add to the pods                                                                   | `[]`                                                       |
 | `forwarder.sidecars`                                           | Add sidecars to forwarder pods                                                                                  | `[]`                                                       |
 | `forwarder.extraVolumes`                                       | Extra volumes                                                                                                   | `[]`                                                       |
@@ -226,6 +227,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `aggregator.persistence.storageClass`                          | Persistent Volume storage class                                                                                 | `""`                                                       |
 | `aggregator.persistence.accessMode`                            | Persistent Volume access mode                                                                                   | `ReadWriteOnce`                                            |
 | `aggregator.persistence.size`                                  | Persistent Volume size                                                                                          | `10Gi`                                                     |
+| `aggregator.lifecycle`                                         | Additional lifecycles to add to the pods                                                                        | `{}`                                                       |
 | `aggregator.initContainers`                                    | Add init containers to aggregator pods                                                                          | `[]`                                                       |
 | `aggregator.sidecars`                                          | Add sidecars to aggregator pods                                                                                 | `[]`                                                       |
 | `aggregator.extraVolumes`                                      | Extra volumes                                                                                                   | `[]`                                                       |

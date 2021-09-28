@@ -183,3 +183,12 @@ To connect to your database from outside the cluster execute the following comma
 {{- end -}}
 {{- $requiredRedisPasswordErrors := include "common.validations.values.multiple.empty" (dict "required" $requiredPassword "context" $) -}}
 {{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" (list $requiredRedisPasswordErrors) "context" $) -}}
+
+{{- if and (eq .Values.architecture "replication") .Values.sentinel.enabled (eq .Values.sentinel.service.type "NodePort") (not .Release.IsUpgrade ) }}
+{{- if $.Values.sentinel.service.nodePorts.sentinel  }}
+No need to upgrade, ports and nodeports have been set from values
+{{- else }}
+#!#!#!#!#!#!#!# IMPORTANT #!#!#!#!#!#!#!#
+YOU NEED TO PERFORM AN UPGRADE FOR THE SERVICES AND WORKLOAD TO BE CREATED
+{{- end }}
+{{- end }}

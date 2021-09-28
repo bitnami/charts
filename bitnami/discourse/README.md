@@ -162,30 +162,30 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Sidekiq parameters
 
-| Name                                         | Description                                                       | Value  |
-| -------------------------------------------- | ----------------------------------------------------------------- | ------ |
-| `sidekiq.containerSecurityContext`           | Container security context specification                          | `{}`   |
-| `sidekiq.command`                            | Custom command to override image cmd (evaluated as a template)    | `[]`   |
-| `sidekiq.args`                               | Custom args for the custom command (evaluated as a template)      | `[]`   |
-| `sidekiq.resources`                          | Sidekiq container resource requests and limits                    | `{}`   |
-| `sidekiq.livenessProbe.enabled`              | Enable/disable livenessProbe                                      | `true` |
-| `sidekiq.livenessProbe.initialDelaySeconds`  | Delay before liveness probe is initiated                          | `500`  |
-| `sidekiq.livenessProbe.periodSeconds`        | How often to perform the probe                                    | `10`   |
-| `sidekiq.livenessProbe.timeoutSeconds`       | When the probe times out                                          | `5`    |
-| `sidekiq.livenessProbe.failureThreshold`     | Minimum consecutive failures for the probe                        | `6`    |
-| `sidekiq.livenessProbe.successThreshold`     | Minimum consecutive successes for the probe                       | `1`    |
-| `sidekiq.readinessProbe.enabled`             | Enable/disable readinessProbe                                     | `true` |
-| `sidekiq.readinessProbe.initialDelaySeconds` | Delay before readiness probe is initiated                         | `30`   |
-| `sidekiq.readinessProbe.periodSeconds`       | How often to perform the probe                                    | `10`   |
-| `sidekiq.readinessProbe.timeoutSeconds`      | When the probe times out                                          | `5`    |
-| `sidekiq.readinessProbe.failureThreshold`    | Minimum consecutive failures for the probe                        | `6`    |
-| `sidekiq.readinessProbe.successThreshold`    | Minimum consecutive successes for the probe                       | `1`    |
-| `sidekiq.customLivenessProbe`                | Custom liveness probe to execute (when the main one is disabled)  | `{}`   |
-| `sidekiq.customReadinessProbe`               | Custom readiness probe to execute (when the main one is disabled) | `{}`   |
-| `sidekiq.extraEnvVars`                       | An array to add extra env vars                                    | `[]`   |
-| `sidekiq.extraEnvVarsCM`                     | Array to add extra configmaps                                     | `[]`   |
-| `sidekiq.extraEnvVarsSecret`                 | Name of the secret that holds extra env vars                      | `""`   |
-| `sidekiq.extraVolumeMounts`                  | Additional volume mounts                                          | `[]`   |
+| Name                                         | Description                                                       | Value                                               |
+| -------------------------------------------- | ----------------------------------------------------------------- | --------------------------------------------------- |
+| `sidekiq.containerSecurityContext`           | Container security context specification                          | `{}`                                                |
+| `sidekiq.command`                            | Custom command to override image cmd (evaluated as a template)    | `["/opt/bitnami/scripts/discourse/entrypoint.sh"]`  |
+| `sidekiq.args`                               | Custom args for the custom command (evaluated as a template)      | `["/opt/bitnami/scripts/discourse-sidekiq/run.sh"]` |
+| `sidekiq.resources`                          | Sidekiq container resource requests and limits                    | `{}`                                                |
+| `sidekiq.livenessProbe.enabled`              | Enable/disable livenessProbe                                      | `true`                                              |
+| `sidekiq.livenessProbe.initialDelaySeconds`  | Delay before liveness probe is initiated                          | `500`                                               |
+| `sidekiq.livenessProbe.periodSeconds`        | How often to perform the probe                                    | `10`                                                |
+| `sidekiq.livenessProbe.timeoutSeconds`       | When the probe times out                                          | `5`                                                 |
+| `sidekiq.livenessProbe.failureThreshold`     | Minimum consecutive failures for the probe                        | `6`                                                 |
+| `sidekiq.livenessProbe.successThreshold`     | Minimum consecutive successes for the probe                       | `1`                                                 |
+| `sidekiq.readinessProbe.enabled`             | Enable/disable readinessProbe                                     | `true`                                              |
+| `sidekiq.readinessProbe.initialDelaySeconds` | Delay before readiness probe is initiated                         | `30`                                                |
+| `sidekiq.readinessProbe.periodSeconds`       | How often to perform the probe                                    | `10`                                                |
+| `sidekiq.readinessProbe.timeoutSeconds`      | When the probe times out                                          | `5`                                                 |
+| `sidekiq.readinessProbe.failureThreshold`    | Minimum consecutive failures for the probe                        | `6`                                                 |
+| `sidekiq.readinessProbe.successThreshold`    | Minimum consecutive successes for the probe                       | `1`                                                 |
+| `sidekiq.customLivenessProbe`                | Custom liveness probe to execute (when the main one is disabled)  | `{}`                                                |
+| `sidekiq.customReadinessProbe`               | Custom readiness probe to execute (when the main one is disabled) | `{}`                                                |
+| `sidekiq.extraEnvVars`                       | An array to add extra env vars                                    | `[]`                                                |
+| `sidekiq.extraEnvVarsCM`                     | Array to add extra configmaps                                     | `[]`                                                |
+| `sidekiq.extraEnvVarsSecret`                 | Name of the secret that holds extra env vars                      | `""`                                                |
+| `sidekiq.extraVolumeMounts`                  | Additional volume mounts                                          | `[]`                                                |
 
 
 ### Volume Permissions parameters
