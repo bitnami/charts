@@ -887,7 +887,7 @@ git:
     debug: false
   ## Get DAG files from git repositories
   ## @param git.dags.enabled Enable in order to download DAG files from git repositories.
-  ## @param git.dags.repositories Array of repositories from which to download DAG files
+  ## @param git.dags.repositories [array] Array of repositories from which to download DAG files
   ##
   dags:
     enabled: false
@@ -913,7 +913,7 @@ git:
         path: ""
   ## Get Plugins files from git repositories.
   ## @param git.plugins.enabled Enable in order to download Plugins files from git repositories.
-  ## @param git.plugins.repositories Array of repositories from which to download DAG files
+  ## @param git.plugins.repositories [array] Array of repositories from which to download DAG files
   ##
   plugins:
     enabled: false
