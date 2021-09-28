@@ -45,6 +45,13 @@ Expand the name of the chart.
 {{- end -}}
 
 {{/*
+Return the proper CATALINA_OPTS value
+*/}}
+{{- define "tomcat.catalinaOpts" -}}
+  {{- printf "%s %s" .Values.catalinaOpts .Values.metrics.jmx.catalinaOpts  | trim  -}}
+{{- end -}}
+
+{{/*
 Return the proper JMX exporter image name
 */}}
 {{- define "tomcat.metrics.jmx.image" -}}
@@ -60,4 +67,14 @@ Return the tomcat jmx configuration configmap
 {{- else -}}
     {{- printf "%s-jmx-configuration" (include "tomcat.fullname" .) -}}
 {{- end -}}
+{{- end -}}
+{{/*
+Check if jmx metrics is enabled, then either metrics.jmx.config or metrics.jmx.existingConfigmap must be set.
+*/}}
+{{- define "tomcat.checkJmxConfig" -}}
+  {{- if .Values.metrics.jmx.enabled -}}
+    {{- if and (not .Values.metrics.jmx.config)  (not .Values.metrics.jmx.existingConfigmap) -}}
+      {{- printf "%s" "\nJMX CONFIG ERROR: You must provide JMX configuration by set either metrics.jmx.config or metrics.jmx.existingConfigmap" | fail -}}
+    {{- end -}}
+  {{- end -}}
 {{- end -}}

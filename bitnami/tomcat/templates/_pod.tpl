@@ -73,10 +73,10 @@ containers:
         key: tomcat-password
   - name: TOMCAT_ALLOW_REMOTE_MANAGEMENT
     value: {{ .Values.tomcatAllowRemoteManagement | quote }}
-  {{ if or .Values.catalinaOpts .Values.metrics.jmx.enabled }}    
+  {{- if or .Values.catalinaOpts .Values.metrics.jmx.enabled }}    
   - name: CATALINA_OPTS
-    value: "{{ .Values.catalinaOpts  }} {{ .Values.metrics.jmx.catalinaOpts }}"
-  {{ end }}
+    value: "{{include "tomcat.catalinaOpts" .}}"
+  {{- end }}
   {{- if .Values.extraEnvVars }}
   {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 2 }}
   {{- end }}
@@ -134,8 +134,8 @@ containers:
     - "5556"
     - /etc/jmx-tomcat/jmx-tomcat-prometheus.yml  
   ports:
-    - name: {{ .Values.metrics.jmx.portName | default "metrics" }}
-      containerPort: {{ .Values.metrics.jmx.port | default "5556" }}	
+    - name: {{ .Values.metrics.jmx.portName }}
+      containerPort: {{ .Values.metrics.jmx.port }}	
   {{- if .Values.metrics.jmx.resources }}
   resources: {{- toYaml .Values.metrics.jmx.resources | nindent 4 }}
   {{- end }}      
