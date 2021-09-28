@@ -524,7 +524,6 @@ metrics:
     ## Specify content for jmx-tomcat-prometheus.yml. Evaluated as a template
     ##
     config: |
-      ---
       jmxUrl: service:jmx:rmi:///jndi/rmi://127.0.0.1:5555/jmxrmi
       startDelaySecs: 120
       ssl: false
