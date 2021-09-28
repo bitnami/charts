@@ -129,7 +129,7 @@ spec:
             - name: MARIADB_MASTER_HOST
               value: {{ include "mariadb.primary.fullname" . }}
             - name: MARIADB_MASTER_PORT_NUMBER
-              value: {{ .Values.primary.service.ports.mysql | quote }}
+              value: {{ coalesce .Values.primary.service.ports.mysql .Values.primary.service.port | quote }}
             - name: MARIADB_MASTER_ROOT_USER
               value: "root"
             {{- if .Values.auth.usePasswordFiles }}

@@ -42,11 +42,11 @@ spec:
   {{- end }}
   ports:
     - name: mysql
-      port: {{ .Values.secondary.service.ports.mysql }}
+      port: {{ coalesce .Values.secondary.service.ports.mysql .Values.primary.service.port }}
       protocol: TCP
       targetPort: mysql
-      {{- if (and (or (eq .Values.secondary.service.type "NodePort") (eq .Values.secondary.service.type "LoadBalancer")) .Values.secondary.service.nodePorts.mysql) }}
-      nodePort: {{ .Values.secondary.service.nodePorts.mysql }}
+      {{- if (and (or (eq .Values.secondary.service.type "NodePort") (eq .Values.secondary.service.type "LoadBalancer")) (coalesce .Values.secondary.service.nodePorts.mysql .Values.secondary.service.nodePort)) }}
+      nodePort: {{ coalesce .Values.secondary.service.nodePorts.mysql .Values.secondary.service.nodePort}}
       {{- else if eq .Values.secondary.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}

@@ -26,9 +26,9 @@ Tip:
 
 Services:
 
-  echo Primary: {{ include "mariadb.primary.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}:{{ .Values.primary.service.ports.mysql }}
+  echo Primary: {{ include "mariadb.primary.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}:{{ coalesce .Values.primary.service.ports.mysql .Values.primary.service.port }}
 {{- if eq .Values.architecture "replication" }}
-  echo Secondary: {{ include "mariadb.secondary.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}:{{ .Values.secondary.service.ports.mysql }}
+  echo Secondary: {{ include "mariadb.secondary.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}:{{ coalesce .Values.secondary.service.ports.mysql .Values.secondary.service.port }}
 {{- end }}
 
 Administrator credentials:
