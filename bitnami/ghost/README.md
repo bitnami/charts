@@ -358,8 +358,8 @@ This major release renames several values in this chart and adds missing feature
 
 Affected values:
 
-- `service.port` renamed as `service.ports.http`.
-- `service.httpsPort` renamed as `service.port.https`.
+- `service.port` was deprecated, we recommend using `service.ports.http` instead.
+- `service.httpsPort` was deprecated, we recommend using `service.ports.https` instead.
 
 Additionally, updates the MariaDB subchart to it newest major, 10.0.0, which contains similar changes.
 
