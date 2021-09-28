@@ -76,9 +76,9 @@ spec:
             {{- include "common.tplvalues.render" (dict "value" .Values.server.args "context" $) | nindent 12 }}
             {{- else }}
             - server
-            - --configmap={{ include "argo-workflows.controller.fullname" . }}
+            - --configmap={{ include "argo-workflows.controller.configMapName" . }}
             - --secure={{ .Values.server.secure }}
-            {{- if .Values.singleNamespace }}
+            {{- if .Values.rbac.singleNamespace }}
             - --namespaced
             {{- end }}
             {{- if .Values.server.auth.enabled }}
@@ -91,7 +91,7 @@ spec:
             {{- end }}
           ports:
             - name: web
-              containerPort: {{ .Values.server.ports.container }}
+              containerPort: {{ .Values.server.containerPorts.web }}
           env:
             - name: IN_CLUSTER
               value: "true"
@@ -122,7 +122,7 @@ spec:
           livenessProbe:
             httpGet:
               path: /
-              port: {{ .Values.server.ports.container }}
+              port: {{ .Values.server.containerPorts.web }}
               {{- if .Values.server.secure }}
               scheme: HTTPS
               {{- end }}
@@ -138,7 +138,7 @@ spec:
           readinessProbe:
             httpGet:
               path: /
-              port: {{ .Values.server.ports.container }}
+              port: {{ .Values.server.containerPorts.web }}
               {{- if .Values.server.secure }}
               scheme: HTTPS
               {{- end }}

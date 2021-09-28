@@ -10,11 +10,20 @@ metadata:
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
-  {{- if .Values.commonAnnotations }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- if or .Values.controller.service.annotations .Values.commonAnnotations }}
+  annotations:
+    {{- if .Values.controller.service.annotations }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.controller.service.annotations "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
   {{- end }}
 spec:
   type: {{ .Values.controller.service.type }}
+  {{- if and .Values.controller.service.clusterIP (eq .Values.controller.service.type "ClusterIP") }}
+  clusterIP: {{ .Values.controller.service.clusterIP }}
+  {{- end }}
   {{- if (or (eq .Values.controller.service.type "LoadBalancer") (eq .Values.controller.service.type "NodePort")) }}
   externalTrafficPolicy: {{ .Values.controller.service.externalTrafficPolicy | quote }}
   {{- end }}
@@ -26,17 +35,30 @@ spec:
   {{- end }}
   ports:
   {{- if .Values.controller.metrics.enabled }}
-  - name: {{ .Values.controller.metrics.servicePortName }}
-    port: {{ .Values.controller.metrics.servicePort }}
-    protocol: TCP
-    targetPort: {{ .Values.controller.metrics.port }}
+    - name: tcp-metrics
+      port: {{ .Values.controller.service.ports.metrics }}
+      protocol: TCP
+      targetPort: {{ .Values.controller.metrics.port }}
+      {{- if (and (or (eq .Values.controller.service.type "NodePort") (eq .Values.controller.service.type "LoadBalancer")) (not (empty .Values.controller.service.nodePorts.metrics))) }}
+      nodePort: {{ .Values.controller.service.nodePorts.metrics }}
+      {{- else if eq .Values.controller.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
   {{- end }}
   {{- if .Values.controller.telemetry.enabled }}
-  - name: {{ .Values.controller.telemetry.servicePortName }}
-    port: {{ .Values.controller.telemetry.servicePort }}
-    protocol: TCP
-    targetPort: {{ .Values.controller.telemetry.port }}
+    - name: tcp-telemetry
+      port: {{ .Values.controller.service.ports.telemetry }}
+      protocol: TCP
+      targetPort: {{ .Values.controller.telemetry.port }}
+      {{- if (and (or (eq .Values.controller.service.type "NodePort") (eq .Values.controller.service.type "LoadBalancer")) (not (empty .Values.controller.service.nodePorts.telemetry))) }}
+      nodePort: {{ .Values.controller.service.nodePorts.telemetry }}
+      {{- else if eq .Values.controller.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
   {{- end }}
+    {{- if .Values.controller.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.controller.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: controller
   sessionAffinity: None

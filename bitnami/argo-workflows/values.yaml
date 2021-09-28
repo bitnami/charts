@@ -38,9 +38,10 @@ clusterDomain: cluster.local
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
-## @param singleNamespace Restrict Argo to only deploy into a single namespace by apply Roles and RoleBindings instead of the Cluster equivalents, and start argo-cli with the --namespaced flag. Use it in clusters with strict access policy.
+## @param rbac.singleNamespace Restrict Argo to only deploy into a single namespace by apply Roles and RoleBindings instead of the Cluster equivalents, and start argo-cli with the --namespaced flag. Use it in clusters with strict access policy.
 ##
-singleNamespace: false
+rbac:
+  singleNamespace: false
 ## @param createAggregateRoles Create Aggregated cluster roles
 ##
 createAggregateRoles: true
@@ -57,7 +58,6 @@ server:
   ## @param server.image.tag server image tag (immutable tags are recommended)
   ## @param server.image.pullPolicy server image pull policy
   ## @param server.image.pullSecrets server image pull secrets
-  ## @param server.image.debug Enable server image debug mode
   ##
   image:
     registry: docker.io
@@ -76,9 +76,7 @@ server:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-    ## Enable debug mode
-    ##
-    debug: false
+
   ## @param server.enabled Enable server deployment
   ##
   enabled: true
@@ -145,7 +143,14 @@ server:
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
-
+  ## Create RBAC resources for the Argo workflows server
+  ## @param server.rbac.create Create RBAC resources for the Argo workflows server
+  ##
+  rbac:
+    create: true
+  ## @param server.extraArgs Extra arguments for the server command line
+  ##
+  extraArgs: ""
   ## Enable authentication with the specified mode
   ## Ref: https://argoproj.github.io/argo-workflows/argo-server-auth-mode/
   ##
@@ -166,7 +171,7 @@ server:
     ## @param server.auth.sso.clientSecret.key Key in the secret to obtain the OIDC client secret
     ## @param server.auth.sso.redirectUrl The OIDC redirect URL. Should be in the form <argo-root-url>/oauth2/callback.
     ## @param server.auth.sso.rbac.enabled Create RBAC resources for SSO
-    ## @param server.auth.sso.secretWhitelist Restricts the secrets that the server can read
+    ## @param server.auth.sso.rbac.secretWhitelist Restricts the secrets that the server can read
     ## @param server.auth.sso.scopes Scopes requested from the SSO ID provider
     ##
     sso:
@@ -191,12 +196,12 @@ server:
       ## Create RBAC resources for SSO
       rbac:
         enabled: true
-      ## When present, restricts secrets the server can read to a given list.
-      ## You can use it to restrict the server to only be able to access the
-      ## service account token secrets that are associated with service accounts
-      ## used for authorization.
-      ##
-      secretWhitelist: []
+        ## When present, restricts secrets the server can read to a given list.
+        ## You can use it to restrict the server to only be able to access the
+        ## service account token secrets that are associated with service accounts
+        ## used for authorization.
+        ##
+        secretWhitelist: []
       ## Scopes requested from the SSO ID provider.  The 'groups' scope requests
       ## group membership information, which is usually used for authorization
       ## decisions.
@@ -234,9 +239,9 @@ server:
   baseHref: /
 
   ## Server container port
-  ## @param server.ports.container argo Server container port
-  ports:
-    container: 2746
+  ## @param server.containerPorts argo Server container port
+  containerPorts:
+    web: 2746
 
   ## ServiceAccount configuration
   ##
@@ -248,6 +253,9 @@ server:
     ## If not set and create is true, a name is generated using the common.names.fullname template
     ##
     name: ""
+    ## @param server.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+    automountServiceAccountToken: true
+
   ## @param server.command Override default container command (useful when using custom images)
   ##
   command: []
@@ -365,20 +373,19 @@ server:
     ## @param server.service.type server service type
     ##
     type: ClusterIP
-    ## @param server.service.port server service HTTP port
+    ## @param server.service.ports.http server service HTTP port
     ##
-    port: 80
+    ports:
+      http: 80
     ## @param server.service.httpsPort server service HTTPS port
     ##
     httpsPort: 443
     ## Node ports to expose
     ## @param server.service.nodePorts.http Node port for HTTP
-    ## @param server.service.nodePorts.https Node port for HTTPS
     ## NOTE: choose port between <30000-32767>
     ##
     nodePorts:
       http:
-      https:
     ## @param server.service.clusterIP server service Cluster IP
     ## e.g.:
     ## clusterIP: None
@@ -402,6 +409,9 @@ server:
     ## @param server.service.annotations Additional custom annotations for server service
     ##
     annotations: {}
+    ## @param server.service.extraPorts Extra port to expose on the server service
+    ##
+    extraPorts: []
 
 ## @section Argo Workflows Controller configuration parameters
 
@@ -415,7 +425,6 @@ controller:
   ## @param controller.image.tag controller image tag (immutable tags are recommended)
   ## @param controller.image.pullPolicy controller image pull policy
   ## @param controller.image.pullSecrets controller image pull secrets
-  ## @param controller.image.debug Enable controller image debug mode
   ##
   image:
     registry: docker.io
@@ -434,9 +443,7 @@ controller:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-    ## Enable debug mode
-    ##
-    debug: false
+
   ## @param controller.replicaCount Number of controller replicas to deploy
   ##
   replicaCount: 1
@@ -502,9 +509,23 @@ controller:
     runAsUser: 1001
 
   ## Server container port
-  ## @param controller.ports.container Argo Workflows controller container port
-  ports:
-    container: 6060
+  ## @param controller.containerPorts Argo Workflows controller container port
+  containerPorts:
+    controller: 6060
+
+  ## Create RBAC resources for the Argo workflows controller
+  ## @param controller.rbac.create Create RBAC resources for the Argo workflows controller
+  ##
+  rbac:
+    create: true
+
+  ## Use an existing configmap instead of creating a configmap with the specified parameters
+  ## @param controller.existingConfigMap
+  existingConfigMap:
+
+  ## @param controller.extraArgs Extra arguments for the controller command line
+  ##
+  extraArgs: ""
 
   ## Controller persistence parameters. It can also be connected to an existing postgresql. Check
   ## @param controller.persistence.enabled Enabled controller persistence
@@ -566,6 +587,7 @@ controller:
       passwordSecret:
         name: argo-mysql-config
         key: password
+
   ## Configure the controller to accept only submissions with a matching instanceID attribute
   ## @param controller.instanceID.enabled Enable submission filtering based on instanceID attribute. Requires to set instanceID.useReleaseName or instanceID.explicitID
   ## @param controller.instanceID.useReleaseName Use the release name to filter submissions
@@ -625,31 +647,23 @@ controller:
   ## @param controller.metrics.enabled Enable controller metrics exporter
   ## @param controller.metrics.path Path to expose controller metrics
   ## @param controller.metrics.port Port to expose controller metrics
-  ## @param controller.metrics.servicePort Service port to expose controller metrics
-  ## @param controller.metrics.servicePortName Name of the service port that expose controller metrics
   ## @param controller.metrics.serviceMonitor.enabled Enable prometheus service monitor configuration
   ##
   metrics:
     enabled: false
     path: /metrics
     port: 9090
-    servicePort: 8080
-    servicePortName: metrics
     serviceMonitor:
       enabled: false
   ## Telemetry configuration for the controller
   ## @param controller.telemetry.enabled Enable telemetry for the controller
   ## @param controller.telemetry.path Path to expose telemetry information
   ## @param controller.telemetry.port Port to expose telemetry information
-  ## @param controller.telemetry.servicePort Service port to expose telemetry information
-  ## @param controller.telemetry.servicePortName Name of the service port that expose telemetry information
   ##
   telemetry:
     enabled: false
     path: /telemetry
     port: 8081
-    servicePort: 8081
-    servicePortName: telemetry
   ## Workflows default configuration for versions greater than 2.7
   ## Ref: https://argoproj.github.io/argo-workflows/default-workflow-specs/#setting-default-workflow-values
   ## @param controller.workflowDefaults Default workflow configuration for versions greater than 2.7
@@ -707,6 +721,9 @@ controller:
     ## If not set and create is true, a name is generated using the common.names.fullname template
     ##
     name: ""
+    ## @param controller.serviceAccount.automountServiceAccountToken Automount service account token for the controller service account
+    automountServiceAccountToken: true
+
   ## @param controller.command Override default container command (useful when using custom images)
   ##
   command: []
@@ -824,14 +841,21 @@ controller:
     ## @param controller.service.type controller service type
     ##
     type: ClusterIP
+
+    ## controller.service.ports.metrics Metrics port for the controller
+    ## controller.service.ports.telemetry Telemetry port for the controller
+    ##
+    ports:
+      metrics: 8080
+      telemetry: 8081
     ## Node ports to expose
-    ## @param controller.service.nodePorts.http Node port for HTTP
-    ## @param controller.service.nodePorts.https Node port for HTTPS
+    ## @param controller.service.nodePorts.metrics Node port for HTTP
+    ## @param controller.service.nodePorts.telemetry Node port for HTTPS
     ## NOTE: choose port between <30000-32767>
     ##
     nodePorts:
-      http:
-      https:
+      metrics:
+      telemetry:
     ## @param controller.service.clusterIP controller service Cluster IP
     ## e.g.:
     ## clusterIP: None
@@ -855,6 +879,9 @@ controller:
     ## @param controller.service.annotations Additional custom annotations for controller service
     ##
     annotations: {}
+    ## @param controller.service.extraPorts Extra port to expose on the controller service
+    ##
+    extraPorts: []
 
 ## @section Executor configuration section
 
@@ -907,14 +934,6 @@ executor:
   podSecurityContext:
     enabled: true
     fsGroup: 1001
-  ## Configure Container Security Context
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param executor.containerSecurityContext.enabled Enabled executor containers' Security Context
-  ## @param executor.containerSecurityContext.runAsUser Set executor containers' Security Context runAsUser
-  ##
-  containerSecurityContext:
-    enabled: true
-    runAsUser: 1001
 
 ## @section Traffic Exposure Parameters
 
@@ -1013,10 +1032,12 @@ workflows:
   ## Service account configuration for workflows
   ## @param workflows.serviceAccount.create Whether to create a service account to run workflows
   ## @param workflows.serviceAccount.name Service account name to run workflows
+  ## @param workflows.serviceAccount.automountServiceAccountToken Automount service account token for the workflows service account
   ##
   serviceAccount:
     create: false
     name:
+    automountServiceAccountToken: true
   ## Create RBAC resources to run workflows.
   ## A Role and Role Bindding are created per namespace in controller.workflowNamespaces
   ## @param workflows.rbac.create Whether to create RBAC resource to run workflows

@@ -87,12 +87,23 @@ Return the proper Docker Image Registry Secret Names
 {{- end -}}
 
 {{/*
+Return the proper configmap for the controller
+*/}}
+{{- define "argo-workflows.controller.configMapName" -}}
+{{- if .Values.controller.existingConfigMap }}
+{{- .Values.controller.existingConfigMap -}}
+{{- else -}}
+{{- include "argo-workflows.controller.fullname" . -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Validate instanceID configuration
 */}}
 {{- define "argo-workflows.validateValues.instanceID" -}}
 {{- if .Values.controller.instanceID.enabled -}}
-{{- if not (or .Values.controller.instanceID.explicitInstanceID .Values.controller.instanceID.useReleaseName) -}}
-{{- printf "Error: controller.instanceID.useReleaseName or controller.instanceID.explicitInstanceID is required when enabling instanceID" -}}
+{{- if not (or .Values.controller.instanceID.explicitID .Values.controller.instanceID.useReleaseName) -}}
+{{- printf "Error: controller.instanceID.useReleaseName or controller.instanceID.explicitID is required when enabling instanceID" -}}
 {{- end -}}
 {{- end -}}
 {{- end -}}

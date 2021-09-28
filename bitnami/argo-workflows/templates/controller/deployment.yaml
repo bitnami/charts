@@ -75,14 +75,14 @@ spec:
           {{- include "common.tplvalues.render" (dict "value" .Values.controller.args "context" $) | nindent 12 }}
           {{- else }}
             - --configmap
-            - {{ include "argo-workflows.controller.fullname" . }}
+            - {{ include "argo-workflows.controller.configMapName" . }}
             - --executor-image
             - {{ .Values.executor.image.registry }}/{{ .Values.executor.image.repository }}:{{ .Values.executor.image.tag }}
             - --loglevel
             - {{ .Values.controller.logging.level }}
             - --gloglevel
             - {{ .Values.controller.logging.globalLevel | quote }}
-            {{- if .Values.singleNamespace }}
+            {{- if .Values.rbac.singleNamespace }}
             - --namespaced
             {{- end }}
             {{- if .Values.controller.workflowWorkers }}
@@ -124,14 +124,14 @@ spec:
             - name: metrics
               containerPort: {{ .Values.controller.metrics.port }}
             - name: controller
-              containerPort: {{ .Values.controller.ports.container }}
+              containerPort: {{ .Values.controller.containerPorts.controller }}
           {{- if .Values.controller.resources }}
           resources: {{- toYaml .Values.controller.resources | nindent 12 }}
           {{- end }}
           {{- if .Values.controller.livenessProbe.enabled }}
           livenessProbe:
             tcpSocket:
-              port: {{ .Values.controller.ports.container }}
+              port: {{ .Values.controller.containerPorts.controller }}
             initialDelaySeconds: {{ .Values.controller.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.controller.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.controller.livenessProbe.timeoutSeconds }}
@@ -143,7 +143,7 @@ spec:
           {{- if .Values.controller.readinessProbe.enabled }}
           readinessProbe:
             tcpSocket:
-              port: {{ .Values.controller.ports.container }}
+              port: {{ .Values.controller.containerPorts.controller }}
             initialDelaySeconds: {{ .Values.controller.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.controller.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.controller.readinessProbe.timeoutSeconds }}

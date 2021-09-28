@@ -1,7 +1,8 @@
+{{- if not .Values.controller.existingConfigMap }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{include "argo-workflows.controller.fullname" . }}
+  name: {{ include "argo-workflows.controller.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/part-of: argo-workflows
@@ -32,7 +33,7 @@ data:
     {{- if .Values.controller.namespaceParallelism }}
     namespaceParallelism: {{ .Values.controller.namespaceParallelism }}
     {{- end }}
-    {{- if or .Values.executor.resources .Values.executor.extraEnvVars .Values.executor.securityContext }}
+    {{- if or .Values.executor.resources .Values.executor.extraEnvVars .Values.executor.podSecurityContext }}
     executor:
       {{- if .Values.executor.resources }}
       resources: {{- include "common.tplvalues.render" (dict "value" .Values.executor.resources "context" $) | nindent 8 }}
@@ -40,8 +41,8 @@ data:
       {{- if .Values.executor.extraEnvVars }}
       env: {{- include "common.tplvalues.render" (dict "value" .Values.executor.extraEnvVars "context" $) | nindent 8 }}
       {{- end }}
-      {{- if .Values.executor.securityContext }}
-      securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.executor.securityContext "context" $) | nindent 8 }}
+      {{- if .Values.executor.podSecurityContext }}
+      securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.executor.podSecurityContext "context" $) | nindent 8 }}
         {{- if not (eq .Values.controller.containerRuntimeExecutor "docker") }}
         ## Docker executor requires to run executor as root
         runAsNonRoot: true
@@ -89,3 +90,4 @@ data:
     {{- if .Values.controller.links }}
     links: {{- include "common.tplvalues.render" (dict "value" .Values.controller.links "context" $) | nindent 6 }}
     {{- end }}
+{{- end }}

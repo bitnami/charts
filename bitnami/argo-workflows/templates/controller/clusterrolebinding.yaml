@@ -1,5 +1,6 @@
+{{- if .Values.controller.rbac.create }}
 apiVersion: rbac.authorization.k8s.io/v1
-{{- if .Values.singleNamespace }}
+{{- if .Values.rbac.singleNamespace }}
 kind: RoleBinding
 {{ else }}
 kind: ClusterRoleBinding
@@ -18,7 +19,7 @@ metadata:
   {{- end }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
-  {{- if .Values.singleNamespace }}
+  {{- if .Values.rbac.singleNamespace }}
   kind: Role
   {{ else }}
   kind: ClusterRole
@@ -63,4 +64,5 @@ subjects:
   - kind: ServiceAccount
     name: {{ include "argo-workflows.controller.serviceAccountName" . }}
     namespace: {{ .Release.Namespace }}
+{{- end }}
 {{- end }}

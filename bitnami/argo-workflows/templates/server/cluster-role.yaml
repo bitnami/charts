@@ -1,6 +1,6 @@
-{{- if .Values.server.enabled }}
+{{- if and .Values.server.enabled .Values.server.rbac.create }}
 apiVersion: rbac.authorization.k8s.io/v1
-{{- if .Values.singleNamespace }}
+{{- if .Values.rbac.singleNamespace }}
 kind: Role
 {{- else }}
 kind: ClusterRole
