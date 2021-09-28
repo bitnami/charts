@@ -77,6 +77,9 @@ spec:
           {{- if .Values.curator.tolerations }}
           tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.curator.tolerations "context" $) | nindent 12 }}
           {{- end }}
+          {{- if .Values.curator.topologySpreadConstraints }}
+          topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.curator.topologySpreadConstraints "context" $) | nindent 12 }}
+          {{- end }}
           {{- if .Values.curator.securityContext }}
           securityContext: {{- toYaml .Values.curator.securityContext | nindent 12 }}
           {{- end }}
