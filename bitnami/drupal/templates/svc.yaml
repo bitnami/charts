@@ -34,7 +34,7 @@ spec:
   {{- end }}
   ports:
     - name: http
-      port: {{ .Values.service.ports.http}}
+      port: {{ coalesce .Values.service.ports.http .Values.service.port }}
       targetPort: http
       {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.http)) }}
       nodePort: {{ .Values.service.nodePorts.http }}
@@ -42,7 +42,7 @@ spec:
       nodePort: null
       {{- end }}
     - name: https
-      port: {{ .Values.service.ports.https }}
+      port: {{ coalesce .Values.service.ports.https .Values.service.httpsPort }}
       targetPort: https
       {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.https)) }}
       nodePort: {{ .Values.service.nodePorts.https }}

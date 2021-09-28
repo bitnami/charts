@@ -111,7 +111,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sessionAffinity`                       | Control where client requests go, to the same pod or round-robin. Values: ClientIP or None                            | `None`               |
 | `persistence.enabled`                   | Enable persistence using PVC                                                                                          | `true`               |
 | `persistence.storageClass`              | PVC Storage Class for Drupal volume                                                                                   | `""`                 |
-| `persistence.accessModes`               | PVC Access Mode for Drupal volume                                                                                     | `[]`                 |
+| `persistence.accessModes`               | PVC Access Mode for Drupal volume                                                                                     | `["ReadWriteOnce"]`  |
 | `persistence.size`                      | PVC Storage Request for Drupal volume                                                                                 | `8Gi`                |
 | `persistence.existingClaim`             | A manually managed Persistent Volume Claim                                                                            | `""`                 |
 | `persistence.hostPath`                  | If defined, the drupal-data volume will mount to the specified hostPath.                                              | `""`                 |
@@ -192,25 +192,25 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Database parameters
 
-| Name                                        | Description                                                                              | Value            |
-| ------------------------------------------- | ---------------------------------------------------------------------------------------- | ---------------- |
-| `mariadb.enabled`                           | Whether to deploy a mariadb server to satisfy the applications database requirements     | `true`           |
-| `mariadb.architecture`                      | MariaDB architecture (`standalone` or `replication`)                                     | `standalone`     |
-| `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                                                     | `""`             |
-| `mariadb.auth.database`                     | Database name to create                                                                  | `bitnami_drupal` |
-| `mariadb.auth.username`                     | Database user to create                                                                  | `bn_drupal`      |
-| `mariadb.auth.password`                     | Password for the database                                                                | `""`             |
-| `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                                                    | `true`           |
-| `mariadb.primary.persistence.storageClass`  | MariaDB primary persistent volume storage Class                                          | `""`             |
-| `mariadb.primary.persistence.accessModes`   | Database Persistent Volume Access Modes                                                  | `[]`             |
-| `mariadb.primary.persistence.size`          | Database Persistent Volume Size                                                          | `8Gi`            |
-| `mariadb.primary.persistence.hostPath`      | Set path in case you want to use local host path volumes (not recommended in production) | `""`             |
-| `mariadb.primary.persistence.existingClaim` | Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas                 | `""`             |
-| `externalDatabase.host`                     | Host of the existing database                                                            | `""`             |
-| `externalDatabase.port`                     | Port of the existing database                                                            | `3306`           |
-| `externalDatabase.user`                     | Existing username in the external db                                                     | `bn_drupal`      |
-| `externalDatabase.password`                 | Password for the above username                                                          | `""`             |
-| `externalDatabase.database`                 | Name of the existing database                                                            | `bitnami_drupal` |
+| Name                                        | Description                                                                              | Value               |
+| ------------------------------------------- | ---------------------------------------------------------------------------------------- | ------------------- |
+| `mariadb.enabled`                           | Whether to deploy a mariadb server to satisfy the applications database requirements     | `true`              |
+| `mariadb.architecture`                      | MariaDB architecture (`standalone` or `replication`)                                     | `standalone`        |
+| `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                                                     | `""`                |
+| `mariadb.auth.database`                     | Database name to create                                                                  | `bitnami_drupal`    |
+| `mariadb.auth.username`                     | Database user to create                                                                  | `bn_drupal`         |
+| `mariadb.auth.password`                     | Password for the database                                                                | `""`                |
+| `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                                                    | `true`              |
+| `mariadb.primary.persistence.storageClass`  | MariaDB primary persistent volume storage Class                                          | `""`                |
+| `mariadb.primary.persistence.accessModes`   | Database Persistent Volume Access Modes                                                  | `["ReadWriteOnce"]` |
+| `mariadb.primary.persistence.size`          | Database Persistent Volume Size                                                          | `8Gi`               |
+| `mariadb.primary.persistence.hostPath`      | Set path in case you want to use local host path volumes (not recommended in production) | `""`                |
+| `mariadb.primary.persistence.existingClaim` | Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas                 | `""`                |
+| `externalDatabase.host`                     | Host of the existing database                                                            | `""`                |
+| `externalDatabase.port`                     | Port of the existing database                                                            | `3306`              |
+| `externalDatabase.user`                     | Existing username in the external db                                                     | `bn_drupal`         |
+| `externalDatabase.password`                 | Password for the above username                                                          | `""`                |
+| `externalDatabase.database`                 | Name of the existing database                                                            | `bitnami_drupal`    |
 
 
 ### Volume Permissions parameters
@@ -366,8 +366,8 @@ This major release renames several values in this chart and adds missing feature
 
 Affected values:
 
-- `service.port` renamed as `service.ports.http`.
-- `service.httpsPort` renamed as `service.ports.https`.
+- `service.port` was deprecated, we recommend using `service.ports.http` instead.
+- `service.httpsPort` was deprecated, we recommend using `service.ports.https` instead.
 - `persistence.accessMode` has been deprecated, we recommend using `persistence.accessModes` instead.
 
 Additionally also updates the MariaDB subchart to it newest major, 10.0.0, which contains similar changes.
