@@ -66,8 +66,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `commonLabels`           | Add labels to all the deployed resources                                                     | `{}`            |
 | `commonAnnotations`      | Add annotations to all the deployed resources                                                | `{}`            |
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)      | `false`         |
-| `diagnosticMode.command` | Command to override all containers in the deployment                                         | `[]`            |
-| `diagnosticMode.args`    | Args to override all containers in the deployment                                            | `[]`            |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                         | `["sleep"]`     |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                            | `["infinity"]`  |
 
 
 ### Zookeeper chart parameters
@@ -76,7 +76,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
 | `image.registry`            | ZooKeeper image registry                                                                                                                 | `docker.io`            |
 | `image.repository`          | ZooKeeper image repository                                                                                                               | `bitnami/zookeeper`    |
-| `image.tag`                 | ZooKeeper Image tag (immutable tags are recommended)                                                                                     | `3.7.0-debian-10-r127` |
+| `image.tag`                 | ZooKeeper Image tag (immutable tags are recommended)                                                                                     | `3.7.0-debian-10-r157` |
 | `image.pullPolicy`          | ZooKeeper image pull policy                                                                                                              | `IfNotPresent`         |
 | `image.pullSecrets`         | Specify docker-registry secret names as an array                                                                                         | `[]`                   |
 | `image.debug`               | Specify if debug values should be set                                                                                                    | `false`                |
@@ -177,24 +177,25 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.create`                       | Enable creation of ServiceAccount for Zookeeper pod                             | `false`     |
 | `serviceAccount.name`                         | The name of the ServiceAccount to use.                                          | `""`        |
 | `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created          | `true`      |
+| `sidecars`                                    | Extra containers to the pod                                                     | `[]`        |
 | `networkPolicy.enabled`                       | Specifies whether a NetworkPolicy should be created                             | `false`     |
 | `networkPolicy.allowExternal`                 | Don't require client label for connections                                      | `true`      |
 
 
 ### Persistence parameters
 
-| Name                                   | Description                                                                    | Value  |
-| -------------------------------------- | ------------------------------------------------------------------------------ | ------ |
-| `persistence.existingClaim`            | Provide an existing `PersistentVolumeClaim`                                    | `""`   |
-| `persistence.enabled`                  | Enable Zookeeper data persistence using PVC                                    | `true` |
-| `persistence.storageClass`             | PVC Storage Class for ZooKeeper data volume                                    | `""`   |
-| `persistence.accessModes`              | PVC Access modes                                                               | `[]`   |
-| `persistence.size`                     | PVC Storage Request for ZooKeeper data volume                                  | `8Gi`  |
-| `persistence.annotations`              | Annotations for the PVC                                                        | `{}`   |
-| `persistence.selector`                 | Selector to match an existing Persistent Volume for Zookeeper's data PVC       | `{}`   |
-| `persistence.dataLogDir.size`          | PVC Storage Request for ZooKeeper's Data log directory                         | `8Gi`  |
-| `persistence.dataLogDir.existingClaim` | Provide an existing `PersistentVolumeClaim` for Zookeeper's Data log directory | `""`   |
-| `persistence.dataLogDir.selector`      | Selector to match an existing Persistent Volume for Zookeeper's Data log PVC   | `{}`   |
+| Name                                   | Description                                                                    | Value               |
+| -------------------------------------- | ------------------------------------------------------------------------------ | ------------------- |
+| `persistence.existingClaim`            | Provide an existing `PersistentVolumeClaim`                                    | `""`                |
+| `persistence.enabled`                  | Enable Zookeeper data persistence using PVC                                    | `true`              |
+| `persistence.storageClass`             | PVC Storage Class for ZooKeeper data volume                                    | `""`                |
+| `persistence.accessModes`              | PVC Access modes                                                               | `["ReadWriteOnce"]` |
+| `persistence.size`                     | PVC Storage Request for ZooKeeper data volume                                  | `8Gi`               |
+| `persistence.annotations`              | Annotations for the PVC                                                        | `{}`                |
+| `persistence.selector`                 | Selector to match an existing Persistent Volume for Zookeeper's data PVC       | `{}`                |
+| `persistence.dataLogDir.size`          | PVC Storage Request for ZooKeeper's Data log directory                         | `8Gi`               |
+| `persistence.dataLogDir.existingClaim` | Provide an existing `PersistentVolumeClaim` for Zookeeper's Data log directory | `""`                |
+| `persistence.dataLogDir.selector`      | Selector to match an existing Persistent Volume for Zookeeper's Data log PVC   | `{}`                |
 
 
 ### Volume Permissions parameters
@@ -204,7 +205,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`           | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`    | Init container volume-permissions image registry                                                                     | `docker.io`             |
 | `volumePermissions.image.repository`  | Init container volume-permissions image repository                                                                   | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`         | Init container volume-permissions image tag (immutable tags are recommended)                                         | `10-debian-10-r172`     |
+| `volumePermissions.image.tag`         | Init container volume-permissions image tag (immutable tags are recommended)                                         | `10-debian-10-r202`     |
 | `volumePermissions.image.pullPolicy`  | Init container volume-permissions image pull policy                                                                  | `Always`                |
 | `volumePermissions.image.pullSecrets` | Init container volume-permissions image pull secrets                                                                 | `[]`                    |
 | `volumePermissions.resources`         | Init container resource requests/limit                                                                               | `{}`                    |
@@ -314,6 +315,18 @@ customReadinessProbe:
   successThreshold: 1
   failureThreshold: 6
 ```
+
+You can also set the log4j logging level and what log appenders are turned on, by using `ZOO_LOG4J_PROP` set inside of conf/log4j.properties as zookeeper.root.logger by default to
+
+```console
+zookeeper.root.logger=INFO, CONSOLE
+```
+the available appender is 
+
+- CONSOLE 
+- ROLLINGFILE
+- RFAAUDIT
+- TRACEFILE
 
 ## Persistence
 

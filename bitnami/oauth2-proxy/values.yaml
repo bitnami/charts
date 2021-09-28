@@ -173,7 +173,7 @@ ingress:
 image:
   registry: docker.io
   repository: bitnami/oauth2-proxy
-  tag: 7.1.3-debian-10-r100
+  tag: 7.1.3-debian-10-r129
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images

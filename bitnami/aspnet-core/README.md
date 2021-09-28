@@ -158,7 +158,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `appFromExternalRepo.publish.image.pullSecrets` | .NET SDK image pull secrets                                            | `[]`                                                                |
 | `appFromExternalRepo.publish.subFolder`         | Sub folder under the Git repository containing the ASP.NET Core app    | `aspnetcore/fundamentals/servers/kestrel/samples/3.x/KestrelSample` |
 | `appFromExternalRepo.publish.extraFlags`        | Extra flags to be appended to "dotnet publish" command                 | `[]`                                                                |
-| `appFromExternalRepo.startCommand`              | Command used to start ASP.NET Core app                                 | `[]`                                                                |
+| `appFromExternalRepo.startCommand`              | Command used to start ASP.NET Core app                                 | `["dotnet","KestrelSample.dll"]`                                    |
 | `appFromExistingPVC.enabled`                    | Enable mounting your ASP.NET Core app from an existing PVC             | `false`                                                             |
 | `appFromExistingPVC.existingClaim`              | A existing Persistent Volume Claim containing your ASP.NET Core app    | `""`                                                                |
 
