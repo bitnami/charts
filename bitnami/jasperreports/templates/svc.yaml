@@ -36,10 +36,10 @@ spec:
   {{- end }}
   ports:
     - name: http
-      port: {{ .Values.service.ports.http }}
+      port: {{ coalesce .Values.service.ports.http .Values.service.port }}
       targetPort: http
-      {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.http)) }}
-      nodePort: {{ .Values.service.nodePorts.http }}
+      {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty (coalesce .Values.service.nodePorts.http .Values.service.nodePort))) }}
+      nodePort: {{ coalesce .Values.service.nodePorts.http .Values.service.nodePort }}
       {{- else if eq .Values.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}

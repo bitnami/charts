@@ -139,7 +139,7 @@ spec:
           {{- end }}
           ports:
             - name: http
-              containerPort: {{ .Values.containerPorts.http }}
+              containerPort: {{ coalesce .Values.containerPorts.http .Values.containerPort }}
           {{- if .Values.startupProbe.enabled }}
           startupProbe:
             httpGet:

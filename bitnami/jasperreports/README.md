@@ -154,7 +154,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sidecars`                              | Add additional sidecar containers to the Jasperreports pods                               | `[]`                       |
 | `persistence.enabled`                   | Enable persistence using PVC                                                              | `true`                     |
 | `persistence.storageClass`              | PVC Storage Class for Jasperreports volume                                                | `""`                       |
-| `persistence.accessModes`               | Persistent Volume Access Mode                                                             | `[]`                       |
+| `persistence.accessModes`               | Persistent Volume Access Mode                                                             | `["ReadWriteOnce"]`        |
 | `persistence.size`                      | PVC Storage Request for Jasperreports volume                                              | `8Gi`                      |
 | `persistence.existingClaim`             | An Existing PVC name for Jasperreports volume                                             | `""`                       |
 | `persistence.annotations`               | Persistent Volume Claim annotations                                                       | `{}`                       |
@@ -307,9 +307,9 @@ This major release renames several values in this chart and adds missing feature
 
 Affected values:
 
-- `service.port` renamed as `service.ports.http`.
-- `service.nodePort` renamed as `service.nodePorts.http`.
-- `containerPort` renamed as `containerPorts.http`
+- `service.port` was deprecated, we recommend using `service.ports.http` instead.
+- `service.nodePort` was deprecated, we recommend using `service.nodePorts.http` instead .
+- `containerPort` was deprecated, we recommend using `containerPorts.http` instead.
 
 Additionally also updates the MariaDB subchart to it newest major, 10.0.0, which contains similar changes.
 
