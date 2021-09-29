@@ -79,7 +79,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.name`                           | The name of the ServiceAccount to create                                                  | `""`                         |
 | `image.registry`                                | kube-state-metrics image registry                                                         | `docker.io`                  |
 | `image.repository`                              | kube-state-metrics image repository                                                       | `bitnami/kube-state-metrics` |
-| `image.tag`                                     | kube-state-metrics Image tag (immutable tags are recommended)                             | `2.2.0-debian-10-r31`        |
+| `image.tag`                                     | kube-state-metrics Image tag (immutable tags are recommended)                             | `2.2.1-debian-10-r1`         |
 | `image.pullPolicy`                              | kube-state-metrics image pull policy                                                      | `IfNotPresent`               |
 | `image.pullSecrets`                             | Specify docker-registry secret names as an array                                          | `[]`                         |
 | `extraArgs`                                     | Additional command line arguments to pass to kube-state-metrics                           | `{}`                         |

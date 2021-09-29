@@ -1,10 +1,10 @@
 dependencies:
 - name: kafka
   repository: https://charts.bitnami.com/bitnami
-  version: 14.1.1
+  version: 14.2.0
 - name: spark
   repository: https://charts.bitnami.com/bitnami
-  version: 5.7.2
+  version: 5.7.3
 - name: elasticsearch
   repository: https://charts.bitnami.com/bitnami
   version: 17.0.3
@@ -17,5 +17,5 @@ dependencies:
 - name: common
   repository: https://charts.bitnami.com/bitnami
   version: 1.9.1
-digest: sha256:7c415f9c997d39e32e33fc5b529c554a8f98b288f7e1227d16913950596cffc2
-generated: "2021-09-23T07:44:29.936487547Z"
+digest: sha256:afbe9415d32060b6d17b772f033b3ca127b01b9a15dfde4583da98dfe85cd0ca
+generated: "2021-09-28T11:07:31.312105673Z"
