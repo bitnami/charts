@@ -891,7 +891,7 @@ ldap:
 ## @param ingress.apiVersion Override API Version (automatically detected if not set)
 ## @param ingress.pathType Ingress Path type
 ## @param ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
-## @param ingress.hosts The list of hostnames to be covered with this ingress record.
+## @param ingress.hosts [array] The list of hostnames to be covered with this ingress record.
 ## @param ingress.secrets If you're providing your own certificates, use this to add the certificates as secrets
 ##
 ingress:
