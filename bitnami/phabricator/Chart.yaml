@@ -12,6 +12,7 @@ dependencies:
     tags:
       - bitnami-common
     version: 1.x.x
+# The Phabricator chart is deprecated and no longer maintained.
 deprecated: true
 description: DEPRECATED Collection of open source web applications that help software companies build better software.
 engine: gotpl
