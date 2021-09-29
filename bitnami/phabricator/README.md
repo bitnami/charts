@@ -164,30 +164,29 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Traffic Exposure Parameters
 
-| Name                            | Description                                                                                                  | Value                    |
-| ------------------------------- | ------------------------------------------------------------------------------------------------------------ | ------------------------ |
-| `service.type`                  | Kubernetes Service type                                                                                      | `LoadBalancer`           |
-| `service.port`                  | Service HTTP port                                                                                            | `80`                     |
-| `service.httpsPort`             | Service HTTP port                                                                                            | `443`                    |
-| `service.sshPort`               | Service SSH port                                                                                             | `22`                     |
-| `service.nodePorts.http`        | Kubernetes HTTP node port                                                                                    | `""`                     |
-| `service.nodePorts.https`       | Kubernetes HTTPS node port                                                                                   | `""`                     |
-| `service.nodePorts.ssh`         | Kubernetes SSH node port                                                                                     | `""`                     |
-| `service.loadBalancerIP`        | `loadBalancerIP` for the Phabricator Service                                                                 | `""`                     |
-| `service.externalTrafficPolicy` | Enable client source IP preservation                                                                         | `Cluster`                |
-| `service.annotations`           | Service annotations                                                                                          | `{}`                     |
-| `ingress.enabled`               | Set to true to enable ingress record generation                                                              | `false`                  |
-| `ingress.tls`                   | Enable TLS configuration for the hostname defined at ingress.hostname parameter                              | `false`                  |
-| `ingress.certManager`           | Set this to true in order to add the corresponding annotations for cert-manager                              | `false`                  |
-| `ingress.pathType`              | Ingress path type                                                                                            | `ImplementationSpecific` |
-| `ingress.apiVersion`            | Force Ingress API version (automatically detected if not set)                                                | `""`                     |
-| `ingress.hostname`              | Default host for the ingress resource                                                                        | `phabricator.local`      |
-| `ingress.path`                  | The Path to Phabricator. You may need to set this to '/*' in order to use this with ALB ingress controllers. | `/`                      |
-| `ingress.annotations`           | Ingress annotations                                                                                          | `{}`                     |
-| `ingress.extraHosts`            | The list of additional hostnames to be covered with this ingress record.                                     | `[]`                     |
-| `ingress.extraPaths`            | Any additional arbitrary paths that may need to be added to the ingress under the main host.                 | `[]`                     |
-| `ingress.extraTls`              | The tls configuration for additional hostnames to be covered with this ingress record.                       | `[]`                     |
-| `ingress.secrets`               | If you're providing your own certificates, please use this to add the certificates as secrets                | `[]`                     |
+| Name                            | Description                                                                                                                      | Value                    |
+| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.type`                  | Kubernetes Service type                                                                                                          | `LoadBalancer`           |
+| `service.port`                  | Service HTTP port                                                                                                                | `80`                     |
+| `service.httpsPort`             | Service HTTP port                                                                                                                | `443`                    |
+| `service.sshPort`               | Service SSH port                                                                                                                 | `22`                     |
+| `service.nodePorts.http`        | Kubernetes HTTP node port                                                                                                        | `""`                     |
+| `service.nodePorts.https`       | Kubernetes HTTPS node port                                                                                                       | `""`                     |
+| `service.nodePorts.ssh`         | Kubernetes SSH node port                                                                                                         | `""`                     |
+| `service.loadBalancerIP`        | `loadBalancerIP` for the Phabricator Service                                                                                     | `""`                     |
+| `service.externalTrafficPolicy` | Enable client source IP preservation                                                                                             | `Cluster`                |
+| `service.annotations`           | Service annotations                                                                                                              | `{}`                     |
+| `ingress.enabled`               | Set to true to enable ingress record generation                                                                                  | `false`                  |
+| `ingress.tls`                   | Enable TLS configuration for the hostname defined at ingress.hostname parameter                                                  | `false`                  |
+| `ingress.pathType`              | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.apiVersion`            | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
+| `ingress.hostname`              | Default host for the ingress resource                                                                                            | `phabricator.local`      |
+| `ingress.path`                  | The Path to Phabricator. You may need to set this to '/*' in order to use this with ALB ingress controllers.                     | `/`                      |
+| `ingress.annotations`           | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.extraHosts`            | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
+| `ingress.extraPaths`            | Any additional arbitrary paths that may need to be added to the ingress under the main host.                                     | `[]`                     |
+| `ingress.extraTls`              | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
+| `ingress.secrets`               | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
 
 
 ### Database parameters
