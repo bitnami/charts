@@ -115,28 +115,27 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Traffic Exposure Parameters
 
-| Name                            | Description                                                                                                | Value                    |
-| ------------------------------- | ---------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `service.type`                  | Kubernetes Service type                                                                                    | `LoadBalancer`           |
-| `service.port`                  | Service HTTP port (Dashboard)                                                                              | `80`                     |
-| `service.nodePorts.http`        | Kubernetes HTTP node port                                                                                  | `""`                     |
-| `service.externalTrafficPolicy` | Enable client source IP preservation                                                                       | `Cluster`                |
-| `ingress.enabled`               | Set to true to enable ingress record generation                                                            | `false`                  |
-| `ingress.certManager`           | Set this to true in order to add the corresponding annotations for cert-manager                            | `false`                  |
-| `ingress.tls`                   | Enable TLS configuration for the hostname defined at ingress.hostname parameter                            | `false`                  |
-| `ingress.annotations`           | Ingress annotations                                                                                        | `{}`                     |
-| `ingress.dashboard.hostname`    | Default host for the ingress resource                                                                      | `parse-dashboard.local`  |
-| `ingress.dashboard.path`        | The Path to WordPress. You may need to set this to '/*' in order to use this with ALB ingress controllers. | `/`                      |
-| `ingress.dashboard.pathType`    | Ingress path type                                                                                          | `ImplementationSpecific` |
-| `ingress.dashboard.extraHosts`  | The list of additional hostnames to be covered with this ingress record.                                   | `[]`                     |
-| `ingress.dashboard.extraPaths`  | Any additional arbitrary paths that may need to be added to the ingress under the main host.               | `[]`                     |
-| `ingress.server.hostname`       | Default host for the ingress resource                                                                      | `parse-server.local`     |
-| `ingress.server.path`           | Default path for the ingress resource*' in order to use this with ALB ingress controllers.                 | `/`                      |
-| `ingress.server.pathType`       | Ingress path type                                                                                          | `ImplementationSpecific` |
-| `ingress.server.extraHosts`     | The list of additional hostnames to be covered with this ingress record.                                   | `[]`                     |
-| `ingress.server.extraPaths`     | Any additional arbitrary paths that may need to be added to the ingress under the main host.               | `[]`                     |
-| `ingress.extraTls`              | The tls configuration for additional hostnames to be covered with this ingress record.                     | `[]`                     |
-| `ingress.secrets`               | If you're providing your own certificates, please use this to add the certificates as secrets              | `[]`                     |
+| Name                            | Description                                                                                                                      | Value                    |
+| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.type`                  | Kubernetes Service type                                                                                                          | `LoadBalancer`           |
+| `service.port`                  | Service HTTP port (Dashboard)                                                                                                    | `80`                     |
+| `service.nodePorts.http`        | Kubernetes HTTP node port                                                                                                        | `""`                     |
+| `service.externalTrafficPolicy` | Enable client source IP preservation                                                                                             | `Cluster`                |
+| `ingress.enabled`               | Set to true to enable ingress record generation                                                                                  | `false`                  |
+| `ingress.tls`                   | Enable TLS configuration for the hostname defined at ingress.hostname parameter                                                  | `false`                  |
+| `ingress.annotations`           | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.dashboard.hostname`    | Default host for the ingress resource                                                                                            | `parse-dashboard.local`  |
+| `ingress.dashboard.path`        | The Path to WordPress. You may need to set this to '/*' in order to use this with ALB ingress controllers.                       | `/`                      |
+| `ingress.dashboard.pathType`    | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.dashboard.extraHosts`  | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
+| `ingress.dashboard.extraPaths`  | Any additional arbitrary paths that may need to be added to the ingress under the main host.                                     | `[]`                     |
+| `ingress.server.hostname`       | Default host for the ingress resource                                                                                            | `parse-server.local`     |
+| `ingress.server.path`           | Default path for the ingress resource*' in order to use this with ALB ingress controllers.                                       | `/`                      |
+| `ingress.server.pathType`       | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.server.extraHosts`     | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
+| `ingress.server.extraPaths`     | Any additional arbitrary paths that may need to be added to the ingress under the main host.                                     | `[]`                     |
+| `ingress.extraTls`              | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
+| `ingress.secrets`               | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
 
 
 ### Persistence Parameters
