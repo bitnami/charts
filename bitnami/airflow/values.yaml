@@ -755,7 +755,7 @@ git:
     pullSecrets: []
   ## Get DAG files from git repositories
   ## @param git.dags.enabled Enable in order to download DAG files from git repositories.
-  ## @param git.dags.repositories Array of repositories from which to download DAG files
+  ## @param git.dags.repositories [array] Array of repositories from which to download DAG files
   ##
   dags:
     enabled: false
@@ -781,7 +781,7 @@ git:
         path: ""
   ## Get Plugins files from git repositories.
   ## @param git.plugins.enabled Enable in order to download Plugins files from git repositories.
-  ## @param git.plugins.repositories Array of repositories from which to download DAG files
+  ## @param git.plugins.repositories [array] Array of repositories from which to download DAG files
   ##
   plugins:
     enabled: false
@@ -892,7 +892,7 @@ ldap:
 ## @param ingress.pathType Ingress Path type
 ## @param ingress.certManager Set this to true in order to add the corresponding annotations for cert-manager
 ## @param ingress.annotations Ingress annotations done as key:value pairs
-## @param ingress.hosts The list of hostnames to be covered with this ingress record.
+## @param ingress.hosts [array] The list of hostnames to be covered with this ingress record.
 ## @param ingress.secrets If you're providing your own certificates, use this to add the certificates as secrets
 ##
 ingress:
