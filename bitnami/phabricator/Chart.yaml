@@ -12,7 +12,9 @@ dependencies:
     tags:
       - bitnami-common
     version: 1.x.x
-description: Collection of open source web applications that help software companies build better software.
+# The Phabricator chart is deprecated and no longer maintained.
+deprecated: true
+description: DEPRECATED Collection of open source web applications that help software companies build better software.
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/phabricator
 icon: https://bitnami.com/assets/stacks/phabricator/img/phabricator-stack-220x234.png
@@ -30,11 +32,9 @@ keywords:
   - git
   - mercurial
   - subversion
-maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+maintainers: []
 name: phabricator
 sources:
   - https://github.com/bitnami/bitnami-docker-phabricator
   - https://www.phacility.com/phabricator/
-version: 11.0.29
+version: 11.0.30

@@ -2,6 +2,10 @@
 
 [Phabricator](https://www.phacility.com) is a collection of open source web applications that help software companies build better software. Phabricator is built by developers for developers. Every feature is optimized around developer efficiency for however you like to work. Code Quality starts with an effective collaboration between team members.
 
+## This Helm chart is deprecated
+
+The upstream project has been discontinued and no new features.
+
 ## TL;DR
 
 ```console
