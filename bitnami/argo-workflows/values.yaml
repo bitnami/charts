@@ -61,8 +61,8 @@ server:
   ##
   image:
     registry: docker.io
-    repository: bitnami/bitnami-docker-argo-workflow-cli
-    tag: 3.1.11-debian-10-r0
+    repository: miguelaeh/test-cli
+    tag: latest
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -239,7 +239,7 @@ server:
   baseHref: /
 
   ## Server container port
-  ## @param server.containerPorts argo Server container port
+  ## @param server.containerPorts.web argo Server container port
   containerPorts:
     web: 2746
 
@@ -428,8 +428,8 @@ controller:
   ##
   image:
     registry: docker.io
-    repository: bitnami/bitnami-docker-argo-workflow-controller
-    tag: 3.1.11-debian-10-r0
+    repository: miguelaeh/test-controller
+    tag: v2
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -509,7 +509,7 @@ controller:
     runAsUser: 1001
 
   ## Server container port
-  ## @param controller.containerPorts Argo Workflows controller container port
+  ## @param controller.containerPorts.controller Argo Workflows controller container port
   containerPorts:
     controller: 6060
 
@@ -526,6 +526,74 @@ controller:
   ## @param controller.extraArgs Extra arguments for the controller command line
   ##
   extraArgs: ""
+
+  ## Controller configmap configuration content. Requires controller.existingConfigmap to be empty.
+  ## @param controller.config [object] Controller configmap configuration content
+  config: |
+    {{- if .Values.controller.instanceID.enabled }}
+    instanceID: {{ .Release.Name }}
+    {{- end }}
+    ## Ref: https://argoproj.github.io/argo-workflows/workflow-executors/
+    containerRuntimeExecutor: {{ .Values.controller.containerRuntimeExecutor }}
+    ## Uncomment to create containerRuntimeExecutors
+    ## Ref: https://argoproj.github.io/argo-workflows/workflow-executors/
+    ## containerRuntimeExecutors: {}
+    ## How many workflows can be running at the same time
+    parallelism:
+    ## Maximun number of workflows running in a namespace
+    namespaceParallelism:
+    {{- if or .Values.executor.resources .Values.executor.extraEnvVars .Values.executor.podSecurityContext }}
+    executor:
+      {{- if .Values.executor.resources }}
+      resources: {{- include "common.tplvalues.render" (dict "value" .Values.executor.resources "context" $) | nindent 4 }}
+      {{- end }}
+      {{- if .Values.executor.extraEnvVars }}
+      env: {{- include "common.tplvalues.render" (dict "value" .Values.executor.extraEnvVars "context" $) | nindent 4 }}
+      {{- end }}
+      {{- if .Values.executor.podSecurityContext }}
+      securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.executor.podSecurityContext "context" $) | nindent 4 }}
+        {{- if not (eq .Values.controller.containerRuntimeExecutor "docker") }}
+        ## Docker executor requires to run executor as root
+        runAsNonRoot: true
+        {{- end }}
+      {{- end }}
+    {{- end }}
+    ## Uncomment to enable Artofact repository with the provided configuration
+    ## artifactRepository:
+    ##  archiveLogs: false
+    ##  configuration: {}
+    {{- if .Values.controller.metrics.enabled }}
+    metricsConfig: {{- include "common.tplvalues.render" (dict "value" .Values.controller.metrics "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.controller.telemetry.enabled }}
+    telemetryConfig: {{- include "common.tplvalues.render" (dict "value" .Values.controller.telemetry "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.controller.persistence.enabled }}
+    persistence:
+      connectionPool:
+        maxIdleConns: {{ .Values.controller.persistence.connectionPool.maxIdleConns }}
+        maxOpenConns: {{ .Values.controller.persistence.connectionPool.maxOpenConns }}
+      nodeStatusOffLoad: {{ .Values.controller.persistence.nodeStatusOffLoad }}
+      archive: {{ .Values.controller.persistence.archive }}
+      {{- if .Values.controller.persistence.postgresql.enabled }}
+      {{- omit .Values.controller.persistence.postgresql "enabled" | toYaml | nindent 6 }}
+      {{- end }}
+      {{- if .Values.controller.persistence.mysql.enabled }}
+      {{- omit .Values.controller.persistence.mysql "enabled" | toYaml | nindent 6 }}
+      {{- end }}
+      {{- end }}
+    ## Uncomment to set workflowDefaults
+    ## Ref: https://argoproj.github.io/argo-workflows/default-workflow-specs/#setting-default-workflow-values
+    ## workflowDefaults: {}
+    {{- if and .Values.server.auth.enabled .Values.server.auth.sso.enabled }}
+    sso: {{- include "common.tplvalues.render" (dict "value" .Values.server.auth.sso "context" $) | nindent 4 }}
+    {{- end }}
+    ## Uncomment to set workflowRestrictions
+    ## Ref: https://argoproj.github.io/argo-workflows/workflow-restrictions/
+    ## workflowRestrictions: {}
+    ## Uncomment to set links
+    ## Ref: https://argoproj.github.io/argo-workflows/links/
+    ## links: {}
 
   ## Controller persistence parameters. It can also be connected to an existing postgresql. Check
   ## @param controller.persistence.enabled Enabled controller persistence
@@ -572,8 +640,8 @@ controller:
         name: argo-postgres-config
         key: username
       passwordSecret:
-        name: argo-postgres-config
-        key: password
+        name: '{{ .Release.name }}-postgresql'
+        key: postgresql-password
     mysql:
       enabled: false
       host: '{{ include "argo-workflows.mysql.fullname" . }}'
@@ -585,64 +653,27 @@ controller:
         name: argo-mysql-config
         key: username
       passwordSecret:
-        name: argo-mysql-config
-        key: password
+        name: '{{ .Release.name }}-mysql'
+        key: mysql-password
 
   ## Configure the controller to accept only submissions with a matching instanceID attribute
   ## @param controller.instanceID.enabled Enable submission filtering based on instanceID attribute. Requires to set instanceID.useReleaseName or instanceID.explicitID
-  ## @param controller.instanceID.useReleaseName Use the release name to filter submissions
-  ## @param controller.instanceID.explicitID Filter submissions based on an explicit instance ID
   ##
   instanceID:
     enabled: false
-    ## NOTE: If `instanceID.enabled` is set to `true` then either `instanceID.userReleaseName` or `instanceID.explicitID` must be defined.
-    useReleaseName: false
-    explicitID: ""
-  ## @param controller.clusterWorkflowTemplates.enabled Whether to create a ClusterRole and Cluster Role Binding to access ClusterWokflowTemplates resources
-  ##
-  clusterWorkflowTemplates:
-    enabled: true
+
   ## Default container runtime that the executor will use.
   ## Set as `k8sapi` because `docker` requires privileged access. Also, `k8sapi` allows to runAsNonRoot
   ## Ref: https://argoproj.github.io/argo-workflows/workflow-executors/
   ## @param controller.containerRuntimeExecutor Specifies the container runtime for the executor
   ##
   containerRuntimeExecutor: k8sapi
-  ## Array containing extra container runtime executors configurations
-  ## Ref: https://argoproj.github.io/argo-workflows/workflow-executors/
-  ## @param controller.containerRuntimeExecutors Array containing extra container runtime executors configurations
-  ## E.g:
-  ##  - name: emissary
-  ##     selector:
-  ##       matchLabels:
-  ##         workflows.argoproj.io/container-runtime-executor: emissary
+
+  ## @param controller.clusterWorkflowTemplates.enabled Whether to create a ClusterRole and Cluster Role Binding to access ClusterWokflowTemplates resources
   ##
-  containerRuntimeExecutors: []
-  ## Parallelism dictates how many workflows can be running at the same time
-  ## @param controller.parallelism Number of workflows running at the same time
-  ##
-  parallelism:
-  ## Maximun number of workflows running in a namespace
-  ## @param controller.namespaceParallelism Maximun number of workflows running in a namespace
-  ##
-  namespaceParallelism:
-  ## Artifact repository configuration to store controller artifacts
-  ## @param controller.artifactRepository.enabled Enable storing controller artifacts
-  ## @param controller.artifactRepository.archiveLogs Whether to archive the main container logs in the artifact repository
-  ## @param controller.artifactRepository.configuration Object configuring the desired artifact repository. Check https://argoproj.github.io/argo-workflows/fields/#artifactoryartifact
-  ##
-  artifactRepository:
-    enabled: false
-    archiveLogs: false
-    ## E.g:
-    ## gcs:
-    ##   bucket: my-bucket-name
-    ##   key: path/in/bucket
-    ##   serviceAccountKeySecret:
-    ##     name: my-gcs-credentials
-    ##     key: serviceAccountKey
-    ##
-    configuration: {}
+  clusterWorkflowTemplates:
+    enabled: true
+
   ## Metrics configuration for the controller
   ## @param controller.metrics.enabled Enable controller metrics exporter
   ## @param controller.metrics.path Path to expose controller metrics
@@ -664,15 +695,7 @@ controller:
     enabled: false
     path: /telemetry
     port: 8081
-  ## Workflows default configuration for versions greater than 2.7
-  ## Ref: https://argoproj.github.io/argo-workflows/default-workflow-specs/#setting-default-workflow-values
-  ## @param controller.workflowDefaults Default workflow configuration for versions greater than 2.7
-  ## E.g
-  ##  spec:
-  ##    ttlStrategy:
-  ##      secondsAfterCompletion: 84600
-  ##
-  workflowDefaults: {}
+
   ## Number of workflow workers to deploy
   ## @param controller.workflowWorkers Number of workflow workers to deploy
   ##
@@ -681,16 +704,7 @@ controller:
   ## @param controller.podWorkers Number of pod workers to deploy
   ##
   podWorkers: 32
-  ## Workflows restrictions. Only for versions 2.9 or greater.
-  ## Ref: https://argoproj.github.io/argo-workflows/workflow-restrictions/
-  ## @param controller.workflowRestrictions Workflows restrictions for the controller
-  ##
-  workflowRestrictions: {}
-  ## Workflows custom links
-  ## Ref: https://argoproj.github.io/argo-workflows/links/
-  ## @param controller.links Configure shown custom links
-  ##
-  links: []
+
   ## Namespaces allowed to run workflows
   ## @param controller.workflowNamespaces Namespaces allowed to run workflows
   workflowNamespaces:
@@ -842,8 +856,8 @@ controller:
     ##
     type: ClusterIP
 
-    ## controller.service.ports.metrics Metrics port for the controller
-    ## controller.service.ports.telemetry Telemetry port for the controller
+    ## @param controller.service.ports.metrics Metrics port for the controller
+    ## @param controller.service.ports.telemetry Telemetry port for the controller
     ##
     ports:
       metrics: 8080
@@ -896,8 +910,8 @@ executor:
   ##
   image:
     registry: docker.io
-    repository: bitnami/bitnami-docker-argo-workflow-exec
-    tag: 3.1.11-debian-10-r0
+    repository: miguelaeh/test-exec
+    tag: latest
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images

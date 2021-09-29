@@ -98,34 +98,10 @@ Return the proper configmap for the controller
 {{- end -}}
 
 {{/*
-Validate instanceID configuration
-*/}}
-{{- define "argo-workflows.validateValues.instanceID" -}}
-{{- if .Values.controller.instanceID.enabled -}}
-{{- if not (or .Values.controller.instanceID.explicitID .Values.controller.instanceID.useReleaseName) -}}
-{{- printf "Error: controller.instanceID.useReleaseName or controller.instanceID.explicitID is required when enabling instanceID" -}}
-{{- end -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Validate artifact repository configuration
-*/}}
-{{- define "argo-workflows.validateValues.artifactRepository" -}}
-{{- if .Values.controller.artifactRepository.enabled -}}
-{{- if not .Values.controller.artifactRepository.configuration -}}
-{{- printf "Error: controller.artifactRepository.configuration is required when enabling controller.artifactRepository.enabled" -}}
-{{- end -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
 Compile all warnings into a single message.
 */}}
 {{- define "argo-workflows.validateValues" -}}
 {{- $messages := list -}}
-{{- $messages := append $messages (include "argo-workflows.validateValues.instanceID" .) -}}
-{{- $messages := append $messages (include "argo-workflows.validateValues.artifactRepository" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
