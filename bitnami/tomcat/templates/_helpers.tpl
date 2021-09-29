@@ -68,13 +68,29 @@ Return the tomcat jmx configuration configmap
     {{- printf "%s-jmx-configuration" (include "tomcat.fullname" .) -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Compile all warnings into a single message, and call fail.
+*/}}
+{{- define "tomcat.validateValues" -}}
+{{- $messages := list -}}
+{{- $messages := append $messages (include "tomcat.validateValues.jmxConfig" .) -}}
+{{- $messages := without $messages "" -}}
+{{- $message := join "\n" $messages -}}
+
+{{- if $message -}}
+{{-   printf "\nVALUES VALIDATION:\n%s" $message | fail -}}
+{{- end -}}
+{{- end -}}
+
 {{/*
 Check if jmx metrics is enabled, then either metrics.jmx.config or metrics.jmx.existingConfigmap must be set.
 */}}
-{{- define "tomcat.checkJmxConfig" -}}
-  {{- if .Values.metrics.jmx.enabled -}}
-    {{- if and (not .Values.metrics.jmx.config)  (not .Values.metrics.jmx.existingConfigmap) -}}
-      {{- printf "%s" "\nJMX CONFIG ERROR: You must provide JMX configuration by set either metrics.jmx.config or metrics.jmx.existingConfigmap" | fail -}}
-    {{- end -}}
+{{- define "tomcat.validateValues.jmxConfig" -}}
+    {{- if and .Values.metrics.jmx.enabled (not .Values.metrics.jmx.config)  (not .Values.metrics.jmx.existingConfigmap) -}}
+tomcat: metrics.jmx.enabled
+    In order to enable JMX metrics, you also need to provide
+    the prometheus/jmx_exporter configuration or
+    provide an existing ConfigMap.
   {{- end -}}
 {{- end -}}
