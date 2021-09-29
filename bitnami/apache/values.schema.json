@@ -1,66 +1,546 @@
 {
-  "$schema": "http://json-schema.org/schema#",
-  "type": "object",
-  "properties": {
-    "ingress": {
-      "type": "object",
-      "form": true,
-      "title": "Ingress Configuration",
-      "properties": {
-        "enabled": {
-          "type": "boolean",
-          "form": true,
-          "title": "Use a custom hostname",
-          "description": "Enable the ingress resource that allows you to access the Apache installation."
+    "title": "Chart Values",
+    "type": "object",
+    "properties": {
+        "global": {
+            "type": "object",
+            "properties": {
+                "imageRegistry": {
+                    "type": "string",
+                    "default": "\"\"",
+                    "description": "Global Docker image registry"
+                },
+                "imagePullSecrets": {
+                    "type": "array",
+                    "default": "[]",
+                    "description": "Global Docker registry secret names as an array"
+                }
+            }
         },
-        "certManager": {
-          "type": "boolean",
-          "form": true,
-          "title": "Enable TLS annotations via cert-manager",
-          "description": "Set this to true in order to add the corresponding annotations for cert-manager",
-          "hidden": {
-            "value": false,
-            "path": "ingress/enabled"
-          }
+        "kubeVersion": {
+            "type": "string",
+            "default": "\"\"",
+            "description": "Override Kubernetes version"
         },
-        "hostname": {
-          "type": "string",
-          "form": true,
-          "title": "Hostname",
-          "hidden": {
-            "value": false,
-            "path": "ingress/enabled"
-          }
+        "nameOverride": {
+            "type": "string",
+            "default": "\"\"",
+            "description": "String to partially override common.names.fullname"
+        },
+        "fullnameOverride": {
+            "type": "string",
+            "default": "\"\"",
+            "description": "String to fully override common.names.fullname"
+        },
+        "commonLabels": {
+            "type": "object",
+            "default": "{}",
+            "description": "Labels to add to all deployed objects"
+        },
+        "commonAnnotations": {
+            "type": "object",
+            "default": "{}",
+            "description": "Annotations to add to all deployed objects"
+        },
+        "extraDeploy": {
+            "type": "array",
+            "default": "[]",
+            "description": "Array of extra objects to deploy with the release"
+        },
+        "image": {
+            "type": "object",
+            "properties": {
+                "registry": {
+                    "type": "string",
+                    "default": "docker.io",
+                    "description": "Apache image registry"
+                },
+                "repository": {
+                    "type": "string",
+                    "default": "bitnami/apache",
+                    "description": "Apache image repository"
+                },
+                "tag": {
+                    "type": "string",
+                    "default": "2.4.49-debian-10-r0",
+                    "description": "Apache image tag (immutable tags are recommended)"
+                },
+                "pullPolicy": {
+                    "type": "string",
+                    "default": "IfNotPresent",
+                    "description": "Apache image pull policy"
+                },
+                "pullSecrets": {
+                    "type": "array",
+                    "default": "[]",
+                    "description": "Apache image pull secrets"
+                },
+                "debug": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Enable image debug mode"
+                }
+            }
+        },
+        "git": {
+            "type": "object",
+            "properties": {
+                "registry": {
+                    "type": "string",
+                    "default": "docker.io",
+                    "description": "Git image registry"
+                },
+                "repository": {
+                    "type": "string",
+                    "default": "bitnami/git",
+                    "description": "Git image name"
+                },
+                "tag": {
+                    "type": "string",
+                    "default": "2.33.0-debian-10-r30",
+                    "description": "Git image tag"
+                },
+                "pullPolicy": {
+                    "type": "string",
+                    "default": "IfNotPresent",
+                    "description": "Git image pull policy"
+                },
+                "pullSecrets": {
+                    "type": "array",
+                    "default": "[]",
+                    "description": "Specify docker-registry secret names as an array"
+                }
+            }
+        },
+        "replicaCount": {
+            "type": "number",
+            "default": 1,
+            "description": "Number of replicas of the Apache deployment"
+        },
+        "podAffinityPreset": {
+            "type": "string",
+            "default": "\"\"",
+            "description": "Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`"
+        },
+        "podAntiAffinityPreset": {
+            "type": "string",
+            "default": "soft",
+            "description": "Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`"
+        },
+        "nodeAffinityPreset": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "default": "\"\"",
+                    "description": "Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`"
+                },
+                "key": {
+                    "type": "string",
+                    "default": "\"\"",
+                    "description": "Node label key to match. Ignored if `affinity` is set"
+                },
+                "values": {
+                    "type": "array",
+                    "default": "[]",
+                    "description": "Node label values to match. Ignored if `affinity` is set"
+                }
+            }
+        },
+        "affinity": {
+            "type": "object",
+            "default": "{}",
+            "description": "Affinity for pod assignment"
+        },
+        "nodeSelector": {
+            "type": "object",
+            "default": "{}",
+            "description": "Node labels for pod assignment"
+        },
+        "tolerations": {
+            "type": "array",
+            "default": "[]",
+            "description": "Tolerations for pod assignment"
+        },
+        "topologySpreadConstraints": {
+            "type": "array",
+            "default": "[]",
+            "description": "Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template"
+        },
+        "extraPodSpec": {
+            "type": "object",
+            "default": "{}",
+            "description": "Optionally specify extra PodSpec"
+        },
+        "cloneHtdocsFromGit": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Get the server static content from a git repository"
+                },
+                "repository": {
+                    "type": "string",
+                    "default": "\"\"",
+                    "description": "Repository to clone static content from"
+                },
+                "branch": {
+                    "type": "string",
+                    "default": "\"\"",
+                    "description": "Branch inside the git repository"
+                },
+                "interval": {
+                    "type": "number",
+                    "default": 60,
+                    "description": "Interval for sidecar container pull from the repository"
+                },
+                "resources": {
+                    "type": "object",
+                    "default": "{}",
+                    "description": "Init container git resource requests"
+                },
+                "extraVolumeMounts": {
+                    "type": "array",
+                    "default": "[]",
+                    "description": "Add extra volume mounts for the GIT containers"
+                }
+            }
+        },
+        "htdocsConfigMap": {
+            "type": "string",
+            "default": "\"\"",
+            "description": "Name of a config map with the server static content"
+        },
+        "htdocsPVC": {
+            "type": "string",
+            "default": "\"\"",
+            "description": "Name of a PVC with the server static content"
+        },
+        "vhostsConfigMap": {
+            "type": "string",
+            "default": "\"\"",
+            "description": "Name of a config map with the virtual hosts content"
+        },
+        "httpdConfConfigMap": {
+            "type": "string",
+            "default": "\"\"",
+            "description": "Name of a config map with the httpd.conf file contents"
+        },
+        "podLabels": {
+            "type": "object",
+            "default": "{}",
+            "description": "Extra labels for Apache pods"
+        },
+        "podAnnotations": {
+            "type": "object",
+            "default": "{}",
+            "description": "Pod annotations"
+        },
+        "hostAliases": {
+            "type": "array",
+            "default": "[]",
+            "description": "Add deployment host aliases"
+        },
+        "resources": {
+            "type": "object",
+            "properties": {
+                "limits": {
+                    "type": "object",
+                    "default": "{}",
+                    "description": "The resources limits for the container"
+                },
+                "requests": {
+                    "type": "object",
+                    "default": "{}",
+                    "description": "The requested resources for the container"
+                }
+            }
+        },
+        "livenessProbe": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Enable liveness probe"
+                },
+                "path": {
+                    "type": "string",
+                    "default": "/",
+                    "description": "Path to access on the HTTP server"
+                },
+                "port": {
+                    "type": "string",
+                    "default": "http",
+                    "description": "Port for livenessProbe"
+                },
+                "initialDelaySeconds": {
+                    "type": "number",
+                    "default": 180,
+                    "description": "Initial delay seconds for livenessProbe"
+                },
+                "periodSeconds": {
+                    "type": "number",
+                    "default": 20,
+                    "description": "Period seconds for livenessProbe"
+                },
+                "timeoutSeconds": {
+                    "type": "number",
+                    "default": 5,
+                    "description": "Timeout seconds for livenessProbe"
+                },
+                "failureThreshold": {
+                    "type": "number",
+                    "default": 6,
+                    "description": "Failure threshold for livenessProbe"
+                },
+                "successThreshold": {
+                    "type": "number",
+                    "default": 1,
+                    "description": "Success threshold for livenessProbe"
+                }
+            }
+        },
+        "readinessProbe": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Enable readiness probe"
+                },
+                "path": {
+                    "type": "string",
+                    "default": "/",
+                    "description": "Path to access on the HTTP server"
+                },
+                "port": {
+                    "type": "string",
+                    "default": "http",
+                    "description": "Port for readinessProbe"
+                },
+                "initialDelaySeconds": {
+                    "type": "number",
+                    "default": 30,
+                    "description": "Initial delay seconds for readinessProbe"
+                },
+                "periodSeconds": {
+                    "type": "number",
+                    "default": 10,
+                    "description": "Period seconds for readinessProbe"
+                },
+                "timeoutSeconds": {
+                    "type": "number",
+                    "default": 5,
+                    "description": "Timeout seconds for readinessProbe"
+                },
+                "failureThreshold": {
+                    "type": "number",
+                    "default": 6,
+                    "description": "Failure threshold for readinessProbe"
+                },
+                "successThreshold": {
+                    "type": "number",
+                    "default": 1,
+                    "description": "Success threshold for readinessProbe"
+                }
+            }
+        },
+        "extraVolumes": {
+            "type": "array",
+            "default": "[]",
+            "description": "Array to add extra volumes (evaluated as a template)"
+        },
+        "extraVolumeMounts": {
+            "type": "array",
+            "default": "[]",
+            "description": "Array to add extra mounts (normally used with extraVolumes, evaluated as a template)"
+        },
+        "extraEnvVars": {
+            "type": "array",
+            "default": "[]",
+            "description": "Array to add extra environment variables"
+        },
+        "initContainers": {
+            "type": "array",
+            "default": "[]",
+            "description": "Add additional init containers to the Apache pods"
+        },
+        "sidecars": {
+            "type": "array",
+            "default": "[]",
+            "description": "Add additional sidecar containers to the Apache pods"
+        },
+        "service": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "default": "LoadBalancer",
+                    "description": "Apache Service type"
+                },
+                "port": {
+                    "type": "number",
+                    "default": 80,
+                    "description": "Apache service HTTP port"
+                },
+                "httpsPort": {
+                    "type": "number",
+                    "default": 443,
+                    "description": "Apache service HTTPS port"
+                },
+                "nodePorts": {
+                    "type": "object",
+                    "properties": {
+                        "http": {
+                            "type": "string",
+                            "default": "\"\"",
+                            "description": "Node port for HTTP"
+                        },
+                        "https": {
+                            "type": "string",
+                            "default": "\"\"",
+                            "description": "Node port for HTTPS"
+                        }
+                    }
+                },
+                "loadBalancerIP": {
+                    "type": "string",
+                    "default": "\"\"",
+                    "description": "Apache service Load Balancer IP"
+                },
+                "annotations": {
+                    "type": "object",
+                    "default": "{}",
+                    "description": "Additional custom annotations for Apache service"
+                },
+                "externalTrafficPolicy": {
+                    "type": "string",
+                    "default": "Cluster",
+                    "description": "Apache service external traffic policy"
+                }
+            }
+        },
+        "ingress": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Enable ingress record generation for Apache"
+                },
+                "pathType": {
+                    "type": "string",
+                    "default": "ImplementationSpecific",
+                    "description": "Ingress path type"
+                },
+                "apiVersion": {
+                    "type": "string",
+                    "default": "\"\"",
+                    "description": "Force Ingress API version (automatically detected if not set)"
+                },
+                "ingressClassName": {
+                    "type": "string",
+                    "default": "\"\"",
+                    "description": "IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)"
+                },
+                "hostname": {
+                    "type": "string",
+                    "default": "example.local",
+                    "description": "Default host for the ingress record"
+                },
+                "path": {
+                    "type": "string",
+                    "default": "/",
+                    "description": "Default path for the ingress record"
+                },
+                "annotations": {
+                    "type": "object",
+                    "default": "{}",
+                    "description": "Additional custom annotations for the ingress record"
+                },
+                "tls": {
+                    "type": "array",
+                    "default": "[]",
+                    "description": "Enable TLS configuration for the hosts defined"
+                },
+                "certManager": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Add the corresponding annotations for cert-manager integration"
+                },
+                "hosts": {
+                    "type": "array",
+                    "default": "[]",
+                    "description": "An array with additional hostname(s) to be covered with the ingress record"
+                },
+                "secrets": {
+                    "type": "array",
+                    "default": "[]",
+                    "description": "Custom TLS certificates as secrets"
+                }
+            }
+        },
+        "metrics": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Start a sidecar prometheus exporter to expose Apache metrics"
+                },
+                "image": {
+                    "type": "object",
+                    "properties": {
+                        "registry": {
+                            "type": "string",
+                            "default": "docker.io",
+                            "description": "Apache Exporter image registry"
+                        },
+                        "repository": {
+                            "type": "string",
+                            "default": "bitnami/apache-exporter",
+                            "description": "Apache Exporter image repository"
+                        },
+                        "tag": {
+                            "type": "string",
+                            "default": "0.10.0-debian-10-r48",
+                            "description": "Apache Exporter image tag (immutable tags are recommended)"
+                        },
+                        "pullPolicy": {
+                            "type": "string",
+                            "default": "IfNotPresent",
+                            "description": "Apache Exporter image pull policy"
+                        },
+                        "pullSecrets": {
+                            "type": "array",
+                            "default": "[]",
+                            "description": "Apache Exporter image pull secrets"
+                        }
+                    }
+                },
+                "podAnnotations": {
+                    "type": "object",
+                    "default": "{}",
+                    "description": "Additional custom annotations for Apache exporter service"
+                },
+                "resources": {
+                    "type": "object",
+                    "properties": {
+                        "limits": {
+                            "type": "object",
+                            "default": "{}",
+                            "description": "The resources limits for the container"
+                        },
+                        "requests": {
+                            "type": "object",
+                            "default": "{}",
+                            "description": "The requested resources for the container"
+                        }
+                    }
+                }
+            }
         }
-      }
-    },
-    "service": {
-      "type": "object",
-      "form": true,
-      "title": "Service Configuration",
-      "properties": {
-        "type": {
-          "type": "string",
-          "form": true,
-          "title": "Service Type",
-          "description": "Allowed values: \"ClusterIP\", \"NodePort\" and \"LoadBalancer\""
-        }
-      }
-    },
-    "replicaCount": {
-      "type": "integer",
-      "form": true,
-      "title": "Number of Replicas"
-    },
-    "metrics": {
-      "type": "object",
-      "properties": {
-        "enabled": {
-          "type": "boolean",
-          "title": "Configure metrics exporter",
-          "form": true
-        }
-      }
     }
-  }
 }

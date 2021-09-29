@@ -554,6 +554,9 @@ primary:
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
+  ## @param primary.extraPodSpec Optionally specify extra PodSpec
+  ##
+  extraPodSpec: {}
   ## @param primary.labels Map of labels to add to the statefulset (postgresql primary)
   ##
   labels: {}
@@ -651,6 +654,9 @@ readReplicas:
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
   topologySpreadConstraints: []
+  ## @param readReplicas.extraPodSpec Optionally specify extra PodSpec
+  ##
+  extraPodSpec: {}
   ## @param readReplicas.labels Map of labels to add to the statefulsets (postgresql readReplicas)
   ##
   labels: {}
