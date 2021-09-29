@@ -71,15 +71,15 @@ $ kubectl delete pvc -l release=my-release
 
 ### Common parameters
 
-| Name                     | Description                                                                                  | Value   |
-| ------------------------ | -------------------------------------------------------------------------------------------- | ------- |
-| `nameOverride`           | String to partially override common.names.fullname template (will maintain the release name) | `""`    |
-| `fullnameOverride`       | String to fully override common.names.fullname template                                      | `""`    |
-| `extraDeploy`            | Array of extra objects to deploy with the release (evaluated as a template)                  | `[]`    |
-| `commonAnnotations`      | Add annotations to all the deployed resources                                                | `{}`    |
-| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)      | `false` |
-| `diagnosticMode.command` | Command to override all containers in the deployment                                         | `[]`    |
-| `diagnosticMode.args`    | Args to override all containers in the deployment                                            | `[]`    |
+| Name                     | Description                                                                                  | Value          |
+| ------------------------ | -------------------------------------------------------------------------------------------- | -------------- |
+| `nameOverride`           | String to partially override common.names.fullname template (will maintain the release name) | `""`           |
+| `fullnameOverride`       | String to fully override common.names.fullname template                                      | `""`           |
+| `extraDeploy`            | Array of extra objects to deploy with the release (evaluated as a template)                  | `[]`           |
+| `commonAnnotations`      | Add annotations to all the deployed resources                                                | `{}`           |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)      | `false`        |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                         | `["sleep"]`    |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                            | `["infinity"]` |
 
 
 ### PostgreSQL parameters
@@ -190,7 +190,7 @@ $ kubectl delete pvc -l release=my-release
 | `persistence.mountPath`                       | The path the volume will be mounted at, useful when using different                                                                                       | `/bitnami/postgresql`       |
 | `persistence.subPath`                         | The subdirectory of the volume to mount to                                                                                                                | `""`                        |
 | `persistence.storageClass`                    | PVC Storage Class for PostgreSQL volume                                                                                                                   | `""`                        |
-| `persistence.accessModes`                     | PVC Access Mode for PostgreSQL volume                                                                                                                     | `[]`                        |
+| `persistence.accessModes`                     | PVC Access Mode for PostgreSQL volume                                                                                                                     | `["ReadWriteOnce"]`         |
 | `persistence.size`                            | PVC Storage Request for PostgreSQL volume                                                                                                                 | `8Gi`                       |
 | `persistence.annotations`                     | Annotations for the PVC                                                                                                                                   | `{}`                        |
 | `persistence.selector`                        | Selector to match an existing Persistent Volume (this value is evaluated as a template)                                                                   | `{}`                        |
@@ -203,6 +203,7 @@ $ kubectl delete pvc -l release=my-release
 | `primary.affinity`                            | Affinity for PostgreSQL primary pods assignment                                                                                                           | `{}`                        |
 | `primary.nodeSelector`                        | Node labels for PostgreSQL primary pods assignment                                                                                                        | `{}`                        |
 | `primary.tolerations`                         | Tolerations for PostgreSQL primary pods assignment                                                                                                        | `[]`                        |
+| `primary.extraPodSpec`                        | Optionally specify extra PodSpec                                                                                                                          | `{}`                        |
 | `primary.labels`                              | Map of labels to add to the statefulset (postgresql primary)                                                                                              | `{}`                        |
 | `primary.annotations`                         | Annotations for PostgreSQL primary pods                                                                                                                   | `{}`                        |
 | `primary.podLabels`                           | Map of labels to add to the pods (postgresql primary)                                                                                                     | `{}`                        |
@@ -223,6 +224,8 @@ $ kubectl delete pvc -l release=my-release
 | `readReplicas.affinity`                       | Affinity for PostgreSQL read only pods assignment                                                                                                         | `{}`                        |
 | `readReplicas.nodeSelector`                   | Node labels for PostgreSQL read only pods assignment                                                                                                      | `{}`                        |
 | `readReplicas.tolerations`                    | Tolerations for PostgreSQL read only pods assignment                                                                                                      | `[]`                        |
+| `readReplicas.topologySpreadConstraints`      | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template                                  | `[]`                        |
+| `readReplicas.extraPodSpec`                   | Optionally specify extra PodSpec                                                                                                                          | `{}`                        |
 | `readReplicas.labels`                         | Map of labels to add to the statefulsets (postgresql readReplicas)                                                                                        | `{}`                        |
 | `readReplicas.annotations`                    | Annotations for PostgreSQL read only pods                                                                                                                 | `{}`                        |
 | `readReplicas.podLabels`                      | Map of labels to add to the pods (postgresql readReplicas)                                                                                                | `{}`                        |

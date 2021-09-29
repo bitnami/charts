@@ -383,7 +383,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `persistence.existingClaim` | A manually managed Persistent Volume and Claim                                          | `""`                  |
 | `persistence.storageClass`  | Persistent Volume Storage Class                                                         | `""`                  |
 | `persistence.mountPath`     | The path the volume will be mounted at, useful when using different PostgreSQL images.  | `/bitnami/postgresql` |
-| `persistence.accessModes`   | List of access modes of data volume                                                     | `[]`                  |
+| `persistence.accessModes`   | List of access modes of data volume                                                     | `["ReadWriteOnce"]`   |
 | `persistence.size`          | Persistent Volume Claim size                                                            | `8Gi`                 |
 | `persistence.annotations`   | Persistent Volume Claim annotations                                                     | `{}`                  |
 | `persistence.selector`      | Selector to match an existing Persistent Volume (this value is evaluated as a template) | `{}`                  |

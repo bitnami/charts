@@ -283,6 +283,7 @@ resources:
 ## Grafana containers' liveness probe
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param livenessProbe.enabled Enable livenessProbe
+## @param livenessProbe.scheme Scheme for livenessProbe
 ## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
 ## @param livenessProbe.periodSeconds Period seconds for livenessProbe
 ## @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
@@ -291,6 +292,7 @@ resources:
 ##
 livenessProbe:
   enabled: true
+  scheme: HTTP
   initialDelaySeconds: 120
   periodSeconds: 10
   timeoutSeconds: 5
@@ -299,6 +301,7 @@ livenessProbe:
 ## Grafana containers' readinessProbe probe
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param readinessProbe.enabled Enable readinessProbe
+## @param readinessProbe.scheme Scheme for readinessProbe
 ## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
 ## @param readinessProbe.periodSeconds Period seconds for readinessProbe
 ## @param readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
@@ -307,6 +310,7 @@ livenessProbe:
 ##
 readinessProbe:
   enabled: true
+  scheme: HTTP
   initialDelaySeconds: 30
   periodSeconds: 10
   timeoutSeconds: 5

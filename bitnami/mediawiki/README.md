@@ -187,7 +187,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `mariadb.auth.password`                     | Password for the database                                                             | `""`                |
 | `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                                                 | `true`              |
 | `mariadb.primary.persistence.storageClass`  | PVC Storage Class                                                                     | `""`                |
-| `mariadb.primary.persistence.accessModes`   | Persistent Volume Access Mode                                                         | `[]`                |
+| `mariadb.primary.persistence.accessModes`   | Persistent Volume Access Mode                                                         | `["ReadWriteOnce"]` |
 | `mariadb.primary.persistence.size`          | Database Persistent Volume Size                                                       | `8Gi`               |
 | `mariadb.primary.persistence.hostPath`      | Host mount path for MariaDB volume                                                    | `""`                |
 | `mariadb.primary.persistence.existingClaim` | Enable persistence using an existing PVC                                              | `""`                |

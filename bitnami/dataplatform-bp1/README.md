@@ -114,7 +114,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dataplatform.exporter.enabled`                               | Start a prometheus exporter                                                                                      | `true`                          |
 | `dataplatform.exporter.image.registry`                        | dataplatform exporter image registry                                                                             | `docker.io`                     |
 | `dataplatform.exporter.image.repository`                      | dataplatform exporter image repository                                                                           | `bitnami/dataplatform-exporter` |
-| `dataplatform.exporter.image.tag`                             | dataplatform exporter image tag (immutable tags are recommended)                                                 | `0.0.11-scratch-r2`             |
+| `dataplatform.exporter.image.tag`                             | dataplatform exporter image tag (immutable tags are recommended)                                                 | `0.0.11-scratch-r4`             |
 | `dataplatform.exporter.image.pullPolicy`                      | dataplatform exporter image pull policy                                                                          | `IfNotPresent`                  |
 | `dataplatform.exporter.image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                 | `[]`                            |
 | `dataplatform.exporter.livenessProbe.enabled`                 | Enable livenessProbe                                                                                             | `true`                          |
@@ -179,7 +179,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dataplatform.emitter.enabled`                                | Start Data Platform metrics emitter                                                                              | `true`                          |
 | `dataplatform.emitter.image.registry`                         | Data Platform emitter image registry                                                                             | `docker.io`                     |
 | `dataplatform.emitter.image.repository`                       | Data Platform emitter image repository                                                                           | `bitnami/dataplatform-emitter`  |
-| `dataplatform.emitter.image.tag`                              | Data Platform emitter image tag (immutable tags are recommended)                                                 | `0.0.10-scratch-r1`             |
+| `dataplatform.emitter.image.tag`                              | Data Platform emitter image tag (immutable tags are recommended)                                                 | `0.0.10-scratch-r3`             |
 | `dataplatform.emitter.image.pullPolicy`                       | Data Platform emitter image pull policy                                                                          | `IfNotPresent`                  |
 | `dataplatform.emitter.image.pullSecrets`                      | Specify docker-registry secret names as an array                                                                 | `[]`                            |
 | `dataplatform.emitter.livenessProbe.enabled`                  | Enable livenessProbe                                                                                             | `true`                          |
@@ -257,45 +257,45 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Kafka chart parameters
 
-| Name                                     | Description                                                                               | Value                 |
-| ---------------------------------------- | ----------------------------------------------------------------------------------------- | --------------------- |
-| `kafka.enabled`                          | Switch to enable or disable the Kafka helm chart                                          | `true`                |
-| `kafka.replicaCount`                     | Number of Kafka replicas                                                                  | `3`                   |
-| `kafka.heapOpts`                         | Kafka's Java Heap size                                                                    | `-Xmx4096m -Xms4096m` |
-| `kafka.resources.limits`                 | The resources limits for Kafka containers                                                 | `{}`                  |
-| `kafka.resources.requests`               | The requested resources for Kafka containers                                              | `{}`                  |
-| `kafka.affinity.podAntiAffinity`         | Zookeeper pods Anti Affinity rules for best possible resiliency (evaluated as a template) | `{}`                  |
-| `kafka.affinity.podAffinity`             | Zookeeper pods Affinity rules for best possible resiliency (evaluated as a template)      | `{}`                  |
-| `kafka.metrics.kafka.enabled`            | Whether or not to create a standalone Kafka exporter to expose Kafka metrics              | `false`               |
-| `kafka.metrics.kafka.resources.limits`   | The resources limits for the container                                                    | `{}`                  |
-| `kafka.metrics.kafka.resources.requests` | Kafka Exporter container resource requests                                                | `{}`                  |
-| `kafka.metrics.kafka.service.port`       | Kafka Exporter Prometheus port to be used in Wavefront configuration                      | `9308`                |
-| `kafka.metrics.jmx.enabled`              | Whether or not to expose JMX metrics to Prometheus                                        | `false`               |
-| `kafka.metrics.jmx.resources.limits`     | The resources limits for the container                                                    | `{}`                  |
-| `kafka.metrics.jmx.resources.requests`   | JMX Exporter container resource requests                                                  | `{}`                  |
-| `kafka.metrics.jmx.service.port`         | JMX Exporter Prometheus port                                                              | `5556`                |
-| `kafka.zookeeper.enabled`                | Switch to enable or disable the Zookeeper helm chart                                      | `false`               |
-| `kafka.externalZookeeper.servers`        | Server or list of external Zookeeper servers to use                                       | `[]`                  |
+| Name                                     | Description                                                                               | Value                               |
+| ---------------------------------------- | ----------------------------------------------------------------------------------------- | ----------------------------------- |
+| `kafka.enabled`                          | Switch to enable or disable the Kafka helm chart                                          | `true`                              |
+| `kafka.replicaCount`                     | Number of Kafka replicas                                                                  | `3`                                 |
+| `kafka.heapOpts`                         | Kafka's Java Heap size                                                                    | `-Xmx4096m -Xms4096m`               |
+| `kafka.resources.limits`                 | The resources limits for Kafka containers                                                 | `{}`                                |
+| `kafka.resources.requests`               | The requested resources for Kafka containers                                              | `{}`                                |
+| `kafka.affinity.podAntiAffinity`         | Zookeeper pods Anti Affinity rules for best possible resiliency (evaluated as a template) | `{}`                                |
+| `kafka.affinity.podAffinity`             | Zookeeper pods Affinity rules for best possible resiliency (evaluated as a template)      | `{}`                                |
+| `kafka.metrics.kafka.enabled`            | Whether or not to create a standalone Kafka exporter to expose Kafka metrics              | `false`                             |
+| `kafka.metrics.kafka.resources.limits`   | The resources limits for the container                                                    | `{}`                                |
+| `kafka.metrics.kafka.resources.requests` | Kafka Exporter container resource requests                                                | `{}`                                |
+| `kafka.metrics.kafka.service.port`       | Kafka Exporter Prometheus port to be used in Wavefront configuration                      | `9308`                              |
+| `kafka.metrics.jmx.enabled`              | Whether or not to expose JMX metrics to Prometheus                                        | `false`                             |
+| `kafka.metrics.jmx.resources.limits`     | The resources limits for the container                                                    | `{}`                                |
+| `kafka.metrics.jmx.resources.requests`   | JMX Exporter container resource requests                                                  | `{}`                                |
+| `kafka.metrics.jmx.service.port`         | JMX Exporter Prometheus port                                                              | `5556`                              |
+| `kafka.zookeeper.enabled`                | Switch to enable or disable the Zookeeper helm chart                                      | `false`                             |
+| `kafka.externalZookeeper.servers`        | Server or list of external Zookeeper servers to use                                       | `["{{ .Release.Name }}-zookeeper"]` |
 
 
 ### Solr chart parameters
 
-| Name                                 | Description                                                                                    | Value                 |
-| ------------------------------------ | ---------------------------------------------------------------------------------------------- | --------------------- |
-| `solr.enabled`                       | Switch to enable or disable the Solr helm chart                                                | `true`                |
-| `solr.replicaCount`                  | Number of Solr replicas                                                                        | `2`                   |
-| `solr.authentication.enabled`        | Enable Solr authentication. BUG: Exporter deployment does not work with authentication enabled | `false`               |
-| `solr.javaMem`                       | Java recommended memory options to pass to the Solr container                                  | `-Xmx4096m -Xms4096m` |
-| `solr.affinity.podAntiAffinity`      | Zookeeper pods Anti Affinity rules for best possible resiliency (evaluated as a template)      | `{}`                  |
-| `solr.resources.limits`              | The resources limits for Solr containers                                                       | `{}`                  |
-| `solr.resources.requests`            | The requested resources for Solr containers                                                    | `{}`                  |
-| `solr.exporter.enabled`              | Start a prometheus exporter                                                                    | `false`               |
-| `solr.exporter.port`                 | Solr exporter port                                                                             | `9983`                |
-| `solr.exporter.affinity.podAffinity` | Zookeeper pods Affinity rules for best possible resiliency (evaluated as a template)           | `{}`                  |
-| `solr.exporter.resources.limits`     | The resources limits for the container                                                         | `{}`                  |
-| `solr.exporter.resources.requests`   | The requested resources for the container                                                      | `{}`                  |
-| `solr.zookeeper.enabled`             | Enable Zookeeper deployment. Needed for Solr cloud.                                            | `false`               |
-| `solr.externalZookeeper.servers`     | Servers for an already existing Zookeeper.                                                     | `[]`                  |
+| Name                                 | Description                                                                                    | Value                               |
+| ------------------------------------ | ---------------------------------------------------------------------------------------------- | ----------------------------------- |
+| `solr.enabled`                       | Switch to enable or disable the Solr helm chart                                                | `true`                              |
+| `solr.replicaCount`                  | Number of Solr replicas                                                                        | `2`                                 |
+| `solr.authentication.enabled`        | Enable Solr authentication. BUG: Exporter deployment does not work with authentication enabled | `false`                             |
+| `solr.javaMem`                       | Java recommended memory options to pass to the Solr container                                  | `-Xmx4096m -Xms4096m`               |
+| `solr.affinity.podAntiAffinity`      | Zookeeper pods Anti Affinity rules for best possible resiliency (evaluated as a template)      | `{}`                                |
+| `solr.resources.limits`              | The resources limits for Solr containers                                                       | `{}`                                |
+| `solr.resources.requests`            | The requested resources for Solr containers                                                    | `{}`                                |
+| `solr.exporter.enabled`              | Start a prometheus exporter                                                                    | `false`                             |
+| `solr.exporter.port`                 | Solr exporter port                                                                             | `9983`                              |
+| `solr.exporter.affinity.podAffinity` | Zookeeper pods Affinity rules for best possible resiliency (evaluated as a template)           | `{}`                                |
+| `solr.exporter.resources.limits`     | The resources limits for the container                                                         | `{}`                                |
+| `solr.exporter.resources.requests`   | The requested resources for the container                                                      | `{}`                                |
+| `solr.zookeeper.enabled`             | Enable Zookeeper deployment. Needed for Solr cloud.                                            | `false`                             |
+| `solr.externalZookeeper.servers`     | Servers for an already existing Zookeeper.                                                     | `["{{ .Release.Name }}-zookeeper"]` |
 
 
 ### Spark chart parameters

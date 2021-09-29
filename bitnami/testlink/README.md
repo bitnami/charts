@@ -172,25 +172,25 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Database parameters
 
-| Name                                        | Description                                                                              | Value              |
-| ------------------------------------------- | ---------------------------------------------------------------------------------------- | ------------------ |
-| `mariadb.enabled`                           | Whether to deploy a mariadb server to satisfy the applications database requirements     | `true`             |
-| `mariadb.architecture`                      | MariaDB architecture. Allowed values: `standalone` or `replication`                      | `standalone`       |
-| `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                                                     | `""`               |
-| `mariadb.auth.database`                     | Database name to create                                                                  | `bitnami_testlink` |
-| `mariadb.auth.username`                     | Database user to create                                                                  | `bn_testlink`      |
-| `mariadb.auth.password`                     | Password for the database                                                                | `""`               |
-| `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                                                    | `true`             |
-| `mariadb.primary.persistence.storageClass`  | MariaDB primary persistent volume storage Class                                          | `""`               |
-| `mariadb.primary.persistence.accessModes`   | Database Persistent Volume Access Modes                                                  | `[]`               |
-| `mariadb.primary.persistence.size`          | Database Persistent Volume Size                                                          | `8Gi`              |
-| `mariadb.primary.persistence.hostPath`      | Set path in case you want to use local host path volumes (not recommended in production) | `""`               |
-| `mariadb.primary.persistence.existingClaim` | Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas                 | `""`               |
-| `externalDatabase.host`                     | Host of the existing database                                                            | `""`               |
-| `externalDatabase.port`                     | Port of the existing database                                                            | `3306`             |
-| `externalDatabase.user`                     | Existing username in the external database                                               | `bn_testlink`      |
-| `externalDatabase.password`                 | Password for the above username                                                          | `""`               |
-| `externalDatabase.database`                 | Name of the existing database                                                            | `bitnami_testlink` |
+| Name                                        | Description                                                                              | Value               |
+| ------------------------------------------- | ---------------------------------------------------------------------------------------- | ------------------- |
+| `mariadb.enabled`                           | Whether to deploy a mariadb server to satisfy the applications database requirements     | `true`              |
+| `mariadb.architecture`                      | MariaDB architecture. Allowed values: `standalone` or `replication`                      | `standalone`        |
+| `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                                                     | `""`                |
+| `mariadb.auth.database`                     | Database name to create                                                                  | `bitnami_testlink`  |
+| `mariadb.auth.username`                     | Database user to create                                                                  | `bn_testlink`       |
+| `mariadb.auth.password`                     | Password for the database                                                                | `""`                |
+| `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                                                    | `true`              |
+| `mariadb.primary.persistence.storageClass`  | MariaDB primary persistent volume storage Class                                          | `""`                |
+| `mariadb.primary.persistence.accessModes`   | Database Persistent Volume Access Modes                                                  | `["ReadWriteOnce"]` |
+| `mariadb.primary.persistence.size`          | Database Persistent Volume Size                                                          | `8Gi`               |
+| `mariadb.primary.persistence.hostPath`      | Set path in case you want to use local host path volumes (not recommended in production) | `""`                |
+| `mariadb.primary.persistence.existingClaim` | Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas                 | `""`                |
+| `externalDatabase.host`                     | Host of the existing database                                                            | `""`                |
+| `externalDatabase.port`                     | Port of the existing database                                                            | `3306`              |
+| `externalDatabase.user`                     | Existing username in the external database                                               | `bn_testlink`       |
+| `externalDatabase.password`                 | Password for the above username                                                          | `""`                |
+| `externalDatabase.database`                 | Name of the existing database                                                            | `bitnami_testlink`  |
 
 
 ### Volume Permissions parameters

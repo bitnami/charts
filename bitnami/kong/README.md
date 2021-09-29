@@ -65,8 +65,8 @@ To uninstall/delete the `my-release` deployment:
 | `clusterDomain`          | Kubernetes cluster domain                                                                                | `cluster.local` |
 | `extraDeploy`            | Array of extra objects to deploy with the release (evaluated as a template).                             | `[]`            |
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                  | `false`         |
-| `diagnosticMode.command` | Command to override all containers in the deployment                                                     | `[]`            |
-| `diagnosticMode.args`    | Args to override all containers in the deployment                                                        | `[]`            |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                                     | `["sleep"]`     |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                                        | `["infinity"]`  |
 
 
 ### Deployment parameters
@@ -75,7 +75,7 @@ To uninstall/delete the `my-release` deployment:
 | --------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`                        | kong image registry                                                                                                                                                              | `docker.io`           |
 | `image.repository`                      | kong image repository                                                                                                                                                            | `bitnami/kong`        |
-| `image.tag`                             | kong image tag (immutable tags are recommended)                                                                                                                                  | `2.5.1-debian-10-r6`  |
+| `image.tag`                             | kong image tag (immutable tags are recommended)                                                                                                                                  | `2.6.0-debian-10-r0`  |
 | `image.pullPolicy`                      | kong image pull policy                                                                                                                                                           | `IfNotPresent`        |
 | `image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                                                                                 | `[]`                  |
 | `image.debug`                           | Enable image debug mode                                                                                                                                                          | `false`               |
@@ -198,7 +198,7 @@ To uninstall/delete the `my-release` deployment:
 | `ingressController.customResourceDeletePolicy`         | Add custom CRD resource delete policy (for Helm 2 support)                                                                                    | `{}`                              |
 | `ingressController.image.registry`                     | Kong Ingress Controller image registry                                                                                                        | `docker.io`                       |
 | `ingressController.image.repository`                   | Kong Ingress Controller image name                                                                                                            | `bitnami/kong-ingress-controller` |
-| `ingressController.image.tag`                          | Kong Ingress Controller image tag                                                                                                             | `1.3.1-debian-10-r89`             |
+| `ingressController.image.tag`                          | Kong Ingress Controller image tag                                                                                                             | `1.3.1-debian-10-r103`            |
 | `ingressController.image.pullPolicy`                   | kong ingress controller image pull policy                                                                                                     | `IfNotPresent`                    |
 | `ingressController.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                                              | `[]`                              |
 | `ingressController.proxyReadyTimeout`                  | Maximum time (in seconds) to wait for the Kong container to be ready                                                                          | `300`                             |

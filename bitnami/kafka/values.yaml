@@ -198,6 +198,15 @@ socketSendBufferBytes: 102400
 ## @param zookeeperConnectionTimeoutMs Timeout in ms for connecting to Zookeeper
 ##
 zookeeperConnectionTimeoutMs: 6000
+## @param authorizerClassName The Authorizer is configured by setting authorizer.class.name=kafka.security.authorizer.AclAuthorizer in server.properties.
+##
+authorizerClassName: ""
+## @param allowEveryoneIfNoAclFound By default, if a resource has no associated ACLs, then no one is allowed to access that resource except super users.
+##
+allowEveryoneIfNoAclFound: true
+## @param superUsers You can add super users in server.properties
+##
+superUsers: User:admin
 ## @param command Override kafka container command
 ##
 command:
