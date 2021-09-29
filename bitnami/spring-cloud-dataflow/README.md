@@ -385,83 +385,42 @@ helm install my-release -f values.yaml bitnami/spring-cloud-dataflow
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling vs Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
-### Features
+### Disable specific features
 
-If you only need to deploy tasks and schedules, streaming and Skipper can be disabled:
+If you only need to deploy tasks and schedules, streaming and Skipper can be disabled by setting the `server.configuration.streamingEnabled`, `skipper.enabled` and `rabbitmq.enabled` parameters to `false`.
 
-```console
-server.configuration.batchEnabled=true
-server.configuration.streamingEnabled=false
-skipper.enabled=false
-rabbitmq.enabled=false
-```
-
-If you only need to deploy streams, tasks and schedules can be disabled:
-
-```console
-server.configuration.batchEnabled=false
-server.configuration.streamingEnabled=true
-skipper.enabled=true
-rabbitmq.enabled=true
-```
+If you only need to deploy streams, tasks and schedules can be disabled by setting the `server.configuration.batchEnabled` parameter to `false`.
 
 NOTE: Both `server.configuration.batchEnabled` and `server.configuration.streamingEnabled` should not be set to `false` at the same time.
 
-### Messaging solutions
+For more information and example configuration, refer to the [chart documentation on disabling features](https://docs.bitnami.com/kubernetes/infrastructure/spring-cloud-dataflow/configuration/disable-streaming-batch-features/).
 
-There are two supported messaging solutions in this chart:
+### Select a different messaging solution
 
-- RabbitMQ (default)
-- Kafka
+There are two supported messaging solutions in this chart: RabbitMQ (default) and Kafka.
 
-To change the messaging layer to Kafka, use the the following parameters:
+To change the messaging layer to Kafka, use the the following configuration:
 
 ```console
 rabbitmq.enabled=false
 kafka.enabled=true
 ```
 
-Only one messaging layer can be used at a given time.
+NOTE: Only one messaging layer can be used at a given time.
 
-### Using an external database
+### Use an external database
 
-Sometimes you may want to have Spring Cloud components connect to an external database rather than installing one inside your cluster, e.g. to use a managed database service, or use run a single database server for all your applications. To do this, the chart allows you to specify credentials for an external database under the [`externalDatabase` parameter](#database-parameters). You should also disable the MariaDB installation with the `mariadb.enabled` option. For example with the following parameters:
+Sometimes, you may want to have Spring Cloud components connect to an external database rather than a database within your cluster - for example, when using a managed database service, or when running a single database server for all your applications. To do this, set the `mariadb.enabled` parameter to `false` and specify the credentials for the external database using the `externalDatabase.*` parameters.
 
-```console
-mariadb.enabled=false
-externalDatabase.scheme=mariadb
-externalDatabase.host=myexternalhost
-externalDatabase.port=3306
-externalDatabase.password=mypassword
-externalDatabase.dataflow.user=mydataflowuser
-externalDatabase.dataflow.database=mydataflowdatabase
-externalDatabase.dataflow.user=myskipperuser
-externalDatabase.dataflow.database=myskipperdatabase
-```
+Refer to the [chart documentation on using an external database](https://docs.bitnami.com/kubernetes/infrastructure/spring-cloud-dataflow/configuration/use-external-database/) for more details and an example.
 
-NOTE: When using the indidual properties (scheme, host, port, database, an optional jdbcParameters) this chart will format the JDBC URL as `jdbc:{scheme}://{host}:{port}/{database}{jdbcParameters}`. The URL format follows that of the MariaDB database drive but may not work for other database vendors.
-
-To use an alternate database vendor (other than MariaDB) you can use the `externalDatabase.dataflow.url` and `externalDatabase.skipper.url` properties to provide the JDBC URLs for the dataflow server and skipper respectively. If these properties are defined, they will take precedence over the individual attributes. As an example of configuring an external MS SQL Server database:
-
-```console
-mariadb.enabled=false
-externalDatabase.password=mypassword
-externalDatabase.dataflow.url=jdbc:sqlserver://mssql-server:1433
-externalDatabase.dataflow.user=mydataflowuser
-externalDatabase.skipper.url=jdbc:sqlserver://mssql-server:1433
-externalDatabase.skipper.user=myskipperuser
-externalDatabase.hibernateDialect=org.hibernate.dialect.SQLServer2012Dialect
-```
-
-NOTE: If you disable MariaDB per above you MUST supply values for the `externalDatabase` connection.
-
-### Adding extra flags
+### Add extra environment variables
 
 In case you want to add extra environment variables to any Spring Cloud component, you can use `XXX.extraEnvs` parameter(s), where XXX is placeholder you need to replace with the actual component(s). For instance, to add extra flags to Spring Cloud Data Flow, use:
 
@@ -472,95 +431,35 @@ server:
       value: BAR
 ```
 
-### Using custom Dataflow configuration
+### Use custom Dataflow configuration
 
-This helm chart supports using custom configuration for Dataflow server.
+This Helm chart supports using custom configuration for the Dataflow server. Specify the configuration for the Dataflow server by setting the `server.existingConfigmap` parameter to an external ConfigMap with the configuration file.
 
-You can specify the configuration for Dataflow server setting the `server.existingConfigmap` parameter to an external ConfigMap with the configuration file.
+### Use custom Skipper configuration
 
-### Using custom Skipper configuration
+This Helm chart supports using custom configuration for the Skipper server. Specify the configuration for the Skipper server by setting the `skipper.existingConfigmap` parameter to an external ConfigMap with the configuration file.
 
-This helm chart supports using custom configuration for Skipper server.
+### Configure Sidecars and Init Containers
 
-You can specify the configuration for Skipper server setting the `skipper.existingConfigmap` parameter to an external ConfigMap with the configuration file.
+If additional containers are needed in the same pod as EJBCA (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter. Similarly, you can add extra init containers using the `initContainers` parameter.
 
-### Sidecars and Init Containers
-
-If you have a need for additional containers to run within the same pod as Dataflow or Skipper components (e.g. an additional metrics or logging exporter), you can do so via the `XXX.sidecars` parameter(s), where XXX is placeholder you need to replace with the actual component(s). Simply define your container according to the Kubernetes container spec.
-
-```yaml
-server:
-  sidecars:
-    - name: your-image-name
-      image: your-image
-      imagePullPolicy: Always
-      ports:
-        - name: portname
-          containerPort: 1234
-```
-
-Similarly, you can add extra init containers using the `XXX.initContainers` parameter(s).
-
-```yaml
-server:
-  initContainers:
-    - name: your-image-name
-      image: your-image
-      imagePullPolicy: Always
-      ports:
-        - name: portname
-          containerPort: 1234
-```
+[Learn more about configuring and using sidecar and init containers](https://docs.bitnami.com/kubernetes/infrastructure/spring-cloud-dataflow/configuration/configure-sidecar-init-containers/).
 
 ### Ingress
 
-This chart provides support for ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress](https://kubeapps.com/charts/stable/nginx-ingress) or [traefik](https://kubeapps.com/charts/stable/traefik) you can utilize the ingress controller to serve your Spring Cloud Data Flow server.
+This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/master/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/master/bitnami/contour) you can utilize the ingress controller to serve your application.
 
-To enable ingress integration, please set `server.ingress.enabled` to `true`
+To enable Ingress integration, set `server.ingress.enabled` to `true`. The `server.ingress.hostname` property can be used to set the host name. The `server.ingress.tls` parameter can be used to add the TLS configuration for this host. It is also possible to have more than one host, with a separate TLS configuration for each host. [Learn more about configuring and using Ingress](https://docs.bitnami.com/kubernetes/infrastructure/spring-cloud-dataflow/configuration/configure-ingress/).
 
-#### Hosts
+### Configure TLS Secrets for use with Ingress
 
-Most likely you will only want to have one hostname that maps to this Spring Cloud Data Flow installation. If that's your case, the property `server.ingress.hostname` will set it. However, it is possible to have more than one host. To facilitate this, the `server.ingress.extraHosts` object is can be specified as an array. You can also use `server.ingress.extraTLS` to add the TLS configuration for extra hosts.
+The chart also facilitates the creation of TLS secrets for use with the Ingress controller, with different options for certificate management. [Learn more about TLS secrets](https://docs.bitnami.com/kubernetes/apps/ghost/administration/enable-tls-ingress/).
 
-For each host indicated at `server.ingress.extraHosts`, please indicate a `name`, `path`, and any `annotations` that you may want the ingress controller to know about.
+### Set Pod affinity
 
-For annotations, please see [this document](https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md). Not all annotations are supported by all ingress controllers, but this document does a good job of indicating which annotation is supported by many popular ingress controllers.
+This chart allows you to set custom Pod affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-#### TLS
-
-This chart will facilitate the creation of TLS secrets for use with the ingress controller, however, this is not required. There are four common use cases:
-
-- Helm generates/manages certificate secrets based on the parameters.
-- User generates/manages certificates separately.
-- Helm creates self-signed certificates and generates/manages certificate secrets.
-- An additional tool (like [cert-manager](https://github.com/jetstack/cert-manager/)) manages the secrets for the application.
-In the first two cases, it's needed a certificate and a key. We would expect them to look like this:
-- certificate files should look like (and there can be more than one certificate if there is a certificate chain)
-  ```console
-  -----BEGIN CERTIFICATE-----
-  MIID6TCCAtGgAwIBAgIJAIaCwivkeB5EMA0GCSqGSIb3DQEBCwUAMFYxCzAJBgNV
-  ...
-  jScrvkiBO65F46KioCL9h5tDvomdU1aqpI/CBzhvZn1c0ZTf87tGQR8NK7v7
-  -----END CERTIFICATE-----
-  ```
-- keys should look like:
-  ```console
-  -----BEGIN RSA PRIVATE KEY-----
-  MIIEogIBAAKCAQEAvLYcyu8f3skuRyUgeeNpeDvYBCDcgq+LsWap6zbX5f8oLqp4
-  ...
-  wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
-  -----END RSA PRIVATE KEY-----
-  ```
-- If you are going to use Helm to manage the certificates based on the parameters, please copy these values into the `certificate` and `key` values for a given `server.ingress.secrets` entry.
-- In case you are going to manage TLS secrets separately, please know that you must create a TLS secret with name *INGRESS_HOSTNAME-tls* (where *INGRESS_HOSTNAME* is a placeholder to be replaced with the hostname you set using the `server.ingress.hostname` parameter).
-- To use self-signed certificates created by Helm, set `server.ingress.tls` to `true` and `server.ingress.certManager` to `false`.
-- If your cluster has a [cert-manager](https://github.com/jetstack/cert-manager) add-on to automate the management and issuance of TLS certificates, set `server.ingress.certManager` boolean to true to enable the corresponding annotations for cert-manager.
-
-### Setting Pod's affinity
-
-This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
-
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
+As an alternative, you can use any of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
 
 ## Troubleshooting
 
@@ -580,26 +479,10 @@ This major updates the Kafka subchart to its newest major 13.0.0. For more infor
 
 ### To 2.0.0
 
-[On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
 
-**What changes were introduced in this major version?**
+[On November 13, 2020, Helm v2 support formally ended](https://github.com/helm/charts#status-of-the-project). This major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
 
-- Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
-- Move dependency information from the *requirements.yaml* to the *Chart.yaml*
-- After running `helm dependency update`, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
-- The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
-
-**Considerations when upgrading to this version**
-
-- If you want to upgrade to this version from a previous one installed with Helm v3, you shouldn't face any issues
-- If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
-- If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3
-
-**Useful links**
-
-- https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
-- https://helm.sh/docs/topics/v2_v3_migration/
-- https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
+[Learn more about this change and related upgrade considerations](https://docs.bitnami.com/kubernetes/infrastructure/spring-cloud-dataflow/administration/upgrade-helm3/).
 
 ### v0.x.x
 
