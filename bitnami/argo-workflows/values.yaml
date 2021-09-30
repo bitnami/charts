@@ -472,7 +472,7 @@ controller:
   ##
   readinessProbe:
     enabled: true
-    initialDelaySeconds: 90
+    initialDelaySeconds: 30
     periodSeconds: 60
     timeoutSeconds: 30
     failureThreshold: 3
@@ -531,7 +531,11 @@ controller:
   ## @param controller.config [object] Controller configmap configuration content
   config: |
     {{- if .Values.controller.instanceID.enabled }}
+    {{- if .Values.controller.instanceID.useReleaseName }}
     instanceID: {{ .Release.Name }}
+    {{- else }}
+    instanceID: {{ .Values.controller.instanceID.explicitID }}
+    {{- end }}
     {{- end }}
     ## Ref: https://argoproj.github.io/argo-workflows/workflow-executors/
     containerRuntimeExecutor: {{ .Values.controller.containerRuntimeExecutor }}
@@ -568,20 +572,30 @@ controller:
     {{- if .Values.controller.telemetry.enabled }}
     telemetryConfig: {{- include "common.tplvalues.render" (dict "value" .Values.controller.telemetry "context" $) | nindent 4 }}
     {{- end }}
-    {{- if .Values.controller.persistence.enabled }}
+    {{- if (include "argo-workflows.controller.persistence.enabled" .) }}
     persistence:
       connectionPool:
-        maxIdleConns: {{ .Values.controller.persistence.connectionPool.maxIdleConns }}
-        maxOpenConns: {{ .Values.controller.persistence.connectionPool.maxOpenConns }}
-      nodeStatusOffLoad: {{ .Values.controller.persistence.nodeStatusOffLoad }}
-      archive: {{ .Values.controller.persistence.archive }}
-      {{- if .Values.controller.persistence.postgresql.enabled }}
-      {{- omit .Values.controller.persistence.postgresql "enabled" | toYaml | nindent 6 }}
+        maxIdleConns: 100
+        maxOpenConns: 0
+      nodeStatusOffLoad: false
+      archive: false
+      {{- if or .Values.postgresql.enabled (eq .Values.externalDatabase.type "postgresql") }}
+      postgresql:
+      {{- else if or .Values.mysql.enabled (eq .Values.externalDatabase.type "mysql") }}
+      mysql:
       {{- end }}
-      {{- if .Values.controller.persistence.mysql.enabled }}
-      {{- omit .Values.controller.persistence.mysql "enabled" | toYaml | nindent 6 }}
-      {{- end }}
-      {{- end }}
+        host: {{ include "argo-workflows.controller.database.host" . }}
+        port: {{ include "argo-workflows.controller.database.port" . }}
+        database: {{ include "argo-workflows.controller.database" . }}
+        tableName: argo_workflows
+        ## the database secrets must be in the same namespace of the controller
+        userNameSecret:
+          name: {{ include "argo-workflows.controller.database.username.secret" . }}
+          key: username
+        passwordSecret:
+          name: {{ include "argo-workflows.controller.database.password.secret" . }}
+          key: {{ include "argo-workflows.controller.database.password.secret.key" . }}
+    {{- end }}
     ## Uncomment to set workflowDefaults
     ## Ref: https://argoproj.github.io/argo-workflows/default-workflow-specs/#setting-default-workflow-values
     ## workflowDefaults: {}
@@ -595,72 +609,16 @@ controller:
     ## Ref: https://argoproj.github.io/argo-workflows/links/
     ## links: {}
 
-  ## Controller persistence parameters. It can also be connected to an existing postgresql. Check
-  ## @param controller.persistence.enabled Enabled controller persistence
-  ## @param controller.persistence.connectionPool.maxIdleConns Msximun number of postgresql connections
-  ## @param controller.persistence.connectionPool.maxOpenConns Maximun number of open connections
-  ## @param controller.persistence.nodeStatusOffLoad Save the entire workflow into etcd and DB
-  ## @param controller.persistence.archive Enable archiving old workflows
-  ## @param controller.persistence.postgresql.enabled Enable Postgresql persistence
-  ## @param controller.persistence.postgresql.host Host to use postgresql persistence
-  ## @param controller.persistence.postgresql.port Port for Postgresql
-  ## @param controller.persistence.postgresql.database Postgresql database
-  ## @param controller.persistence.postgresql.tableName Postgresql table name
-  ## @param controller.persistence.postgresql.userNameSecret.name Name of the secret containing the postgresql username
-  ## @param controller.persistence.postgresql.userNameSecret.key Key of the secret containing the postgresql username
-  ## @param controller.persistence.postgresql.passwordSecret.name Name of the secret containing the postgresql password
-  ## @param controller.persistence.postgresql.passwordSecret.key Key of the secret containing the postgresql password
-  ## @param controller.persistence.mysql.enabled Enable MySQL persistence
-  ## @param controller.persistence.mysql.host Host to use mysql persistence
-  ## @param controller.persistence.mysql.port Port for Postgresql
-  ## @param controller.persistence.mysql.database Postgresql database
-  ## @param controller.persistence.mysql.tableName Postgresql table name
-  ## @param controller.persistence.mysql.userNameSecret.name Name of the secret containing the mysql username
-  ## @param controller.persistence.mysql.userNameSecret.key Key of the secret containing the mysql username
-  ## @param controller.persistence.mysql.passwordSecret.name Name of the secret containing the mysql password
-  ## @param controller.persistence.mysql.passwordSecret.key Key of the secret containing the mysql password
-  ##
-  persistence:
-    enabled: false
-    connectionPool:
-      maxIdleConns: 100
-      maxOpenConns: 0
-    ## Save the entire workflow into etcd and DB
-    nodeStatusOffLoad: false
-    ## Enable archiving of old workflows
-    archive: false
-    postgresql:
-      enabled: false
-      host: '{{ include "argo-workflows.postgresql.fullname" . }}'
-      port: 5432
-      database: postgres
-      tableName: argo_workflows
-      ## the database secrets must be in the same namespace of the controller
-      userNameSecret:
-        name: argo-postgres-config
-        key: username
-      passwordSecret:
-        name: '{{ .Release.name }}-postgresql'
-        key: postgresql-password
-    mysql:
-      enabled: false
-      host: '{{ include "argo-workflows.mysql.fullname" . }}'
-      port: 3306
-      database: mysql
-      tableName: argo_workflows
-      ## the database secrets must be in the same namespace of the controller
-      userNameSecret:
-        name: argo-mysql-config
-        key: username
-      passwordSecret:
-        name: '{{ .Release.name }}-mysql'
-        key: mysql-password
-
   ## Configure the controller to accept only submissions with a matching instanceID attribute
   ## @param controller.instanceID.enabled Enable submission filtering based on instanceID attribute. Requires to set instanceID.useReleaseName or instanceID.explicitID
+  ## @param controller.instanceID.useReleaseName Use the release name to filter submissions
+  ## @param controller.instanceID.explicitID Filter submissions based on an explicit instance ID
   ##
   instanceID:
     enabled: false
+    ## NOTE: If `instanceID.enabled` is set to `true` then either `instanceID.userReleaseName` or `instanceID.explicitID` must be defined.
+    useReleaseName: false
+    explicitID: ""
 
   ## Default container runtime that the executor will use.
   ## Set as `k8sapi` because `docker` requires privileged access. Also, `k8sapi` allows to runAsNonRoot
@@ -1058,3 +1016,60 @@ workflows:
   ##
   rbac:
     create: true
+
+## @section PostgreSQL subchart
+
+## Postgresql subchart configuration
+## @param postgresql.enabled Enable PostgreSQL subchart and controller persistence using PostgreSQL
+## @param postgresql.port PostgreSQL port
+## @param postgresql.postgresqlUsername PostgreSQL username
+## @param postgresql.postgresqlDatabase PortgreSQL database name
+##
+postgresql:
+  enabled: false
+  port: 5432
+  postgresqlUsername: postgres
+  postgresqlDatabase: bn_argo_workflows
+
+## @section MySQL subchart
+
+## Mysql subchart configuration
+## @param mysql.enabled Enable MySQL subchart and controller persistence using MySQL
+## @param mysql.service.port MySQL port
+## @param mysql.auth.username MySQL username
+## @param mysql.auth.database MySQL database name
+##
+mysql:
+  enabled: false
+  service:
+    port: 3306
+  auth:
+    username: mysql
+    database: bn_argo_workflows
+
+## @section External Database configuration
+
+## External Database Configuration
+## @param externalDatabase.enabled Enable using externaldatabase and the controller to use persistence with it
+## @param externalDatabase.host External Database server host
+## @param externalDatabase.port External Database server port
+## @param externalDatabase.user External Database username
+## @param externalDatabase.password External Database user password
+## @param externalDatabase.database External Database database name
+## @param externalDatabase.existingSecret The name of an existing secret with database credentials
+## @param externalDatabase.type Either postgresql or mysql
+##
+externalDatabase:
+  enabled: false
+  ## Either "postgres" or  "mysql"
+  ##
+  type: ""
+  host: localhost
+  port: 3306
+  user: bn_wordpress
+  password: ""
+  database: bitnami_wordpress
+  ## NOTE: Must contain key `database-password`
+  ## NOTE: When it's set, the `externalDatabase.password` parameter is ignored
+  ##
+  existingSecret: ""

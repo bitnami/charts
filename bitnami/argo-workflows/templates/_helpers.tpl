@@ -32,7 +32,6 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 */}}
 {{- define "argo-workflows.postgresql.fullname" -}}
 {{- $name := default "postgresql" .Values.postgresql.nameOverride -}}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
 {{- include "common.names.dependency.fullname" (dict "chartName" "postgresql" "chartValues" .Values.postgresql "context" $) -}}
 {{- end -}}
 
@@ -42,7 +41,6 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 */}}
 {{- define "argo-workflows.mysql.fullname" -}}
 {{- $name := default "mysql" .Values.mysql.nameOverride -}}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
 {{- include "common.names.dependency.fullname" (dict "chartName" "mysql" "chartValues" .Values.mysql "context" $) -}}
 {{- end -}}
 
@@ -98,10 +96,137 @@ Return the proper configmap for the controller
 {{- end -}}
 
 {{/*
+Return true if persistence is enabled
+*/}}
+{{- define "argo-workflows.controller.persistence.enabled" -}}
+{{- if or .Values.postgresql.enabled .Values.mysql.enabled .Values.externalDatabase.enabled -}}
+{{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the proper database username
+*/}}
+{{- define "argo-workflows.controller.database.username" -}}
+{{- if .Values.postgresql.enabled -}}
+{{- .Values.postgresql.postgresqlUsername -}}
+{{- end -}}
+{{- if .Values.mysql.enabled -}}
+{{- .Values.mysql.auth.username -}}
+{{- end -}}
+{{- if .Values.externalDatabase.enabled -}}
+{{- .Values.externalDatabase.username -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the proper database username secret name
+*/}}
+{{- define "argo-workflows.controller.database.username.secret" -}}
+{{- printf "%s-%s" (include "argo-workflows.controller.fullname" .) "database" -}}
+{{- end -}}
+
+{{/*
+Return the proper database password secret
+*/}}
+{{- define "argo-workflows.controller.database.password.secret" -}}
+{{- if .Values.postgresql.enabled -}}
+{{- include "argo-workflows.postgresql.fullname" . -}}
+{{- end -}}
+{{- if .Values.mysql.enabled -}}
+{{- include "argo-workflows.mysql.fullname" . -}}
+{{- end -}}
+{{- if .Values.externalDatabase.enabled -}}
+{{- if .Values.externalDatabase.existingSecret -}}
+{{- .Values.externalDatabase.existingSecret -}}
+{{- else -}}
+{{- include "argo-workflows.controller.database.username.secret" . -}}
+{{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the proper database password secret key
+*/}}
+{{- define "argo-workflows.controller.database.password.secret.key" -}}
+{{- if .Values.postgresql.enabled -}}
+{{- printf "%s" "postgresql-password" -}}
+{{- end -}}
+{{- if .Values.mysql.enabled -}}
+{{- printf "%s" "mysql-password" -}}
+{{- end -}}
+{{- if .Values.externalDatabase.enabled -}}
+{{- printf "%s" "database-password" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the proper database host
+The validate values function checks that both types are not set at the same time
+*/}}
+{{- define "argo-workflows.controller.database.host" -}}
+{{- if .Values.postgresql.enabled -}}
+{{- include "argo-workflows.postgresql.fullname" . -}}
+{{- end -}}
+{{- if .Values.mysql.enabled -}}
+{{- include "argo-workflows.mysql.fullname" . -}}
+{{- end -}}
+{{- if .Values.externalDatabase.enabled -}}
+{{- .Values.externalDatabase.host -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the proper database
+*/}}
+{{- define "argo-workflows.controller.database" -}}
+{{- if .Values.postgresql.enabled -}}
+{{- .Values.postgresql.postgresqlDatabase -}}
+{{- end -}}
+{{- if .Values.mysql.enabled -}}
+{{- .Values.mysql.auth.database -}}
+{{- end -}}
+{{- if .Values.externalDatabase.enabled -}}
+{{- .Values.externalDatabase.database -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the proper database port
+*/}}
+{{- define "argo-workflows.controller.database.port" -}}
+{{- if .Values.postgresql.enabled -}}
+{{- .Values.postgresql.service.port -}}
+{{- end -}}
+{{- if .Values.mysql.enabled -}}
+{{- .Values.mysql.service.port -}}
+{{- end -}}
+{{- if .Values.externalDatabase.enabled -}}
+{{- .Values.externalDatabase.port -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate database configuration
+*/}}
+{{- define "argo-workflows.validate.database.config" -}}
+{{- if or (and .Values.postgresql.enabled .Values.mysql.enabled) (and .Values.externalDatabase.enabled .Values.mysql.enabled) (and .Values.postgresql.enabled .Values.externalDatabase.enabled) -}}
+{{- printf "Validation error: more than one type of database specified, you should either configure postgresql, mysql or an external database" -}}
+{{- end -}}
+{{- if and .Values.externalDatabase.enabled (not .Values.externalDatabase.database) -}}
+{{- printf "Validation error: External database provided without the database parameter" -}}
+{{- end -}}
+{{- if and .Values.externalDatabase.enabled (not .Values.externalDatabase.type) -}}
+{{- printf "Validation error: External database provided without the database type parameter" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Compile all warnings into a single message.
 */}}
 {{- define "argo-workflows.validateValues" -}}
 {{- $messages := list -}}
+{{- $messages := append $messages (include "argo-workflows.validate.database.config" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 

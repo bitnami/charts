@@ -85,24 +85,14 @@ rules:
       - watch
       - create
       - patch
-  {{- if .Values.controller.persistence.enabled }}
+  {{- if (include "argo-workflows.controller.persistence.enabled" .) }}
   - apiGroups:
       - ""
     resources:
       - secrets
     resourceNames:
-    {{- if .Values.controller.persistence.postgresql.enabled }}
-    {{- with .Values.controller.persistence.postgresql }}
-      - {{ .userNameSecret.name }}
-      - {{ .passwordSecret.name }}
-    {{- end }}
-    {{- end }}
-    {{- if .Values.controller.persistence.mysql.enabled }}
-    {{- with .Values.controller.persistence.mysql }}
-      - {{ .userNameSecret.name }}
-      - {{ .passwordSecret.name }}
-    {{- end }}
-    {{- end }}
+      - {{ include "argo-workflows.controller.database.username.secret" . }}
+      - {{ include "argo-workflows.controller.database.password.secret" . }}
     verbs:
       - get
   {{- end}}

@@ -104,20 +104,14 @@ rules:
       - create
       - get
       - delete
-  {{- if .Values.controller.persistence.enabled }}
+  {{- if (include "argo-workflows.controller.persistence.enabled" .) }}
   - apiGroups:
       - ""
     resources:
       - secrets
     resourceNames:
-    {{- if .Values.controller.persistence.postgresql }}
-      - {{ .Values.controller.persistence.postgresql.userNameSecret.name }}
-      - {{ .Values.controller.persistence.postgresql.passwordSecret.name }}
-    {{- end}}
-    {{- if .Values.controller.persistence.mysql }}
-      - {{ .Values.controller.persistence.mysql.userNameSecret.name }}
-      - {{ .Values.controller.persistence.mysql.passwordSecret.name }}
-    {{- end }}
+      - {{ include "argo-workflows.controller.database.username.secret" . }}
+      - {{ include "argo-workflows.controller.database.password.secret" . }}
     verbs:
       - get
   {{- end }}

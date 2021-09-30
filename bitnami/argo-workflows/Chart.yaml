@@ -3,11 +3,11 @@ annotations:
 apiVersion: v2
 appVersion: 3.1.10
 dependencies:
-  - condition: controller.persistence.postgresql.enabled
+  - condition: postgresql.enabled
     name: postgresql
     repository: https://charts.bitnami.com/bitnami
     version: 10.x.x
-  - condition: controller.persistence.mysql.enabled
+  - condition: mysql.enabled
     name: mysql
     repository: https://charts.bitnami.com/bitnami
     version: 8.x.x
