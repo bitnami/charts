@@ -31,7 +31,7 @@ Return the appropriate apiVersion for networkpolicy.
 */}}
 {{- define "common.capabilities.networkPolicy.apiVersion" -}}
 {{- if semverCompare "<1.7-0" (include "common.capabilities.kubeVersion" .) -}}
-{{- print "policy/v1beta1" -}}
+{{- print "extensions/v1beta1" -}}
 {{- else -}}
 {{- print "networking.k8s.io/v1" -}}
 {{- end -}}
