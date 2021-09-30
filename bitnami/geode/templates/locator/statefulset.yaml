@@ -303,17 +303,31 @@ spec:
         - name: metrics
           image: {{ include "geode.metrics.image" . }}
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy }}
-          # TODO: To be removed once 'socat' is included in bitnami/bitnami-shell
-          securityContext:
-            runAsUser: 0
-          # END TODO
-          command:
-            - bash
-          args:
-            - -ec
-            - |
-              install_packages socat
-              socat tcp-listen:{{ .Values.metrics.containerPort }},reuseaddr,fork tcp:localhost:{{ .Values.locator.containerPorts.metrics }}
+          {{- if .Values.metrics.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.metrics.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: haproxy-configuration
+              mountPath: /bitnami/haproxy/conf/haproxy.cfg
+              subPath: haproxy.cfg
+          {{- if .Values.metrics.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.livenessProbe "enabled") "context" $) | nindent 12 }}
+            exec:
+              command:
+                - pgrep
+                - haproxy
+          {{- else if .Values.metrics.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.metrics.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.readinessProbe "enabled") "context" $) | nindent 12 }}
+            exec:
+              command:
+                - pgrep
+                - haproxy
+          {{- else if .Values.metrics.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
           ports:
             - name: metrics
               containerPort: {{ .Values.metrics.containerPort }}
@@ -337,6 +351,11 @@ spec:
           secret:
             secretName: {{ printf "%s" (tpl .Values.auth.tls.existingSecret $) }}
             defaultMode: 256
+        {{- end }}
+        {{- if .Values.metrics.enabled }}
+        - name: haproxy-configuration
+          configMap:
+            name: {{ printf "%s-haproxy-conf" (include "common.names.fullname" .) }}
         {{- end }}
         {{- if .Values.locator.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.locator.extraVolumes "context" $) | nindent 8 }}

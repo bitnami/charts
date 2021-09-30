@@ -243,6 +243,9 @@ locator:
   ## @param locator.customReadinessProbe Custom readinessProbe that overrides the default one
   ##
   customReadinessProbe: {}
+  ## @param locator.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
   ## Locator resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ## @param locator.resources.limits The resources limits for the Locator containers
@@ -551,6 +554,9 @@ server:
   ## @param server.customReadinessProbe Custom readinessProbe that overrides the default one
   ##
   customReadinessProbe: {}
+  ## @param server.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
   ## Cache server resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ## @param server.resources.limits The resources limits for the Cache server containers
@@ -873,19 +879,19 @@ metrics:
   ## @param metrics.enabled Expose Apache Geode metrics
   ##
   enabled: false
-  ## Bitnami Shell image
-  ## ref: https://hub.docker.com/r/bitnami/bitnami-shell/tags/
-  ## @param metrics.image.registry Bitnami Shell image registry
-  ## @param metrics.image.repository Bitnami Shell image repository
-  ## @param metrics.image.tag Bitnami Shell image tag (immutable tags are recommended)
-  ## @param metrics.image.pullPolicy Bitnami Shell image pull policy
-  ## @param metrics.image.pullSecrets Bitnami Shell image pull secrets
+  ## Bitnami HAProxy image
+  ## ref: https://hub.docker.com/r/bitnami/haproxy/tags/
+  ## @param metrics.image.registry Bitnami HAProxy image registry
+  ## @param metrics.image.repository Bitnami HAProxy image repository
+  ## @param metrics.image.tag Bitnami HAProxy image tag (immutable tags are recommended)
+  ## @param metrics.image.pullPolicy Bitnami HAProxy image pull policy
+  ## @param metrics.image.pullSecrets Bitnami HAProxy image pull secrets
   ##
   image:
     registry: docker.io
-    repository: bitnami/bitnami-shell
-    tag: "10"
-    pullPolicy: Always
+    repository: bitnami/haproxy
+    tag: 2.4.4-debian-10-r20
+    pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -897,6 +903,50 @@ metrics:
   ## @param metrics.containerPort Metrics container port
   ##
   containerPort: 9914
+  ## Configure extra options for Metrics containers' liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param metrics.livenessProbe.enabled Enable livenessProbe on Metrics containers
+  ## @param metrics.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param metrics.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param metrics.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param metrics.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param metrics.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: false
+    failureThreshold: 5
+    initialDelaySeconds: 15
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 5
+  ## @param metrics.readinessProbe.enabled Enable readinessProbe on Metrics containers
+  ## @param metrics.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param metrics.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param metrics.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param metrics.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param metrics.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: false
+    failureThreshold: 5
+    initialDelaySeconds: 15
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 5
+  ## @param metrics.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param metrics.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param metrics.containerSecurityContext.enabled Enabled Metrics containers' Security Context
+  ## @param metrics.containerSecurityContext.runAsUser Set Metrics containers' Security Context runAsUser
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
   ## Apache Geode metrics service parameters
   ##
   service:
