@@ -162,6 +162,12 @@ spec:
               value: {{ .Values.locator.containerPorts.http | quote }}
             - name: GEODE_RMI_PORT_NUMBER
               value: {{ .Values.locator.containerPorts.rmi | quote }}
+            - name: GEODE_ENABLE_METRICS
+              value: {{ ternary "yes" "no" .Values.metrics.enabled | quote }}
+            {{- if .Values.metrics.enabled }}
+            - name: GEODE_METRICS_PORT_NUMBER
+              value: {{ .Values.locator.containerPorts.metrics | quote }}
+            {{- end }}
             - name: GEODE_LOG_LEVEL
               value: {{ .Values.locator.logLevel | quote }}
             {{- if .Values.locator.initialHeapSize }}
@@ -234,6 +240,10 @@ spec:
               containerPort: {{ .Values.locator.containerPorts.http }}
             - name: rmi
               containerPort: {{ .Values.locator.containerPorts.rmi }}
+            {{- if .Values.metrics.enabled }}
+            - name: int-metrics
+              containerPort: {{ .Values.locator.containerPorts.metrics }}
+            {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.locator.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.locator.livenessProbe "enabled") "context" $) | nindent 12 }}
@@ -289,6 +299,25 @@ spec:
           {{- if .Values.locator.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.locator.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
+        {{- if .Values.metrics.enabled }}
+        - name: metrics
+          image: {{ include "geode.metrics.image" . }}
+          imagePullPolicy: {{ .Values.metrics.image.pullPolicy }}
+          # TODO: To be removed once 'socat' is included in bitnami/bitnami-shell
+          securityContext:
+            runAsUser: 0
+          # END TODO
+          command:
+            - bash
+          args:
+            - -ec
+            - |
+              install_packages socat
+              socat tcp-listen:{{ .Values.metrics.containerPort }},reuseaddr,fork tcp:localhost:{{ .Values.locator.containerPorts.metrics }}
+          ports:
+            - name: metrics
+              containerPort: {{ .Values.metrics.containerPort }}
+        {{- end }}
         {{- if .Values.locator.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.locator.sidecars "context" $) | nindent 8 }}
         {{- end }}

@@ -76,7 +76,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ---------------------------------------- | -------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
 | `image.registry`                         | Apache Geode image registry                                                            | `docker.io`                                                 |
 | `image.repository`                       | Apache Geode image repository                                                          | `bitnami/geode`                                             |
-| `image.tag`                              | Apache Geode image tag (immutable tags are recommended)                                | `1.14.0-debian-10-r0`                                       |
+| `image.tag`                              | Apache Geode image tag (immutable tags are recommended)                                | `1.14.0-debian-10-r3`                                       |
 | `image.pullPolicy`                       | Apache Geode image pull policy                                                         | `IfNotPresent`                                              |
 | `image.pullSecrets`                      | Apache Geode image pull secrets                                                        | `[]`                                                        |
 | `image.debug`                            | Enable Apache Geode image debug mode                                                   | `false`                                                     |
@@ -110,6 +110,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `locator.containerPorts.locator`             | Locator multicast container port                                                                            | `10334`             |
 | `locator.containerPorts.http`                | Locator HTTP container port                                                                                 | `7070`              |
 | `locator.containerPorts.rmi`                 | Locator RMI container port                                                                                  | `1099`              |
+| `locator.containerPorts.metrics`             | Locator internal metrics container port                                                                     | `9915`              |
 | `locator.livenessProbe.enabled`              | Enable livenessProbe on Locator containers                                                                  | `false`             |
 | `locator.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                     | `5`                 |
 | `locator.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                            | `10`                |
@@ -194,6 +195,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.containerPorts.server`              | Cache Server container port                                                                                      | `40404`             |
 | `server.containerPorts.http`                | Cache Server HTTP container port                                                                                 | `7070`              |
 | `server.containerPorts.rmi`                 | Cache Server RMI container port                                                                                  | `1099`              |
+| `server.containerPorts.metrics`             | Cache Server internal metrics container port                                                                     | `9915`              |
 | `server.livenessProbe.enabled`              | Enable livenessProbe on Cache server containers                                                                  | `false`             |
 | `server.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                          | `5`                 |
 | `server.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                                 | `10`                |
@@ -286,6 +288,26 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                    |
 | `volumePermissions.resources.requests`                 | The requested resources for the init container                                                  | `{}`                    |
 | `volumePermissions.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                 | `0`                     |
+
+
+### Metrics parameters
+
+| Name                                       | Description                                                          | Value                   |
+| ------------------------------------------ | -------------------------------------------------------------------- | ----------------------- |
+| `metrics.enabled`                          | Expose Apache Geode metrics                                          | `false`                 |
+| `metrics.image.registry`                   | Bitnami Shell image registry                                         | `docker.io`             |
+| `metrics.image.repository`                 | Bitnami Shell image repository                                       | `bitnami/bitnami-shell` |
+| `metrics.image.tag`                        | Bitnami Shell image tag (immutable tags are recommended)             | `10`                    |
+| `metrics.image.pullPolicy`                 | Bitnami Shell image pull policy                                      | `Always`                |
+| `metrics.image.pullSecrets`                | Bitnami Shell image pull secrets                                     | `[]`                    |
+| `metrics.containerPort`                    | Metrics container port                                               | `9914`                  |
+| `metrics.service.port`                     | Service HTTP management port                                         | `9914`                  |
+| `metrics.service.annotations`              | Annotations for enabling prometheus to access the metrics endpoints  | `{}`                    |
+| `metrics.serviceMonitor.enabled`           | Specify if a ServiceMonitor will be deployed for Prometheus Operator | `false`                 |
+| `metrics.serviceMonitor.interval`          | How frequently to scrape metrics                                     | `""`                    |
+| `metrics.serviceMonitor.scrapeTimeout`     | Timeout after which the scrape is ended                              | `""`                    |
+| `metrics.serviceMonitor.metricRelabelings` | Specify additional relabeling of metrics                             | `[]`                    |
+| `metrics.serviceMonitor.relabelings`       | Specify general relabeling                                           | `[]`                    |
 
 
 ### Other Parameters

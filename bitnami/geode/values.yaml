@@ -65,7 +65,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/geode
-  tag: 1.14.0-debian-10-r0
+  tag: 1.14.0-debian-10-r3
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -186,11 +186,13 @@ locator:
   ## @param locator.containerPorts.locator Locator multicast container port
   ## @param locator.containerPorts.http Locator HTTP container port
   ## @param locator.containerPorts.rmi Locator RMI container port
+  ## @param locator.containerPorts.metrics Locator internal metrics container port
   ##
   containerPorts:
     locator: 10334
     http: 7070
     rmi: 1099
+    metrics: 9915
   ## Configure extra options for Locator containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param locator.livenessProbe.enabled Enable livenessProbe on Locator containers
@@ -492,11 +494,13 @@ server:
   ## @param server.containerPorts.server Cache Server container port
   ## @param server.containerPorts.http Cache Server HTTP container port
   ## @param server.containerPorts.rmi Cache Server RMI container port
+  ## @param server.containerPorts.metrics Cache Server internal metrics container port
   ##
   containerPorts:
     server: 40404
     http: 7070
     rmi: 1099
+    metrics: 9915
   ## Configure extra options for Cache server containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param server.livenessProbe.enabled Enable livenessProbe on Cache server containers
@@ -862,6 +866,72 @@ volumePermissions:
   ##
   containerSecurityContext:
     runAsUser: 0
+
+## @section Metrics parameters
+##
+metrics:
+  ## @param metrics.enabled Expose Apache Geode metrics
+  ##
+  enabled: false
+  ## Bitnami Shell image
+  ## ref: https://hub.docker.com/r/bitnami/bitnami-shell/tags/
+  ## @param metrics.image.registry Bitnami Shell image registry
+  ## @param metrics.image.repository Bitnami Shell image repository
+  ## @param metrics.image.tag Bitnami Shell image tag (immutable tags are recommended)
+  ## @param metrics.image.pullPolicy Bitnami Shell image pull policy
+  ## @param metrics.image.pullSecrets Bitnami Shell image pull secrets
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/bitnami-shell
+    tag: "10"
+    pullPolicy: Always
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+  ## @param metrics.containerPort Metrics container port
+  ##
+  containerPort: 9914
+  ## Apache Geode metrics service parameters
+  ##
+  service:
+    ## @param metrics.service.port Service HTTP management port
+    ##
+    port: 9914
+    ## @param metrics.service.annotations [object] Annotations for enabling prometheus to access the metrics endpoints
+    ##
+    annotations:
+      prometheus.io/scrape: "true"
+      prometheus.io/port: "{{ .Values.metrics.service.port }}"
+      prometheus.io/path: "/"
+  ## Prometheus Service Monitor
+  ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+  ##
+  serviceMonitor:
+    ## @param metrics.serviceMonitor.enabled Specify if a ServiceMonitor will be deployed for Prometheus Operator
+    ##
+    enabled: false
+    ## @param metrics.serviceMonitor.interval How frequently to scrape metrics
+    ## e.g:
+    ## interval: 10s
+    ##
+    interval: ""
+    ## @param metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
+    ## e.g:
+    ## scrapeTimeout: 10s
+    ##
+    scrapeTimeout: ""
+    ## @param metrics.serviceMonitor.metricRelabelings [array] Specify additional relabeling of metrics
+    ##
+    metricRelabelings: []
+    ## @param metrics.serviceMonitor.relabelings [array] Specify general relabeling
+    ##
+    relabelings: []
 
 ## @section Other Parameters
 
