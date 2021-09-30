@@ -73,25 +73,25 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Node parameters
 
-| Name                                    | Description                                                                                                          | Value             |
-| --------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ----------------- |
-| `command`                               | Override default container command (useful when using custom images)                                                 | `[]`              |
-| `args`                                  | Override default container args (useful when using custom images)                                                    | `[]`              |
-| `hostAliases`                           | Deployment pod host aliases                                                                                          | `[]`              |
-| `extraEnvVars`                          | Extra environment variables to be set on Node container                                                              | `[]`              |
-| `extraEnvVarsCM`                        | Name of existing ConfigMap containing extra environment variables                                                    | `""`              |
-| `extraEnvVarsSecret`                    | Name of existing Secret containing extra environment variables                                                       | `""`              |
-| `mongodb.enabled`                       | Whether to install or not the MongoDB&reg; chart                                                                     | `true`            |
-| `mongodb.auth.enabled`                  | Whether to enable auth or not for the MongoDB&reg; chart                                                             | `true`            |
-| `mongodb.auth.rootPassword`             | MongoDB&reg; admin password                                                                                          | `""`              |
-| `mongodb.auth.username`                 | MongoDB&reg; custom user                                                                                             | `user`            |
-| `mongodb.auth.database`                 | MongoDB&reg; custom database                                                                                         | `test_db`         |
-| `mongodb.auth.password`                 | MongoDB&reg; custom password                                                                                         | `secret_password` |
-| `externaldb.enabled`                    | Enables or disables external database (ignored if `mongodb.enabled=true`)                                            | `false`           |
-| `externaldb.ssl`                        | Set to true if your external database has ssl enabled                                                                | `false`           |
-| `externaldb.secretName`                 | Secret containing existing database credentials                                                                      | `""`              |
-| `externaldb.type`                       | Only if using Kubernetes Service Catalog you can specify the kind of broker used. Available options are osba|gce|aws | `osba`            |
-| `externaldb.broker.serviceInstanceName` | If you provide the serviceInstanceName, the chart will create a ServiceBinding for that ServiceInstance              | `""`              |
+| Name                                    | Description                                                                                                          | Value                             |
+| --------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | --------------------------------- |
+| `command`                               | Override default container command (useful when using custom images)                                                 | `["/bin/bash","-ec","npm start"]` |
+| `args`                                  | Override default container args (useful when using custom images)                                                    | `[]`                              |
+| `hostAliases`                           | Deployment pod host aliases                                                                                          | `[]`                              |
+| `extraEnvVars`                          | Extra environment variables to be set on Node container                                                              | `[]`                              |
+| `extraEnvVarsCM`                        | Name of existing ConfigMap containing extra environment variables                                                    | `""`                              |
+| `extraEnvVarsSecret`                    | Name of existing Secret containing extra environment variables                                                       | `""`                              |
+| `mongodb.enabled`                       | Whether to install or not the MongoDB&reg; chart                                                                     | `true`                            |
+| `mongodb.auth.enabled`                  | Whether to enable auth or not for the MongoDB&reg; chart                                                             | `true`                            |
+| `mongodb.auth.rootPassword`             | MongoDB&reg; admin password                                                                                          | `""`                              |
+| `mongodb.auth.username`                 | MongoDB&reg; custom user                                                                                             | `user`                            |
+| `mongodb.auth.database`                 | MongoDB&reg; custom database                                                                                         | `test_db`                         |
+| `mongodb.auth.password`                 | MongoDB&reg; custom password                                                                                         | `secret_password`                 |
+| `externaldb.enabled`                    | Enables or disables external database (ignored if `mongodb.enabled=true`)                                            | `false`                           |
+| `externaldb.ssl`                        | Set to true if your external database has ssl enabled                                                                | `false`                           |
+| `externaldb.secretName`                 | Secret containing existing database credentials                                                                      | `""`                              |
+| `externaldb.type`                       | Only if using Kubernetes Service Catalog you can specify the kind of broker used. Available options are osba|gce|aws | `osba`                            |
+| `externaldb.broker.serviceInstanceName` | If you provide the serviceInstanceName, the chart will create a ServiceBinding for that ServiceInstance              | `""`                              |
 
 
 ### Node deployment parameters
@@ -100,7 +100,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | ----------------------------------------------------------------------------------------- | ---------------------- |
 | `image.registry`                        | NodeJS image registry                                                                     | `docker.io`            |
 | `image.repository`                      | NodeJS image repository                                                                   | `bitnami/node`         |
-| `image.tag`                             | NodeJS image tag (immutable tags are recommended)                                         | `14.17.6-debian-10-r0` |
+| `image.tag`                             | NodeJS image tag (immutable tags are recommended)                                         | `14.18.0-debian-10-r0` |
 | `image.pullPolicy`                      | NodeJS image pull policy                                                                  | `IfNotPresent`         |
 | `image.pullSecrets`                     | Specify docker-registry secret names as an array                                          | `[]`                   |
 | `replicaCount`                          | Specify the number of replicas for the application                                        | `1`                    |
@@ -153,7 +153,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------ | --------------------------------------------------- | -------------------------------------------- |
 | `git.image.registry`           | Git image registry                                  | `docker.io`                                  |
 | `git.image.repository`         | Git image repository                                | `bitnami/git`                                |
-| `git.image.tag`                | Git image tag (immutable tags are recommended)      | `2.33.0-debian-10-r14`                       |
+| `git.image.tag`                | Git image tag (immutable tags are recommended)      | `2.33.0-debian-10-r44`                       |
 | `git.image.pullPolicy`         | Git image pull policy                               | `IfNotPresent`                               |
 | `git.image.pullSecrets`        | Specify docker-registry secret names as an array    | `[]`                                         |
 | `git.extraVolumeMounts`        | Add extra volume mounts for the Git container       | `[]`                                         |
@@ -169,7 +169,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory  | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                             | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image repository                           | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended) | `10-debian-10-r178`     |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended) | `10-debian-10-r206`     |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                          | `Always`                |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                             | `[]`                    |
 | `volumePermissions.resources.limits`   | The resources limits for the container                                       | `{}`                    |

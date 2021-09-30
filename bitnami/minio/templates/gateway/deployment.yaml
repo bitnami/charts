@@ -90,6 +90,8 @@ spec:
             - {{ default "/opt/bitnami/minio/certs" .Values.tls.mountPath }}
             - gateway
             - {{ .Values.gateway.type }}
+            - --console-address 
+            - :{{ .Values.containerPorts.console }}
             {{- if eq .Values.gateway.type "gcs" }}
             - {{ .Values.gateway.auth.gcs.projectID }}
             {{- else if eq .Values.gateway.type "nas" }}
