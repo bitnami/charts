@@ -13,6 +13,13 @@ Return the proper controller image name
 {{- end -}}
 
 {{/*
+Return the proper executor image name
+*/}}
+{{- define "argo-workflows.executor.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.executor.image "global" .Values.global) }}
+{{- end -}}
+
+{{/*
 Return the proper service name for Argo Workflows server
 */}}
 {{- define "argo-workflows.server.fullname" -}}

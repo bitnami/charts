@@ -377,9 +377,7 @@ server:
     ##
     ports:
       http: 80
-    ## @param server.service.httpsPort server service HTTPS port
-    ##
-    httpsPort: 443
+
     ## Node ports to expose
     ## @param server.service.nodePorts.http Node port for HTTP
     ## NOTE: choose port between <30000-32767>
@@ -510,8 +508,12 @@ controller:
 
   ## Server container port
   ## @param controller.containerPorts.controller Argo Workflows controller container port
+  ## @param controller.containerPorts.metrics Port to expose controller metrics
+  ## @param controller.containerPorts.telemetry Port to expose controller telemetry
   containerPorts:
     controller: 6060
+    metrics: 9090
+    telemetry: 8081
 
   ## Create RBAC resources for the Argo workflows controller
   ## @param controller.rbac.create Create RBAC resources for the Argo workflows controller
@@ -635,24 +637,20 @@ controller:
   ## Metrics configuration for the controller
   ## @param controller.metrics.enabled Enable controller metrics exporter
   ## @param controller.metrics.path Path to expose controller metrics
-  ## @param controller.metrics.port Port to expose controller metrics
   ## @param controller.metrics.serviceMonitor.enabled Enable prometheus service monitor configuration
   ##
   metrics:
     enabled: false
     path: /metrics
-    port: 9090
     serviceMonitor:
       enabled: false
   ## Telemetry configuration for the controller
   ## @param controller.telemetry.enabled Enable telemetry for the controller
   ## @param controller.telemetry.path Path to expose telemetry information
-  ## @param controller.telemetry.port Port to expose telemetry information
   ##
   telemetry:
     enabled: false
     path: /telemetry
-    port: 8081
 
   ## Number of workflow workers to deploy
   ## @param controller.workflowWorkers Number of workflow workers to deploy

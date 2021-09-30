@@ -151,7 +151,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.initContainers`                              | Add additional init containers to the server pod(s)                                              | `{}`                 |
 | `server.service.type`                                | server service type                                                                              | `ClusterIP`          |
 | `server.service.ports.http`                          | server service HTTP port                                                                         | `80`                 |
-| `server.service.httpsPort`                           | server service HTTPS port                                                                        | `443`                |
 | `server.service.nodePorts.http`                      | Node port for HTTP                                                                               | `nil`                |
 | `server.service.clusterIP`                           | server service Cluster IP                                                                        | `nil`                |
 | `server.service.loadBalancerIP`                      | server service Load Balancer IP                                                                  | `nil`                |
@@ -192,6 +191,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.containerSecurityContext.enabled`            | Enabled controller containers' Security Context                                                                               | `true`                      |
 | `controller.containerSecurityContext.runAsUser`          | Set controller containers' Security Context runAsUser                                                                         | `1001`                      |
 | `controller.containerPorts.controller`                   | Argo Workflows controller container port                                                                                      | `6060`                      |
+| `controller.containerPorts.metrics`                      | Port to expose controller metrics                                                                                             | `9090`                      |
+| `controller.containerPorts.telemetry`                    | Port to expose controller telemetry                                                                                           | `8081`                      |
 | `controller.rbac.create`                                 | Create RBAC resources for the Argo workflows controller                                                                       | `true`                      |
 | `controller.existingConfigMap`                           |                                                                                                                               | `nil`                       |
 | `controller.extraArgs`                                   | Extra arguments for the controller command line                                                                               | `""`                        |
@@ -203,11 +204,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.clusterWorkflowTemplates.enabled`            | Whether to create a ClusterRole and Cluster Role Binding to access ClusterWokflowTemplates resources                          | `true`                      |
 | `controller.metrics.enabled`                             | Enable controller metrics exporter                                                                                            | `false`                     |
 | `controller.metrics.path`                                | Path to expose controller metrics                                                                                             | `/metrics`                  |
-| `controller.metrics.port`                                | Port to expose controller metrics                                                                                             | `9090`                      |
 | `controller.metrics.serviceMonitor.enabled`              | Enable prometheus service monitor configuration                                                                               | `false`                     |
 | `controller.telemetry.enabled`                           | Enable telemetry for the controller                                                                                           | `false`                     |
 | `controller.telemetry.path`                              | Path to expose telemetry information                                                                                          | `/telemetry`                |
-| `controller.telemetry.port`                              | Port to expose telemetry information                                                                                          | `8081`                      |
 | `controller.workflowWorkers`                             | Number of workflow workers to deploy                                                                                          | `32`                        |
 | `controller.podWorkers`                                  | Number of pod workers to deploy                                                                                               | `32`                        |
 | `controller.workflowNamespaces`                          | Namespaces allowed to run workflows                                                                                           | `["default"]`               |

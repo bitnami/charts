@@ -38,7 +38,7 @@ spec:
     - name: tcp-metrics
       port: {{ .Values.controller.service.ports.metrics }}
       protocol: TCP
-      targetPort: {{ .Values.controller.metrics.port }}
+      targetPort: {{ .Values.controller.containerPorts.metrics }}
       {{- if (and (or (eq .Values.controller.service.type "NodePort") (eq .Values.controller.service.type "LoadBalancer")) (not (empty .Values.controller.service.nodePorts.metrics))) }}
       nodePort: {{ .Values.controller.service.nodePorts.metrics }}
       {{- else if eq .Values.controller.service.type "ClusterIP" }}
@@ -49,7 +49,7 @@ spec:
     - name: tcp-telemetry
       port: {{ .Values.controller.service.ports.telemetry }}
       protocol: TCP
-      targetPort: {{ .Values.controller.telemetry.port }}
+      targetPort: {{ .Values.controller.containerPorts.telemetry }}
       {{- if (and (or (eq .Values.controller.service.type "NodePort") (eq .Values.controller.service.type "LoadBalancer")) (not (empty .Values.controller.service.nodePorts.telemetry))) }}
       nodePort: {{ .Values.controller.service.nodePorts.telemetry }}
       {{- else if eq .Values.controller.service.type "ClusterIP" }}

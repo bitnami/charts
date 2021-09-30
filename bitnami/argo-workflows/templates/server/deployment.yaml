@@ -24,7 +24,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config: {{ include (print $.Template.BasePath "/controller/configmap.yaml") . | sha256sum }}
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
         {{- if .Values.server.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.server.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
@@ -87,6 +87,8 @@ spec:
             - --auth-mode
             - {{ .Values.server.auth.mode }}
             {{- end }}
+            - --port
+            - {{ .Values.server.containerPorts.web | quote }}
             {{- if .Values.server.extraArgs }}
             {{- include "common.tplvalues.render" (dict "value" .Values.server.extraArgs "context" $) | nindent 12 }}
             {{- end }}
@@ -119,7 +121,6 @@ spec:
           {{- if .Values.server.resources }}
           resources: {{- toYaml .Values.server.resources | nindent 12 }}
           {{- end }}
-
           {{- if .Values.server.livenessProbe.enabled }}
           livenessProbe:
             httpGet:

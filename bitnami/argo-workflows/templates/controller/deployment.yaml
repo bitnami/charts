@@ -23,7 +23,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config: {{ include (print $.Template.BasePath "/controller/configmap.yaml") . | sha256sum }}
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
         {{- if .Values.controller.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.controller.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
@@ -79,7 +79,9 @@ spec:
             - --configmap
             - {{ include "argo-workflows.controller.configMapName" . }}
             - --executor-image
-            - {{ .Values.executor.image.registry }}/{{ .Values.executor.image.repository }}:{{ .Values.executor.image.tag }}
+            - {{ include "argo-workflows.executor.image" . }}
+            - --executor-image-pull-policy
+            - {{ .Values.executor.image.pullPolicy }}
             - --loglevel
             - {{ .Values.controller.logging.level }}
             - --gloglevel
@@ -124,7 +126,7 @@ spec:
             {{- end }}
           ports:
             - name: metrics
-              containerPort: {{ .Values.controller.metrics.port }}
+              containerPort: {{ .Values.controller.containerPorts.metrics }}
             - name: controller
               containerPort: {{ .Values.controller.containerPorts.controller }}
           {{- if .Values.controller.resources }}

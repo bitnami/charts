@@ -12,6 +12,7 @@ metadata:
     {{- end }}
   {{- if or .Values.ingress.annotations .Values.commonAnnotations .Values.ingress.certManager }}
   annotations:
+    # Ref: https://argoproj.github.io/argo-workflows/argo-server/#ingress
     ingress.kubernetes.io/rewrite-target: /$2
     {{- if .Values.server.secure }}
     ingress.kubernetes.io/protocol: https # Traefik
