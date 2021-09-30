@@ -61,8 +61,8 @@ server:
   ##
   image:
     registry: docker.io
-    repository: miguelaeh/test-cli
-    tag: latest
+    repository: bitnami/argo-workflow-cli
+    tag: 3.1.12-scratch-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -426,8 +426,8 @@ controller:
   ##
   image:
     registry: docker.io
-    repository: miguelaeh/test-controller
-    tag: v2
+    repository: bitnami/argo-workflow-controller
+    tag: 3.1.13-scratch-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -866,8 +866,8 @@ executor:
   ##
   image:
     registry: docker.io
-    repository: miguelaeh/test-exec
-    tag: latest
+    repository: bitnami/argo-workflow-exec
+    tag: 3.1.13-scratch-r1
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
