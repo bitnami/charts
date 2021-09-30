@@ -7,6 +7,15 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*
+Kubernetes standard labels
+*/}}
+{{- define "networkPolicy.matchLabels" -}}
+app.kubernetes.io/name: {{ .Values.networkPolicy.destinationName }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end -}}
+
+{{/*
 Return the proper certificate image name
 */}}
 {{- define "certificates.image" -}}

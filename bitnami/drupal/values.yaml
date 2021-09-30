@@ -33,6 +33,7 @@ commonAnnotations: {}
 ## @param commonLabels Common labels to add to all Drupal resources (sub-charts are not considered). Evaluated as a template
 ##
 commonLabels: {}
+
 ## @param extraDeploy Array of extra objects to deploy with the release (evaluated as a template).
 ##
 extraDeploy: []
@@ -658,3 +659,10 @@ certificates:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
+
+networkPolicy:
+  enabled: false
+  block: {}
+  destinationName: mariadb
+  extraSelectorLabels: {}
+  extraMatchLabels: {}
