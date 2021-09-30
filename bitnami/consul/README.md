@@ -60,15 +60,18 @@ $ helm delete --purge my-release
 
 ### Common parameters
 
-| Name                | Description                                                                | Value           |
-| ------------------- | -------------------------------------------------------------------------- | --------------- |
-| `kubeVersion`       | Override Kubernetes version                                                | `""`            |
-| `nameOverride`      | String to partially override common.names.fullname                         | `""`            |
-| `fullnameOverride`  | String to fully override common.names.fullname                             | `""`            |
-| `commonLabels`      | Labels to add to all deployed objects (sub-charts are not considered)      | `{}`            |
-| `commonAnnotations` | Annotations to add to all deployed objects (sub-charts are not considered) | `{}`            |
-| `clusterDomain`     | Kubernetes cluster domain name                                             | `cluster.local` |
-| `extraDeploy`       | Array of extra objects to deploy with the release                          | `[]`            |
+| Name                     | Description                                                                             | Value           |
+| ------------------------ | --------------------------------------------------------------------------------------- | --------------- |
+| `kubeVersion`            | Override Kubernetes version                                                             | `""`            |
+| `nameOverride`           | String to partially override common.names.fullname                                      | `""`            |
+| `fullnameOverride`       | String to fully override common.names.fullname                                          | `""`            |
+| `commonLabels`           | Labels to add to all deployed objects (sub-charts are not considered)                   | `{}`            |
+| `commonAnnotations`      | Annotations to add to all deployed objects (sub-charts are not considered)              | `{}`            |
+| `clusterDomain`          | Kubernetes cluster domain name                                                          | `cluster.local` |
+| `extraDeploy`            | Array of extra objects to deploy with the release                                       | `[]`            |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`     |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]`  |
 
 
 ### HashiCorp Consul parameters
@@ -77,7 +80,7 @@ $ helm delete --purge my-release
 | -------------------------- | -------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`           | HashiCorp Consul image registry                                                              | `docker.io`           |
 | `image.repository`         | HashiCorp Consul image repository                                                            | `bitnami/consul`      |
-| `image.tag`                | HashiCorp Consul image tag (immutable tags are recommended)                                  | `1.10.1-debian-10-r0` |
+| `image.tag`                | HashiCorp Consul image tag (immutable tags are recommended)                                  | `1.10.3-debian-10-r0` |
 | `image.pullPolicy`         | HashiCorp Consul image pull policy                                                           | `IfNotPresent`        |
 | `image.pullSecrets`        | HashiCorp Consul image pull secrets                                                          | `[]`                  |
 | `image.debug`              | Enable image debug mode                                                                      | `false`               |
@@ -173,13 +176,13 @@ $ helm delete --purge my-release
 
 ### Persistence parameters
 
-| Name                       | Description                                                                                               | Value  |
-| -------------------------- | --------------------------------------------------------------------------------------------------------- | ------ |
-| `persistence.enabled`      | Enable HashiCorp Consul data persistence using PVC, use a Persistent Volume Claim, If false, use emptyDir | `true` |
-| `persistence.storageClass` | Persistent Volume storage class                                                                           | `""`   |
-| `persistence.annotations`  | Persistent Volume Claim annotations                                                                       | `{}`   |
-| `persistence.accessModes`  | Persistent Volume Access Mode                                                                             | `[]`   |
-| `persistence.size`         | PVC Storage Request for HashiCorp Consul data volume                                                      | `8Gi`  |
+| Name                       | Description                                                                                               | Value               |
+| -------------------------- | --------------------------------------------------------------------------------------------------------- | ------------------- |
+| `persistence.enabled`      | Enable HashiCorp Consul data persistence using PVC, use a Persistent Volume Claim, If false, use emptyDir | `true`              |
+| `persistence.storageClass` | Persistent Volume storage class                                                                           | `""`                |
+| `persistence.annotations`  | Persistent Volume Claim annotations                                                                       | `{}`                |
+| `persistence.accessModes`  | Persistent Volume Access Mode                                                                             | `["ReadWriteOnce"]` |
+| `persistence.size`         | PVC Storage Request for HashiCorp Consul data volume                                                      | `8Gi`               |
 
 
 ### Volume Permissions parameters
@@ -189,7 +192,7 @@ $ helm delete --purge my-release
 | `volumePermissions.enabled`            | Enable init container that changes the owner and group of the persistent volume | `false`                 |
 | `volumePermissions.image.registry`     | Bitnami Shell image registry                                                    | `docker.io`             |
 | `volumePermissions.image.repository`   | Bitnami Shell image repository                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Bitnami Shell image tag (immutable tags are recommended)                        | `10-debian-10-r133`     |
+| `volumePermissions.image.tag`          | Bitnami Shell image tag (immutable tags are recommended)                        | `10-debian-10-r205`     |
 | `volumePermissions.image.pullPolicy`   | Bitnami Shell image pull policy                                                 | `Always`                |
 | `volumePermissions.image.pullSecrets`  | Bitnami Shell image pull secrets                                                | `[]`                    |
 | `volumePermissions.resources.limits`   | The resources limits for the container                                          | `{}`                    |
@@ -203,7 +206,7 @@ $ helm delete --purge my-release
 | `metrics.enabled`                         | Start a side-car prometheus exporter                                                                                        | `false`                   |
 | `metrics.image.registry`                  | HashiCorp Consul Prometheus Exporter image registry                                                                         | `docker.io`               |
 | `metrics.image.repository`                | HashiCorp Consul Prometheus Exporter image repository                                                                       | `bitnami/consul-exporter` |
-| `metrics.image.tag`                       | HashiCorp Consul Prometheus Exporter image tag (immutable tags are recommended)                                             | `0.7.1-debian-10-r331`    |
+| `metrics.image.tag`                       | HashiCorp Consul Prometheus Exporter image tag (immutable tags are recommended)                                             | `0.7.1-debian-10-r405`    |
 | `metrics.image.pullPolicy`                | HashiCorp Consul Prometheus Exporter image pull policy                                                                      | `IfNotPresent`            |
 | `metrics.image.pullSecrets`               | HashiCorp Consul Prometheus Exporter image pull secrets                                                                     | `[]`                      |
 | `metrics.service.type`                    | Kubernetes Service type                                                                                                     | `ClusterIP`               |

@@ -8,22 +8,22 @@
 ## @param global.storageClass Global storage class for dynamic provisioning
 ##
 global:
-  imageRegistry:
+  imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass:
+  storageClass: ""
 
 ## @section Common parameters
 
 ## @param nameOverride String to partially override mariadb.fullname
 ##
-nameOverride:
+nameOverride: ""
 ## @param fullnameOverride String to fully override mariadb.fullname
 ##
-fullnameOverride:
+fullnameOverride: ""
 ## @param clusterDomain Default Kubernetes cluster domain
 ##
 clusterDomain: cluster.local
@@ -36,10 +36,25 @@ commonLabels: {}
 ## @param schedulerName Name of the scheduler (other than default) to dispatch pods
 ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
 ##
-schedulerName:
+schedulerName: ""
 ## @param extraDeploy Array of extra objects to deploy with the release (evaluated as a template)
 ##
 extraDeploy: []
+
+## Enable diagnostic mode in the deployment
+##
+diagnosticMode:
+  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+  ##
+  enabled: false
+  ## @param diagnosticMode.command Command to override all containers in the deployment
+  ##
+  command:
+    - sleep
+  ## @param diagnosticMode.args Args to override all containers in the deployment
+  ##
+  args:
+    - infinity
 
 ## @section MariaDB common parameters
 
@@ -55,7 +70,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/mariadb
-  tag: 10.5.11-debian-10-r0
+  tag: 10.5.12-debian-10-r32
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -103,7 +118,7 @@ auth:
   replicationPassword: ""
   ## @param auth.existingSecret Use existing secret for password details (`auth.rootPassword`, `auth.password`, `auth.replicationPassword` will be ignored and picked up from this secret). The secret has to contain the keys `mariadb-root-password`, `mariadb-replication-password` and `mariadb-password`
   ##
-  existingSecret:
+  existingSecret: ""
   ## @param auth.forcePassword Force users to specify required passwords
   ##
   forcePassword: false
@@ -129,7 +144,7 @@ auth:
 initdbScripts: {}
 ## @param initdbScriptsConfigMap ConfigMap with the initdb scripts (Note: Overrides `initdbScripts`)
 ##
-initdbScriptsConfigMap:
+initdbScriptsConfigMap: ""
 
 ## @section MariaDB Primary parameters
 
@@ -178,7 +193,7 @@ primary:
   ## @param primary.existingConfiguration Name of existing ConfigMap with MariaDB Primary configuration.
   ## NOTE: When it's set the 'configuration' parameter is ignored
   ##
-  existingConfiguration:
+  existingConfiguration: ""
   ## @param primary.updateStrategy Update strategy type for the MariaDB primary statefulset
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
@@ -186,7 +201,7 @@ primary:
   ## @param primary.rollingUpdatePartition Partition update strategy for Mariadb Primary statefulset
   ## https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#partitions
   ##
-  rollingUpdatePartition:
+  rollingUpdatePartition: ""
   ## @param primary.podAnnotations Additional pod annotations for MariaDB primary pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
@@ -231,6 +246,15 @@ primary:
   ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
+  ## @param primary.topologySpreadConstraints Topology Spread Constraints for MariaDB primary pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+  ## E.g.
+  ## topologySpreadConstraints:
+  ##   - maxSkew: 1
+  ##     topologyKey: topology.kubernetes.io/zone
+  ##     whenUnsatisfiable: DoNotSchedule
+  ##
+  topologySpreadConstraints: {}
   ## @param primary.priorityClassName Priority class for MariaDB primary pods assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
   ##
@@ -349,10 +373,10 @@ primary:
     ## @param primary.persistence.existingClaim Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas
     ## NOTE: When it's set the rest of persistence parameters are ignored
     ##
-    existingClaim:
+    existingClaim: ""
     ## @param primary.persistence.subPath Subdirectory of the volume to mount at
     ##
-    subPath:
+    subPath: ""
     ## @param primary.persistence.storageClass MariaDB primary persistent volume storage Class
     ## If defined, storageClassName: <storageClass>
     ## If set to "-", storageClassName: "", which disables dynamic provisioning
@@ -360,7 +384,7 @@ primary:
     ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
     ##   GKE, AWS & OpenStack)
     ##
-    storageClass:
+    storageClass: ""
     ## @param primary.persistence.annotations MariaDB primary persistent volume claim annotations
     ##
     annotations: {}
@@ -409,6 +433,10 @@ primary:
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
     loadBalancerIP: ""
+    ## @param primary.service.externalTrafficPolicy Enable client source IP preservation
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
     ## @param primary.service.loadBalancerSourceRanges Address that are allowed when MariaDB Primary service is LoadBalancer
     ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## E.g.
@@ -431,7 +459,7 @@ primary:
     minAvailable: 1
     ## @param primary.pdb.maxUnavailable Maximum number/percentage of MariaDB primary pods that can be unavailable after the eviction
     ##
-    maxUnavailable:
+    maxUnavailable: ""
   ## @param primary.revisionHistoryLimit Maximum number of revisions that will be maintained in the StatefulSet
   ##
   revisionHistoryLimit: 10
@@ -484,7 +512,7 @@ secondary:
   ## @param secondary.existingConfiguration Name of existing ConfigMap with MariaDB Secondary configuration.
   ## NOTE: When it's set the 'configuration' parameter is ignored
   ##
-  existingConfiguration:
+  existingConfiguration: ""
   ## @param secondary.updateStrategy Update strategy type for the MariaDB secondary statefulset
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
@@ -492,7 +520,7 @@ secondary:
   ## @param secondary.rollingUpdatePartition Partition update strategy for Mariadb Secondary statefulset
   ## https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#partitions
   ##
-  rollingUpdatePartition:
+  rollingUpdatePartition: ""
   ## @param secondary.podAnnotations Additional pod annotations for MariaDB secondary pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
@@ -537,6 +565,15 @@ secondary:
   ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
+  ## @param secondary.topologySpreadConstraints Topology Spread Constraints for MariaDB secondary pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+  ## E.g.
+  ## topologySpreadConstraints:
+  ##   - maxSkew: 1
+  ##     topologyKey: topology.kubernetes.io/zone
+  ##     whenUnsatisfiable: DoNotSchedule
+  ##
+  topologySpreadConstraints: {}
   ## @param secondary.priorityClassName Priority class for MariaDB secondary pods assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
   ##
@@ -654,7 +691,7 @@ secondary:
     enabled: true
     ## @param secondary.persistence.subPath Subdirectory of the volume to mount at
     ##
-    subPath:
+    subPath: ""
     ## @param secondary.persistence.storageClass MariaDB secondary persistent volume storage Class
     ## If defined, storageClassName: <storageClass>
     ## If set to "-", storageClassName: "", which disables dynamic provisioning
@@ -662,7 +699,7 @@ secondary:
     ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
     ##   GKE, AWS & OpenStack)
     ##
-    storageClass:
+    storageClass: ""
     ## @param secondary.persistence.annotations MariaDB secondary persistent volume claim annotations
     ##
     annotations: {}
@@ -713,6 +750,10 @@ secondary:
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
     loadBalancerIP: ""
+    ## @param secondary.service.externalTrafficPolicy Enable client source IP preservation
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
     ## @param secondary.service.loadBalancerSourceRanges Address that are allowed when MariaDB secondary service is LoadBalancer
     ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## E.g.
@@ -735,7 +776,7 @@ secondary:
     minAvailable: 1
     ## @param secondary.pdb.maxUnavailable Maximum number/percentage of MariaDB secondary pods that may be made unavailable
     ##
-    maxUnavailable:
+    maxUnavailable: ""
   ## @param secondary.revisionHistoryLimit Maximum number of revisions that will be maintained in the StatefulSet
   ##
   revisionHistoryLimit: 10
@@ -752,7 +793,7 @@ serviceAccount:
   ## @param serviceAccount.name Name of the created ServiceAccount
   ## If not set and create is true, a name is generated using the mariadb.fullname template
   ##
-  name:
+  name: ""
   ## @param serviceAccount.annotations Annotations for MariaDB Service Account
   ##
   annotations: {}
@@ -782,7 +823,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r115
+    tag: 10-debian-10-r185
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -815,7 +856,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mysqld-exporter
-    tag: 0.13.0-debian-10-r19
+    tag: 0.13.0-debian-10-r88
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -931,7 +972,7 @@ metrics:
     enabled: false
     ## @param metrics.serviceMonitor.namespace Namespace which Prometheus is running in
     ##
-    namespace:
+    namespace: ""
     ## @param metrics.serviceMonitor.interval Interval at which metrics should be scraped
     ##
     interval: 30s
@@ -939,16 +980,16 @@ metrics:
     ## e.g:
     ## scrapeTimeout: 30s
     ##
-    scrapeTimeout:
+    scrapeTimeout: ""
     ## @param metrics.serviceMonitor.relabellings Specify Metric Relabellings to add to the scrape endpoint
     ##
-    relabellings:
+    relabellings: ""
     ## @param metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels.
     ##
     honorLabels: false
     ## @param metrics.serviceMonitor.release Used to pass Labels release that sometimes should be custom for Prometheus Operator
     ##
-    release:
+    release: ""
     ## @param metrics.serviceMonitor.additionalLabels Used to pass Labels that are required by the Installed Prometheus Operator
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
     ##

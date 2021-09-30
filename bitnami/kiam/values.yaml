@@ -8,22 +8,22 @@
 ## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
 global:
-  imageRegistry:
+  imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass:
+  storageClass: ""
 
 ## @section Common parameters
 
 ## @param nameOverride Release name override
 ##
-nameOverride:
+nameOverride: ""
 ## @param fullnameOverride Release full name override
 ##
-fullnameOverride:
+fullnameOverride: ""
 ## @param commonLabels Labels to add to all deployed objects
 ##
 commonLabels: {}
@@ -45,7 +45,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/kiam
-  tag: 3.6.0-debian-10-r251
+  tag: 3.6.0-debian-10-r316
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -93,8 +93,8 @@ server:
   ## @param server.sslCertHostPath Path to the host system SSL certificates (necessary for contacting the AWS metadata server)
   ##
   sslCertHostPath: /etc/ssl/certs
-  ## @param server.podSecurityPolicy.create
-  ## @param server.podSecurityPolicy.allowedHostPaths
+  ## @param server.podSecurityPolicy.create Create a PodSecurityPolicy resource
+  ## @param server.podSecurityPolicy.allowedHostPaths Extra host paths to allow in the PodSecurityPolicy
   ##
   podSecurityPolicy:
     create: true
@@ -155,7 +155,7 @@ server:
   gatewayTimeoutCreation: 1s
   ## @param server.tlsSecret Name of a secret with TLS certificates for the container
   ##
-  tlsSecret:
+  tlsSecret: ""
   ## @param server.dnsPolicy Pod DNS policy
   ## Ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pods-dns-policy
   ##
@@ -163,13 +163,13 @@ server:
   ## @param server.roleBaseArn Base ARN for IAM roles. If not set kiam will detect it automatically
   ## If not specified use EC2 metadata service to detect ARN prefix
   ##
-  roleBaseArn: null
+  roleBaseArn: ""
   ## @param server.cacheSyncInterval Cache synchronization interval
   ##
   cacheSyncInterval: 1m
   ## @param server.assumeRoleArn IAM role for the server to assume
   ##
-  assumeRoleArn: null
+  assumeRoleArn: ""
   ## @param server.sessionDuration Session duration for STS tokens
   ##
   sessionDuration: 15m
@@ -210,7 +210,7 @@ server:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
-    seLinuxOptions:
+    seLinuxOptions: {}
   ## @param server.podSecurityContext.enabled Enabled kiam server pods' Security Context
   ## @param server.podSecurityContext.fsGroup Set kiam server pod's Security Context fsGroup
   ##
@@ -288,10 +288,10 @@ server:
   extraEnvVars: []
   ## @param server.extraEnvVarsCM ConfigMap containing extra env vars to configure kiam server
   ##
-  extraEnvVarsCM:
+  extraEnvVarsCM: ""
   ## @param server.extraEnvVarsSecret Secret containing extra env vars to configure kiam server (in case of sensitive data)
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret: ""
   ## @param server.extraVolumes Optionally specify extra list of additional volumes for kiam pods
   ##
   extraVolumes: []
@@ -344,7 +344,7 @@ server:
     ## @param server.service.loadBalancerIP loadBalancerIP if service type is `LoadBalancer`
     ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
     ##
-    loadBalancerIP:
+    loadBalancerIP: ""
     ## @param server.service.loadBalancerSourceRanges Address that are allowed when service is LoadBalancer
     ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## Example:
@@ -371,7 +371,7 @@ server:
     ## @param server.serviceAccount.name Name of the created ServiceAccount
     ## If not set and create is true, a name is generated using the fullname template
     ##
-    name:
+    name: ""
 
   ## @section kiam server metrics parameters
 
@@ -398,7 +398,7 @@ server:
       enabled: false
       ## @param server.metrics.serviceMonitor.namespace Namespace in which Prometheus is running
       ##
-      namespace:
+      namespace: ""
       ## @param server.metrics.serviceMonitor.interval Interval at which metrics should be scraped
       ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
       ##
@@ -414,11 +414,11 @@ server:
       ## @param server.metrics.serviceMonitor.scrapeTimeout Specify the timeout after which the scrape is ended
       ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
       ##
-      scrapeTimeout:
+      scrapeTimeout: ""
       ## @param server.metrics.serviceMonitor.selector metrics service selector
       ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
       ##
-      selector:
+      selector: {}
 
 ## @section kiam agent parameters
 
@@ -440,7 +440,7 @@ agent:
   priorityClassName: ""
   ## @param agent.allowRouteRegExp Regexp with the allowed paths for agents to redirect
   ##
-  allowRouteRegExp:
+  allowRouteRegExp: ""
   ## @param agent.hostAliases Add deployment host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -463,8 +463,8 @@ agent:
   ## @param agent.keepaliveParams.timeout Keepalive timeout
   ##
   keepaliveParams:
-    time:
-    timeout:
+    time: ""
+    timeout: ""
     permitWithoutStream: false
   ## @param agent.enableDeepProbe Use the probes using the `/health` endpoint
   ## able to communicate with servers, which may happen on
@@ -484,15 +484,15 @@ agent:
     ca:
     cert:
     key:
-  ## @param agent.podSecurityPolicy.create Create a PodSecurityPolicy resources
+  ## @param agent.podSecurityPolicy.create Create a PodSecurityPolicy resource
   ## @param agent.podSecurityPolicy.allowedHostPaths Extra host paths to allow in the PodSecurityPolicy
   ##
   podSecurityPolicy:
     create: true
-    allowedHostPaths:
+    allowedHostPaths: []
   ## @param agent.tlsSecret Name of a secret with TLS certificates for the container
   ##
-  tlsSecret:
+  tlsSecret: ""
   ## @param agent.useHostNetwork Use host networking (ports will be directly exposed in the host)
   ## This is necessary for intercepting the metadata URL for nodes.
   ##
@@ -578,7 +578,7 @@ agent:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
-    seLinuxOptions:
+    seLinuxOptions: {}
   ## @param agent.podSecurityContext.enabled Enabled agent pods' Security Context
   ## @param agent.podSecurityContext.fsGroup Set agent pod's Security Context fsGroup
   ##
@@ -656,10 +656,10 @@ agent:
   extraEnvVars: []
   ## @param agent.extraEnvVarsCM ConfigMap containing extra env vars to configure kiam agent
   ##
-  extraEnvVarsCM:
+  extraEnvVarsCM: ""
   ## @param agent.extraEnvVarsSecret Secret containing extra env vars to configure kiam agent (in case of sensitive data)
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret: ""
   ## @param agent.extraVolumes Optionally specify extra list of additional volumes for kiam pods
   ##
   extraVolumes: []
@@ -704,11 +704,11 @@ agent:
       metrics:
     ## @param agent.service.clusterIP kiam service clusterIP IP
     ##
-    clusterIP:
+    clusterIP: ""
     ## @param agent.service.loadBalancerIP loadBalancerIP if service type is `LoadBalancer`
     ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
     ##
-    loadBalancerIP:
+    loadBalancerIP: ""
     ## @param agent.service.loadBalancerSourceRanges Address that are allowed when service is LoadBalancer
     ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## Example:
@@ -733,7 +733,7 @@ agent:
     ## @param agent.serviceAccount.name Name of the created ServiceAccount
     ## If not set and create is true, a name is generated using the fullname template
     ##
-    name:
+    name: ""
 
   ## @section kiam agent metrics parameters
 
@@ -760,7 +760,7 @@ agent:
       enabled: false
       ## @param agent.metrics.serviceMonitor.namespace Namespace which Prometheus is running in
       ##
-      namespace:
+      namespace: ""
       ## @param agent.metrics.serviceMonitor.interval Interval at which metrics should be scraped
       ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
       ##
@@ -776,11 +776,11 @@ agent:
       ## @param agent.metrics.serviceMonitor.scrapeTimeout Specify the timeout after which the scrape is ended
       ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
       ##
-      scrapeTimeout:
+      scrapeTimeout: ""
       ## @param agent.metrics.serviceMonitor.selector metrics service selector
       ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
       ##
-      selector:
+      selector: {}
 
 ## @section RBAC parameters
 

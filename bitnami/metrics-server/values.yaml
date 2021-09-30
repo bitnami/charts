@@ -7,7 +7,7 @@
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
 ##
 global:
-  imageRegistry:
+  imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
@@ -18,10 +18,18 @@ global:
 
 ## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
 ##
-nameOverride:
+nameOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname template
 ##
-fullnameOverride:
+fullnameOverride: ""
+
+## @param commonLabels Add labels to all the deployed resources
+##
+commonLabels: {}
+
+## @param commonAnnotations Add annotations to all the deployed resources
+##
+commonAnnotations: {}
 
 ## @section Metrics Server parameters
 
@@ -36,7 +44,7 @@ fullnameOverride:
 image:
   registry: docker.io
   repository: bitnami/metrics-server
-  tag: 0.5.0-debian-10-r32
+  tag: 0.5.1-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -86,7 +94,7 @@ serviceAccount:
   create: true
   ## @param serviceAccount.name The name of the ServiceAccount to create
   ## If not set and create is true, a name is generated using the common.names.fullname template
-  name:
+  name: ""
   ## @param serviceAccount.automountServiceAccountToken Automount API credentials for a service account
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/#use-the-default-service-account-to-access-the-api-server
   ##
@@ -98,6 +106,11 @@ apiService:
   ## This is still necessary up to at least k8s version >= 1.21, but depends on vendors and cloud providers.
   ##
   create: false
+  ## @param apiService.insecureSkipTLSVerify Specifies whether to skip self-verifying self-signed TLS certificates. Set to "false" if you are providing your own certificates.
+  ## Note that "false" MUST be in quotation marks (cf. https://github.com/helm/helm/issues/3308), since false without quotation marks will render to true
+  insecureSkipTLSVerify: true
+  ## @param apiService.caBundle A base64-encoded string of concatenated certificates for the CA chain for the APIService.
+  caBundle: ""
 ## @param securePort Port where metrics-server will be running
 ##
 securePort: 8443
@@ -128,7 +141,7 @@ podLabels: {}
 podAnnotations: {}
 ## @param priorityClassName Priority class for pod scheduling
 ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
-priorityClassName:
+priorityClassName: ""
 ## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ##
@@ -145,8 +158,8 @@ podAntiAffinityPreset: soft
 ##
 podDisruptionBudget:
   enabled: false
-  minAvailable:
-  maxUnavailable:
+  minAvailable: ""
+  maxUnavailable: ""
 ## Node affinity preset
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
 ##
@@ -197,12 +210,12 @@ service:
   ## e.g:
   ## nodePort: 30001
   ##
-  nodePort:
+  nodePort: ""
   ## @param service.loadBalancerIP LoadBalancer IP if Service type is `LoadBalancer`
   ## Set the LoadBalancer service type to internal only.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
   ##
-  loadBalancerIP:
+  loadBalancerIP: ""
   ## @param service.annotations Annotations for the Service
   ## set the LoadBalancer service type to internal only.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer

@@ -8,25 +8,25 @@
 ## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
 global:
-  imageRegistry:
+  imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass:
+  storageClass: ""
 
 ## @section Common parameters
 
 ## @param kubeVersion Override Kubernetes version
 ##
-kubeVersion:
+kubeVersion: ""
 ## @param nameOverride String to partially override common.names.fullname
 ##
-nameOverride:
+nameOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname
 ##
-fullnameOverride:
+fullnameOverride: ""
 ## @param commonLabels Labels to add to all deployed objects
 ##
 commonLabels: {}
@@ -54,7 +54,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/ghost
-  tag: 4.10.1-debian-10-r0
+  tag: 4.16.0-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -87,7 +87,7 @@ ghostPassword: ""
 ## NOTE: Must contain key `ghost-password`
 ## NOTE: When it's set, the `ghostPassword` parameter is ignored
 ##
-existingSecret:
+existingSecret: ""
 ## @param ghostEmail Ghost user email
 ##
 ghostEmail: user@example.com
@@ -120,7 +120,7 @@ smtpService: ""
 ## NOTE: Must contain key `smtp-password`
 ## NOTE: When it's set, the `smtpPassword` parameter is ignored
 ##
-smtpExistingSecret:
+smtpExistingSecret: ""
 ## @param allowEmptyPassword Allow the container to be started with blank passwords
 ##
 allowEmptyPassword: true
@@ -142,10 +142,10 @@ args: []
 extraEnvVars: []
 ## @param extraEnvVarsCM Name of existing ConfigMap containing extra env vars
 ##
-extraEnvVarsCM:
+extraEnvVarsCM: ""
 ## @param extraEnvVarsSecret Name of existing Secret containing extra env vars
 ##
-extraEnvVarsSecret:
+extraEnvVarsSecret: ""
 
 ## @section Ghost deployment parameters
 
@@ -167,7 +167,7 @@ updateStrategy:
   type: RollingUpdate
 ## @param priorityClassName Ghost pod priority class name
 ##
-priorityClassName:
+priorityClassName: ""
 ## @param hostAliases Ghost pod host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
@@ -188,7 +188,7 @@ extraVolumeMounts: []
 ##       - name: portname
 ##         containerPort: 1234
 ##
-sidecars: {}
+sidecars: []
 ## @param initContainers Add additional init containers to the Ghost pods
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
 ## e.g:
@@ -200,7 +200,7 @@ sidecars: {}
 ##      - name: portname
 ##        containerPort: 1234
 ##
-initContainers: {}
+initContainers: []
 ## @param lifecycleHooks Add lifecycle hooks to the Ghost deployment
 ##
 lifecycleHooks: {}
@@ -340,17 +340,17 @@ service:
   ## NOTE: choose port between <30000-32767>
   ##
   nodePorts:
-    http:
-    https:
+    http: ""
+    https: ""
   ## @param service.clusterIP Ghost service Cluster IP
   ## e.g.:
   ## clusterIP: None
   ##
-  clusterIP:
+  clusterIP: ""
   ## @param service.loadBalancerIP Ghost service Load Balancer IP
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
   ##
-  loadBalancerIP:
+  loadBalancerIP: ""
   ## @param service.loadBalancerSourceRanges Ghost service Load Balancer sources
   ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
   ## e.g:
@@ -380,7 +380,7 @@ ingress:
   pathType: ImplementationSpecific
   ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
   ##
-  apiVersion:
+  apiVersion: ""
   ## @param ingress.hostname Default host for the ingress record
   ##
   hostname: ghost.local
@@ -466,7 +466,7 @@ persistence:
   ## If set to "-", storageClassName: "", which disables dynamic provisioning
   ## If undefined (the default) or set to null, no storageClassName spec is set, choosing the default provisioner
   ##
-  storageClass:
+  storageClass: ""
   ## @param persistence.annotations Additional custom annotations for the PVC
   ##
   annotations: {}
@@ -479,7 +479,7 @@ persistence:
   size: 8Gi
   ## @param persistence.existingClaim The name of an existing PVC to use for persistence
   ##
-  existingClaim:
+  existingClaim: ""
 ## 'volumePermissions' init container parameters
 ## Changes the owner and group of the persistent volume mount point to runAsUser:fsGroup values
 ##   based on the podSecurityContext/containerSecurityContext parameters
@@ -499,7 +499,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r140
+    tag: 10-debian-10-r202
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -554,7 +554,7 @@ mariadb:
     database: bitnami_ghost
     username: bn_ghost
     password: ""
-    existingSecret:
+    existingSecret: ""
   ## MariaDB Primary configuration
   ##
   primary:
@@ -567,7 +567,7 @@ mariadb:
     ##
     persistence:
       enabled: true
-      storageClass:
+      storageClass: ""
       accessModes:
         - ReadWriteOnce
       size: 8Gi
@@ -594,4 +594,4 @@ externalDatabase:
   ## NOTE: Must contain key `mariadb-password`
   ## NOTE: When it's set, the `externalDatabase.password` parameter is ignored
   ##
-  existingSecret:
+  existingSecret: ""

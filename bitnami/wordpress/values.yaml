@@ -40,6 +40,21 @@ clusterDomain: cluster.local
 ##
 extraDeploy: []
 
+## Enable diagnostic mode in the deployment
+##
+diagnosticMode:
+  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+  ##
+  enabled: false
+  ## @param diagnosticMode.command Command to override all containers in the deployment
+  ##
+  command:
+    - sleep
+  ## @param diagnosticMode.args Args to override all containers in the deployment
+  ##
+  args:
+    - infinity
+
 ## @section WordPress Image parameters
 
 ## Bitnami WordPress image
@@ -54,7 +69,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/wordpress
-  tag: 5.7.2-debian-10-r45
+  tag: 5.8.1-debian-10-r14
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -272,6 +287,13 @@ extraVolumes: []
 ## @param extraVolumeMounts Optionally specify extra list of additional volumeMounts for WordPress container(s)
 ##
 extraVolumeMounts: []
+## @param extraContainerPorts Optionally specify extra list of additional ports for WordPress container(s)
+## e.g:
+## extraContainerPorts:
+##   - name: myservice
+##     containerPort: 9090
+##
+extraContainerPorts: []
 ## @param sidecars Add additional sidecar containers to the WordPress pod
 ## e.g:
 ## sidecars:
@@ -388,8 +410,8 @@ livenessProbe:
   enabled: true
   httpGet:
     path: /wp-admin/install.php
-    port: http
-    scheme: HTTP
+    port: '{{ .Values.wordpressScheme }}'
+    scheme: '{{ .Values.wordpressScheme | upper }}'
     ## If using an HTTPS-terminating load-balancer, the probes may need to behave
     ## like the balancer to prevent HTTP 302 responses. According to the Kubernetes
     ## docs, 302 should be considered "successful", but this issue on GitHub
@@ -417,8 +439,8 @@ readinessProbe:
   enabled: true
   httpGet:
     path: /wp-login.php
-    port: http
-    scheme: HTTP
+    port: '{{ .Values.wordpressScheme }}'
+    scheme: '{{ .Values.wordpressScheme | upper }}'
     ## If using an HTTPS-terminating load-balancer, the probes may need to behave
     ## like the balancer to prevent HTTP 302 responses. According to the Kubernetes
     ## docs, 302 should be considered "successful", but this issue on GitHub
@@ -628,7 +650,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r134
+    tag: 10-debian-10-r200
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -702,7 +724,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.9.0-debian-10-r33
+    tag: 0.10.1-debian-10-r2
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

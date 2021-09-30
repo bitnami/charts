@@ -38,9 +38,17 @@ spec:
     {{- if .Values.commonAnnotations }}
     annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 6 }}
     {{- end }}
-  {{- $imagePullSecrets := include "common.images.pullSecrets" (dict "images" (list .Values.operator.image .Values.grafana.image .Values.grafanaPluginInit.image) "global" .Values.global) }}
-  {{- if not (empty ($imagePullSecrets)) }}
-  serviceAccount: {{- $imagePullSecrets | nindent 4 }}
+  {{- $imagePullSecrets := include "common.images.pullSecrets" (dict "images" (list .Values.operator.image .Values.grafana.image) "global" .Values.global) }}
+  {{- if (not (empty ($imagePullSecrets))) | or .Values.grafana.serviceAccount }}
+  serviceAccount:
+  {{- with .Values.grafana.serviceAccount }}
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- $imagePullSecrets | nindent 4 }}
+  {{- end }}
+  {{- if .Values.grafana.sidecars }}
+  containers:
+    {{- include "common.tplvalues.render" ( dict "value" .Values.grafana.sidecars "context" $) | nindent 4 }}
   {{- end }}
   deployment:
     labels: {{- include "common.labels.standard" . | nindent 6 }}
@@ -86,6 +94,17 @@ spec:
       timeoutSeconds: {{ .Values.grafana.readinessProbe.timeoutSeconds }}
       successThreshold: {{ .Values.grafana.readinessProbe.successThreshold }}
       failureThreshold: {{ .Values.grafana.readinessProbe.failureThreshold }}
+    {{- end }}
+    {{- if .Values.grafana.updateStrategy }}
+    strategy: {{ toYaml .Values.grafana.updateStrategy | nindent 6 }}
+    {{- end }}
+    {{- if .Values.grafana.extraVolumeMounts }}
+    extraVolumeMounts:
+      {{- include "common.tplvalues.render" (dict "value" .Values.grafana.extraVolumeMounts "context" $) | nindent 6 }}
+    {{- end }}
+    {{- if .Values.grafana.extraVolumes }}
+    extraVolumes:
+      {{- include "common.tplvalues.render" (dict "value" .Values.grafana.extraVolumes "context" $) | nindent 6 }}
     {{- end }}
   {{- if .Values.grafana.resources }}
   resources: {{- toYaml .Values.grafana.resources | nindent 4 }}

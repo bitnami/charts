@@ -2,6 +2,7 @@
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
 ## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
@@ -44,6 +45,7 @@ global:
     existingSecret: ""
 
 ## @section General parameters
+##
 
 ## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
 ##
@@ -63,19 +65,9 @@ commonLabels: {}
 ## @param extraDeploy Array of extra objects to deploy with the release (evaluated as a template)
 ##
 extraDeploy: []
-## Enable diagnostic mode in the deployment
-## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
-## @param diagnosticMode.command [array] Command to override all containers in the deployment
-## @param diagnosticMode.args [array] Args to override all containers in the deployment
-##
-diagnosticMode:
-  enabled: false
-  command:
-    - sleep
-  args:
-    - infinity
 ## Pod Service Account
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+##
 serviceAccount:
   ## @param serviceAccount.enabled Enable service account (Note: Service Account will only be automatically created if `serviceAccount.name` is not set)
   ##
@@ -84,7 +76,23 @@ serviceAccount:
   ##
   name: ""
 
+## Diagnostic mode in the deployment
+##
+diagnosticMode:
+  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+  ##
+  enabled: false
+  ## @param diagnosticMode.command [array] Command to override all containers in the deployment
+  ##
+  command:
+    - sleep
+  ## @param diagnosticMode.args [array] Args to override all containers in the deployment
+  ##
+  args:
+    - infinity
+
 ## @section PostgreSQL with Repmgr parameters
+##
 
 ## Bitnami PostgreSQL image
 ## ref: https://hub.docker.com/r/bitnami/postgresql/tags/
@@ -98,7 +106,7 @@ serviceAccount:
 postgresqlImage:
   registry: docker.io
   repository: bitnami/postgresql-repmgr
-  tag: 11.12.0-debian-10-r44
+  tag: 11.13.0-debian-10-r40
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -254,11 +262,13 @@ postgresql:
     ## limits:
     ##    cpu: 250m
     ##    memory: 256Mi
+    ##
     limits: {}
     ## Examples:
     ## requests:
     ##    cpu: 250m
     ##    memory: 256Mi
+    ##
     requests: {}
   ## PostgreSQL container's liveness probe
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
@@ -533,6 +543,7 @@ postgresql:
     certCAFilename: ""
 
 ## @section Pgpool parameters
+##
 
 ## Bitnami Pgpool image
 ## ref: https://hub.docker.com/r/bitnami/pgpool/tags/
@@ -546,7 +557,7 @@ postgresql:
 pgpoolImage:
   registry: docker.io
   repository: bitnami/pgpool
-  tag: 4.2.3-debian-10-r38
+  tag: 4.2.5-debian-10-r8
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -723,11 +734,13 @@ pgpool:
     ## limits:
     ##    cpu: 250m
     ##    memory: 256Mi
+    ##
     limits: {}
     ## Examples:
     ## requests:
     ##    cpu: 250m
     ##    memory: 256Mi
+    ##
     requests: {}
   ## Pgpool container's liveness probe
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
@@ -851,6 +864,10 @@ pgpool:
   ## @param pgpool.useLoadBalancing Use Pgpool Load-Balancing
   ##
   useLoadBalancing: true
+  ## @param pgpool.loadBalancingOnWrite LoadBalancer on write actions behavior
+  ## one of: [off, transaction, trans_transaction, always]
+  ##
+  loadBalancingOnWrite: transaction
   ## @param pgpool.configuration Pgpool configuration
   ## You can use this parameter to specify the content for pgpool.conf
   ## Otherwise, a repmgr.conf will be generated based on the environment variables
@@ -916,6 +933,7 @@ pgpool:
     certCAFilename: ""
 
 ## @section LDAP parameters
+##
 
 ## LDAP parameters
 ## @param ldap.enabled Enable LDAP support
@@ -942,6 +960,7 @@ ldap:
   nssInitgroupsIgnoreusers: root,nslcd
 
 ## @section Metrics parameters
+##
 
 ## Bitnami PostgreSQL Prometheus exporter image
 ## ref: https://hub.docker.com/r/bitnami/pgpool/tags/
@@ -955,7 +974,7 @@ ldap:
 metricsImage:
   registry: docker.io
   repository: bitnami/postgres-exporter
-  tag: 0.9.0-debian-10-r108
+  tag: 0.10.0-debian-10-r68
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -999,11 +1018,13 @@ metrics:
     ## limits:
     ##    cpu: 250m
     ##    memory: 256Mi
+    ##
     limits: {}
     ## Examples:
     ## requests:
     ##    cpu: 250m
     ##    memory: 256Mi
+    ##
     requests: {}
   ## Prometheus exporter container's liveness probe
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
@@ -1100,9 +1121,9 @@ metrics:
     ## scrapeTimeout: 10s
     ##
     scrapeTimeout: ""
-    ## @param metrics.serviceMonitor.selector [object] Defaults to what's used if you follow CoreOS [Prometheus Install Instructions](https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#tldr)
-    ## [Prometheus Selector Label](https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-operator-1)
-    ## [Kube Prometheus Selector Label](https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#exporters)
+    ## @param metrics.serviceMonitor.selector [object] Defaults to what's used if you follow CoreOS Prometheus Install Instructions (https://github.com/bitnami/charts/tree/master/bitnami/kube-prometheus#tldr)
+    ## Prometheus Selector Label (https://github.com/bitnami/charts/tree/master/bitnami/kube-prometheus#prometheus-operator-parameters)
+    ## Kube Prometheus Selector Label (https://github.com/bitnami/charts/tree/master/bitnami/kube-prometheus#exporters)
     ##
     selector:
       prometheus: kube-prometheus
@@ -1116,6 +1137,7 @@ metrics:
     metricRelabelings: []
 
 ## @section Volume permissions parameters
+##
 
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume mountpoint
@@ -1128,7 +1150,7 @@ metrics:
 volumePermissionsImage:
   registry: docker.io
   repository: bitnami/bitnami-shell
-  tag: 10-debian-10-r125
+  tag: 10-debian-10-r200
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -1167,14 +1189,17 @@ volumePermissions:
     ## limits:
     ##    cpu: 100m
     ##    memory: 128Mi
+    ##
     limits: {}
     ## Examples:
     ## requests:
     ##    cpu: 100m
     ##    memory: 128Mi
+    ##
     requests: {}
 
 ## @section Persistence parameters
+##
 
 persistence:
   ## @param persistence.enabled Enable data persistence
@@ -1214,6 +1239,7 @@ persistence:
   selector: {}
 
 ## @section Traffic Exposure parameters
+##
 
 ## PgPool service parameters
 ##

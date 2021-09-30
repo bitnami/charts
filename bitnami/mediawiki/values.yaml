@@ -8,25 +8,25 @@
 ## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
 global:
-  imageRegistry:
+  imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass:
+  storageClass: ""
 
 ## @section Common parameters
 
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
-kubeVersion:
+kubeVersion: ""
 ## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
 ##
-nameOverride:
+nameOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname template
 ##
-fullnameOverride:
+fullnameOverride: ""
 ## @param commonLabels Labels to add to all deployed objects
 ##
 commonLabels: {}
@@ -53,7 +53,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/mediawiki
-  tag: 1.36.1-debian-10-r0
+  tag: 1.36.1-debian-10-r82
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -84,7 +84,7 @@ mediawikiUser: user
 ## Defaults to a random 10-character alphanumeric string if not set
 ## ref: https://github.com/bitnami/bitnami-docker-mediawiki#environment-variables
 ##
-mediawikiPassword:
+mediawikiPassword: ""
 ## @param mediawikiEmail Admin email
 ## ref: https://github.com/bitnami/bitnami-docker-mediawiki#environment-variables
 ##
@@ -96,7 +96,7 @@ mediawikiName: My Wiki
 ## @param mediawikiHost Mediawiki host to create application URLs
 ## ref: https://github.com/bitnami/bitnami-docker-mediawiki#configuration
 ##
-mediawikiHost:
+mediawikiHost: ""
 ## @param allowEmptyPassword Allow DB blank passwords
 ## ref: https://github.com/bitnami/bitnami-docker-mediawiki#environment-variables
 ##
@@ -109,11 +109,11 @@ allowEmptyPassword: "yes"
 ## @param smtpUser SMTP user
 ## @param smtpPassword SMTP password
 ##
-smtpHost:
-smtpPort:
-smtpHostID:
-smtpUser:
-smtpPassword:
+smtpHost: ""
+smtpPort: ""
+smtpHostID: ""
+smtpUser: ""
+smtpPassword: ""
 ## @param command Override default container command (useful when using custom images)
 ##
 command: []
@@ -129,10 +129,10 @@ args: []
 extraEnvVars: []
 ## @param extraEnvVarsCM Name of existing ConfigMap containing extra env vars
 ##
-extraEnvVarsCM:
+extraEnvVarsCM: ""
 ## @param extraEnvVarsSecret Name of existing Secret containing extra env vars
 ##
-extraEnvVarsSecret:
+extraEnvVarsSecret: ""
 
 ## @section Mediawiki deployment parameters
 
@@ -298,7 +298,7 @@ extraVolumeMounts: []
 ##       - name: portname
 ##         containerPort: 1234
 ##
-initContainers: {}
+initContainers: []
 ## @param sidecars Add additional sidecar containers to the Mediawki pods
 ## Example:
 ## sidecars:
@@ -309,7 +309,7 @@ initContainers: {}
 ##       - name: portname
 ##         containerPort: 1234
 ##
-sidecars: {}
+sidecars: []
 ## Enable persistence using Persistent Volume Claims
 ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
 ##
@@ -324,12 +324,12 @@ persistence:
   ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
   ##   GKE, AWS & OpenStack)
   ##
-  storageClass:
+  storageClass: ""
   ## @param persistence.existingClaim An Existing PVC name for MediaWiki volume
   ## Requires persistence.enabled: true
   ## If defined, PVC must be created manually before volume will be bound
   ##
-  existingClaim:
+  existingClaim: ""
   ## @param persistence.accessMode PVC Access Mode for MediaWiki volume
   ##
   accessMode: ReadWriteOnce
@@ -351,13 +351,13 @@ service:
   ## @param service.loadBalancerIP Use serviceLoadBalancerIP to request a specific static IP,
   ## otherwise leave blank
   ##
-  loadBalancerIP:
+  loadBalancerIP: ""
   ## @param service.port Service HTTP port
   ##
   port: 80
   ## @param service.httpsPort HTTPS Port. Set this to any value (recommended: 443) to enable the https service port
   ##
-  httpsPort:
+  httpsPort: ""
   ## Use nodePorts to requests some specific ports when using NodePort
   ## @param service.nodePorts.http Kubernetes http node port
   ## @param service.nodePorts.https Kubernetes https node port
@@ -387,7 +387,7 @@ ingress:
   pathType: ImplementationSpecific
   ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
   ##
-  apiVersion:
+  apiVersion: ""
   ## @param ingress.hostname Default host for the ingress resource
   ##
   hostname: mediawiki.local
@@ -496,16 +496,16 @@ mariadb:
       ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
       ##   GKE, AWS & OpenStack)
       ##
-      storageClass:
+      storageClass: ""
       accessModes:
         - ReadWriteOnce
       size: 8Gi
       ## Set path in case you want to use local host path volumes (not recommended in production)
       ##
-      hostPath:
+      hostPath: ""
       ## Use an existing PVC
       ##
-      existingClaim:
+      existingClaim: ""
 ## External database configuration
 ##
 externalDatabase:
@@ -513,10 +513,10 @@ externalDatabase:
   ## Must contain key `mariadb-password`
   ## NOTE: When it's set, the `externalDatabase.password` parameter is ignored
   ##
-  existingSecret:
+  existingSecret: ""
   ## @param externalDatabase.host Host of the existing database
   ##
-  host:
+  host: ""
   ## @param externalDatabase.port Port of the existing database
   ##
   port: 3306
@@ -525,7 +525,7 @@ externalDatabase:
   user: bn_mediawiki
   ## @param externalDatabase.password Password for the above username
   ##
-  password:
+  password: ""
   ## @param externalDatabase.database Name of the existing database
   ##
   database: bitnami_mediawiki
@@ -547,7 +547,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.9.0-debian-10-r14
+    tag: 0.10.1-debian-10-r0
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -581,16 +581,16 @@ metrics:
     enabled: true
     ## @param metrics.serviceMonitor.namespace The namespace in which the ServiceMonitor will be created
     ##
-    namespace:
+    namespace: ""
     ## @param metrics.serviceMonitor.interval The interval at which metrics should be scraped
     ##
     interval: 30s
     ## @param metrics.serviceMonitor.scrapeTimeout The timeout after which the scrape is ended
     ##
-    scrapeTimeout:
+    scrapeTimeout: ""
     ## @param metrics.serviceMonitor.relabellings Metrics relabellings to add to the scrape endpoint
     ##
-    relabellings:
+    relabellings: []
     ## @param metrics.serviceMonitor.honorLabels Labels to honor to add to the scrape endpoint
     ##
     honorLabels: false

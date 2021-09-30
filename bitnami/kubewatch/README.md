@@ -44,7 +44,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                      | Description                                     | Value |
 | ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `nil` |
+| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 
 
@@ -52,8 +52,8 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                | Description                                                 | Value |
 | ------------------- | ----------------------------------------------------------- | ----- |
-| `nameOverride`      | String to partially override common.names.fullname template | `nil` |
-| `fullnameOverride`  | String to fully override common.names.fullname template     | `nil` |
+| `nameOverride`      | String to partially override common.names.fullname template | `""`  |
+| `fullnameOverride`  | String to fully override common.names.fullname template     | `""`  |
 | `commonLabels`      | Labels to add to all deployed objects                       | `{}`  |
 | `commonAnnotations` | Annotations to add to all deployed objects                  | `{}`  |
 | `extraDeploy`       | Array of extra objects to deploy with the release           | `[]`  |
@@ -65,7 +65,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ---------------------------------------- | -------------------------------------------------------------------- | ---------------------- |
 | `image.registry`                         | Kubewatch image registry                                             | `docker.io`            |
 | `image.repository`                       | Kubewatch image repository                                           | `bitnami/kubewatch`    |
-| `image.tag`                              | Kubewatch image tag (immutable tags are recommended)                 | `0.1.0-debian-10-r308` |
+| `image.tag`                              | Kubewatch image tag (immutable tags are recommended)                 | `0.1.0-debian-10-r398` |
 | `image.pullPolicy`                       | Kubewatch image pull policy                                          | `IfNotPresent`         |
 | `image.pullSecrets`                      | Specify docker-registry secret names as an array                     | `[]`                   |
 | `hostAliases`                            | Add deployment host aliases                                          | `[]`                   |
@@ -73,30 +73,30 @@ The command removes all the Kubernetes components associated with the chart and 
 | `slack.channel`                          | Slack channel to notify                                              | `XXXX`                 |
 | `slack.token`                            | Slack API token                                                      | `XXXX`                 |
 | `hipchat.enabled`                        | Enable HipChat notifications                                         | `false`                |
-| `hipchat.room`                           | HipChat room to notify                                               | `nil`                  |
-| `hipchat.token`                          | HipChat token                                                        | `nil`                  |
-| `hipchat.url`                            | HipChat URL                                                          | `nil`                  |
+| `hipchat.room`                           | HipChat room to notify                                               | `""`                   |
+| `hipchat.token`                          | HipChat token                                                        | `""`                   |
+| `hipchat.url`                            | HipChat URL                                                          | `""`                   |
 | `mattermost.enabled`                     | Enable Mattermost notifications                                      | `false`                |
-| `mattermost.channel`                     | Mattermost channel to notify                                         | `nil`                  |
-| `mattermost.url`                         | Mattermost URL                                                       | `nil`                  |
-| `mattermost.username`                    | Mattermost user to notify                                            | `nil`                  |
+| `mattermost.channel`                     | Mattermost channel to notify                                         | `""`                   |
+| `mattermost.url`                         | Mattermost URL                                                       | `""`                   |
+| `mattermost.username`                    | Mattermost user to notify                                            | `""`                   |
 | `flock.enabled`                          | Enable Flock notifications                                           | `false`                |
-| `flock.url`                              | Flock URL                                                            | `nil`                  |
+| `flock.url`                              | Flock URL                                                            | `""`                   |
 | `msteams.enabled`                        | Enable Microsoft Teams notifications                                 | `false`                |
-| `msteams.webhookurl`                     | Microsoft Teams webhook URL                                          | `nil`                  |
+| `msteams.webhookurl`                     | Microsoft Teams webhook URL                                          | `""`                   |
 | `webhook.enabled`                        | Enable Webhook notifications                                         | `false`                |
-| `webhook.url`                            | Webhook URL                                                          | `nil`                  |
+| `webhook.url`                            | Webhook URL                                                          | `""`                   |
 | `smtp.enabled`                           | Enable SMTP (email) notifications                                    | `false`                |
-| `smtp.to`                                | Destination email address (required)                                 | `nil`                  |
-| `smtp.from`                              | Source email address (required)                                      | `nil`                  |
-| `smtp.hello`                             | SMTP hello field (optional)                                          | `nil`                  |
-| `smtp.smarthost`                         | SMTP server address (name:port) (required)                           | `nil`                  |
-| `smtp.subject`                           | Source email subject                                                 | `nil`                  |
-| `smtp.auth.username`                     | Username for LOGIN and PLAIN auth mech                               | `nil`                  |
-| `smtp.auth.password`                     | Password for LOGIN and PLAIN auth mech                               | `nil`                  |
-| `smtp.auth.secret`                       | Secret for CRAM-MD5 auth mech                                        | `nil`                  |
-| `smtp.auth.identity`                     | Identity for PLAIN auth mech                                         | `nil`                  |
-| `smtp.requireTLS`                        | Force STARTTLS. Set to `true` or `false`                             | `nil`                  |
+| `smtp.to`                                | Destination email address (required)                                 | `""`                   |
+| `smtp.from`                              | Source email address (required)                                      | `""`                   |
+| `smtp.hello`                             | SMTP hello field (optional)                                          | `""`                   |
+| `smtp.smarthost`                         | SMTP server address (name:port) (required)                           | `""`                   |
+| `smtp.subject`                           | Source email subject                                                 | `""`                   |
+| `smtp.auth.username`                     | Username for LOGIN and PLAIN auth mech                               | `""`                   |
+| `smtp.auth.password`                     | Password for LOGIN and PLAIN auth mech                               | `""`                   |
+| `smtp.auth.secret`                       | Secret for CRAM-MD5 auth mech                                        | `""`                   |
+| `smtp.auth.identity`                     | Identity for PLAIN auth mech                                         | `""`                   |
+| `smtp.requireTLS`                        | Force STARTTLS. Set to `true` or `false`                             | `""`                   |
 | `namespaceToWatch`                       | Namespace to watch, leave it empty for watching all                  | `""`                   |
 | `resourcesToWatch.deployment`            | Watch changes to Deployments                                         | `true`                 |
 | `resourcesToWatch.replicationcontroller` | Watch changes to ReplicationControllers                              | `false`                |
@@ -109,8 +109,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `command`                                | Override default container command (useful when using custom images) | `[]`                   |
 | `args`                                   | Override default container args (useful when using custom images)    | `[]`                   |
 | `extraEnvVars`                           | Extra environment variables to be set on Kubewatch container         | `[]`                   |
-| `extraEnvVarsCM`                         | Name of existing ConfigMap containing extra env vars                 | `nil`                  |
-| `extraEnvVarsSecret`                     | Name of existing Secret containing extra env vars                    | `nil`                  |
+| `extraEnvVarsCM`                         | Name of existing ConfigMap containing extra env vars                 | `""`                   |
+| `extraEnvVarsSecret`                     | Name of existing Secret containing extra env vars                    | `""`                   |
 
 
 ### Kubewatch deployment parameters
@@ -119,10 +119,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | ----------------------------------------------------------------------------------------- | ------- |
 | `replicaCount`                          | Number of Kubewatch replicas to deploy                                                    | `1`     |
 | `podSecurityContext.enabled`            | Enable Kubewatch containers' SecurityContext                                              | `false` |
-| `podSecurityContext.fsGroup`            | Set Kubewatch containers' SecurityContext fsGroup                                         | `nil`   |
+| `podSecurityContext.fsGroup`            | Set Kubewatch containers' SecurityContext fsGroup                                         | `""`    |
 | `containerSecurityContext.enabled`      | Enable Kubewatch pods' Security Context                                                   | `false` |
-| `containerSecurityContext.runAsUser`    | Set Kubewatch pods' SecurityContext runAsUser                                             | `nil`   |
-| `containerSecurityContext.runAsNonRoot` | Set Kubewatch pods' SecurityContext runAsNonRoot                                          | `nil`   |
+| `containerSecurityContext.runAsUser`    | Set Kubewatch pods' SecurityContext runAsUser                                             | `""`    |
+| `containerSecurityContext.runAsNonRoot` | Set Kubewatch pods' SecurityContext runAsNonRoot                                          | `""`    |
 | `resources.limits`                      | The resources limits for the Kubewatch container                                          | `{}`    |
 | `resources.requests`                    | The requested resources for the Kubewatch container                                       | `{}`    |
 | `livenessProbe.enabled`                 | Enable livenessProbe                                                                      | `false` |
@@ -147,13 +147,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `affinity`                              | Affinity for pod assignment                                                               | `{}`    |
 | `nodeSelector`                          | Node labels for pod assignment                                                            | `{}`    |
 | `tolerations`                           | Tolerations for pod assignment                                                            | `[]`    |
-| `priorityClassName`                     | Controller priorityClassName                                                              | `nil`   |
+| `priorityClassName`                     | Controller priorityClassName                                                              | `""`    |
 | `podLabels`                             | Extra labels for Kubewatch pods                                                           | `{}`    |
 | `podAnnotations`                        | Annotations for Kubewatch pods                                                            | `{}`    |
 | `extraVolumes`                          | Optionally specify extra list of additional volumes for Kubewatch pods                    | `[]`    |
 | `extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for Kubewatch container(s)       | `[]`    |
-| `initContainers`                        | Add additional init containers to the Kubewatch pods                                      | `{}`    |
-| `sidecars`                              | Add additional sidecar containers to the Kubewatch pods                                   | `{}`    |
+| `initContainers`                        | Add additional init containers to the Kubewatch pods                                      | `[]`    |
+| `sidecars`                              | Add additional sidecar containers to the Kubewatch pods                                   | `[]`    |
 
 
 ### RBAC parameters

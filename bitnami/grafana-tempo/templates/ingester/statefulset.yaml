@@ -90,16 +90,17 @@ spec:
         - name: grafana-tempo-ingester
           image: {{ template "grafana-tempo.image" . }}
           imagePullPolicy: {{ .Values.tempo.image.pullPolicy }}
-          {{- if .Values.ingester.lifecycleHooks }}
-          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.ingester.lifecycleHooks "context" $) | nindent 12 }}
-          {{- end }}
           {{- if .Values.ingester.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.ingester.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
-          {{- if .Values.ingester.command }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.ingester.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.ingester.command "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.ingester.args }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.ingester.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.ingester.args "context" $) | nindent 12 }}
           {{- else }}
           args:
@@ -129,6 +130,7 @@ spec:
           {{- if .Values.ingester.resources }}
           resources: {{- toYaml .Values.ingester.resources | nindent 12 }}
           {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.ingester.livenessProbe.enabled }}
           livenessProbe:
             tcpSocket:
@@ -152,6 +154,10 @@ spec:
             failureThreshold: {{ .Values.ingester.readinessProbe.failureThreshold }}
           {{- else if .Values.ingester.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ingester.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.ingester.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.ingester.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
           {{- end }}
           volumeMounts:
             - name: tempo-config

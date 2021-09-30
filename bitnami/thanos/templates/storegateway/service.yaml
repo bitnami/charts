@@ -1,4 +1,4 @@
-{{- if .Values.storegateway.enabled -}}
+{{- if and .Values.storegateway.enabled (not .Values.storegateway.sharded.enabled) }}
 apiVersion: v1
 kind: Service
 metadata:

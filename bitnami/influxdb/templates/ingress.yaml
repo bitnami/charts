@@ -37,7 +37,7 @@ spec:
             {{- $relayServiceName := printf "%s-%s" (include "common.names.fullname" .) "relay" }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" $relayServiceName  "servicePort" "http" "context" $)  | nindent 14 }}
           {{- end }}
-          - path: {{ default "/*" .Values.ingress.path }}
+          - path: {{ default "/" .Values.ingress.path }}
             {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
             pathType: {{ .Values.ingress.pathType }}
             {{- end }}

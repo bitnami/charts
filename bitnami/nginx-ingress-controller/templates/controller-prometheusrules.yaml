@@ -23,6 +23,6 @@ spec:
   {{- with .Values.metrics.prometheusRule.rules }}
   groups:
     - name: {{ include "common.names.name" $ }}
-      rules: {{- toYaml . | nindent 4 }}
+      rules: {{- toYaml . | nindent 6 }}
   {{- end }}
 {{- end }}

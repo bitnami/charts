@@ -9,26 +9,26 @@
 ## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
 global:
-  imageRegistry:
+  imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass:
+  storageClass: ""
 
 ## @section Common parameters
 ##
 
 ## @param kubeVersion Override Kubernetes version
 ##
-kubeVersion:
+kubeVersion: ""
 ## @param nameOverride String to partially override common.names.fullname
 ##
-nameOverride:
+nameOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname
 ##
-fullnameOverride:
+fullnameOverride: ""
 ## @param commonLabels Labels to add to all deployed objects
 ##
 commonLabels: {}
@@ -41,6 +41,21 @@ clusterDomain: cluster.local
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
+
+## Enable diagnostic mode in the deployment
+##
+diagnosticMode:
+  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+  ##
+  enabled: false
+  ## @param diagnosticMode.command Command to override all containers in the deployment
+  ##
+  command:
+    - sleep
+  ## @param diagnosticMode.args Args to override all containers in the deployment
+  ##
+  args:
+    - infinity
 
 ## @section Traffic Exposure Parameters
 ##
@@ -62,11 +77,11 @@ service:
   ## e.g.:
   ## clusterIP: None
   ##
-  clusterIP:
+  clusterIP: ""
   ## @param service.loadBalancerIP haproxy service Load Balancer IP
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
   ##
-  loadBalancerIP:
+  loadBalancerIP: ""
   ## @param service.loadBalancerSourceRanges haproxy service Load Balancer sources
   ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
   ## e.g:
@@ -93,7 +108,7 @@ service:
 image:
   registry: docker.io
   repository: bitnami/haproxy
-  tag: 2.4.0-debian-10-r28
+  tag: 2.4.4-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -180,7 +195,7 @@ containerSecurityContext:
 pdb:
   create: false
   minAvailable: 1
-  maxUnavailable:
+  maxUnavailable: ""
 
 ## HAProxy Autoscaling configuration
 ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
@@ -305,10 +320,10 @@ lifecycleHooks: {}
 extraEnvVars: []
 ## @param extraEnvVarsCM Name of existing ConfigMap containing extra env vars for haproxy nodes
 ##
-extraEnvVarsCM:
+extraEnvVarsCM: ""
 ## @param extraEnvVarsSecret Name of existing Secret containing extra env vars for haproxy nodes
 ##
-extraEnvVarsSecret:
+extraEnvVarsSecret: ""
 ## @param extraVolumes Optionally specify extra list of additional volumes for the haproxy pod(s)
 ##
 extraVolumes: []
@@ -335,7 +350,7 @@ sidecars: []
 ##    imagePullPolicy: Always
 ##    command: ['sh', '-c', 'echo "hello world"']
 ##
-initContainers: {}
+initContainers: []
 
 ## @section Other Parameters
 ##

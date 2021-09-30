@@ -79,12 +79,16 @@ spec:
           {{- if .Values.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
-          {{- if .Values.redis.command }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.redis.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.redis.command "context" $) | nindent 12 }}
           {{- else }}
           command: ['/bin/bash', '-c']
           {{- end }}
-          {{- if .Values.redis.args }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.redis.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.redis.args "context" $) | nindent 12 }}
           {{- else if .Values.cluster.externalAccess.enabled }}
           args:
@@ -122,9 +126,6 @@ spec:
               fi
               {{- end }}
               /opt/bitnami/scripts/redis-cluster/entrypoint.sh /opt/bitnami/scripts/redis-cluster/run.sh
-          {{- end }}
-          {{- if .Values.redis.lifecycleHooks }}
-          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.redis.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           env:
             - name: POD_NAME
@@ -200,6 +201,7 @@ spec:
               containerPort: {{ .Values.redis.port }}
             - name: tcp-redis-bus
               containerPort: {{ .Values.redis.busPort }}
+          {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.redis.livenessProbe.enabled }}
           livenessProbe:
             initialDelaySeconds: {{ .Values.redis.livenessProbe.initialDelaySeconds }}
@@ -232,6 +234,10 @@ spec:
           {{- else if .Values.redis.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.redis.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
+          {{- if .Values.redis.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.redis.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          {{- end }}
           {{- if .Values.redis.resources }}
           resources:
           {{- include "common.tplvalues.render" (dict "value" .Values.redis.resources "context" $) | nindent 12 }}
@@ -263,6 +269,10 @@ spec:
         - name: metrics
           image: {{ template "redis-cluster.metrics.image" . }}
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else }}
           command:
             - /bin/bash
             - -c
@@ -271,7 +281,10 @@ spec:
               export REDIS_PASSWORD="$(< "${REDIS_PASSWORD_FILE}")"
               {{- end }}
               redis_exporter{{- range $key, $value := .Values.metrics.extraArgs }} --{{ $key }}={{ $value }}{{- end }}
+          {{- end }}
           env:
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
             - name: REDIS_ALIAS
               value: {{ template "common.names.fullname" . }}
             - name: REDIS_ADDR

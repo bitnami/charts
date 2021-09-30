@@ -75,7 +75,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
 | `image.registry`                       | phpBB image registry                                                                                                                                      | `docker.io`             |
 | `image.repository`                     | phpBB Image repository                                                                                                                                    | `bitnami/phpbb`         |
-| `image.tag`                            | phpBB Image tag (immutable tags are recommended)                                                                                                          | `3.3.4-debian-10-r45`   |
+| `image.tag`                            | phpBB Image tag (immutable tags are recommended)                                                                                                          | `3.3.4-debian-10-r129`  |
 | `image.pullPolicy`                     | phpBB image pull policy                                                                                                                                   | `IfNotPresent`          |
 | `image.pullSecrets`                    | Specify docker-registry secret names as an array                                                                                                          | `[]`                    |
 | `image.debug`                          | Specify if debug logs should be enabled                                                                                                                   | `false`                 |
@@ -102,7 +102,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image repository                                                                                                        | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                                                                              | `10-debian-10-r115`     |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                                                                              | `10-debian-10-r202`     |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `Always`                |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                                          | `[]`                    |
 | `volumePermissions.resources.limits`   | The resources limits for the container                                                                                                                    | `{}`                    |
@@ -166,7 +166,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.pathType`              | Ingress path type                                                                                      | `ImplementationSpecific` |
 | `ingress.apiVersion`            | Override API Version (automatically detected if not set)                                               | `""`                     |
 | `ingress.hostname`              | Default host for the ingress resource                                                                  | `phpbb.local`            |
-| `ingress.path`                  | The Path to phpBB. You may need to set this to '/*' in order to use this with ALB ingress controllers. | `ImplementationSpecific` |
+| `ingress.path`                  | The Path to phpBB. You may need to set this to '/*' in order to use this with ALB ingress controllers. | `/`                      |
 | `ingress.annotations`           | Ingress annotations                                                                                    | `{}`                     |
 | `ingress.tls`                   | Enable TLS configuration for the hostname defined at ingress.hostname parameter                        | `false`                  |
 | `ingress.extraHosts`            | The list of additional hostnames to be covered with this ingress record.                               | `[]`                     |
@@ -177,26 +177,26 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Database parameters
 
-| Name                                        | Description                                                                          | Value           |
-| ------------------------------------------- | ------------------------------------------------------------------------------------ | --------------- |
-| `mariadb.enabled`                           | Whether to deploy a mariadb server to satisfy the applications database requirements | `true`          |
-| `mariadb.architecture`                      | MariaDB architecture. Allowed values: `standalone` or `replication`                  | `standalone`    |
-| `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                                                 | `""`            |
-| `mariadb.auth.database`                     | Database name to create                                                              | `bitnami_phpbb` |
-| `mariadb.auth.username`                     | Database user to create                                                              | `bn_phpbb`      |
-| `mariadb.auth.password`                     | Password for the database                                                            | `""`            |
-| `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                                                | `true`          |
-| `mariadb.primary.persistence.storageClass`  | MariaDB primary persistent volume storage Class                                      | `""`            |
-| `mariadb.primary.persistence.accessModes`   | PVC Access Modes for phpBB volume                                                    | `[]`            |
-| `mariadb.primary.persistence.size`          | Database Persistent Volume Size                                                      | `8Gi`           |
-| `mariadb.primary.persistence.hostPath`      | Host mount path for MariaDB volume                                                   | `""`            |
-| `mariadb.primary.persistence.existingClaim` | Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas             | `""`            |
-| `externalDatabase.existingSecret`           | Use existing secret (ignores previous password)                                      | `""`            |
-| `externalDatabase.host`                     | Host of the existing database                                                        | `""`            |
-| `externalDatabase.port`                     | Port of the existing database                                                        | `3306`          |
-| `externalDatabase.user`                     | Existing username in the external db                                                 | `bn_phpbb`      |
-| `externalDatabase.password`                 | Password for the above username                                                      | `""`            |
-| `externalDatabase.database`                 | Name of the existing database                                                        | `bitnami_phpbb` |
+| Name                                        | Description                                                                          | Value               |
+| ------------------------------------------- | ------------------------------------------------------------------------------------ | ------------------- |
+| `mariadb.enabled`                           | Whether to deploy a mariadb server to satisfy the applications database requirements | `true`              |
+| `mariadb.architecture`                      | MariaDB architecture. Allowed values: `standalone` or `replication`                  | `standalone`        |
+| `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                                                 | `""`                |
+| `mariadb.auth.database`                     | Database name to create                                                              | `bitnami_phpbb`     |
+| `mariadb.auth.username`                     | Database user to create                                                              | `bn_phpbb`          |
+| `mariadb.auth.password`                     | Password for the database                                                            | `""`                |
+| `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                                                | `true`              |
+| `mariadb.primary.persistence.storageClass`  | MariaDB primary persistent volume storage Class                                      | `""`                |
+| `mariadb.primary.persistence.accessModes`   | PVC Access Modes for phpBB volume                                                    | `["ReadWriteOnce"]` |
+| `mariadb.primary.persistence.size`          | Database Persistent Volume Size                                                      | `8Gi`               |
+| `mariadb.primary.persistence.hostPath`      | Host mount path for MariaDB volume                                                   | `""`                |
+| `mariadb.primary.persistence.existingClaim` | Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas             | `""`                |
+| `externalDatabase.existingSecret`           | Use existing secret (ignores previous password)                                      | `""`                |
+| `externalDatabase.host`                     | Host of the existing database                                                        | `""`                |
+| `externalDatabase.port`                     | Port of the existing database                                                        | `3306`              |
+| `externalDatabase.user`                     | Existing username in the external db                                                 | `bn_phpbb`          |
+| `externalDatabase.password`                 | Password for the above username                                                      | `""`                |
+| `externalDatabase.database`                 | Name of the existing database                                                        | `bitnami_phpbb`     |
 
 
 ### Metrics parameters
@@ -206,7 +206,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`           | Start a side-car prometheus exporter                       | `false`                   |
 | `metrics.image.registry`    | Apache exporter image registry                             | `docker.io`               |
 | `metrics.image.repository`  | Apache exporter image repository                           | `bitnami/apache-exporter` |
-| `metrics.image.tag`         | Apache exporter image tag (immutable tags are recommended) | `0.9.0-debian-10-r13`     |
+| `metrics.image.tag`         | Apache exporter image tag (immutable tags are recommended) | `0.10.1-debian-10-r4`     |
 | `metrics.image.pullPolicy`  | Image pull policy                                          | `IfNotPresent`            |
 | `metrics.image.pullSecrets` | Specify docker-registry secret names as an array           | `[]`                      |
 | `metrics.resources`         | Metrics exporter resource requests and limits              | `{}`                      |
@@ -393,7 +393,7 @@ To upgrade to `8.0.0`, backup phpBB data and the previous MariaDB databases, ins
 
 This upgrade also adapts the chart to the latest Bitnami good practices. Check the Parameters section for more information.
 
-### 7.0.0
+### To 7.0.0
 
 Helm performs a lookup for the object based on its group (apps), version (v1), and kind (Deployment). Also known as its GroupVersionKind, or GVK. Changing the GVK is considered a compatibility breaker from Kubernetes' point of view, so you cannot "upgrade" those objects to the new GVK in-place. Earlier versions of Helm 3 did not perform the lookup correctly which has since been fixed to match the spec.
 

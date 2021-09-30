@@ -97,7 +97,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `collector.enabled`                               | Setup and enable the Wavefront collector to gather metrics                                                              | `true`                                   |
 | `collector.image.registry`                        | Wavefront collector Image registry                                                                                      | `docker.io`                              |
 | `collector.image.repository`                      | Wavefront collector Image repository                                                                                    | `bitnami/wavefront-kubernetes-collector` |
-| `collector.image.tag`                             | Wavefront collector Image tag (immutable tags are recommended)                                                          | `1.5.0-scratch-r0`                       |
+| `collector.image.tag`                             | Wavefront collector Image tag (immutable tags are recommended)                                                          | `1.7.1-scratch-r0`                       |
 | `collector.image.pullPolicy`                      | Image pull policy                                                                                                       | `IfNotPresent`                           |
 | `collector.image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                        | `[]`                                     |
 | `collector.hostAliases`                           | Deployment pod host aliases                                                                                             | `[]`                                     |
@@ -163,7 +163,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `proxy.enabled`                               | Setup and enable Wavefront proxy to send metrics through                                                                                | `true`                    |
 | `proxy.image.registry`                        | Wavefront proxy image registry                                                                                                          | `docker.io`               |
 | `proxy.image.repository`                      | Wavefront proxy image repository                                                                                                        | `bitnami/wavefront-proxy` |
-| `proxy.image.tag`                             | Wavefront proxy image tag (immutable tags are recommended)                                                                              | `9.7.0-debian-10-r73`     |
+| `proxy.image.tag`                             | Wavefront proxy image tag (immutable tags are recommended)                                                                              | `10.8.0-debian-10-r14`    |
 | `proxy.image.pullPolicy`                      | Wavefront proxy image pull policy                                                                                                       | `IfNotPresent`            |
 | `proxy.image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                                        | `[]`                      |
 | `proxy.hostAliases`                           | Deployment pod host aliases                                                                                                             | `[]`                      |
@@ -269,9 +269,9 @@ It is possible to deploy the Collector as a `Daemonset` or a `Deployment`. Refer
 
 The most common use case is to deploy the Wavefront Collector as a `DaemonSet` to obtain information from the different nodes. However, there are some use cases where a `Deployment` can be used to gather data (at application level) without deploying a pod per node.
 
-### Change Wavefront version
+### Use a different Wavefront version
 
-To modify the application version used in this chart, specify a [different image tag](https://hub.docker.com/r/bitnami/Wavefront-kubernetes-collector/tags/) using the `collector.image.tag` parameter. For example, `collector.image.tag=X.Y.Z`. This approach is also applicable to other images like the proxy.
+To modify the application version used in this chart, specify a different version of the image using the `image.tag` parameter and/or a different repository using the `image.repository` parameter. Refer to the [chart documentation for more information on these parameters and how to use them with images from a private registry](https://docs.bitnami.com/kubernetes/apps/wavefront/configuration/change-image-version/).
 
 ### Use Sidecars and Init Containers
 

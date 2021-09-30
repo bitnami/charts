@@ -1,5 +1,25 @@
 ** Please be patient while the chart is being deployed **
 
+{{- if .Values.diagnosticMode.enabled }}
+The chart has been deployed in diagnostic mode. All probes have been disabled and the command has been overwritten with:
+
+  command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 4 }}
+  args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 4 }}
+
+Get the list of pods by executing:
+
+  kubectl get pods --namespace {{ .Release.Namespace }} -l app.kubernetes.io/instance={{ .Release.Name }}
+
+Access the pod you want to debug by executing
+
+  kubectl exec --namespace {{ .Release.Namespace }} -ti <NAME OF THE POD> -- bash
+
+In order to replicate the container startup execute this command:
+
+    tempo -config.file=/bitnami/grafana-tempo/conf/tempo.yaml
+
+{{- else }}
+
 Installed components:
 
   * ingester
@@ -25,6 +45,7 @@ Installed components:
 {{- else if contains "ClusterIP" .Values.queryFrontend.service.type }}
     echo "The Query Frontend is available at http://127.0.0.1:{{ .Values.queryFrontend.service.port }}"
     kubectl port-forward svc/{{ template "grafana-tempo.query-frontend.fullname" . }} {{ .Values.queryFrontend.service.port }}:{{ .Values.queryFrontend.service.port }} &
+{{- end }}
 {{- end }}
 
 {{- include "common.warnings.rollingTag" .Values.tempo.image }}

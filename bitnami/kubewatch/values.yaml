@@ -7,7 +7,7 @@
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
 ##
 global:
-  imageRegistry:
+  imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
@@ -18,10 +18,10 @@ global:
 
 ## @param nameOverride String to partially override common.names.fullname template
 ##
-nameOverride:
+nameOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname template
 ##
-fullnameOverride:
+fullnameOverride: ""
 ## @param commonLabels Labels to add to all deployed objects
 ##
 commonLabels: {}
@@ -45,7 +45,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/kubewatch
-  tag: 0.1.0-debian-10-r334
+  tag: 0.1.0-debian-10-r398
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -80,9 +80,9 @@ slack:
 ##
 hipchat:
   enabled: false
-  room:
-  token:
-  url:
+  room: ""
+  token: ""
+  url: ""
 ## @param mattermost.enabled Enable Mattermost notifications
 ## @param mattermost.channel Mattermost channel to notify
 ## @param mattermost.url Mattermost URL
@@ -90,59 +90,59 @@ hipchat:
 ##
 mattermost:
   enabled: false
-  channel:
-  url:
-  username:
+  channel: ""
+  url: ""
+  username: ""
 ## @param flock.enabled Enable Flock notifications
 ## @param flock.url Flock URL
 ##
 flock:
   enabled: false
-  url:
+  url: ""
 ## @param msteams.enabled Enable Microsoft Teams notifications
 ## @param msteams.webhookurl Microsoft Teams webhook URL
 ##
 msteams:
   enabled: false
-  webhookurl:
+  webhookurl: ""
 ## @param webhook.enabled Enable Webhook notifications
 ## @param webhook.url Webhook URL
 ##
 webhook:
   enabled: false
-  url:
+  url: ""
 smtp:
   ## @param smtp.enabled Enable SMTP (email) notifications
   ##
   enabled: false
   ## @param smtp.to Destination email address (required)
   ##
-  to:
+  to: ""
   ## @param smtp.from Source email address (required)
   ##
-  from:
+  from: ""
   ## @param smtp.hello SMTP hello field (optional)
   ##
-  hello:
+  hello: ""
   ## @param smtp.smarthost SMTP server address (name:port) (required)
   ##
-  smarthost:
+  smarthost: ""
   ## @param smtp.subject Source email subject
   ##
-  subject:
+  subject: ""
   ## @param smtp.auth.username Username for LOGIN and PLAIN auth mech
   ## @param smtp.auth.password Password for LOGIN and PLAIN auth mech
   ## @param smtp.auth.secret Secret for CRAM-MD5 auth mech
   ## @param smtp.auth.identity Identity for PLAIN auth mech
   ##
   auth:
-    username:
-    password:
-    secret:
-    identity:
+    username: ""
+    password: ""
+    secret: ""
+    identity: ""
   ## @param smtp.requireTLS Force STARTTLS. Set to `true` or `false`
   ##
-  requireTLS:
+  requireTLS: ""
 ## @param namespaceToWatch Namespace to watch, leave it empty for watching all
 ##
 namespaceToWatch: ""
@@ -180,10 +180,10 @@ args: []
 extraEnvVars: []
 ## @param extraEnvVarsCM Name of existing ConfigMap containing extra env vars
 ##
-extraEnvVarsCM:
+extraEnvVarsCM: ""
 ## @param extraEnvVarsSecret Name of existing Secret containing extra env vars
 ##
-extraEnvVarsSecret:
+extraEnvVarsSecret: ""
 
 ## @section Kubewatch deployment parameters
 
@@ -197,7 +197,7 @@ replicaCount: 1
 ##
 podSecurityContext:
   enabled: false
-  fsGroup:
+  fsGroup: ""
 ## Kubewatch pods' Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ## @param containerSecurityContext.enabled Enable Kubewatch pods' Security Context
@@ -206,8 +206,8 @@ podSecurityContext:
 ##
 containerSecurityContext:
   enabled: false
-  runAsUser:
-  runAsNonRoot:
+  runAsUser: ""
+  runAsNonRoot: ""
 ## Kubewatch resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -309,7 +309,7 @@ tolerations: []
 ## @param priorityClassName Controller priorityClassName
 ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
 ##
-priorityClassName:
+priorityClassName: ""
 ## @param podLabels Extra labels for Kubewatch pods
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
@@ -334,7 +334,7 @@ extraVolumeMounts: []
 ##       - name: portname
 ##         containerPort: 1234
 ##
-initContainers: {}
+initContainers: []
 ## @param sidecars Add additional sidecar containers to the Kubewatch pods
 ## Example:
 ## sidecars:
@@ -345,7 +345,7 @@ initContainers: {}
 ##       - name: portname
 ##         containerPort: 1234
 ##
-sidecars: {}
+sidecars: []
 
 ## @section RBAC parameters
 

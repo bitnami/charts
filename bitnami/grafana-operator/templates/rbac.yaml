@@ -136,26 +136,95 @@ metadata:
   {{- end }}
 rules:
   - apiGroups:
-      - integreatly.org
-    resources:
-      - grafanadashboards
-      - grafanadashboards/status
-      - grafanadatasources
-      - grafanadatasources/status
-    verbs: ['get', 'list', 'update', 'watch']
-  - apiGroups:
       - ""
     resources:
-      - namespaces
+      - pods
+      - services
+      - endpoints
+      - persistentvolumeclaims
       - configmaps
-    verbs: ['get', 'list', 'watch']
+      - secrets
+      - serviceaccounts
+      - configmaps
+    verbs:
+      - get
+      - list
+      - create
+      - update
+      - delete
+      - deletecollection
+      - watch
   - apiGroups:
       - ""
     resources:
       - events
     verbs:
+      - get
+      - list
+      - watch
       - create
+      - delete
+      - update
       - patch
+  - apiGroups:
+      - apps
+    resources:
+      - deployments
+      - deployments/finalizers
+      - daemonsets
+      - replicasets
+      - statefulsets
+    verbs:
+      - get
+      - list
+      - create
+      - update
+      - delete
+      - deletecollection
+      - watch
+  - apiGroups:
+      - route.openshift.io
+    resources:
+      - routes
+      - routes/custom-host
+    verbs:
+      - get
+      - list
+      - create
+      - update
+      - delete
+      - deletecollection
+      - watch
+      - create
+  - apiGroups:
+      - extensions
+    resources:
+      - ingresses
+    verbs:
+      - get
+      - list
+      - create
+      - update
+      - delete
+      - deletecollection
+      - watch
+  - apiGroups:
+      - integreatly.org
+    resources:
+      - grafanas
+      - grafanas/status
+      - grafanas/finalizers
+      - grafanadashboards
+      - grafanadatasources
+      - grafanadatasources/status
+    verbs:
+      - get
+      - list
+      - create
+      - update
+      - delete
+      - deletecollection
+      - watch
 ---
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRoleBinding

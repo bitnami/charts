@@ -159,8 +159,8 @@ spec:
                   service's certificate
                 properties:
                   caSecret:
-                    description: Name of the Kubernetes secret be used to validate
-                      the certificate presented by the backend
+                    description: Name or namespaced name of the Kubernetes secret
+                      used to validate the certificate presented by the backend
                     type: string
                   subjectName:
                     description: Key which is expected to be present in the 'subjectAltName'

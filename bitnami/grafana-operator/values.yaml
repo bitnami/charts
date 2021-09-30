@@ -7,7 +7,7 @@
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
 ##
 global:
-  imageRegistry:
+  imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
@@ -18,10 +18,10 @@ global:
 
 ## @param nameOverride String to partially override common.names.fullname template with a string (will prepend the release name)
 ##
-nameOverride:
+nameOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname template with a string
 ##
-fullnameOverride:
+fullnameOverride: ""
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
@@ -46,7 +46,7 @@ operator:
   ## @param operator.replicaCount Number of grafana-operator Pod replicas
   ##
   replicaCount: 1
-  ## @param operator.updateStrategy.type Set up update strategy for Grafana installation.
+  ## @param operator.updateStrategy.type Set up update strategy for Grafana Operator installation.
   ## Set to Recreate if you use persistent volume that cannot be mounted by more than one pods to make sure the pods is destroyed first.
   ## Ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
   ## Example:
@@ -67,7 +67,7 @@ operator:
   image:
     registry: docker.io
     repository: bitnami/grafana-operator
-    tag: 3.10.2-debian-10-r0
+    tag: 3.10.3-debian-10-r61
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## Ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -99,7 +99,7 @@ operator:
   ##
   serviceAccount:
     create: true
-    name:
+    name: ""
   ## Pod securityContext
   ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param operator.podSecurityContext.enabled Enable pods security context
@@ -151,7 +151,7 @@ operator:
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ## Allowed values: soft, hard
   ##
-  podAffinityPreset: ''
+  podAffinityPreset: ""
   ## @param operator.podAntiAffinityPreset Pod anti-affinity preset. Allowed values: `soft` or `hard`
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
@@ -162,12 +162,12 @@ operator:
   nodeAffinityPreset:
     ## @param operator.nodeAffinityPreset.type Node affinity preset type. Allowed values: `soft` or `hard`
     ##
-    type: ''
+    type: ""
     ## @param operator.nodeAffinityPreset.key Set nodeAffinity preset key
     ## E.g.
     ## key: "kubernetes.io/e2e-az-name"
     ##
-    key: ''
+    key: ""
     ## @param operator.nodeAffinityPreset.values Set nodeAffinity preset values
     ## E.g.
     ## values:
@@ -261,7 +261,7 @@ grafana:
   image:
     registry: docker.io
     repository: bitnami/grafana
-    tag: 7.5.9-debian-10-r1
+    tag: 8.1.5-debian-10-r2
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -270,6 +270,13 @@ grafana:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
+  ## @param grafana.serviceAccount Additional service account configuration
+  ## Ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/deploy_grafana.md#configuring-the-serviceaccount
+  ## e.g:
+  ## serviceAccount:
+  ##   annotations:
+  ##     iam.gke.io/gcp-service-account: "grafana@preprodz.iam.gserviceaccount.com"
+  serviceAccount: {}
   ## Pod securityContext
   ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param grafana.podSecurityContext.enabled Enable pods security context
@@ -425,6 +432,9 @@ grafana:
   ##
   persistence:
     ## @param grafana.persistence.enabled Enable persistent storage for the grafana deployment
+    ## NOTE: In order to avoid deployment failure due to multi-attach of the same volume,
+    ## you might also want to set `grafana.updateStrategy` to Recreate.
+    ## More information can be found here: https://github.com/grafana-operator/grafana-operator/issues/453
     ##
     enabled: false
     ## @param grafana.persistence.storageClass Define the storageClass for the persistent storage if not defined default is used
@@ -434,7 +444,7 @@ grafana:
     ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
     ##   GKE, AWS & OpenStack)
     ##
-    storageClass:
+    storageClass: ""
     ## @param grafana.persistence.accessMode Define the accessMode for the persistent storage
     ##
     accessMode: ReadWriteOnce
@@ -505,14 +515,14 @@ grafana:
   ##
   jsonnetLibrarySelector:
     matchLabels:
-      app.kubernetes.io/instance: '{{ .Release.Name }}'
+      app.kubernetes.io/instance: "{{ .Release.Name }}"
   ## @param grafana.dashboardLabelSelectors [object] This selects dashboards on the label.
   ## A cachall is not possible so you need to define at least one label selector here.
   ## Ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/deploy_grafana.md#deploying-grafana
   ##
   dashboardLabelSelectors:
     - matchLabels:
-        app.kubernetes.io/instance: '{{ .Release.Name }}'
+        app.kubernetes.io/instance: "{{ .Release.Name }}"
   ## Grafana containers' liveness probe
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ## @param grafana.livenessProbe.enabled Enable livenessProbe
@@ -545,24 +555,31 @@ grafana:
     timeoutSeconds: 5
     failureThreshold: 6
     successThreshold: 1
-
-## @section PluginInit parameters
-
-grafanaPluginInit:
-  ## @param grafanaPluginInit.image.registry Grafana Plugin Init image registry
-  ## @param grafanaPluginInit.image.repository Grafana Plugin Init image name
-  ## @param grafanaPluginInit.image.tag Grafana Plugin Init image tag
-  ## @param grafanaPluginInit.image.pullSecrets Grafana Plugin Init image pull secrets
+  ## @param grafana.updateStrategy Set up update strategy for Grafana installation.
+  ## Set to Recreate if you use persistent volume that cannot be mounted by more than one pods to make sure the pods is destroyed first.
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+  ## Example:
+  ## updateStrategy:
+  ##  type: RollingUpdate
+  ##  rollingUpdate:
+  ##    maxSurge: 25%
+  ##    maxUnavailable: 25%
   ##
-  image:
-    registry: docker.io
-    repository: bitnami/grafana
-    tag: 7.5.9-debian-10-r1
-    ## Optionally specify an array of imagePullSecrets.
-    ## Secrets must be manually created in the namespace.
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-    ## e.g:
-    ## pullSecrets:
-    ##   - myRegistryKeySecretName
-    ##
-    pullSecrets: []
+  updateStrategy: {}
+  ## @param grafana.extraVolumes Optionally specify extra list of additional volumes for the grafana pod(s)
+  ##
+  extraVolumes: []
+  ## @param grafana.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the grafana container(s)
+  ##
+  extraVolumeMounts: []
+  ## @param grafana.sidecars Add additional sidecar containers to the grafana pod(s)
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []

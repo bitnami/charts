@@ -38,6 +38,21 @@ clusterDomain: cluster.local
 ##
 extraDeploy: []
 
+## Enable diagnostic mode in the deployment
+##
+diagnosticMode:
+  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+  ##
+  enabled: false
+  ## @param diagnosticMode.command Command to override all containers in the deployment
+  ##
+  command:
+    - sleep
+  ## @param diagnosticMode.args Args to override all containers in the deployment
+  ##
+  args:
+    - infinity
+
 ## @section NATS parameters
 
 ## Bitnami NATS image version
@@ -51,7 +66,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/nats
-  tag: 2.3.2-debian-10-r0
+  tag: 2.6.1-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -532,7 +547,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/nats-exporter
-    tag: 0.8.0-debian-10-r10
+    tag: 0.8.0-debian-10-r85
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

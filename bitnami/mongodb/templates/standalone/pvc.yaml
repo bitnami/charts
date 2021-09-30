@@ -9,8 +9,14 @@ metadata:
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
+  {{- if or .Values.persistence.annotations  .Values.commonAnnotations }}
+  annotations:
   {{- if .Values.commonAnnotations }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.persistence.annotations }}
+  {{- include "common.tplvalues.render" ( dict "value" .Values.persistence.annotations "context" $) | nindent 4 }}
+  {{- end }}
   {{- end }}
 spec:
   accessModes:

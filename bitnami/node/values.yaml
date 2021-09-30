@@ -58,7 +58,7 @@ extraEnvVarsCM: ""
 ## @param extraEnvVarsSecret Name of existing Secret containing extra environment variables
 ##
 extraEnvVarsSecret: ""
-## MongoDB(R) chart configuration
+## MongoDB&reg; chart configuration
 ## ref: https://github.com/bitnami/charts/blob/master/bitnami/mongodb/values.yaml
 ##
 mongodb:
@@ -66,7 +66,7 @@ mongodb:
   ## To use an external database set this to false and configure the externaldb parameters
   ##
   enabled: true
-  ## MongoDB(R) Authentication parameters
+  ## MongoDB&reg; Authentication parameters
   ##
   auth:
     ## @param mongodb.auth.enabled Whether to enable auth or not for the MongoDB&reg; chart
@@ -125,7 +125,7 @@ externaldb:
 image:
   registry: docker.io
   repository: bitnami/node
-  tag: 14.17.3-debian-10-r6
+  tag: 14.18.0-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -326,7 +326,7 @@ git:
   image:
     registry: docker.io
     repository: bitnami/git
-    tag: 2.32.0-debian-10-r30
+    tag: 2.33.0-debian-10-r44
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -377,7 +377,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r131
+    tag: 10-debian-10-r206
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

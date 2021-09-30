@@ -75,7 +75,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------ | -------------------------------------------------------------------------------------------- | ------------------------ |
 | `image.registry`                     | OrangeHRM image registry                                                                     | `docker.io`              |
 | `image.repository`                   | OrangeHRM image repository                                                                   | `bitnami/orangehrm`      |
-| `image.tag`                          | OrangeHRM Image tag (immutable tags are recommended)                                         | `4.8.0-0-debian-10-r82`  |
+| `image.tag`                          | OrangeHRM Image tag (immutable tags are recommended)                                         | `4.8.0-0-debian-10-r167` |
 | `image.pullPolicy`                   | OrangeHRM image pull policy                                                                  | `IfNotPresent`           |
 | `image.pullSecrets`                  | Specify docker-registry secret names as an array                                             | `[]`                     |
 | `image.debug`                        | Specify if debug logs should be enabled                                                      | `false`                  |
@@ -167,7 +167,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.pathType`                 | Ingress path type                                                                                          | `ImplementationSpecific` |
 | `ingress.apiVersion`               | Override API Version (automatically detected if not set)                                                   | `""`                     |
 | `ingress.hostname`                 | Default host for the ingress resource                                                                      | `orangehrm.local`        |
-| `ingress.path`                     | The Path to OrangeHRM. You may need to set this to '/*' in order to use this with ALB ingress controllers. | `ImplementationSpecific` |
+| `ingress.path`                     | The Path to OrangeHRM. You may need to set this to '/*' in order to use this with ALB ingress controllers. | `/`                      |
 | `ingress.annotations`              | Ingress annotations                                                                                        | `{}`                     |
 | `ingress.tls`                      | Enable TLS configuration for the hostname defined at ingress.hostname parameter                            | `false`                  |
 | `ingress.extraHosts`               | The list of additional hostnames to be covered with this ingress record.                                   | `[]`                     |
@@ -188,7 +188,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `mariadb.auth.password`                     | Password for the database                                                                | `""`                |
 | `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                                                    | `true`              |
 | `mariadb.primary.persistence.storageClass`  | MariaDB primary persistent volume storage Class                                          | `""`                |
-| `mariadb.primary.persistence.accessModes`   | Database Persistent Volume Access Modes                                                  | `[]`                |
+| `mariadb.primary.persistence.accessModes`   | Database Persistent Volume Access Modes                                                  | `["ReadWriteOnce"]` |
 | `mariadb.primary.persistence.size`          | Database Persistent Volume Size                                                          | `8Gi`               |
 | `mariadb.primary.persistence.hostPath`      | Set path in case you want to use local host path volumes (not recommended in production) | `""`                |
 | `mariadb.primary.persistence.existingClaim` | Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas                 | `""`                |
@@ -206,7 +206,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image repository                                                                                                        | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                                                                              | `10-debian-10-r115`     |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                                                                              | `10-debian-10-r202`     |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `Always`                |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                                          | `[]`                    |
 | `volumePermissions.resources.limits`   | The resources limits for the container                                                                                                                    | `{}`                    |
@@ -220,7 +220,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`           | Start a side-car prometheus exporter                       | `false`                   |
 | `metrics.image.registry`    | Apache exporter image registry                             | `docker.io`               |
 | `metrics.image.repository`  | Apache exporter image repository                           | `bitnami/apache-exporter` |
-| `metrics.image.tag`         | Apache exporter image tag (immutable tags are recommended) | `0.9.0-debian-10-r13`     |
+| `metrics.image.tag`         | Apache exporter image tag (immutable tags are recommended) | `0.10.1-debian-10-r4`     |
 | `metrics.image.pullPolicy`  | Apache exporter image pull policy                          | `IfNotPresent`            |
 | `metrics.image.pullSecrets` | Specify docker-registry secret names as an array           | `[]`                      |
 | `metrics.resources`         | Metrics exporter resource requests and limits              | `{}`                      |
@@ -245,196 +245,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `certificates.extraEnvVarsSecret`                    | Secret with extra environment variables                              | `""`                                     |
 | `certificates.image.registry`                        | Container sidecar registry                                           | `docker.io`                              |
 | `certificates.image.repository`                      | Container sidecar image repository                                   | `bitnami/bitnami-shell`                  |
-| `certificates.image.tag`                             | Container sidecar image tag (immutable tags are recommended)         | `10-debian-10-r115`                      |
+| `certificates.image.tag`                             | Container sidecar image tag (immutable tags are recommended)         | `10-debian-10-r202`                      |
 | `certificates.image.pullPolicy`                      | Container sidecar image pull policy                                  | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Container sidecar image pull secrets                                 | `[]`                                     |
 
-
-The following table lists the configurable parameters of the OrangeHRM chart and their default values per section/component:
-
-### Global parameters
-
-| Parameter                 | Description                                     | Default                                                 |
-|---------------------------|-------------------------------------------------|---------------------------------------------------------|
-| `global.imageRegistry`    | Global Docker image registry                    | `nil`                                                   |
-| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]` (does not add image pull secrets to deployed pods) |
-| `global.storageClass`     | Global storage class for dynamic provisioning   | `nil`                                                   |
-
-### Common parameters
-
-| Parameter           | Description                                                                  | Default                                                 |
-|---------------------|------------------------------------------------------------------------------|---------------------------------------------------------|
-| `image.registry`    | OrangeHRM image registry                                                     | `docker.io`                                             |
-| `image.repository`  | OrangeHRM Image name                                                         | `bitnami/orangehrm`                                     |
-| `image.tag`         | OrangeHRM Image tag                                                          | `{TAG_NAME}`                                            |
-| `image.pullPolicy`  | OrangeHRM image pull policy                                                  | `IfNotPresent`                                          |
-| `image.pullSecrets` | Specify docker-registry secret names as an array                             | `[]` (does not add image pull secrets to deployed pods) |
-| `image.debug`       | Specify if debug logs should be enabled                                      | `false`                                                 |
-| `nameOverride`      | String to partially override orangehrm.fullname template                     | `nil`                                                   |
-| `fullnameOverride`  | String to fully override orangehrm.fullname template                         | `nil`                                                   |
-| `commonLabels`      | Labels to add to all deployed objects                                        | `nil`                                                   |
-| `commonAnnotations` | Annotations to add to all deployed objects                                   | `[]`                                                    |
-| `extraDeploy`       | Array of extra objects to deploy with the release (evaluated as a template). | `nil`                                                   |
-| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)         | `nil`                                                   |
-
-### OrangeHRM parameters
-
-| Parameter                            | Description                                                                                                           | Default                                        |
-|--------------------------------------|-----------------------------------------------------------------------------------------------------------------------|------------------------------------------------|
-| `affinity`                           | Map of node/pod affinities                                                                                            | `{}`                                           |
-| `allowEmptyPassword`                 | Allow DB blank passwords                                                                                              | `yes`                                          |
-| `args`                               | Override default container args (useful when using custom images)                                                     | `nil`                                          |
-| `command`                            | Override default container command (useful when using custom images)                                                  | `nil`                                          |
-| `containerPorts.http`                | Sets http port inside NGINX container                                                                                 | `8080`                                         |
-| `containerPorts.https`               | Sets https port inside NGINX container                                                                                | `8443`                                         |
-| `containerSecurityContext.enabled`   | Enable OrangeHRM containers' Security Context                                                                         | `true`                                         |
-| `containerSecurityContext.runAsUser` | OrangeHRM containers' Security Context                                                                                | `1001`                                         |
-| `customLivenessProbe`                | Override default liveness probe                                                                                       | `nil`                                          |
-| `customReadinessProbe`               | Override default readiness probe                                                                                      | `nil`                                          |
-| `existingSecret`                     | Name of a secret with the application password                                                                        | `nil`                                          |
-| `extraEnvVarsCM`                     | ConfigMap containing extra env vars                                                                                   | `nil`                                          |
-| `extraEnvVarsSecret`                 | Secret containing extra env vars (in case of sensitive data)                                                          | `nil`                                          |
-| `extraEnvVars`                       | Extra environment variables                                                                                           | `nil`                                          |
-| `extraVolumeMounts`                  | Array of extra volume mounts to be added to the container (evaluated as template). Normally used with `extraVolumes`. | `nil`                                          |
-| `extraVolumes`                       | Array of extra volumes to be added to the deployment (evaluated as template). Requires setting `extraVolumeMounts`    | `nil`                                          |
-| `initContainers`                     | Add additional init containers to the pod (evaluated as a template)                                                   | `nil`                                          |
-| `lifecycleHooks`                     | LifecycleHook to set additional configuration at startup Evaluated as a template                                      | ``                                             |
-| `livenessProbe`                      | Liveness probe configuration                                                                                          | `Check values.yaml file`                       |
-| `nodeAffinityPreset.type`            | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                             | `""`                                           |
-| `nodeAffinityPreset.key`             | Node label key to match Ignored if `affinity` is set.                                                                 | `""`                                           |
-| `nodeAffinityPreset.values`          | Node label values to match. Ignored if `affinity` is set.                                                             | `[]`                                           |
-| `hostAliases`                        | Add deployment host aliases                                                                                           | `Check values.yaml`                            |
-| `nodeSelector`                       | Node labels for pod assignment                                                                                        | `{}` (The value is evaluated as a template)    |
-| `orangehrmUsername`                  | User of the application                                                                                               | `admin`                                        |
-| `orangehrmPassword`                  | Application password                                                                                                  | _random 10 character long alphanumeric string_ |
-| `orangehrmEnforcePasswordStrength`   | Whether the OrangeHRM password validation should use strong or medium level                                           | `true`                                         |
-| `orangehrmSkipInstall`               | Skip OrangeHRM installation wizard (`no` / `yes`)                                                                     | `false`                                        |
-| `persistence.accessMode`             | PVC Access Mode for OrangeHRM volume                                                                                  | `ReadWriteOnce`                                |
-| `persistence.enabled`                | Enable persistence using PVC                                                                                          | `true`                                         |
-| `persistence.existingClaim`          | An Existing PVC name                                                                                                  | `nil`                                          |
-| `persistence.hostPath`               | Host mount path for OrangeHRM volume                                                                                  | `nil` (will not mount to a host path)          |
-| `persistence.size`                   | PVC Storage Request for OrangeHRM volume                                                                              | `8Gi`                                          |
-| `persistence.storageClass`           | PVC Storage Class for OrangeHRM volume                                                                                | `nil` (uses alpha storage class annotation)    |
-| `persistence.subPath`                | volumeMount subPath, use it for compatibility with previous versions of the chart                                     | `orangehrm`                                    |
-| `podAffinityPreset`                  | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                   | `""`                                           |
-| `podAntiAffinityPreset`              | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                              | `soft`                                         |
-| `podAnnotations`                     | Pod annotations                                                                                                       | `{}`                                           |
-| `podLabels`                          | Add additional labels to the pod (evaluated as a template)                                                            | `nil`                                          |
-| `podSecurityContext.enabled`         | Enable OrangeHRM pods' Security Context                                                                               | `true`                                         |
-| `podSecurityContext.fsGroup`         | OrangeHRM pods' group ID                                                                                              | `1001`                                         |
-| `readinessProbe`                     | Readiness probe configuration                                                                                         | `Check values.yaml file`                       |
-| `replicaCount`                       | Number of OrangeHRM Pods to run                                                                                       | `1`                                            |
-| `resources`                          | CPU/Memory resource requests/limits                                                                                   | Memory: `512Mi`, CPU: `300m`                   |
-| `sidecars`                           | Attach additional containers to the pod (evaluated as a template)                                                     | `nil`                                          |
-| `smtpHost`                           | SMTP host                                                                                                             | `nil`                                          |
-| `smtpPort`                           | SMTP port                                                                                                             | `nil`                                          |
-| `smtpProtocol`                       | SMTP Protocol (options: ssl, none)                                                                                    | `nil`                                          |
-| `smtpUser`                           | SMTP user                                                                                                             | `nil`                                          |
-| `smtpPassword`                       | SMTP password. Ignored if `smtpExistingSecret` is set                                                                 | `nil`                                          |
-| `smtpExistingSecret`                 | Name of a secret with the SMTP password                                                                               | `nil`                                          |
-| `tolerations`                        | Tolerations for pod assignment                                                                                        | `[]` (The value is evaluated as a template)    |
-| `updateStrategy`                     | Deployment update strategy                                                                                            | `nil`                                          |
-
-### Traffic Exposure Parameters
-
-| Parameter                          | Description                                                                   | Default                        |
-|------------------------------------|-------------------------------------------------------------------------------|--------------------------------|
-| `service.type`                     | Kubernetes Service type                                                       | `LoadBalancer`                 |
-| `service.port`                     | Service HTTP port                                                             | `80`                           |
-| `service.httpsPort`                | Service HTTPS port                                                            | `443`                          |
-| `service.httpsTargetPort`          | Service Target HTTPS port                                                     | `https`                        |
-| `service.nodePorts.http`           | Kubernetes http node port                                                     | `""`                           |
-| `service.nodePorts.https`          | Kubernetes https node port                                                    | `""`                           |
-| `service.extraPorts`               | Extra ports to expose in the service (normally used with the `sidecar` value) | `nil`                          |
-| `service.clusterIP`                | WordPress service clusterIP IP                                                | `None`                         |
-| `service.loadBalancerSourceRanges` | Restricts access for LoadBalancer (only with `service.type: LoadBalancer`)    | `[]`                           |
-| `service.loadBalancerIP`           | loadBalancerIP if service type is `LoadBalancer`                              | `nil`                          |
-| `service.externalTrafficPolicy`    | Enable client source IP preservation                                          | `Cluster`                      |
-| `service.annotations`              | Service annotations                                                           | `{}` (evaluated as a template) |
-| `ingress.enabled`                  | Enable ingress controller resource                                            | `false`                        |
-| `ingress.certManager`              | Add annotations for cert-manager                                              | `false`                        |
-| `ingress.hostname`                 | Default host for the ingress resource                                         | `orangehrm.local`              |
-| `ingress.path`                     | Default path for the ingress resource                                         | `/`                            |
-| `ingress.tls`                      | Create TLS Secret                                                             | `false`                        |
-| `ingress.annotations`              | Ingress annotations                                                           | `[]` (evaluated as a template) |
-| `ingress.extraHosts[0].name`       | Additional hostnames to be covered                                            | `nil`                          |
-| `ingress.extraHosts[0].path`       | Additional hostnames to be covered                                            | `nil`                          |
-| `ingress.extraPaths`               | Additional arbitrary path/backend objects                                     | `nil`                          |
-| `ingress.extraTls[0].hosts[0]`     | TLS configuration for additional hostnames to be covered                      | `nil`                          |
-| `ingress.extraTls[0].secretName`   | TLS configuration for additional hostnames to be covered                      | `nil`                          |
-| `ingress.secrets[0].name`          | TLS Secret Name                                                               | `nil`                          |
-| `ingress.secrets[0].certificate`   | TLS Secret Certificate                                                        | `nil`                          |
-| `ingress.secrets[0].key`           | TLS Secret Key                                                                | `nil`                          |
-| `ingress.pathType`                 | Ingress path type                                                             | `ImplementationSpecific`       |
-
-### Database parameters
-
-| Parameter                                   | Description                                                                              | Default                                        |
-|---------------------------------------------|------------------------------------------------------------------------------------------|------------------------------------------------|
-| `mariadb.enabled`                           | Whether to use the MariaDB chart                                                         | `true`                                         |
-| `mariadb.architecture`                      | MariaDB architecture (`standalone` or `replication`)                                     | `standalone`                                   |
-| `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                                                     | _random 10 character alphanumeric string_      |
-| `mariadb.auth.database`                     | Database name to create                                                                  | `bitnami_orangehrm`                            |
-| `mariadb.auth.username`                     | Database user to create                                                                  | `bn_orangehrm`                                 |
-| `mariadb.auth.password`                     | Password for the database                                                                | _random 10 character long alphanumeric string_ |
-| `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                                                    | `true`                                         |
-| `mariadb.primary.persistence.existingClaim` | Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas                 | `nil`                                          |
-| `mariadb.primary.persistence.accessModes`   | Database Persistent Volume Access Modes                                                  | `[ReadWriteOnce]`                              |
-| `mariadb.primary.persistence.size`          | Database Persistent Volume Size                                                          | `8Gi`                                          |
-| `mariadb.primary.persistence.hostPath`      | Set path in case you want to use local host path volumes (not recommended in production) | `nil`                                          |
-| `mariadb.primary.persistence.storageClass`  | MariaDB primary persistent volume storage Class                                          | `nil`                                          |
-| `externalDatabase.user`                     | Existing username in the external db                                                     | `bn_orangehrm`                                 |
-| `externalDatabase.password`                 | Password for the above username                                                          | `""`                                           |
-| `externalDatabase.database`                 | Name of the existing database                                                            | `bitnami_orangehrm`                            |
-| `externalDatabase.host`                     | Host of the existing database                                                            | `nil`                                          |
-| `externalDatabase.port`                     | Port of the existing database                                                            | `3306`                                         |
-
-### Volume Permissions parameters
-
-| Parameter                             | Description                                                                                                                                               | Default                                                 |
-|---------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
-| `volumePermissions.enabled`           | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                                                 |
-| `volumePermissions.image.registry`    | Init container volume-permissions image registry                                                                                                          | `docker.io`                                             |
-| `volumePermissions.image.repository`  | Init container volume-permissions image name                                                                                                              | `bitnami/bitnami-shell`                                 |
-| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                                                                               | `"10"`                                                  |
-| `volumePermissions.image.pullSecrets` | Specify docker-registry secret names as an array                                                                                                          | `[]` (does not add image pull secrets to deployed pods) |
-| `volumePermissions.image.pullPolicy`  | Init container volume-permissions image pull policy                                                                                                       | `Always`                                                |
-| `volumePermissions.resources`         | Init container resource requests/limit                                                                                                                    | `nil`                                                   |
-
-### Metrics parameters
-
-| Parameter                   | Description                                      | Default                                                      |
-|-----------------------------|--------------------------------------------------|--------------------------------------------------------------|
-| `metrics.enabled`           | Start a side-car prometheus exporter             | `false`                                                      |
-| `metrics.image.registry`    | Apache exporter image registry                   | `docker.io`                                                  |
-| `metrics.image.repository`  | Apache exporter image name                       | `bitnami/apache-exporter`                                    |
-| `metrics.image.tag`         | Apache exporter image tag                        | `{TAG_NAME}`                                                 |
-| `metrics.image.pullPolicy`  | Image pull policy                                | `IfNotPresent`                                               |
-| `metrics.image.pullSecrets` | Specify docker-registry secret names as an array | `[]` (does not add image pull secrets to deployed pods)      |
-| `metrics.podAnnotations`    | Additional annotations for Metrics exporter pod  | `{prometheus.io/scrape: "true", prometheus.io/port: "9117"}` |
-| `metrics.resources`         | Exporter resource requests/limit                 | {}                                                           |
-
-### Certificate injection parameters
-
-| Parameter                                            | Description                                                          | Default                                  |
-|------------------------------------------------------|----------------------------------------------------------------------|------------------------------------------|
-| `certificates.customCertificate.certificateSecret`   | Secret containing the certificate and key to add                     | `""`                                     |
-| `certificates.customCertificate.chainSecret.name`    | Name of the secret containing the certificate chain                  | `""`                                     |
-| `certificates.customCertificate.chainSecret.key`     | Key of the certificate chain file inside the secret                  | `""`                                     |
-| `certificates.customCertificate.certificateLocation` | Location in the container to store the certificate                   | `/etc/ssl/certs/ssl-cert-snakeoil.pem`   |
-| `certificates.customCertificate.keyLocation`         | Location in the container to store the private key                   | `/etc/ssl/private/ssl-cert-snakeoil.key` |
-| `certificates.customCertificate.chainLocation`       | Location in the container to store the certificate chain             | `/etc/ssl/certs/chain.pem`               |
-| `certificates.customCAs`                             | Defines a list of secrets to import into the container trust store   | `[]`                                     |
-| `certificates.image.registry`                        | Container sidecar registry                                           | `docker.io`                              |
-| `certificates.image.repository`                      | Container sidecar image                                              | `bitnami/bitnami-shell`                  |
-| `certificates.image.tag`                             | Container sidecar image tag                                          | `"10"`                                   |
-| `certificates.image.pullPolicy`                      | Container sidecar image pull policy                                  | `IfNotPresent`                           |
-| `certificates.image.pullSecrets`                     | Container sidecar image pull secrets                                 | `image.pullSecrets`                      |
-| `certificates.args`                                  | Override default container args (useful when using custom images)    | `nil`                                    |
-| `certificates.command`                               | Override default container command (useful when using custom images) | `nil`                                    |
-| `certificates.extraEnvVars`                          | Container sidecar extra environment variables (eg proxy)             | `[]`                                     |
-| `certificates.extraEnvVarsCM`                        | ConfigMap containing extra env vars                                  | `nil`                                    |
-| `certificates.extraEnvVarsSecret`                    | Secret containing extra env vars (in case of sensitive data)         | `nil`                                    |
 
 The above parameters map to the env variables defined in [bitnami/orangehrm](http://github.com/bitnami/bitnami-docker-orangehrm). For more information please refer to the [bitnami/orangehrm](http://github.com/bitnami/bitnami-docker-orangehrm) image documentation.
 

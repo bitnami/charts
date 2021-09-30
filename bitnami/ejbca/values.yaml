@@ -34,6 +34,21 @@ commonLabels: {}
 ##
 commonAnnotations: {}
 
+## Enable diagnostic mode in the deployment
+##
+diagnosticMode:
+  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+  ##
+  enabled: false
+  ## @param diagnosticMode.command Command to override all containers in the deployment
+  ##
+  command:
+    - sleep
+  ## @param diagnosticMode.args Args to override all containers in the deployment
+  ##
+  args:
+    - infinity
+
 ## @section EJBCA parameters
 
 ## Bitnami EJBCA image version
@@ -43,11 +58,12 @@ commonAnnotations: {}
 ## @param image.tag EJBCA image tag
 ## @param image.pullPolicy EJBCA image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
+## @param image.debug Enable image debug mode
 ##
 image:
   registry: docker.io
   repository: bitnami/ejbca
-  tag: 6.15.2-6-debian-10-r294
+  tag: 7.4.3-2-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -61,8 +77,9 @@ image:
   ##   - myRegistryKeySecretName
   ##
   pullSecrets: []
-  ## Set to true if you would like to see extra information on logs
+  ## Enable debug mode
   ##
+  debug: false
 ## @param replicaCount Number of EJBCA replicas to deploy
 ##
 replicaCount: 1

@@ -105,6 +105,8 @@ spec:
               value: {{ .Values.ldap.uri }}
             - name: AIRFLOW_LDAP_SEARCH
               value: {{ .Values.ldap.base }}
+            - name: AIRFLOW_LDAP_UID_FIELD
+              value: {{ .Values.ldap.uidField }}
             - name: AIRFLOW_LDAP_BIND_USER
               value: {{ .Values.ldap.binddn }}
             - name: AIRFLOW_LDAP_BIND_PASSWORD
@@ -112,8 +114,14 @@ spec:
                 secretKeyRef:
                   name: {{ include "airflow.ldapSecretName" . }}
                   key: bind-password
-            - name: AIRFLOW_LDAP_UID_FIELD
-              value: {{ .Values.ldap.uidField }}
+            - name: AIRFLOW_LDAP_USER_REGISTRATION
+              value: {{ .Values.ldap.userRegistration | quote }}
+            - name: AIRFLOW_LDAP_USER_REGISTRATION_ROLE
+              value: {{ .Values.ldap.userRegistrationRole }}
+            - name: AIRFLOW_LDAP_ROLES_MAPPING
+              value: {{ .Values.ldap.rolesMapping | quote }}
+            - name: AIRFLOW_LDAP_ROLES_SYNC_AT_LOGIN
+              value: {{ .Values.ldap.rolesSyncAtLogin | quote }}
             - name: AIRFLOW_LDAP_USE_TLS
               value: {{ ternary "True" "False" .Values.ldap.tls.enabled | quote }}
             {{- if .Values.ldap.tls.enabled }}

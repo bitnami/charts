@@ -70,3 +70,26 @@ Create the name of the settings ConfigMap to use.
     {{ .Values.existingConfigMap }}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Compile all warnings into a single message, and call fail.
+*/}}
+{{- define "contour.validateValues" -}}
+{{- $messages := list -}}
+{{- $messages := append $messages (include "contour.validateValues.envoy.kind" .) -}}
+{{- $messages := without $messages "" -}}
+{{- $message := join "\n" $messages -}}
+
+{{- if $message -}}
+{{-   printf "\nVALUES VALIDATION:\n%s" $message | fail -}}
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of Contour - must provide a valid Envoy kind */}}
+{{- define "contour.validateValues.envoy.kind" -}}
+{{- if and .Values.envoy.enabled (ne .Values.envoy.kind "deployment") (ne .Values.envoy.kind "daemonset") -}}
+contour: envoy.kind
+    Invalid envoy.kind selected. Valid values are "daemonset" and
+    "deployment". Please set a valid kind (--set envoy.kind="xxxx")
+{{- end -}}
+{{- end -}}

@@ -16,6 +16,9 @@ metadata:
     {{ $key }}: {{ $value | quote }}
     {{- end }}
 spec:
+  {{- if and .Values.queryFrontend.ingress.ingressClassName (eq "true" (include "common.ingress.supportsIngressClassname" .)) }}
+  ingressClassName: {{ .Values.queryFrontend.ingress.ingressClassName | quote }}
+  {{- end }}
   rules:
     {{- if .Values.queryFrontend.ingress.hostname }}
     - host: {{ .Values.queryFrontend.ingress.hostname }}
@@ -42,7 +45,7 @@ spec:
     {{- if or .Values.queryFrontend.ingress.secrets .Values.queryFrontend.ingress.tls }}
     - hosts:
         - {{ .Values.queryFrontend.ingress.hostname }}
-      secretName: {{ printf "%s-tls" .Values.queryFrontend.ingress.hostname }}
+      secretName: {{ printf "%s-query-frontend" (include "common.names.fullname" .) }}
     {{- end }}
     {{- if .Values.queryFrontend.ingress.extraTls }}
     {{- toYaml .Values.queryFrontend.ingress.extraTls | nindent 4 }}

@@ -49,7 +49,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/redmine
-  tag: 4.2.1-debian-10-r71
+  tag: 4.2.2-debian-10-r42
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -97,7 +97,7 @@ redmineLanguage: en
 # customPostInitScripts:
 #   enable-logs.sh: |
 #     #!/bin/bash
-#     sed -i s/;logfile/logfile/ /opt/bitnami/redmine/conf/redmine.conf
+#     sed -i "s/;logfile/logfile/" /opt/bitnami/redmine/config/configuration.yml
 #     ...
 customPostInitScripts: {}
 ## SMTP mail delivery configuration
@@ -702,22 +702,6 @@ mailReceiver:
   ## @param mailReceiver.suspend Whether to create suspended CronJob
   ##
   suspend: true
-  ## @param mailReceiver.image.registry Redmine MailReceiver image registry
-  ## @param mailReceiver.image.repository Redmine MailReceiver image repository
-  ## @param mailReceiver.image.tag Redmine MailReceiver image tag (immutable tags are recommended)
-  ## @param mailReceiver.image.pullPolicy Redmine MailReceiver image pull policy
-  ## @param mailReceiver.image.pullSecrets [array] Redmine MailReceiver image pull secrets
-  ##
-  image:
-    registry: docker.io
-    repository: bitnami/redmine
-    tag: 4.2.1-debian-10-r70
-    ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-    ##
-    pullPolicy: IfNotPresent
-    pullSecrets: []
   ## @param mailReceiver.podAnnotations Additional pod annotations
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
@@ -954,7 +938,7 @@ certificates:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r133
+    tag: 10-debian-10-r203
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
