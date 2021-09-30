@@ -2,31 +2,33 @@
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
 ## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
 ## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
 global:
-  imageRegistry:
+  imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass:
+  storageClass: ""
 
 ## @section Common parameters
+##
 
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
-kubeVersion:
+kubeVersion: ""
 ## @param nameOverride String to partially override common.names.fullname
 ##
-nameOverride:
+nameOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname
 ##
-fullnameOverride:
+fullnameOverride: ""
 ## @param commonLabels Labels to add to all deployed objects
 ##
 commonLabels: {}
@@ -41,6 +43,7 @@ clusterDomain: cluster.local
 extraDeploy: []
 
 ## @section JasperReports parameters
+##
 
 ## Bitnami JasperReports image version
 ## ref: https://hub.docker.com/r/bitnami/dokuwiki/tags/
@@ -53,7 +56,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/jasperreports
-  tag: 7.8.0-debian-10-r251
+  tag: 7.8.0-debian-10-r338
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -70,12 +73,12 @@ image:
 ## @param jasperreportsUsername JasperReports user
 ## ref: https://github.com/bitnami/bitnami-docker-jasperreports#configuration
 ##
-jasperreportsUsername: user
+jasperreportsUsername: jasperadmin
 ## @param jasperreportsPassword JasperReports password
 ## Defaults to a random 10-character alphanumeric string if not set
 ## ref: https://github.com/bitnami/bitnami-docker-jasperreports#configuration
 ##
-jasperreportsPassword:
+jasperreportsPassword: ""
 ## @param jasperreportsEmail JasperReports user email
 ## ref: https://github.com/bitnami/bitnami-docker-jasperreports#configuration
 ##
@@ -83,7 +86,7 @@ jasperreportsEmail: user@example.com
 ## @param allowEmptyPassword Set to `yes` to allow the container to be started with blank passwords
 ## ref: https://github.com/bitnami/bitnami-docker-jasperreports#environment-variables
 ##
-allowEmptyPassword: "yes"
+allowEmptyPassword: "no"
 ## SMTP mail delivery configuration
 ## ref: https://github.com/bitnami/bitnami-docker-jasperreports#smtp-configuration
 ## @param smtpHost SMTP host
@@ -93,12 +96,12 @@ allowEmptyPassword: "yes"
 ## @param smtpPassword SMTP password
 ## @param smtpProtocol SMTP protocol [`ssl`, `none`]
 ##
-smtpHost:
-smtpPort:
-smtpEmail:
-smtpUser:
-smtpPassword:
-smtpProtocol:
+smtpHost: ""
+smtpPort: ""
+smtpEmail: ""
+smtpUser: ""
+smtpPassword: ""
+smtpProtocol: ""
 ## @param command Override default container command (useful when using custom images)
 ##
 command: []
@@ -114,10 +117,10 @@ args: []
 extraEnvVars: []
 ## @param extraEnvVarsCM Name of existing ConfigMap containing extra env vars
 ##
-extraEnvVarsCM:
+extraEnvVarsCM: ""
 ## @param extraEnvVarsSecret Name of existing Secret containing extra env vars
 ##
-extraEnvVarsSecret:
+extraEnvVarsSecret: ""
 ## Strategy to use to update Pods
 ##
 updateStrategy:
@@ -127,6 +130,7 @@ updateStrategy:
   type: RollingUpdate
 
 ## @section Jasperreports deployment parameters
+##
 
 ## @param hostAliases Add deployment host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
@@ -142,7 +146,7 @@ containerPort: 8080
 ##
 podSecurityContext:
   enabled: true
-  fsGroup: 0
+  fsGroup: 1001
 ## JasperReports containers' SecurityContext
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param containerSecurityContext.enabled Enable container's Security Context
@@ -150,7 +154,7 @@ podSecurityContext:
 ##
 containerSecurityContext:
   enabled: true
-  runAsUser: 0
+  runAsUser: 1001
 ## JasperReports resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -165,6 +169,7 @@ resources:
   ## limits:
   ##    cpu: 200m
   ##    memory: 256Mi
+  ##
   limits: {}
   requests:
     memory: 512Mi
@@ -172,8 +177,7 @@ resources:
 ## JasperReports containers' liveness and readiness probes.
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param livenessProbe.enabled Enable livenessProbe
-## @param livenessProbe.httpGet.path Request path for livenessProbe
-## @param livenessProbe.httpGet.port Port for livenessProbe
+## @param livenessProbe.path Request path for livenessProbe
 ## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
 ## @param livenessProbe.periodSeconds Period seconds for livenessProbe
 ## @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
@@ -182,10 +186,8 @@ resources:
 ##
 livenessProbe:
   enabled: true
-  httpGet:
-    path: /jasperserver/login.html
-    port: http
-  initialDelaySeconds: 300
+  path: /jasperserver/login.html
+  initialDelaySeconds: 450
   periodSeconds: 10
   timeoutSeconds: 5
   failureThreshold: 6
@@ -193,8 +195,7 @@ livenessProbe:
 ## JasperReports containers' readiness probe
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param readinessProbe.enabled Enable readinessProbe
-## @param readinessProbe.httpGet.path Request path for readinessProbe
-## @param readinessProbe.httpGet.port Port for readinessProbe
+## @param readinessProbe.path Request path for readinessProbe
 ## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
 ## @param readinessProbe.periodSeconds Period seconds for readinessProbe
 ## @param readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
@@ -203,9 +204,7 @@ livenessProbe:
 ##
 readinessProbe:
   enabled: true
-  httpGet:
-    path: /jasperserver/login.html
-    port: http
+  path: /jasperserver/login.html
   initialDelaySeconds: 30
   periodSeconds: 10
   timeoutSeconds: 5
@@ -310,7 +309,7 @@ persistence:
   ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
   ##   GKE, AWS & OpenStack)
   ##
-  storageClass:
+  storageClass: ""
   ## @param persistence.accessModes Persistent Volume Access Mode
   ##
   accessModes:
@@ -325,6 +324,7 @@ persistence:
   existingClaim: ""
 
 ## @section Exposure parameters
+##
 
 ## Kubernetes configuration
 ## For minikube, set this to NodePort, elsewhere use LoadBalancer
@@ -342,7 +342,7 @@ service:
   nodePort: ""
   ## @param service.loadBalancerIP Kubernetes LoadBalancerIP to request
   ##
-  loadBalancerIP:
+  loadBalancerIP: ""
   ## @param service.externalTrafficPolicy Enable client source IP preservation
   ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
@@ -366,7 +366,7 @@ ingress:
   pathType: ImplementationSpecific
   ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
   ##
-  apiVersion:
+  apiVersion: ""
   ## @param ingress.hostname Default host for the ingress resource
   ##
   hostname: jasperreports.local
@@ -426,6 +426,7 @@ ingress:
   secrets: []
 
 ## @section Database parameters
+##
 
 ## MariaDB chart configuration
 ## https://github.com/bitnami/charts/blob/master/bitnami/mariadb/values.yaml
@@ -475,25 +476,26 @@ mariadb:
       ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
       ##   GKE, AWS & OpenStack)
       ##
-      storageClass:
+      storageClass: ""
       accessModes:
         - ReadWriteOnce
       size: 8Gi
       ## Set path in case you want to use local host path volumes (not recommended in production)
       ##
-      hostPath:
+      hostPath: ""
       ## Use an existing PVC
       ##
-      existingClaim:
+      existingClaim: ""
 ## External database configuration
 ##
 externalDatabase:
   ## @param externalDatabase.existingSecret Name of the database existing Secret Object
   ## NOTE: When it's set, the `externalDatabase.password` parameter is ignored
-  existingSecret:
+  ##
+  existingSecret: ""
   ## @param externalDatabase.host Host of the existing database
   ##
-  host:
+  host: ""
   ## @param externalDatabase.port Port of the existing database
   ##
   port: 3306
@@ -502,7 +504,7 @@ externalDatabase:
   user: bn_jasperreports
   ## @param externalDatabase.password Password for the above username
   ##
-  password:
+  password: ""
   ## @param externalDatabase.database Name of the existing database
   ##
   database: bitnami_jasperreports

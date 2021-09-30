@@ -79,8 +79,8 @@ spec:
               mountPath: /tmp
         {{- end }}
         - name: copyutil
-          image: {{ include "argocd.server.image" . }}
-          imagePullPolicy: {{ .Values.server.image.pullPolicy }}
+          image: {{ include "argocd.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
           {{- if .Values.dex.resources }}
           resources:  {{- toYaml .Values.dex.resources | nindent 12 }}
           {{- end }}
@@ -120,7 +120,7 @@ spec:
           args:
             - rundex
             {{- if .Values.dex.extraArgs }}
-            {{- include "common.tplvalues.render" (dict "value" .Values.dex.extraArgs "context" $) | nindent 8 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.dex.extraArgs "context" $) | nindent 12 }}
             {{- end }}
           {{- end }}
           ports:

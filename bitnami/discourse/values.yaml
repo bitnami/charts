@@ -88,7 +88,7 @@ service:
 image:
   registry: docker.io
   repository: bitnami/discourse
-  tag: 2.7.6-debian-10-r0
+  tag: 2.7.8-debian-10-r22
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -654,9 +654,9 @@ externalDatabase:
   ##
   database: bitnami_application
 
-## @section Redis<sup>TM</sup> parameters
+## @section Redis&trade; parameters
 
-## Redis(TM) chart configuration
+## Redis&trade; chart configuration
 ## https://github.com/bitnami/charts/blob/master/bitnami/redis/values.yaml
 ##
 redis:
@@ -665,7 +665,7 @@ redis:
   enabled: true
   ## Use password authentication
   ## @param redis.auth.enabled Use password authentication
-  ## @param redis.auth.password Redis(TM) password (both master and replica)
+  ## @param redis.auth.password Redis&trade; password (both master and replica)
   ## @param redis.auth.existingSecret Name of an existing Kubernetes secret object containing the password
   ## @param redis.auth.existingSecretPasswordKey Name of the key pointing to the password in your Kubernetes secret
   ##
@@ -681,13 +681,13 @@ redis:
   ## @param redis.architecture Cluster settings
   ##
   architecture: standalone
-  ## Redis(TM) Master parameters
+  ## Redis&trade; Master parameters
   ## @param redis.master.persistence.enabled Enable database persistence using PVC
   ##
   master:
     persistence:
       enabled: true
-## External Redis(TM)
+## External Redis&trade;
 ## @param externalRedis.host Host of the external database
 ## @param externalRedis.port Database port number
 ## @param externalRedis.password Password for the external Redis. Ignored if existingSecret is set

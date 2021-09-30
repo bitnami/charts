@@ -70,14 +70,14 @@ helm uninstall my-release
 | -------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
 | `server.image.registry`                      | Spring Cloud Dataflow image registry                                                                             | `docker.io`                                          |
 | `server.image.repository`                    | Spring Cloud Dataflow image repository                                                                           | `bitnami/spring-cloud-dataflow`                      |
-| `server.image.tag`                           | Spring Cloud Dataflow image tag (immutable tags are recommended)                                                 | `2.8.1-debian-10-r0`                                 |
+| `server.image.tag`                           | Spring Cloud Dataflow image tag (immutable tags are recommended)                                                 | `2.8.2-debian-10-r22`                                |
 | `server.image.pullPolicy`                    | Spring Cloud Dataflow image pull policy                                                                          | `IfNotPresent`                                       |
 | `server.image.pullSecrets`                   | Specify docker-registry secret names as an array                                                                 | `[]`                                                 |
 | `server.image.debug`                         | Enable image debug mode                                                                                          | `false`                                              |
 | `server.hostAliases`                         | Deployment pod host aliases                                                                                      | `[]`                                                 |
 | `server.composedTaskRunner.image.registry`   | Spring Cloud Dataflow Composed Task Runner image registry                                                        | `docker.io`                                          |
 | `server.composedTaskRunner.image.repository` | Spring Cloud Dataflow Composed Task Runner image repository                                                      | `bitnami/spring-cloud-dataflow-composed-task-runner` |
-| `server.composedTaskRunner.image.tag`        | Spring Cloud Dataflow Composed Task Runner image tag (immutable tags are recommended)                            | `2.8.1-debian-10-r0`                                 |
+| `server.composedTaskRunner.image.tag`        | Spring Cloud Dataflow Composed Task Runner image tag (immutable tags are recommended)                            | `2.8.2-debian-10-r22`                                |
 | `server.configuration.streamingEnabled`      | Enables or disables streaming data processing                                                                    | `true`                                               |
 | `server.configuration.batchEnabled`          | Enables or disables batch data (tasks and schedules) processing                                                  | `true`                                               |
 | `server.configuration.accountName`           | The name of the account to configure for the Kubernetes platform                                                 | `default`                                            |
@@ -163,7 +163,7 @@ helm uninstall my-release
 | `skipper.hostAliases`                        | Deployment pod host aliases                                                                               | `[]`                           |
 | `skipper.image.registry`                     | Spring Cloud Skipper image registry                                                                       | `docker.io`                    |
 | `skipper.image.repository`                   | Spring Cloud Skipper image repository                                                                     | `bitnami/spring-cloud-skipper` |
-| `skipper.image.tag`                          | Spring Cloud Skipper image tag (immutable tags are recommended)                                           | `2.7.0-debian-10-r4`           |
+| `skipper.image.tag`                          | Spring Cloud Skipper image tag (immutable tags are recommended)                                           | `2.7.2-debian-10-r22`          |
 | `skipper.image.pullPolicy`                   | Spring Cloud Skipper image pull policy                                                                    | `IfNotPresent`                 |
 | `skipper.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                          | `[]`                           |
 | `skipper.image.debug`                        | Enable image debug mode                                                                                   | `false`                        |
@@ -261,7 +261,7 @@ helm uninstall my-release
 | `metrics.enabled`                      | Enable Prometheus metrics                                                                                                  | `false`                            |
 | `metrics.image.registry`               | Prometheus Rsocket Proxy image registry                                                                                    | `docker.io`                        |
 | `metrics.image.repository`             | Prometheus Rsocket Proxy image repository                                                                                  | `bitnami/prometheus-rsocket-proxy` |
-| `metrics.image.tag`                    | Prometheus Rsocket Proxy image tag (immutable tags are recommended)                                                        | `1.3.0-debian-10-r187`             |
+| `metrics.image.tag`                    | Prometheus Rsocket Proxy image tag (immutable tags are recommended)                                                        | `1.3.0-debian-10-r270`             |
 | `metrics.image.pullPolicy`             | Prometheus Rsocket Proxy image pull policy                                                                                 | `IfNotPresent`                     |
 | `metrics.image.pullSecrets`            | Specify docker-registry secret names as an array                                                                           | `[]`                               |
 | `metrics.resources.limits`             | The resources limits for the Prometheus Rsocket Proxy container                                                            | `{}`                               |
@@ -302,7 +302,7 @@ helm uninstall my-release
 | `waitForBackends.enabled`            | Wait for the database and other services (such as Kafka or RabbitMQ) used when enabling streaming | `true`                 |
 | `waitForBackends.image.registry`     | Init container wait-for-backend image registry                                                    | `docker.io`            |
 | `waitForBackends.image.repository`   | Init container wait-for-backend image name                                                        | `bitnami/kubectl`      |
-| `waitForBackends.image.tag`          | Init container wait-for-backend image tag                                                         | `1.19.12-debian-10-r6` |
+| `waitForBackends.image.tag`          | Init container wait-for-backend image tag                                                         | `1.19.15-debian-10-r4` |
 | `waitForBackends.image.pullPolicy`   | Init container wait-for-backend image pull policy                                                 | `IfNotPresent`         |
 | `waitForBackends.image.pullSecrets`  | Specify docker-registry secret names as an array                                                  | `[]`                   |
 | `waitForBackends.resources.limits`   | Init container wait-for-backend resource limits                                                   | `{}`                   |
@@ -322,6 +322,7 @@ helm uninstall my-release
 | `mariadb.auth.forcePassword`              | Force users to specify required passwords in the database                                           | `false`      |
 | `mariadb.auth.usePasswordFiles`           | Mount credentials as a file instead of using an environment variable                                | `false`      |
 | `mariadb.initdbScripts`                   | Specify dictionary of scripts to be run at first boot                                               | `{}`         |
+| `flyway.enabled`                          | Enable/disable flyway running Dataflow and Skipper Database creation scripts on startup             | `true`       |
 | `externalDatabase.host`                   | Host of the external database                                                                       | `localhost`  |
 | `externalDatabase.port`                   | External database port number                                                                       | `3306`       |
 | `externalDatabase.driver`                 | The fully qualified name of the JDBC Driver class                                                   | `""`         |
@@ -568,6 +569,10 @@ Find more information about how to deal with common errors related to Bitnami He
 ## Upgrading
 
 If you enabled RabbitMQ chart to be used as the messaging solution for Skipper to manage streaming content, then it's necessary to set the `rabbitmq.auth.password` and `rabbitmq.auth.erlangCookie` parameters when upgrading for readiness/liveness probes to work properly. Inspect the RabbitMQ secret to obtain the password and the Erlang cookie, then you can upgrade your chart using the command below:
+
+### To 4.0.0
+
+This major updates the Kafka subchart its newest major, 14.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/kafka#to-1400) you can find more information about the changes introduced in this version.
 
 ### To 3.0.0
 

@@ -1,4 +1,4 @@
-{{- $globalSecretName := include "common.secrets.name" (dict "existingSecret" .Values.auth.existingSecret "context" $) }}
+{{- $globalSecretName := printf "%s" (tpl (include "common.secrets.name" (dict "existingSecret" .Values.auth.existingSecret "context" $)) $) }}
 apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
@@ -67,9 +67,6 @@ spec:
       {{- end }}
       {{- if or .Values.initContainers .Values.auth.tls.enabled }}
       initContainers:
-        {{- if .Values.initContainers }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
-        {{- end }}
         {{- if .Values.auth.tls.enabled }}
         {{- $fullname := include "keycloak.fullname" . }}
         - name: init-certs
@@ -103,6 +100,14 @@ spec:
                 echo "Couldn't find the expected PEM certificates! They are mandatory when encryption via TLS is enabled."
                 exit 1
             fi
+            {{- else if and .Values.auth.tls.truststoreFilename .Values.auth.tls.keystoreFilename }}
+            if [[ -f {{ printf "/certs/%s" .Values.auth.tls.truststoreFilename | quote }} ]] && [[ -f {{ printf "/certs/%s" .Values.auth.tls.keystoreFilename | quote }} ]]; then
+                cp {{ printf "/certs/%s" .Values.auth.tls.truststoreFilename | quote }} "/opt/bitnami/keycloak/certs/keycloak.truststore.jks"
+                cp {{ printf "/certs/%s" .Values.auth.tls.keystoreFilename | quote }} "/opt/bitnami/keycloak/certs/keycloak.keystore.jks"
+            else
+                echo "Couldn't find the expected Java Key Stores (JKS) files! They are mandatory when encryption via TLS is enabled."
+                exit 1
+            fi
             {{- else }}
             if [[ -f "/certs/keycloak.truststore.jks" ]] && [[ -f "/certs/keycloak-${ID}.keystore.jks" ]]; then
                 cp "/certs/keycloak.truststore.jks" "/opt/bitnami/keycloak/certs/keycloak.truststore.jks"
@@ -123,7 +128,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                 {{- if .Values.auth.existingSecretPerPassword }}
-                  name: {{ include "common.secrets.name" (dict "existingSecret" .Values.auth.existingSecretPerPassword.tlsKeystorePassword "context" $) }}
+                  name: {{ tpl (include "common.secrets.name" (dict "existingSecret" .Values.auth.existingSecretPerPassword.tlsKeystorePassword "context" $)) $ }}
                   key: {{ include "common.secrets.key" (dict "existingSecret" .Values.auth.existingSecretPerPassword "key" "tlsKeystorePassword") }}
                 {{- else }}
                   name: {{ $globalSecretName }}
@@ -135,7 +140,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                 {{- if .Values.auth.existingSecretPerPassword }}
-                  name: {{ include "common.secrets.name" (dict "existingSecret" .Values.auth.existingSecretPerPassword.tlsTruststorePassword "context" $) }}
+                  name: {{ tpl (include "common.secrets.name" (dict "existingSecret" .Values.auth.existingSecretPerPassword.tlsTruststorePassword "context" $)) $ }}
                   key: {{ include "common.secrets.key" (dict "existingSecret" .Values.auth.existingSecretPerPassword "key" "tlsKeystorePassword") }}
                 {{- else }}
                   name: {{ $globalSecretName }}
@@ -150,6 +155,9 @@ spec:
             mountPath: /certs
           - name: shared-certs
             mountPath: /opt/bitnami/keycloak/certs
+        {{- end }}
+        {{- if .Values.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
         {{- end }}
       {{- end }}
       containers:
@@ -180,7 +188,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                 {{- if .Values.auth.existingSecretPerPassword }}
-                  name: {{ include "common.secrets.name" (dict "existingSecret" .Values.auth.existingSecretPerPassword.adminPassword "context" $) }}
+                  name: {{ tpl (include "common.secrets.name" (dict "existingSecret" .Values.auth.existingSecretPerPassword.adminPassword "context" $)) $ }}
                   key: {{ include "common.secrets.key" (dict "existingSecret" .Values.auth.existingSecretPerPassword "key" "adminPassword") }}
                 {{- else }}
                   name: {{ $globalSecretName }}
@@ -190,31 +198,29 @@ spec:
               valueFrom:
                 secretKeyRef:
                 {{- if .Values.auth.existingSecretPerPassword }}
-                  name: {{ include "common.secrets.name" (dict "existingSecret" .Values.auth.existingSecretPerPassword.managementPassword "context" $) }}
+                  name: {{ tpl (include "common.secrets.name" (dict "existingSecret" .Values.auth.existingSecretPerPassword.managementPassword "context" $)) $ }}
                   key: {{ include "common.secrets.key" (dict "existingSecret" .Values.auth.existingSecretPerPassword "key" "managementPassword") }}
                 {{- else }}
                   name: {{ $globalSecretName }}
                   key: {{ include "common.secrets.key" (dict "existingSecret" .Values.auth.existingSecret "key" "management-password") }}
                 {{- end }}
-            {{- if (not .Values.externalDatabase.existingSecret) }}
             - name: KEYCLOAK_DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
                 {{- if .Values.auth.existingSecretPerPassword }}
-                  name: {{ include "common.secrets.name" (dict "existingSecret" .Values.auth.existingSecretPerPassword.databasePassword "context" $) }}
+                  name: {{ tpl (include "common.secrets.name" (dict "existingSecret" .Values.auth.existingSecretPerPassword.databasePassword "context" $)) $ }}
                   key: {{ include "common.secrets.key" (dict "existingSecret" .Values.auth.existingSecretPerPassword "key" "databasePassword") }}
                 {{- else }}
-                  name: {{ $globalSecretName }}
-                  key: {{ include "common.secrets.key" (dict "existingSecret" .Values.auth.existingSecret "key" "database-password") }}
+                  name: {{ include "keycloak.databaseSecretName" . }}
+                  key: "postgresql-password"
                 {{- end }}
-            {{- end }}
             {{- if .Values.auth.tls.enabled }}
             {{- if or .Values.auth.tls.keystorePassword .Values.auth.existingSecretPerPassword }}
             - name: KEYCLOAK_TLS_KEYSTORE_PASSWORD
               valueFrom:
                 secretKeyRef:
                 {{- if .Values.auth.existingSecretPerPassword }}
-                  name: {{ include "common.secrets.name" (dict "existingSecret" .Values.auth.existingSecretPerPassword.tlsKeystorePassword "context" $) }}
+                  name: {{ tpl (include "common.secrets.name" (dict "existingSecret" .Values.auth.existingSecretPerPassword.tlsKeystorePassword "context" $) $) }}
                   key: {{ include "common.secrets.key" (dict "existingSecret" .Values.auth.existingSecretPerPassword "key" "tlsKeystorePassword") }}
                 {{- else }}
                   name: {{ $globalSecretName }}
@@ -226,7 +232,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                 {{- if .Values.auth.existingSecretPerPassword }}
-                  name: {{ include "common.secrets.name" (dict "existingSecret" .Values.auth.existingSecretPerPassword.tlsTruststorePassword "context" $) }}
+                  name: {{ tpl (include "common.secrets.name" (dict "existingSecret" .Values.auth.existingSecretPerPassword.tlsTruststorePassword "context" $) $) }}
                   key: {{ include "common.secrets.key" (dict "existingSecret" .Values.auth.existingSecretPerPassword "key" "tlsKeystorePassword") }}
                 {{- else }}
                   name: {{ $globalSecretName }}
@@ -269,6 +275,11 @@ spec:
             - name: http-management
               containerPort: 9990
               protocol: TCP
+          {{- if .Values.startupProbe.enabled }}
+          startupProbe: {{- omit .Values.startupProbe "enabled" | toYaml | nindent 12 }}
+          {{- else if .Values.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe: {{- omit .Values.livenessProbe "enabled" | toYaml | nindent 12 }}
           {{- else if .Values.customLivenessProbe }}

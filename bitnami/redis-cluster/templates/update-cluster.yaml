@@ -69,12 +69,16 @@ spec:
           {{- if .Values.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
-          {{- if .Values.updateJob.command }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.updateJob.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.updateJob.command "context" $) | nindent 12 }}
           {{- else }}
           command: ['/bin/bash', '-c']
           {{- end }}
-          {{- if .Values.updateJob.args }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.updateJob.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.updateJob.args "context" $) | nindent 12 }}
           {{- else }}
           args:
@@ -142,6 +146,8 @@ spec:
               {{- end }}
           {{- end }}
           env:
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
             {{- if .Values.cluster.externalAccess.enabled }}
             {{- if .Values.tls.enabled }}
             - name: REDIS_TLS_PORT

@@ -68,106 +68,107 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraDeploy`       | Array of extra objects to deploy with the release  | `[]`            |
 
 
+### Argo CD image parameters
+
+| Name                | Description                                        | Value                |
+| ------------------- | -------------------------------------------------- | -------------------- |
+| `image.registry`    | Argo CD image registry                             | `docker.io`          |
+| `image.repository`  | Argo CD image repository                           | `bitnami/argo-cd`    |
+| `image.tag`         | Argo CD image tag (immutable tags are recommended) | `2.1.3-debian-10-r0` |
+| `image.pullPolicy`  | Argo CD image pull policy                          | `IfNotPresent`       |
+| `image.pullSecrets` | Argo CD image pull secrets                         | `[]`                 |
+
+
 ### Argo CD application controller parameters
 
-| Name                                                     | Description                                                                                          | Value                 |
-| -------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- | --------------------- |
-| `controller.image.registry`                              | Argo CD controller image registry                                                                    | `docker.io`           |
-| `controller.image.repository`                            | Argo CD controller image repository                                                                  | `bitnami/argo-cd`     |
-| `controller.image.tag`                                   | Argo CD controller image tag (immutable tags are recommended)                                        | `2.0.4-debian-10-r19` |
-| `controller.image.pullPolicy`                            | Argo CD controller image pull policy                                                                 | `IfNotPresent`        |
-| `controller.image.pullSecrets`                           | Argo CD controller image pull secrets                                                                | `[]`                  |
-| `controller.replicaCount`                                | Number of Argo CD replicas to deploy                                                                 | `1`                   |
-| `controller.livenessProbe.enabled`                       | Enable livenessProbe on Argo CD nodes                                                                | `true`                |
-| `controller.livenessProbe.initialDelaySeconds`           | Initial delay seconds for livenessProbe                                                              | `10`                  |
-| `controller.livenessProbe.periodSeconds`                 | Period seconds for livenessProbe                                                                     | `10`                  |
-| `controller.livenessProbe.timeoutSeconds`                | Timeout seconds for livenessProbe                                                                    | `1`                   |
-| `controller.livenessProbe.failureThreshold`              | Failure threshold for livenessProbe                                                                  | `3`                   |
-| `controller.livenessProbe.successThreshold`              | Success threshold for livenessProbe                                                                  | `1`                   |
-| `controller.readinessProbe.enabled`                      | Enable readinessProbe on Argo CD nodes                                                               | `true`                |
-| `controller.readinessProbe.initialDelaySeconds`          | Initial delay seconds for readinessProbe                                                             | `10`                  |
-| `controller.readinessProbe.periodSeconds`                | Period seconds for readinessProbe                                                                    | `10`                  |
-| `controller.readinessProbe.timeoutSeconds`               | Timeout seconds for readinessProbe                                                                   | `1`                   |
-| `controller.readinessProbe.failureThreshold`             | Failure threshold for readinessProbe                                                                 | `3`                   |
-| `controller.readinessProbe.successThreshold`             | Success threshold for readinessProbe                                                                 | `1`                   |
-| `controller.customLivenessProbe`                         | Custom livenessProbe that overrides the default one                                                  | `{}`                  |
-| `controller.customReadinessProbe`                        | Custom readinessProbe that overrides the default one                                                 | `{}`                  |
-| `controller.resources.limits`                            | The resources limits for the Argo CD containers                                                      | `{}`                  |
-| `controller.resources.requests`                          | The requested resources for the Argo CD containers                                                   | `{}`                  |
-| `controller.podSecurityContext.enabled`                  | Enabled Argo CD pods' Security Context                                                               | `true`                |
-| `controller.podSecurityContext.fsGroup`                  | Set Argo CD pod's Security Context fsGroup                                                           | `1001`                |
-| `controller.containerSecurityContext.enabled`            | Enabled Argo CD containers' Security Context                                                         | `true`                |
-| `controller.containerSecurityContext.runAsUser`          | Set Argo CD containers' Security Context runAsUser                                                   | `1001`                |
-| `controller.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                 | `true`                |
-| `controller.serviceAccount.name`                         | The name of the ServiceAccount to use.                                                               | `""`                  |
-| `controller.serviceAccount.automountServiceAccountToken` | Automount service account token for the application controller service account                       | `true`                |
-| `controller.clusterAdminAccess`                          | Enable K8s cluster admin access for the application controller                                       | `true`                |
-| `controller.clusterRoleRules`                            | Use custom rules for the application controller's cluster role                                       | `[]`                  |
-| `controller.logFormat`                                   | Format for the Argo CD application controller logs. Options: [text, json]                            | `text`                |
-| `controller.logLevel`                                    | Log level for the Argo CD application controller                                                     | `info`                |
-| `controller.containerPorts.controller`                   | Argo CD application controller port number                                                           | `8082`                |
-| `controller.containerPorts.metrics`                      | Argo CD application controller metrics port number                                                   | `8082`                |
-| `controller.service.type`                                | Argo CD service type                                                                                 | `ClusterIP`           |
-| `controller.service.port`                                | Argo CD application controller service port                                                          | `8082`                |
-| `controller.service.nodePort`                            | Node port for Argo CD application controller service                                                 | `""`                  |
-| `controller.service.loadBalancerIP`                      | Argo CD application controller service Load Balancer IP                                              | `""`                  |
-| `controller.service.loadBalancerSourceRanges`            | Argo CD application controller service Load Balancer sources                                         | `[]`                  |
-| `controller.service.externalTrafficPolicy`               | Argo CD application controller service external traffic policy                                       | `Cluster`             |
-| `controller.service.annotations`                         | Additional custom annotations for Argo CD application controller service                             | `{}`                  |
-| `controller.metrics.enabled`                             | Enable Argo CD application controller metrics                                                        | `false`               |
-| `controller.metrics.service.type`                        | Argo CD application controller service type                                                          | `ClusterIP`           |
-| `controller.metrics.service.port`                        | Argo CD application controller metrics service port                                                  | `8082`                |
-| `controller.metrics.service.nodePort`                    | Node port for the application controller service                                                     | `""`                  |
-| `controller.metrics.service.loadBalancerIP`              | Argo CD application controller service Load Balancer IP                                              | `""`                  |
-| `controller.metrics.service.loadBalancerSourceRanges`    | Argo CD application controller service Load Balancer sources                                         | `[]`                  |
-| `controller.metrics.service.externalTrafficPolicy`       | Argo CD application controller service external traffic policy                                       | `Cluster`             |
-| `controller.metrics.service.annotations`                 | Additional custom annotations for Argo CD application controller service                             | `{}`                  |
-| `controller.metrics.serviceMonitor.enabled`              | Enable service monirot for Argo CD application controller                                            | `false`               |
-| `controller.metrics.serviceMonitor.interval`             | Interval for the Argo CD application controller service monitor                                      | `30s`                 |
-| `controller.metrics.rules.enabled`                       | Enable render extra rules for PrometheusRule object                                                  | `false`               |
-| `controller.metrics.rules.spec`                          | Rules to render into the PrometheusRule object                                                       | `[]`                  |
-| `controller.metrics.rules.selector`                      | Selector for the PrometheusRule object                                                               | `{}`                  |
-| `controller.metrics.rules.namespace`                     | Namespace where to create the PrometheusRule object                                                  | `monitoring`          |
-| `controller.metrics.rules.additionalLabels`              | Additional lables to add to the PrometheusRule object                                                | `{}`                  |
-| `controller.command`                                     | Override default container command (useful when using custom images)                                 | `[]`                  |
-| `controller.defaultArgs.statusProcessors`                | Default status processors for Argo CD controller                                                     | `20`                  |
-| `controller.defaultArgs.operationProcessors`             | Default operation processors for Argo CD controller                                                  | `10`                  |
-| `controller.defaultArgs.appResyncPeriod`                 | Default application resync period for Argo CD controller                                             | `180`                 |
-| `controller.defaultArgs.selfHealTimeout`                 | Default self heal timeout for Argo CD controller                                                     | `5`                   |
-| `controller.args`                                        | Override default container args (useful when using custom images). Overrides the defaultArgs.        | `[]`                  |
-| `controller.extraArgs`                                   | Add extra arguments to the default arguments for the Argo CD controller                              | `[]`                  |
-| `controller.hostAliases`                                 | Argo CD pods host aliases                                                                            | `[]`                  |
-| `controller.podLabels`                                   | Extra labels for Argo CD pods                                                                        | `{}`                  |
-| `controller.podAnnotations`                              | Annotations for Argo CD pods                                                                         | `{}`                  |
-| `controller.podAffinityPreset`                           | Pod affinity preset. Ignored if `controller.affinity` is set. Allowed values: `soft` or `hard`       | `""`                  |
-| `controller.podAntiAffinityPreset`                       | Pod anti-affinity preset. Ignored if `controller.affinity` is set. Allowed values: `soft` or `hard`  | `soft`                |
-| `controller.nodeAffinityPreset.type`                     | Node affinity preset type. Ignored if `controller.affinity` is set. Allowed values: `soft` or `hard` | `""`                  |
-| `controller.nodeAffinityPreset.key`                      | Node label key to match. Ignored if `controller.affinity` is set                                     | `""`                  |
-| `controller.nodeAffinityPreset.values`                   | Node label values to match. Ignored if `controller.affinity` is set                                  | `[]`                  |
-| `controller.affinity`                                    | Affinity for Argo CD pods assignment                                                                 | `{}`                  |
-| `controller.nodeSelector`                                | Node labels for Argo CD pods assignment                                                              | `{}`                  |
-| `controller.tolerations`                                 | Tolerations for Argo CD pods assignment                                                              | `[]`                  |
-| `controller.updateStrategy.type`                         | Argo CD statefulset strategy type                                                                    | `RollingUpdate`       |
-| `controller.priorityClassName`                           | Argo CD pods' priorityClassName                                                                      | `""`                  |
-| `controller.lifecycleHooks`                              | for the Argo CD container(s) to automate configuration before or after startup                       | `{}`                  |
-| `controller.extraEnvVars`                                | Array with extra environment variables to add to Argo CD nodes                                       | `[]`                  |
-| `controller.extraEnvVarsCM`                              | Name of existing ConfigMap containing extra env vars for Argo CD nodes                               | `""`                  |
-| `controller.extraEnvVarsSecret`                          | Name of existing Secret containing extra env vars for Argo CD nodes                                  | `""`                  |
-| `controller.extraVolumes`                                | Optionally specify extra list of additional volumes for the Argo CD pod(s)                           | `[]`                  |
-| `controller.extraVolumeMounts`                           | Optionally specify extra list of additional volumeMounts for the Argo CD container(s)                | `[]`                  |
-| `controller.sidecars`                                    | Add additional sidecar containers to the Argo CD pod(s)                                              | `[]`                  |
-| `controller.initContainers`                              | Add additional init containers to the Argo CD pod(s)                                                 | `[]`                  |
+| Name                                                     | Description                                                                                          | Value           |
+| -------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- | --------------- |
+| `controller.replicaCount`                                | Number of Argo CD replicas to deploy                                                                 | `1`             |
+| `controller.livenessProbe.enabled`                       | Enable livenessProbe on Argo CD nodes                                                                | `true`          |
+| `controller.livenessProbe.initialDelaySeconds`           | Initial delay seconds for livenessProbe                                                              | `10`            |
+| `controller.livenessProbe.periodSeconds`                 | Period seconds for livenessProbe                                                                     | `10`            |
+| `controller.livenessProbe.timeoutSeconds`                | Timeout seconds for livenessProbe                                                                    | `1`             |
+| `controller.livenessProbe.failureThreshold`              | Failure threshold for livenessProbe                                                                  | `3`             |
+| `controller.livenessProbe.successThreshold`              | Success threshold for livenessProbe                                                                  | `1`             |
+| `controller.readinessProbe.enabled`                      | Enable readinessProbe on Argo CD nodes                                                               | `true`          |
+| `controller.readinessProbe.initialDelaySeconds`          | Initial delay seconds for readinessProbe                                                             | `10`            |
+| `controller.readinessProbe.periodSeconds`                | Period seconds for readinessProbe                                                                    | `10`            |
+| `controller.readinessProbe.timeoutSeconds`               | Timeout seconds for readinessProbe                                                                   | `1`             |
+| `controller.readinessProbe.failureThreshold`             | Failure threshold for readinessProbe                                                                 | `3`             |
+| `controller.readinessProbe.successThreshold`             | Success threshold for readinessProbe                                                                 | `1`             |
+| `controller.customLivenessProbe`                         | Custom livenessProbe that overrides the default one                                                  | `{}`            |
+| `controller.customReadinessProbe`                        | Custom readinessProbe that overrides the default one                                                 | `{}`            |
+| `controller.resources.limits`                            | The resources limits for the Argo CD containers                                                      | `{}`            |
+| `controller.resources.requests`                          | The requested resources for the Argo CD containers                                                   | `{}`            |
+| `controller.podSecurityContext.enabled`                  | Enabled Argo CD pods' Security Context                                                               | `true`          |
+| `controller.podSecurityContext.fsGroup`                  | Set Argo CD pod's Security Context fsGroup                                                           | `1001`          |
+| `controller.containerSecurityContext.enabled`            | Enabled Argo CD containers' Security Context                                                         | `true`          |
+| `controller.containerSecurityContext.runAsUser`          | Set Argo CD containers' Security Context runAsUser                                                   | `1001`          |
+| `controller.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                 | `true`          |
+| `controller.serviceAccount.name`                         | The name of the ServiceAccount to use.                                                               | `""`            |
+| `controller.serviceAccount.automountServiceAccountToken` | Automount service account token for the application controller service account                       | `true`          |
+| `controller.clusterAdminAccess`                          | Enable K8s cluster admin access for the application controller                                       | `true`          |
+| `controller.clusterRoleRules`                            | Use custom rules for the application controller's cluster role                                       | `[]`            |
+| `controller.logFormat`                                   | Format for the Argo CD application controller logs. Options: [text, json]                            | `text`          |
+| `controller.logLevel`                                    | Log level for the Argo CD application controller                                                     | `info`          |
+| `controller.containerPorts.controller`                   | Argo CD application controller port number                                                           | `8082`          |
+| `controller.containerPorts.metrics`                      | Argo CD application controller metrics port number                                                   | `8082`          |
+| `controller.service.type`                                | Argo CD service type                                                                                 | `ClusterIP`     |
+| `controller.service.port`                                | Argo CD application controller service port                                                          | `8082`          |
+| `controller.service.nodePort`                            | Node port for Argo CD application controller service                                                 | `""`            |
+| `controller.service.loadBalancerIP`                      | Argo CD application controller service Load Balancer IP                                              | `""`            |
+| `controller.service.loadBalancerSourceRanges`            | Argo CD application controller service Load Balancer sources                                         | `[]`            |
+| `controller.service.externalTrafficPolicy`               | Argo CD application controller service external traffic policy                                       | `Cluster`       |
+| `controller.service.annotations`                         | Additional custom annotations for Argo CD application controller service                             | `{}`            |
+| `controller.metrics.enabled`                             | Enable Argo CD application controller metrics                                                        | `false`         |
+| `controller.metrics.service.type`                        | Argo CD application controller service type                                                          | `ClusterIP`     |
+| `controller.metrics.service.port`                        | Argo CD application controller metrics service port                                                  | `8082`          |
+| `controller.metrics.service.nodePort`                    | Node port for the application controller service                                                     | `""`            |
+| `controller.metrics.service.loadBalancerIP`              | Argo CD application controller service Load Balancer IP                                              | `""`            |
+| `controller.metrics.service.loadBalancerSourceRanges`    | Argo CD application controller service Load Balancer sources                                         | `[]`            |
+| `controller.metrics.service.externalTrafficPolicy`       | Argo CD application controller service external traffic policy                                       | `Cluster`       |
+| `controller.metrics.service.annotations`                 | Additional custom annotations for Argo CD application controller service                             | `{}`            |
+| `controller.metrics.serviceMonitor.enabled`              | Enable service monirot for Argo CD application controller                                            | `false`         |
+| `controller.metrics.serviceMonitor.interval`             | Interval for the Argo CD application controller service monitor                                      | `30s`           |
+| `controller.metrics.rules.enabled`                       | Enable render extra rules for PrometheusRule object                                                  | `false`         |
+| `controller.metrics.rules.spec`                          | Rules to render into the PrometheusRule object                                                       | `[]`            |
+| `controller.metrics.rules.selector`                      | Selector for the PrometheusRule object                                                               | `{}`            |
+| `controller.metrics.rules.namespace`                     | Namespace where to create the PrometheusRule object                                                  | `monitoring`    |
+| `controller.metrics.rules.additionalLabels`              | Additional lables to add to the PrometheusRule object                                                | `{}`            |
+| `controller.command`                                     | Override default container command (useful when using custom images)                                 | `[]`            |
+| `controller.defaultArgs.statusProcessors`                | Default status processors for Argo CD controller                                                     | `20`            |
+| `controller.defaultArgs.operationProcessors`             | Default operation processors for Argo CD controller                                                  | `10`            |
+| `controller.defaultArgs.appResyncPeriod`                 | Default application resync period for Argo CD controller                                             | `180`           |
+| `controller.defaultArgs.selfHealTimeout`                 | Default self heal timeout for Argo CD controller                                                     | `5`             |
+| `controller.args`                                        | Override default container args (useful when using custom images). Overrides the defaultArgs.        | `[]`            |
+| `controller.extraArgs`                                   | Add extra arguments to the default arguments for the Argo CD controller                              | `[]`            |
+| `controller.hostAliases`                                 | Argo CD pods host aliases                                                                            | `[]`            |
+| `controller.podLabels`                                   | Extra labels for Argo CD pods                                                                        | `{}`            |
+| `controller.podAnnotations`                              | Annotations for Argo CD pods                                                                         | `{}`            |
+| `controller.podAffinityPreset`                           | Pod affinity preset. Ignored if `controller.affinity` is set. Allowed values: `soft` or `hard`       | `""`            |
+| `controller.podAntiAffinityPreset`                       | Pod anti-affinity preset. Ignored if `controller.affinity` is set. Allowed values: `soft` or `hard`  | `soft`          |
+| `controller.nodeAffinityPreset.type`                     | Node affinity preset type. Ignored if `controller.affinity` is set. Allowed values: `soft` or `hard` | `""`            |
+| `controller.nodeAffinityPreset.key`                      | Node label key to match. Ignored if `controller.affinity` is set                                     | `""`            |
+| `controller.nodeAffinityPreset.values`                   | Node label values to match. Ignored if `controller.affinity` is set                                  | `[]`            |
+| `controller.affinity`                                    | Affinity for Argo CD pods assignment                                                                 | `{}`            |
+| `controller.nodeSelector`                                | Node labels for Argo CD pods assignment                                                              | `{}`            |
+| `controller.tolerations`                                 | Tolerations for Argo CD pods assignment                                                              | `[]`            |
+| `controller.updateStrategy.type`                         | Argo CD statefulset strategy type                                                                    | `RollingUpdate` |
+| `controller.priorityClassName`                           | Argo CD pods' priorityClassName                                                                      | `""`            |
+| `controller.lifecycleHooks`                              | for the Argo CD container(s) to automate configuration before or after startup                       | `{}`            |
+| `controller.extraEnvVars`                                | Array with extra environment variables to add to Argo CD nodes                                       | `[]`            |
+| `controller.extraEnvVarsCM`                              | Name of existing ConfigMap containing extra env vars for Argo CD nodes                               | `""`            |
+| `controller.extraEnvVarsSecret`                          | Name of existing Secret containing extra env vars for Argo CD nodes                                  | `""`            |
+| `controller.extraVolumes`                                | Optionally specify extra list of additional volumes for the Argo CD pod(s)                           | `[]`            |
+| `controller.extraVolumeMounts`                           | Optionally specify extra list of additional volumeMounts for the Argo CD container(s)                | `[]`            |
+| `controller.sidecars`                                    | Add additional sidecar containers to the Argo CD pod(s)                                              | `[]`            |
+| `controller.initContainers`                              | Add additional init containers to the Argo CD pod(s)                                                 | `[]`            |
 
 
 ### Argo CD server Parameters
 
 | Name                                                 | Description                                                                                      | Value                    |
 | ---------------------------------------------------- | ------------------------------------------------------------------------------------------------ | ------------------------ |
-| `server.image.registry`                              | Argo CD server image registry                                                                    | `docker.io`              |
-| `server.image.repository`                            | Argo CD server image repository                                                                  | `bitnami/argo-cd`        |
-| `server.image.tag`                                   | Argo CD server image tag (immutable tags are recommended)                                        | `2.0.4-debian-10-r20`    |
-| `server.image.pullPolicy`                            | Argo CD server image pull policy                                                                 | `IfNotPresent`           |
-| `server.image.pullSecrets`                           | Argo CD server image pull secrets                                                                | `[]`                     |
 | `server.replicaCount`                                | Number of Argo CD server replicas to deploy                                                      | `1`                      |
 | `server.livenessProbe.enabled`                       | Enable livenessProbe on Argo CD server nodes                                                     | `true`                   |
 | `server.livenessProbe.initialDelaySeconds`           | Initial delay seconds for livenessProbe                                                          | `10`                     |
@@ -208,7 +209,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.ingress.annotations`                         | Annotations for the Argo CD server ingress                                                       | `{}`                     |
 | `server.ingress.tls`                                 | Enable TLS for the Argo CD server ingress                                                        | `false`                  |
 | `server.ingress.extraHosts`                          | Extra hosts array for the Argo CD server ingress                                                 | `[]`                     |
-| `server.ingress.path`                                | Path array for the Argo CD server ingress                                                        | `ImplementationSpecific` |
+| `server.ingress.path`                                | Path array for the Argo CD server ingress                                                        | `/`                      |
 | `server.ingress.extraPaths`                          | Extra paths for the Argo CD server ingress                                                       | `[]`                     |
 | `server.ingress.extraTls`                            | Extra TLS configuration for the Argo CD server ingress                                           | `[]`                     |
 | `server.ingress.secrets`                             | Secrets array to mount into the Ingress                                                          | `[]`                     |
@@ -231,7 +232,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.ingressGrpc.annotations`                     | Annotations for the Argo CD gRPC server ingress                                                  | `{}`                     |
 | `server.ingressGrpc.tls`                             | Enable TLS for the Argo CD server ingress                                                        | `false`                  |
 | `server.ingressGrpc.extraHosts`                      | Extra hosts array for the Argo CD gRPC server ingress                                            | `[]`                     |
-| `server.ingressGrpc.path`                            | Path array for the Argo CD gRPC server ingress                                                   | `ImplementationSpecific` |
+| `server.ingressGrpc.path`                            | Path array for the Argo CD gRPC server ingress                                                   | `/`                      |
 | `server.ingressGrpc.extraPaths`                      | Extra paths for the Argo CD gRPC server ingress                                                  | `[]`                     |
 | `server.ingressGrpc.extraTls`                        | Extra TLS configuration for the Argo CD gRPC server ingress                                      | `[]`                     |
 | `server.ingressGrpc.secrets`                         | Secrets array to mount into the Ingress                                                          | `[]`                     |
@@ -279,87 +280,82 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Argo CD repo server Parameters
 
-| Name                                                     | Description                                                                                          | Value                 |
-| -------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- | --------------------- |
-| `repoServer.image.registry`                              | Argo CD repo server image registry                                                                   | `docker.io`           |
-| `repoServer.image.repository`                            | Argo CD repo server image repository                                                                 | `bitnami/argo-cd`     |
-| `repoServer.image.tag`                                   | Argo CD repo server image tag (immutable tags are recommended)                                       | `2.0.4-debian-10-r19` |
-| `repoServer.image.pullPolicy`                            | Argo CD repo server image pull policy                                                                | `IfNotPresent`        |
-| `repoServer.image.pullSecrets`                           | Argo CD repo server image pull secrets                                                               | `[]`                  |
-| `repoServer.replicaCount`                                | Number of Argo CD repo server replicas to deploy                                                     | `1`                   |
-| `repoServer.livenessProbe.enabled`                       | Enable livenessProbe on Argo CD repo server nodes                                                    | `true`                |
-| `repoServer.livenessProbe.initialDelaySeconds`           | Initial delay seconds for livenessProbe                                                              | `10`                  |
-| `repoServer.livenessProbe.periodSeconds`                 | Period seconds for livenessProbe                                                                     | `10`                  |
-| `repoServer.livenessProbe.timeoutSeconds`                | Timeout seconds for livenessProbe                                                                    | `1`                   |
-| `repoServer.livenessProbe.failureThreshold`              | Failure threshold for livenessProbe                                                                  | `3`                   |
-| `repoServer.livenessProbe.successThreshold`              | Success threshold for livenessProbe                                                                  | `1`                   |
-| `repoServer.readinessProbe.enabled`                      | Enable readinessProbe on Argo CD repo server nodes                                                   | `true`                |
-| `repoServer.readinessProbe.initialDelaySeconds`          | Initial delay seconds for readinessProbe                                                             | `10`                  |
-| `repoServer.readinessProbe.periodSeconds`                | Period seconds for readinessProbe                                                                    | `10`                  |
-| `repoServer.readinessProbe.timeoutSeconds`               | Timeout seconds for readinessProbe                                                                   | `1`                   |
-| `repoServer.readinessProbe.failureThreshold`             | Failure threshold for readinessProbe                                                                 | `3`                   |
-| `repoServer.readinessProbe.successThreshold`             | Success threshold for readinessProbe                                                                 | `1`                   |
-| `repoServer.customLivenessProbe`                         | Custom livenessProbe that overrides the default one                                                  | `{}`                  |
-| `repoServer.customReadinessProbe`                        | Custom readinessProbe that overrides the default one                                                 | `{}`                  |
-| `repoServer.resources.limits`                            | The resources limits for the Argo CD repo server containers                                          | `{}`                  |
-| `repoServer.resources.requests`                          | The requested resources for the Argo CD repo server containers                                       | `{}`                  |
-| `repoServer.podSecurityContext.enabled`                  | Enabled Argo CD repo server pods' Security Context                                                   | `true`                |
-| `repoServer.podSecurityContext.fsGroup`                  | Set Argo CD repo server pod's Security Context fsGroup                                               | `1001`                |
-| `repoServer.containerSecurityContext.enabled`            | Enabled Argo CD repo server containers' Security Context                                             | `true`                |
-| `repoServer.containerSecurityContext.runAsUser`          | Set Argo CD repo server containers' Security Context runAsUser                                       | `1001`                |
-| `repoServer.service.type`                                | Repo server service type                                                                             | `ClusterIP`           |
-| `repoServer.service.port`                                | Repo server service port                                                                             | `8081`                |
-| `repoServer.service.nodePort`                            | Node port for the repo server service                                                                | `""`                  |
-| `repoServer.service.loadBalancerIP`                      | Repo server service Load Balancer IP                                                                 | `""`                  |
-| `repoServer.service.loadBalancerSourceRanges`            | Repo server service Load Balancer sources                                                            | `[]`                  |
-| `repoServer.service.externalTrafficPolicy`               | Repo server service external traffic policy                                                          | `Cluster`             |
-| `repoServer.service.annotations`                         | Additional custom annotations for Repo server service                                                | `{}`                  |
-| `repoServer.logFormat`                                   | Format for the Argo CD repo server logs. Options: [text, json]                                       | `text`                |
-| `repoServer.logLevel`                                    | Log level for the Argo CD repo server                                                                | `info`                |
-| `repoServer.containerPorts.repoServer`                   | Container port for Argo CD repo server                                                               | `8081`                |
-| `repoServer.containerPorts.metrics`                      | Metrics port for Argo CD repo server                                                                 | `""`                  |
-| `repoServer.metrics.enabled`                             | Enable metrics for the Argo CD repo server                                                           | `false`               |
-| `repoServer.metrics.service.type`                        | Argo CD repo server service type                                                                     | `ClusterIP`           |
-| `repoServer.metrics.service.port`                        | Argo CD repo server metrics service port                                                             | `8084`                |
-| `repoServer.metrics.service.nodePort`                    | Node port for the repo server metrics service                                                        | `""`                  |
-| `repoServer.metrics.service.loadBalancerIP`              | Argo CD repo server service Load Balancer IP                                                         | `""`                  |
-| `repoServer.metrics.service.loadBalancerSourceRanges`    | Argo CD repo server service Load Balancer sources                                                    | `[]`                  |
-| `repoServer.metrics.service.externalTrafficPolicy`       | Argo CD repo server service external traffic policy                                                  | `Cluster`             |
-| `repoServer.metrics.service.annotations`                 | Additional custom annotations for Argo CD repo server service                                        | `{}`                  |
-| `repoServer.metrics.serviceMonitor.enabled`              | Enable service monirot for Argo CD repo server                                                       | `false`               |
-| `repoServer.metrics.serviceMonitor.interval`             | Interval for the Argo CD repo server service monitor                                                 | `30s`                 |
-| `repoServer.autoscaling.enabled`                         | Enable Argo CD repo server deployment autoscaling                                                    | `false`               |
-| `repoServer.autoscaling.minReplicas`                     | Argo CD repo server deployment autoscaling minimum number of replicas                                | `1`                   |
-| `repoServer.autoscaling.maxReplicas`                     | Argo CD repo server deployment autoscaling maximum number of replicas                                | `5`                   |
-| `repoServer.autoscaling.targetCPU`                       | Argo CD repo server deployment autoscaling target CPU percentage                                     | `50`                  |
-| `repoServer.autoscaling.targetMemory`                    | Argo CD repo server deployment autoscaling target CPU memory                                         | `50`                  |
-| `repoServer.serviceAccount.create`                       | Specifies whether a ServiceAccount for repo server should be created                                 | `true`                |
-| `repoServer.serviceAccount.name`                         | The name of the ServiceAccount for repo server to use.                                               | `""`                  |
-| `repoServer.serviceAccount.automountServiceAccountToken` | Automount service account token for the repo server service account                                  | `true`                |
-| `repoServer.command`                                     | Override default container command (useful when using custom images)                                 | `[]`                  |
-| `repoServer.args`                                        | Override default container args (useful when using custom images)                                    | `[]`                  |
-| `repoServer.extraArgs`                                   | Add extra args to the default repo server args                                                       | `[]`                  |
-| `repoServer.hostAliases`                                 | Argo CD repo server pods host aliases                                                                | `[]`                  |
-| `repoServer.podLabels`                                   | Extra labels for Argo CD repo server pods                                                            | `{}`                  |
-| `repoServer.podAnnotations`                              | Annotations for Argo CD repo server pods                                                             | `{}`                  |
-| `repoServer.podAffinityPreset`                           | Pod affinity preset. Ignored if `repoServer.affinity` is set. Allowed values: `soft` or `hard`       | `""`                  |
-| `repoServer.podAntiAffinityPreset`                       | Pod anti-affinity preset. Ignored if `repoServer.affinity` is set. Allowed values: `soft` or `hard`  | `soft`                |
-| `repoServer.nodeAffinityPreset.type`                     | Node affinity preset type. Ignored if `repoServer.affinity` is set. Allowed values: `soft` or `hard` | `""`                  |
-| `repoServer.nodeAffinityPreset.key`                      | Node label key to match. Ignored if `repoServer.affinity` is set                                     | `""`                  |
-| `repoServer.nodeAffinityPreset.values`                   | Node label values to match. Ignored if `repoServer.affinity` is set                                  | `[]`                  |
-| `repoServer.affinity`                                    | Affinity for Argo CD repo server pods assignment                                                     | `{}`                  |
-| `repoServer.nodeSelector`                                | Node labels for Argo CD repo server pods assignment                                                  | `{}`                  |
-| `repoServer.tolerations`                                 | Tolerations for Argo CD repo server pods assignment                                                  | `[]`                  |
-| `repoServer.updateStrategy.type`                         | Argo CD repo server statefulset strategy type                                                        | `RollingUpdate`       |
-| `repoServer.priorityClassName`                           | Argo CD repo server pods' priorityClassName                                                          | `""`                  |
-| `repoServer.lifecycleHooks`                              | for the Argo CD repo server container(s) to automate configuration before or after startup           | `{}`                  |
-| `repoServer.extraEnvVars`                                | Array with extra environment variables to add to Argo CD repo server nodes                           | `[]`                  |
-| `repoServer.extraEnvVarsCM`                              | Name of existing ConfigMap containing extra env vars for Argo CD repo server nodes                   | `""`                  |
-| `repoServer.extraEnvVarsSecret`                          | Name of existing Secret containing extra env vars for Argo CD repo server nodes                      | `""`                  |
-| `repoServer.extraVolumes`                                | Optionally specify extra list of additional volumes for the Argo CD repo server pod(s)               | `[]`                  |
-| `repoServer.extraVolumeMounts`                           | Optionally specify extra list of additional volumeMounts for the Argo CD repo server container(s)    | `[]`                  |
-| `repoServer.sidecars`                                    | Add additional sidecar containers to the Argo CD repo server pod(s)                                  | `[]`                  |
-| `repoServer.initContainers`                              | Add additional init containers to the Argo CD repo server pod(s)                                     | `[]`                  |
+| Name                                                     | Description                                                                                          | Value           |
+| -------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- | --------------- |
+| `repoServer.replicaCount`                                | Number of Argo CD repo server replicas to deploy                                                     | `1`             |
+| `repoServer.livenessProbe.enabled`                       | Enable livenessProbe on Argo CD repo server nodes                                                    | `true`          |
+| `repoServer.livenessProbe.initialDelaySeconds`           | Initial delay seconds for livenessProbe                                                              | `10`            |
+| `repoServer.livenessProbe.periodSeconds`                 | Period seconds for livenessProbe                                                                     | `10`            |
+| `repoServer.livenessProbe.timeoutSeconds`                | Timeout seconds for livenessProbe                                                                    | `1`             |
+| `repoServer.livenessProbe.failureThreshold`              | Failure threshold for livenessProbe                                                                  | `3`             |
+| `repoServer.livenessProbe.successThreshold`              | Success threshold for livenessProbe                                                                  | `1`             |
+| `repoServer.readinessProbe.enabled`                      | Enable readinessProbe on Argo CD repo server nodes                                                   | `true`          |
+| `repoServer.readinessProbe.initialDelaySeconds`          | Initial delay seconds for readinessProbe                                                             | `10`            |
+| `repoServer.readinessProbe.periodSeconds`                | Period seconds for readinessProbe                                                                    | `10`            |
+| `repoServer.readinessProbe.timeoutSeconds`               | Timeout seconds for readinessProbe                                                                   | `1`             |
+| `repoServer.readinessProbe.failureThreshold`             | Failure threshold for readinessProbe                                                                 | `3`             |
+| `repoServer.readinessProbe.successThreshold`             | Success threshold for readinessProbe                                                                 | `1`             |
+| `repoServer.customLivenessProbe`                         | Custom livenessProbe that overrides the default one                                                  | `{}`            |
+| `repoServer.customReadinessProbe`                        | Custom readinessProbe that overrides the default one                                                 | `{}`            |
+| `repoServer.resources.limits`                            | The resources limits for the Argo CD repo server containers                                          | `{}`            |
+| `repoServer.resources.requests`                          | The requested resources for the Argo CD repo server containers                                       | `{}`            |
+| `repoServer.podSecurityContext.enabled`                  | Enabled Argo CD repo server pods' Security Context                                                   | `true`          |
+| `repoServer.podSecurityContext.fsGroup`                  | Set Argo CD repo server pod's Security Context fsGroup                                               | `1001`          |
+| `repoServer.containerSecurityContext.enabled`            | Enabled Argo CD repo server containers' Security Context                                             | `true`          |
+| `repoServer.containerSecurityContext.runAsUser`          | Set Argo CD repo server containers' Security Context runAsUser                                       | `1001`          |
+| `repoServer.service.type`                                | Repo server service type                                                                             | `ClusterIP`     |
+| `repoServer.service.port`                                | Repo server service port                                                                             | `8081`          |
+| `repoServer.service.nodePort`                            | Node port for the repo server service                                                                | `""`            |
+| `repoServer.service.loadBalancerIP`                      | Repo server service Load Balancer IP                                                                 | `""`            |
+| `repoServer.service.loadBalancerSourceRanges`            | Repo server service Load Balancer sources                                                            | `[]`            |
+| `repoServer.service.externalTrafficPolicy`               | Repo server service external traffic policy                                                          | `Cluster`       |
+| `repoServer.service.annotations`                         | Additional custom annotations for Repo server service                                                | `{}`            |
+| `repoServer.logFormat`                                   | Format for the Argo CD repo server logs. Options: [text, json]                                       | `text`          |
+| `repoServer.logLevel`                                    | Log level for the Argo CD repo server                                                                | `info`          |
+| `repoServer.containerPorts.repoServer`                   | Container port for Argo CD repo server                                                               | `8081`          |
+| `repoServer.containerPorts.metrics`                      | Metrics port for Argo CD repo server                                                                 | `""`            |
+| `repoServer.metrics.enabled`                             | Enable metrics for the Argo CD repo server                                                           | `false`         |
+| `repoServer.metrics.service.type`                        | Argo CD repo server service type                                                                     | `ClusterIP`     |
+| `repoServer.metrics.service.port`                        | Argo CD repo server metrics service port                                                             | `8084`          |
+| `repoServer.metrics.service.nodePort`                    | Node port for the repo server metrics service                                                        | `""`            |
+| `repoServer.metrics.service.loadBalancerIP`              | Argo CD repo server service Load Balancer IP                                                         | `""`            |
+| `repoServer.metrics.service.loadBalancerSourceRanges`    | Argo CD repo server service Load Balancer sources                                                    | `[]`            |
+| `repoServer.metrics.service.externalTrafficPolicy`       | Argo CD repo server service external traffic policy                                                  | `Cluster`       |
+| `repoServer.metrics.service.annotations`                 | Additional custom annotations for Argo CD repo server service                                        | `{}`            |
+| `repoServer.metrics.serviceMonitor.enabled`              | Enable service monirot for Argo CD repo server                                                       | `false`         |
+| `repoServer.metrics.serviceMonitor.interval`             | Interval for the Argo CD repo server service monitor                                                 | `30s`           |
+| `repoServer.autoscaling.enabled`                         | Enable Argo CD repo server deployment autoscaling                                                    | `false`         |
+| `repoServer.autoscaling.minReplicas`                     | Argo CD repo server deployment autoscaling minimum number of replicas                                | `1`             |
+| `repoServer.autoscaling.maxReplicas`                     | Argo CD repo server deployment autoscaling maximum number of replicas                                | `5`             |
+| `repoServer.autoscaling.targetCPU`                       | Argo CD repo server deployment autoscaling target CPU percentage                                     | `50`            |
+| `repoServer.autoscaling.targetMemory`                    | Argo CD repo server deployment autoscaling target CPU memory                                         | `50`            |
+| `repoServer.serviceAccount.create`                       | Specifies whether a ServiceAccount for repo server should be created                                 | `true`          |
+| `repoServer.serviceAccount.name`                         | The name of the ServiceAccount for repo server to use.                                               | `""`            |
+| `repoServer.serviceAccount.automountServiceAccountToken` | Automount service account token for the repo server service account                                  | `true`          |
+| `repoServer.command`                                     | Override default container command (useful when using custom images)                                 | `[]`            |
+| `repoServer.args`                                        | Override default container args (useful when using custom images)                                    | `[]`            |
+| `repoServer.extraArgs`                                   | Add extra args to the default repo server args                                                       | `[]`            |
+| `repoServer.hostAliases`                                 | Argo CD repo server pods host aliases                                                                | `[]`            |
+| `repoServer.podLabels`                                   | Extra labels for Argo CD repo server pods                                                            | `{}`            |
+| `repoServer.podAnnotations`                              | Annotations for Argo CD repo server pods                                                             | `{}`            |
+| `repoServer.podAffinityPreset`                           | Pod affinity preset. Ignored if `repoServer.affinity` is set. Allowed values: `soft` or `hard`       | `""`            |
+| `repoServer.podAntiAffinityPreset`                       | Pod anti-affinity preset. Ignored if `repoServer.affinity` is set. Allowed values: `soft` or `hard`  | `soft`          |
+| `repoServer.nodeAffinityPreset.type`                     | Node affinity preset type. Ignored if `repoServer.affinity` is set. Allowed values: `soft` or `hard` | `""`            |
+| `repoServer.nodeAffinityPreset.key`                      | Node label key to match. Ignored if `repoServer.affinity` is set                                     | `""`            |
+| `repoServer.nodeAffinityPreset.values`                   | Node label values to match. Ignored if `repoServer.affinity` is set                                  | `[]`            |
+| `repoServer.affinity`                                    | Affinity for Argo CD repo server pods assignment                                                     | `{}`            |
+| `repoServer.nodeSelector`                                | Node labels for Argo CD repo server pods assignment                                                  | `{}`            |
+| `repoServer.tolerations`                                 | Tolerations for Argo CD repo server pods assignment                                                  | `[]`            |
+| `repoServer.updateStrategy.type`                         | Argo CD repo server statefulset strategy type                                                        | `RollingUpdate` |
+| `repoServer.priorityClassName`                           | Argo CD repo server pods' priorityClassName                                                          | `""`            |
+| `repoServer.lifecycleHooks`                              | for the Argo CD repo server container(s) to automate configuration before or after startup           | `{}`            |
+| `repoServer.extraEnvVars`                                | Array with extra environment variables to add to Argo CD repo server nodes                           | `[]`            |
+| `repoServer.extraEnvVarsCM`                              | Name of existing ConfigMap containing extra env vars for Argo CD repo server nodes                   | `""`            |
+| `repoServer.extraEnvVarsSecret`                          | Name of existing Secret containing extra env vars for Argo CD repo server nodes                      | `""`            |
+| `repoServer.extraVolumes`                                | Optionally specify extra list of additional volumes for the Argo CD repo server pod(s)               | `[]`            |
+| `repoServer.extraVolumeMounts`                           | Optionally specify extra list of additional volumeMounts for the Argo CD repo server container(s)    | `[]`            |
+| `repoServer.sidecars`                                    | Add additional sidecar containers to the Argo CD repo server pod(s)                                  | `[]`            |
+| `repoServer.initContainers`                              | Add additional init containers to the Argo CD repo server pod(s)                                     | `[]`            |
 
 
 ### Dex Parameters
@@ -368,7 +364,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------------- | --------------------------------------------------------------------------------------------- | ---------------------- |
 | `dex.image.registry`                              | Dex image registry                                                                            | `docker.io`            |
 | `dex.image.repository`                            | Dex image repository                                                                          | `bitnami/dex`          |
-| `dex.image.tag`                                   | Dex image tag (immutable tags are recommended)                                                | `2.29.0-debian-10-r18` |
+| `dex.image.tag`                                   | Dex image tag (immutable tags are recommended)                                                | `2.30.0-debian-10-r57` |
 | `dex.image.pullPolicy`                            | Dex image pull policy                                                                         | `IfNotPresent`         |
 | `dex.image.pullSecrets`                           | Dex image pull secrets                                                                        | `[]`                   |
 | `dex.enabled`                                     | Enable the creation of a Dex deployment for SSO                                               | `false`                |
@@ -492,7 +488,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `rbac.create`                             | Specifies whether RBAC resources should be created                          | `true`                |
 | `redis.image.registry`                    | Argo CD controller image registry                                           | `docker.io`           |
 | `redis.image.repository`                  | Argo CD controller image repository                                         | `bitnami/redis`       |
-| `redis.image.tag`                         | Argo CD controller image tag (immutable tags are recommended)               | `6.2.4-debian-10-r37` |
+| `redis.image.tag`                         | Argo CD controller image tag (immutable tags are recommended)               | `6.2.5-debian-10-r66` |
 | `redis.image.pullPolicy`                  | Argo CD controller image pull policy                                        | `IfNotPresent`        |
 | `redis.image.pullSecrets`                 | Argo CD controller image pull secrets                                       | `[]`                  |
 | `redis.enabled`                           | Enable Redis dependency                                                     | `true`                |
@@ -590,3 +586,42 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+
+## Upgrading
+
+### To 2.0.0
+
+This major update the Redis&trade; subchart to its newest major, 15.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1500) you can find more info about the specific changes.
+
+### To 1.0.0
+
+In this version, the `image` block is defined once and is used in the different templates, while in the previous version, the `image` block was duplicated for every component
+
+```yaml
+image:
+  registry: docker.io
+  repository: bitnami/argo-cd
+  tag: 2.0.5
+```
+VS
+```yaml
+controller:
+  image:
+    registry: docker.io
+    repository: bitnami/argo-cd
+    tag: 2.0.5
+...
+server:
+  image:
+    registry: docker.io
+    repository: bitnami/argo-cd
+    tag: 2.0.5
+...
+repoServer:
+  image:
+    registry: docker.io
+    repository: bitnami/argo-cd
+    tag: 2.0.5
+```
+
+See [PR#7113](https://github.com/bitnami/charts/pull/7113) for more info about the implemented changes

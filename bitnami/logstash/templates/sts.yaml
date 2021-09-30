@@ -76,9 +76,13 @@ spec:
         - name: logstash
           image: {{ include "logstash.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- end }}
           env:
             - name: BITNAMI_DEBUG
-              value: {{ ternary "true" "false" .Values.image.debug | quote }}
+              value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
             {{- if .Values.configFileName }}
             - name: LOGSTASH_CONF_FILENAME
               value: {{ .Values.configFileName | quote }}
@@ -108,11 +112,16 @@ spec:
           {{- if .Values.containerPorts }}
           ports: {{ toYaml .Values.containerPorts | nindent 12 }}
           {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.livenessProbe }}
           livenessProbe: {{- toYaml .Values.livenessProbe | nindent 12 }}
           {{- end }}
           {{- if .Values.readinessProbe }}
           readinessProbe: {{- toYaml .Values.readinessProbe | nindent 12 }}
+          {{- end }}
+          {{- if .Values.lifecycle }}
+          lifecycle: {{- include "common.tplvalues.render" ( dict "value" .Values.lifecycle "context" $ ) | nindent 12 }}
+          {{- end }}
           {{- end }}
           {{- if .Values.resources }}
           resources: {{- toYaml .Values.resources | nindent 12 }}
@@ -129,28 +138,32 @@ spec:
           {{- if .Values.extraVolumeMounts }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.extraVolumeMounts "context" $ ) | nindent 12 }}
           {{- end }}
-          {{- if .Values.lifecycle }}
-          lifecycle: {{- include "common.tplvalues.render" ( dict "value" .Values.lifecycle "context" $ ) | nindent 12 }}
-          {{- end }}
         {{- if .Values.metrics.enabled }}
         - name: metrics
           image: {{ include "logstash.metrics.image" . }}
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else }}
           command:
             - bash
             - -c
             - |
                sleep 60
                exec logstash_exporter --logstash.endpoint=http://127.0.0.1:{{ .Values.monitoringAPIPort }} --web.listen-address=:9198
+          {{- end }}
           ports:
             - name: metrics
               containerPort: 9198
               protocol: TCP
+          {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.metrics.livenessProbe }}
           livenessProbe: {{- toYaml .Values.metrics.livenessProbe | nindent 12 }}
           {{- end }}
           {{- if .Values.metrics.readinessProbe }}
           readinessProbe: {{- toYaml .Values.metrics.readinessProbe | nindent 12 }}
+          {{- end }}
           {{- end }}
           {{- if .Values.metrics.resources }}
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}

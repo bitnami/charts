@@ -74,7 +74,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------- | -------------------------------------------------------------------- | --------------------- |
 | `image.registry`     | NGINX image registry                                                 | `docker.io`           |
 | `image.repository`   | NGINX image repository                                               | `bitnami/nginx`       |
-| `image.tag`          | NGINX image tag (immutable tags are recommended)                     | `1.21.1-debian-10-r0` |
+| `image.tag`          | NGINX image tag (immutable tags are recommended)                     | `1.21.3-debian-10-r0` |
 | `image.pullPolicy`   | NGINX image pull policy                                              | `IfNotPresent`        |
 | `image.pullSecrets`  | Specify docker-registry secret names as an array                     | `[]`                  |
 | `image.debug`        | Set to true if you would like to see extra information on logs       | `false`               |
@@ -133,11 +133,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `autoscaling.targetMemory`              | Target Memory utilization percentage                                                      | `""`    |
 | `extraVolumes`                          | Array to add extra volumes                                                                | `[]`    |
 | `extraVolumeMounts`                     | Array to add extra mount                                                                  | `[]`    |
-| `serviceAccount.autoMount`              | Auto-mount the service account token in the pod                                           | `false` |
 | `serviceAccount.create`                 | Enable creation of ServiceAccount for nginx pod                                           | `false` |
 | `serviceAccount.name`                   | The name of the ServiceAccount to use.                                                    | `""`    |
 | `serviceAccount.annotations`            | Annotations for service account. Evaluated as a template.                                 | `{}`    |
+| `serviceAccount.autoMount`              | Auto-mount the service account token in the pod                                           | `false` |
 | `sidecars`                              | Sidecar parameters                                                                        | `[]`    |
+| `sidecarSingleProcessNamespace`         | Enable sharing the process namespace with sidecars                                        | `false` |
 | `initContainers`                        | Extra init containers                                                                     | `[]`    |
 | `pdb.create`                            | Created a PodDisruptionBudget                                                             | `false` |
 | `pdb.minAvailable`                      | Min number of pods that must still be available after the eviction                        | `1`     |
@@ -151,7 +152,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cloneStaticSiteFromGit.enabled`           | Get the server static content from a Git repository                                               | `false`                |
 | `cloneStaticSiteFromGit.image.registry`    | Git image registry                                                                                | `docker.io`            |
 | `cloneStaticSiteFromGit.image.repository`  | Git image repository                                                                              | `bitnami/git`          |
-| `cloneStaticSiteFromGit.image.tag`         | Git image tag (immutable tags are recommended)                                                    | `2.32.0-debian-10-r25` |
+| `cloneStaticSiteFromGit.image.tag`         | Git image tag (immutable tags are recommended)                                                    | `2.33.0-debian-10-r21` |
 | `cloneStaticSiteFromGit.image.pullPolicy`  | Git image pull policy                                                                             | `IfNotPresent`         |
 | `cloneStaticSiteFromGit.image.pullSecrets` | Specify docker-registry secret names as an array                                                  | `[]`                   |
 | `cloneStaticSiteFromGit.repository`        | Git Repository to clone static content from                                                       | `""`                   |
@@ -176,7 +177,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ldapDaemon.enabled`                            | Enable LDAP Auth Daemon proxy                                                            | `false`                          |
 | `ldapDaemon.image.registry`                     | LDAP AUth Daemon Image registry                                                          | `docker.io`                      |
 | `ldapDaemon.image.repository`                   | LDAP Auth Daemon Image repository                                                        | `bitnami/nginx-ldap-auth-daemon` |
-| `ldapDaemon.image.tag`                          | LDAP Auth Daemon Image tag (immutable tags are recommended)                              | `0.20200116.0-debian-10-r387`    |
+| `ldapDaemon.image.tag`                          | LDAP Auth Daemon Image tag (immutable tags are recommended)                              | `0.20200116.0-debian-10-r446`    |
 | `ldapDaemon.image.pullPolicy`                   | LDAP Auth Daemon Image pull policy                                                       | `IfNotPresent`                   |
 | `ldapDaemon.port`                               | LDAP Auth Daemon port                                                                    | `8888`                           |
 | `ldapDaemon.ldapConfig.uri`                     | LDAP Server URI, `ldap[s]:/<hostname>:<port>`                                            | `""`                             |
@@ -221,7 +222,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.pathType`              | Ingress path type                                                                                      | `ImplementationSpecific` |
 | `ingress.apiVersion`            | Force Ingress API version (automatically detected if not set)                                          | `""`                     |
 | `ingress.hostname`              | Default host for the ingress resource                                                                  | `nginx.local`            |
-| `ingress.path`                  | The Path to Nginx. You may need to set this to '/*' in order to use this with ALB ingress controllers. | `ImplementationSpecific` |
+| `ingress.path`                  | The Path to Nginx. You may need to set this to '/*' in order to use this with ALB ingress controllers. | `/`                      |
 | `ingress.annotations`           | Ingress annotations                                                                                    | `{}`                     |
 | `ingress.tls`                   | Create TLS Secret                                                                                      | `false`                  |
 | `ingress.extraHosts`            | The list of additional hostnames to be covered with this ingress record.                               | `[]`                     |
@@ -247,7 +248,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.port`                         | NGINX Container Status Port scraped by Prometheus Exporter                                  | `""`                     |
 | `metrics.image.registry`               | NGINX Prometheus exporter image registry                                                    | `docker.io`              |
 | `metrics.image.repository`             | NGINX Prometheus exporter image repository                                                  | `bitnami/nginx-exporter` |
-| `metrics.image.tag`                    | NGINX Prometheus exporter image tag (immutable tags are recommended)                        | `0.9.0-debian-10-r93`    |
+| `metrics.image.tag`                    | NGINX Prometheus exporter image tag (immutable tags are recommended)                        | `0.9.0-debian-10-r153`   |
 | `metrics.image.pullPolicy`             | NGINX Prometheus exporter image pull policy                                                 | `IfNotPresent`           |
 | `metrics.image.pullSecrets`            | Specify docker-registry secret names as an array                                            | `[]`                     |
 | `metrics.podAnnotations`               | Additional annotations for NGINX Prometheus exporter pod(s)                                 | `{}`                     |
@@ -290,9 +291,9 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
-### Change NGINX version
+### Use a different NGINX version
 
-To modify the NGINX version used in this chart you can specify a [valid image tag](https://hub.docker.com/r/bitnami/nginx/tags/) using the `image.tag` parameter. For example, `image.tag=X.Y.Z`. This approach is also applicable to other images like exporters.
+To modify the application version used in this chart, specify a different version of the image using the `image.tag` parameter and/or a different repository using the `image.repository` parameter. Refer to the [chart documentation for more information on these parameters and how to use them with images from a private registry](https://docs.bitnami.com/kubernetes/infrastructure/nginx/configuration/change-image-version/).
 
 ### Deploying your custom web application
 

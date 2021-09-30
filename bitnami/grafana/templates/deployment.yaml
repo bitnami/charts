@@ -114,7 +114,11 @@ spec:
             {{- end }}
             {{- range .Values.dashboardsConfigMaps }}
             - name: {{ .configMapName }}
+            {{- if .folderName }}
+              mountPath: /opt/bitnami/grafana/dashboards/{{ .folderName }}/{{ .fileName }}
+            {{- else }}
               mountPath: /opt/bitnami/grafana/dashboards/{{ .fileName }}
+            {{- end }}
               subPath: {{ .fileName }}
             {{- end }}
             {{- if .Values.datasources.secretName }}
@@ -144,6 +148,7 @@ spec:
             httpGet:
               path: /api/health
               port: dashboard
+              scheme: {{ .Values.livenessProbe.scheme }}
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
@@ -155,6 +160,7 @@ spec:
             httpGet:
               path: /api/health
               port: dashboard
+              scheme: {{ .Values.readinessProbe.scheme }}
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}

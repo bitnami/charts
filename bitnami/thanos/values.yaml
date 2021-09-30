@@ -47,7 +47,7 @@ clusterDomain: cluster.local
 image:
   registry: docker.io
   repository: bitnami/thanos
-  tag: 0.22.0-scratch-r0
+  tag: 0.23.0-scratch-r1
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -473,6 +473,11 @@ query:
     ## @param query.ingress.hostname Default host for the ingress resource
     ##
     hostname: thanos.local
+    ## @param query.ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+    ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+    ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+    ##
+    ingressClassName: ""
     ## @param query.ingress.annotations Ingress annotations
     ## For a full list of possible ingress annotations, please see
     ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
@@ -882,6 +887,11 @@ queryFrontend:
     ## @param queryFrontend.ingress.hostname Default host for the ingress resource
     ##
     hostname: thanos.local
+    ## @param queryFrontend.ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+    ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+    ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+    ##
+    ingressClassName: ""
     ## @param queryFrontend.ingress.annotations Ingress annotations
     ## For a full list of possible ingress annotations, please see
     ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
@@ -1206,6 +1216,11 @@ bucketweb:
     ## @param bucketweb.ingress.hostname Default host for the ingress resource
     ##
     hostname: thanos-bucketweb.local
+    ## @param bucketweb.ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+    ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+    ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+    ##
+    ingressClassName: ""
     ## @param bucketweb.ingress.annotations Ingress annotations
     ## For a full list of possible ingress annotations, please see
     ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
@@ -1483,6 +1498,77 @@ compactor:
     ## @param compactor.service.labelSelectorsOverride Selector for Thanos query service
     ##
     labelSelectorsOverride: {}
+
+  ## Configure the ingress resource that allows you to access Thanos Query Frontend
+  ## ref: http://kubernetes.io/docs/user-guide/ingress/
+  ##
+  ingress:
+    ## @param compactor.ingress.enabled Enable ingress controller resource
+    ##
+    enabled: false
+    ## @param compactor.ingress.certManager Set this to true in order to add the corresponding annotations for cert-manager
+    ##
+    certManager: false
+    ## @param compactor.ingress.hostname Default host for the ingress resource
+    ##
+    hostname: thanos-compactor.local
+    ## @param compactor.ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+    ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+    ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+    ##
+    ingressClassName: ""
+    ## @param compactor.ingress.annotations Ingress annotations
+    ## For a full list of possible ingress annotations, please see
+    ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+    ##
+    ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+    ##
+    annotations: {}
+    ## @param compactor.ingress.extraHosts The list of additional hostnames to be covered with this ingress record.
+    ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
+    ## extraHosts:
+    ## - name: thanos.local
+    ##   path: /
+    ##   pathType: ImplementationSpecific
+    ##
+    extraHosts: []
+    ## @param compactor.ingress.extraTls The tls configuration for additional hostnames to be covered with this ingress record.
+    ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+    ## extraTls:
+    ## - hosts:
+    ##     - thanos.local
+    ##   secretName: thanos.local-tls
+    ##
+    extraTls: []
+    ## @param compactor.ingress.secrets If you're providing your own certificates, please use this to add the certificates as secrets
+    ## key and certificate should start with -----BEGIN CERTIFICATE----- or
+    ## -----BEGIN RSA PRIVATE KEY-----
+    ##
+    ## name should line up with a tlsSecret set further up
+    ## If you're using cert-manager, this is unneeded, as it will create the secret for you if it is not set
+    ##
+    ## It is also possible to create and manage the certificates outside of this helm chart
+    ## Please see README.md for more information
+    ## e.g:
+    ## - name: thanos.local-tls
+    ##   key:
+    ##   certificate:
+    ##
+    secrets: []
+    ## @param compactor.ingress.tls Create ingress TLS section
+    ## When specifying cert-manager.io/cluster-issuer: nameOfClusterIssuer annotation, enable tls for ingress
+    ##
+    tls: false
+    ## @param compactor.ingress.apiVersion Force Ingress API version (automatically detected if not set)
+    ##
+    apiVersion: ""
+    ## @param compactor.ingress.path Ingress path
+    ##
+    path: /
+    ## @param compactor.ingress.pathType Ingress path type
+    ##
+    pathType: ImplementationSpecific
+
   ## Persistence parameters
   ##
   persistence:
@@ -1632,15 +1718,28 @@ storegateway:
     values: []
   ## @param storegateway.affinity Thanos Store Gateway affinity for pod assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## If you have set storegateway.sharded.enabled: true you can set shardLoopId (or any other parameter) by setting the below code block under this 'affinity' section:
+  ## affinity:
+  ##   matchLabels:
+  ##     shard: "{{ .shardLoopId }}"
   ## Note: storegateway.podAffinityPreset, storegateway.podAntiAffinityPreset, and storegateway.nodeAffinityPreset will be ignored when it's set
   ##
   affinity: {}
   ## @param storegateway.nodeSelector Thanos Store Gateway node labels for pod assignment
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## If you have set storegateway.sharded.enabled: true you can set shardLoopId (or any other parameter) by setting the below code block under this 'nodeSelector' section:
+  ## nodeSelector: { shardId: "{{ .shardLoopId }}" }
   ##
   nodeSelector: {}
   ## @param storegateway.tolerations Thanos Store Gateway tolerations for pod assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ## If you have set storegateway.sharded.enabled: true you can set shardLoopId (or any other parameter) by setting the below code block under this 'nodeSelector' section:
+  ## tolerations:
+  ## - key: "shardId"
+  ##   operator: "Equal"
+  ##   value: "{{ .shardLoopId }}"
+  ##   effect: "NoSchedule"
+  ##
   ##
   tolerations: []
   ## @param storegateway.podLabels Thanos Store Gateway pod labels
@@ -1834,6 +1933,116 @@ storegateway:
     ## @param storegateway.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
     ##
     maxUnavailable: ""
+
+  ## Configure the ingress resource that allows you to access Thanos Query Frontend
+  ## ref: http://kubernetes.io/docs/user-guide/ingress/
+  ##
+  ingress:
+    ## @param storegateway.ingress.enabled Enable ingress controller resource
+    ##
+    enabled: false
+    ## @param storegateway.ingress.certManager Set this to true in order to add the corresponding annotations for cert-manager
+    ##
+    certManager: false
+    ## @param storegateway.ingress.hostname Default host for the ingress resource
+    ##
+    hostname: thanos-storegateway.local
+    ## @param storegateway.ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+    ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+    ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+    ##
+    ingressClassName: ""
+    ## @param storegateway.ingress.annotations Ingress annotations
+    ## For a full list of possible ingress annotations, please see
+    ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+    ##
+    ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+    ##
+    annotations: {}
+    ## @param storegateway.ingress.extraHosts The list of additional hostnames to be covered with this ingress record.
+    ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
+    ## extraHosts:
+    ## - name: thanos.local
+    ##   path: /
+    ##   pathType: ImplementationSpecific
+    ##
+    extraHosts: []
+    ## @param storegateway.ingress.extraTls The tls configuration for additional hostnames to be covered with this ingress record.
+    ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+    ## extraTls:
+    ## - hosts:
+    ##     - thanos.local
+    ##   secretName: thanos.local-tls
+    ##
+    extraTls: []
+    ## @param storegateway.ingress.secrets If you're providing your own certificates, please use this to add the certificates as secrets
+    ## key and certificate should start with -----BEGIN CERTIFICATE----- or
+    ## -----BEGIN RSA PRIVATE KEY-----
+    ##
+    ## name should line up with a tlsSecret set further up
+    ## If you're using cert-manager, this is unneeded, as it will create the secret for you if it is not set
+    ##
+    ## It is also possible to create and manage the certificates outside of this helm chart
+    ## Please see README.md for more information
+    ## e.g:
+    ## - name: thanos.local-tls
+    ##   key:
+    ##   certificate:
+    ##
+    secrets: []
+    ## @param storegateway.ingress.tls Create ingress TLS section
+    ## When specifying cert-manager.io/cluster-issuer: nameOfClusterIssuer annotation, enable tls for ingress
+    ##
+    tls: false
+    ## @param storegateway.ingress.apiVersion Force Ingress API version (automatically detected if not set)
+    ##
+    apiVersion: ""
+    ## @param storegateway.ingress.path Ingress path
+    ##
+    path: /
+    ## @param storegateway.ingress.pathType Ingress path type
+    ##
+    pathType: ImplementationSpecific
+
+  ## Sharded parameters
+  ## @param storegateway.sharded.enabled Enable sharding for Thanos Store Gateway
+  ## @param storegateway.sharded.hashPartitioning.shards Setting hashPartitioning will create multiple store statefulsets based on the number of shards specified using the hashmod of the blocks
+  ## @param storegateway.sharded.timePartitioning [array] Setting time timePartitioning will create multiple store deployments based on the number of partitions
+  ## @param storegateway.sharded.service.clusterIPs Array of cluster IPs for each Store Gateway service. Length must be the same as the number of shards
+  ## Example:
+  ## clusterIPs:
+  ##   - X.X.X.X
+  ##   - Y.Y.Y.Y
+  ## @param storegateway.sharded.service.loadBalancerIPs Array of load balancer IPs for each Store Gateway service. Length must be the same as the number of shards
+  ## Example:
+  ## loadBalancerIPs:
+  ##   - X.X.X.X
+  ##   - Y.Y.Y.Y
+  ## @param storegateway.sharded.service.http.nodePorts Array of http node ports used for Store Gateway service. Length must be the same as the number of shards
+  ## Example:
+  ## nodePorts:
+  ##   - 30001
+  ##   - 30002
+  ## @param storegateway.sharded.service.grpc.nodePorts Array of grpc node ports used for Store Gateway service. Length must be the same as the number of shards
+  ## Example:
+  ## nodePorts:
+  ##   - 30011
+  ##   - 30012
+  ##
+  sharded:
+    enabled: false
+    hashPartitioning:
+      shards: ""
+    timePartitioning:
+      - min: ""
+        max: ""
+    service:
+      clusterIPs: []
+      loadBalancerIPs: []
+      http:
+        nodePorts: []
+      grpc:
+        nodePorts: []
 
 ## @section Thanos Ruler parameters
 
@@ -2184,6 +2393,11 @@ ruler:
     ## @param ruler.ingress.hostname Default host for the ingress resource
     ##
     hostname: thanos-ruler.local
+    ## @param ruler.ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+    ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+    ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+    ##
+    ingressClassName: ""
     ## @param ruler.ingress.annotations Ingress annotations
     ## For a full list of possible ingress annotations, please see
     ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
@@ -2238,6 +2452,98 @@ receive:
   ## @param receive.enabled Enable/disable Thanos Receive component
   ##
   enabled: false
+  ## @param receive.mode Mode to run receiver in. Valid options are "standalone" or "dual-mode"
+  ## ref: https://github.com/thanos-io/thanos/blob/release-0.22/docs/proposals-accepted/202012-receive-split.md
+  ## Enables running the Thanos Receiver in dual mode. Setting this to "dual-mode" will create a deployment for
+  ## the stateless thanos distributor.
+  mode: standalone
+
+  distributor:
+    ## Thanos Receive Distributor containers' resource requests and limits
+    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ## We usually recommend not to specify default resources and to leave this as a conscious
+    ## choice for the user. This also increases chances charts run on environments with little
+    ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+    ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ## @param receive.distributor.resources.limits The resources limits for the Thanos Receive container
+    ## @param receive.distributor.resources.requests The requested resources for the Thanos Receive container
+    ##
+    resources:
+      ## Example:
+      ## limits:
+      ##    cpu: 100m
+      ##    memory: 128Mi
+      ##
+      limits: {}
+      ## Examples:
+      ## requests:
+      ##    cpu: 100m
+      ##    memory: 128Mi
+      ##
+      requests: {}
+    ## @param receive.distributor.extraContainers Extra containers running as sidecars to Thanos Receive Distributor container
+    ## Example:
+    ## - name: oAuth2-proxy
+    ##   args:
+    ##     - -https-address=:9092
+    ##     - -upstream=http://localhost:9091
+    ##     - -skip-auth-regex=^/metrics
+    ##   image: openshift/oauth-proxy:v1.1.0
+    ##   ports:
+    ##       - containerPort: 9092
+    ##         name: proxy
+    ##   resources:
+    ##       limits:
+    ##         memory: 16Mi
+    ##       requests:
+    ##         memory: 4Mi
+    ##         cpu: 20m
+    ##   volumeMounts:
+    ##     - mountPath: /secrets/proxy-tls
+    ##       name: secret-proxy-tls
+    ##
+    extraContainers: []
+    ## @param receive.distributor.extraEnv Extra environment variables for Thanos Receive Distributor container
+    ## Example:
+    ## extraEnv:
+    ## - name: VARNAME1
+    ##   value: value1
+    ## - name: VARNAME2
+    ##   valueFrom:
+    ##     secretKeyRef:
+    ##       name: existing-secret
+    ##       key: varname2-key
+    ##
+    extraEnv: []
+    ## @param receive.distributor.extraVolumes Extra volumes to add to Thanos Receive Distributor
+    ##
+    extraVolumes: []
+    ## @param receive.distributor.extraVolumeMounts Extra volume mounts to add to the receive distributor container
+    ##
+    extraVolumeMounts: []
+    ## @param receive.distributor.extraFlags Extra Flags to passed to Thanos Receive Distributor
+    ##
+    extraFlags: []
+    ## @param receive.distributor.replicaCount Number of Thanos Receive Distributor replicas to deploy
+    ##
+    replicaCount: 1
+    ## @param receive.distributor.strategyType StrategyType, can be set to RollingUpdate or Recreate by default.
+    ##
+    strategyType: RollingUpdate
+    ## @param receive.distributor.affinity Thanos Receive Distributor affinity for pod assignment
+    ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+    ## Note: receive.podAffinityPreset, receive.podAntiAffinityPreset, and receive.nodeAffinityPreset will be ignored when it's set
+    ##
+    affinity: {}
+    ## @param receive.distributor.nodeSelector Thanos Receive Distributor node labels for pod assignment
+    ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+    ##
+    nodeSelector: {}
+    ## @param receive.distributor.tolerations Thanos Receive Distributor tolerations for pod assignment
+    ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+    ##
+    tolerations: []
+
   ## @param receive.logLevel Thanos Receive log level
   ##
   logLevel: info
@@ -2606,6 +2912,11 @@ receive:
     ## @param receive.ingress.hostname When the ingress is enabled, a host pointing to this will be created
     ##
     hostname: thanos-receive.local
+    ## @param receive.ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+    ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+    ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+    ##
+    ingressClassName: ""
     ## @param receive.ingress.annotations Ingress annotations done as key:value pairs
     ## For a full list of possible ingress annotations, please see
     ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
@@ -2738,7 +3049,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r140
+    tag: 10-debian-10-r207
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -2759,7 +3070,7 @@ minio:
   ## to be used as an objstore for Thanos
   ##
   enabled: false
-  ## MinIO(R) credentials
+  ## MinIO&reg; credentials
   ## @param minio.accessKey.password MinIO&reg; Access Key
   ## @param minio.secretKey.password MinIO&reg; Secret Key
   ##

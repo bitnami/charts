@@ -40,37 +40,39 @@ clusterDomain: cluster.local
 ##
 extraDeploy: []
 
+## @section Argo CD image parameters
+
+## Bitnami Argo CD image
+## ref: https://hub.docker.com/r/bitnami/argo-cd/tags/
+## @param image.registry Argo CD image registry
+## @param image.repository Argo CD image repository
+## @param image.tag Argo CD image tag (immutable tags are recommended)
+## @param image.pullPolicy Argo CD image pull policy
+## @param image.pullSecrets Argo CD image pull secrets
+##
+image:
+  registry: docker.io
+  repository: bitnami/argo-cd
+  tag: 2.1.3-debian-10-r0
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## e.g:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  pullSecrets: []
+
 ## @section Argo CD application controller parameters
 
 ## Argo CD Controller
 ##
 controller:
-  ## Bitnami Argo CD controller image
-  ## ref: https://hub.docker.com/r/bitnami/argo-cd/tags/
-  ## @param controller.image.registry Argo CD controller image registry
-  ## @param controller.image.repository Argo CD controller image repository
-  ## @param controller.image.tag Argo CD controller image tag (immutable tags are recommended)
-  ## @param controller.image.pullPolicy Argo CD controller image pull policy
-  ## @param controller.image.pullSecrets Argo CD controller image pull secrets
-  ##
-  image:
-    registry: docker.io
-    repository: bitnami/argo-cd
-    tag: 2.0.4-debian-10-r21
-    ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-    ##
-    pullPolicy: IfNotPresent
-    ## Optionally specify an array of imagePullSecrets.
-    ## Secrets must be manually created in the namespace.
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-    ## e.g:
-    ## pullSecrets:
-    ##   - myRegistryKeySecretName
-    ##
-    pullSecrets: []
-
   ## @param controller.replicaCount Number of Argo CD replicas to deploy
   ##
   replicaCount: 1
@@ -432,32 +434,6 @@ controller:
 ## Argo CD server configuration
 ##
 server:
-  ## Bitnami Argo CD server image
-  ## ref: https://hub.docker.com/r/bitnami/argo-cd/tags/
-  ## @param server.image.registry Argo CD server image registry
-  ## @param server.image.repository Argo CD server image repository
-  ## @param server.image.tag Argo CD server image tag (immutable tags are recommended)
-  ## @param server.image.pullPolicy Argo CD server image pull policy
-  ## @param server.image.pullSecrets Argo CD server image pull secrets
-  ##
-  image:
-    registry: docker.io
-    repository: bitnami/argo-cd
-    tag: 2.0.5-debian-10-r0
-    ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-    ##
-    pullPolicy: IfNotPresent
-    ## Optionally specify an array of imagePullSecrets.
-    ## Secrets must be manually created in the namespace.
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-    ## e.g:
-    ## pullSecrets:
-    ##   - myRegistryKeySecretName
-    ##
-    pullSecrets: []
-
   ## @param server.replicaCount Number of Argo CD server replicas to deploy
   ##
   replicaCount: 1
@@ -1042,32 +1018,6 @@ server:
 ## Argo CD repository server configuration
 ##
 repoServer:
-  ## Bitnami Argo CD repo server image
-  ## ref: https://hub.docker.com/r/bitnami/argo-cd/tags/
-  ## @param repoServer.image.registry Argo CD repo server image registry
-  ## @param repoServer.image.repository Argo CD repo server image repository
-  ## @param repoServer.image.tag Argo CD repo server image tag (immutable tags are recommended)
-  ## @param repoServer.image.pullPolicy Argo CD repo server image pull policy
-  ## @param repoServer.image.pullSecrets Argo CD repo server image pull secrets
-  ##
-  image:
-    registry: docker.io
-    repository: bitnami/argo-cd
-    tag: 2.0.4-debian-10-r21
-    ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-    ##
-    pullPolicy: IfNotPresent
-    ## Optionally specify an array of imagePullSecrets.
-    ## Secrets must be manually created in the namespace.
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-    ## e.g:
-    ## pullSecrets:
-    ##   - myRegistryKeySecretName
-    ##
-    pullSecrets: []
-
   ## @param repoServer.replicaCount Number of Argo CD repo server replicas to deploy
   ##
   replicaCount: 1
@@ -1386,7 +1336,7 @@ dex:
   image:
     registry: docker.io
     repository: bitnami/dex
-    tag: 2.29.0-debian-10-r21
+    tag: 2.30.0-debian-10-r57
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1917,7 +1867,7 @@ redis:
   image:
     registry: docker.io
     repository: bitnami/redis
-    tag: 6.2.5-debian-10-r0
+    tag: 6.2.5-debian-10-r66
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1955,7 +1905,7 @@ redis:
     ##
     existingSecret: ""
     ##
-    ## Password key to be retrieved from Redis(TM) secret
+    ## Password key to be retrieved from Redis&trade; secret
     ##
     existingSecretPasswordKey: 'redis-password'
 
@@ -1966,18 +1916,18 @@ redis:
   ## architecture: standalone
 
 ##
-## External Redis(TM)
+## External Redis&trade;
 ##
 externalRedis:
-  ## Redis(TM) host
+  ## Redis&trade; host
   ## @param externalRedis.host External Redis host
   ##
   host: ""
-  ## Redis(TM) port
+  ## Redis&trade; port
   ## @param externalRedis.port External Redis port
   ##
   port: 6379
-  ## Redis(TM) password for authentication
+  ## Redis&trade; password for authentication
   ## Ignored if existingSecret is set
   ## @param externalRedis.password External Redis password
   ##
@@ -1986,7 +1936,7 @@ externalRedis:
   ## @param externalRedis.existingSecret Existing secret for the external redis
   ##
   existingSecret: ""
-  ## Password key to be retrieved from Redis(TM) secret
+  ## Password key to be retrieved from Redis&trade; secret
   ## @param externalRedis.existingSecretPasswordKey Password key for the existing secret containing the external redis password
   ##
   existingSecretPasswordKey: 'redis-password'

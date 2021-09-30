@@ -74,7 +74,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------- | -------------------------------------------------------------------- | --------------------- |
 | `image.registry`     | ASP.NET Core image registry                                          | `docker.io`           |
 | `image.repository`   | ASP.NET Core image repository                                        | `bitnami/aspnet-core` |
-| `image.tag`          | ASP.NET Core image tag (immutable tags are recommended)              | `3.1.17-debian-10-r0` |
+| `image.tag`          | ASP.NET Core image tag (immutable tags are recommended)              | `3.1.19-debian-10-r0` |
 | `image.pullPolicy`   | ASP.NET Core image pull policy                                       | `IfNotPresent`        |
 | `image.pullSecrets`  | ASP.NET Core image pull secrets                                      | `[]`                  |
 | `command`            | Override default container command (useful when using custom images) | `[]`                  |
@@ -111,7 +111,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `resources.requests`                 | The requested resources for the ASP.NET Core container                                    | `{}`            |
 | `containerPort`                      | Port to expose at ASP.NET Core container level                                            | `8080`          |
 | `podSecurityContext.enabled`         | Enabled ASP.NET Core pods' Security Context                                               | `false`         |
-| `podSecurityContext.sysctls`         | Set namespaced sysctls for the ASP.NET Core pods                                          | `{}`            |
+| `podSecurityContext.sysctls`         | Set namespaced sysctls for the ASP.NET Core pods                                          | `[]`            |
 | `containerSecurityContext.enabled`   | Enabled ASP.NET Core containers' Security Context                                         | `false`         |
 | `containerSecurityContext.runAsUser` | Set ASP.NET Core container's Security Context runAsUser                                   | `0`             |
 | `livenessProbe.enabled`              | Enable livenessProbe                                                                      | `true`          |
@@ -145,7 +145,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `appFromExternalRepo.enabled`                   | Enable to download/build ASP.NET Core app from external git repository | `true`                                                              |
 | `appFromExternalRepo.clone.image.registry`      | Git image registry                                                     | `docker.io`                                                         |
 | `appFromExternalRepo.clone.image.repository`    | Git image repository                                                   | `bitnami/git`                                                       |
-| `appFromExternalRepo.clone.image.tag`           | Git image tag (immutable tags are recommended)                         | `2.32.0-debian-10-r31`                                              |
+| `appFromExternalRepo.clone.image.tag`           | Git image tag (immutable tags are recommended)                         | `2.33.0-debian-10-r28`                                              |
 | `appFromExternalRepo.clone.image.pullPolicy`    | Git image pull policy                                                  | `IfNotPresent`                                                      |
 | `appFromExternalRepo.clone.image.pullSecrets`   | Git image pull secrets                                                 | `[]`                                                                |
 | `appFromExternalRepo.clone.repository`          | Git repository to clone                                                | `https://github.com/dotnet/AspNetCore.Docs.git`                     |
@@ -153,12 +153,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `appFromExternalRepo.clone.extraVolumeMounts`   | Add extra volume mounts for the GIT container                          | `[]`                                                                |
 | `appFromExternalRepo.publish.image.registry`    | .NET SDK image registry                                                | `docker.io`                                                         |
 | `appFromExternalRepo.publish.image.repository`  | .NET SDK image repository                                              | `bitnami/dotnet-sdk`                                                |
-| `appFromExternalRepo.publish.image.tag`         | .NET SDK image tag (immutable tags are recommended)                    | `3.1.410-debian-10-r28`                                             |
+| `appFromExternalRepo.publish.image.tag`         | .NET SDK image tag (immutable tags are recommended)                    | `3.1.412-debian-10-r33`                                             |
 | `appFromExternalRepo.publish.image.pullPolicy`  | .NET SDK image pull policy                                             | `IfNotPresent`                                                      |
 | `appFromExternalRepo.publish.image.pullSecrets` | .NET SDK image pull secrets                                            | `[]`                                                                |
 | `appFromExternalRepo.publish.subFolder`         | Sub folder under the Git repository containing the ASP.NET Core app    | `aspnetcore/fundamentals/servers/kestrel/samples/3.x/KestrelSample` |
 | `appFromExternalRepo.publish.extraFlags`        | Extra flags to be appended to "dotnet publish" command                 | `[]`                                                                |
-| `appFromExternalRepo.startCommand`              | Command used to start ASP.NET Core app                                 | `[]`                                                                |
+| `appFromExternalRepo.startCommand`              | Command used to start ASP.NET Core app                                 | `["dotnet","KestrelSample.dll"]`                                    |
 | `appFromExistingPVC.enabled`                    | Enable mounting your ASP.NET Core app from an existing PVC             | `false`                                                             |
 | `appFromExistingPVC.existingClaim`              | A existing Persistent Volume Claim containing your ASP.NET Core app    | `""`                                                                |
 
@@ -179,7 +179,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.pathType`                 | Ingress path type                                                                   | `ImplementationSpecific` |
 | `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                       | `""`                     |
 | `ingress.hostname`                 | Default host for the ingress resource, a host pointing to this will be created      | `aspnet-core.local`      |
-| `ingress.path`                     | Default path for the ingress record                                                 | `ImplementationSpecific` |
+| `ingress.path`                     | Default path for the ingress record                                                 | `/`                      |
 | `ingress.annotations`              | Additional custom annotations for the ingress record                                | `{}`                     |
 | `ingress.tls`                      | Enable TLS configuration for the host defined at `ingress.hostname` parameter       | `false`                  |
 | `ingress.certManager`              | Add the corresponding annotations for cert-manager integration                      | `false`                  |

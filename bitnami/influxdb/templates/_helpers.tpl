@@ -2,14 +2,14 @@
 
 
 {{/*
-Return the proper InfluxDB(TM) image name
+Return the proper InfluxDB&trade; image name
 */}}
 {{- define "influxdb.image" -}}
 {{ include "common.images.image" (dict "imageRoot" .Values.image "global" .Values.global) }}
 {{- end -}}
 
 {{/*
-Return the proper InfluxDB Relay(TM) image name
+Return the proper InfluxDB Relay&trade; image name
 */}}
 {{- define "influxdb.relay.image" -}}
 {{ include "common.images.image" (dict "imageRoot" .Values.relay.image "global" .Values.global) }}
@@ -44,7 +44,7 @@ Return the proper Docker Image Registry Secret Names
 {{- end -}}
 
 {{/*
-Return the InfluxDB(TM) credentials secret.
+Return the InfluxDB&trade; credentials secret.
 */}}
 {{- define "influxdb.secretName" -}}
 {{- if .Values.auth.existingSecret -}}
@@ -55,7 +55,7 @@ Return the InfluxDB(TM) credentials secret.
 {{- end -}}
 
 {{/*
-Return the InfluxDB(TM) configuration configmap.
+Return the InfluxDB&trade; configuration configmap.
 */}}
 {{- define "influxdb.configmapName" -}}
 {{- if .Values.influxdb.existingConfiguration -}}
@@ -66,7 +66,7 @@ Return the InfluxDB(TM) configuration configmap.
 {{- end -}}
 
 {{/*
-Return the InfluxDB(TM) PVC name.
+Return the InfluxDB&trade; PVC name.
 */}}
 {{- define "influxdb.claimName" -}}
 {{- if .Values.persistence.existingClaim }}
@@ -77,7 +77,7 @@ Return the InfluxDB(TM) PVC name.
 {{- end -}}
 
 {{/*
-Return the InfluxDB(TM) initialization scripts configmap.
+Return the InfluxDB&trade; initialization scripts configmap.
 */}}
 {{- define "influxdb.initdbScriptsConfigmapName" -}}
 {{- if .Values.influxdb.initdbScriptsCM -}}
@@ -88,14 +88,14 @@ Return the InfluxDB(TM) initialization scripts configmap.
 {{- end -}}
 
 {{/*
-Get the InfluxDB(TM) initialization scripts secret.
+Get the InfluxDB&trade; initialization scripts secret.
 */}}
 {{- define "influxdb.initdbScriptsSecret" -}}
 {{- printf "%s" (tpl .Values.influxdb.initdbScriptsSecret $) -}}
 {{- end -}}
 
 {{/*
-Return the InfluxDB(TM) configuration configmap.
+Return the InfluxDB&trade; configuration configmap.
 */}}
 {{- define "influxdb.relay.configmapName" -}}
 {{- if .Values.relay.existingConfiguration -}}
@@ -132,7 +132,7 @@ Compile all warnings into a single message, and call fail.
 {{- end -}}
 {{- end -}}
 
-{{/* Validate values of InfluxDB(TM) - must provide a valid architecture */}}
+{{/* Validate values of InfluxDB&trade; - must provide a valid architecture */}}
 {{- define "influxdb.validateValues.architecture" -}}
 {{- if and (ne .Values.architecture "standalone") (ne .Values.architecture "high-availability") -}}
 influxdb: architecture
@@ -141,7 +141,7 @@ influxdb: architecture
 {{- end -}}
 {{- end -}}
 
-{{/* Validate values of InfluxDB(TM) - number of replicas */}}
+{{/* Validate values of InfluxDB&trade; - number of replicas */}}
 {{- define "influxdb.validateValues.replicaCount" -}}
 {{- $replicaCount := int .Values.influxdb.replicaCount }}
 {{- if and (eq .Values.architecture "standalone") (gt $replicaCount 1) -}}

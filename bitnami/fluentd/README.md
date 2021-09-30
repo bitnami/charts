@@ -52,20 +52,23 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                      | Description                                     | Value |
 | ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `nil` |
+| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `nil` |
+| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
 
 ### Common parameters
 
-| Name               | Description                                                                                  | Value           |
-| ------------------ | -------------------------------------------------------------------------------------------- | --------------- |
-| `kubeVersion`      | Force target Kubernetes version (using Helm capabilities if not set)                         | `nil`           |
-| `nameOverride`     | String to partially override common.names.fullname template (will maintain the release name) | `nil`           |
-| `fullnameOverride` | String to fully override common.names.fullname template                                      | `nil`           |
-| `clusterDomain`    | Cluster Domain                                                                               | `cluster.local` |
-| `extraDeploy`      | Array of extra objects to deploy with the release                                            | `[]`            |
+| Name                     | Description                                                                                  | Value           |
+| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
+| `kubeVersion`            | Force target Kubernetes version (using Helm capabilities if not set)                         | `""`            |
+| `nameOverride`           | String to partially override common.names.fullname template (will maintain the release name) | `""`            |
+| `fullnameOverride`       | String to fully override common.names.fullname template                                      | `""`            |
+| `clusterDomain`          | Cluster Domain                                                                               | `cluster.local` |
+| `extraDeploy`            | Array of extra objects to deploy with the release                                            | `[]`            |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)      | `false`         |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                         | `["sleep"]`     |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                            | `["infinity"]`  |
 
 
 ### Fluentd parameters
@@ -74,9 +77,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- |
 | `image.registry`                                               | Fluentd image registry                                                                                          | `docker.io`                                                |
 | `image.repository`                                             | Fluentd image repository                                                                                        | `bitnami/fluentd`                                          |
-| `image.tag`                                                    | Fluentd image tag (immutable tags are recommended)                                                              | `1.13.1-debian-10-r0`                                      |
+| `image.tag`                                                    | Fluentd image tag (immutable tags are recommended)                                                              | `1.14.1-debian-10-r0`                                      |
 | `image.pullPolicy`                                             | Fluentd image pull policy                                                                                       | `IfNotPresent`                                             |
 | `image.pullSecrets`                                            | Fluentd image pull secrets                                                                                      | `[]`                                                       |
+| `image.debug`                                                  | Enable image debug mode                                                                                         | `false`                                                    |
 | `forwarder.enabled`                                            | Enable forwarder daemonset                                                                                      | `true`                                                     |
 | `forwarder.daemonUser`                                         | Forwarder daemon user and group (set to root by default because it reads from host paths)                       | `root`                                                     |
 | `forwarder.daemonGroup`                                        | Fluentd forwarder daemon system group                                                                           | `root`                                                     |
@@ -88,19 +92,20 @@ The command removes all the Kubernetes components associated with the chart and 
 | `forwarder.containerSecurityContext.enabled`                   | Enable security context for the forwarder container                                                             | `true`                                                     |
 | `forwarder.containerSecurityContext.privileged`                | Run as privileged                                                                                               | `false`                                                    |
 | `forwarder.containerSecurityContext.allowPrivilegeEscalation`  | Allow Privilege Escalation                                                                                      | `false`                                                    |
+| `forwarder.containerSecurityContext.readOnlyRootFilesystem`    | Require the use of a read only root file system                                                                 | `false`                                                    |
 | `forwarder.containerSecurityContext.capabilities.drop`         | Drop capabilities for the securityContext                                                                       | `[]`                                                       |
 | `forwarder.terminationGracePeriodSeconds`                      | Duration in seconds the pod needs to terminate gracefully                                                       | `30`                                                       |
 | `forwarder.configFile`                                         | Name of the config file that will be used by Fluentd at launch under the `/opt/bitnami/fluentd/conf` directory  | `fluentd.conf`                                             |
-| `forwarder.configMap`                                          | Name of the config map that contains the Fluentd configuration files                                            | `nil`                                                      |
+| `forwarder.configMap`                                          | Name of the config map that contains the Fluentd configuration files                                            | `""`                                                       |
 | `forwarder.configMapFiles`                                     | Files to be added to be config map. Ignored if `forwarder.configMap` is set                                     | `{}`                                                       |
 | `forwarder.extraArgs`                                          | Extra arguments for the Fluentd command line                                                                    | `""`                                                       |
 | `forwarder.extraEnv`                                           | Extra environment variables to pass to the container                                                            | `[]`                                                       |
 | `forwarder.containerPorts`                                     | Ports the forwarder containers will listen on                                                                   | `[]`                                                       |
 | `forwarder.service.type`                                       | Kubernetes service type (`ClusterIP`, `NodePort`, or `LoadBalancer`) for the forwarders                         | `ClusterIP`                                                |
 | `forwarder.service.ports`                                      | Array containing the forwarder service ports                                                                    | `{}`                                                       |
-| `forwarder.service.loadBalancerIP`                             | loadBalancerIP if service type is `LoadBalancer` (optional, cloud specific)                                     | `nil`                                                      |
+| `forwarder.service.loadBalancerIP`                             | loadBalancerIP if service type is `LoadBalancer` (optional, cloud specific)                                     | `""`                                                       |
 | `forwarder.service.loadBalancerSourceRanges`                   | Addresses that are allowed when service is LoadBalancer                                                         | `[]`                                                       |
-| `forwarder.service.clusterIP`                                  | Static clusterIP or None for headless services                                                                  | `nil`                                                      |
+| `forwarder.service.clusterIP`                                  | Static clusterIP or None for headless services                                                                  | `""`                                                       |
 | `forwarder.service.annotations`                                | Provide any additional annotations which may be required                                                        | `{}`                                                       |
 | `forwarder.livenessProbe.enabled`                              | Enable livenessProbe                                                                                            | `true`                                                     |
 | `forwarder.livenessProbe.httpGet.path`                         | Request path for livenessProbe                                                                                  | `/fluentd.healthcheck?json=%7B%22ping%22%3A+%22pong%22%7D` |
@@ -133,16 +138,17 @@ The command removes all the Kubernetes components associated with the chart and 
 | `forwarder.podAnnotations`                                     | Pod annotations                                                                                                 | `{}`                                                       |
 | `forwarder.podLabels`                                          | Extra labels to add to Pod                                                                                      | `{}`                                                       |
 | `forwarder.serviceAccount.create`                              | Specify whether a ServiceAccount should be created.                                                             | `true`                                                     |
-| `forwarder.serviceAccount.name`                                | The name of the ServiceAccount to create                                                                        | `nil`                                                      |
+| `forwarder.serviceAccount.name`                                | The name of the ServiceAccount to create                                                                        | `""`                                                       |
 | `forwarder.serviceAccount.annotations`                         | Additional Service Account annotations (evaluated as a template)                                                | `{}`                                                       |
 | `forwarder.rbac.create`                                        | Specify whether RBAC resources should be created and used, allowing the get, watch and list of pods/namespaces  | `true`                                                     |
 | `forwarder.rbac.pspEnabled`                                    | Specify whether the bundled Pod Security Policy should be created and bound with RBAC                           | `false`                                                    |
 | `forwarder.persistence.enabled`                                | Enable persistence volume for the forwarder                                                                     | `false`                                                    |
 | `forwarder.persistence.hostPath.path`                          | Directory from the host node's filesystem to mount as hostPath volume for persistence.                          | `/opt/bitnami/fluentd/logs/buffers`                        |
+| `forwarder.lifecycle`                                          | Additional lifecycles to add to the pods                                                                        | `{}`                                                       |
 | `forwarder.initContainers`                                     | Additional init containers to add to the pods                                                                   | `[]`                                                       |
 | `forwarder.sidecars`                                           | Add sidecars to forwarder pods                                                                                  | `[]`                                                       |
-| `forwarder.extraVolumes`                                       | Extra volumes                                                                                                   | `nil`                                                      |
-| `forwarder.extraVolumeMounts`                                  | Mount extra volume(s)                                                                                           | `nil`                                                      |
+| `forwarder.extraVolumes`                                       | Extra volumes                                                                                                   | `[]`                                                       |
+| `forwarder.extraVolumeMounts`                                  | Mount extra volume(s)                                                                                           | `[]`                                                       |
 | `aggregator.enabled`                                           | Enable Fluentd aggregator statefulset                                                                           | `true`                                                     |
 | `aggregator.replicaCount`                                      | Number of aggregator pods to deploy in the Stateful Set                                                         | `1`                                                        |
 | `aggregator.securityContext.enabled`                           | Enable security context for aggregator pods                                                                     | `true`                                                     |
@@ -153,10 +159,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `aggregator.containerSecurityContext.enabled`                  | Enable security context for the aggregator container                                                            | `true`                                                     |
 | `aggregator.containerSecurityContext.privileged`               | Run as privileged                                                                                               | `false`                                                    |
 | `aggregator.containerSecurityContext.allowPrivilegeEscalation` | Allow Privilege Escalation                                                                                      | `false`                                                    |
+| `aggregator.containerSecurityContext.readOnlyRootFilesystem`   | Require the use of a read only root file system                                                                 | `false`                                                    |
 | `aggregator.containerSecurityContext.capabilities.drop`        | Drop capabilities for the securityContext                                                                       | `[]`                                                       |
 | `aggregator.terminationGracePeriodSeconds`                     | Duration in seconds the pod needs to terminate gracefully                                                       | `30`                                                       |
 | `aggregator.configFile`                                        | Name of the config file that will be used by Fluentd at launch under the `/opt/bitnami/fluentd/conf` directory  | `fluentd.conf`                                             |
-| `aggregator.configMap`                                         | Name of the config map that contains the Fluentd configuration files                                            | `nil`                                                      |
+| `aggregator.configMap`                                         | Name of the config map that contains the Fluentd configuration files                                            | `""`                                                       |
 | `aggregator.configMapFiles`                                    | Files to be added to be config map. Ignored if `aggregator.configMap` is set                                    | `{}`                                                       |
 | `aggregator.port`                                              | Port the Aggregator container will listen for logs. Leave it blank to ignore.                                   | `24224`                                                    |
 | `aggregator.extraArgs`                                         | Extra arguments for the Fluentd command line                                                                    | `""`                                                       |
@@ -164,16 +171,16 @@ The command removes all the Kubernetes components associated with the chart and 
 | `aggregator.containerPorts`                                    | Ports the aggregator containers will listen on                                                                  | `[]`                                                       |
 | `aggregator.service.type`                                      | Kubernetes service type (`ClusterIP`, `NodePort`, or `LoadBalancer`) for the aggregators                        | `ClusterIP`                                                |
 | `aggregator.service.ports`                                     | Array containing the aggregator service ports                                                                   | `{}`                                                       |
-| `aggregator.service.loadBalancerIP`                            | loadBalancerIP if service type is `LoadBalancer` (optional, cloud specific)                                     | `nil`                                                      |
+| `aggregator.service.loadBalancerIP`                            | loadBalancerIP if service type is `LoadBalancer` (optional, cloud specific)                                     | `""`                                                       |
 | `aggregator.service.loadBalancerSourceRanges`                  | Addresses that are allowed when service is LoadBalancer                                                         | `[]`                                                       |
-| `aggregator.service.clusterIP`                                 | Static clusterIP or None for headless services                                                                  | `nil`                                                      |
+| `aggregator.service.clusterIP`                                 | Static clusterIP or None for headless services                                                                  | `""`                                                       |
 | `aggregator.service.annotations`                               | Provide any additional annotations which may be required                                                        | `{}`                                                       |
 | `aggregator.ingress.enabled`                                   | Set to true to enable ingress record generation                                                                 | `false`                                                    |
 | `aggregator.ingress.certManager`                               | Set this to true in order to add the corresponding annotations for cert-manager                                 | `false`                                                    |
 | `aggregator.ingress.pathType`                                  | Ingress Path type. How the path matching is interpreted                                                         | `ImplementationSpecific`                                   |
-| `aggregator.ingress.apiVersion`                                | Override API Version (automatically detected if not set)                                                        | `nil`                                                      |
+| `aggregator.ingress.apiVersion`                                | Override API Version (automatically detected if not set)                                                        | `""`                                                       |
 | `aggregator.ingress.hostname`                                  | Default host for the ingress resource                                                                           | `fluentd.local`                                            |
-| `aggregator.ingress.path`                                      | Default path for the ingress resource                                                                           | `ImplementationSpecific`                                   |
+| `aggregator.ingress.path`                                      | Default path for the ingress resource                                                                           | `/`                                                        |
 | `aggregator.ingress.annotations`                               | Ingress annotations                                                                                             | `{}`                                                       |
 | `aggregator.ingress.tls`                                       | Enable TLS configuration for the hostname defined at ingress.hostname parameter                                 | `false`                                                    |
 | `aggregator.ingress.extraHosts`                                | The list of additional hostnames to be covered with this ingress record.                                        | `[]`                                                       |
@@ -210,38 +217,39 @@ The command removes all the Kubernetes components associated with the chart and 
 | `aggregator.podAnnotations`                                    | Pod annotations                                                                                                 | `{}`                                                       |
 | `aggregator.podLabels`                                         | Extra labels to add to Pod                                                                                      | `{}`                                                       |
 | `aggregator.serviceAccount.create`                             | Specify whether a ServiceAccount should be created                                                              | `false`                                                    |
-| `aggregator.serviceAccount.name`                               | The name of the ServiceAccount to create                                                                        | `nil`                                                      |
+| `aggregator.serviceAccount.name`                               | The name of the ServiceAccount to create                                                                        | `""`                                                       |
 | `aggregator.serviceAccount.annotations`                        | Additional Service Account annotations (evaluated as a template)                                                | `{}`                                                       |
 | `aggregator.autoscaling.enabled`                               | Create an Horizontal Pod Autoscaler                                                                             | `false`                                                    |
 | `aggregator.autoscaling.minReplicas`                           | Minimum number of replicas for the HPA                                                                          | `2`                                                        |
 | `aggregator.autoscaling.maxReplicas`                           | Maximum number of replicas for the HPA                                                                          | `5`                                                        |
 | `aggregator.autoscaling.metrics`                               | Metrics for the HPA to manage the scaling                                                                       | `[]`                                                       |
 | `aggregator.persistence.enabled`                               | Enable persistence volume for the aggregator                                                                    | `false`                                                    |
-| `aggregator.persistence.storageClass`                          | Persistent Volume storage class                                                                                 | `nil`                                                      |
+| `aggregator.persistence.storageClass`                          | Persistent Volume storage class                                                                                 | `""`                                                       |
 | `aggregator.persistence.accessMode`                            | Persistent Volume access mode                                                                                   | `ReadWriteOnce`                                            |
 | `aggregator.persistence.size`                                  | Persistent Volume size                                                                                          | `10Gi`                                                     |
+| `aggregator.lifecycle`                                         | Additional lifecycles to add to the pods                                                                        | `{}`                                                       |
 | `aggregator.initContainers`                                    | Add init containers to aggregator pods                                                                          | `[]`                                                       |
 | `aggregator.sidecars`                                          | Add sidecars to aggregator pods                                                                                 | `[]`                                                       |
-| `aggregator.extraVolumes`                                      | Extra volumes                                                                                                   | `nil`                                                      |
-| `aggregator.extraVolumeMounts`                                 | Mount extra volume(s)                                                                                           | `nil`                                                      |
+| `aggregator.extraVolumes`                                      | Extra volumes                                                                                                   | `[]`                                                       |
+| `aggregator.extraVolumeMounts`                                 | Mount extra volume(s)                                                                                           | `[]`                                                       |
 | `serviceAccount`                                               | Pods Service Account. This top-level global entry is DEPRECATED. Please use "forwarder.serviceAccount" instead. | `{}`                                                       |
 | `rbac`                                                         | Role Based Access. This top-level global entry is DEPRECATED. Please use "forwarder.rbac" instead.              | `{}`                                                       |
 | `metrics.enabled`                                              | Enable the export of Prometheus metrics                                                                         | `false`                                                    |
 | `metrics.service.type`                                         | Prometheus metrics service type                                                                                 | `ClusterIP`                                                |
 | `metrics.service.port`                                         | Prometheus metrics service port                                                                                 | `24231`                                                    |
-| `metrics.service.loadBalancerIP`                               | Load Balancer IP if the Prometheus metrics server type is `LoadBalancer`                                        | `nil`                                                      |
+| `metrics.service.loadBalancerIP`                               | Load Balancer IP if the Prometheus metrics server type is `LoadBalancer`                                        | `""`                                                       |
 | `metrics.service.annotations`                                  | Annotations for the Prometheus Exporter service service                                                         | `{}`                                                       |
 | `metrics.serviceMonitor.enabled`                               | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)          | `false`                                                    |
-| `metrics.serviceMonitor.namespace`                             | Namespace in which Prometheus is running                                                                        | `nil`                                                      |
-| `metrics.serviceMonitor.interval`                              | Interval at which metrics should be scraped.                                                                    | `nil`                                                      |
-| `metrics.serviceMonitor.scrapeTimeout`                         | Timeout after which the scrape is ended                                                                         | `nil`                                                      |
+| `metrics.serviceMonitor.namespace`                             | Namespace in which Prometheus is running                                                                        | `""`                                                       |
+| `metrics.serviceMonitor.interval`                              | Interval at which metrics should be scraped.                                                                    | `""`                                                       |
+| `metrics.serviceMonitor.scrapeTimeout`                         | Timeout after which the scrape is ended                                                                         | `""`                                                       |
 | `metrics.serviceMonitor.selector`                              | Prometheus instance selector labels                                                                             | `{}`                                                       |
 | `metrics.serviceMonitor.labels`                                | ServiceMonitor extra labels                                                                                     | `{}`                                                       |
 | `metrics.serviceMonitor.annotations`                           | ServiceMonitor annotations                                                                                      | `{}`                                                       |
 | `tls.enabled`                                                  | Enable TLS/SSL encrytion for internal communications                                                            | `false`                                                    |
 | `tls.autoGenerated`                                            | Generate automatically self-signed TLS certificates.                                                            | `false`                                                    |
-| `tls.forwarder.existingSecret`                                 | Name of the existing secret containing the TLS certificates for the Fluentd forwarder                           | `nil`                                                      |
-| `tls.aggregator.existingSecret`                                | Name of the existing secret containing the TLS certificates for the Fluentd aggregator                          | `nil`                                                      |
+| `tls.forwarder.existingSecret`                                 | Name of the existing secret containing the TLS certificates for the Fluentd forwarder                           | `""`                                                       |
+| `tls.aggregator.existingSecret`                                | Name of the existing secret containing the TLS certificates for the Fluentd aggregator                          | `""`                                                       |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
@@ -467,7 +475,7 @@ forwarder:
     create: true
 ```
 
-### 1.0.0
+### To 1.0.0
 
 In this version of the chart the Fluentd forwarder daemon system user will be root by default. This is done to ensure that mounted host paths are readable by the forwarder. For more context, check this [support case](https://github.com/bitnami/charts/issues/1905).
 

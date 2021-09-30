@@ -17,7 +17,7 @@ spec:
   ingress:
     # Allow inbound connections
     - ports:
-        - port: {{ .Values.containerPort }}
+        - port: {{ .Values.containerPorts.console }}
       {{- if not .Values.networkPolicy.allowExternal }}
       from:
         - podSelector:

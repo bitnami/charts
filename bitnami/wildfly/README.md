@@ -75,7 +75,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | -------------------------------------------------- | ---------------------- |
 | `image.registry`    | WildFly image registry                             | `docker.io`            |
 | `image.repository`  | WildFly image repository                           | `bitnami/wildfly`      |
-| `image.tag`         | WildFly image tag (immutable tags are recommended) | `24.0.0-debian-10-r10` |
+| `image.tag`         | WildFly image tag (immutable tags are recommended) | `24.0.1-debian-10-r44` |
 | `image.pullPolicy`  | WildFly image pull policy                          | `IfNotPresent`         |
 | `image.pullSecrets` | WildFly image pull secrets                         | `[]`                   |
 | `image.debug`       | Enable image debug mode                            | `false`                |
@@ -83,15 +83,16 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### WildFly Configuration parameters
 
-| Name                 | Description                                                            | Value  |
-| -------------------- | ---------------------------------------------------------------------- | ------ |
-| `wildflyUsername`    | WildFly username                                                       | `user` |
-| `wildflyPassword`    | WildFly user password                                                  | `""`   |
-| `command`            | Override default container command (useful when using custom images)   | `[]`   |
-| `args`               | Override default container args (useful when using custom images)      | `[]`   |
-| `extraEnvVars`       | Array with extra environment variables to add to the WildFly container | `[]`   |
-| `extraEnvVarsCM`     | Name of existing ConfigMap containing extra env vars                   | `""`   |
-| `extraEnvVarsSecret` | Name of existing Secret containing extra env vars                      | `""`   |
+| Name                      | Description                                                            | Value   |
+| ------------------------- | ---------------------------------------------------------------------- | ------- |
+| `wildflyUsername`         | WildFly username                                                       | `user`  |
+| `wildflyPassword`         | WildFly user password                                                  | `""`    |
+| `exposeManagementConsole` | Allows exposing the WildFly Management console outside the cluster     | `false` |
+| `command`                 | Override default container command (useful when using custom images)   | `[]`    |
+| `args`                    | Override default container args (useful when using custom images)      | `[]`    |
+| `extraEnvVars`            | Array with extra environment variables to add to the WildFly container | `[]`    |
+| `extraEnvVarsCM`          | Name of existing ConfigMap containing extra env vars                   | `""`    |
+| `extraEnvVarsSecret`      | Name of existing Secret containing extra env vars                      | `""`    |
 
 
 ### WildFly deployment parameters
@@ -146,7 +147,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ---------------------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------ |
 | `service.type`                     | WildFly service type                                                                                  | `LoadBalancer`           |
 | `service.port`                     | WildFly service HTTP port                                                                             | `80`                     |
-| `service.mgmtPort`                 | WildFly service management console port                                                               | `443`                    |
+| `service.mgmtPort`                 | WildFly service management console port                                                               | `9990`                   |
 | `service.nodePorts.http`           | Node port for HTTP                                                                                    | `""`                     |
 | `service.nodePorts.mgmt`           | Node port for Management console                                                                      | `""`                     |
 | `service.clusterIP`                | WildFly service Cluster IP                                                                            | `""`                     |
@@ -154,19 +155,29 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.loadBalancerSourceRanges` | WildFly service Load Balancer sources                                                                 | `[]`                     |
 | `service.externalTrafficPolicy`    | WildFly service external traffic policy                                                               | `Cluster`                |
 | `service.annotations`              | Additional custom annotations for WildFly service                                                     | `{}`                     |
-| `service.extraPorts`               | Extra port to expose on WildFly service                                                               | `[]`                     |
+| `service.extraPorts`               | Extra ports to expose on WildFly service                                                              | `[]`                     |
 | `ingress.enabled`                  | Enable ingress record generation for WildFly                                                          | `false`                  |
 | `ingress.certManager`              | Add the corresponding annotations for cert-manager integration                                        | `false`                  |
 | `ingress.pathType`                 | Ingress path type                                                                                     | `ImplementationSpecific` |
 | `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                         | `""`                     |
 | `ingress.hostname`                 | Default host for the ingress record                                                                   | `wildfly.local`          |
-| `ingress.path`                     | Default path for the ingress record                                                                   | `ImplementationSpecific` |
+| `ingress.path`                     | Default path for the ingress record                                                                   | `/`                      |
 | `ingress.annotations`              | Additional custom annotations for the ingress record                                                  | `{}`                     |
 | `ingress.tls`                      | Enable TLS configuration for the host defined at `ingress.hostname` parameter                         | `false`                  |
 | `ingress.extraHosts`               | An array with additional hostname(s) to be covered with the ingress record                            | `[]`                     |
 | `ingress.extraPaths`               | An array with additional arbitrary paths that may need to be added to the ingress under the main host | `[]`                     |
 | `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                   | `[]`                     |
 | `ingress.secrets`                  | Custom TLS certificates as secrets                                                                    | `[]`                     |
+| `mgmtIngress.enabled`              | Set to true to enable ingress record generation for the Management console                            | `false`                  |
+| `mgmtIngress.certManager`          | Set this to true in order to add the corresponding annotations for cert-manager                       | `false`                  |
+| `mgmtIngress.pathType`             | Ingress path type                                                                                     | `ImplementationSpecific` |
+| `mgmtIngress.hostname`             | When the Management ingress is enabled, a host pointing to this will be created                       | `management.local`       |
+| `mgmtIngress.annotations`          | Health Ingress annotations                                                                            | `{}`                     |
+| `mgmtIngress.tls`                  | Enable TLS configuration for the hostname defined at `mgmtIngress.hostname` parameter                 | `false`                  |
+| `mgmtIngress.extraHosts`           | The list of additional hostnames to be covered with this Management ingress record                    | `[]`                     |
+| `mgmtIngress.extraPaths`           | An array with additional arbitrary paths that may need to be added to the ingress under the main host | `[]`                     |
+| `mgmtIngress.extraTls`             | TLS configuration for additional hostnames to be covered                                              | `[]`                     |
+| `mgmtIngress.secrets`              | TLS Secret configuration                                                                              | `[]`                     |
 
 
 ### Persistence Parameters
@@ -180,7 +191,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                   | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`            | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`          | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r125`     |
+| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r188`     |
 | `volumePermissions.image.pullPolicy`          | Bitnami Shell image pull policy                                                                 | `Always`                |
 | `volumePermissions.image.pullSecrets`         | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`          | The resources limits for the init container                                                     | `{}`                    |
@@ -212,7 +223,7 @@ $ helm install my-release -f values.yaml bitnami/wildfly
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling vs Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -234,9 +245,9 @@ As an alternative, this chart supports using an initContainer to change the owne
 
 You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
 
-### Adding extra environment variables
+### Add extra environment variables
 
-In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property.
+To add extra environment variables (useful for advanced operations like custom init scripts),  use the `extraEnvVars` property.
 
 ```yaml
 extraEnvVars:
@@ -244,39 +255,19 @@ extraEnvVars:
     value: DEBUG
 ```
 
-Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values.
+Alternatively, use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values.
 
-### Sidecars and Init Containers
+### Use Sidecars and Init Containers
 
-If you have a need for additional containers to run within the same pod as the Wildfly app (e.g. an additional metrics or logging exporter), you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
+If additional containers are needed in the same pod (such as additional metrics or logging exporters), they can be defined using the `sidecars` config parameter. Similarly, extra init containers can be added using the `initContainers` parameter.
 
-```yaml
-sidecars:
-  - name: your-image-name
-    image: your-image
-    imagePullPolicy: Always
-    ports:
-      - name: portname
-       containerPort: 1234
-```
+Refer to the chart documentation for more information on, and examples of, configuring and using [sidecars and init containers](https://docs.bitnami.com/kubernetes/infrastructure/wildfly/configuration/configure-sidecar-init-containers/).
 
-Similarly, you can add extra init containers using the `initContainers` parameter.
+### Set Pod affinity
 
-```yaml
-initContainers:
-  - name: your-image-name
-    image: your-image
-    imagePullPolicy: Always
-    ports:
-      - name: portname
-        containerPort: 1234
-```
+This chart allows you to set custom Pod affinity using the `affinity` parameter. Find more information about Pod affinity in the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-### Setting Pod's affinity
-
-This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
-
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
 ## Troubleshooting
 
@@ -308,24 +299,9 @@ $ helm upgrade wildfly bitnami/wildfly --set wildflyPassword=$WILDFLY_PASSWORD
 
 ### To 6.0.0
 
-[On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
+[On November 13, 2020, Helm v2 support formally ended](https://github.com/helm/charts#status-of-the-project). This major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
 
-#### What changes were introduced in this major version?
-
-- Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
-- The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
-
-#### Considerations when upgrading to this version
-
-- If you want to upgrade to this version from a previous one installed with Helm v3, you shouldn't face any issues
-- If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
-- If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3
-
-#### Useful links**
-
-- https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
-- https://helm.sh/docs/topics/v2_v3_migration/
-- https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
+[Learn more about this change and related upgrade considerations](https://docs.bitnami.com/kubernetes/infrastructure/wildfly/administration/upgrade-helm3/).
 
 ### To 2.1.0
 

@@ -73,7 +73,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------ | --------------------------------------------------------------------------------------------------------------------- | ----------------------------- |
 | `image.registry`                     | DokuWiki image registry                                                                                               | `docker.io`                   |
 | `image.repository`                   | DokuWiki image repository                                                                                             | `bitnami/dokuwiki`            |
-| `image.tag`                          | DokuWiki image tag                                                                                                    | `20200729.0.0-debian-10-r283` |
+| `image.tag`                          | DokuWiki image tag                                                                                                    | `20200729.0.0-debian-10-r370` |
 | `image.pullPolicy`                   | Image pull policy                                                                                                     | `IfNotPresent`                |
 | `image.pullSecrets`                  | Image pull policy                                                                                                     | `[]`                          |
 | `image.debug`                        | Enable image debugging                                                                                                | `false`                       |
@@ -144,7 +144,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.pathType`              | Ingress Path type                                                                             | `ImplementationSpecific` |
 | `ingress.apiVersion`            | Override API Version (automatically detected if not set)                                      | `""`                     |
 | `ingress.hostname`              | When the ingress is enabled, a host pointing to this will be created                          | `dokuwiki.local`         |
-| `ingress.path`                  | The Path to Dokuwiki. You may need to set this to '/*' in order to use this                   | `ImplementationSpecific` |
+| `ingress.path`                  | The Path to Dokuwiki. You may need to set this to '/*' in order to use this                   | `/`                      |
 | `ingress.annotations`           | Ingress annotations done as key:value pairs                                                   | `{}`                     |
 | `ingress.tls`                   | Enable TLS configuration for the hostname defined at ingress.hostname parameter               | `false`                  |
 | `ingress.extraHosts`            | The list of additional hostnames to be covered with this ingress record.                      | `[]`                     |
@@ -160,7 +160,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                                                              | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `10-debian-10-r112`     |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `10-debian-10-r202`     |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `Always`                |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                                          | `[]`                    |
 | `volumePermissions.resources.limits`   | The resources limits for the container                                                                                                                    | `{}`                    |
@@ -174,7 +174,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`           | Start a exporter side-car                        | `false`                   |
 | `metrics.image.registry`    | Apache exporter image registry                   | `docker.io`               |
 | `metrics.image.repository`  | Apache exporter image name                       | `bitnami/apache-exporter` |
-| `metrics.image.tag`         | Apache exporter image tag                        | `0.9.0-debian-10-r11`     |
+| `metrics.image.tag`         | Apache exporter image tag                        | `0.10.1-debian-10-r4`     |
 | `metrics.image.pullPolicy`  | Image pull policy                                | `IfNotPresent`            |
 | `metrics.image.pullSecrets` | Specify docker-registry secret names as an array | `[]`                      |
 | `metrics.podAnnotations`    | Additional annotations for Metrics exporter pod  | `{}`                      |
@@ -199,7 +199,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `certificates.extraEnvVarsSecret`                    | Secret containing extra env vars (in case of sensitive data)         | `""`                                     |
 | `certificates.image.registry`                        | Container sidecar registry                                           | `docker.io`                              |
 | `certificates.image.repository`                      | Container sidecar image                                              | `bitnami/bitnami-shell`                  |
-| `certificates.image.tag`                             | Container sidecar image tag                                          | `10-debian-10-r112`                      |
+| `certificates.image.tag`                             | Container sidecar image tag                                          | `10-debian-10-r202`                      |
 | `certificates.image.pullPolicy`                      | Container sidecar image pull policy                                  | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Container sidecar image pull secrets                                 | `[]`                                     |
 

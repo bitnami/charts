@@ -1,7 +1,7 @@
 
 {{/* vim: set filetype=mustache: */}}
 {{/*
-Validate Redis(TM) required passwords are not empty.
+Validate Redis&trade; required passwords are not empty.
 
 Usage:
 {{ include "common.validations.values.redis.passwords" (dict "secret" "secretName" "subchart" false "context" $) }}

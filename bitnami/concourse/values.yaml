@@ -47,7 +47,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/concourse
-  tag: 7.3.2-debian-10-r23
+  tag: 7.5.0-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -86,7 +86,7 @@ secrets:
   ## Extra Reads: https://github.com/concourse/concourse/issues/1865#issuecomment-464166994
   ## https://concourse-ci.org/global-resources.html#complications-with-reusing-containers
   ##
-  teamAuthorizedKeys:
+  teamAuthorizedKeys: []
 
   ## @param secrets.localUsers List of `username:password` or `username:bcrypted_password` combinations for all your local concourse users. Auto-generated if not set
   ## For details of expected format, see https://concourse-ci.org/local-auth.html
@@ -126,7 +126,7 @@ secrets:
     y1ZOrWfvON+XjWFFAEej/CpQZkNUkTzjTtSC0dnfAveZlasQHdI=
     -----END RSA PRIVATE KEY-----
 
-  ## @param secrets.hostKeyPub Concourse Host Keys.
+  ## @param secrets.hostKeyPub [string] Concourse Host Keys.
   ##
   hostKeyPub: |-
     ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDYBQ9fG6IML+qsFaMh1Pl+81wyUwRilHdfhItAiAsLVQsOwI5+V4pn5aLhHPBuRQqIqYmbkZ7I1VUIN1+90PVJ3X7l9qqanb85AHMtLujw1j9u0zDyH2XHgpUloknUQzUSLIZjjU3Hn3Uo/XikF+vT8104isO7Ym8Xp7sIcRuvOQ3nuRsFVCRogxpLTVHD/k57rwYVqWWLaKLwvx01ZVXOq4GHk/BVaKa9ODC/dNgbZMfwvVVXuf7/NFGmSMyXb49Si4aoP4Gn7jAX6GngBbm/bgKqO0skQy/ggQm/YVF+s5q4EhleMBLVJKD1VpM5LeLDFpiu/y4bVd8wUcgK+QQ9 Concourse
@@ -1151,7 +1151,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: "10"
+    tag: 10-debian-10-r195
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

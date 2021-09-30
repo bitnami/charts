@@ -10,4 +10,3 @@ Watch the Grafana Operator Deployment status using the command:
 {{- if .Values.grafana.enabled }}
 {{ include "common.warnings.rollingTag" .Values.grafana.image }}
 {{- end }}
-{{ include "common.warnings.rollingTag" .Values.grafanaPluginInit.image }}

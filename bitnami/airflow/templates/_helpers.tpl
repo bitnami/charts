@@ -106,8 +106,7 @@ Create a default fully qualified postgresql name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 {{- define "airflow.postgresql.fullname" -}}
-{{- $name := default "postgresql" .Values.postgresql.nameOverride -}}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
+{{- include "common.names.dependency.fullname" (dict "chartName" "postgresql" "chartValues" .Values.postgresql "context" $) -}}
 {{- end -}}
 
 {{/*
@@ -115,12 +114,11 @@ Create a default fully qualified redis name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 {{- define "airflow.redis.fullname" -}}
-{{- $name := default "redis" .Values.redis.nameOverride -}}
-{{- printf "%s-%s-master" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
+{{- include "common.names.dependency.fullname" (dict "chartName" "redis-master" "chartValues" .Values.redis "context" $) -}}
 {{- end -}}
 
 {{/*
-Get the Redis(TM) credentials secret.
+Get the Redis&trade; credentials secret.
 */}}
 {{- define "airflow.redis.secretName" -}}
 {{- if and (.Values.redis.enabled) (not .Values.redis.auth.existingSecret) -}}
@@ -295,6 +293,11 @@ Add environment variables to configure airflow common values
     secretKeyRef:
       name: {{ include "airflow.secretName" . }}
       key: airflow-fernetKey
+- name: AIRFLOW_SECRET_KEY
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "airflow.secretName" . }}
+      key: airflow-secretKey
 - name: AIRFLOW_LOAD_EXAMPLES
   value: {{ ternary "yes" "no" .Values.loadExamples | quote }}
 {{- if .Values.web.image.debug }}

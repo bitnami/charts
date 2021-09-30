@@ -29,9 +29,6 @@ spec:
       {{- if .Values.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
       {{- end }}
-      tolerations:
-        - key: node-role.kubernetes.io/master
-          effect: NoSchedule
       serviceAccountName: {{ include "metallb.speakerServiceAccountName" . }}
       terminationGracePeriodSeconds: {{ .Values.speaker.daemonset.terminationGracePeriodSeconds }}
       hostNetwork: true

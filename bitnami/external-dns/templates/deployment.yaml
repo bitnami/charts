@@ -146,9 +146,7 @@ spec:
             {{- if .Values.aws.apiRetries }}
             - --aws-api-retries={{ .Values.aws.apiRetries }}
             {{- end }}
-            {{- if .Values.aws.zoneType }}
             - --aws-zone-type={{ .Values.aws.zoneType }}
-            {{- end }}
             {{- if .Values.aws.assumeRoleArn }}
             - --aws-assume-role={{ .Values.aws.assumeRoleArn }}
             {{- end }}
@@ -220,14 +218,19 @@ spec:
             - --rfc2136-port={{ .Values.rfc2136.port }}
             - --rfc2136-zone={{ required "rfc2136.zone must be supplied for provider 'rfc2136'" .Values.rfc2136.zone }}
             - --rfc2136-min-ttl={{ .Values.rfc2136.minTTL }}
-              {{- if .Values.rfc2136.tsigKeyname }}
+              {{- if .Values.rfc2136.tsigAxfr }}
+            - --rfc2136-tsig-axfr
+              {{- end }}
+              {{- if .Values.rfc2136.rfc3645Enabled }}
+            - --rfc2136-gss-tsig
+            - --rfc2136-kerberos-realm={{ .Values.rfc2136.kerberosRealm }}
+              {{- else }}
+                {{- if .Values.rfc2136.tsigKeyname }}
             - --rfc2136-tsig-secret-alg={{ .Values.rfc2136.tsigSecretAlg }}
             - --rfc2136-tsig-keyname={{ .Values.rfc2136.tsigKeyname }}
-                {{- if .Values.rfc2136.tsigAxfr }}
-            - --rfc2136-tsig-axfr
-                {{- end }}
-              {{- else }}
+                {{- else }}
             - --rfc2136-insecure
+                {{- end }}
               {{- end }}
             {{- end }}
             {{- if eq .Values.provider "pdns" }}
@@ -446,13 +449,26 @@ spec:
                   key: infoblox_wapi_password
             {{- end }}
             {{- end }}
-            {{- if or .Values.rfc2136.tsigSecret .Values.rfc2136.secretName }}
+            {{- if .Values.rfc2136.tsigSecret | or (and .Values.rfc2136.kerberosUsername .Values.rfc2136.kerberosPassword) | or .Values.rfc2136.secretName }}
             # RFC 2136 environment variables
+            {{- if .Values.rfc2136.rfc3645Enabled }}
+            - name: EXTERNAL_DNS_RFC2136_KERBEROS_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "external-dns.secretName" . }}
+                  key: rfc2136_kerberos_username
+            - name: EXTERNAL_DNS_RFC2136_KERBEROS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "external-dns.secretName" . }}
+                  key: rfc2136_kerberos_password
+            {{- else }}
             - name: EXTERNAL_DNS_RFC2136_TSIG_SECRET
               valueFrom:
                 secretKeyRef:
                   name: {{ template "external-dns.secretName" . }}
                   key: rfc2136_tsig_secret
+            {{- end }}
             {{- end }}
             {{- if eq .Values.provider "pdns" }}
             # PowerDNS environment variables
@@ -550,6 +566,11 @@ spec:
               readOnly: true
             {{- end }}
             {{- end }}
+            {{- if and (eq .Values.provider "rfc2136") .Values.rfc2136.rfc3645Enabled }}
+            - name: krb5config
+              mountPath: /etc/krb5.conf
+              subPath: krb5.conf
+            {{- end}}
             {{- if (eq .Values.provider "transip") }}
             # TransIP mountPath(s)
             - name: transip-api-key
@@ -618,11 +639,20 @@ spec:
             path: {{ .Values.designate.customCAHostPath }}
         {{- end }}
         {{- end }}
+        {{- if and (eq .Values.provider "rfc2136") .Values.rfc2136.rfc3645Enabled }}
+        # Kerberos config volume
+        - name: krb5config
+          configMap:
+            name: {{ template "external-dns.fullname" . }}
+            items:
+            - key: "krb5.conf"
+              path: "krb5.conf"
+        {{- end }}
         {{- if (eq .Values.provider "transip") }}
         # TransIP volume(s)
         - name: transip-api-key
           secret:
-            name: {{ template "external-dns.fullname" . }}
+            secretName: {{ template "external-dns.fullname" . }}
         {{- end }}
         {{- if .Values.extraVolumes }}
         # Extra volume(s)

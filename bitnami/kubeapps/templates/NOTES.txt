@@ -1,5 +1,7 @@
 {{- $postgresqlSecretName := include "kubeapps.postgresql.secretName" . -}}
 
+{{- $redisSecretName := include "kubeapps.redis.secretName" . -}}
+
 ** Please be patient while the chart is being deployed **
 
 Tip:
@@ -65,10 +67,19 @@ To access Kubeapps from outside your K8s cluster, follow the steps below:
 ##########################################################################################################
 {{- end }}
 
+{{ if and (.Values.redis.enabled) (not .Values.redis.existingSecret) (empty .Values.redis.redisPassword) -}}
+##########################################################################################################
+### WARNING: You did not provide a value for the redisPassword so one has been generated randomly      ###
+##########################################################################################################
+{{- end }}
+
 {{- $passwordValidationErrors := list -}}
 
 {{- $postgresqlPasswordValidationErrors := include "common.validations.values.postgresql.passwords" (dict "secret" $postgresqlSecretName "subchart" true "context" $) -}}
 {{- $passwordValidationErrors = append $passwordValidationErrors $postgresqlPasswordValidationErrors -}}
+
+{{- $redisPasswordValidationErrors := include "common.validations.values.redis.passwords" (dict "secret" $redisSecretName "subchart" true "context" $) -}}
+{{- $passwordValidationErrors = append $passwordValidationErrors $redisPasswordValidationErrors -}}
 
 {{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordValidationErrors "context" $) -}}
 {{- include "kubeapps.checkRollingTags" . }}

@@ -23,6 +23,9 @@ tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerat
 {{- if .Values.podSecurityContext.enabled }}
 securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 2 }}
 {{- end }}
+{{- if .Values.topologySpreadConstraints }}
+topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.topologySpreadConstraints "context" $) | nindent 2 }}
+{{- end }}
 initContainers:
 {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
 - name: volume-permissions
@@ -125,5 +128,8 @@ volumes:
 {{- end }}
 {{- if .Values.extraVolumes }}
 {{ include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) }}
+{{- end }}
+{{- if .Values.extraPodSpec }}
+{{- include "common.tplvalues.render" (dict "value" .Values.extraPodSpec "context" $) }}
 {{- end }}
 {{- end -}}

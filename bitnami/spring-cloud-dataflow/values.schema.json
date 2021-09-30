@@ -251,6 +251,19 @@
         }
       }
     },
+    "flyway": {
+      "type": "object",
+      "title": "Flyway Details",
+      "form": true,
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Run or skip Database creation scripts on startup",
+          "form": true,
+          "description": "Whether to run or skip running Database creation scripts on startup. This feature can be used in scenario of Database schema and tables already present, when using Mariadb or external database"
+        }
+      }
+    },
     "externalDatabase": {
       "type": "object",
       "title": "External Database Details",

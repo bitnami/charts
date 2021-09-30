@@ -8,25 +8,25 @@
 ## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
 global:
-  imageRegistry:
+  imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass:
+  storageClass: ""
 
 ## @section Common parameters
 
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
-kubeVersion:
+kubeVersion: ""
 ## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
 ##
-nameOverride:
+nameOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname template
 ##
-fullnameOverride:
+fullnameOverride: ""
 ## @param commonAnnotations Common annotations to add to all Harbor resources (sub-charts are not considered). Evaluated as a template
 ##
 commonAnnotations: {}
@@ -51,7 +51,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/joomla
-  tag: 3.9.28-debian-10-r0
+  tag: 3.10.2-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -91,10 +91,10 @@ joomlaEmail: user@example.com
 allowEmptyPassword: "no"
 ## @param command Override default container command (useful when using custom images)
 ##
-command:
+command: []
 ## @param args Override default container args (useful when using custom images)
 ##
-args:
+args: []
 ## @param replicaCount Number of replicas (requires ReadWriteMany PVC support)
 ##
 replicaCount: 1
@@ -122,10 +122,10 @@ updateStrategy:
 extraEnvVars: []
 ## @param extraEnvVarsCM ConfigMap containing extra env vars
 ##
-extraEnvVarsCM:
+extraEnvVarsCM: ""
 ## @param extraEnvVarsSecret Secret containing extra env vars (in case of sensitive data)
 ##
-extraEnvVarsSecret:
+extraEnvVarsSecret: ""
 ## @param extraVolumes Array of extra volumes to be added to the deployment (evaluated as template). Requires setting `extraVolumeMounts`
 ##
 extraVolumes: []
@@ -140,7 +140,7 @@ initContainers: []
 sidecars: []
 ## @param existingSecret Name of a secret with the application password
 ##
-existingSecret:
+existingSecret: ""
 ## SMTP mail delivery configuration
 ## ref: https://github.com/bitnami/bitnami-docker-joomla/#smtp-configuration
 ## @param smtpHost SMTP host
@@ -149,11 +149,11 @@ existingSecret:
 ## @param smtpPassword SMTP password
 ## @param smtpProtocol SMTP Protocol (options: ssl,tls, nil)
 ##
-smtpHost:
-smtpPort:
-smtpUser:
-smtpPassword:
-smtpProtocol:
+smtpHost: ""
+smtpPort: ""
+smtpUser: ""
+smtpPassword: ""
+smtpProtocol: ""
 ## @param containerPorts [object] Container ports
 ##
 containerPorts:
@@ -176,19 +176,19 @@ persistence:
   ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
   ##   GKE, AWS & OpenStack)
   ##
-  storageClass:
+  storageClass: ""
   accessMode: ReadWriteOnce
   size: 8Gi
   ## Requires persistence.enabled: true
   ## If defined, PVC must be created manually before volume will be bound
   ##
-  existingClaim:
+  existingClaim: ""
   ## If defined, the joomla-data volume will mount to the specified hostPath.
   ## Requires persistence.enabled: true
   ## Requires persistence.existingClaim: nil|false
   ## Default: nil.
   ##
-  hostPath:
+  hostPath: ""
 ## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ##
@@ -307,7 +307,7 @@ customReadinessProbe: {}
 priorityClassName: ""
 ## @param lifecycleHooks LifecycleHook to set additional configuration at startup Evaluated as a template
 ##
-lifecycleHooks:
+lifecycleHooks: {}
 ## @param podAnnotations Pod annotations
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
@@ -335,7 +335,7 @@ service:
   ## @param service.loadBalancerIP loadBalancerIP for the Joomla Service (optional, cloud specific)
   ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
   ##
-  loadBalancerIP:
+  loadBalancerIP: ""
   ## Node ports to expose
   ## @param service.nodePorts.http Node port for HTTP
   ## @param service.nodePorts.https Node port for HTTPS
@@ -366,7 +366,7 @@ ingress:
   pathType: ImplementationSpecific
   ## @param ingress.apiVersion Override API Version (automatically detected if not set)
   ##
-  apiVersion:
+  apiVersion: ""
   ## @param ingress.hostname Default host for the ingress resource
   ##
   hostname: joomla.local
@@ -474,22 +474,22 @@ mariadb:
       ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
       ##   GKE, AWS & OpenStack)
       ##
-      storageClass:
+      storageClass: ""
       accessModes:
         - ReadWriteOnce
       size: 8Gi
       ## Set path in case you want to use local host path volumes (not recommended in production)
       ##
-      hostPath:
+      hostPath: ""
       ## Use an existing PVC
       ##
-      existingClaim:
+      existingClaim: ""
 ## External database configuration
 ##
 externalDatabase:
   ## @param externalDatabase.existingSecret Name of the database existing Secret Object
   ## NOTE: When it's set, the `externalDatabase.password` parameter is ignored
-  existingSecret:
+  existingSecret: ""
   ## @param externalDatabase.host Host of the existing database
   ##
   host: ""
@@ -521,7 +521,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.9.0-debian-10-r24
+    tag: 0.10.0-debian-10-r46
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

@@ -157,11 +157,12 @@ tolerations: []
 ## @section Airflow common parameters
 
 ## Authentication
-## @param auth.existingSecret Name of an existing secret containing password and fernet key ('airflow-password and 'airflow-fernetKey' keys)
+## @param auth.existingSecret Name of an existing secret containing password, fernet key and secret key ('airflow-password', 'airflow-fernetKey' and 'airflow-secretKey' keys)
 ## @param auth.fernetKey Fernet key to secure connections
 ## @param auth.forcePassword Force users to specify a password
 ## @param auth.password Password to access web UI
 ## @param auth.username Username to access web UI
+## @param auth.secretKey Secret key to run your flask app
 ##
 auth:
   existingSecret: ""
@@ -176,6 +177,10 @@ auth:
   forcePassword: false
   password: ""
   username: user
+  ## More info about the secret key at:
+  ## - https://airflow.apache.org/docs/apache-airflow/stable/configurations-ref.html#secret-key
+  ##
+  secretKey: ""
 ## @param configurationConfigMap Name of an existing config map containing the Airflow config file
 ##
 configurationConfigMap: ""
@@ -204,7 +209,7 @@ web:
   image:
     registry: docker.io
     repository: bitnami/airflow
-    tag: 2.1.2-debian-10-r0
+    tag: 2.1.4-debian-10-r5
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -393,7 +398,7 @@ scheduler:
   image:
     registry: docker.io
     repository: bitnami/airflow-scheduler
-    tag: 2.1.1-debian-10-r10
+    tag: 2.1.4-debian-10-r10
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -525,7 +530,7 @@ worker:
   image:
     registry: docker.io
     repository: bitnami/airflow-worker
-    tag: 2.1.1-debian-10-r9
+    tag: 2.1.4-debian-10-r9
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -734,7 +739,7 @@ git:
   image:
     registry: docker.io
     repository: bitnami/git
-    tag: 2.32.0-debian-10-r33
+    tag: 2.33.0-debian-10-r45
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -750,7 +755,7 @@ git:
     pullSecrets: []
   ## Get DAG files from git repositories
   ## @param git.dags.enabled Enable in order to download DAG files from git repositories.
-  ## @param git.dags.repositories Array of repositories from which to download DAG files
+  ## @param git.dags.repositories [array] Array of repositories from which to download DAG files
   ##
   dags:
     enabled: false
@@ -776,7 +781,7 @@ git:
         path: ""
   ## Get Plugins files from git repositories.
   ## @param git.plugins.enabled Enable in order to download Plugins files from git repositories.
-  ## @param git.plugins.repositories Array of repositories from which to download DAG files
+  ## @param git.plugins.repositories [array] Array of repositories from which to download DAG files
   ##
   plugins:
     enabled: false
@@ -840,17 +845,27 @@ git:
 ## @param ldap.enabled Enable LDAP authentication
 ## @param ldap.uri Server URI, eg. ldap://ldap_server:389
 ## @param ldap.base Base of the search, eg. ou=example,o=org
+## @param ldap.uidField if doing an indirect bind to ldap, this is the field that matches the username when searching for the account to bind to
 ## @param ldap.binddn Bind DN
 ## @param ldap.bindpw Bind Password
-## @param ldap.uidField Field used for uid
+## @param ldap.userRegistration Set to True to enable user self registration
+## @param ldap.userRegistrationRole Set role name to be assign when a user registers himself. This role must already exist. Mandatory when using ldap.userRegistration
+## @param ldap.rolesMapping mapping from LDAP DN to a list of roles
+## @param ldap.rolesSyncAtLogin replace ALL the user's roles each login, or only on registration
+## @para
 ##
 ldap:
   enabled: false
   uri: 'ldap://ldap_server:389'
-  base: 'ou=example,o=org'
-  binddn: 'cn=user,ou=example,o=org'
-  bindpw: ""
-  uidField: 'uid'
+  base: 'dc=example,dc=org'
+  uidField: 'cn'
+  binddn: 'cn=admin,dc=example,dc=org'
+  bindpw: ''
+  userRegistration: 'True'
+  userRegistrationRole: 'Public'
+  rolesMapping: '{ "cn=All,ou=Groups,dc=example,dc=org": ["User"], "cn=Admins,ou=Groups,dc=example,dc=org": ["Admin"], }'
+  rolesSyncAtLogin: 'True'
+
   ## SSL/TLS parameters for LDAP
   ## @param ldap.tls.enabled Enabled TLS/SSL for LDAP, you must include the CA file.
   ## @param ldap.tls.allowSelfSigned Allow to use self signed certificates
@@ -877,7 +892,7 @@ ldap:
 ## @param ingress.pathType Ingress Path type
 ## @param ingress.certManager Set this to true in order to add the corresponding annotations for cert-manager
 ## @param ingress.annotations Ingress annotations done as key:value pairs
-## @param ingress.hosts The list of hostnames to be covered with this ingress record.
+## @param ingress.hosts [array] The list of hostnames to be covered with this ingress record.
 ## @param ingress.secrets If you're providing your own certificates, use this to add the certificates as secrets
 ##
 ingress:
@@ -964,11 +979,11 @@ externalDatabase:
   database: bitnami_airflow
   port: 5432
 
-## Redis(TM) chart configuration
+## Redis&trade; chart configuration
 ## ref: https://github.com/bitnami/charts/blob/master/bitnami/redis/values.yaml
-## @param redis.enabled Switch to enable or disable the Redis(TM) helm
+## @param redis.enabled Switch to enable or disable the Redis&trade; helm
 ## @param redis.auth.enabled Switch to enable or disable authentication
-## @param redis.auth.password Redis(TM) password
+## @param redis.auth.password Redis&trade; password
 ## @param redis.auth.existingSecret Name of existing secret object containing the password
 ## @param redis.architecture Cluster settings
 ##
@@ -976,7 +991,7 @@ redis:
   enabled: true
   auth:
     enabled: true
-    ## Redis(TM) password (both master and slave). Defaults to a random 10-character alphanumeric string if not set and auth.enabled is true.
+    ## Redis&trade; password (both master and slave). Defaults to a random 10-character alphanumeric string if not set and auth.enabled is true.
     ## It should always be set using the password value or in the existingSecret to avoid issues
     ## with Airflow.
     ## The password value is ignored if existingSecret is set
@@ -984,20 +999,20 @@ redis:
     existingSecret: ""
   architecture: standalone
 
-## External Redis(TM) configuration
+## External Redis&trade; configuration
 ## All of these values are only used when redis.enabled is set to false
-## @param externalRedis.host Redis(TM) host
-## @param externalRedis.port Redis(TM) port number
-## @param externalRedis.password Redis(TM) password
-## @param externalRedis.existingSecret Name of an existing secret resource containing the Redis(TM) password in a 'redis-password' key
-## @param externalRedis.username Redis(TM) username
+## @param externalRedis.host Redis&trade; host
+## @param externalRedis.port Redis&trade; port number
+## @param externalRedis.password Redis&trade; password
+## @param externalRedis.existingSecret Name of an existing secret resource containing the Redis&trade; password in a 'redis-password' key
+## @param externalRedis.username Redis&trade; username
 ##
 externalRedis:
   host: localhost
   port: 6379
   password: ""
   existingSecret: ""
-  ## Most Redis(TM) implementnations do not require a username to authenticate
+  ## Most Redis&trade; implementnations do not require a username to authenticate
   ## and it should be enough with the password
   ##
   username: ""
@@ -1018,7 +1033,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/airflow-exporter
-    tag: 0.20210126.0-debian-10-r153
+    tag: 0.20210126.0-debian-10-r231
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1051,6 +1066,15 @@ metrics:
     scrapeTimeout: 10s
     # ServiceMonitor Labels
     labels: {}
+  ## @param metrics.extraEnvVars Array containing extra environment variables
+  ##
+  extraEnvVars: []
+  ## @param metrics.extraEnvVarsCM ConfigMap containing extra environment variables
+  ##
+  extraEnvVarsCM: ""
+  ## @param metrics.extraEnvVarsSecret Secret containing extra environment variables (in case of sensitive data)
+  ##
+  extraEnvVarsSecret: ""
   ## @param metrics.resources Metrics exporter resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##

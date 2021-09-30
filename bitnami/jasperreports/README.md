@@ -52,18 +52,18 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                      | Description                                     | Value |
 | ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `nil` |
+| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `nil` |
+| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
 
 ### Common parameters
 
 | Name                | Description                                                          | Value           |
 | ------------------- | -------------------------------------------------------------------- | --------------- |
-| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set) | `nil`           |
-| `nameOverride`      | String to partially override common.names.fullname                   | `nil`           |
-| `fullnameOverride`  | String to fully override common.names.fullname                       | `nil`           |
+| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set) | `""`            |
+| `nameOverride`      | String to partially override common.names.fullname                   | `""`            |
+| `fullnameOverride`  | String to fully override common.names.fullname                       | `""`            |
 | `commonLabels`      | Labels to add to all deployed objects                                | `{}`            |
 | `commonAnnotations` | Annotations to add to all deployed objects                           | `{}`            |
 | `clusterDomain`     | Default Kubernetes cluster domain                                    | `cluster.local` |
@@ -76,24 +76,24 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------- | ---------------------------------------------------------------------- | ----------------------- |
 | `image.registry`        | JasperReports image registry                                           | `docker.io`             |
 | `image.repository`      | JasperReports image repository                                         | `bitnami/jasperreports` |
-| `image.tag`             | JasperReports image tag (immutable tags are recommended)               | `7.8.0-debian-10-r251`  |
+| `image.tag`             | JasperReports image tag (immutable tags are recommended)               | `7.8.0-debian-10-r338`  |
 | `image.pullPolicy`      | JasperReports image pull policy                                        | `IfNotPresent`          |
 | `image.pullSecrets`     | Specify docker-registry secret names as an array                       | `[]`                    |
-| `jasperreportsUsername` | JasperReports user                                                     | `user`                  |
-| `jasperreportsPassword` | JasperReports password                                                 | `nil`                   |
+| `jasperreportsUsername` | JasperReports user                                                     | `jasperadmin`           |
+| `jasperreportsPassword` | JasperReports password                                                 | `""`                    |
 | `jasperreportsEmail`    | JasperReports user email                                               | `user@example.com`      |
-| `allowEmptyPassword`    | Set to `yes` to allow the container to be started with blank passwords | `yes`                   |
-| `smtpHost`              | SMTP host                                                              | `nil`                   |
-| `smtpPort`              | SMTP port                                                              | `nil`                   |
-| `smtpEmail`             | SMTP email                                                             | `nil`                   |
-| `smtpUser`              | SMTP user                                                              | `nil`                   |
-| `smtpPassword`          | SMTP password                                                          | `nil`                   |
-| `smtpProtocol`          | SMTP protocol [`ssl`, `none`]                                          | `nil`                   |
+| `allowEmptyPassword`    | Set to `yes` to allow the container to be started with blank passwords | `no`                    |
+| `smtpHost`              | SMTP host                                                              | `""`                    |
+| `smtpPort`              | SMTP port                                                              | `""`                    |
+| `smtpEmail`             | SMTP email                                                             | `""`                    |
+| `smtpUser`              | SMTP user                                                              | `""`                    |
+| `smtpPassword`          | SMTP password                                                          | `""`                    |
+| `smtpProtocol`          | SMTP protocol [`ssl`, `none`]                                          | `""`                    |
 | `command`               | Override default container command (useful when using custom images)   | `[]`                    |
 | `args`                  | Override default container args (useful when using custom images)      | `[]`                    |
 | `extraEnvVars`          | Extra environment variables to be set on Jasperreports container       | `[]`                    |
-| `extraEnvVarsCM`        | Name of existing ConfigMap containing extra env vars                   | `nil`                   |
-| `extraEnvVarsSecret`    | Name of existing Secret containing extra env vars                      | `nil`                   |
+| `extraEnvVarsCM`        | Name of existing ConfigMap containing extra env vars                   | `""`                    |
+| `extraEnvVarsSecret`    | Name of existing Secret containing extra env vars                      | `""`                    |
 | `updateStrategy.type`   | StrategyType                                                           | `RollingUpdate`         |
 
 
@@ -104,22 +104,20 @@ The command removes all the Kubernetes components associated with the chart and 
 | `hostAliases`                        | Add deployment host aliases                                                               | `[]`                       |
 | `containerPort`                      | HTTP port to expose at container level                                                    | `8080`                     |
 | `podSecurityContext.enabled`         | Enable pod's Security Context                                                             | `true`                     |
-| `podSecurityContext.fsGroup`         | Set pod's Security Context fsGroup                                                        | `0`                        |
+| `podSecurityContext.fsGroup`         | Set pod's Security Context fsGroup                                                        | `1001`                     |
 | `containerSecurityContext.enabled`   | Enable container's Security Context                                                       | `true`                     |
-| `containerSecurityContext.runAsUser` | Set container's Security Context runAsUser                                                | `0`                        |
+| `containerSecurityContext.runAsUser` | Set container's Security Context runAsUser                                                | `1001`                     |
 | `resources.limits`                   | The resources limits for the Jasperreports container                                      | `{}`                       |
 | `resources.requests`                 | The requested resources for the Jasperreports container                                   | `{}`                       |
 | `livenessProbe.enabled`              | Enable livenessProbe                                                                      | `true`                     |
-| `livenessProbe.httpGet.path`         | Request path for livenessProbe                                                            | `/jasperserver/login.html` |
-| `livenessProbe.httpGet.port`         | Port for livenessProbe                                                                    | `http`                     |
-| `livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                   | `300`                      |
+| `livenessProbe.path`                 | Request path for livenessProbe                                                            | `/jasperserver/login.html` |
+| `livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                   | `450`                      |
 | `livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                          | `10`                       |
 | `livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                         | `5`                        |
 | `livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                       | `6`                        |
 | `livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                       | `1`                        |
 | `readinessProbe.enabled`             | Enable readinessProbe                                                                     | `true`                     |
-| `readinessProbe.httpGet.path`        | Request path for readinessProbe                                                           | `/jasperserver/login.html` |
-| `readinessProbe.httpGet.port`        | Port for readinessProbe                                                                   | `http`                     |
+| `readinessProbe.path`                | Request path for readinessProbe                                                           | `/jasperserver/login.html` |
 | `readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                  | `30`                       |
 | `readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                         | `10`                       |
 | `readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                        | `5`                        |
@@ -143,8 +141,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `initContainers`                     | Add additional init containers to the Jasperreports pods                                  | `[]`                       |
 | `sidecars`                           | Add additional sidecar containers to the Jasperreports pods                               | `[]`                       |
 | `persistence.enabled`                | Enable persistence using PVC                                                              | `true`                     |
-| `persistence.storageClass`           | PVC Storage Class for Jasperreports volume                                                | `nil`                      |
-| `persistence.accessModes`            | Persistent Volume Access Mode                                                             | `[]`                       |
+| `persistence.storageClass`           | PVC Storage Class for Jasperreports volume                                                | `""`                       |
+| `persistence.accessModes`            | Persistent Volume Access Mode                                                             | `["ReadWriteOnce"]`        |
 | `persistence.size`                   | PVC Storage Request for Jasperreports volume                                              | `8Gi`                      |
 | `persistence.existingClaim`          | An Existing PVC name for Jasperreports volume                                             | `""`                       |
 
@@ -156,15 +154,15 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.type`                  | Kubernetes Service type                                                                       | `LoadBalancer`           |
 | `service.port`                  | Service HTTP port                                                                             | `80`                     |
 | `service.nodePort`              | Kubernetes http node port                                                                     | `""`                     |
-| `service.loadBalancerIP`        | Kubernetes LoadBalancerIP to request                                                          | `nil`                    |
+| `service.loadBalancerIP`        | Kubernetes LoadBalancerIP to request                                                          | `""`                     |
 | `service.externalTrafficPolicy` | Enable client source IP preservation                                                          | `Cluster`                |
 | `service.annotations`           | Annotations for Jasperreports service                                                         | `{}`                     |
 | `ingress.enabled`               | Enable ingress controller resource                                                            | `false`                  |
 | `ingress.certManager`           | Add annotations for cert-manager                                                              | `false`                  |
 | `ingress.pathType`              | Ingress path type                                                                             | `ImplementationSpecific` |
-| `ingress.apiVersion`            | Force Ingress API version (automatically detected if not set)                                 | `nil`                    |
+| `ingress.apiVersion`            | Force Ingress API version (automatically detected if not set)                                 | `""`                     |
 | `ingress.hostname`              | Default host for the ingress resource                                                         | `jasperreports.local`    |
-| `ingress.path`                  | Ingress path                                                                                  | `ImplementationSpecific` |
+| `ingress.path`                  | Ingress path                                                                                  | `/`                      |
 | `ingress.annotations`           | Ingress annotations                                                                           | `{}`                     |
 | `ingress.tls`                   | Enable TLS configuration for the hostname defined at ingress.hostname parameter               | `false`                  |
 | `ingress.extraHosts`            | The list of additional hostnames to be covered with this ingress record.                      | `[]`                     |
@@ -184,16 +182,16 @@ The command removes all the Kubernetes components associated with the chart and 
 | `mariadb.auth.username`                     | Database user to create                              | `bn_jasperreports`      |
 | `mariadb.auth.password`                     | Password for the database                            | `""`                    |
 | `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                | `true`                  |
-| `mariadb.primary.persistence.storageClass`  | PVC Storage Class                                    | `nil`                   |
-| `mariadb.primary.persistence.accessModes`   | Access mode of persistent volume                     | `[]`                    |
+| `mariadb.primary.persistence.storageClass`  | PVC Storage Class                                    | `""`                    |
+| `mariadb.primary.persistence.accessModes`   | Access mode of persistent volume                     | `["ReadWriteOnce"]`     |
 | `mariadb.primary.persistence.size`          | Database Persistent Volume Size                      | `8Gi`                   |
-| `mariadb.primary.persistence.hostPath`      | Host mount path for MariaDB volume                   | `nil`                   |
-| `mariadb.primary.persistence.existingClaim` | Enable persistence using an existing PVC             | `nil`                   |
-| `externalDatabase.existingSecret`           | Name of the database existing Secret Object          | `nil`                   |
-| `externalDatabase.host`                     | Host of the existing database                        | `nil`                   |
+| `mariadb.primary.persistence.hostPath`      | Host mount path for MariaDB volume                   | `""`                    |
+| `mariadb.primary.persistence.existingClaim` | Enable persistence using an existing PVC             | `""`                    |
+| `externalDatabase.existingSecret`           | Name of the database existing Secret Object          | `""`                    |
+| `externalDatabase.host`                     | Host of the existing database                        | `""`                    |
 | `externalDatabase.port`                     | Port of the existing database                        | `3306`                  |
 | `externalDatabase.user`                     | Existing username in the external db                 | `bn_jasperreports`      |
-| `externalDatabase.password`                 | Password for the above username                      | `nil`                   |
+| `externalDatabase.password`                 | Password for the above username                      | `""`                    |
 | `externalDatabase.database`                 | Name of the existing database                        | `bitnami_jasperreports` |
 
 
@@ -283,6 +281,21 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 11.0.0
+
+The [Bitnami JasperReports](https://github.com/bitnami/bitnami-docker-jasperreports) image was migrated to a "non-root" user approach. Previously the container ran as the `root` user and the Tomcat daemon was started as the `tomcat` user. From now on, both the container and the Tomcat daemon run as user `1001`. You can revert this behavior by setting the parameters `containerSecurityContext.runAsUser` to `root`.
+
+Consequences:
+
+- The HTTP/HTTPS ports exposed by the container are now `8080/8443` instead of `80/443`.
+- Backwards compatibility is not guaranteed.
+
+To upgrade to `11.0.0`, backup JasperReports data and the previous MariaDB databases, install a new JasperReports chart and import the backups and data, ensuring the `1001` user has the appropriate permissions on the migrated volume.
+
+In addition to this, the image was refactored and now the source code is published in GitHub in the [`rootfs`](https://github.com/bitnami/bitnami-docker-jasperreports/tree/master/7/debian-10/rootfs) folder of the container image.
+
+We also fixed a regression with readiness and liveness probes. Now the kind of probe cannot be configured under the *readinessProbe/livenessProbe* sections but in the *customReadinessProbe/customLivenessProbe* sections.
 
 ### To 10.0.0
 
@@ -380,11 +393,11 @@ mariadb 12:13:25.01 INFO  ==> Running mysql_upgrade
 ...
 ```
 
-### to 8.0.0
+### To 8.0.0
 
 JasperReports 7.5.0 includes some new configuration options that are required to be added if you upgrade from previous versions. Please check the [official community guide](https://community.jaspersoft.com/documentation/tibco-jasperreports-server-upgrade-guide/v750/upgrading-72-75) to upgrade your previous JasperReports installation.
 
-### 7.0.0
+### To 7.0.0
 
 Helm performs a lookup for the object based on its group (apps), version (v1), and kind (Deployment). Also known as its GroupVersionKind, or GVK. Changing the GVK is considered a compatibility breaker from Kubernetes' point of view, so you cannot "upgrade" those objects to the new GVK in-place. Earlier versions of Helm 3 did not perform the lookup correctly which has since been fixed to match the spec.
 
@@ -392,7 +405,7 @@ In https://github.com/helm/charts/pull/17298 the `apiVersion` of the deployment 
 
 This major version signifies this change.
 
-### 3.0.0
+### To 3.0.0
 
 Backwards compatibility is not guaranteed unless you modify the labels used on the chart's deployments.
 Use the workaround below to upgrade from versions previous to 3.0.0. The following example assumes that the release name is jasperreports:

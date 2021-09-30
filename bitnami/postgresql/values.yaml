@@ -45,6 +45,21 @@ extraDeploy: []
 ##
 commonAnnotations: {}
 
+## Enable diagnostic mode in the deployment
+##
+diagnosticMode:
+  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+  ##
+  enabled: false
+  ## @param diagnosticMode.command Command to override all containers in the deployment
+  ##
+  command:
+    - sleep
+  ## @param diagnosticMode.args Args to override all containers in the deployment
+  ##
+  args:
+    - infinity
+
 ## @section PostgreSQL parameters
 
 ## Bitnami PostgreSQL image version
@@ -59,7 +74,7 @@ commonAnnotations: {}
 image:
   registry: docker.io
   repository: bitnami/postgresql
-  tag: 11.12.0-debian-10-r44
+  tag: 11.13.0-debian-10-r40
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -93,7 +108,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r125
+    tag: 10-debian-10-r200
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -123,6 +138,9 @@ volumePermissions:
 ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
 ##
 schedulerName: ""
+## @param lifecycleHooks for the PostgreSQL container to automate configuration before or after startup
+##
+lifecycleHooks: {}
 ## Pod Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 ## @param securityContext.enabled Enable security context
@@ -416,6 +434,10 @@ service:
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
   ##
   loadBalancerIP: ""
+  ## @param service.externalTrafficPolicy Enable client source IP preservation
+  ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+  ##
+  externalTrafficPolicy: Cluster
   ## @param service.loadBalancerSourceRanges Addresses that are allowed when service is LoadBalancer
   ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
   ##
@@ -532,6 +554,9 @@ primary:
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
+  ## @param primary.extraPodSpec Optionally specify extra PodSpec
+  ##
+  extraPodSpec: {}
   ## @param primary.labels Map of labels to add to the statefulset (postgresql primary)
   ##
   labels: {}
@@ -625,6 +650,13 @@ readReplicas:
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
+  ## @param readReplicas.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## @param readReplicas.extraPodSpec Optionally specify extra PodSpec
+  ##
+  extraPodSpec: {}
   ## @param readReplicas.labels Map of labels to add to the statefulsets (postgresql readReplicas)
   ##
   labels: {}
@@ -827,6 +859,8 @@ metrics:
   ## @param metrics.serviceMonitor.namespace Optional namespace in which to create ServiceMonitor
   ## @param metrics.serviceMonitor.interval Scrape interval. If not set, the Prometheus default scrape interval is used
   ## @param metrics.serviceMonitor.scrapeTimeout Scrape timeout. If not set, the Prometheus default scrape timeout is used
+  ## @param metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping
+  ## @param metrics.serviceMonitor.metricRelabelings MetricRelabelConfigs to apply to samples before ingestion
   ##
   serviceMonitor:
     enabled: false
@@ -834,6 +868,8 @@ metrics:
     namespace: ""
     interval: ""
     scrapeTimeout: ""
+    relabelings: []
+    metricRelabelings: []
   ## Custom PrometheusRule to be defined
   ## The value is evaluated as a template, so, for example, the value can depend on .Release or .Chart
   ## ref: https://github.com/coreos/prometheus-operator#customresourcedefinitions
@@ -870,7 +906,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/postgres-exporter
-    tag: 0.9.0-debian-10-r108
+    tag: 0.10.0-debian-10-r68
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

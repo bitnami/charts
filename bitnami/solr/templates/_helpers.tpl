@@ -38,13 +38,6 @@ Return the proper Apache Solr image name
 {{- end -}}
 
 {{/*
-Return the proper Solr Exporter image name
-*/}}
-{{- define "exporter.image" -}}
-{{- include "common.images.image" (dict "imageRoot" .Values.exporter.image "global" .Values.global) -}}
-{{- end -}}
-
-{{/*
 Return the proper image name (for the init container volume-permissions image)
 */}}
 {{- define "volumePermissions.image" -}}

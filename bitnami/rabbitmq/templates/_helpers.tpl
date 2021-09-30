@@ -86,7 +86,7 @@ Get the TLS secret.
 */}}
 {{- define "rabbitmq.tlsSecretName" -}}
     {{- if .Values.auth.tls.existingSecret -}}
-        {{- printf "%s" .Values.auth.tls.existingSecret -}}
+        {{- printf "%s" (tpl .Values.auth.tls.existingSecret $) -}}
     {{- else -}}
         {{- printf "%s-certs" (include "rabbitmq.fullname" .) -}}
     {{- end -}}

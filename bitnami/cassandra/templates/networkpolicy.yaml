@@ -16,10 +16,9 @@ spec:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
   ingress:
     # Allow inbound connections
-    # CQL and Thrift ports
+    # CQL port
     - ports:
         - port: {{ .Values.service.port }}
-        - port: {{ .Values.service.thriftPort }}
       from:
       {{- if not .Values.networkPolicy.allowExternal }}
         - podSelector:

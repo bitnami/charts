@@ -8,22 +8,22 @@
 ## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
 global:
-  imageRegistry:
+  imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass:
+  storageClass: ""
 
 ## @section Common parameters
 
 ## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
 ##
-nameOverride:
+nameOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname template
 ##
-fullnameOverride:
+fullnameOverride: ""
 
 ## @section Common Mxnet parameters
 
@@ -39,7 +39,7 @@ fullnameOverride:
 image:
   registry: docker.io
   repository: bitnami/mxnet
-  tag: 1.8.0-debian-10-r106
+  tag: 1.8.0-debian-10-r171
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -68,7 +68,7 @@ image:
 git:
   registry: docker.io
   repository: bitnami/git
-  tag: 2.32.0-debian-10-r38
+  tag: 2.33.0-debian-10-r38
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
@@ -94,7 +94,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r138
+    tag: 10-debian-10-r202
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -154,10 +154,10 @@ entrypoint:
 mode: standalone
 ## @param existingSecret Name of a secret with sensitive data to mount in the pods
 ##
-existingSecret:
+existingSecret: ""
 ## @param configMap Name of an existing config map containing all the files you want to load in Apache MXNet (Incubating)
 ##
-configMap:
+configMap: ""
 ## @param hostAliases Deployment pod host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##

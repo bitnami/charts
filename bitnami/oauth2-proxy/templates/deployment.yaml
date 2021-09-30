@@ -21,9 +21,11 @@ spec:
       app.kubernetes.io/component: oauth2-proxy
   template:
     metadata:
-      {{- if .Values.podAnnotations }}
-      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
-      {{- end }}
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        {{- if .Values.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: oauth2-proxy
         {{- if .Values.podLabels }}
@@ -237,6 +239,7 @@ spec:
           secret:
             items:
             - key: authenticated-emails-list
+              path: authenticated-emails-list
             secretName: {{ include "oauth2-proxy.authenticatedEmailsSecret" . }}
         {{- end }}
         {{- if or .Values.configuration.existingConfigmap .Values.configuration.content }}

@@ -1,22 +1,8 @@
 {{/*
-Return the proper Argo CD controller image name
+Return the proper Argo CD image name
 */}}
-{{- define "argocd.application-controller.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.controller.image "global" .Values.global) }}
-{{- end -}}
-
-{{/*
-Return the proper Argo CD server image name
-*/}}
-{{- define "argocd.server.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.server.image "global" .Values.global) }}
-{{- end -}}
-
-{{/*
-Return the proper Argo CD repoServer image name
-*/}}
-{{- define "argocd.repo-server.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.repoServer.image "global" .Values.global) }}
+{{- define "argocd.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.image "global" .Values.global) }}
 {{- end -}}
 
 {{/*
@@ -37,7 +23,7 @@ Return the proper image name (for the init container volume-permissions image)
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "argocd.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.controller.image .Values.server.image .Values.repoServer.image .Values.dex.image .Values.volumePermissions.image) "global" .Values.global) -}}
+{{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.dex.image .Values.volumePermissions.image) "global" .Values.global) -}}
 {{- end -}}
 
 {{/*
@@ -73,8 +59,7 @@ Create a default fully qualified redis name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 {{- define "argocd.redis.fullname" -}}
-{{- $name := default "redis" .Values.redis.nameOverride -}}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
+{{- include "common.names.dependency.fullname" (dict "chartName" "redis" "chartValues" .Values.redis "context" $) -}}
 {{- end -}}
 
 {{/*
@@ -138,7 +123,7 @@ Compile all warnings into a single message.
 */}}
 
 {{/*
-Return the Redis(TM) secret name
+Return the Redis&trade; secret name
 */}}
 {{- define "argocd.redis.secretName" -}}
 {{- if .Values.redis.enabled }}
@@ -155,7 +140,7 @@ Return the Redis(TM) secret name
 {{- end -}}
 
 {{/*
-Return the Redis(TM) secret key
+Return the Redis&trade; secret key
 */}}
 {{- define "argocd.redis.secretPasswordKey" -}}
 {{- if and .Values.redis.enabled .Values.redis.auth.existingSecret }}
@@ -168,7 +153,7 @@ Return the Redis(TM) secret key
 {{- end -}}
 
 {{/*
-Return whether Redis(TM) uses password authentication or not
+Return whether Redis&trade; uses password authentication or not
 */}}
 {{- define "argocd.redis.auth.enabled" -}}
 {{- if or (and .Values.redis.enabled .Values.redis.auth.enabled) (and (not .Values.redis.enabled) (or .Values.externalRedis.password .Values.externalRedis.existingSecret)) }}
@@ -177,7 +162,7 @@ Return whether Redis(TM) uses password authentication or not
 {{- end -}}
 
 {{/*
-Return the Redis(TM) hostname
+Return the Redis&trade; hostname
 */}}
 {{- define "argocd.redisHost" -}}
 {{- if .Values.redis.enabled }}
@@ -188,7 +173,7 @@ Return the Redis(TM) hostname
 {{- end -}}
 
 {{/*
-Return the Redis(TM) port
+Return the Redis&trade; port
 */}}
 {{- define "argocd.redisPort" -}}
 {{- if .Values.redis.enabled }}

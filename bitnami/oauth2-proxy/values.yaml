@@ -173,7 +173,7 @@ ingress:
 image:
   registry: docker.io
   repository: bitnami/oauth2-proxy
-  tag: 7.1.3-debian-10-r69
+  tag: 7.1.3-debian-10-r129
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -231,7 +231,7 @@ configuration:
   ##   pass_basic_auth = false
   ##   pass_access_token = true
   ##
-  ## @param configuration.content Default configuration
+  ## @param configuration.content [string] Default configuration
   ##
   content: |
     email_domains = [ "*" ]
@@ -487,66 +487,66 @@ serviceAccount:
   ##
   name: ""
 
-## @section External Redis(TM) parameters
+## @section External Redis&trade; parameters
 ##
 externalRedis:
-  ## @param externalRedis.host External Redis(TM) server host
+  ## @param externalRedis.host External Redis&trade; server host
   ##
   host: ""
-  ## @param externalRedis.password External Redis(TM) user password
+  ## @param externalRedis.password External Redis&trade; user password
   ##
   password: ""
-  ## @param externalRedis.port External Redis(TM) server port
+  ## @param externalRedis.port External Redis&trade; server port
   ##
   port: 6379
-  ## @param externalRedis.existingSecret The name of an existing secret with Redis(TM) credentials
+  ## @param externalRedis.existingSecret The name of an existing secret with Redis&trade; credentials
   ## NOTE: Must contain key `redis-password`
   ## NOTE: When it's set, the `externalRedis.password` parameter is ignored
   ##
   existingSecret: ""
 
-## @section Redis(TM) sub-chart parameters
+## @section Redis&trade; sub-chart parameters
 ##
 redis:
-  ## @param redis.enabled Deploy Redis(TM) sub-chart
+  ## @param redis.enabled Deploy Redis&trade; sub-chart
   ##
   enabled: true
-  ## @param redis.architecture Redis(TM) architecture
+  ## @param redis.architecture Redis&trade; architecture
   ##
   architecture: "standalone"
   master:
-    ## @param redis.master.service.port Redis(TM) (without Sentinel) service port
+    ## @param redis.master.service.port Redis&trade; (without Sentinel) service port
     ##
     service:
       port: 6379
   replica:
-    ## @param redis.replica.replicaCount Number of Redis(TM) replicas
+    ## @param redis.replica.replicaCount Number of Redis&trade; replicas
     ##
     replicaCount: 3
   auth:
-    ## @param redis.auth.enabled Enable Redis(TM) authentication
+    ## @param redis.auth.enabled Enable Redis&trade; authentication
     ##
     enabled: true
-    ## @param redis.auth.existingSecret Secret with Redis(TM) credentials
+    ## @param redis.auth.existingSecret Secret with Redis&trade; credentials
     ##
     existingSecret: ""
-    ## @param redis.auth.existingSecretPasswordKey Key inside the existing secret with Redis(TM) credentials
+    ## @param redis.auth.existingSecretPasswordKey Key inside the existing secret with Redis&trade; credentials
     ##
     existingSecretPasswordKey: ""
     ## @param redis.auth.sentinel Enable authentication in the Sentinel nodes
     ##
     sentinel: true
   sentinel:
-    ## @param redis.sentinel.enabled Enable Redis(TM) sentinel in the deployment
+    ## @param redis.sentinel.enabled Enable Redis&trade; sentinel in the deployment
     ##
     enabled: false
-    ## @param redis.sentinel.masterSet Name of the Redis(TM) Sentinel master set
+    ## @param redis.sentinel.masterSet Name of the Redis&trade; Sentinel master set
     ##
     masterSet: mymaster
     service:
-      ## @param redis.sentinel.service.port Redis(TM) (with Sentinel) service port
+      ## @param redis.sentinel.service.port Redis&trade; (with Sentinel) service port
       ##
       port: 6379
-      ## @param redis.sentinel.service.sentinelPort Redis(TM) (with Sentinel) sentinel service port
+      ## @param redis.sentinel.service.sentinelPort Redis&trade; (with Sentinel) sentinel service port
       ##
       sentinelPort: 26379

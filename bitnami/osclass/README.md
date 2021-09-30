@@ -71,14 +71,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Osclass Image parameters
 
-| Name                | Description                                        | Value                 |
-| ------------------- | -------------------------------------------------- | --------------------- |
-| `image.registry`    | Osclass image registry                             | `docker.io`           |
-| `image.repository`  | Osclass image repository                           | `bitnami/osclass`     |
-| `image.tag`         | Osclass image tag (immutable tags are recommended) | `4.4.0-debian-10-r38` |
-| `image.pullPolicy`  | Osclass image pull policy                          | `IfNotPresent`        |
-| `image.pullSecrets` | Osclass image pull secrets                         | `[]`                  |
-| `image.debug`       | Enable Bitnami debug mode in Osclass image         | `false`               |
+| Name                | Description                                        | Value                  |
+| ------------------- | -------------------------------------------------- | ---------------------- |
+| `image.registry`    | Osclass image registry                             | `docker.io`            |
+| `image.repository`  | Osclass image repository                           | `bitnami/osclass`      |
+| `image.tag`         | Osclass image tag (immutable tags are recommended) | `4.4.0-debian-10-r121` |
+| `image.pullPolicy`  | Osclass image pull policy                          | `IfNotPresent`         |
+| `image.pullSecrets` | Osclass image pull secrets                         | `[]`                   |
+| `image.debug`       | Enable Bitnami debug mode in Osclass image         | `false`                |
 
 
 ### Osclass Configuration parameters
@@ -139,7 +139,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `certificates.extraEnvVarsSecret`                    | Secret with extra environment variables                                                   | `""`                                     |
 | `certificates.image.registry`                        | Apache Exporter image registry                                                            | `docker.io`                              |
 | `certificates.image.repository`                      | Apache Exporter image repository                                                          | `bitnami/bitnami-shell`                  |
-| `certificates.image.tag`                             | Apache Exporter image tag (immutable tags are recommended)                                | `10-debian-10-r112`                      |
+| `certificates.image.tag`                             | Apache Exporter image tag (immutable tags are recommended)                                | `10-debian-10-r199`                      |
 | `certificates.image.pullPolicy`                      | Apache Exporter image pull policy                                                         | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Apache Exporter image pull secrets                                                        | `[]`                                     |
 | `lifecycleHooks`                                     | lifecycleHooks for the container to automate configuration before or after startup.       | `{}`                                     |
@@ -190,7 +190,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.pathType`                 | Ingress path type                                                                                     | `ImplementationSpecific` |
 | `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                         | `""`                     |
 | `ingress.hostname`                 | Default host for the ingress record                                                                   | `osclass.local`          |
-| `ingress.path`                     | Default path for the ingress record                                                                   | `ImplementationSpecific` |
+| `ingress.path`                     | Default path for the ingress record                                                                   | `/`                      |
 | `ingress.annotations`              | Additional custom annotations for the ingress record                                                  | `{}`                     |
 | `ingress.tls`                      | Enable TLS configuration for the host defined at `ingress.hostname` parameter                         | `false`                  |
 | `ingress.extraHosts`               | An array with additional hostname(s) to be covered with the ingress record                            | `[]`                     |
@@ -227,7 +227,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`         | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`       | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`              | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r112`     |
+| `volumePermissions.image.tag`              | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r199`     |
 | `volumePermissions.image.pullPolicy`       | Bitnami Shell image pull policy                                                                 | `Always`                |
 | `volumePermissions.image.pullSecrets`      | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`       | The resources limits for the init container                                                     | `{}`                    |
@@ -255,7 +255,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                         | Start a sidecar prometheus exporter to expose metrics                        | `false`                   |
 | `metrics.image.registry`                  | Apache Exporter image registry                                               | `docker.io`               |
 | `metrics.image.repository`                | Apache Exporter image repository                                             | `bitnami/apache-exporter` |
-| `metrics.image.tag`                       | Apache Exporter image tag (immutable tags are recommended)                   | `0.9.0-debian-10-r11`     |
+| `metrics.image.tag`                       | Apache Exporter image tag (immutable tags are recommended)                   | `0.10.1-debian-10-r0`     |
 | `metrics.image.pullPolicy`                | Apache Exporter image pull policy                                            | `IfNotPresent`            |
 | `metrics.image.pullSecrets`               | Apache Exporter image pull secrets                                           | `[]`                      |
 | `metrics.resources.limits`                | The resources limits for the Prometheus exporter container                   | `{}`                      |
@@ -272,153 +272,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.honorLabels`      | Labels to honor to add to the scrape endpoint                                | `false`                   |
 | `metrics.serviceMonitor.additionalLabels` | Additional custom labels for the ServiceMonitor                              | `{}`                      |
 
-
-The following table lists the configurable parameters of the Osclass chart and their default values per section/component:
-
-### Global parameters
-
-| Parameter                 | Description                                     | Default                                                 |
-|---------------------------|-------------------------------------------------|---------------------------------------------------------|
-| `global.imageRegistry`    | Global Docker image registry                    | `nil`                                                   |
-| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]` (does not add image pull secrets to deployed pods) |
-| `global.storageClass`     | Global storage class for dynamic provisioning   | `nil`                                                   |
-
-### Common parameters
-
-| Parameter           | Description                                                          | Default                        |
-|---------------------|----------------------------------------------------------------------|--------------------------------|
-| `nameOverride`      | String to partially override common.names.fullname                   | `nil`                          |
-| `fullnameOverride`  | String to fully override common.names.fullname                       | `nil`                          |
-| `commonLabels`      | Labels to add to all deployed objects                                | `{}`                           |
-| `commonAnnotations` | Annotations to add to all deployed objects                           | `{}`                           |
-| `clusterDomain`     | Default Kubernetes cluster domain                                    | `cluster.local`                |
-| `extraDeploy`       | Array of extra objects to deploy with the release                    | `[]` (evaluated as a template) |
-| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set) | `nil`                          |
-
-### Osclass parameters
-
-| Parameter            | Description                                                          | Default                                                 |
-|----------------------|----------------------------------------------------------------------|---------------------------------------------------------|
-| `image.registry`     | Osclass image registry                                               | `docker.io`                                             |
-| `image.repository`   | Osclass image name                                                   | `bitnami/osclass`                                       |
-| `image.tag`          | Osclass image tag                                                    | `{TAG_NAME}`                                            |
-| `image.pullPolicy`   | Image pull policy                                                    | `IfNotPresent`                                          |
-| `image.pullSecrets`  | Specify docker-registry secret names as an array                     | `[]` (does not add image pull secrets to deployed pods) |
-| `osclassUsername`    | User of the application                                              | `user`                                                  |
-| `osclassPassword`    | Application password                                                 | `bitnami`                                               |
-| `osclassEmail`       | Admin email                                                          | `user@example.com`                                      |
-| `osclassHost`        | Osclass host to create application URLs                              | `nil`                                                   |
-| `osclassWebTitle`    | Application title                                                    | `Sample Web Page`                                       |
-| `osclassPingEngines` | Allow site to appear in search engines                               | `1`                                                     |
-| `osclassSaveStats`   | Send statistics and reports to Osclass                               | `1`                                                     |
-| `smtpHost`           | SMTP host                                                            | `nil`                                                   |
-| `smtpPort`           | SMTP port                                                            | `nil`                                                   |
-| `smtpUser`           | SMTP user                                                            | `nil`                                                   |
-| `smtpPassword`       | SMTP password                                                        | `nil`                                                   |
-| `smtpProtocol`       | SMTP protocol [`ssl`, `tls`]                                         | `nil`                                                   |
-| `hostAliases`        | Add deployment host aliases                                          | `Check values.yaml`                                     |
-| `command`            | Override default container command (useful when using custom images) | `nil`                                                   |
-| `args`               | Override default container args (useful when using custom images)    | `nil`                                                   |
-| `extraEnvVars`       | Extra environment variables to be set on Osclass container           | `{}`                                                    |
-| `extraEnvVarsCM`     | Name of existing ConfigMap containing extra env vars                 | `nil`                                                   |
-| `extraEnvVarsSecret` | Name of existing Secret containing extra env vars                    | `nil`                                                   |
-
-### Osclass deployment parameters
-
-| Parameter                   | Description                                                                               | Default                                     |
-|-----------------------------|-------------------------------------------------------------------------------------------|---------------------------------------------|
-| `containerPorts.http`       | HTTP port to expose at container level                                                    | `80`                                        |
-| `containerPorts.https`      | HTTPS port to expose at container level                                                   | `84`                                        |
-| `podSecurityContext`        | Osclass pods' Security Context                                                            | Check `values.yaml` file                    |
-| `containerSecurityContext`  | Osclass containers' Security Context                                                      | Check `values.yaml` file                    |
-| `resources.limits`          | The resources limits for the Osclass container                                            | `{}`                                        |
-| `resources.requests`        | The requested resources for the Osclass container                                         | `{"memory": "512Mi", "cpu": "300m"}`        |
-| `livenessProbe`             | Liveness probe configuration for Osclass                                                  | Check `values.yaml` file                    |
-| `readinessProbe`            | Readiness probe configuration for Osclass                                                 | Check `values.yaml` file                    |
-| `customLivenessProbe`       | Override default liveness probe                                                           | `nil`                                       |
-| `customReadinessProbe`      | Override default readiness probe                                                          | `nil`                                       |
-| `updateStrategy`            | Strategy to use to update Pods                                                            | Check `values.yaml` file                    |
-| `podAffinityPreset`         | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                                        |
-| `podAntiAffinityPreset`     | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`                                      |
-| `nodeAffinityPreset.type`   | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                                        |
-| `nodeAffinityPreset.key`    | Node label key to match. Ignored if `affinity` is set.                                    | `""`                                        |
-| `nodeAffinityPreset.values` | Node label values to match. Ignored if `affinity` is set.                                 | `[]`                                        |
-| `affinity`                  | Affinity for pod assignment                                                               | `{}` (evaluated as a template)              |
-| `nodeSelector`              | Node labels for pod assignment                                                            | `{}` (evaluated as a template)              |
-| `tolerations`               | Tolerations for pod assignment                                                            | `[]` (evaluated as a template)              |
-| `podLabels`                 | Extra labels for Osclass pods                                                             | `{}` (evaluated as a template)              |
-| `podAnnotations`            | Annotations for Osclass pods                                                              | `{}` (evaluated as a template)              |
-| `extraVolumeMounts`         | Optionally specify extra list of additional volumeMounts for Osclass container(s)         | `[]`                                        |
-| `extraVolumes`              | Optionally specify extra list of additional volumes for Osclass pods                      | `[]`                                        |
-| `initContainers`            | Add additional init containers to the Osclass pods                                        | `{}` (evaluated as a template)              |
-| `sidecars`                  | Add additional sidecar containers to the Osclass pods                                     | `{}` (evaluated as a template)              |
-| `persistence.enabled`       | Enable persistence using PVC                                                              | `true`                                      |
-| `persistence.storageClass`  | PVC Storage Class for Osclass volume                                                      | `nil` (uses alpha storage class annotation) |
-| `persistence.existingClaim` | An Existing PVC name for Osclass volume                                                   | `nil` (uses alpha storage class annotation) |
-| `persistence.accessMode`    | PVC Access Mode for Osclass volume                                                        | `ReadWriteOnce`                             |
-| `persistence.size`          | PVC Storage Request for Osclass volume                                                    | `8Gi`                                       |
-
-### Exposure parameters
-
-| Parameter                        | Description                                                                       | Default                        |
-|----------------------------------|-----------------------------------------------------------------------------------|--------------------------------|
-| `service.type`                   | Kubernetes Service type                                                           | `LoadBalancer`                 |
-| `service.loadBalancerIP`         | Kubernetes LoadBalancerIP to request                                              | `nil`                          |
-| `service.port`                   | Service HTTP port                                                                 | `80`                           |
-| `service.httpsPort`              | Service HTTPS port                                                                | `""`                           |
-| `service.externalTrafficPolicy`  | Enable client source IP preservation                                              | `Cluster`                      |
-| `service.nodePorts.http`         | Kubernetes http node port                                                         | `""`                           |
-| `service.nodePorts.https`        | Kubernetes https node port                                                        | `""`                           |
-| `ingress.enabled`                | Enable ingress controller resource                                                | `false`                        |
-| `ingress.pathType`               | Ingress path type                                                                 | `ImplementationSpecific`       |
-| `ingress.certManager`            | Add annotations for cert-manager                                                  | `false`                        |
-| `ingress.hostname`               | Default host for the ingress resource                                             | `osclass.local`                |
-| `ingress.tls`                    | Enable TLS configuration for the hostname defined at `ingress.hostname` parameter | `false`                        |
-| `ingress.annotations`            | Ingress annotations                                                               | `{}` (evaluated as a template) |
-| `ingress.extraHosts[0].name`     | Additional hostnames to be covered                                                | `nil`                          |
-| `ingress.extraHosts[0].path`     | Additional hostnames to be covered                                                | `nil`                          |
-| `ingress.extraTls[0].hosts[0]`   | TLS configuration for additional hostnames to be covered                          | `nil`                          |
-| `ingress.extraTls[0].secretName` | TLS configuration for additional hostnames to be covered                          | `nil`                          |
-| `ingress.secrets[0].name`        | TLS Secret Name                                                                   | `nil`                          |
-| `ingress.secrets[0].certificate` | TLS Secret Certificate                                                            | `nil`                          |
-| `ingress.secrets[0].key`         | TLS Secret Key                                                                    | `nil`                          |
-
-### Database parameters
-
-| Parameter                                   | Description                                          | Default                                        |
-|---------------------------------------------|------------------------------------------------------|------------------------------------------------|
-| `mariadb.enabled`                           | Whether to use the MariaDB chart                     | `true`                                         |
-| `mariadb.architecture`                      | MariaDB architecture (`standalone` or `replication`) | `standalone`                                   |
-| `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                 | _random 10 character alphanumeric string_      |
-| `mariadb.auth.database`                     | Database name to create                              | `bitnami_osclass`                              |
-| `mariadb.auth.username`                     | Database user to create                              | `bn_osclass`                                   |
-| `mariadb.auth.password`                     | Password for the database                            | _random 10 character long alphanumeric string_ |
-| `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                | `true`                                         |
-| `mariadb.primary.persistence.accessMode`    | Database Persistent Volume Access Modes              | `ReadWriteOnce`                                |
-| `mariadb.primary.persistence.size`          | Database Persistent Volume Size                      | `8Gi`                                          |
-| `mariadb.primary.persistence.existingClaim` | Enable persistence using an existing PVC             | `nil`                                          |
-| `mariadb.primary.persistence.storageClass`  | PVC Storage Class                                    | `nil` (uses alpha storage class annotation)    |
-| `mariadb.primary.persistence.hostPath`      | Host mount path for MariaDB volume                   | `nil` (will not mount to a host path)          |
-| `externalDatabase.user`                     | Existing username in the external db                 | `bn_osclass`                                   |
-| `externalDatabase.password`                 | Password for the above username                      | `nil`                                          |
-| `externalDatabase.database`                 | Name of the existing database                        | `bitnami_osclass`                              |
-| `externalDatabase.host`                     | Host of the existing database                        | `nil`                                          |
-| `externalDatabase.port`                     | Port of the existing database                        | `3306`                                         |
-| `externalDatabase.existingSecret`           | Name of the database existing Secret Object          | `nil`                                          |
-
-### Metrics parameters
-
-| Parameter                     | Description                                      | Default                                                      |
-|-------------------------------|--------------------------------------------------|--------------------------------------------------------------|
-| `metrics.enabled`             | Start a side-car prometheus exporter             | `false`                                                      |
-| `metrics.image.registry`      | Apache exporter image registry                   | `docker.io`                                                  |
-| `metrics.image.repository`    | Apache exporter image name                       | `bitnami/apache-exporter`                                    |
-| `metrics.image.tag`           | Apache exporter image tag                        | `{TAG_NAME}`                                                 |
-| `metrics.image.pullPolicy`    | Image pull policy                                | `IfNotPresent`                                               |
-| `metrics.image.pullSecrets`   | Specify docker-registry secret names as an array | `[]` (does not add image pull secrets to deployed pods)      |
-| `metrics.service.port`        | Service Metrics port                             | `9117`                                                       |
-| `metrics.service.annotations` | Annotations for enabling prometheus scraping     | `{prometheus.io/scrape: "true", prometheus.io/port: "9117"}` |
-| `metrics.resources`           | Exporter resource requests/limit                 | `{}`                                                         |
 
 The above parameters map to the env variables defined in [bitnami/osclass](http://github.com/bitnami/bitnami-docker-osclass). For more information please refer to the [bitnami/osclass](http://github.com/bitnami/bitnami-docker-osclass) image documentation.
 
