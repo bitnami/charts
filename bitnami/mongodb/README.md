@@ -121,7 +121,7 @@ Refer to the [chart documentation for more information on each of these architec
 | `enableJournal`                                  | Switch to enable/disable MongoDB&reg; Journaling                                                                              | `true`                  |
 | `configuration`                                  | MongoDB&reg; configuration file to be used for Primary and Secondary nodes                                                    | `""`                    |
 | `replicaSetConfigurationSettings.enabled`        | Switch to enable/disable configuring MongoDB&reg; run time rs.conf settings                                                   | `false`                 |
-| `replicaSetConfigurationSettings.configuration`  | run-time rs.conf settings                                                                                       | `nil`                   |
+| `replicaSetConfigurationSettings.configuration`  | run-time rs.conf settings                                                                                                     | `nil`                   |
 | `existingConfigmap`                              | Name of existing ConfigMap with MongoDB&reg; configuration for Primary and Secondary nodes                                    | `nil`                   |
 | `initdbScripts`                                  | Dictionary of initdb scripts                                                                                                  | `{}`                    |
 | `initdbScriptsConfigMap`                         | Existing ConfigMap with custom initdb scripts                                                                                 | `nil`                   |
