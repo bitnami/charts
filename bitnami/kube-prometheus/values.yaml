@@ -502,9 +502,10 @@ prometheus:
     ## Use this parameter to set the required annotations for cert-manager, see
     ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
     ##
-    ## Examples:
-    ## kubernetes.io/ingress.class: nginx
-    ## cert-manager.io/cluster-issuer: cluster-issuer-name
+    ## e.g:
+    ## annotations:
+    ##   kubernetes.io/ingress.class: nginx
+    ##   cert-manager.io/cluster-issuer: cluster-issuer-name
     ##
     annotations: {}
     ## @param prometheus.ingress.tls Enable TLS configuration for the hostname defined at prometheus.ingress.hostname parameter
@@ -1255,9 +1256,10 @@ alertmanager:
     ## Use this parameter to set the required annotations for cert-manager, see
     ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
     ##
-    ## Examples:
-    ## kubernetes.io/ingress.class: nginx
-    ## cert-manager.io/cluster-issuer: cluster-issuer-name
+    ## e.g:
+    ## annotations:
+    ##   kubernetes.io/ingress.class: nginx
+    ##   cert-manager.io/cluster-issuer: cluster-issuer-name
     ##
     annotations: {}
     ## @param alertmanager.ingress.tls Enable TLS configuration for the hostname defined at alertmanager.ingress.hostname parameter

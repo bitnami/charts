@@ -485,9 +485,10 @@ query:
     ## Use this parameter to set the required annotations for cert-manager, see
     ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
     ##
-    ## Examples:
-    ## kubernetes.io/ingress.class: nginx
-    ## cert-manager.io/cluster-issuer: cluster-issuer-name
+    ## e.g:
+    ## annotations:
+    ##   kubernetes.io/ingress.class: nginx
+    ##   cert-manager.io/cluster-issuer: cluster-issuer-name
     ##
     annotations: {}
     ## @param query.ingress.extraHosts The list of additional hostnames to be covered with this ingress record.
@@ -913,9 +914,10 @@ queryFrontend:
     ## Use this parameter to set the required annotations for cert-manager, see
     ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
     ##
-    ## Examples:
-    ## kubernetes.io/ingress.class: nginx
-    ## cert-manager.io/cluster-issuer: cluster-issuer-name
+    ## e.g:
+    ## annotations:
+    ##   kubernetes.io/ingress.class: nginx
+    ##   cert-manager.io/cluster-issuer: cluster-issuer-name
     ##
     annotations: {}
     ## @param queryFrontend.ingress.extraHosts The list of additional hostnames to be covered with this ingress record.
@@ -1247,9 +1249,10 @@ bucketweb:
     ## Use this parameter to set the required annotations for cert-manager, see
     ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
     ##
-    ## Examples:
-    ## kubernetes.io/ingress.class: nginx
-    ## cert-manager.io/cluster-issuer: cluster-issuer-name
+    ## e.g:
+    ## annotations:
+    ##   kubernetes.io/ingress.class: nginx
+    ##   cert-manager.io/cluster-issuer: cluster-issuer-name
     ##
     annotations: {}
     ## @param bucketweb.ingress.extraHosts The list of additional hostnames to be covered with this ingress record.
@@ -1548,9 +1551,10 @@ compactor:
     ## Use this parameter to set the required annotations for cert-manager, see
     ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
     ##
-    ## Examples:
-    ## kubernetes.io/ingress.class: nginx
-    ## cert-manager.io/cluster-issuer: cluster-issuer-name
+    ## e.g:
+    ## annotations:
+    ##   kubernetes.io/ingress.class: nginx
+    ##   cert-manager.io/cluster-issuer: cluster-issuer-name
     ##
     annotations: {}
     ## @param compactor.ingress.extraHosts The list of additional hostnames to be covered with this ingress record.
@@ -1988,9 +1992,10 @@ storegateway:
     ## Use this parameter to set the required annotations for cert-manager, see
     ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
     ##
-    ## Examples:
-    ## kubernetes.io/ingress.class: nginx
-    ## cert-manager.io/cluster-issuer: cluster-issuer-name
+    ## e.g:
+    ## annotations:
+    ##   kubernetes.io/ingress.class: nginx
+    ##   cert-manager.io/cluster-issuer: cluster-issuer-name
     ##
     annotations: {}
     ## @param storegateway.ingress.extraHosts The list of additional hostnames to be covered with this ingress record.
@@ -2439,9 +2444,10 @@ ruler:
     ## Use this parameter to set the required annotations for cert-manager, see
     ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
     ##
-    ## Examples:
-    ## kubernetes.io/ingress.class: nginx
-    ## cert-manager.io/cluster-issuer: cluster-issuer-name
+    ## e.g:
+    ## annotations:
+    ##   kubernetes.io/ingress.class: nginx
+    ##   cert-manager.io/cluster-issuer: cluster-issuer-name
     ##
     annotations: {}
     ## @param ruler.ingress.extraHosts The list of additional hostnames to be covered with this ingress record.
@@ -2963,9 +2969,10 @@ receive:
     ## Use this parameter to set the required annotations for cert-manager, see
     ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
     ##
-    ## Examples:
-    ## kubernetes.io/ingress.class: nginx
-    ## cert-manager.io/cluster-issuer: cluster-issuer-name
+    ## e.g:
+    ## annotations:
+    ##   kubernetes.io/ingress.class: nginx
+    ##   cert-manager.io/cluster-issuer: cluster-issuer-name
     ##
     annotations: {}
     ## @param receive.ingress.extraHosts The list of additional hostnames to be covered with this ingress record.
