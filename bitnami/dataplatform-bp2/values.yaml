@@ -65,7 +65,7 @@ dataplatform:
     image:
       registry: docker.io
       repository: bitnami/dataplatform-exporter
-      tag: 0.0.11-scratch-r1
+      tag: 0.0.11-scratch-r3
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -342,7 +342,7 @@ dataplatform:
     image:
       registry: docker.io
       repository: bitnami/dataplatform-emitter
-      tag: 0.0.10-scratch-r2
+      tag: 0.0.10-scratch-r4
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1073,7 +1073,7 @@ logstash:
                 values:
                   - "{{ .Release.Name }}"
           topologyKey: "kubernetes.io/hostname"
-  ## @param logstash.extraEnvVars Array containing extra env vars to configure Logstash
+  ## @param logstash.extraEnvVars [array] Array containing extra env vars to configure Logstash
   ## For example:
   ## extraEnvVars:
   ##  - name: ELASTICSEARCH_HOST

@@ -139,6 +139,7 @@ $ helm delete --purge my-release
 | `master.affinity`                           | Master-eligible Affinity for pod assignment                                                                                                                                                                                             | `{}`                |
 | `master.nodeSelector`                       | Master-eligible Node labels for pod assignment                                                                                                                                                                                          | `{}`                |
 | `master.tolerations`                        | Master-eligible Tolerations for pod assignment                                                                                                                                                                                          | `[]`                |
+| `master.topologySpreadConstraints`          | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template                                                                                                                | `[]`                |
 | `master.resources.limits`                   | The resources limits for the container                                                                                                                                                                                                  | `{}`                |
 | `master.resources.requests`                 | The requested resources for the container                                                                                                                                                                                               | `{}`                |
 | `master.startupProbe.enabled`               | Enable/disable the startup probe (master nodes pod)                                                                                                                                                                                     | `false`             |
@@ -209,6 +210,7 @@ $ helm delete --purge my-release
 | `coordinating.affinity`                           | Coordinating Affinity for pod assignment                                                                                  | `{}`            |
 | `coordinating.nodeSelector`                       | Coordinating Node labels for pod assignment                                                                               | `{}`            |
 | `coordinating.tolerations`                        | Coordinating Tolerations for pod assignment                                                                               | `[]`            |
+| `coordinating.topologySpreadConstraints`          | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template  | `[]`            |
 | `coordinating.resources.limits`                   | The resources limits for the container                                                                                    | `{}`            |
 | `coordinating.resources.requests`                 | The requested resources for the container                                                                                 | `{}`            |
 | `coordinating.startupProbe.enabled`               | Enable/disable the startup probe (coordinating nodes pod)                                                                 | `false`         |
@@ -273,6 +275,7 @@ $ helm delete --purge my-release
 | `data.affinity`                              | Data Affinity for pod assignment                                                                                                                  | `{}`                |
 | `data.nodeSelector`                          | Data Node labels for pod assignment                                                                                                               | `{}`                |
 | `data.tolerations`                           | Data Tolerations for pod assignment                                                                                                               | `[]`                |
+| `data.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template                          | `[]`                |
 | `data.resources.limits`                      | The resources limits for the container                                                                                                            | `{}`                |
 | `data.resources.requests`                    | The requested resources for the container                                                                                                         | `{}`                |
 | `data.startupProbe.enabled`                  | Enable/disable the startup probe (data nodes pod)                                                                                                 | `false`             |
@@ -317,156 +320,159 @@ $ helm delete --purge my-release
 
 ### Ingest parameters
 
-| Name                                        | Description                                                                                                    | Value           |
-| ------------------------------------------- | -------------------------------------------------------------------------------------------------------------- | --------------- |
-| `ingest.enabled`                            | Enable ingest nodes                                                                                            | `false`         |
-| `ingest.name`                               | Ingest node pod name                                                                                           | `ingest`        |
-| `ingest.fullnameOverride`                   | String to fully override elasticsearch.ingest.fullname template with a string                                  | `""`            |
-| `ingest.replicas`                           | Desired number of Elasticsearch ingest nodes                                                                   | `2`             |
-| `ingest.updateStrategy.type`                | Update strategy for Ingest statefulset                                                                         | `RollingUpdate` |
-| `ingest.heapSize`                           | Ingest node heap size                                                                                          | `128m`          |
-| `ingest.podAnnotations`                     | Annotations for ingest pods.                                                                                   | `{}`            |
-| `ingest.hostAliases`                        | Add deployment host aliases                                                                                    | `[]`            |
-| `ingest.schedulerName`                      | Name of the k8s scheduler (other than default)                                                                 | `""`            |
-| `ingest.podLabels`                          | Extra labels to add to Pod                                                                                     | `{}`            |
-| `ingest.securityContext.enabled`            | Enable security context for ingest pods                                                                        | `true`          |
-| `ingest.securityContext.fsGroup`            | Group ID for the container for ingest pods                                                                     | `1001`          |
-| `ingest.securityContext.runAsUser`          | User ID for the container for ingest pods                                                                      | `1001`          |
-| `ingest.podAffinityPreset`                  | Ingest Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                     | `""`            |
-| `ingest.podAntiAffinityPreset`              | Ingest Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                | `""`            |
-| `ingest.nodeAffinityPreset.type`            | Ingest Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`               | `""`            |
-| `ingest.nodeAffinityPreset.key`             | Ingest Node label key to match Ignored if `affinity` is set.                                                   | `""`            |
-| `ingest.nodeAffinityPreset.values`          | Ingest Node label values to match. Ignored if `affinity` is set.                                               | `[]`            |
-| `ingest.affinity`                           | Ingest Affinity for pod assignment                                                                             | `{}`            |
-| `ingest.nodeSelector`                       | Ingest Node labels for pod assignment                                                                          | `{}`            |
-| `ingest.tolerations`                        | Ingest Tolerations for pod assignment                                                                          | `[]`            |
-| `ingest.resources.limits`                   | The resources limits for the container                                                                         | `{}`            |
-| `ingest.resources.requests`                 | The requested resources for the container                                                                      | `{}`            |
-| `ingest.startupProbe.enabled`               | Enable/disable the startup probe (ingest nodes pod)                                                            | `false`         |
-| `ingest.startupProbe.initialDelaySeconds`   | Delay before startup probe is initiated (ingest nodes pod)                                                     | `90`            |
-| `ingest.startupProbe.periodSeconds`         | How often to perform the probe (ingest nodes pod)                                                              | `10`            |
-| `ingest.startupProbe.timeoutSeconds`        | When the probe times out (ingest nodes pod)                                                                    | `5`             |
-| `ingest.startupProbe.failureThreshold`      | Minimum consecutive failures for the probe to be considered failed after having succeeded                      | `5`             |
-| `ingest.startupProbe.successThreshold`      | Minimum consecutive successes for the probe to be considered successful after having failed (ingest nodes pod) | `1`             |
-| `ingest.livenessProbe.enabled`              | Enable/disable the liveness probe (ingest nodes pod)                                                           | `true`          |
-| `ingest.livenessProbe.initialDelaySeconds`  | Delay before liveness probe is initiated (ingest nodes pod)                                                    | `90`            |
-| `ingest.livenessProbe.periodSeconds`        | How often to perform the probe (ingest nodes pod)                                                              | `10`            |
-| `ingest.livenessProbe.timeoutSeconds`       | When the probe times out (ingest nodes pod)                                                                    | `5`             |
-| `ingest.livenessProbe.failureThreshold`     | Minimum consecutive failures for the probe to be considered failed after having succeeded                      | `5`             |
-| `ingest.livenessProbe.successThreshold`     | Minimum consecutive successes for the probe to be considered successful after having failed (ingest nodes pod) | `1`             |
-| `ingest.readinessProbe.enabled`             | Enable/disable the readiness probe (ingest nodes pod)                                                          | `true`          |
-| `ingest.readinessProbe.initialDelaySeconds` | Delay before readiness probe is initiated (ingest nodes pod)                                                   | `90`            |
-| `ingest.readinessProbe.periodSeconds`       | How often to perform the probe (ingest nodes pod)                                                              | `10`            |
-| `ingest.readinessProbe.timeoutSeconds`      | When the probe times out (ingest nodes pod)                                                                    | `5`             |
-| `ingest.readinessProbe.failureThreshold`    | Minimum consecutive failures for the probe to be considered failed after having succeeded                      | `5`             |
-| `ingest.readinessProbe.successThreshold`    | Minimum consecutive successes for the probe to be considered successful after having failed (ingest nodes pod) | `1`             |
-| `ingest.customStartupProbe`                 | Override default startup probe                                                                                 | `{}`            |
-| `ingest.customLivenessProbe`                | Override default liveness probe                                                                                | `{}`            |
-| `ingest.customReadinessProbe`               | Override default readiness probe                                                                               | `{}`            |
-| `ingest.initContainers`                     | Extra init containers to add to the Elasticsearch ingest pod(s)                                                | `[]`            |
-| `ingest.sidecars`                           | Extra sidecar containers to add to the Elasticsearch ingest pod(s)                                             | `[]`            |
-| `ingest.service.type`                       | Kubernetes Service type (ingest nodes)                                                                         | `ClusterIP`     |
-| `ingest.service.port`                       | Kubernetes Service port Elasticsearch transport port (ingest nodes)                                            | `9300`          |
-| `ingest.service.nodePort`                   | Kubernetes Service nodePort (ingest nodes)                                                                     | `""`            |
-| `ingest.service.annotations`                | Annotations for ingest nodes service                                                                           | `{}`            |
-| `ingest.service.loadBalancerIP`             | loadBalancerIP if ingest nodes service type is `LoadBalancer`                                                  | `""`            |
-| `ingest.serviceAccount.create`              | Create a default serviceaccount for elasticsearch curator                                                      | `false`         |
-| `ingest.serviceAccount.name`                | Name of the created serviceAccount                                                                             | `""`            |
+| Name                                        | Description                                                                                                              | Value           |
+| ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | --------------- |
+| `ingest.enabled`                            | Enable ingest nodes                                                                                                      | `false`         |
+| `ingest.name`                               | Ingest node pod name                                                                                                     | `ingest`        |
+| `ingest.fullnameOverride`                   | String to fully override elasticsearch.ingest.fullname template with a string                                            | `""`            |
+| `ingest.replicas`                           | Desired number of Elasticsearch ingest nodes                                                                             | `2`             |
+| `ingest.updateStrategy.type`                | Update strategy for Ingest statefulset                                                                                   | `RollingUpdate` |
+| `ingest.heapSize`                           | Ingest node heap size                                                                                                    | `128m`          |
+| `ingest.podAnnotations`                     | Annotations for ingest pods.                                                                                             | `{}`            |
+| `ingest.hostAliases`                        | Add deployment host aliases                                                                                              | `[]`            |
+| `ingest.schedulerName`                      | Name of the k8s scheduler (other than default)                                                                           | `""`            |
+| `ingest.podLabels`                          | Extra labels to add to Pod                                                                                               | `{}`            |
+| `ingest.securityContext.enabled`            | Enable security context for ingest pods                                                                                  | `true`          |
+| `ingest.securityContext.fsGroup`            | Group ID for the container for ingest pods                                                                               | `1001`          |
+| `ingest.securityContext.runAsUser`          | User ID for the container for ingest pods                                                                                | `1001`          |
+| `ingest.podAffinityPreset`                  | Ingest Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                               | `""`            |
+| `ingest.podAntiAffinityPreset`              | Ingest Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                          | `""`            |
+| `ingest.nodeAffinityPreset.type`            | Ingest Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                         | `""`            |
+| `ingest.nodeAffinityPreset.key`             | Ingest Node label key to match Ignored if `affinity` is set.                                                             | `""`            |
+| `ingest.nodeAffinityPreset.values`          | Ingest Node label values to match. Ignored if `affinity` is set.                                                         | `[]`            |
+| `ingest.affinity`                           | Ingest Affinity for pod assignment                                                                                       | `{}`            |
+| `ingest.nodeSelector`                       | Ingest Node labels for pod assignment                                                                                    | `{}`            |
+| `ingest.tolerations`                        | Ingest Tolerations for pod assignment                                                                                    | `[]`            |
+| `ingest.topologySpreadConstraints`          | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`            |
+| `ingest.resources.limits`                   | The resources limits for the container                                                                                   | `{}`            |
+| `ingest.resources.requests`                 | The requested resources for the container                                                                                | `{}`            |
+| `ingest.startupProbe.enabled`               | Enable/disable the startup probe (ingest nodes pod)                                                                      | `false`         |
+| `ingest.startupProbe.initialDelaySeconds`   | Delay before startup probe is initiated (ingest nodes pod)                                                               | `90`            |
+| `ingest.startupProbe.periodSeconds`         | How often to perform the probe (ingest nodes pod)                                                                        | `10`            |
+| `ingest.startupProbe.timeoutSeconds`        | When the probe times out (ingest nodes pod)                                                                              | `5`             |
+| `ingest.startupProbe.failureThreshold`      | Minimum consecutive failures for the probe to be considered failed after having succeeded                                | `5`             |
+| `ingest.startupProbe.successThreshold`      | Minimum consecutive successes for the probe to be considered successful after having failed (ingest nodes pod)           | `1`             |
+| `ingest.livenessProbe.enabled`              | Enable/disable the liveness probe (ingest nodes pod)                                                                     | `true`          |
+| `ingest.livenessProbe.initialDelaySeconds`  | Delay before liveness probe is initiated (ingest nodes pod)                                                              | `90`            |
+| `ingest.livenessProbe.periodSeconds`        | How often to perform the probe (ingest nodes pod)                                                                        | `10`            |
+| `ingest.livenessProbe.timeoutSeconds`       | When the probe times out (ingest nodes pod)                                                                              | `5`             |
+| `ingest.livenessProbe.failureThreshold`     | Minimum consecutive failures for the probe to be considered failed after having succeeded                                | `5`             |
+| `ingest.livenessProbe.successThreshold`     | Minimum consecutive successes for the probe to be considered successful after having failed (ingest nodes pod)           | `1`             |
+| `ingest.readinessProbe.enabled`             | Enable/disable the readiness probe (ingest nodes pod)                                                                    | `true`          |
+| `ingest.readinessProbe.initialDelaySeconds` | Delay before readiness probe is initiated (ingest nodes pod)                                                             | `90`            |
+| `ingest.readinessProbe.periodSeconds`       | How often to perform the probe (ingest nodes pod)                                                                        | `10`            |
+| `ingest.readinessProbe.timeoutSeconds`      | When the probe times out (ingest nodes pod)                                                                              | `5`             |
+| `ingest.readinessProbe.failureThreshold`    | Minimum consecutive failures for the probe to be considered failed after having succeeded                                | `5`             |
+| `ingest.readinessProbe.successThreshold`    | Minimum consecutive successes for the probe to be considered successful after having failed (ingest nodes pod)           | `1`             |
+| `ingest.customStartupProbe`                 | Override default startup probe                                                                                           | `{}`            |
+| `ingest.customLivenessProbe`                | Override default liveness probe                                                                                          | `{}`            |
+| `ingest.customReadinessProbe`               | Override default readiness probe                                                                                         | `{}`            |
+| `ingest.initContainers`                     | Extra init containers to add to the Elasticsearch ingest pod(s)                                                          | `[]`            |
+| `ingest.sidecars`                           | Extra sidecar containers to add to the Elasticsearch ingest pod(s)                                                       | `[]`            |
+| `ingest.service.type`                       | Kubernetes Service type (ingest nodes)                                                                                   | `ClusterIP`     |
+| `ingest.service.port`                       | Kubernetes Service port Elasticsearch transport port (ingest nodes)                                                      | `9300`          |
+| `ingest.service.nodePort`                   | Kubernetes Service nodePort (ingest nodes)                                                                               | `""`            |
+| `ingest.service.annotations`                | Annotations for ingest nodes service                                                                                     | `{}`            |
+| `ingest.service.loadBalancerIP`             | loadBalancerIP if ingest nodes service type is `LoadBalancer`                                                            | `""`            |
+| `ingest.serviceAccount.create`              | Create a default serviceaccount for elasticsearch curator                                                                | `false`         |
+| `ingest.serviceAccount.name`                | Name of the created serviceAccount                                                                                       | `""`            |
 
 
 ### Curator parameters
 
-| Name                                         | Description                                                                                       | Value                           |
-| -------------------------------------------- | ------------------------------------------------------------------------------------------------- | ------------------------------- |
-| `curator.enabled`                            | Enable Elasticsearch Curator cron job                                                             | `false`                         |
-| `curator.name`                               | Elasticsearch Curator pod name                                                                    | `curator`                       |
-| `curator.image.registry`                     | Elasticsearch Curator image registry                                                              | `docker.io`                     |
-| `curator.image.repository`                   | Elasticsearch Curator image repository                                                            | `bitnami/elasticsearch-curator` |
-| `curator.image.tag`                          | Elasticsearch Curator image tag                                                                   | `5.8.4-debian-10-r130`          |
-| `curator.image.pullPolicy`                   | Elasticsearch Curator image pull policy                                                           | `IfNotPresent`                  |
-| `curator.image.pullSecrets`                  | Elasticsearch Curator image pull secrets                                                          | `[]`                            |
-| `curator.cronjob.schedule`                   | Schedule for the CronJob                                                                          | `0 1 * * *`                     |
-| `curator.cronjob.annotations`                | Annotations to add to the cronjob                                                                 | `{}`                            |
-| `curator.cronjob.concurrencyPolicy`          | `Allow,Forbid,Replace` concurrent jobs                                                            | `""`                            |
-| `curator.cronjob.failedJobsHistoryLimit`     | Specify the number of failed Jobs to keep                                                         | `""`                            |
-| `curator.cronjob.successfulJobsHistoryLimit` | Specify the number of completed Jobs to keep                                                      | `""`                            |
-| `curator.cronjob.jobRestartPolicy`           | Control the Job restartPolicy                                                                     | `Never`                         |
-| `curator.schedulerName`                      | Name of the k8s scheduler (other than default)                                                    | `""`                            |
-| `curator.podAnnotations`                     | Annotations to add to the pod                                                                     | `{}`                            |
-| `curator.podLabels`                          | Extra labels to add to Pod                                                                        | `{}`                            |
-| `curator.podAffinityPreset`                  | Curator Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                            |
-| `curator.podAntiAffinityPreset`              | Curator Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `""`                            |
-| `curator.nodeAffinityPreset.type`            | Curator Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                            |
-| `curator.nodeAffinityPreset.key`             | Curator Node label key to match Ignored if `affinity` is set.                                     | `""`                            |
-| `curator.nodeAffinityPreset.values`          | Curator Node label values to match. Ignored if `affinity` is set.                                 | `[]`                            |
-| `curator.initContainers`                     | Extra init containers to add to the Elasticsearch coordinating-only pod(s)                        | `[]`                            |
-| `curator.sidecars`                           | Extra sidecar containers to add to the Elasticsearch ingest pod(s)                                | `[]`                            |
-| `curator.affinity`                           | Curator Affinity for pod assignment                                                               | `{}`                            |
-| `curator.nodeSelector`                       | Curator Node labels for pod assignment                                                            | `{}`                            |
-| `curator.tolerations`                        | Curator Tolerations for pod assignment                                                            | `[]`                            |
-| `curator.rbac.enabled`                       | Enable RBAC resources                                                                             | `false`                         |
-| `curator.serviceAccount.create`              | Create a default serviceaccount for elasticsearch curator                                         | `true`                          |
-| `curator.serviceAccount.name`                | Name for elasticsearch curator serviceaccount                                                     | `""`                            |
-| `curator.psp.create`                         | Create pod security policy resources                                                              | `false`                         |
-| `curator.hooks`                              | Whether to run job on selected hooks                                                              | `{}`                            |
-| `curator.dryrun`                             | Run Curator in dry-run mode                                                                       | `false`                         |
-| `curator.command`                            | Command to execute                                                                                | `["curator"]`                   |
-| `curator.env`                                | Environment variables to add to the cronjob container                                             | `{}`                            |
-| `curator.configMaps.action_file_yml`         | Contents of the Curator action_file.yml                                                           | `""`                            |
-| `curator.configMaps.config_yml`              | Contents of the Curator config.yml (overrides config)                                             | `""`                            |
-| `curator.resources.limits`                   | The resources limits for the container                                                            | `{}`                            |
-| `curator.resources.requests`                 | The requested resources for the container                                                         | `{}`                            |
-| `curator.priorityClassName`                  | Priority Class Name                                                                               | `""`                            |
-| `curator.extraVolumes`                       | Extra volumes                                                                                     | `[]`                            |
-| `curator.extraVolumeMounts`                  | Mount extra volume(s)                                                                             | `[]`                            |
-| `curator.extraInitContainers`                | DEPRECATED. Use `curator.initContainers` instead. Init containers to add to the cronjob container | `[]`                            |
+| Name                                         | Description                                                                                                              | Value                           |
+| -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ------------------------------- |
+| `curator.enabled`                            | Enable Elasticsearch Curator cron job                                                                                    | `false`                         |
+| `curator.name`                               | Elasticsearch Curator pod name                                                                                           | `curator`                       |
+| `curator.image.registry`                     | Elasticsearch Curator image registry                                                                                     | `docker.io`                     |
+| `curator.image.repository`                   | Elasticsearch Curator image repository                                                                                   | `bitnami/elasticsearch-curator` |
+| `curator.image.tag`                          | Elasticsearch Curator image tag                                                                                          | `5.8.4-debian-10-r130`          |
+| `curator.image.pullPolicy`                   | Elasticsearch Curator image pull policy                                                                                  | `IfNotPresent`                  |
+| `curator.image.pullSecrets`                  | Elasticsearch Curator image pull secrets                                                                                 | `[]`                            |
+| `curator.cronjob.schedule`                   | Schedule for the CronJob                                                                                                 | `0 1 * * *`                     |
+| `curator.cronjob.annotations`                | Annotations to add to the cronjob                                                                                        | `{}`                            |
+| `curator.cronjob.concurrencyPolicy`          | `Allow,Forbid,Replace` concurrent jobs                                                                                   | `""`                            |
+| `curator.cronjob.failedJobsHistoryLimit`     | Specify the number of failed Jobs to keep                                                                                | `""`                            |
+| `curator.cronjob.successfulJobsHistoryLimit` | Specify the number of completed Jobs to keep                                                                             | `""`                            |
+| `curator.cronjob.jobRestartPolicy`           | Control the Job restartPolicy                                                                                            | `Never`                         |
+| `curator.schedulerName`                      | Name of the k8s scheduler (other than default)                                                                           | `""`                            |
+| `curator.podAnnotations`                     | Annotations to add to the pod                                                                                            | `{}`                            |
+| `curator.podLabels`                          | Extra labels to add to Pod                                                                                               | `{}`                            |
+| `curator.podAffinityPreset`                  | Curator Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                              | `""`                            |
+| `curator.podAntiAffinityPreset`              | Curator Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                         | `""`                            |
+| `curator.nodeAffinityPreset.type`            | Curator Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                        | `""`                            |
+| `curator.nodeAffinityPreset.key`             | Curator Node label key to match Ignored if `affinity` is set.                                                            | `""`                            |
+| `curator.nodeAffinityPreset.values`          | Curator Node label values to match. Ignored if `affinity` is set.                                                        | `[]`                            |
+| `curator.initContainers`                     | Extra init containers to add to the Elasticsearch coordinating-only pod(s)                                               | `[]`                            |
+| `curator.sidecars`                           | Extra sidecar containers to add to the Elasticsearch ingest pod(s)                                                       | `[]`                            |
+| `curator.affinity`                           | Curator Affinity for pod assignment                                                                                      | `{}`                            |
+| `curator.nodeSelector`                       | Curator Node labels for pod assignment                                                                                   | `{}`                            |
+| `curator.tolerations`                        | Curator Tolerations for pod assignment                                                                                   | `[]`                            |
+| `curator.topologySpreadConstraints`          | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`                            |
+| `curator.rbac.enabled`                       | Enable RBAC resources                                                                                                    | `false`                         |
+| `curator.serviceAccount.create`              | Create a default serviceaccount for elasticsearch curator                                                                | `true`                          |
+| `curator.serviceAccount.name`                | Name for elasticsearch curator serviceaccount                                                                            | `""`                            |
+| `curator.psp.create`                         | Create pod security policy resources                                                                                     | `false`                         |
+| `curator.hooks`                              | Whether to run job on selected hooks                                                                                     | `{}`                            |
+| `curator.dryrun`                             | Run Curator in dry-run mode                                                                                              | `false`                         |
+| `curator.command`                            | Command to execute                                                                                                       | `["curator"]`                   |
+| `curator.env`                                | Environment variables to add to the cronjob container                                                                    | `{}`                            |
+| `curator.configMaps.action_file_yml`         | Contents of the Curator action_file.yml                                                                                  | `""`                            |
+| `curator.configMaps.config_yml`              | Contents of the Curator config.yml (overrides config)                                                                    | `""`                            |
+| `curator.resources.limits`                   | The resources limits for the container                                                                                   | `{}`                            |
+| `curator.resources.requests`                 | The requested resources for the container                                                                                | `{}`                            |
+| `curator.priorityClassName`                  | Priority Class Name                                                                                                      | `""`                            |
+| `curator.extraVolumes`                       | Extra volumes                                                                                                            | `[]`                            |
+| `curator.extraVolumeMounts`                  | Mount extra volume(s)                                                                                                    | `[]`                            |
+| `curator.extraInitContainers`                | DEPRECATED. Use `curator.initContainers` instead. Init containers to add to the cronjob container                        | `[]`                            |
 
 
 ### Metrics parameters
 
-| Name                                         | Description                                                                                               | Value                            |
-| -------------------------------------------- | --------------------------------------------------------------------------------------------------------- | -------------------------------- |
-| `metrics.enabled`                            | Enable prometheus exporter                                                                                | `false`                          |
-| `metrics.name`                               | Metrics pod name                                                                                          | `metrics`                        |
-| `metrics.image.registry`                     | Metrics exporter image registry                                                                           | `docker.io`                      |
-| `metrics.image.repository`                   | Metrics exporter image repository                                                                         | `bitnami/elasticsearch-exporter` |
-| `metrics.image.tag`                          | Metrics exporter image tag                                                                                | `1.2.1-debian-10-r81`            |
-| `metrics.image.pullPolicy`                   | Metrics exporter image pull policy                                                                        | `IfNotPresent`                   |
-| `metrics.image.pullSecrets`                  | Metrics exporter image pull secrets                                                                       | `[]`                             |
-| `metrics.extraArgs`                          | Extra arguments to add to the default exporter command                                                    | `[]`                             |
-| `metrics.hostAliases`                        | Add deployment host aliases                                                                               | `[]`                             |
-| `metrics.schedulerName`                      | Name of the k8s scheduler (other than default)                                                            | `""`                             |
-| `metrics.service.type`                       | Metrics exporter endpoint service type                                                                    | `ClusterIP`                      |
-| `metrics.service.annotations`                | Provide any additional annotations which may be required.                                                 | `{}`                             |
-| `metrics.podAffinityPreset`                  | Metrics Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`               | `""`                             |
-| `metrics.podAntiAffinityPreset`              | Metrics Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`          | `""`                             |
-| `metrics.nodeAffinityPreset.type`            | Metrics Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`         | `""`                             |
-| `metrics.nodeAffinityPreset.key`             | Metrics Node label key to match Ignored if `affinity` is set.                                             | `""`                             |
-| `metrics.nodeAffinityPreset.values`          | Metrics Node label values to match. Ignored if `affinity` is set.                                         | `[]`                             |
-| `metrics.affinity`                           | Metrics Affinity for pod assignment                                                                       | `{}`                             |
-| `metrics.nodeSelector`                       | Metrics Node labels for pod assignment                                                                    | `{}`                             |
-| `metrics.tolerations`                        | Metrics Tolerations for pod assignment                                                                    | `[]`                             |
-| `metrics.resources.limits`                   | The resources limits for the container                                                                    | `{}`                             |
-| `metrics.resources.requests`                 | The requested resources for the container                                                                 | `{}`                             |
-| `metrics.livenessProbe.enabled`              | Enable/disable the liveness probe (metrics pod)                                                           | `true`                           |
-| `metrics.livenessProbe.initialDelaySeconds`  | Delay before liveness probe is initiated (metrics pod)                                                    | `60`                             |
-| `metrics.livenessProbe.periodSeconds`        | How often to perform the probe (metrics pod)                                                              | `10`                             |
-| `metrics.livenessProbe.timeoutSeconds`       | When the probe times out (metrics pod)                                                                    | `5`                              |
-| `metrics.livenessProbe.failureThreshold`     | Minimum consecutive failures for the probe to be considered failed after having succeeded                 | `5`                              |
-| `metrics.livenessProbe.successThreshold`     | Minimum consecutive successes for the probe to be considered successful after having failed (metrics pod) | `1`                              |
-| `metrics.readinessProbe.enabled`             | Enable/disable the readiness probe (metrics pod)                                                          | `true`                           |
-| `metrics.readinessProbe.initialDelaySeconds` | Delay before readiness probe is initiated (metrics pod)                                                   | `5`                              |
-| `metrics.readinessProbe.periodSeconds`       | How often to perform the probe (metrics pod)                                                              | `10`                             |
-| `metrics.readinessProbe.timeoutSeconds`      | When the probe times out (metrics pod)                                                                    | `1`                              |
-| `metrics.readinessProbe.failureThreshold`    | Minimum consecutive failures for the probe to be considered failed after having succeeded                 | `5`                              |
-| `metrics.readinessProbe.successThreshold`    | Minimum consecutive successes for the probe to be considered successful after having failed (metrics pod) | `1`                              |
-| `metrics.podAnnotations`                     | Metrics exporter pod Annotation and Labels                                                                | `{}`                             |
-| `metrics.podLabels`                          | Extra labels to add to Pod                                                                                | `{}`                             |
-| `metrics.serviceMonitor.enabled`             | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)    | `false`                          |
-| `metrics.serviceMonitor.namespace`           | Namespace in which Prometheus is running                                                                  | `""`                             |
-| `metrics.serviceMonitor.interval`            | Interval at which metrics should be scraped.                                                              | `""`                             |
-| `metrics.serviceMonitor.scrapeTimeout`       | Timeout after which the scrape is ended                                                                   | `""`                             |
-| `metrics.serviceMonitor.selector`            | Prometheus instance selector labels                                                                       | `{}`                             |
+| Name                                         | Description                                                                                                              | Value                            |
+| -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | -------------------------------- |
+| `metrics.enabled`                            | Enable prometheus exporter                                                                                               | `false`                          |
+| `metrics.name`                               | Metrics pod name                                                                                                         | `metrics`                        |
+| `metrics.image.registry`                     | Metrics exporter image registry                                                                                          | `docker.io`                      |
+| `metrics.image.repository`                   | Metrics exporter image repository                                                                                        | `bitnami/elasticsearch-exporter` |
+| `metrics.image.tag`                          | Metrics exporter image tag                                                                                               | `1.2.1-debian-10-r81`            |
+| `metrics.image.pullPolicy`                   | Metrics exporter image pull policy                                                                                       | `IfNotPresent`                   |
+| `metrics.image.pullSecrets`                  | Metrics exporter image pull secrets                                                                                      | `[]`                             |
+| `metrics.extraArgs`                          | Extra arguments to add to the default exporter command                                                                   | `[]`                             |
+| `metrics.hostAliases`                        | Add deployment host aliases                                                                                              | `[]`                             |
+| `metrics.schedulerName`                      | Name of the k8s scheduler (other than default)                                                                           | `""`                             |
+| `metrics.service.type`                       | Metrics exporter endpoint service type                                                                                   | `ClusterIP`                      |
+| `metrics.service.annotations`                | Provide any additional annotations which may be required.                                                                | `{}`                             |
+| `metrics.podAffinityPreset`                  | Metrics Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                              | `""`                             |
+| `metrics.podAntiAffinityPreset`              | Metrics Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                         | `""`                             |
+| `metrics.nodeAffinityPreset.type`            | Metrics Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                        | `""`                             |
+| `metrics.nodeAffinityPreset.key`             | Metrics Node label key to match Ignored if `affinity` is set.                                                            | `""`                             |
+| `metrics.nodeAffinityPreset.values`          | Metrics Node label values to match. Ignored if `affinity` is set.                                                        | `[]`                             |
+| `metrics.affinity`                           | Metrics Affinity for pod assignment                                                                                      | `{}`                             |
+| `metrics.nodeSelector`                       | Metrics Node labels for pod assignment                                                                                   | `{}`                             |
+| `metrics.tolerations`                        | Metrics Tolerations for pod assignment                                                                                   | `[]`                             |
+| `metrics.topologySpreadConstraints`          | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`                             |
+| `metrics.resources.limits`                   | The resources limits for the container                                                                                   | `{}`                             |
+| `metrics.resources.requests`                 | The requested resources for the container                                                                                | `{}`                             |
+| `metrics.livenessProbe.enabled`              | Enable/disable the liveness probe (metrics pod)                                                                          | `true`                           |
+| `metrics.livenessProbe.initialDelaySeconds`  | Delay before liveness probe is initiated (metrics pod)                                                                   | `60`                             |
+| `metrics.livenessProbe.periodSeconds`        | How often to perform the probe (metrics pod)                                                                             | `10`                             |
+| `metrics.livenessProbe.timeoutSeconds`       | When the probe times out (metrics pod)                                                                                   | `5`                              |
+| `metrics.livenessProbe.failureThreshold`     | Minimum consecutive failures for the probe to be considered failed after having succeeded                                | `5`                              |
+| `metrics.livenessProbe.successThreshold`     | Minimum consecutive successes for the probe to be considered successful after having failed (metrics pod)                | `1`                              |
+| `metrics.readinessProbe.enabled`             | Enable/disable the readiness probe (metrics pod)                                                                         | `true`                           |
+| `metrics.readinessProbe.initialDelaySeconds` | Delay before readiness probe is initiated (metrics pod)                                                                  | `5`                              |
+| `metrics.readinessProbe.periodSeconds`       | How often to perform the probe (metrics pod)                                                                             | `10`                             |
+| `metrics.readinessProbe.timeoutSeconds`      | When the probe times out (metrics pod)                                                                                   | `1`                              |
+| `metrics.readinessProbe.failureThreshold`    | Minimum consecutive failures for the probe to be considered failed after having succeeded                                | `5`                              |
+| `metrics.readinessProbe.successThreshold`    | Minimum consecutive successes for the probe to be considered successful after having failed (metrics pod)                | `1`                              |
+| `metrics.podAnnotations`                     | Metrics exporter pod Annotation and Labels                                                                               | `{}`                             |
+| `metrics.podLabels`                          | Extra labels to add to Pod                                                                                               | `{}`                             |
+| `metrics.serviceMonitor.enabled`             | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)                   | `false`                          |
+| `metrics.serviceMonitor.namespace`           | Namespace in which Prometheus is running                                                                                 | `""`                             |
+| `metrics.serviceMonitor.interval`            | Interval at which metrics should be scraped.                                                                             | `""`                             |
+| `metrics.serviceMonitor.scrapeTimeout`       | Timeout after which the scrape is ended                                                                                  | `""`                             |
+| `metrics.serviceMonitor.selector`            | Prometheus instance selector labels                                                                                      | `{}`                             |
 
 
 ### Sysctl Image parameters
