@@ -244,17 +244,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for the Cache server container(s)                       | `[]`                |
 | `server.sidecars`                           | Add additional sidecar containers to the Cache server pod(s)                                                     | `{}`                |
 | `server.initContainers`                     | Add additional init containers to the Cache server pod(s)                                                        | `{}`                |
-| `server.service.type`                       | Cache server service type                                                                                        | `ClusterIP`         |
 | `server.service.ports.server`               | Cache server multicast service port                                                                              | `40404`             |
 | `server.service.ports.http`                 | Cache server HTTP service port                                                                                   | `7070`              |
 | `server.service.ports.rmi`                  | Cache server RMI service port                                                                                    | `1099`              |
-| `server.service.nodePorts.server`           | Node port for multicast                                                                                          | `""`                |
-| `server.service.nodePorts.http`             | Node port for HTTP                                                                                               | `""`                |
-| `server.service.nodePorts.rmi`              | Node port for RMI                                                                                                | `""`                |
-| `server.service.clusterIP`                  | Cache server service Cluster IP                                                                                  | `""`                |
-| `server.service.loadBalancerIP`             | Cache server service Load Balancer IP                                                                            | `""`                |
-| `server.service.loadBalancerSourceRanges`   | Cache server service Load Balancer sources                                                                       | `[]`                |
-| `server.service.externalTrafficPolicy`      | Cache server service external traffic policy                                                                     | `Cluster`           |
 | `server.service.annotations`                | Additional custom annotations for Cache server service                                                           | `{}`                |
 | `server.persistence.enabled`                | Enable persistence on Cache server replicas using a `PersistentVolumeClaim`                                      | `true`              |
 | `server.persistence.storageClass`           | MariaDB secondary persistent volume storage Class                                                                | `""`                |
@@ -265,21 +257,20 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Traffic Exposure Parameters
 
-| Name                  | Description                                                                                           | Value                    |
-| --------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------ |
-| `ingress.enabled`     | Enable ingress record generation for Apache Geode                                                     | `false`                  |
-| `ingress.pathType`    | Ingress path type                                                                                     | `ImplementationSpecific` |
-| `ingress.apiVersion`  | Force Ingress API version (automatically detected if not set)                                         | `nil`                    |
-| `ingress.hostname`    | Default host for the ingress record                                                                   | `geode.local`            |
-| `ingress.path`        | Default path for the ingress record                                                                   | `/`                      |
-| `ingress.annotations` | Additional custom annotations for the ingress record                                                  | `{}`                     |
-| `ingress.tls`         | Enable TLS configuration for the host defined at `ingress.hostname` parameter                         | `false`                  |
-| `ingress.certManager` | Add the corresponding annotations for cert-manager integration                                        | `false`                  |
-| `ingress.selfSigned`  | Create a TLS secret for this ingress record using self-signed certificates generated by Helm          | `false`                  |
-| `ingress.extraHosts`  | An array with additional hostname(s) to be covered with the ingress record                            | `[]`                     |
-| `ingress.extraPaths`  | An array with additional arbitrary paths that may need to be added to the ingress under the main host | `[]`                     |
-| `ingress.extraTls`    | TLS configuration for additional hostname(s) to be covered with this ingress record                   | `[]`                     |
-| `ingress.secrets`     | Custom TLS certificates as secrets                                                                    | `[]`                     |
+| Name                  | Description                                                                                                                      | Value                    |
+| --------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `ingress.enabled`     | Enable ingress record generation for Apache Geode                                                                                | `false`                  |
+| `ingress.pathType`    | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.apiVersion`  | Force Ingress API version (automatically detected if not set)                                                                    | `nil`                    |
+| `ingress.hostname`    | Default host for the ingress record                                                                                              | `geode.local`            |
+| `ingress.path`        | Default path for the ingress record                                                                                              | `/`                      |
+| `ingress.annotations` | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.tls`         | Enable TLS configuration for the host defined at `ingress.hostname` parameter                                                    | `false`                  |
+| `ingress.selfSigned`  | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
+| `ingress.extraHosts`  | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                     |
+| `ingress.extraPaths`  | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |
+| `ingress.extraTls`    | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
+| `ingress.secrets`     | Custom TLS certificates as secrets                                                                                               | `[]`                     |
 
 
 ### Init Container Parameters
@@ -299,10 +290,12 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Other Parameters
 
-| Name                    | Description                                          | Value  |
-| ----------------------- | ---------------------------------------------------- | ------ |
-| `serviceAccount.create` | Specifies whether a ServiceAccount should be created | `true` |
-| `serviceAccount.name`   | The name of the ServiceAccount to use.               | `""`   |
+| Name                          | Description                                          | Value   |
+| ----------------------------- | ---------------------------------------------------- | ------- |
+| `serviceAccount.create`       | Specifies whether a ServiceAccount should be created | `true`  |
+| `serviceAccount.name`         | The name of the ServiceAccount to use.               | `""`    |
+| `networkPolicy.enabled`       | Specifies whether a NetworkPolicy should be created  | `false` |
+| `networkPolicy.allowExternal` | Don't require client label for connections           | `true`  |
 
 
 The above parameters map to the env variables defined in [bitnami/geode](http://github.com/bitnami/bitnami-docker-geode). For more information please refer to the [bitnami/geode](http://github.com/bitnami/bitnami-docker-geode) image documentation.

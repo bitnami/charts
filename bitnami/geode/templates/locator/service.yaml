@@ -56,6 +56,5 @@ spec:
       {{- else if eq .Values.locator.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
-  # publishNotReadyAddresses: true
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: locator

@@ -685,12 +685,9 @@ server:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: {}
-  ## Apache Geode Cache server service parameters
+  ## Apache Geode Cache server (headless) service parameters
   ##
   service:
-    ## @param server.service.type Cache server service type
-    ##
-    type: ClusterIP
     ## @param server.service.ports.server Cache server multicast service port
     ## @param server.service.ports.http Cache server HTTP service port
     ## @param server.service.ports.rmi Cache server RMI service port
@@ -699,36 +696,6 @@ server:
       server: 40404
       http: 7070
       rmi: 1099
-    ## Node ports to expose
-    ## @param server.service.nodePorts.server Node port for multicast
-    ## @param server.service.nodePorts.http Node port for HTTP
-    ## @param server.service.nodePorts.rmi Node port for RMI
-    ## NOTE: choose port between <30000-32767>
-    ##
-    nodePorts:
-      server: ""
-      http: ""
-      rmi: ""
-    ## @param server.service.clusterIP Cache server service Cluster IP
-    ## e.g.:
-    ## clusterIP: None
-    ##
-    clusterIP: ""
-    ## @param server.service.loadBalancerIP Cache server service Load Balancer IP
-    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
-    ##
-    loadBalancerIP: ""
-    ## @param server.service.loadBalancerSourceRanges Cache server service Load Balancer sources
-    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
-    ## e.g:
-    ## loadBalancerSourceRanges:
-    ##   - 10.10.10.0/24
-    ##
-    loadBalancerSourceRanges: []
-    ## @param server.service.externalTrafficPolicy Cache server service external traffic policy
-    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
-    ##
-    externalTrafficPolicy: Cluster
     ## @param server.service.annotations Additional custom annotations for Cache server service
     ##
     annotations: {}
@@ -908,3 +875,17 @@ serviceAccount:
   ## If not set and create is true, a name is generated using the common.names.fullname template
   ##
   name: ""
+
+## Network policies
+## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+##
+networkPolicy:
+  ## @param networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+  ##
+  enabled: false
+  ## @param networkPolicy.allowExternal Don't require client label for connections
+  ## When set to false, only pods with the correct client label will have network access to the ports
+  ## the Apache Geode nodes are listening on.
+  ## When true, Apache Geode nodes accept connections from any source (with the correct destination port).
+  ##
+  allowExternal: true
