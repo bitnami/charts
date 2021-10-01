@@ -158,6 +158,7 @@ server:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param server.containerSecurityContext.enabled Enabled server containers' Security Context
   ## @param server.containerSecurityContext.runAsUser Set server containers' Security Context runAsUser
+  ## @param server.containerSecurityContext.runAsNonRoot Set server containers' Security Context runAsNonRoot
   ##
   containerSecurityContext:
     enabled: true
@@ -200,7 +201,7 @@ server:
       ## The root URL of the OIDC identity provider.
       ## E.g.
       ## issuer: "https://accounts.google.com"
-      issuer:
+      issuer: ""
       ## Name of a secret and a key in it to retrieve the app OIDC client ID from.
       ##
       clientId:
@@ -369,10 +370,10 @@ server:
   extraEnvVars: []
   ## @param server.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for server nodes
   ##
-  extraEnvVarsCM:
+  extraEnvVarsCM: ""
   ## @param server.extraEnvVarsSecret Name of existing Secret containing extra env vars for server nodes
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret: ""
   ## @param server.extraVolumes Optionally specify extra list of additional volumes for the server pod(s)
   ##
   extraVolumes: []
@@ -417,16 +418,16 @@ server:
     ## NOTE: choose port between <30000-32767>
     ##
     nodePorts:
-      http:
+      http: ""
     ## @param server.service.clusterIP server service Cluster IP
     ## e.g.:
     ## clusterIP: None
     ##
-    clusterIP:
+    clusterIP: ""
     ## @param server.service.loadBalancerIP server service Load Balancer IP
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
     ##
-    loadBalancerIP:
+    loadBalancerIP: ""
     ## @param server.service.loadBalancerSourceRanges server service Load Balancer sources
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## e.g:
@@ -576,7 +577,7 @@ controller:
 
   ## Use an existing configmap instead of creating a configmap with the specified parameters
   ## @param controller.existingConfigMap
-  existingConfigMap:
+  existingConfigMap: ""
 
   ## @param controller.extraArgs Extra arguments for the controller command line
   ##
@@ -839,10 +840,10 @@ controller:
   extraEnvVars: []
   ## @param controller.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for controller nodes
   ##
-  extraEnvVarsCM:
+  extraEnvVarsCM: ""
   ## @param controller.extraEnvVarsSecret Name of existing Secret containing extra env vars for controller nodes
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret: ""
   ## @param controller.extraVolumes Optionally specify extra list of additional volumes for the controller pod(s)
   ##
   extraVolumes: []
@@ -890,17 +891,17 @@ controller:
     ## NOTE: choose port between <30000-32767>
     ##
     nodePorts:
-      metrics:
-      telemetry:
+      metrics: ""
+      telemetry: ""
     ## @param controller.service.clusterIP controller service Cluster IP
     ## e.g.:
     ## clusterIP: None
     ##
-    clusterIP:
+    clusterIP: ""
     ## @param controller.service.loadBalancerIP controller service Load Balancer IP
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
     ##
-    loadBalancerIP:
+    loadBalancerIP: ""
     ## @param controller.service.loadBalancerSourceRanges controller service Load Balancer sources
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## e.g:
@@ -985,7 +986,7 @@ ingress:
   pathType: ImplementationSpecific
   ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
   ##
-  apiVersion:
+  apiVersion: ""
   ## @param ingress.hostname Default host for the ingress record
   ##
   hostname: server.local
@@ -1072,7 +1073,7 @@ workflows:
   ##
   serviceAccount:
     create: false
-    name:
+    name: ""
     automountServiceAccountToken: true
   ## Create RBAC resources to run workflows.
   ## A Role and Role Bindding are created per namespace in controller.workflowNamespaces
