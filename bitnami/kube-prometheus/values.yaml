@@ -480,9 +480,10 @@ prometheus:
     ## @param prometheus.ingress.enabled Enable ingress controller resource
     ##
     enabled: false
-    ## @param prometheus.ingress.certManager Add annotations for cert-manager
+    ## DEPRECATED: Use prometheus.ingress.annotations instead of prometheus.ingress.certManager
+    ## certManager: false
     ##
-    certManager: false
+
     ## @param prometheus.ingress.pathType Ingress Path type
     ##
     pathType: ImplementationSpecific
@@ -495,15 +496,16 @@ prometheus:
     ## @param prometheus.ingress.path The Path to Prometheus. You may need to set this to '/*' in order to use this with ALB ingress controllers
     ##
     path: /
-    ## @param prometheus.ingress.annotations Ingress annotations
+    ## @param prometheus.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
     ## For a full list of possible ingress annotations, please see
     ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+    ## Use this parameter to set the required annotations for cert-manager, see
+    ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
     ##
-    ## If tls is set to true, annotation ingress.kubernetes.io/secure-backends: "true" will automatically be set
-    ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
     ## e.g:
     ## annotations:
-    ##  kubernetes.io/ingress.class: nginx
+    ##   kubernetes.io/ingress.class: nginx
+    ##   cert-manager.io/cluster-issuer: cluster-issuer-name
     ##
     annotations: {}
     ## @param prometheus.ingress.tls Enable TLS configuration for the hostname defined at prometheus.ingress.hostname parameter
@@ -1052,18 +1054,19 @@ prometheus:
       ## @param prometheus.thanos.ingress.enabled Enable ingress controller resource
       ##
       enabled: false
-      ## @param prometheus.thanos.ingress.certManager Add annotations for cert-manager
+      ## DEPRECATED: Use prometheus.thanos.ingress.annotations instead of prometheus.thanos.ingress.certManager
+      ## certManager: false
       ##
-      certManager: false
-      ## @param prometheus.thanos.ingress.annotations Ingress annotations
+
+      ## @param prometheus.thanos.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
       ## For a full list of possible ingress annotations, please see
       ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+      ## Use this parameter to set the required annotations for cert-manager, see
+      ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
       ##
-      ## If tls is set to true, annotation ingress.kubernetes.io/secure-backends: "true" will automatically be set
-      ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
-      ## annotations:
-      ##    kubernetes.io/ingress.class: nginx
-      ##    nginx.ingress.kubernetes.io/backend-protocol: "GRPCS"
+      ## Examples:
+      ## kubernetes.io/ingress.class: nginx
+      ## cert-manager.io/cluster-issuer: cluster-issuer-name
       ##
       annotations: {}
       ## @param prometheus.thanos.ingress.hosts [array] The list of hostnames to be covered with this ingress record.
@@ -1231,9 +1234,10 @@ alertmanager:
     ## @param alertmanager.ingress.enabled Enable ingress controller resource
     ##
     enabled: false
-    ## @param alertmanager.ingress.certManager Add annotations for cert-manager
+    ## DEPRECATED: Use alertmanager.ingress.annotations instead of alertmanager.ingress.certManager
+    ## certManager: false
     ##
-    certManager: false
+
     ## @param alertmanager.ingress.pathType Ingress Path type
     ##
     pathType: ImplementationSpecific
@@ -1246,14 +1250,16 @@ alertmanager:
     ## @param alertmanager.ingress.path The Path to Alert Manager. You may need to set this to '/*' in order to use this with ALB ingress controllers.
     ##
     path: /
-    ## @param alertmanager.ingress.annotations Ingress annotations
+    ## @param alertmanager.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
     ## For a full list of possible ingress annotations, please see
     ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+    ## Use this parameter to set the required annotations for cert-manager, see
+    ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
     ##
-    ## If tls is set to true, annotation ingress.kubernetes.io/secure-backends: "true" will automatically be set
-    ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+    ## e.g:
     ## annotations:
-    ##    kubernetes.io/ingress.class: nginx
+    ##   kubernetes.io/ingress.class: nginx
+    ##   cert-manager.io/cluster-issuer: cluster-issuer-name
     ##
     annotations: {}
     ## @param alertmanager.ingress.tls Enable TLS configuration for the hostname defined at alertmanager.ingress.hostname parameter

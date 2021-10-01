@@ -166,45 +166,43 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Traffic exposure parameters
 
-| Name                               | Description                                                                                                 | Value                    |
-| ---------------------------------- | ----------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `service.type`                     | MinIO&reg; service type                                                                                     | `ClusterIP`              |
-| `service.ports.api`                | MinIO&reg; API service port                                                                                 | `9000`                   |
-| `service.ports.console`            | MinIO&reg; Console service port                                                                             | `9001`                   |
-| `service.nodePorts.api`            | Specify the MinIO&reg API nodePort value for the LoadBalancer and NodePort service types                    | `""`                     |
-| `service.nodePorts.console`        | Specify the MinIO&reg Console nodePort value for the LoadBalancer and NodePort service types                | `""`                     |
-| `service.loadBalancerIP`           | loadBalancerIP if service type is `LoadBalancer` (optional, cloud specific)                                 | `""`                     |
-| `service.loadBalancerSourceRanges` | Addresses that are allowed when service is LoadBalancer                                                     | `[]`                     |
-| `service.externalTrafficPolicy`    | Enable client source IP preservation                                                                        | `Cluster`                |
-| `service.annotations`              | Annotations for MinIO&reg; service                                                                          | `{}`                     |
-| `ingress.enabled`                  | Enable ingress controller resource                                                                          | `false`                  |
-| `ingress.certManager`              | Set this to true in order to add the corresponding annotations for cert-manager                             | `false`                  |
-| `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                               | `""`                     |
-| `ingress.hostname`                 | Default host for the ingress resource                                                                       | `minio.local`            |
-| `ingress.path`                     | The Path to MinIO&reg;. You may need to set this to '/*' in order to use this with ALB ingress controllers. | `/`                      |
-| `ingress.pathType`                 | Ingress path type                                                                                           | `ImplementationSpecific` |
-| `ingress.servicePort`              | Service port to be used                                                                                     | `minio-console`          |
-| `ingress.annotations`              | Ingress annotations                                                                                         | `{}`                     |
-| `ingress.tls`                      | Enable TLS configuration for the hostname defined at `ingress.hostname` parameter                           | `false`                  |
-| `ingress.extraHosts`               | The list of additional hostnames to be covered with this ingress record.                                    | `[]`                     |
-| `ingress.extraPaths`               | Any additional paths that may need to be added to the ingress under the main host                           | `[]`                     |
-| `ingress.extraTls`                 | The tls configuration for additional hostnames to be covered with this ingress record.                      | `[]`                     |
-| `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets               | `[]`                     |
-| `apiIngress.enabled`               | Enable ingress controller resource                                                                          | `false`                  |
-| `apiIngress.certManager`           | Set this to true in order to add the corresponding annotations for cert-manager                             | `false`                  |
-| `apiIngress.apiVersion`            | Force Ingress API version (automatically detected if not set)                                               | `""`                     |
-| `apiIngress.hostname`              | Default host for the ingress resource                                                                       | `minio.local`            |
-| `apiIngress.path`                  | The Path to MinIO&reg;. You may need to set this to '/*' in order to use this with ALB ingress controllers. | `/`                      |
-| `apiIngress.pathType`              | Ingress path type                                                                                           | `ImplementationSpecific` |
-| `apiIngress.servicePort`           | Service port to be used                                                                                     | `minio-api`              |
-| `apiIngress.annotations`           | Ingress annotations                                                                                         | `{}`                     |
-| `apiIngress.tls`                   | Enable TLS configuration for the hostname defined at `apiIngress.hostname` parameter                        | `false`                  |
-| `apiIngress.extraHosts`            | The list of additional hostnames to be covered with this ingress record.                                    | `[]`                     |
-| `apiIngress.extraPaths`            | Any additional paths that may need to be added to the ingress under the main host                           | `[]`                     |
-| `apiIngress.extraTls`              | The tls configuration for additional hostnames to be covered with this ingress record.                      | `[]`                     |
-| `apiIngress.secrets`               | If you're providing your own certificates, please use this to add the certificates as secrets               | `[]`                     |
-| `networkPolicy.enabled`            | Enable the default NetworkPolicy policy                                                                     | `false`                  |
-| `networkPolicy.allowExternal`      | Don't require client label for connections                                                                  | `true`                   |
+| Name                               | Description                                                                                                                      | Value                    |
+| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.type`                     | MinIO&reg; service type                                                                                                          | `ClusterIP`              |
+| `service.ports.api`                | MinIO&reg; API service port                                                                                                      | `9000`                   |
+| `service.ports.console`            | MinIO&reg; Console service port                                                                                                  | `9001`                   |
+| `service.nodePorts.api`            | Specify the MinIO&reg API nodePort value for the LoadBalancer and NodePort service types                                         | `""`                     |
+| `service.nodePorts.console`        | Specify the MinIO&reg Console nodePort value for the LoadBalancer and NodePort service types                                     | `""`                     |
+| `service.loadBalancerIP`           | loadBalancerIP if service type is `LoadBalancer` (optional, cloud specific)                                                      | `""`                     |
+| `service.loadBalancerSourceRanges` | Addresses that are allowed when service is LoadBalancer                                                                          | `[]`                     |
+| `service.externalTrafficPolicy`    | Enable client source IP preservation                                                                                             | `Cluster`                |
+| `service.annotations`              | Annotations for MinIO&reg; service                                                                                               | `{}`                     |
+| `ingress.enabled`                  | Enable ingress controller resource                                                                                               | `false`                  |
+| `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
+| `ingress.hostname`                 | Default host for the ingress resource                                                                                            | `minio.local`            |
+| `ingress.path`                     | The Path to MinIO&reg;. You may need to set this to '/*' in order to use this with ALB ingress controllers.                      | `/`                      |
+| `ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.servicePort`              | Service port to be used                                                                                                          | `minio-console`          |
+| `ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.tls`                      | Enable TLS configuration for the hostname defined at `ingress.hostname` parameter                                                | `false`                  |
+| `ingress.extraHosts`               | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
+| `ingress.extraPaths`               | Any additional paths that may need to be added to the ingress under the main host                                                | `[]`                     |
+| `ingress.extraTls`                 | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
+| `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
+| `apiIngress.enabled`               | Enable ingress controller resource                                                                                               | `false`                  |
+| `apiIngress.apiVersion`            | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
+| `apiIngress.hostname`              | Default host for the ingress resource                                                                                            | `minio.local`            |
+| `apiIngress.path`                  | The Path to MinIO&reg;. You may need to set this to '/*' in order to use this with ALB ingress controllers.                      | `/`                      |
+| `apiIngress.pathType`              | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `apiIngress.servicePort`           | Service port to be used                                                                                                          | `minio-api`              |
+| `apiIngress.annotations`           | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `apiIngress.tls`                   | Enable TLS configuration for the hostname defined at `apiIngress.hostname` parameter                                             | `false`                  |
+| `apiIngress.extraHosts`            | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
+| `apiIngress.extraPaths`            | Any additional paths that may need to be added to the ingress under the main host                                                | `[]`                     |
+| `apiIngress.extraTls`              | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
+| `apiIngress.secrets`               | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
+| `networkPolicy.enabled`            | Enable the default NetworkPolicy policy                                                                                          | `false`                  |
+| `networkPolicy.allowExternal`      | Don't require client label for connections                                                                                       | `true`                   |
 
 
 ### Persistence parameters

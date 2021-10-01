@@ -202,27 +202,26 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Traffic Exposure Parameters
 
-| Name                               | Description                                                                                   | Value                    |
-| ---------------------------------- | --------------------------------------------------------------------------------------------- | ------------------------ |
-| `service.type`                     | Kubernetes Service type                                                                       | `LoadBalancer`           |
-| `service.port`                     | Service HTTP port                                                                             | `8080`                   |
-| `service.httpsPort`                | Service HTTPS port                                                                            | `8443`                   |
-| `service.clusterIP`                | Static clusterIP or None for headless services                                                | `""`                     |
-| `service.loadBalancerSourceRanges` | Service Load Balancer sources                                                                 | `[]`                     |
-| `service.loadBalancerIP`           | loadBalancerIP for the SuiteCRM Service (optional, cloud specific)                            | `""`                     |
-| `service.nodePorts.http`           | Kubernetes HTTP node port                                                                     | `""`                     |
-| `service.nodePorts.https`          | Kubernetes HTTPS node port                                                                    | `""`                     |
-| `service.externalTrafficPolicy`    | Enable client source IP preservation                                                          | `Cluster`                |
-| `ingress.enabled`                  | Enable ingress controller resource                                                            | `false`                  |
-| `ingress.certManager`              | Set this to true in order to add the corresponding annotations for cert-manager               | `false`                  |
-| `ingress.hostname`                 | Default host for the ingress resource                                                         | `suitecrm.local`         |
-| `ingress.annotations`              | Ingress annotations                                                                           | `{}`                     |
-| `ingress.hosts`                    | The list of additional hostnames to be covered with this ingress record.                      | `[]`                     |
-| `ingress.tls`                      | The tls configuration for the ingress                                                         | `[]`                     |
-| `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets | `[]`                     |
-| `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                 | `""`                     |
-| `ingress.path`                     | Ingress path                                                                                  | `/`                      |
-| `ingress.pathType`                 | Ingress path type                                                                             | `ImplementationSpecific` |
+| Name                               | Description                                                                                                                      | Value                    |
+| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.type`                     | Kubernetes Service type                                                                                                          | `LoadBalancer`           |
+| `service.port`                     | Service HTTP port                                                                                                                | `8080`                   |
+| `service.httpsPort`                | Service HTTPS port                                                                                                               | `8443`                   |
+| `service.clusterIP`                | Static clusterIP or None for headless services                                                                                   | `""`                     |
+| `service.loadBalancerSourceRanges` | Service Load Balancer sources                                                                                                    | `[]`                     |
+| `service.loadBalancerIP`           | loadBalancerIP for the SuiteCRM Service (optional, cloud specific)                                                               | `""`                     |
+| `service.nodePorts.http`           | Kubernetes HTTP node port                                                                                                        | `""`                     |
+| `service.nodePorts.https`          | Kubernetes HTTPS node port                                                                                                       | `""`                     |
+| `service.externalTrafficPolicy`    | Enable client source IP preservation                                                                                             | `Cluster`                |
+| `ingress.enabled`                  | Enable ingress controller resource                                                                                               | `false`                  |
+| `ingress.hostname`                 | Default host for the ingress resource                                                                                            | `suitecrm.local`         |
+| `ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.hosts`                    | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
+| `ingress.tls`                      | The tls configuration for the ingress                                                                                            | `[]`                     |
+| `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
+| `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
+| `ingress.path`                     | Ingress path                                                                                                                     | `/`                      |
+| `ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
 
 
 ### Metrics parameters

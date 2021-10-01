@@ -173,30 +173,29 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Traffic Exposure Parameters
 
-| Name                               | Description                                                                                           | Value                    |
-| ---------------------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------ |
-| `service.type`                     | WordPress service type                                                                                | `LoadBalancer`           |
-| `service.port`                     | WordPress service HTTP port                                                                           | `80`                     |
-| `service.httpsPort`                | WordPress service HTTPS port                                                                          | `443`                    |
-| `service.clusterIP`                | WordPress service Cluster IP                                                                          | `""`                     |
-| `service.loadBalancerIP`           | Osclass service Load Balancer IP                                                                      | `""`                     |
-| `service.loadBalancerSourceRanges` | Osclass service Load Balancer sources                                                                 | `[]`                     |
-| `service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin                                      | `None`                   |
-| `service.nodePorts.http`           | Node port for HTTP                                                                                    | `""`                     |
-| `service.nodePorts.https`          | Node port for HTTPS                                                                                   | `""`                     |
-| `service.externalTrafficPolicy`    | Osclass service external traffic policy                                                               | `Cluster`                |
-| `ingress.enabled`                  | Enable ingress record generation for Osclass                                                          | `false`                  |
-| `ingress.certManager`              | Add the corresponding annotations for cert-manager integration                                        | `false`                  |
-| `ingress.pathType`                 | Ingress path type                                                                                     | `ImplementationSpecific` |
-| `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                         | `""`                     |
-| `ingress.hostname`                 | Default host for the ingress record                                                                   | `osclass.local`          |
-| `ingress.path`                     | Default path for the ingress record                                                                   | `/`                      |
-| `ingress.annotations`              | Additional custom annotations for the ingress record                                                  | `{}`                     |
-| `ingress.tls`                      | Enable TLS configuration for the host defined at `ingress.hostname` parameter                         | `false`                  |
-| `ingress.extraHosts`               | An array with additional hostname(s) to be covered with the ingress record                            | `[]`                     |
-| `ingress.extraPaths`               | An array with additional arbitrary paths that may need to be added to the ingress under the main host | `[]`                     |
-| `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                   | `[]`                     |
-| `ingress.secrets`                  | Custom TLS certificates as secrets                                                                    | `[]`                     |
+| Name                               | Description                                                                                                                      | Value                    |
+| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.type`                     | WordPress service type                                                                                                           | `LoadBalancer`           |
+| `service.port`                     | WordPress service HTTP port                                                                                                      | `80`                     |
+| `service.httpsPort`                | WordPress service HTTPS port                                                                                                     | `443`                    |
+| `service.clusterIP`                | WordPress service Cluster IP                                                                                                     | `""`                     |
+| `service.loadBalancerIP`           | Osclass service Load Balancer IP                                                                                                 | `""`                     |
+| `service.loadBalancerSourceRanges` | Osclass service Load Balancer sources                                                                                            | `[]`                     |
+| `service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin                                                                 | `None`                   |
+| `service.nodePorts.http`           | Node port for HTTP                                                                                                               | `""`                     |
+| `service.nodePorts.https`          | Node port for HTTPS                                                                                                              | `""`                     |
+| `service.externalTrafficPolicy`    | Osclass service external traffic policy                                                                                          | `Cluster`                |
+| `ingress.enabled`                  | Enable ingress record generation for Osclass                                                                                     | `false`                  |
+| `ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
+| `ingress.hostname`                 | Default host for the ingress record                                                                                              | `osclass.local`          |
+| `ingress.path`                     | Default path for the ingress record                                                                                              | `/`                      |
+| `ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.tls`                      | Enable TLS configuration for the host defined at `ingress.hostname` parameter                                                    | `false`                  |
+| `ingress.extraHosts`               | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                     |
+| `ingress.extraPaths`               | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |
+| `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
+| `ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
 
 
 ### Database Parameters

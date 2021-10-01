@@ -467,9 +467,10 @@ query:
     ## @param query.ingress.enabled Enable ingress controller resource
     ##
     enabled: false
-    ## @param query.ingress.certManager Set this to true in order to add the corresponding annotations for cert-manager
+    ## DEPRECATED: Use query.ingress.annotations instead of query.ingress.certManager
+    ## certManager: false
     ##
-    certManager: false
+
     ## @param query.ingress.hostname Default host for the ingress resource
     ##
     hostname: thanos.local
@@ -478,11 +479,16 @@ query:
     ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
     ##
     ingressClassName: ""
-    ## @param query.ingress.annotations Ingress annotations
+    ## @param query.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
     ## For a full list of possible ingress annotations, please see
     ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+    ## Use this parameter to set the required annotations for cert-manager, see
+    ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
     ##
-    ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+    ## e.g:
+    ## annotations:
+    ##   kubernetes.io/ingress.class: nginx
+    ##   cert-manager.io/cluster-issuer: cluster-issuer-name
     ##
     annotations: {}
     ## @param query.ingress.extraHosts The list of additional hostnames to be covered with this ingress record.
@@ -543,13 +549,22 @@ query:
       ## @param query.ingress.grpc.enabled Enable ingress controller resource (GRPC)
       ##
       enabled: false
-      ## @param query.ingress.grpc.certManager Add annotations for cert-manager (GRPC)
+      ## DEPRECATED: Use query.ingress.grpc.annotations instead of query.ingress.grpc.certManager
+      ## certManager: false
       ##
-      certManager: false
+
       ## @param query.ingress.grpc.hostname Default host for the ingress resource (GRPC)
       ##
       hostname: thanos-grpc.local
-      ## @param query.ingress.grpc.annotations Ingress annotations (GRPC)
+      ## @param query.ingress.grpc.annotations Additional annotations for the Ingress resource (GRPC). To enable certificate autogeneration, place here your cert-manager annotations.
+      ## For a full list of possible ingress annotations, please see
+      ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+      ## Use this parameter to set the required annotations for cert-manager, see
+      ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
+      ##
+      ## Examples:
+      ## kubernetes.io/ingress.class: nginx
+      ## cert-manager.io/cluster-issuer: cluster-issuer-name
       ##
       annotations: {}
       ## @param query.ingress.grpc.extraHosts The list of additional hostnames to be covered with this ingress record.
@@ -881,9 +896,10 @@ queryFrontend:
     ## @param queryFrontend.ingress.enabled Enable ingress controller resource
     ##
     enabled: false
-    ## @param queryFrontend.ingress.certManager Set this to true in order to add the corresponding annotations for cert-manager
+    ## DEPRECATED: Use queryFrontend.ingress.annotations instead of queryFrontend.ingress.certManager
+    ## certManager: false
     ##
-    certManager: false
+
     ## @param queryFrontend.ingress.hostname Default host for the ingress resource
     ##
     hostname: thanos.local
@@ -892,11 +908,16 @@ queryFrontend:
     ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
     ##
     ingressClassName: ""
-    ## @param queryFrontend.ingress.annotations Ingress annotations
+    ## @param queryFrontend.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
     ## For a full list of possible ingress annotations, please see
     ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+    ## Use this parameter to set the required annotations for cert-manager, see
+    ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
     ##
-    ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+    ## e.g:
+    ## annotations:
+    ##   kubernetes.io/ingress.class: nginx
+    ##   cert-manager.io/cluster-issuer: cluster-issuer-name
     ##
     annotations: {}
     ## @param queryFrontend.ingress.extraHosts The list of additional hostnames to be covered with this ingress record.
@@ -1210,9 +1231,10 @@ bucketweb:
     ## @param bucketweb.ingress.enabled Enable ingress controller resource
     ##
     enabled: false
-    ## @param bucketweb.ingress.certManager Add annotations for cert-manager
+    ## DEPRECATED: Use bucketweb.ingress.annotations instead of bucketweb.ingress.certManager
+    ## certManager: false
     ##
-    certManager: false
+
     ## @param bucketweb.ingress.hostname Default host for the ingress resource
     ##
     hostname: thanos-bucketweb.local
@@ -1221,11 +1243,16 @@ bucketweb:
     ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
     ##
     ingressClassName: ""
-    ## @param bucketweb.ingress.annotations Ingress annotations
+    ## @param bucketweb.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
     ## For a full list of possible ingress annotations, please see
     ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+    ## Use this parameter to set the required annotations for cert-manager, see
+    ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
     ##
-    ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+    ## e.g:
+    ## annotations:
+    ##   kubernetes.io/ingress.class: nginx
+    ##   cert-manager.io/cluster-issuer: cluster-issuer-name
     ##
     annotations: {}
     ## @param bucketweb.ingress.extraHosts The list of additional hostnames to be covered with this ingress record.
@@ -1506,9 +1533,10 @@ compactor:
     ## @param compactor.ingress.enabled Enable ingress controller resource
     ##
     enabled: false
-    ## @param compactor.ingress.certManager Set this to true in order to add the corresponding annotations for cert-manager
+    ## DEPRECATED: Use compactor.ingress.annotations instead of compactor.ingress.certManager
+    ## certManager: false
     ##
-    certManager: false
+
     ## @param compactor.ingress.hostname Default host for the ingress resource
     ##
     hostname: thanos-compactor.local
@@ -1517,11 +1545,16 @@ compactor:
     ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
     ##
     ingressClassName: ""
-    ## @param compactor.ingress.annotations Ingress annotations
+    ## @param compactor.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
     ## For a full list of possible ingress annotations, please see
     ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+    ## Use this parameter to set the required annotations for cert-manager, see
+    ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
     ##
-    ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+    ## e.g:
+    ## annotations:
+    ##   kubernetes.io/ingress.class: nginx
+    ##   cert-manager.io/cluster-issuer: cluster-issuer-name
     ##
     annotations: {}
     ## @param compactor.ingress.extraHosts The list of additional hostnames to be covered with this ingress record.
@@ -1941,9 +1974,10 @@ storegateway:
     ## @param storegateway.ingress.enabled Enable ingress controller resource
     ##
     enabled: false
-    ## @param storegateway.ingress.certManager Set this to true in order to add the corresponding annotations for cert-manager
+    ## DEPRECATED: Use storegateway.ingress.annotations instead of storegateway.ingress.certManager
+    ## certManager: false
     ##
-    certManager: false
+
     ## @param storegateway.ingress.hostname Default host for the ingress resource
     ##
     hostname: thanos-storegateway.local
@@ -1952,11 +1986,16 @@ storegateway:
     ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
     ##
     ingressClassName: ""
-    ## @param storegateway.ingress.annotations Ingress annotations
+    ## @param storegateway.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
     ## For a full list of possible ingress annotations, please see
     ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+    ## Use this parameter to set the required annotations for cert-manager, see
+    ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
     ##
-    ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+    ## e.g:
+    ## annotations:
+    ##   kubernetes.io/ingress.class: nginx
+    ##   cert-manager.io/cluster-issuer: cluster-issuer-name
     ##
     annotations: {}
     ## @param storegateway.ingress.extraHosts The list of additional hostnames to be covered with this ingress record.
@@ -2387,9 +2426,10 @@ ruler:
     ## @param ruler.ingress.enabled Enable ingress controller resource
     ##
     enabled: false
-    ## @param ruler.ingress.certManager Add annotations for cert-manager
+    ## DEPRECATED: Use ruler.ingress.annotations instead of ruler.ingress.certManager
+    ## certManager: false
     ##
-    certManager: false
+
     ## @param ruler.ingress.hostname Default host for the ingress resource
     ##
     hostname: thanos-ruler.local
@@ -2398,11 +2438,16 @@ ruler:
     ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
     ##
     ingressClassName: ""
-    ## @param ruler.ingress.annotations Ingress annotations
+    ## @param ruler.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
     ## For a full list of possible ingress annotations, please see
     ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+    ## Use this parameter to set the required annotations for cert-manager, see
+    ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
     ##
-    ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+    ## e.g:
+    ## annotations:
+    ##   kubernetes.io/ingress.class: nginx
+    ##   cert-manager.io/cluster-issuer: cluster-issuer-name
     ##
     annotations: {}
     ## @param ruler.ingress.extraHosts The list of additional hostnames to be covered with this ingress record.
@@ -2906,9 +2951,10 @@ receive:
     ## @param receive.ingress.enabled Set to true to enable ingress record generation
     ##
     enabled: false
-    ## @param receive.ingress.certManager Set this to true in order to add the corresponding annotations for cert-manager
+    ## DEPRECATED: Use receive.ingress.annotations instead of receive.ingress.certManager
+    ## certManager: false
     ##
-    certManager: false
+
     ## @param receive.ingress.hostname When the ingress is enabled, a host pointing to this will be created
     ##
     hostname: thanos-receive.local
@@ -2917,11 +2963,16 @@ receive:
     ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
     ##
     ingressClassName: ""
-    ## @param receive.ingress.annotations Ingress annotations done as key:value pairs
+    ## @param receive.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
     ## For a full list of possible ingress annotations, please see
     ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+    ## Use this parameter to set the required annotations for cert-manager, see
+    ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
     ##
-    ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+    ## e.g:
+    ## annotations:
+    ##   kubernetes.io/ingress.class: nginx
+    ##   cert-manager.io/cluster-issuer: cluster-issuer-name
     ##
     annotations: {}
     ## @param receive.ingress.extraHosts The list of additional hostnames to be covered with this ingress record.
