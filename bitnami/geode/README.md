@@ -169,7 +169,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `locator.service.ports.rmi`                  | Locator RMI service port                                                                                    | `1099`              |
 | `locator.service.nodePorts.locator`          | Node port for multicast                                                                                     | `""`                |
 | `locator.service.nodePorts.http`             | Node port for HTTP                                                                                          | `""`                |
-| `locator.service.nodePorts.rmi`              | Node port for RMI                                                                                           | `""`                |
+| `locator.service.sessionAffinity`            | Control where client requests go, to the same pod or round-robin                                            | `None`              |
 | `locator.service.clusterIP`                  | Locator service Cluster IP                                                                                  | `""`                |
 | `locator.service.loadBalancerIP`             | Locator service Load Balancer IP                                                                            | `""`                |
 | `locator.service.loadBalancerSourceRanges`   | Locator service Load Balancer sources                                                                       | `[]`                |

@@ -19,6 +19,7 @@ metadata:
   {{- end }}
 spec:
   type: {{ .Values.locator.service.type }}
+  sessionAffinity: {{ .Values.locator.service.sessionAffinity }}
   {{- if and (eq .Values.locator.service.type "ClusterIP") .Values.locator.service.clusterIP }}
   clusterIP: {{ .Values.locator.service.clusterIP }}
   {{- end }}
