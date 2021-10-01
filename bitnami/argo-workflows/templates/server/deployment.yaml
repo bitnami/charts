@@ -62,8 +62,8 @@ spec:
       {{- if .Values.server.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.server.tolerations "context" .) | nindent 8 }}
       {{- end }}
-      {{- if .Values.server.spreadConstraints }}
-      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.server.spreadConstraints "context" $) | nindent 8 }}
+      {{- if .Values.server.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.server.topologySpreadConstraints "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.server.priorityClassName }}
       priorityClassName: {{ .Values.server.priorityClassName | quote }}

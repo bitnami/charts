@@ -162,6 +162,8 @@ server:
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
+    runAsNonRoot: true
+
   ## Create RBAC resources for the Argo workflows server
   ## @param server.rbac.create Create RBAC resources for the Argo workflows server
   ##
@@ -608,7 +610,7 @@ controller:
       env: {{- include "common.tplvalues.render" (dict "value" .Values.executor.extraEnvVars "context" $) | nindent 4 }}
       {{- end }}
       {{- if .Values.executor.podSecurityContext }}
-      securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.executor.podSecurityContext "context" $) | nindent 4 }}
+      securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.executor.containerSecurityContext "context" $) | nindent 4 }}
         {{- if not (eq .Values.controller.containerRuntimeExecutor "docker") }}
         ## Docker executor requires to run executor as root
         runAsNonRoot: true
@@ -960,12 +962,12 @@ executor:
   ##     value: "bar"
   ##
   extraEnvVars: []
-  ## Configure Pods Security Context
+  ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param executor.podSecurityContext.enabled Enabled executor pods' Security Context
-  ## @param executor.podSecurityContext.fsGroup Set executor pod's Security Context fsGroup
+  ## @param executor.containerSecurityContext.enabled Enabled executor pods' Security Context
+  ## @param executor.containerSecurityContext.fsGroup Set executor pod's Security Context fsGroup
   ##
-  podSecurityContext:
+  containerSecurityContext:
     enabled: true
     fsGroup: 1001
 
