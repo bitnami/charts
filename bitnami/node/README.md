@@ -189,28 +189,27 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Traffic exposure parameters
 
-| Name                               | Description                                                                                                | Value                    |
-| ---------------------------------- | ---------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `service.type`                     | Kubernetes Service type                                                                                    | `ClusterIP`              |
-| `service.port`                     | Kubernetes Service port                                                                                    | `80`                     |
-| `service.clusterIP`                | Service Cluster IP                                                                                         | `""`                     |
-| `service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin                                           | `None`                   |
-| `service.nodePort`                 | NodePort if Service type is `LoadBalancer` or `NodePort`                                                   | `""`                     |
-| `service.loadBalancerIP`           | LoadBalancer IP if Service type is `LoadBalancer`                                                          | `""`                     |
-| `service.loadBalancerSourceRanges` | In order to limit which client IP's can access the Network Load Balancer, specify loadBalancerSourceRanges | `[]`                     |
-| `service.annotations`              | Annotations for the Service                                                                                | `{}`                     |
-| `ingress.enabled`                  | Set to true to enable ingress record generation                                                            | `false`                  |
-| `ingress.certManager`              | Set this to true in order to add the corresponding annotations for cert-manager                            | `false`                  |
-| `ingress.pathType`                 | Ingress path type                                                                                          | `ImplementationSpecific` |
-| `ingress.apiVersion`               | Override API Version (automatically detected if not set)                                                   | `""`                     |
-| `ingress.hostname`                 | When the ingress is enabled, a host pointing to this will be created                                       | `node.local`             |
-| `ingress.path`                     | The Path to Node.js. You may need to set this to '/*' in order to use this with ALB ingress controllers.   | `/`                      |
-| `ingress.annotations`              | Ingress annotations                                                                                        | `{}`                     |
-| `ingress.tls`                      | Enable TLS configuration for the hostname defined at ingress.hostname parameter                            | `false`                  |
-| `ingress.extraHosts`               | The list of additional hostnames to be covered with this ingress record.                                   | `[]`                     |
-| `ingress.extraPaths`               | Any additional arbitrary paths that may need to be added to the ingress under the main host.               | `[]`                     |
-| `ingress.extraTls`                 | The tls configuration for additional hostnames to be covered with this ingress record.                     | `[]`                     |
-| `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets              | `[]`                     |
+| Name                               | Description                                                                                                                      | Value                    |
+| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.type`                     | Kubernetes Service type                                                                                                          | `ClusterIP`              |
+| `service.port`                     | Kubernetes Service port                                                                                                          | `80`                     |
+| `service.clusterIP`                | Service Cluster IP                                                                                                               | `""`                     |
+| `service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin                                                                 | `None`                   |
+| `service.nodePort`                 | NodePort if Service type is `LoadBalancer` or `NodePort`                                                                         | `""`                     |
+| `service.loadBalancerIP`           | LoadBalancer IP if Service type is `LoadBalancer`                                                                                | `""`                     |
+| `service.loadBalancerSourceRanges` | In order to limit which client IP's can access the Network Load Balancer, specify loadBalancerSourceRanges                       | `[]`                     |
+| `service.annotations`              | Annotations for the Service                                                                                                      | `{}`                     |
+| `ingress.enabled`                  | Set to true to enable ingress record generation                                                                                  | `false`                  |
+| `ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.apiVersion`               | Override API Version (automatically detected if not set)                                                                         | `""`                     |
+| `ingress.hostname`                 | When the ingress is enabled, a host pointing to this will be created                                                             | `node.local`             |
+| `ingress.path`                     | The Path to Node.js. You may need to set this to '/*' in order to use this with ALB ingress controllers.                         | `/`                      |
+| `ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.tls`                      | Enable TLS configuration for the hostname defined at ingress.hostname parameter                                                  | `false`                  |
+| `ingress.extraHosts`               | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
+| `ingress.extraPaths`               | Any additional arbitrary paths that may need to be added to the ingress under the main host.                                     | `[]`                     |
+| `ingress.extraTls`                 | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
+| `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
 
 
 The above parameters map to the env variables defined in [bitnami/node](http://github.com/bitnami/bitnami-docker-node). For more information please refer to the [bitnami/node](http://github.com/bitnami/bitnami-docker-node) image documentation.

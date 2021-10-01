@@ -300,15 +300,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Airflow exposing parameters
 
-| Name                  | Description                                                                            | Value                    |
-| --------------------- | -------------------------------------------------------------------------------------- | ------------------------ |
-| `ingress.enabled`     | Set to true to enable ingress record generation                                        | `false`                  |
-| `ingress.apiVersion`  | Override API Version (automatically detected if not set)                               | `""`                     |
-| `ingress.pathType`    | Ingress Path type                                                                      | `ImplementationSpecific` |
-| `ingress.certManager` | Set this to true in order to add the corresponding annotations for cert-manager        | `false`                  |
-| `ingress.annotations` | Ingress annotations done as key:value pairs                                            | `{}`                     |
-| `ingress.hosts`       | The list of hostnames to be covered with this ingress record.                          | `[]`                     |
-| `ingress.secrets`     | If you're providing your own certificates, use this to add the certificates as secrets | `[]`                     |
+| Name                  | Description                                                                                                                      | Value                    |
+| --------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `ingress.enabled`     | Set to true to enable ingress record generation                                                                                  | `false`                  |
+| `ingress.apiVersion`  | Override API Version (automatically detected if not set)                                                                         | `""`                     |
+| `ingress.pathType`    | Ingress Path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.annotations` | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.hosts`       | The list of hostnames to be covered with this ingress record.                                                                    | `[]`                     |
+| `ingress.secrets`     | If you're providing your own certificates, use this to add the certificates as secrets                                           | `[]`                     |
 
 
 ### Airflow database parameters

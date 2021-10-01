@@ -147,6 +147,7 @@ $ helm uninstall my-release
 | `envoy.kind`                                        | Install as deployment or daemonset                                                                                    | `daemonset`            |
 | `envoy.replicaCount`                                | Desired number of Controller pods                                                                                     | `1`                    |
 | `envoy.updateStrategy`                              | Strategy to use to update Pods                                                                                        | `{}`                   |
+| `envoy.minReadySeconds`                             | The minimum number of seconds for which a newly created Pod should be ready                                           | `0`                    |
 | `envoy.revisionHistoryLimit`                        | The number of old history to retain to allow rollback                                                                 | `10`                   |
 | `envoy.autoscaling.enabled`                         | Enable autoscaling for Controller                                                                                     | `false`                |
 | `envoy.autoscaling.minReplicas`                     | Minimum number of Controller replicas                                                                                 | `1`                    |

@@ -53,7 +53,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/argo-cd
-  tag: 2.1.2-debian-10-r0
+  tag: 2.1.3-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -594,11 +594,10 @@ server:
   ## Configure the ingress for the Argo CD server
   ## Ref: http://kubernetes.io/docs/user-guide/ingress/
   ## @param server.ingress.enabled Enable the creation of an ingress for the Argo CD server
-  ## @param server.ingress.certManager Set to true to add certmanager annotations for Argo CD server ingress
   ## @param server.ingress.pathType Path type for the Argo CD server ingress
   ## @param server.ingress.apiVersion Ingress API version for the Argo CD server ingress
   ## @param server.ingress.hostname Ingress hostname for the Argo CD server ingress
-  ## @param server.ingress.annotations Annotations for the Argo CD server ingress
+  ## @param server.ingress.annotations Annotations for the Argo CD server ingress. To enable certificate autogeneration, place here your cert-manager annotations.
   ## @param server.ingress.tls Enable TLS for the Argo CD server ingress
   ## @param server.ingress.extraHosts Extra hosts array for the Argo CD server ingress
   ## @param server.ingress.path Path array for the Argo CD server ingress
@@ -615,9 +614,9 @@ server:
     ##
     selfSigned: false
 
-    ## Set this to true in order to add the corresponding annotations for cert-manager
+    ## DEPRECATED: Use server.ingress.annotations instead of server.ingress.certManager
+    ## certManager: false
     ##
-    certManager: false
 
     ## Ingress Path type
     ##
@@ -636,11 +635,15 @@ server:
     ##
     path: /
 
-    ## Ingress annotations done as key:value pairs
     ## For a full list of possible ingress annotations, please see
     ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+    ## Use this parameter to set the required annotations for cert-manager, see
+    ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
     ##
-    ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+    ## e.g:
+    ## annotations:
+    ##   kubernetes.io/ingress.class: nginx
+    ##   cert-manager.io/cluster-issuer: cluster-issuer-name
     ##
     annotations: {}
 
@@ -740,11 +743,10 @@ server:
   ## Ref: http://kubernetes.io/docs/user-guide/ingress/
   ## Ref: https://argoproj.github.io/argo-cd/operator-manual/ingress/
   ## @param server.ingressGrpc.enabled Enable the creation of an ingress for the Argo CD gRPC server
-  ## @param server.ingressGrpc.certManager Set to true to add certmanager annotations for Argo CD gRPC server ingress
   ## @param server.ingressGrpc.pathType Path type for the Argo CD gRPC server ingress
   ## @param server.ingressGrpc.apiVersion Ingress API version for the Argo CD gRPC server ingress
   ## @param server.ingressGrpc.hostname Ingress hostname for the Argo CD gRPC server ingress
-  ## @param server.ingressGrpc.annotations Annotations for the Argo CD gRPC server ingress
+  ## @param server.ingressGrpc.annotations Annotations for the Argo CD gRPC server ingress. To enable certificate autogeneration, place here your cert-manager annotations
   ## @param server.ingressGrpc.tls Enable TLS for the Argo CD server ingress
   ## @param server.ingressGrpc.extraHosts Extra hosts array for the Argo CD gRPC server ingress
   ## @param server.ingressGrpc.path Path array for the Argo CD gRPC server ingress
@@ -761,9 +763,9 @@ server:
     ##
     selfSigned: false
 
-    ## Set this to true in order to add the corresponding annotations for cert-manager
+    ## DEPRECATED: Use server.ingressGrpc.annotations instead of server.ingressGrpc.certManager
+    ## certManager: false
     ##
-    certManager: false
 
     ## Ingress Path type
     ##
@@ -782,11 +784,15 @@ server:
     ##
     path: /
 
-    ## Ingress annotations done as key:value pairs
     ## For a full list of possible ingress annotations, please see
     ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+    ## Use this parameter to set the required annotations for cert-manager, see
+    ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
     ##
-    ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+    ## e.g:
+    ## annotations:
+    ##   kubernetes.io/ingress.class: nginx
+    ##   cert-manager.io/cluster-issuer: cluster-issuer-name
     ##
     annotations: {}
 
@@ -1336,7 +1342,7 @@ dex:
   image:
     registry: docker.io
     repository: bitnami/dex
-    tag: 2.30.0-debian-10-r39
+    tag: 2.30.0-debian-10-r57
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1867,7 +1873,7 @@ redis:
   image:
     registry: docker.io
     repository: bitnami/redis
-    tag: 6.2.5-debian-10-r50
+    tag: 6.2.5-debian-10-r66
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
