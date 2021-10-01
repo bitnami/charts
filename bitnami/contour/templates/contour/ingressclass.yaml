@@ -1,0 +1,13 @@
+{{- if and .Values.contour.ingressClass.create }}
+---
+apiVersion: networking.k8s.io/v1
+kind: IngressClass
+metadata:
+  name: {{ .Values.contour.ingressClass.name }}
+  annotations:
+    ingressclass.kubernetes.io/is-default-class: {{ .Values.contour.ingressClass.default | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: contour
+spec:
+  controller: projectcontour.io/{{ .Release.Namespace }}/{{ include "common.names.fullname" . }}-contour
+{{- end }}
