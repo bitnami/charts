@@ -345,6 +345,9 @@ envoy:
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategy: {}
+  ## @param envoy.minReadySeconds The minimum number of seconds for which a newly created Pod should be ready
+  ##
+  minReadySeconds: 0
   ## @param envoy.revisionHistoryLimit The number of old history to retain to allow rollback
   ##
   revisionHistoryLimit: 10
