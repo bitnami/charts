@@ -229,10 +229,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.extraTls`              | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
 | `ingress.secrets`               | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
 | `healthIngress.enabled`         | Set to true to enable health ingress record generation                                                                           | `false`                  |
-| `healthIngress.certManager`     | Set this to true in order to add the corresponding annotations for cert-manager                                                  | `false`                  |
 | `healthIngress.pathType`        | Ingress path type                                                                                                                | `ImplementationSpecific` |
 | `healthIngress.hostname`        | When the health ingress is enabled, a host pointing to this will be created                                                      | `example.local`          |
-| `healthIngress.annotations`     | Health Ingress annotations                                                                                                       | `{}`                     |
+| `healthIngress.annotations`     | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
 | `healthIngress.tls`             | Enable TLS configuration for the hostname defined at `healthIngress.hostname` parameter                                          | `false`                  |
 | `healthIngress.extraHosts`      | The list of additional hostnames to be covered with this health ingress record                                                   | `[]`                     |
 | `healthIngress.extraTls`        | TLS configuration for additional hostnames to be covered                                                                         | `[]`                     |
