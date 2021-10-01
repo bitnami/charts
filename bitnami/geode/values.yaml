@@ -405,13 +405,11 @@ locator:
     ## Node ports to expose
     ## @param locator.service.nodePorts.locator Node port for multicast
     ## @param locator.service.nodePorts.http Node port for HTTP
-    ## @param locator.service.nodePorts.rmi Node port for RMI
     ## NOTE: choose port between <30000-32767>
     ##
     nodePorts:
       locator: ""
       http: ""
-      rmi: ""
     ## @param locator.service.clusterIP Locator service Cluster IP
     ## e.g.:
     ## clusterIP: None

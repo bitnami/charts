@@ -245,10 +245,6 @@ spec:
               containerPort: {{ .Values.locator.containerPorts.http }}
             - name: rmi
               containerPort: {{ .Values.locator.containerPorts.rmi }}
-            {{- if .Values.metrics.enabled }}
-            - name: int-metrics
-              containerPort: {{ .Values.locator.containerPorts.metrics }}
-            {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.locator.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.locator.livenessProbe "enabled") "context" $) | nindent 12 }}

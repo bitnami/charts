@@ -48,14 +48,6 @@ spec:
       {{- else if eq .Values.locator.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
-    - name: rmi
-      port: {{ .Values.locator.service.ports.rmi }}
-      targetPort: rmi
-      {{- if and (or (eq .Values.locator.service.type "NodePort") (eq .Values.locator.service.type "LoadBalancer")) (not (empty .Values.locator.service.nodePorts.rmi)) }}
-      nodePort: {{ .Values.locator.service.nodePorts.rmi }}
-      {{- else if eq .Values.locator.service.type "ClusterIP" }}
-      nodePort: null
-      {{- end }}
     {{- if .Values.locator.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.locator.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
