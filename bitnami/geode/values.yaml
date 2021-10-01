@@ -341,6 +341,10 @@ locator:
   ## @param locator.priorityClassName Locator pods' priorityClassName
   ##
   priorityClassName: ""
+  ## @param locator.schedulerName Name of the k8s scheduler (other than default) for Locator pods
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
   ## @param locator.lifecycleHooks for the Locator container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -431,6 +435,9 @@ locator:
     ## @param locator.service.annotations Additional custom annotations for Locator service
     ##
     annotations: {}
+    ## @param locator.service.extraPorts Extra ports to expose in the Locator service (normally used with the `sidecar` value)
+    ##
+    extraPorts: []
   ## Apache Geode Locator persistence parameters
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
@@ -652,6 +659,10 @@ server:
   ## @param server.priorityClassName Cache server pods' priorityClassName
   ##
   priorityClassName: ""
+  ## @param server.schedulerName Name of the k8s scheduler (other than default) for Cache server pods
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
   ## @param server.lifecycleHooks for the Cache server container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}

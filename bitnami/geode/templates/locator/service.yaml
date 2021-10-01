@@ -22,13 +22,13 @@ spec:
   {{- if and (eq .Values.locator.service.type "ClusterIP") .Values.locator.service.clusterIP }}
   clusterIP: {{ .Values.locator.service.clusterIP }}
   {{- end }}
-  {{- if (or (eq .Values.locator.service.type "LoadBalancer") (eq .Values.locator.service.type "NodePort")) }}
+  {{- if or (eq .Values.locator.service.type "LoadBalancer") (eq .Values.locator.service.type "NodePort") }}
   externalTrafficPolicy: {{ .Values.locator.service.externalTrafficPolicy | quote }}
   {{- end }}
-  {{ if eq .Values.locator.service.type "LoadBalancer" }}
+  {{- if and (eq .Values.locator.service.type "LoadBalancer") .Values.locator.service.loadBalancerSourceRanges }}
   loadBalancerSourceRanges: {{ .Values.locator.service.loadBalancerSourceRanges }}
   {{ end }}
-  {{- if (and (eq .Values.locator.service.type "LoadBalancer") (not (empty .Values.locator.service.loadBalancerIP))) }}
+  {{- if and (eq .Values.locator.service.type "LoadBalancer") (not (empty .Values.locator.service.loadBalancerIP)) }}
   loadBalancerIP: {{ .Values.locator.service.loadBalancerIP }}
   {{- end }}
   ports:
@@ -56,5 +56,8 @@ spec:
       {{- else if eq .Values.locator.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
+    {{- if .Values.locator.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.locator.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: locator

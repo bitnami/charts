@@ -72,6 +72,9 @@ spec:
       {{- if .Values.server.priorityClassName }}
       priorityClassName: {{ .Values.server.priorityClassName | quote }}
       {{- end }}
+      {{- if .Values.server.schedulerName }}
+      schedulerName: {{ .Values.server.schedulerName }}
+      {{- end }}
       {{- if .Values.server.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.server.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}

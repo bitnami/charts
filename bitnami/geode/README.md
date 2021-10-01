@@ -154,6 +154,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `locator.tolerations`                        | Tolerations for Locator pods assignment                                                                     | `[]`                |
 | `locator.updateStrategy.type`                | Locator statefulset strategy type                                                                           | `RollingUpdate`     |
 | `locator.priorityClassName`                  | Locator pods' priorityClassName                                                                             | `""`                |
+| `locator.schedulerName`                      | Name of the k8s scheduler (other than default) for Locator pods                                             | `""`                |
 | `locator.lifecycleHooks`                     | for the Locator container(s) to automate configuration before or after startup                              | `{}`                |
 | `locator.extraEnvVars`                       | Array with extra environment variables to add to Locator nodes                                              | `[]`                |
 | `locator.extraEnvVarsCM`                     | Name of existing ConfigMap containing extra env vars for Locator nodes                                      | `nil`               |
@@ -174,6 +175,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `locator.service.loadBalancerSourceRanges`   | Locator service Load Balancer sources                                                                       | `[]`                |
 | `locator.service.externalTrafficPolicy`      | Locator service external traffic policy                                                                     | `Cluster`           |
 | `locator.service.annotations`                | Additional custom annotations for Locator service                                                           | `{}`                |
+| `locator.service.extraPorts`                 | Extra ports to expose in the Locator service (normally used with the `sidecar` value)                       | `[]`                |
 | `locator.persistence.enabled`                | Enable persistence on Locator replicas using a `PersistentVolumeClaim`                                      | `true`              |
 | `locator.persistence.storageClass`           | MariaDB secondary persistent volume storage Class                                                           | `""`                |
 | `locator.persistence.annotations`            | MariaDB secondary persistent volume claim annotations                                                       | `{}`                |
@@ -240,6 +242,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.tolerations`                        | Tolerations for Cache server pods assignment                                                                     | `[]`                |
 | `server.updateStrategy.type`                | Cache server statefulset strategy type                                                                           | `RollingUpdate`     |
 | `server.priorityClassName`                  | Cache server pods' priorityClassName                                                                             | `""`                |
+| `server.schedulerName`                      | Name of the k8s scheduler (other than default) for Cache server pods                                             | `""`                |
 | `server.lifecycleHooks`                     | for the Cache server container(s) to automate configuration before or after startup                              | `{}`                |
 | `server.extraEnvVars`                       | Array with extra environment variables to add to Cache server nodes                                              | `[]`                |
 | `server.extraEnvVarsCM`                     | Name of existing ConfigMap containing extra env vars for Cache server nodes                                      | `nil`               |
