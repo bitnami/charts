@@ -334,11 +334,16 @@ ingress:
   ## @param ingress.path Default path for the ingress record
   ##
   path: /
-  ## @param ingress.annotations Additional custom annotations for the ingress record
+  ## @param ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
   ## For a full list of possible ingress annotations, please see
   ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
-  ## NOTE: If `ingress.certManager=true`, annotation `ingress.kubernetes.io/secure-backends: "true"` will automatically be added
-  ## NOTE: If `ingress.certManager=true`, annotation `kubernetes.io/tls-acme: "true"` will automatically be added
+  ## Use this parameter to set the required annotations for cert-manager, see
+  ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
+  ##
+  ## e.g:
+  ## annotations:
+  ##   kubernetes.io/ingress.class: nginx
+  ##   cert-manager.io/cluster-issuer: cluster-issuer-name
   ##
   annotations: {}
   ## @param ingress.tls [array] Enable TLS configuration for the hosts defined
@@ -348,9 +353,10 @@ ingress:
     - hosts:
         - example.local
       secretName: example.local-tls
-  ## @param ingress.certManager Add the corresponding annotations for cert-manager integration
+  ## DEPRECATED: Use ingress.annotations instead of ingress.certManager
+  ## certManager: false
   ##
-  certManager: false
+
   ## @param ingress.hosts An array with additional hostname(s) to be covered with the ingress record
   ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
   ## e.g:

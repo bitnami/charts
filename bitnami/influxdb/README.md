@@ -221,20 +221,19 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Exposing parameters
 
-| Name                  | Description                                                                                   | Value                    |
-| --------------------- | --------------------------------------------------------------------------------------------- | ------------------------ |
-| `ingress.enabled`     | Enable ingress controller resource                                                            | `false`                  |
-| `ingress.tls`         | Create TLS Secret                                                                             | `false`                  |
-| `ingress.certManager` | Add annotations for cert-manager                                                              | `false`                  |
-| `ingress.pathType`    | Ingress path type                                                                             | `ImplementationSpecific` |
-| `ingress.apiVersion`  | Force Ingress API version (automatically detected if not set)                                 | `""`                     |
-| `ingress.hostname`    | Default host for the ingress resource                                                         | `influxdb.local`         |
-| `ingress.path`        | Ingress path*' in order to use this                                                           | `/`                      |
-| `ingress.annotations` | Ingress annotations                                                                           | `{}`                     |
-| `ingress.extraHosts`  | The list of additional hostnames to be covered with this ingress record.                      | `[]`                     |
-| `ingress.extraPaths`  | Additional arbitrary path/backend objects                                                     | `[]`                     |
-| `ingress.extraTls`    | The tls configuration for additional hostnames to be covered with this ingress record.        | `[]`                     |
-| `ingress.secrets`     | If you're providing your own certificates, please use this to add the certificates as secrets | `[]`                     |
+| Name                  | Description                                                                                                                      | Value                    |
+| --------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `ingress.enabled`     | Enable ingress controller resource                                                                                               | `false`                  |
+| `ingress.tls`         | Create TLS Secret                                                                                                                | `false`                  |
+| `ingress.pathType`    | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.apiVersion`  | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
+| `ingress.hostname`    | Default host for the ingress resource                                                                                            | `influxdb.local`         |
+| `ingress.path`        | Ingress path*' in order to use this                                                                                              | `/`                      |
+| `ingress.annotations` | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.extraHosts`  | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
+| `ingress.extraPaths`  | Additional arbitrary path/backend objects                                                                                        | `[]`                     |
+| `ingress.extraTls`    | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
+| `ingress.secrets`     | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
 
 
 ### Metrics parameters
