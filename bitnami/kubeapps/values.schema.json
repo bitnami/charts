@@ -66,14 +66,6 @@
             "value": false,
             "path": "ingress/enabled"
           }
-        },
-          "properties": {
-            "clusterIssuer": {
-              "type": "string",
-              "title": "Cert-manager cluster issuer",
-              "form": true
-            }
-          }
         }
       }
     },
