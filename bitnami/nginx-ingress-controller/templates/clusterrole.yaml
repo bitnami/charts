@@ -72,6 +72,7 @@ rules:
     verbs:
       - update
   - apiGroups:
+      - extensions
       - networking.k8s.io
     resources:
       - ingressclasses
