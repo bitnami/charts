@@ -131,27 +131,26 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Traffic Exposure parameters
 
-| Name                               | Description                                                                                   | Value                    |
-| ---------------------------------- | --------------------------------------------------------------------------------------------- | ------------------------ |
-| `service.type`                     | Kubernetes Service type                                                                       | `ClusterIP`              |
-| `service.port`                     | Service HTTP port                                                                             | `80`                     |
-| `service.httpsPort`                | Service HTTPS port                                                                            | `443`                    |
-| `service.nodePorts.http`           | Kubernetes http node port                                                                     | `""`                     |
-| `service.nodePorts.https`          | Kubernetes https node port                                                                    | `""`                     |
-| `service.clusterIP`                | PhpMyAdmin service clusterIP IP                                                               | `""`                     |
-| `service.loadBalancerIP`           | Load balancer IP for the phpMyAdmin Service (optional, cloud specific)                        | `""`                     |
-| `service.loadBalancerSourceRanges` | Addresses that are allowed when service is LoadBalancer                                       | `[]`                     |
-| `service.externalTrafficPolicy`    | Enable client source IP preservation                                                          | `Cluster`                |
-| `service.annotations`              | Provide any additional annotations that may be required for the PhpMyAdmin service            | `{}`                     |
-| `ingress.enabled`                  | Set to true to enable ingress record generation                                               | `false`                  |
-| `ingress.certManager`              | Set this to true in order to add the corresponding annotations for cert-manager               | `false`                  |
-| `ingress.hostname`                 | When the ingress is enabled, a host pointing to this will be created                          | `phpmyadmin.local`       |
-| `ingress.pathType`                 | Ingress path type                                                                             | `ImplementationSpecific` |
-| `ingress.annotations`              | Ingress annotations                                                                           | `{}`                     |
-| `ingress.tls`                      | Enable TLS configuration for the hostname defined at `ingress.hostname` parameter             | `false`                  |
-| `ingress.extraHosts`               | The list of additional hostnames to be covered with this ingress record.                      | `[]`                     |
-| `ingress.extraTls`                 | The tls configuration for additional hostnames to be covered with this ingress record.        | `[]`                     |
-| `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets | `[]`                     |
+| Name                               | Description                                                                                                                      | Value                    |
+| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.type`                     | Kubernetes Service type                                                                                                          | `ClusterIP`              |
+| `service.port`                     | Service HTTP port                                                                                                                | `80`                     |
+| `service.httpsPort`                | Service HTTPS port                                                                                                               | `443`                    |
+| `service.nodePorts.http`           | Kubernetes http node port                                                                                                        | `""`                     |
+| `service.nodePorts.https`          | Kubernetes https node port                                                                                                       | `""`                     |
+| `service.clusterIP`                | PhpMyAdmin service clusterIP IP                                                                                                  | `""`                     |
+| `service.loadBalancerIP`           | Load balancer IP for the phpMyAdmin Service (optional, cloud specific)                                                           | `""`                     |
+| `service.loadBalancerSourceRanges` | Addresses that are allowed when service is LoadBalancer                                                                          | `[]`                     |
+| `service.externalTrafficPolicy`    | Enable client source IP preservation                                                                                             | `Cluster`                |
+| `service.annotations`              | Provide any additional annotations that may be required for the PhpMyAdmin service                                               | `{}`                     |
+| `ingress.enabled`                  | Set to true to enable ingress record generation                                                                                  | `false`                  |
+| `ingress.hostname`                 | When the ingress is enabled, a host pointing to this will be created                                                             | `phpmyadmin.local`       |
+| `ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.tls`                      | Enable TLS configuration for the hostname defined at `ingress.hostname` parameter                                                | `false`                  |
+| `ingress.extraHosts`               | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
+| `ingress.extraTls`                 | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
+| `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
 
 
 ### Database parameters

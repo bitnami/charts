@@ -147,28 +147,27 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Traffic Exposure Parameters
 
-| Name                               | Description                                                                                   | Value                    |
-| ---------------------------------- | --------------------------------------------------------------------------------------------- | ------------------------ |
-| `service.type`                     | Kubernetes Service type                                                                       | `LoadBalancer`           |
-| `service.port`                     | Service HTTP port                                                                             | `80`                     |
-| `service.httpsPort`                | Service HTTPS port                                                                            | `443`                    |
-| `service.loadBalancerSourceRanges` | Restricts access for LoadBalancer (only with `service.type: LoadBalancer`)                    | `[]`                     |
-| `service.loadBalancerIP`           | loadBalancerIP for the Drupal Service (optional, cloud specific)                              | `""`                     |
-| `service.nodePorts`                | Kubernetes node port                                                                          | `{}`                     |
-| `service.externalTrafficPolicy`    | Enable client source IP preservation                                                          | `Cluster`                |
-| `ingress.enabled`                  | Enable ingress controller resource                                                            | `false`                  |
-| `ingress.certManager`              | Add annotations for cert-manager                                                              | `false`                  |
-| `ingress.pathType`                 | Ingress Path type                                                                             | `ImplementationSpecific` |
-| `ingress.apiVersion`               | Override API Version (automatically detected if not set)                                      | `""`                     |
-| `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                 | `""`                     |
-| `ingress.hostname`                 | Default host for the ingress resource                                                         | `drupal.local`           |
-| `ingress.path`                     | The Path to Drupal. You may need to set this to '/*' in order to use this                     | `/`                      |
-| `ingress.annotations`              | Ingress annotations done as key:value pairs                                                   | `{}`                     |
-| `ingress.tls`                      | Enable TLS configuration for the hostname defined at ingress.hostname parameter               | `false`                  |
-| `ingress.extraHosts`               | The list of additional hostnames to be covered with this ingress record.                      | `[]`                     |
-| `ingress.extraPaths`               | Any additional arbitrary paths that may need to be added to the ingress under the main host.  | `[]`                     |
-| `ingress.extraTls`                 | The tls configuration for additional hostnames to be covered with this ingress record.        | `[]`                     |
-| `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets | `[]`                     |
+| Name                               | Description                                                                                                                      | Value                    |
+| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.type`                     | Kubernetes Service type                                                                                                          | `LoadBalancer`           |
+| `service.port`                     | Service HTTP port                                                                                                                | `80`                     |
+| `service.httpsPort`                | Service HTTPS port                                                                                                               | `443`                    |
+| `service.loadBalancerSourceRanges` | Restricts access for LoadBalancer (only with `service.type: LoadBalancer`)                                                       | `[]`                     |
+| `service.loadBalancerIP`           | loadBalancerIP for the Drupal Service (optional, cloud specific)                                                                 | `""`                     |
+| `service.nodePorts`                | Kubernetes node port                                                                                                             | `{}`                     |
+| `service.externalTrafficPolicy`    | Enable client source IP preservation                                                                                             | `Cluster`                |
+| `ingress.enabled`                  | Enable ingress controller resource                                                                                               | `false`                  |
+| `ingress.pathType`                 | Ingress Path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.apiVersion`               | Override API Version (automatically detected if not set)                                                                         | `""`                     |
+| `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
+| `ingress.hostname`                 | Default host for the ingress resource                                                                                            | `drupal.local`           |
+| `ingress.path`                     | The Path to Drupal. You may need to set this to '/*' in order to use this                                                        | `/`                      |
+| `ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.tls`                      | Enable TLS configuration for the hostname defined at ingress.hostname parameter                                                  | `false`                  |
+| `ingress.extraHosts`               | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
+| `ingress.extraPaths`               | Any additional arbitrary paths that may need to be added to the ingress under the main host.                                     | `[]`                     |
+| `ingress.extraTls`                 | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
+| `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
 
 
 ### Database parameters

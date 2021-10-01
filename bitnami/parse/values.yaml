@@ -237,19 +237,25 @@ ingress:
   ## @param ingress.enabled Set to true to enable ingress record generation
   ##
   enabled: false
-  ## @param ingress.certManager Set this to true in order to add the corresponding annotations for cert-manager
+  ## DEPRECATED: Use ingress.annotations instead of ingress.certManager
+  ## certManager: false
   ##
-  certManager: false
+
   ## @param ingress.tls Enable TLS configuration for the hostname defined at ingress.hostname parameter
   ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.ingress.hostname }}
   ## You can use the ingress.secrets parameter to create this TLS secret or relay on cert-manager to create it
   ##
   tls: false
-  ## @param ingress.annotations Ingress annotations
-  ## If certManager is set to true, the annotation 'kubernetes.io/tls-acme: "true"' will automatically be set
+  ## @param ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
+  ## For a full list of possible ingress annotations, please see
   ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+  ## Use this parameter to set the required annotations for cert-manager, see
+  ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
+  ##
   ## e.g:
-  ##  kubernetes.io/ingress.class: nginx
+  ## annotations:
+  ##   kubernetes.io/ingress.class: nginx
+  ##   cert-manager.io/cluster-issuer: cluster-issuer-name
   ##
   annotations: {}
   dashboard:

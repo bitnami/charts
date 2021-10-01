@@ -199,19 +199,18 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Ingress parameters
 
-| Name                  | Description                                                                                   | Value                    |
-| --------------------- | --------------------------------------------------------------------------------------------- | ------------------------ |
-| `ingress.enabled`     | Enable ingress controller resource                                                            | `false`                  |
-| `ingress.certManager` | Add annotations for cert-manager                                                              | `false`                  |
-| `ingress.hostname`    | Default host for the ingress resource                                                         | `discourse.local`        |
-| `ingress.apiVersion`  | Force Ingress API version (automatically detected if not set)                                 | `""`                     |
-| `ingress.path`        | Ingress path                                                                                  | `/`                      |
-| `ingress.pathType`    | Ingress path type                                                                             | `ImplementationSpecific` |
-| `ingress.annotations` | Ingress annotations done as key:value pairs                                                   | `{}`                     |
-| `ingress.tls`         | Enable TLS configuration for the hostname defined at ingress.hostname parameter               | `false`                  |
-| `ingress.extraHosts`  | The list of additional hostnames to be covered with this ingress record.                      | `[]`                     |
-| `ingress.extraTls`    | The tls configuration for additional hostnames to be covered with this ingress record.        | `[]`                     |
-| `ingress.secrets`     | If you're providing your own certificates, please use this to add the certificates as secrets | `[]`                     |
+| Name                  | Description                                                                                                                      | Value                    |
+| --------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `ingress.enabled`     | Enable ingress controller resource                                                                                               | `false`                  |
+| `ingress.hostname`    | Default host for the ingress resource                                                                                            | `discourse.local`        |
+| `ingress.apiVersion`  | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
+| `ingress.path`        | Ingress path                                                                                                                     | `/`                      |
+| `ingress.pathType`    | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.annotations` | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.tls`         | Enable TLS configuration for the hostname defined at ingress.hostname parameter                                                  | `false`                  |
+| `ingress.extraHosts`  | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
+| `ingress.extraTls`    | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
+| `ingress.secrets`     | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
 
 
 ### Database parameters

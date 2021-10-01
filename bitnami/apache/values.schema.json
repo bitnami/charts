@@ -465,11 +465,6 @@
                     "default": "[]",
                     "description": "Enable TLS configuration for the hosts defined"
                 },
-                "certManager": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "Add the corresponding annotations for cert-manager integration"
-                },
                 "hosts": {
                     "type": "array",
                     "default": "[]",

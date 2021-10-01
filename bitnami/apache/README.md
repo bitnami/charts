@@ -135,27 +135,26 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Traffic Exposure Parameters
 
-| Name                            | Description                                                                   | Value                    |
-| ------------------------------- | ----------------------------------------------------------------------------- | ------------------------ |
-| `service.type`                  | Apache Service type                                                           | `LoadBalancer`           |
-| `service.port`                  | Apache service HTTP port                                                      | `80`                     |
-| `service.httpsPort`             | Apache service HTTPS port                                                     | `443`                    |
-| `service.nodePorts.http`        | Node port for HTTP                                                            | `""`                     |
-| `service.nodePorts.https`       | Node port for HTTPS                                                           | `""`                     |
-| `service.loadBalancerIP`        | Apache service Load Balancer IP                                               | `""`                     |
-| `service.annotations`           | Additional custom annotations for Apache service                              | `{}`                     |
-| `service.externalTrafficPolicy` | Apache service external traffic policy                                        | `Cluster`                |
-| `ingress.enabled`               | Enable ingress record generation for Apache                                   | `false`                  |
-| `ingress.pathType`              | Ingress path type                                                             | `ImplementationSpecific` |
-| `ingress.apiVersion`            | Force Ingress API version (automatically detected if not set)                 | `""`                     |
-| `ingress.ingressClassName`      | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+) | `""`                     |
-| `ingress.hostname`              | Default host for the ingress record                                           | `example.local`          |
-| `ingress.path`                  | Default path for the ingress record                                           | `/`                      |
-| `ingress.annotations`           | Additional custom annotations for the ingress record                          | `{}`                     |
-| `ingress.tls`                   | Enable TLS configuration for the hosts defined                                | `[]`                     |
-| `ingress.certManager`           | Add the corresponding annotations for cert-manager integration                | `false`                  |
-| `ingress.hosts`                 | An array with additional hostname(s) to be covered with the ingress record    | `[]`                     |
-| `ingress.secrets`               | Custom TLS certificates as secrets                                            | `[]`                     |
+| Name                            | Description                                                                                                                      | Value                    |
+| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.type`                  | Apache Service type                                                                                                              | `LoadBalancer`           |
+| `service.port`                  | Apache service HTTP port                                                                                                         | `80`                     |
+| `service.httpsPort`             | Apache service HTTPS port                                                                                                        | `443`                    |
+| `service.nodePorts.http`        | Node port for HTTP                                                                                                               | `""`                     |
+| `service.nodePorts.https`       | Node port for HTTPS                                                                                                              | `""`                     |
+| `service.loadBalancerIP`        | Apache service Load Balancer IP                                                                                                  | `""`                     |
+| `service.annotations`           | Additional custom annotations for Apache service                                                                                 | `{}`                     |
+| `service.externalTrafficPolicy` | Apache service external traffic policy                                                                                           | `Cluster`                |
+| `ingress.enabled`               | Enable ingress record generation for Apache                                                                                      | `false`                  |
+| `ingress.pathType`              | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.apiVersion`            | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
+| `ingress.ingressClassName`      | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
+| `ingress.hostname`              | Default host for the ingress record                                                                                              | `example.local`          |
+| `ingress.path`                  | Default path for the ingress record                                                                                              | `/`                      |
+| `ingress.annotations`           | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.tls`                   | Enable TLS configuration for the hosts defined                                                                                   | `[]`                     |
+| `ingress.hosts`                 | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                     |
+| `ingress.secrets`               | Custom TLS certificates as secrets                                                                                               | `[]`                     |
 
 
 ### Metrics Parameters
