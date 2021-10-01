@@ -22,9 +22,9 @@ data:
       timeout client 60s
       timeout connect 60s
       timeout server 60s
-    frontend fe_main
+    frontend fe_metrics
       bind :{{ .Values.metrics.containerPort }}
-      default_backend be_main
-    backend be_main
-      server web1 localhost:{{ .Values.locator.containerPorts.metrics }} check
+      default_backend be_metrics
+    backend be_metrics
+      server micrometer localhost:{{ .Values.locator.containerPorts.metrics }} check
 {{- end }}

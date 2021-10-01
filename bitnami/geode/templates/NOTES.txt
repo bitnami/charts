@@ -117,7 +117,7 @@ To Access the Pulse dashboard:
 1. Get the Pulse dashboard URL and associate its hostname to your cluster external IP:
 
     export CLUSTER_IP=$(minikube ip) # On Minikube. Use: `kubectl cluster-info` on others K8s clusters
-    echo "Pulse URL: http{{ if .Values.ingress.tls }}s{{ end }}://{{ .Values.ingress.hostname }}/"
+    echo "Pulse URL: http{{ if .Values.ingress.tls }}s{{ end }}://{{ .Values.ingress.hostname }}/pulse"
     echo "$CLUSTER_IP  {{ .Values.ingress.hostname }}" | sudo tee -a /etc/hosts
 
 2. Open a browser and access the Pulse dashboard using the obtained URL.
