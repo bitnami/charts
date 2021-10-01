@@ -18,6 +18,12 @@
           "title": "Enable Authentication",
           "form": true
         },
+        "rootUser": {
+          "type": "string",
+          "title": "MongoDB&reg; admin user",
+          "form": true,
+          "description": "Name of the admin user. Default is root"
+        },
         "rootPassword": {
           "type": "string",
           "title": "MongoDB&reg; admin password",

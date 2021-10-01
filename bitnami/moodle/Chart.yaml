@@ -1,7 +1,7 @@
 annotations:
   category: E-Learning
 apiVersion: v2
-appVersion: 3.11.2
+appVersion: 3.11.3
 dependencies:
   - condition: mariadb.enabled
     name: mariadb

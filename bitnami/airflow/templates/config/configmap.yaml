@@ -87,6 +87,9 @@ data:
             - secretRef:
                 name: {{ .Values.worker.extraEnvVarsSecret }}
             {{- end }}
+          {{- if .Values.worker.resources }}
+          resources: {{- toYaml .Values.worker.resources | nindent 12 }}
+          {{- end }}
           volumeMounts:
             - name: k8s-executor-config
               mountPath: /opt/bitnami/airflow/k8s-executor-config

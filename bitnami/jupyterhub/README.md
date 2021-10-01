@@ -77,7 +77,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------- | ----------------------------------------------------------------------------------------- | --------------------- |
 | `hub.image.registry`                        | Hub image registry                                                                        | `docker.io`           |
 | `hub.image.repository`                      | Hub image repository                                                                      | `bitnami/jupyterhub`  |
-| `hub.image.tag`                             | Hub image tag (immutabe tags are recommended)                                             | `1.4.2-debian-10-r37` |
+| `hub.image.tag`                             | Hub image tag (immutabe tags are recommended)                                             | `1.4.2-debian-10-r65` |
 | `hub.image.pullPolicy`                      | Hub image pull policy                                                                     | `IfNotPresent`        |
 | `hub.image.pullSecrets`                     | Hub image pull secrets                                                                    | `[]`                  |
 | `hub.startupProbe.enabled`                  | Enable startupProbe                                                                       | `true`                |
@@ -174,7 +174,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------- | ----------------------------------------------------------------------------------------- | --------------------------------- |
 | `proxy.image.registry`                        | Proxy image registry                                                                      | `docker.io`                       |
 | `proxy.image.repository`                      | Proxy image repository                                                                    | `bitnami/configurable-http-proxy` |
-| `proxy.image.tag`                             | Proxy image tag (immutable tags are recommended)                                          | `4.5.0-debian-10-r36`             |
+| `proxy.image.tag`                             | Proxy image tag (immutable tags are recommended)                                          | `4.5.0-debian-10-r65`             |
 | `proxy.image.pullPolicy`                      | Proxy image pull policy                                                                   | `IfNotPresent`                    |
 | `proxy.image.pullSecrets`                     | Proxy image pull secrets                                                                  | `[]`                              |
 | `proxy.image.debug`                           | Activate verbose output                                                                   | `false`                           |
@@ -239,35 +239,34 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Proxy Traffic Exposure Parameters
 
-| Name                                            | Description                                                                                  | Value                    |
-| ----------------------------------------------- | -------------------------------------------------------------------------------------------- | ------------------------ |
-| `proxy.networkPolicy.enabled`                   | Deploy Proxy network policies                                                                | `true`                   |
-| `proxy.networkPolicy.allowInterspaceAccess`     | Allow communication between pods in different namespaces                                     | `true`                   |
-| `proxy.networkPolicy.extraIngress`              | Add extra ingress rules to the NetworkPolicy                                                 | `""`                     |
-| `proxy.networkPolicy.extraEgress`               | Add extra egress rules to the NetworkPolicy                                                  | `""`                     |
-| `proxy.service.api.type`                        | API service type                                                                             | `ClusterIP`              |
-| `proxy.service.api.port`                        | API service port                                                                             | `8001`                   |
-| `proxy.service.api.loadBalancerIP`              | API service LoadBalancer IP (optional, cloud specific)                                       | `""`                     |
-| `proxy.service.api.loadBalancerSourceRanges`    | loadBalancerIP source ranges for the Service                                                 | `[]`                     |
-| `proxy.service.api.nodePorts.http`              | NodePort for the HTTP endpoint                                                               | `""`                     |
-| `proxy.service.api.externalTrafficPolicy`       | External traffic policy for the service                                                      | `Cluster`                |
-| `proxy.service.public.type`                     | Public service type                                                                          | `LoadBalancer`           |
-| `proxy.service.public.port`                     | Public service port                                                                          | `80`                     |
-| `proxy.service.public.loadBalancerIP`           | Public service LoadBalancer IP (optional, cloud specific)                                    | `""`                     |
-| `proxy.service.public.loadBalancerSourceRanges` | loadBalancerIP source ranges for the Service                                                 | `[]`                     |
-| `proxy.service.public.nodePorts.http`           | NodePort for the HTTP endpoint                                                               | `""`                     |
-| `proxy.service.public.externalTrafficPolicy`    | External traffic policy for the service                                                      | `Cluster`                |
-| `proxy.ingress.enabled`                         | Set to true to enable ingress record generation                                              | `false`                  |
-| `proxy.ingress.path`                            | Path to the Proxy pod.                                                                       | `/`                      |
-| `proxy.ingress.pathType`                        | Ingress path type                                                                            | `ImplementationSpecific` |
-| `proxy.ingress.certManager`                     | Add cert-manager annotations to the Ingress object                                           | `false`                  |
-| `proxy.ingress.hostname`                        | Set ingress rule hostname                                                                    | `jupyterhub.local`       |
-| `proxy.ingress.annotations`                     | Add annotations to the Ingress object                                                        | `{}`                     |
-| `proxy.ingress.tls`                             | Enable ingress tls configuration for the hostname defined at proxy.ingress.hostname          | `false`                  |
-| `proxy.ingress.extraHosts`                      | The list of additional hostnames to be covered with this ingress record.                     | `[]`                     |
-| `proxy.ingress.extraTls`                        | The tls configuration for additional hostnames to be covered with this ingress record.       | `[]`                     |
-| `proxy.ingress.extraPaths`                      | Any additional arbitrary paths that may need to be added to the ingress under the main host. | `[]`                     |
-| `proxy.ingress.secrets`                         | Add extra secrets for the tls configuration                                                  | `[]`                     |
+| Name                                            | Description                                                                                                                      | Value                    |
+| ----------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `proxy.networkPolicy.enabled`                   | Deploy Proxy network policies                                                                                                    | `true`                   |
+| `proxy.networkPolicy.allowInterspaceAccess`     | Allow communication between pods in different namespaces                                                                         | `true`                   |
+| `proxy.networkPolicy.extraIngress`              | Add extra ingress rules to the NetworkPolicy                                                                                     | `""`                     |
+| `proxy.networkPolicy.extraEgress`               | Add extra egress rules to the NetworkPolicy                                                                                      | `""`                     |
+| `proxy.service.api.type`                        | API service type                                                                                                                 | `ClusterIP`              |
+| `proxy.service.api.port`                        | API service port                                                                                                                 | `8001`                   |
+| `proxy.service.api.loadBalancerIP`              | API service LoadBalancer IP (optional, cloud specific)                                                                           | `""`                     |
+| `proxy.service.api.loadBalancerSourceRanges`    | loadBalancerIP source ranges for the Service                                                                                     | `[]`                     |
+| `proxy.service.api.nodePorts.http`              | NodePort for the HTTP endpoint                                                                                                   | `""`                     |
+| `proxy.service.api.externalTrafficPolicy`       | External traffic policy for the service                                                                                          | `Cluster`                |
+| `proxy.service.public.type`                     | Public service type                                                                                                              | `LoadBalancer`           |
+| `proxy.service.public.port`                     | Public service port                                                                                                              | `80`                     |
+| `proxy.service.public.loadBalancerIP`           | Public service LoadBalancer IP (optional, cloud specific)                                                                        | `""`                     |
+| `proxy.service.public.loadBalancerSourceRanges` | loadBalancerIP source ranges for the Service                                                                                     | `[]`                     |
+| `proxy.service.public.nodePorts.http`           | NodePort for the HTTP endpoint                                                                                                   | `""`                     |
+| `proxy.service.public.externalTrafficPolicy`    | External traffic policy for the service                                                                                          | `Cluster`                |
+| `proxy.ingress.enabled`                         | Set to true to enable ingress record generation                                                                                  | `false`                  |
+| `proxy.ingress.path`                            | Path to the Proxy pod.                                                                                                           | `/`                      |
+| `proxy.ingress.pathType`                        | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `proxy.ingress.hostname`                        | Set ingress rule hostname                                                                                                        | `jupyterhub.local`       |
+| `proxy.ingress.annotations`                     | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `proxy.ingress.tls`                             | Enable ingress tls configuration for the hostname defined at proxy.ingress.hostname                                              | `false`                  |
+| `proxy.ingress.extraHosts`                      | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
+| `proxy.ingress.extraTls`                        | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
+| `proxy.ingress.extraPaths`                      | Any additional arbitrary paths that may need to be added to the ingress under the main host.                                     | `[]`                     |
+| `proxy.ingress.secrets`                         | Add extra secrets for the tls configuration                                                                                      | `[]`                     |
 
 
 ### Image puller deployment parameters
@@ -316,7 +315,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------------------------------- | --------------------------------------------------------------------------------------------------- | ------------------------------------ |
 | `singleuser.image.registry`                     | Single User image registry                                                                          | `docker.io`                          |
 | `singleuser.image.repository`                   | Single User image repository                                                                        | `bitnami/jupyter-base-notebook`      |
-| `singleuser.image.tag`                          | Single User image tag (immutabe tags are recommended)                                               | `1.4.2-debian-10-r5`                 |
+| `singleuser.image.tag`                          | Single User image tag (immutabe tags are recommended)                                               | `1.4.2-debian-10-r33`                |
 | `singleuser.image.pullPolicy`                   | Single User image pull policy                                                                       | `IfNotPresent`                       |
 | `singleuser.image.pullSecrets`                  | Single User image pull secrets                                                                      | `[]`                                 |
 | `singleuser.command`                            | Override Single User default command                                                                | `[]`                                 |
@@ -351,12 +350,12 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Single User Persistence parameters
 
-| Name                                  | Description                                                | Value  |
-| ------------------------------------- | ---------------------------------------------------------- | ------ |
-| `singleuser.persistence.enabled`      | Enable persistent volume creation on Single User instances | `true` |
-| `singleuser.persistence.storageClass` | Persistent Volumes storage class                           | `""`   |
-| `singleuser.persistence.accessModes`  | Persistent Volumes access modes                            | `[]`   |
-| `singleuser.persistence.size`         | Persistent Volumes size                                    | `10Gi` |
+| Name                                  | Description                                                | Value               |
+| ------------------------------------- | ---------------------------------------------------------- | ------------------- |
+| `singleuser.persistence.enabled`      | Enable persistent volume creation on Single User instances | `true`              |
+| `singleuser.persistence.storageClass` | Persistent Volumes storage class                           | `""`                |
+| `singleuser.persistence.accessModes`  | Persistent Volumes access modes                            | `["ReadWriteOnce"]` |
+| `singleuser.persistence.size`         | Persistent Volumes size                                    | `10Gi`              |
 
 
 ### Traffic exposure parameters
@@ -376,7 +375,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ---------------------------- | --------------------------------------------------- | ----------------------- |
 | `auxiliaryImage.registry`    | Auxiliary image registry                            | `docker.io`             |
 | `auxiliaryImage.repository`  | Auxiliary image repository                          | `bitnami/bitnami-shell` |
-| `auxiliaryImage.tag`         | Auxiliary image tag (immutabe tags are recommended) | `10-debian-10-r173`     |
+| `auxiliaryImage.tag`         | Auxiliary image tag (immutabe tags are recommended) | `10-debian-10-r202`     |
 | `auxiliaryImage.pullPolicy`  | Auxiliary image pull policy                         | `Always`                |
 | `auxiliaryImage.pullSecrets` | Auxiliary image pull secrets                        | `[]`                    |
 

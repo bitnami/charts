@@ -45,7 +45,7 @@ spec:
     {{- if or .Values.queryFrontend.ingress.secrets .Values.queryFrontend.ingress.tls }}
     - hosts:
         - {{ .Values.queryFrontend.ingress.hostname }}
-      secretName: {{ printf "%s-tls" .Values.queryFrontend.ingress.hostname }}
+      secretName: {{ printf "%s-query-frontend" (include "common.names.fullname" .) }}
     {{- end }}
     {{- if .Values.queryFrontend.ingress.extraTls }}
     {{- toYaml .Values.queryFrontend.ingress.extraTls | nindent 4 }}

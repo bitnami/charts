@@ -71,22 +71,22 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common Concourse Parameters
 
-| Name                            | Description                                                                                                                            | Value                 |
-| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
-| `image.registry`                | image registry                                                                                                                         | `docker.io`           |
-| `image.repository`              | image repository                                                                                                                       | `bitnami/concourse`   |
-| `image.tag`                     | image tag (immutable tags are recommended)                                                                                             | `7.4.0-debian-10-r25` |
-| `image.pullPolicy`              | image pull policy                                                                                                                      | `IfNotPresent`        |
-| `image.pullSecrets`             | image pull secrets                                                                                                                     | `[]`                  |
-| `secrets.localAuth.enabled`     | the use of local authentication (basic auth).                                                                                          | `true`                |
-| `secrets.teamAuthorizedKeys`    | Array of team names and public keys for team external workers. A single                                                                | `[]`                  |
-| `secrets.localUsers`            | List of `username:password` or `username:bcrypted_password` combinations for all your local concourse users. Auto-generated if not set | `""`                  |
-| `secrets.hostKey`               | Concourse Host Keys.                                                                                                                   | `""`                  |
-| `secrets.hostKeyPub`            | Concourse Host Keys.                                                                                                                   | `""`                  |
-| `secrets.sessionSigningKey`     | Concourse Session Signing Keys.                                                                                                        | `""`                  |
-| `secrets.workerKey`             | Concourse Worker Keys.                                                                                                                 | `""`                  |
-| `secrets.workerKeyPub`          | Concourse Worker Keys.                                                                                                                 | `""`                  |
-| `secrets.workerAdditionalCerts` | Additional certificates to add to the worker nodes                                                                                     | `""`                  |
+| Name                            | Description                                                                                                                            | Value                |
+| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | -------------------- |
+| `image.registry`                | image registry                                                                                                                         | `docker.io`          |
+| `image.repository`              | image repository                                                                                                                       | `bitnami/concourse`  |
+| `image.tag`                     | image tag (immutable tags are recommended)                                                                                             | `7.5.0-debian-10-r0` |
+| `image.pullPolicy`              | image pull policy                                                                                                                      | `IfNotPresent`       |
+| `image.pullSecrets`             | image pull secrets                                                                                                                     | `[]`                 |
+| `secrets.localAuth.enabled`     | the use of local authentication (basic auth).                                                                                          | `true`               |
+| `secrets.teamAuthorizedKeys`    | Array of team names and public keys for team external workers. A single                                                                | `[]`                 |
+| `secrets.localUsers`            | List of `username:password` or `username:bcrypted_password` combinations for all your local concourse users. Auto-generated if not set | `""`                 |
+| `secrets.hostKey`               | Concourse Host Keys.                                                                                                                   | `""`                 |
+| `secrets.hostKeyPub`            | Concourse Host Keys.                                                                                                                   | `""`                 |
+| `secrets.sessionSigningKey`     | Concourse Session Signing Keys.                                                                                                        | `""`                 |
+| `secrets.workerKey`             | Concourse Worker Keys.                                                                                                                 | `""`                 |
+| `secrets.workerKeyPub`          | Concourse Worker Keys.                                                                                                                 | `""`                 |
+| `secrets.workerAdditionalCerts` | Additional certificates to add to the worker nodes                                                                                     | `""`                 |
 
 
 ### Concourse Web parameters
@@ -261,38 +261,37 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Traffic exposure parameters
 
-| Name                                             | Description                                                                                                   | Value                    |
-| ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `service.web.type`                               | For minikube, set this to ClusterIP, elsewhere use LoadBalancer or NodePort                                   | `LoadBalancer`           |
-| `service.web.port`                               | Service HTTP port                                                                                             | `80`                     |
-| `service.web.tlsPort`                            | Service HTTPS port                                                                                            | `443`                    |
-| `service.web.clusterIP`                          | When using `service.web.type: ClusterIP`, sets the user-specified cluster IP.                                 | `""`                     |
-| `service.web.loadBalancerIP`                     | When using `service.web.type: LoadBalancer`, sets the user-specified load balancer IP.                        | `""`                     |
-| `service.web.labels`                             | Additional Labels to be added to the web api service.                                                         | `{}`                     |
-| `service.web.annotations`                        | Annotations to be added to the web api service.                                                               | `{}`                     |
-| `service.web.loadBalancerSourceRanges`           | When using `service.web.type: LoadBalancer`, restrict access to the load balancer to particular IPs           | `[]`                     |
-| `service.web.nodePort`                           | When using `service.web.type: NodePort`, sets the nodePort for api                                            | `""`                     |
-| `service.web.tlsnodePort`                        | When using `service.web.type: NodePort`, sets the nodePort for api tls                                        | `""`                     |
-| `service.web.externalTrafficPolicy`              | Set service externalTraffic policy                                                                            | `""`                     |
-| `service.workerGateway.type`                     | For minikube, set this to ClusterIP, elsewhere use LoadBalancer or NodePort                                   | `ClusterIP`              |
-| `service.workerGateway.clusterIP`                | When using `service.workerGateway.type: ClusterIP`, sets the user-specified cluster IP.                       | `""`                     |
-| `service.workerGateway.port`                     | Service HTTP port                                                                                             | `2222`                   |
-| `service.workerGateway.loadBalancerIP`           | When using `service.workerGateway.type: LoadBalancer`, sets the user-specified load balancer IP.              | `""`                     |
-| `service.workerGateway.labels`                   | Additional Labels to be added to the web workerGateway service.                                               | `{}`                     |
-| `service.workerGateway.annotations`              | Annotations to be added to the web workerGateway service.                                                     | `{}`                     |
-| `service.workerGateway.loadBalancerSourceRanges` | When using `service.workerGateway.type: LoadBalancer`, restrict access to the load balancer to particular IPs | `[]`                     |
-| `service.workerGateway.nodePort`                 | When using `service.workerGateway.type: NodePort`, sets the nodePort for tsa                                  | `""`                     |
-| `ingress.enabled`                                | Ingress configuration enabled                                                                                 | `false`                  |
-| `ingress.certManager`                            | Add annotations for cert-manager                                                                              | `false`                  |
-| `ingress.annotations`                            | Annotations to be added to the web ingress.                                                                   | `{}`                     |
-| `ingress.hostname`                               | Hostename for the Ingress object                                                                              | `concourse.local`        |
-| `ingress.path`                                   | The Path to Concourse                                                                                         | `/`                      |
-| `ingress.rulesOverride`                          | Ingress rules override                                                                                        | `[]`                     |
-| `ingress.tls`                                    | TLS configuration.                                                                                            | `false`                  |
-| `ingress.pathType`                               | Ingress Path type                                                                                             | `ImplementationSpecific` |
-| `ingress.extraHosts`                             | The list of additional hostnames to be covered with this ingress record.                                      | `[]`                     |
-| `ingress.extraTls`                               | The tls configuration for additional hostnames to be covered with this ingress record.                        | `[]`                     |
-| `ingress.secrets`                                | If you're providing your own certificates, please use this to add the certificates as secrets                 | `[]`                     |
+| Name                                             | Description                                                                                                                      | Value                    |
+| ------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.web.type`                               | For minikube, set this to ClusterIP, elsewhere use LoadBalancer or NodePort                                                      | `LoadBalancer`           |
+| `service.web.port`                               | Service HTTP port                                                                                                                | `80`                     |
+| `service.web.tlsPort`                            | Service HTTPS port                                                                                                               | `443`                    |
+| `service.web.clusterIP`                          | When using `service.web.type: ClusterIP`, sets the user-specified cluster IP.                                                    | `""`                     |
+| `service.web.loadBalancerIP`                     | When using `service.web.type: LoadBalancer`, sets the user-specified load balancer IP.                                           | `""`                     |
+| `service.web.labels`                             | Additional Labels to be added to the web api service.                                                                            | `{}`                     |
+| `service.web.annotations`                        | Annotations to be added to the web api service.                                                                                  | `{}`                     |
+| `service.web.loadBalancerSourceRanges`           | When using `service.web.type: LoadBalancer`, restrict access to the load balancer to particular IPs                              | `[]`                     |
+| `service.web.nodePort`                           | When using `service.web.type: NodePort`, sets the nodePort for api                                                               | `""`                     |
+| `service.web.tlsnodePort`                        | When using `service.web.type: NodePort`, sets the nodePort for api tls                                                           | `""`                     |
+| `service.web.externalTrafficPolicy`              | Set service externalTraffic policy                                                                                               | `""`                     |
+| `service.workerGateway.type`                     | For minikube, set this to ClusterIP, elsewhere use LoadBalancer or NodePort                                                      | `ClusterIP`              |
+| `service.workerGateway.clusterIP`                | When using `service.workerGateway.type: ClusterIP`, sets the user-specified cluster IP.                                          | `""`                     |
+| `service.workerGateway.port`                     | Service HTTP port                                                                                                                | `2222`                   |
+| `service.workerGateway.loadBalancerIP`           | When using `service.workerGateway.type: LoadBalancer`, sets the user-specified load balancer IP.                                 | `""`                     |
+| `service.workerGateway.labels`                   | Additional Labels to be added to the web workerGateway service.                                                                  | `{}`                     |
+| `service.workerGateway.annotations`              | Annotations to be added to the web workerGateway service.                                                                        | `{}`                     |
+| `service.workerGateway.loadBalancerSourceRanges` | When using `service.workerGateway.type: LoadBalancer`, restrict access to the load balancer to particular IPs                    | `[]`                     |
+| `service.workerGateway.nodePort`                 | When using `service.workerGateway.type: NodePort`, sets the nodePort for tsa                                                     | `""`                     |
+| `ingress.enabled`                                | Ingress configuration enabled                                                                                                    | `false`                  |
+| `ingress.annotations`                            | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.hostname`                               | Hostename for the Ingress object                                                                                                 | `concourse.local`        |
+| `ingress.path`                                   | The Path to Concourse                                                                                                            | `/`                      |
+| `ingress.rulesOverride`                          | Ingress rules override                                                                                                           | `[]`                     |
+| `ingress.tls`                                    | TLS configuration.                                                                                                               | `false`                  |
+| `ingress.pathType`                               | Ingress Path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.extraHosts`                             | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
+| `ingress.extraTls`                               | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
+| `ingress.secrets`                                | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
 
 
 ### Init Container Parameters
@@ -302,7 +301,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r171`     |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r195`     |
 | `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `Always`                |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                    |
