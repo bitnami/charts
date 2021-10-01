@@ -5,7 +5,7 @@ locator:
     type: ClusterIP
 ingress:
   enabled: true
-  hostname: geode.juan.cluster
+  hostname: geode.local
 volumePermissions:
   enabled: true
 metrics:

@@ -168,14 +168,14 @@ locator:
   ##   log-level=info
   ##   ...
   ##
-  configuration: {}
+  configuration: ""
   ## @param locator.existingConfigmap The name of an existing ConfigMap with your custom configuration for Locator
   ## NOTE: When it's set the locator.configuration parameter is ignored
   ##
   existingConfigmap: ""
   ## @param locator.log4j Specify content for log4j2.xml on Locator nodes (optional)
   ##
-  log4j: {}
+  log4j: ""
   ## @param locator.existingLog4jConfigMap Name of existing ConfigMap containing a custom log4j2.xml configuration for Locator
   ## NOTE: When it's set the locator.log4j is ignored
   ##
@@ -183,6 +183,10 @@ locator:
   ## @param locator.replicaCount Number of Locator replicas to deploy
   ##
   replicaCount: 2
+  ## @param locator.podManagementPolicy Locator statefulset Pod Management Policy Type
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
+  ##
+  podManagementPolicy: OrderedReady
   ## @param locator.containerPorts.locator Locator multicast container port
   ## @param locator.containerPorts.http Locator HTTP container port
   ## @param locator.containerPorts.rmi Locator RMI container port
@@ -203,8 +207,8 @@ locator:
   ## @param locator.livenessProbe.successThreshold Success threshold for livenessProbe
   ##
   livenessProbe:
-    enabled: false
-    initialDelaySeconds: 5
+    enabled: true
+    initialDelaySeconds: 30
     periodSeconds: 10
     timeoutSeconds: 3
     failureThreshold: 3
@@ -217,8 +221,8 @@ locator:
   ## @param locator.readinessProbe.successThreshold Success threshold for readinessProbe
   ##
   readinessProbe:
-    enabled: false
-    initialDelaySeconds: 5
+    enabled: true
+    initialDelaySeconds: 30
     periodSeconds: 10
     timeoutSeconds: 3
     failureThreshold: 3
@@ -231,7 +235,7 @@ locator:
   ## @param locator.startupProbe.successThreshold Success threshold for startupProbe
   ##
   startupProbe:
-    enabled: true
+    enabled: false
     initialDelaySeconds: 30
     periodSeconds: 10
     timeoutSeconds: 1
@@ -263,6 +267,7 @@ locator:
   podSecurityContext:
     enabled: true
     fsGroup: 1001
+    ## ref: https://geode.apache.org/docs/guide/114/managing/monitor_tune/disabling_tcp_syn_cookies.html
     sysctls:
       - name: net.ipv4.tcp_syncookies
         value: "0"
@@ -270,10 +275,12 @@ locator:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param locator.containerSecurityContext.enabled Enabled Locator containers' Security Context
   ## @param locator.containerSecurityContext.runAsUser Set Locator containers' Security Context runAsUser
+  ## @param locator.containerSecurityContext.runAsNonRoot Set Locator containers' Security Context runAsNonRoot
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
+    runAsNonRoot: true
   ## @param locator.command Override default container command (useful when using custom images)
   ##
   command: []
@@ -330,6 +337,10 @@ locator:
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
+  ## @param locator.topologySpreadConstraints Topology Spread Constraints for Locator pods assignment spread across your cluster among failure-domains
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
   ## @param locator.updateStrategy.type Locator statefulset strategy type
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
@@ -357,10 +368,10 @@ locator:
   extraEnvVars: []
   ## @param locator.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Locator nodes
   ##
-  extraEnvVarsCM:
+  extraEnvVarsCM: ""
   ## @param locator.extraEnvVarsSecret Name of existing Secret containing extra env vars for Locator nodes
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret: ""
   ## @param locator.extraVolumes Optionally specify extra list of additional volumes for the Locator pod(s)
   ##
   extraVolumes: []
@@ -377,7 +388,7 @@ locator:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  sidecars: {}
+  sidecars: []
   ## @param locator.initContainers Add additional init containers to the Locator pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
@@ -387,7 +398,7 @@ locator:
   ##    imagePullPolicy: Always
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
-  initContainers: {}
+  initContainers: []
   ## Apache Geode Locator service parameters
   ##
   service:
@@ -489,14 +500,14 @@ server:
   ##   log-level=info
   ##   ...
   ##
-  configuration: {}
+  configuration: ""
   ## @param server.existingConfigmap The name of an existing ConfigMap with your custom configuration for Cache server
   ## NOTE: When it's set the server.configuration parameter is ignored
   ##
   existingConfigmap: ""
   ## @param server.log4j Specify content for log4j2.xml on Cache server nodes (optional)
   ##
-  log4j: {}
+  log4j: ""
   ## @param server.existingLog4jConfigMap Name of existing ConfigMap containing a custom log4j2.xml configuration for Cache server
   ## NOTE: When it's set the server.log4j is ignored
   ##
@@ -504,6 +515,10 @@ server:
   ## @param server.replicaCount Number of Cache Server replicas to deploy
   ##
   replicaCount: 3
+  ## @param server.podManagementPolicy Cache Server statefulset Pod Management Policy Type
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
+  ##
+  podManagementPolicy: OrderedReady
   ## @param server.containerPorts.server Cache Server container port
   ## @param server.containerPorts.http Cache Server HTTP container port
   ## @param server.containerPorts.rmi Cache Server RMI container port
@@ -524,8 +539,8 @@ server:
   ## @param server.livenessProbe.successThreshold Success threshold for livenessProbe
   ##
   livenessProbe:
-    enabled: false
-    initialDelaySeconds: 5
+    enabled: true
+    initialDelaySeconds: 40
     periodSeconds: 10
     timeoutSeconds: 3
     failureThreshold: 3
@@ -538,8 +553,8 @@ server:
   ## @param server.readinessProbe.successThreshold Success threshold for readinessProbe
   ##
   readinessProbe:
-    enabled: false
-    initialDelaySeconds: 5
+    enabled: true
+    initialDelaySeconds: 40
     periodSeconds: 10
     timeoutSeconds: 4
     failureThreshold: 3
@@ -552,7 +567,7 @@ server:
   ## @param server.startupProbe.successThreshold Success threshold for startupProbe
   ##
   startupProbe:
-    enabled: true
+    enabled: false
     initialDelaySeconds: 45
     periodSeconds: 10
     timeoutSeconds: 1
@@ -584,6 +599,7 @@ server:
   podSecurityContext:
     enabled: true
     fsGroup: 1001
+    ## ref: https://geode.apache.org/docs/guide/114/managing/monitor_tune/disabling_tcp_syn_cookies.html
     sysctls:
       - name: net.ipv4.tcp_syncookies
         value: "0"
@@ -591,10 +607,12 @@ server:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param server.containerSecurityContext.enabled Enabled Cache server containers' Security Context
   ## @param server.containerSecurityContext.runAsUser Set Cache server containers' Security Context runAsUser
+  ## @param server.containerSecurityContext.runAsNonRoot Set Cache server containers' Security Context runAsNonRoot
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
+    runAsNonRoot: true
   ## @param server.command Override default container command (useful when using custom images)
   ##
   command: []
@@ -651,6 +669,10 @@ server:
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
+  ## @param server.topologySpreadConstraints Topology Spread Constraints for Cache server pods assignment spread across your cluster among failure-domains
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
   ## @param server.updateStrategy.type Cache server statefulset strategy type
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
@@ -678,10 +700,10 @@ server:
   extraEnvVars: []
   ## @param server.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Cache server nodes
   ##
-  extraEnvVarsCM:
+  extraEnvVarsCM: ""
   ## @param server.extraEnvVarsSecret Name of existing Secret containing extra env vars for Cache server nodes
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret: ""
   ## @param server.extraVolumes Optionally specify extra list of additional volumes for the Cache server pod(s)
   ##
   extraVolumes: []
@@ -698,7 +720,7 @@ server:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  sidecars: {}
+  sidecars: []
   ## @param server.initContainers Add additional init containers to the Cache server pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
@@ -708,7 +730,7 @@ server:
   ##    imagePullPolicy: Always
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
-  initContainers: {}
+  initContainers: []
   ## Apache Geode Cache server (headless) service parameters
   ##
   service:
@@ -929,7 +951,7 @@ metrics:
   ## @param metrics.livenessProbe.successThreshold Success threshold for livenessProbe
   ##
   livenessProbe:
-    enabled: false
+    enabled: true
     failureThreshold: 5
     initialDelaySeconds: 15
     periodSeconds: 10
@@ -943,7 +965,7 @@ metrics:
   ## @param metrics.readinessProbe.successThreshold Success threshold for readinessProbe
   ##
   readinessProbe:
-    enabled: false
+    enabled: true
     failureThreshold: 5
     initialDelaySeconds: 15
     periodSeconds: 10
@@ -959,10 +981,12 @@ metrics:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param metrics.containerSecurityContext.enabled Enabled Metrics containers' Security Context
   ## @param metrics.containerSecurityContext.runAsUser Set Metrics containers' Security Context runAsUser
+  ## @param metrics.containerSecurityContext.runAsNonRoot Set Metrics containers' Security Context runAsNonRoot
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
+    runAsNonRoot: true
   ## Apache Geode metrics service parameters
   ##
   service:
@@ -982,6 +1006,12 @@ metrics:
     ## @param metrics.serviceMonitor.enabled Specify if a ServiceMonitor will be deployed for Prometheus Operator
     ##
     enabled: false
+    ## @param metrics.serviceMonitor.namespace Namespace in which Prometheus is running
+    ##
+    namespace: ""
+    ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in Prometheus
+    ##
+    jobLabel: ""
     ## @param metrics.serviceMonitor.interval How frequently to scrape metrics
     ## e.g:
     ## interval: 10s
@@ -998,6 +1028,10 @@ metrics:
     ## @param metrics.serviceMonitor.relabelings [array] Specify general relabeling
     ##
     relabelings: []
+    ## @param metrics.serviceMonitor.selector Prometheus instance selector labels
+    ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+    ##
+    selector: {}
 
 ## @section Other Parameters
 
@@ -1011,6 +1045,9 @@ serviceAccount:
   ## If not set and create is true, a name is generated using the common.names.fullname template
   ##
   name: ""
+  ## @param serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
+  ##
+  automountServiceAccountToken: false
 
 ## Network policies
 ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/

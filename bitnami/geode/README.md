@@ -97,169 +97,175 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Apache Geode Locator parameters
 
-| Name                                         | Description                                                                                                 | Value               |
-| -------------------------------------------- | ----------------------------------------------------------------------------------------------------------- | ------------------- |
-| `locator.logLevel`                           | Log level for Locator nodes                                                                                 | `info`              |
-| `locator.initialHeapSize`                    | Initial size of the heap on Locator nodes                                                                   | `""`                |
-| `locator.maxHeapSize`                        | Maximum size of the heap on Locator nodes                                                                   | `""`                |
-| `locator.configuration`                      | Specify content for gemfire.properties on Locator nodes (auto-generated based on other env. vars otherwise) | `{}`                |
-| `locator.existingConfigmap`                  | The name of an existing ConfigMap with your custom configuration for Locator                                | `""`                |
-| `locator.log4j`                              | Specify content for log4j2.xml on Locator nodes (optional)                                                  | `{}`                |
-| `locator.existingLog4jConfigMap`             | Name of existing ConfigMap containing a custom log4j2.xml configuration for Locator                         | `""`                |
-| `locator.replicaCount`                       | Number of Locator replicas to deploy                                                                        | `2`                 |
-| `locator.containerPorts.locator`             | Locator multicast container port                                                                            | `10334`             |
-| `locator.containerPorts.http`                | Locator HTTP container port                                                                                 | `7070`              |
-| `locator.containerPorts.rmi`                 | Locator RMI container port                                                                                  | `1099`              |
-| `locator.containerPorts.metrics`             | Locator internal metrics container port                                                                     | `9915`              |
-| `locator.livenessProbe.enabled`              | Enable livenessProbe on Locator containers                                                                  | `false`             |
-| `locator.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                     | `5`                 |
-| `locator.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                            | `10`                |
-| `locator.livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                                           | `3`                 |
-| `locator.livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                                         | `3`                 |
-| `locator.livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                                         | `1`                 |
-| `locator.readinessProbe.enabled`             | Enable readinessProbe on Locator containers                                                                 | `false`             |
-| `locator.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                                    | `5`                 |
-| `locator.readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                                           | `10`                |
-| `locator.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                          | `3`                 |
-| `locator.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                                        | `3`                 |
-| `locator.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                        | `1`                 |
-| `locator.startupProbe.enabled`               | Enable startupProbe on Locator containers                                                                   | `true`              |
-| `locator.startupProbe.initialDelaySeconds`   | Initial delay seconds for startupProbe                                                                      | `30`                |
-| `locator.startupProbe.periodSeconds`         | Period seconds for startupProbe                                                                             | `10`                |
-| `locator.startupProbe.timeoutSeconds`        | Timeout seconds for startupProbe                                                                            | `1`                 |
-| `locator.startupProbe.failureThreshold`      | Failure threshold for startupProbe                                                                          | `15`                |
-| `locator.startupProbe.successThreshold`      | Success threshold for startupProbe                                                                          | `1`                 |
-| `locator.customLivenessProbe`                | Custom livenessProbe that overrides the default one                                                         | `{}`                |
-| `locator.customReadinessProbe`               | Custom readinessProbe that overrides the default one                                                        | `{}`                |
-| `locator.customStartupProbe`                 | Custom startupProbe that overrides the default one                                                          | `{}`                |
-| `locator.resources.limits`                   | The resources limits for the Locator containers                                                             | `{}`                |
-| `locator.resources.requests`                 | The requested resources for the Locator containers                                                          | `{}`                |
-| `locator.podSecurityContext.enabled`         | Enabled Locator pods' Security Context                                                                      | `true`              |
-| `locator.podSecurityContext.fsGroup`         | Set Locator pod's Security Context fsGroup                                                                  | `1001`              |
-| `locator.podSecurityContext.sysctls`         | List of namespaced sysctls used for the Locator pods                                                        | `[]`                |
-| `locator.containerSecurityContext.enabled`   | Enabled Locator containers' Security Context                                                                | `true`              |
-| `locator.containerSecurityContext.runAsUser` | Set Locator containers' Security Context runAsUser                                                          | `1001`              |
-| `locator.command`                            | Override default container command (useful when using custom images)                                        | `[]`                |
-| `locator.args`                               | Override default container args (useful when using custom images)                                           | `[]`                |
-| `locator.hostAliases`                        | Locator pods host aliases                                                                                   | `[]`                |
-| `locator.podLabels`                          | Extra labels for Locator pods                                                                               | `{}`                |
-| `locator.podAnnotations`                     | Annotations for Locator pods                                                                                | `{}`                |
-| `locator.podAffinityPreset`                  | Pod affinity preset. Ignored if `locator.affinity` is set. Allowed values: `soft` or `hard`                 | `""`                |
-| `locator.podAntiAffinityPreset`              | Pod anti-affinity preset. Ignored if `locator.affinity` is set. Allowed values: `soft` or `hard`            | `soft`              |
-| `locator.nodeAffinityPreset.type`            | Node affinity preset type. Ignored if `locator.affinity` is set. Allowed values: `soft` or `hard`           | `""`                |
-| `locator.nodeAffinityPreset.key`             | Node label key to match. Ignored if `locator.affinity` is set                                               | `""`                |
-| `locator.nodeAffinityPreset.values`          | Node label values to match. Ignored if `locator.affinity` is set                                            | `[]`                |
-| `locator.affinity`                           | Affinity for Locator pods assignment                                                                        | `{}`                |
-| `locator.nodeSelector`                       | Node labels for Locator pods assignment                                                                     | `{}`                |
-| `locator.tolerations`                        | Tolerations for Locator pods assignment                                                                     | `[]`                |
-| `locator.updateStrategy.type`                | Locator statefulset strategy type                                                                           | `RollingUpdate`     |
-| `locator.priorityClassName`                  | Locator pods' priorityClassName                                                                             | `""`                |
-| `locator.schedulerName`                      | Name of the k8s scheduler (other than default) for Locator pods                                             | `""`                |
-| `locator.lifecycleHooks`                     | for the Locator container(s) to automate configuration before or after startup                              | `{}`                |
-| `locator.extraEnvVars`                       | Array with extra environment variables to add to Locator nodes                                              | `[]`                |
-| `locator.extraEnvVarsCM`                     | Name of existing ConfigMap containing extra env vars for Locator nodes                                      | `nil`               |
-| `locator.extraEnvVarsSecret`                 | Name of existing Secret containing extra env vars for Locator nodes                                         | `nil`               |
-| `locator.extraVolumes`                       | Optionally specify extra list of additional volumes for the Locator pod(s)                                  | `[]`                |
-| `locator.extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for the Locator container(s)                       | `[]`                |
-| `locator.sidecars`                           | Add additional sidecar containers to the Locator pod(s)                                                     | `{}`                |
-| `locator.initContainers`                     | Add additional init containers to the Locator pod(s)                                                        | `{}`                |
-| `locator.service.type`                       | Locator service type                                                                                        | `ClusterIP`         |
-| `locator.service.ports.locator`              | Locator multicast service port                                                                              | `10334`             |
-| `locator.service.ports.http`                 | Locator HTTP service port                                                                                   | `7070`              |
-| `locator.service.ports.rmi`                  | Locator RMI service port                                                                                    | `1099`              |
-| `locator.service.nodePorts.locator`          | Node port for multicast                                                                                     | `""`                |
-| `locator.service.nodePorts.http`             | Node port for HTTP                                                                                          | `""`                |
-| `locator.service.sessionAffinity`            | Control where client requests go, to the same pod or round-robin                                            | `None`              |
-| `locator.service.clusterIP`                  | Locator service Cluster IP                                                                                  | `""`                |
-| `locator.service.loadBalancerIP`             | Locator service Load Balancer IP                                                                            | `""`                |
-| `locator.service.loadBalancerSourceRanges`   | Locator service Load Balancer sources                                                                       | `[]`                |
-| `locator.service.externalTrafficPolicy`      | Locator service external traffic policy                                                                     | `Cluster`           |
-| `locator.service.annotations`                | Additional custom annotations for Locator service                                                           | `{}`                |
-| `locator.service.extraPorts`                 | Extra ports to expose in the Locator service (normally used with the `sidecar` value)                       | `[]`                |
-| `locator.persistence.enabled`                | Enable persistence on Locator replicas using a `PersistentVolumeClaim`                                      | `true`              |
-| `locator.persistence.storageClass`           | MariaDB secondary persistent volume storage Class                                                           | `""`                |
-| `locator.persistence.annotations`            | MariaDB secondary persistent volume claim annotations                                                       | `{}`                |
-| `locator.persistence.accessModes`            | MariaDB secondary persistent volume access Modes                                                            | `["ReadWriteOnce"]` |
-| `locator.persistence.size`                   | MariaDB secondary persistent volume size                                                                    | `8Gi`               |
+| Name                                            | Description                                                                                                 | Value               |
+| ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------- | ------------------- |
+| `locator.logLevel`                              | Log level for Locator nodes                                                                                 | `info`              |
+| `locator.initialHeapSize`                       | Initial size of the heap on Locator nodes                                                                   | `""`                |
+| `locator.maxHeapSize`                           | Maximum size of the heap on Locator nodes                                                                   | `""`                |
+| `locator.configuration`                         | Specify content for gemfire.properties on Locator nodes (auto-generated based on other env. vars otherwise) | `""`                |
+| `locator.existingConfigmap`                     | The name of an existing ConfigMap with your custom configuration for Locator                                | `""`                |
+| `locator.log4j`                                 | Specify content for log4j2.xml on Locator nodes (optional)                                                  | `""`                |
+| `locator.existingLog4jConfigMap`                | Name of existing ConfigMap containing a custom log4j2.xml configuration for Locator                         | `""`                |
+| `locator.replicaCount`                          | Number of Locator replicas to deploy                                                                        | `2`                 |
+| `locator.podManagementPolicy`                   | Locator statefulset Pod Management Policy Type                                                              | `OrderedReady`      |
+| `locator.containerPorts.locator`                | Locator multicast container port                                                                            | `10334`             |
+| `locator.containerPorts.http`                   | Locator HTTP container port                                                                                 | `7070`              |
+| `locator.containerPorts.rmi`                    | Locator RMI container port                                                                                  | `1099`              |
+| `locator.containerPorts.metrics`                | Locator internal metrics container port                                                                     | `9915`              |
+| `locator.livenessProbe.enabled`                 | Enable livenessProbe on Locator containers                                                                  | `true`              |
+| `locator.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                     | `30`                |
+| `locator.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                            | `10`                |
+| `locator.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                           | `3`                 |
+| `locator.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                         | `3`                 |
+| `locator.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                         | `1`                 |
+| `locator.readinessProbe.enabled`                | Enable readinessProbe on Locator containers                                                                 | `true`              |
+| `locator.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                    | `30`                |
+| `locator.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                           | `10`                |
+| `locator.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                          | `3`                 |
+| `locator.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                        | `3`                 |
+| `locator.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                        | `1`                 |
+| `locator.startupProbe.enabled`                  | Enable startupProbe on Locator containers                                                                   | `false`             |
+| `locator.startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                      | `30`                |
+| `locator.startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                             | `10`                |
+| `locator.startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                            | `1`                 |
+| `locator.startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                          | `15`                |
+| `locator.startupProbe.successThreshold`         | Success threshold for startupProbe                                                                          | `1`                 |
+| `locator.customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                                         | `{}`                |
+| `locator.customReadinessProbe`                  | Custom readinessProbe that overrides the default one                                                        | `{}`                |
+| `locator.customStartupProbe`                    | Custom startupProbe that overrides the default one                                                          | `{}`                |
+| `locator.resources.limits`                      | The resources limits for the Locator containers                                                             | `{}`                |
+| `locator.resources.requests`                    | The requested resources for the Locator containers                                                          | `{}`                |
+| `locator.podSecurityContext.enabled`            | Enabled Locator pods' Security Context                                                                      | `true`              |
+| `locator.podSecurityContext.fsGroup`            | Set Locator pod's Security Context fsGroup                                                                  | `1001`              |
+| `locator.podSecurityContext.sysctls`            | List of namespaced sysctls used for the Locator pods                                                        | `[]`                |
+| `locator.containerSecurityContext.enabled`      | Enabled Locator containers' Security Context                                                                | `true`              |
+| `locator.containerSecurityContext.runAsUser`    | Set Locator containers' Security Context runAsUser                                                          | `1001`              |
+| `locator.containerSecurityContext.runAsNonRoot` | Set Locator containers' Security Context runAsNonRoot                                                       | `true`              |
+| `locator.command`                               | Override default container command (useful when using custom images)                                        | `[]`                |
+| `locator.args`                                  | Override default container args (useful when using custom images)                                           | `[]`                |
+| `locator.hostAliases`                           | Locator pods host aliases                                                                                   | `[]`                |
+| `locator.podLabels`                             | Extra labels for Locator pods                                                                               | `{}`                |
+| `locator.podAnnotations`                        | Annotations for Locator pods                                                                                | `{}`                |
+| `locator.podAffinityPreset`                     | Pod affinity preset. Ignored if `locator.affinity` is set. Allowed values: `soft` or `hard`                 | `""`                |
+| `locator.podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `locator.affinity` is set. Allowed values: `soft` or `hard`            | `soft`              |
+| `locator.nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `locator.affinity` is set. Allowed values: `soft` or `hard`           | `""`                |
+| `locator.nodeAffinityPreset.key`                | Node label key to match. Ignored if `locator.affinity` is set                                               | `""`                |
+| `locator.nodeAffinityPreset.values`             | Node label values to match. Ignored if `locator.affinity` is set                                            | `[]`                |
+| `locator.affinity`                              | Affinity for Locator pods assignment                                                                        | `{}`                |
+| `locator.nodeSelector`                          | Node labels for Locator pods assignment                                                                     | `{}`                |
+| `locator.tolerations`                           | Tolerations for Locator pods assignment                                                                     | `[]`                |
+| `locator.topologySpreadConstraints`             | Topology Spread Constraints for Locator pods assignment spread across your cluster among failure-domains    | `[]`                |
+| `locator.updateStrategy.type`                   | Locator statefulset strategy type                                                                           | `RollingUpdate`     |
+| `locator.priorityClassName`                     | Locator pods' priorityClassName                                                                             | `""`                |
+| `locator.schedulerName`                         | Name of the k8s scheduler (other than default) for Locator pods                                             | `""`                |
+| `locator.lifecycleHooks`                        | for the Locator container(s) to automate configuration before or after startup                              | `{}`                |
+| `locator.extraEnvVars`                          | Array with extra environment variables to add to Locator nodes                                              | `[]`                |
+| `locator.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars for Locator nodes                                      | `""`                |
+| `locator.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for Locator nodes                                         | `""`                |
+| `locator.extraVolumes`                          | Optionally specify extra list of additional volumes for the Locator pod(s)                                  | `[]`                |
+| `locator.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the Locator container(s)                       | `[]`                |
+| `locator.sidecars`                              | Add additional sidecar containers to the Locator pod(s)                                                     | `[]`                |
+| `locator.initContainers`                        | Add additional init containers to the Locator pod(s)                                                        | `[]`                |
+| `locator.service.type`                          | Locator service type                                                                                        | `ClusterIP`         |
+| `locator.service.ports.locator`                 | Locator multicast service port                                                                              | `10334`             |
+| `locator.service.ports.http`                    | Locator HTTP service port                                                                                   | `7070`              |
+| `locator.service.ports.rmi`                     | Locator RMI service port                                                                                    | `1099`              |
+| `locator.service.nodePorts.locator`             | Node port for multicast                                                                                     | `""`                |
+| `locator.service.nodePorts.http`                | Node port for HTTP                                                                                          | `""`                |
+| `locator.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin                                            | `None`              |
+| `locator.service.clusterIP`                     | Locator service Cluster IP                                                                                  | `""`                |
+| `locator.service.loadBalancerIP`                | Locator service Load Balancer IP                                                                            | `""`                |
+| `locator.service.loadBalancerSourceRanges`      | Locator service Load Balancer sources                                                                       | `[]`                |
+| `locator.service.externalTrafficPolicy`         | Locator service external traffic policy                                                                     | `Cluster`           |
+| `locator.service.annotations`                   | Additional custom annotations for Locator service                                                           | `{}`                |
+| `locator.service.extraPorts`                    | Extra ports to expose in the Locator service (normally used with the `sidecar` value)                       | `[]`                |
+| `locator.persistence.enabled`                   | Enable persistence on Locator replicas using a `PersistentVolumeClaim`                                      | `true`              |
+| `locator.persistence.storageClass`              | MariaDB secondary persistent volume storage Class                                                           | `""`                |
+| `locator.persistence.annotations`               | MariaDB secondary persistent volume claim annotations                                                       | `{}`                |
+| `locator.persistence.accessModes`               | MariaDB secondary persistent volume access Modes                                                            | `["ReadWriteOnce"]` |
+| `locator.persistence.size`                      | MariaDB secondary persistent volume size                                                                    | `8Gi`               |
 
 
 ### Apache Geode Cache Server parameters
 
-| Name                                        | Description                                                                                                      | Value               |
-| ------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | ------------------- |
-| `server.logLevel`                           | Log level for Cache Server nodes                                                                                 | `info`              |
-| `server.initialHeapSize`                    | Initial size of the heap on Cache Server nodes                                                                   | `""`                |
-| `server.maxHeapSize`                        | Maximum size of the heap on Cache Server nodes                                                                   | `""`                |
-| `server.configuration`                      | Specify content for gemfire.properties on Cache server nodes (auto-generated based on other env. vars otherwise) | `{}`                |
-| `server.existingConfigmap`                  | The name of an existing ConfigMap with your custom configuration for Cache server                                | `""`                |
-| `server.log4j`                              | Specify content for log4j2.xml on Cache server nodes (optional)                                                  | `{}`                |
-| `server.existingLog4jConfigMap`             | Name of existing ConfigMap containing a custom log4j2.xml configuration for Cache server                         | `""`                |
-| `server.replicaCount`                       | Number of Cache Server replicas to deploy                                                                        | `3`                 |
-| `server.containerPorts.server`              | Cache Server container port                                                                                      | `40404`             |
-| `server.containerPorts.http`                | Cache Server HTTP container port                                                                                 | `7070`              |
-| `server.containerPorts.rmi`                 | Cache Server RMI container port                                                                                  | `1099`              |
-| `server.containerPorts.metrics`             | Cache Server internal metrics container port                                                                     | `9915`              |
-| `server.livenessProbe.enabled`              | Enable livenessProbe on Cache server containers                                                                  | `false`             |
-| `server.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                          | `5`                 |
-| `server.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                                 | `10`                |
-| `server.livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                                                | `3`                 |
-| `server.livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                                              | `3`                 |
-| `server.livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                                              | `1`                 |
-| `server.readinessProbe.enabled`             | Enable readinessProbe on Cache server containers                                                                 | `false`             |
-| `server.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                                         | `5`                 |
-| `server.readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                                                | `10`                |
-| `server.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                               | `4`                 |
-| `server.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                                             | `3`                 |
-| `server.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                             | `1`                 |
-| `server.startupProbe.enabled`               | Enable startupProbe on Cache server containers                                                                   | `true`              |
-| `server.startupProbe.initialDelaySeconds`   | Initial delay seconds for startupProbe                                                                           | `45`                |
-| `server.startupProbe.periodSeconds`         | Period seconds for startupProbe                                                                                  | `10`                |
-| `server.startupProbe.timeoutSeconds`        | Timeout seconds for startupProbe                                                                                 | `1`                 |
-| `server.startupProbe.failureThreshold`      | Failure threshold for startupProbe                                                                               | `15`                |
-| `server.startupProbe.successThreshold`      | Success threshold for startupProbe                                                                               | `1`                 |
-| `server.customLivenessProbe`                | Custom livenessProbe that overrides the default one                                                              | `{}`                |
-| `server.customReadinessProbe`               | Custom readinessProbe that overrides the default one                                                             | `{}`                |
-| `server.customStartupProbe`                 | Custom startupProbe that overrides the default one                                                               | `{}`                |
-| `server.resources.limits`                   | The resources limits for the Cache server containers                                                             | `{}`                |
-| `server.resources.requests`                 | The requested resources for the Cache server containers                                                          | `{}`                |
-| `server.podSecurityContext.enabled`         | Enabled Cache server pods' Security Context                                                                      | `true`              |
-| `server.podSecurityContext.fsGroup`         | Set Cache server pod's Security Context fsGroup                                                                  | `1001`              |
-| `server.podSecurityContext.sysctls`         | List of namespaced sysctls used for the Cache server pods                                                        | `[]`                |
-| `server.containerSecurityContext.enabled`   | Enabled Cache server containers' Security Context                                                                | `true`              |
-| `server.containerSecurityContext.runAsUser` | Set Cache server containers' Security Context runAsUser                                                          | `1001`              |
-| `server.command`                            | Override default container command (useful when using custom images)                                             | `[]`                |
-| `server.args`                               | Override default container args (useful when using custom images)                                                | `[]`                |
-| `server.hostAliases`                        | Cache server pods host aliases                                                                                   | `[]`                |
-| `server.podLabels`                          | Extra labels for Cache server pods                                                                               | `{}`                |
-| `server.podAnnotations`                     | Annotations for Cache server pods                                                                                | `{}`                |
-| `server.podAffinityPreset`                  | Pod affinity preset. Ignored if `server.affinity` is set. Allowed values: `soft` or `hard`                       | `""`                |
-| `server.podAntiAffinityPreset`              | Pod anti-affinity preset. Ignored if `server.affinity` is set. Allowed values: `soft` or `hard`                  | `soft`              |
-| `server.nodeAffinityPreset.type`            | Node affinity preset type. Ignored if `server.affinity` is set. Allowed values: `soft` or `hard`                 | `""`                |
-| `server.nodeAffinityPreset.key`             | Node label key to match. Ignored if `server.affinity` is set                                                     | `""`                |
-| `server.nodeAffinityPreset.values`          | Node label values to match. Ignored if `server.affinity` is set                                                  | `[]`                |
-| `server.affinity`                           | Affinity for Cache server pods assignment                                                                        | `{}`                |
-| `server.nodeSelector`                       | Node labels for Cache server pods assignment                                                                     | `{}`                |
-| `server.tolerations`                        | Tolerations for Cache server pods assignment                                                                     | `[]`                |
-| `server.updateStrategy.type`                | Cache server statefulset strategy type                                                                           | `RollingUpdate`     |
-| `server.priorityClassName`                  | Cache server pods' priorityClassName                                                                             | `""`                |
-| `server.schedulerName`                      | Name of the k8s scheduler (other than default) for Cache server pods                                             | `""`                |
-| `server.lifecycleHooks`                     | for the Cache server container(s) to automate configuration before or after startup                              | `{}`                |
-| `server.extraEnvVars`                       | Array with extra environment variables to add to Cache server nodes                                              | `[]`                |
-| `server.extraEnvVarsCM`                     | Name of existing ConfigMap containing extra env vars for Cache server nodes                                      | `nil`               |
-| `server.extraEnvVarsSecret`                 | Name of existing Secret containing extra env vars for Cache server nodes                                         | `nil`               |
-| `server.extraVolumes`                       | Optionally specify extra list of additional volumes for the Cache server pod(s)                                  | `[]`                |
-| `server.extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for the Cache server container(s)                       | `[]`                |
-| `server.sidecars`                           | Add additional sidecar containers to the Cache server pod(s)                                                     | `{}`                |
-| `server.initContainers`                     | Add additional init containers to the Cache server pod(s)                                                        | `{}`                |
-| `server.service.ports.server`               | Cache server multicast service port                                                                              | `40404`             |
-| `server.service.ports.http`                 | Cache server HTTP service port                                                                                   | `7070`              |
-| `server.service.ports.rmi`                  | Cache server RMI service port                                                                                    | `1099`              |
-| `server.service.annotations`                | Additional custom annotations for Cache server service                                                           | `{}`                |
-| `server.persistence.enabled`                | Enable persistence on Cache server replicas using a `PersistentVolumeClaim`                                      | `true`              |
-| `server.persistence.storageClass`           | MariaDB secondary persistent volume storage Class                                                                | `""`                |
-| `server.persistence.annotations`            | MariaDB secondary persistent volume claim annotations                                                            | `{}`                |
-| `server.persistence.accessModes`            | MariaDB secondary persistent volume access Modes                                                                 | `["ReadWriteOnce"]` |
-| `server.persistence.size`                   | MariaDB secondary persistent volume size                                                                         | `8Gi`               |
+| Name                                           | Description                                                                                                      | Value               |
+| ---------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | ------------------- |
+| `server.logLevel`                              | Log level for Cache Server nodes                                                                                 | `info`              |
+| `server.initialHeapSize`                       | Initial size of the heap on Cache Server nodes                                                                   | `""`                |
+| `server.maxHeapSize`                           | Maximum size of the heap on Cache Server nodes                                                                   | `""`                |
+| `server.configuration`                         | Specify content for gemfire.properties on Cache server nodes (auto-generated based on other env. vars otherwise) | `""`                |
+| `server.existingConfigmap`                     | The name of an existing ConfigMap with your custom configuration for Cache server                                | `""`                |
+| `server.log4j`                                 | Specify content for log4j2.xml on Cache server nodes (optional)                                                  | `""`                |
+| `server.existingLog4jConfigMap`                | Name of existing ConfigMap containing a custom log4j2.xml configuration for Cache server                         | `""`                |
+| `server.replicaCount`                          | Number of Cache Server replicas to deploy                                                                        | `3`                 |
+| `server.podManagementPolicy`                   | Cache Server statefulset Pod Management Policy Type                                                              | `OrderedReady`      |
+| `server.containerPorts.server`                 | Cache Server container port                                                                                      | `40404`             |
+| `server.containerPorts.http`                   | Cache Server HTTP container port                                                                                 | `7070`              |
+| `server.containerPorts.rmi`                    | Cache Server RMI container port                                                                                  | `1099`              |
+| `server.containerPorts.metrics`                | Cache Server internal metrics container port                                                                     | `9915`              |
+| `server.livenessProbe.enabled`                 | Enable livenessProbe on Cache server containers                                                                  | `true`              |
+| `server.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                          | `40`                |
+| `server.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                                 | `10`                |
+| `server.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                                | `3`                 |
+| `server.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                              | `3`                 |
+| `server.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                              | `1`                 |
+| `server.readinessProbe.enabled`                | Enable readinessProbe on Cache server containers                                                                 | `true`              |
+| `server.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                         | `40`                |
+| `server.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                                | `10`                |
+| `server.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                               | `4`                 |
+| `server.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                             | `3`                 |
+| `server.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                             | `1`                 |
+| `server.startupProbe.enabled`                  | Enable startupProbe on Cache server containers                                                                   | `false`             |
+| `server.startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                           | `45`                |
+| `server.startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                                  | `10`                |
+| `server.startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                                 | `1`                 |
+| `server.startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                               | `15`                |
+| `server.startupProbe.successThreshold`         | Success threshold for startupProbe                                                                               | `1`                 |
+| `server.customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                                              | `{}`                |
+| `server.customReadinessProbe`                  | Custom readinessProbe that overrides the default one                                                             | `{}`                |
+| `server.customStartupProbe`                    | Custom startupProbe that overrides the default one                                                               | `{}`                |
+| `server.resources.limits`                      | The resources limits for the Cache server containers                                                             | `{}`                |
+| `server.resources.requests`                    | The requested resources for the Cache server containers                                                          | `{}`                |
+| `server.podSecurityContext.enabled`            | Enabled Cache server pods' Security Context                                                                      | `true`              |
+| `server.podSecurityContext.fsGroup`            | Set Cache server pod's Security Context fsGroup                                                                  | `1001`              |
+| `server.podSecurityContext.sysctls`            | List of namespaced sysctls used for the Cache server pods                                                        | `[]`                |
+| `server.containerSecurityContext.enabled`      | Enabled Cache server containers' Security Context                                                                | `true`              |
+| `server.containerSecurityContext.runAsUser`    | Set Cache server containers' Security Context runAsUser                                                          | `1001`              |
+| `server.containerSecurityContext.runAsNonRoot` | Set Cache server containers' Security Context runAsNonRoot                                                       | `true`              |
+| `server.command`                               | Override default container command (useful when using custom images)                                             | `[]`                |
+| `server.args`                                  | Override default container args (useful when using custom images)                                                | `[]`                |
+| `server.hostAliases`                           | Cache server pods host aliases                                                                                   | `[]`                |
+| `server.podLabels`                             | Extra labels for Cache server pods                                                                               | `{}`                |
+| `server.podAnnotations`                        | Annotations for Cache server pods                                                                                | `{}`                |
+| `server.podAffinityPreset`                     | Pod affinity preset. Ignored if `server.affinity` is set. Allowed values: `soft` or `hard`                       | `""`                |
+| `server.podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `server.affinity` is set. Allowed values: `soft` or `hard`                  | `soft`              |
+| `server.nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `server.affinity` is set. Allowed values: `soft` or `hard`                 | `""`                |
+| `server.nodeAffinityPreset.key`                | Node label key to match. Ignored if `server.affinity` is set                                                     | `""`                |
+| `server.nodeAffinityPreset.values`             | Node label values to match. Ignored if `server.affinity` is set                                                  | `[]`                |
+| `server.affinity`                              | Affinity for Cache server pods assignment                                                                        | `{}`                |
+| `server.nodeSelector`                          | Node labels for Cache server pods assignment                                                                     | `{}`                |
+| `server.tolerations`                           | Tolerations for Cache server pods assignment                                                                     | `[]`                |
+| `server.topologySpreadConstraints`             | Topology Spread Constraints for Cache server pods assignment spread across your cluster among failure-domains    | `[]`                |
+| `server.updateStrategy.type`                   | Cache server statefulset strategy type                                                                           | `RollingUpdate`     |
+| `server.priorityClassName`                     | Cache server pods' priorityClassName                                                                             | `""`                |
+| `server.schedulerName`                         | Name of the k8s scheduler (other than default) for Cache server pods                                             | `""`                |
+| `server.lifecycleHooks`                        | for the Cache server container(s) to automate configuration before or after startup                              | `{}`                |
+| `server.extraEnvVars`                          | Array with extra environment variables to add to Cache server nodes                                              | `[]`                |
+| `server.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars for Cache server nodes                                      | `""`                |
+| `server.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for Cache server nodes                                         | `""`                |
+| `server.extraVolumes`                          | Optionally specify extra list of additional volumes for the Cache server pod(s)                                  | `[]`                |
+| `server.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the Cache server container(s)                       | `[]`                |
+| `server.sidecars`                              | Add additional sidecar containers to the Cache server pod(s)                                                     | `[]`                |
+| `server.initContainers`                        | Add additional init containers to the Cache server pod(s)                                                        | `[]`                |
+| `server.service.ports.server`                  | Cache server multicast service port                                                                              | `40404`             |
+| `server.service.ports.http`                    | Cache server HTTP service port                                                                                   | `7070`              |
+| `server.service.ports.rmi`                     | Cache server RMI service port                                                                                    | `1099`              |
+| `server.service.annotations`                   | Additional custom annotations for Cache server service                                                           | `{}`                |
+| `server.persistence.enabled`                   | Enable persistence on Cache server replicas using a `PersistentVolumeClaim`                                      | `true`              |
+| `server.persistence.storageClass`              | MariaDB secondary persistent volume storage Class                                                                | `""`                |
+| `server.persistence.annotations`               | MariaDB secondary persistent volume claim annotations                                                            | `{}`                |
+| `server.persistence.accessModes`               | MariaDB secondary persistent volume access Modes                                                                 | `["ReadWriteOnce"]` |
+| `server.persistence.size`                      | MariaDB secondary persistent volume size                                                                         | `8Gi`               |
 
 
 ### Traffic Exposure Parameters
@@ -297,48 +303,53 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Metrics parameters
 
-| Name                                         | Description                                                          | Value                 |
-| -------------------------------------------- | -------------------------------------------------------------------- | --------------------- |
-| `metrics.enabled`                            | Expose Apache Geode metrics                                          | `false`               |
-| `metrics.image.registry`                     | Bitnami HAProxy image registry                                       | `docker.io`           |
-| `metrics.image.repository`                   | Bitnami HAProxy image repository                                     | `bitnami/haproxy`     |
-| `metrics.image.tag`                          | Bitnami HAProxy image tag (immutable tags are recommended)           | `2.4.4-debian-10-r20` |
-| `metrics.image.pullPolicy`                   | Bitnami HAProxy image pull policy                                    | `IfNotPresent`        |
-| `metrics.image.pullSecrets`                  | Bitnami HAProxy image pull secrets                                   | `[]`                  |
-| `metrics.containerPort`                      | Metrics container port                                               | `9914`                |
-| `metrics.livenessProbe.enabled`              | Enable livenessProbe on Metrics containers                           | `false`               |
-| `metrics.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                              | `15`                  |
-| `metrics.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                     | `10`                  |
-| `metrics.livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                    | `5`                   |
-| `metrics.livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                  | `5`                   |
-| `metrics.livenessProbe.successThreshold`     | Success threshold for livenessProbe                                  | `1`                   |
-| `metrics.readinessProbe.enabled`             | Enable readinessProbe on Metrics containers                          | `false`               |
-| `metrics.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                             | `15`                  |
-| `metrics.readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                    | `10`                  |
-| `metrics.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                   | `5`                   |
-| `metrics.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                 | `5`                   |
-| `metrics.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                 | `1`                   |
-| `metrics.customLivenessProbe`                | Custom livenessProbe that overrides the default one                  | `{}`                  |
-| `metrics.customReadinessProbe`               | Custom readinessProbe that overrides the default one                 | `{}`                  |
-| `metrics.containerSecurityContext.enabled`   | Enabled Metrics containers' Security Context                         | `true`                |
-| `metrics.containerSecurityContext.runAsUser` | Set Metrics containers' Security Context runAsUser                   | `1001`                |
-| `metrics.service.port`                       | Service HTTP management port                                         | `9914`                |
-| `metrics.service.annotations`                | Annotations for enabling prometheus to access the metrics endpoints  | `{}`                  |
-| `metrics.serviceMonitor.enabled`             | Specify if a ServiceMonitor will be deployed for Prometheus Operator | `false`               |
-| `metrics.serviceMonitor.interval`            | How frequently to scrape metrics                                     | `""`                  |
-| `metrics.serviceMonitor.scrapeTimeout`       | Timeout after which the scrape is ended                              | `""`                  |
-| `metrics.serviceMonitor.metricRelabelings`   | Specify additional relabeling of metrics                             | `[]`                  |
-| `metrics.serviceMonitor.relabelings`         | Specify general relabeling                                           | `[]`                  |
+| Name                                            | Description                                                                      | Value                 |
+| ----------------------------------------------- | -------------------------------------------------------------------------------- | --------------------- |
+| `metrics.enabled`                               | Expose Apache Geode metrics                                                      | `false`               |
+| `metrics.image.registry`                        | Bitnami HAProxy image registry                                                   | `docker.io`           |
+| `metrics.image.repository`                      | Bitnami HAProxy image repository                                                 | `bitnami/haproxy`     |
+| `metrics.image.tag`                             | Bitnami HAProxy image tag (immutable tags are recommended)                       | `2.4.4-debian-10-r20` |
+| `metrics.image.pullPolicy`                      | Bitnami HAProxy image pull policy                                                | `IfNotPresent`        |
+| `metrics.image.pullSecrets`                     | Bitnami HAProxy image pull secrets                                               | `[]`                  |
+| `metrics.containerPort`                         | Metrics container port                                                           | `9914`                |
+| `metrics.livenessProbe.enabled`                 | Enable livenessProbe on Metrics containers                                       | `true`                |
+| `metrics.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                          | `15`                  |
+| `metrics.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                 | `10`                  |
+| `metrics.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                | `5`                   |
+| `metrics.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                              | `5`                   |
+| `metrics.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                              | `1`                   |
+| `metrics.readinessProbe.enabled`                | Enable readinessProbe on Metrics containers                                      | `true`                |
+| `metrics.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                         | `15`                  |
+| `metrics.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                | `10`                  |
+| `metrics.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                               | `5`                   |
+| `metrics.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                             | `5`                   |
+| `metrics.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                             | `1`                   |
+| `metrics.customLivenessProbe`                   | Custom livenessProbe that overrides the default one                              | `{}`                  |
+| `metrics.customReadinessProbe`                  | Custom readinessProbe that overrides the default one                             | `{}`                  |
+| `metrics.containerSecurityContext.enabled`      | Enabled Metrics containers' Security Context                                     | `true`                |
+| `metrics.containerSecurityContext.runAsUser`    | Set Metrics containers' Security Context runAsUser                               | `1001`                |
+| `metrics.containerSecurityContext.runAsNonRoot` | Set Metrics containers' Security Context runAsNonRoot                            | `true`                |
+| `metrics.service.port`                          | Service HTTP management port                                                     | `9914`                |
+| `metrics.service.annotations`                   | Annotations for enabling prometheus to access the metrics endpoints              | `{}`                  |
+| `metrics.serviceMonitor.enabled`                | Specify if a ServiceMonitor will be deployed for Prometheus Operator             | `false`               |
+| `metrics.serviceMonitor.namespace`              | Namespace in which Prometheus is running                                         | `""`                  |
+| `metrics.serviceMonitor.jobLabel`               | The name of the label on the target service to use as the job name in Prometheus | `""`                  |
+| `metrics.serviceMonitor.interval`               | How frequently to scrape metrics                                                 | `""`                  |
+| `metrics.serviceMonitor.scrapeTimeout`          | Timeout after which the scrape is ended                                          | `""`                  |
+| `metrics.serviceMonitor.metricRelabelings`      | Specify additional relabeling of metrics                                         | `[]`                  |
+| `metrics.serviceMonitor.relabelings`            | Specify general relabeling                                                       | `[]`                  |
+| `metrics.serviceMonitor.selector`               | Prometheus instance selector labels                                              | `{}`                  |
 
 
 ### Other Parameters
 
-| Name                          | Description                                          | Value   |
-| ----------------------------- | ---------------------------------------------------- | ------- |
-| `serviceAccount.create`       | Specifies whether a ServiceAccount should be created | `true`  |
-| `serviceAccount.name`         | The name of the ServiceAccount to use.               | `""`    |
-| `networkPolicy.enabled`       | Specifies whether a NetworkPolicy should be created  | `false` |
-| `networkPolicy.allowExternal` | Don't require client label for connections           | `true`  |
+| Name                                          | Description                                                            | Value   |
+| --------------------------------------------- | ---------------------------------------------------------------------- | ------- |
+| `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                   | `true`  |
+| `serviceAccount.name`                         | The name of the ServiceAccount to use.                                 | `""`    |
+| `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created | `false` |
+| `networkPolicy.enabled`                       | Specifies whether a NetworkPolicy should be created                    | `false` |
+| `networkPolicy.allowExternal`                 | Don't require client label for connections                             | `true`  |
 
 
 The above parameters map to the env variables defined in [bitnami/geode](http://github.com/bitnami/bitnami-docker-geode). For more information please refer to the [bitnami/geode](http://github.com/bitnami/bitnami-docker-geode) image documentation.

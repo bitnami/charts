@@ -22,6 +22,7 @@ metadata:
   {{- end }}
 spec:
   replicas: {{ .Values.locator.replicaCount }}
+  podManagementPolicy: {{ .Values.locator.podManagementPolicy }}
   selector:
     matchLabels: {{ include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: locator
@@ -68,6 +69,9 @@ spec:
       {{- end }}
       {{- if .Values.locator.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.locator.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.locator.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.locator.topologySpreadConstraints "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.locator.priorityClassName }}
       priorityClassName: {{ .Values.locator.priorityClassName | quote }}
@@ -340,12 +344,12 @@ spec:
         {{- if or .Values.locator.configuration .Values.locator.existingConfigmap }}
         - name: configuration
           configMap:
-            name: {{ include "geode.server.configmapName" . }}
+            name: {{ include "geode.locator.configmapName" . }}
         {{- end }}
         {{- if or .Values.locator.log4j .Values.locator.existingLog4jConfigMap }}
         - name: log4j-configuration
           configMap:
-            name: {{ include "geode.server.log4j.configmapName" . }}
+            name: {{ include "geode.locator.log4j.configmapName" . }}
         {{ end }}
         {{- if .Values.auth.tls.enabled }}
         - name: geode-tls-certificates
