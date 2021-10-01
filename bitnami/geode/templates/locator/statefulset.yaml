@@ -257,7 +257,7 @@ spec:
                 - /bin/bash
                 - -ec
                 - |
-                  gfsh status locator --dir /bitnami/geode/data >/dev/null 2>&1 || exit 1
+                  gfsh -e "connect --locator=localhost[$GEODE_LOCATOR_PORT_NUMBER]{{ if .Values.auth.enabled }} --user=$GEODE_SECURITY_USERNAME --password=$GEODE_SECURITY_PASSWORD{{ end }}" || exit 1
           {{- else if .Values.locator.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.locator.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
@@ -268,7 +268,7 @@ spec:
                 - /bin/bash
                 - -ec
                 - |
-                  gfsh status locator --dir /bitnami/geode/data >/dev/null 2>&1 || exit 1
+                  gfsh -e "connect --locator=localhost[$GEODE_LOCATOR_PORT_NUMBER]{{ if .Values.auth.enabled }} --user=$GEODE_SECURITY_USERNAME --password=$GEODE_SECURITY_PASSWORD{{ end }}" || exit 1
           {{- else if .Values.locator.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.locator.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}

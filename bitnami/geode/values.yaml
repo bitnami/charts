@@ -210,7 +210,7 @@ locator:
     enabled: true
     initialDelaySeconds: 30
     periodSeconds: 10
-    timeoutSeconds: 3
+    timeoutSeconds: 10
     failureThreshold: 3
     successThreshold: 1
   ## @param locator.readinessProbe.enabled Enable readinessProbe on Locator containers
@@ -224,7 +224,7 @@ locator:
     enabled: true
     initialDelaySeconds: 30
     periodSeconds: 10
-    timeoutSeconds: 3
+    timeoutSeconds: 10
     failureThreshold: 3
     successThreshold: 1
   ## @param locator.startupProbe.enabled Enable startupProbe on Locator containers
@@ -542,7 +542,7 @@ server:
     enabled: true
     initialDelaySeconds: 40
     periodSeconds: 10
-    timeoutSeconds: 3
+    timeoutSeconds: 10
     failureThreshold: 3
     successThreshold: 1
   ## @param server.readinessProbe.enabled Enable readinessProbe on Cache server containers
@@ -556,7 +556,7 @@ server:
     enabled: true
     initialDelaySeconds: 40
     periodSeconds: 10
-    timeoutSeconds: 4
+    timeoutSeconds: 10
     failureThreshold: 3
     successThreshold: 1
   ## @param server.startupProbe.enabled Enable startupProbe on Cache server containers
