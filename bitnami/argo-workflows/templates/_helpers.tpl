@@ -145,7 +145,7 @@ Return the proper database password secret
 {{- end -}}
 {{- if .Values.externalDatabase.enabled -}}
 {{- if .Values.externalDatabase.existingSecret -}}
-{{- .Values.externalDatabase.existingSecret -}}
+{{- tpl .Values.externalDatabase.existingSecret . -}}
 {{- else -}}
 {{- include "argo-workflows.controller.database.username.secret" . -}}
 {{- end -}}

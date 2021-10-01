@@ -61,8 +61,8 @@ server:
   ##
   image:
     registry: docker.io
-    repository: miguelaeh/test-cli
-    tag: v2
+    repository: bitnami/argo-workflow-cli
+    tag: 3.1.13-scratch-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -113,12 +113,31 @@ server:
     timeoutSeconds: 1
     failureThreshold: 3
     successThreshold: 1
-  ## @param server.customLivenessProbe Custom livenessProbe that overrides the default one
+  ## @param server.startupProbe.enabled Enable startupProbe
+  ## @param server.startupProbe.path Path to check for startupProbe
+  ## @param server.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param server.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param server.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param server.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param server.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    path: /
+    initialDelaySeconds: 300
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+  ## @param server.customLivenessProbe Server custom livenessProbe that overrides the default one
   ##
   customLivenessProbe: {}
-  ## @param server.customReadinessProbe Custom readinessProbe that overrides the default one
+  ## @param server.customReadinessProbe Server custom readinessProbe that overrides the default one
   ##
   customReadinessProbe: {}
+  ## @param server.customStartupProbe Server custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
   ## server resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ## @param server.resources.limits The resources limits for the server containers
@@ -320,6 +339,19 @@ server:
     ## Can be set to RollingUpdate or OnDelete
     ##
     type: RollingUpdate
+  ## @param server.topologySpreadConstraints Topology spread constraints rely on node labels to identify the topology domain(s) that each Node is in
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+  ##
+  ## topologySpreadConstraints:
+  ##   - maxSkew: 1
+  ##     topologyKey: failure-domain.beta.kubernetes.io/zone
+  ##     whenUnsatisfiable: DoNotSchedule
+  ##
+  topologySpreadConstraints: []
+  ## @param server.schedulerName Alternate scheduler for the server deployment
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
   ## @param server.priorityClassName server pods' priorityClassName
   ##
   priorityClassName: ""
@@ -475,12 +507,31 @@ controller:
     timeoutSeconds: 30
     failureThreshold: 3
     successThreshold: 1
-  ## @param controller.customLivenessProbe Custom livenessProbe that overrides the default one
+  ## @param controller.startupProbe.enabled Enable startupProbe
+  ## @param controller.startupProbe.path Path to check for startupProbe
+  ## @param controller.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param controller.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param controller.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param controller.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param controller.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    path: /
+    initialDelaySeconds: 300
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+  ## @param controller.customLivenessProbe Controller custom livenessProbe that overrides the default one
   ##
   customLivenessProbe: {}
-  ## @param controller.customReadinessProbe Custom readinessProbe that overrides the default one
+  ## @param controller.customReadinessProbe Controller custom readinessProbe that overrides the default one
   ##
   customReadinessProbe: {}
+  ## @param controller.customStartupProbe Controller custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
   ## controller resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ## @param controller.resources.limits The resources limits for the controller containers
@@ -501,17 +552,17 @@ controller:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param controller.containerSecurityContext.enabled Enabled controller containers' Security Context
   ## @param controller.containerSecurityContext.runAsUser Set controller containers' Security Context runAsUser
+  ## @param controller.containerSecurityContext.runAsNonRoot Set controller containers' Security Context runAsNonRoot
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
+    runAsNonRoot: true
 
   ## Server container port
-  ## @param controller.containerPorts.controller Argo Workflows controller container port
   ## @param controller.containerPorts.metrics Port to expose controller metrics
   ## @param controller.containerPorts.telemetry Port to expose controller telemetry
   containerPorts:
-    controller: 6060
     metrics: 9090
     telemetry: 8081
 
@@ -758,6 +809,19 @@ controller:
     ## Can be set to RollingUpdate or OnDelete
     ##
     type: RollingUpdate
+  ## @param controller.topologySpreadConstraints Topology spread constraints rely on node labels to identify the topology domain(s) that each Node is in
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+  ##
+  ## topologySpreadConstraints:
+  ##   - maxSkew: 1
+  ##     topologyKey: failure-domain.beta.kubernetes.io/zone
+  ##     whenUnsatisfiable: DoNotSchedule
+  ##
+  topologySpreadConstraints: []
+  ## @param controller.schedulerName Alternate scheduler for the server controller
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
   ## @param controller.priorityClassName controller pods' priorityClassName
   ##
   priorityClassName: ""
@@ -867,7 +931,7 @@ executor:
   image:
     registry: docker.io
     repository: bitnami/argo-workflow-exec
-    tag: 3.1.13-scratch-r1
+    tag: 3.1.13-debian-10-r2
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1019,13 +1083,14 @@ workflows:
 
 ## Postgresql subchart configuration
 ## @param postgresql.enabled Enable PostgreSQL subchart and controller persistence using PostgreSQL
-## @param postgresql.port PostgreSQL port
+## @param postgresql.service.port PostgreSQL port
 ## @param postgresql.postgresqlUsername PostgreSQL username
 ## @param postgresql.postgresqlDatabase PortgreSQL database name
 ##
 postgresql:
   enabled: false
-  port: 5432
+  service:
+    port: 5432
   postgresqlUsername: postgres
   postgresqlDatabase: bn_argo_workflows
 
@@ -1051,7 +1116,7 @@ mysql:
 ## @param externalDatabase.enabled Enable using externaldatabase and the controller to use persistence with it
 ## @param externalDatabase.host External Database server host
 ## @param externalDatabase.port External Database server port
-## @param externalDatabase.user External Database username
+## @param externalDatabase.username External Database username
 ## @param externalDatabase.password External Database user password
 ## @param externalDatabase.database External Database database name
 ## @param externalDatabase.existingSecret The name of an existing secret with database credentials
@@ -1064,7 +1129,7 @@ externalDatabase:
   type: ""
   host: localhost
   port: 3306
-  user: bn_wordpress
+  username: bn_wordpress
   password: ""
   database: bitnami_wordpress
   ## NOTE: Must contain key `database-password`

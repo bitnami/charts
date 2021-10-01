@@ -6,6 +6,8 @@ metadata:
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     rbac.authorization.k8s.io/aggregate-to-view: "true"
+    app.kubernetes.io/part-of: argo-workflows
+    app.kubernetes.io/component: controller
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
@@ -40,6 +42,8 @@ metadata:
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     rbac.authorization.k8s.io/aggregate-to-edit: "true"
+    app.kubernetes.io/part-of: argo-workflows
+    app.kubernetes.io/component: controller
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
@@ -79,6 +83,8 @@ metadata:
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     rbac.authorization.k8s.io/aggregate-to-admin: "true"
+    app.kubernetes.io/part-of: argo-workflows
+    app.kubernetes.io/component: controller
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}

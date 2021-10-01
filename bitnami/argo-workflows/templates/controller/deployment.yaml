@@ -27,12 +27,21 @@ spec:
         {{- if .Values.controller.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.controller.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
+        {{- if .Values.commonAnnotations }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+        {{- end }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: controller
         {{- if .Values.controller.podLabels }}
         {{- include "common.tplvalues.render" (dict "value" .Values.controller.podLabels "context" $) | nindent 8 }}
         {{- end }}
+        {{- if .Values.commonLabels }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+        {{- end }}
     spec:
+      {{- if .Values.controller.schedulerName }}
+      schedulerName: {{ .Values.controller.schedulerName | quote }}
+      {{- end }}
       serviceAccountName: {{ include "argo-workflows.controller.serviceAccountName" . }}
       {{- include "argo-workflows.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.controller.hostAliases }}
@@ -51,6 +60,9 @@ spec:
       {{- end }}
       {{- if .Values.controller.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.controller.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.controller.spreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.controller.spreadConstraints "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.controller.priorityClassName }}
       priorityClassName: {{ .Values.controller.priorityClassName | quote }}
@@ -128,14 +140,16 @@ spec:
             - name: metrics
               containerPort: {{ .Values.controller.containerPorts.metrics }}
             - name: controller
-              containerPort: {{ .Values.controller.containerPorts.controller }}
+              # The controller port is hardcoded in the source code.
+              # Ref: https://github.com/argoproj/argo-workflows/blob/b35aabe86be9fa5db80299cebcfb29c32be21047/cmd/workflow-controller/main.go#L116
+              containerPort: 6060
           {{- if .Values.controller.resources }}
           resources: {{- toYaml .Values.controller.resources | nindent 12 }}
           {{- end }}
           {{- if .Values.controller.livenessProbe.enabled }}
           livenessProbe:
             tcpSocket:
-              port: {{ .Values.controller.containerPorts.controller }}
+              port: 6060
             initialDelaySeconds: {{ .Values.controller.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.controller.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.controller.livenessProbe.timeoutSeconds }}
@@ -147,7 +161,7 @@ spec:
           {{- if .Values.controller.readinessProbe.enabled }}
           readinessProbe:
             tcpSocket:
-              port: {{ .Values.controller.containerPorts.controller }}
+              port: 6060
             initialDelaySeconds: {{ .Values.controller.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.controller.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.controller.readinessProbe.timeoutSeconds }}
@@ -155,6 +169,19 @@ spec:
             failureThreshold: {{ .Values.controller.readinessProbe.failureThreshold }}
           {{- else if .Values.controller.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.controller.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.controller.startupProbe.enabled }}
+          startupProbe:
+            httpGet:
+              path: {{ .Values.controller.startupProbe.path }}
+              port: http
+            initialDelaySeconds: {{ .Values.controller.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.controller.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.controller.startupProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.controller.startupProbe.successThreshold }}
+            failureThreshold: {{ .Values.controller.startupProbe.failureThreshold }}
+          {{- else if .Values.controller.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.controller.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.controller.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.controller.lifecycleHooks "context" $) | nindent 12 }}
