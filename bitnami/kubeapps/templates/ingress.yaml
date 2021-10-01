@@ -9,6 +9,7 @@ metadata:
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" . ) | nindent 4 }}
     {{- end }}
   annotations:
+    {{- if .Values.ingress.certManager }}
     {{- if .Values.ingress.certManager.clusterIssuer }}
     cert-manager.io/cluster-issuer: {{ .Values.ingress.certManager.clusterIssuer }}
     {{- end }}
@@ -17,6 +18,7 @@ metadata:
     {{- end }}
     {{- if .Values.ingress.certManager.commonName }}
     cert-manager.io/common-name: {{ .Values.ingress.certManager.commonName }}
+    {{- end }}
     {{- end }}
     {{- if .Values.ingress.annotations }}
     {{- include "common.tplvalues.render" (dict "value" .Values.ingress.annotations "context" . ) | nindent 4 }}
@@ -49,9 +51,9 @@ spec:
             {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname" $) "servicePort" "http" "context" $)  | nindent 14 }}
     {{- end }}
-  {{- if or (and .Values.ingress.tls (or .Values.ingress.certManager .Values.ingress.selfSigned)) .Values.ingress.extraTls }}
+  {{- if or (and .Values.ingress.tls (or (include "kubeapps.ingress.certManagerRequest" .Values.ingress.annotations) .Values.ingress.selfSigned)) .Values.ingress.extraTls }}
   tls:
-    {{- if and .Values.ingress.tls (or .Values.ingress.certManager .Values.ingress.selfSigned) }}
+    {{- if and .Values.ingress.tls (or (include "kubeapps.ingress.certManagerRequest" .Values.ingress.annotations) .Values.ingress.selfSigned) }}
     - hosts:
         - {{ .Values.ingress.hostname | quote }}
       secretName: {{ printf "%s-tls" .Values.ingress.hostname }}
