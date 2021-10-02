@@ -793,7 +793,7 @@ git:
         ## An unique identifier for repository, must be unique for each repository
         ##
         name: ""
-        ## Path to a folder in the repository containing the dags
+        ## Path to a folder in the repository containing the plugins
         ##
         path: ""
   ## Properties for the Clone init container
