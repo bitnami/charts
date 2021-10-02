@@ -44,7 +44,6 @@ clusterDomain: cluster.local
 ##     labels:
 ##       app.kubernetes.io/component: mongodb
 ##       app.kubernetes.io/managed-by: Helm
-##       app.kubernetes.io/name: mongodb
 ##   spec:
 ##     type: NodePort
 ##     externalTrafficPolicy: Cluster
@@ -56,7 +55,6 @@ clusterDomain: cluster.local
 ##         targetPort: mongodb
 ##     selector:
 ##       app.kubernetes.io/component: mongodb
-##       app.kubernetes.io/name: mongodb
 ##       primary: "true"
 ##
 extraDeploy: []
@@ -520,7 +518,7 @@ initContainers: []
 ##   imagePullPolicy: Always
 ##   env:
 ##     - name: LABEL_SELECTOR
-##       value: "app.kubernetes.io/component=mongodb,app.kubernetes.io/instance=mongodb,app.kubernetes.io/name=mongodb"
+##       value: "app.kubernetes.io/component=mongodb"
 ##     - name: NAMESPACE
 ##       value: "the-mongodb-namespace"
 ##     - name: DEBUG
