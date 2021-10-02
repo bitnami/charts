@@ -35,7 +35,7 @@ clusterDomain: cluster.local
 ## extraDeploy:
 ## This needs to be uncommented and added to 'extraDeploy' in order to use the replicaset 'mongo-labeler' sidecar
 ## for dynamically discovering the mongodb primary pod
-## suggestion is to use a hard-coded and predictable TCP port for the primary mongodb pod (here is 30001, choose your own)
+## suggestion is to use a hard-coded var and predictable TCP port for the primary mongodb pod (here is 30001, choose your own)
 ## - apiVersion: v1
 ##   kind: Service
 ##   metadata:
@@ -43,7 +43,6 @@ clusterDomain: cluster.local
 ##     namespace: the-mongodb-namespace
 ##     labels:
 ##       app.kubernetes.io/component: mongodb
-##       app.kubernetes.io/instance: mongodb
 ##       app.kubernetes.io/managed-by: Helm
 ##       app.kubernetes.io/name: mongodb
 ##   spec:
@@ -57,7 +56,6 @@ clusterDomain: cluster.local
 ##         targetPort: mongodb
 ##     selector:
 ##       app.kubernetes.io/component: mongodb
-##       app.kubernetes.io/instance: mongodb
 ##       app.kubernetes.io/name: mongodb
 ##       primary: "true"
 ##
