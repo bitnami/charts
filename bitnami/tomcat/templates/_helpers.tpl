@@ -55,7 +55,7 @@ Return the proper CATALINA_OPTS value
 Return the proper JMX exporter image name
 */}}
 {{- define "tomcat.metrics.jmx.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.metrics.jmx.image "global" .Values.global) }}
+{{- include "common.images.image" (dict "imageRoot" .Values.metrics.jmx.image "global" .Values.global) -}}
 {{- end -}}
 
 {{/*
