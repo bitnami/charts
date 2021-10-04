@@ -92,7 +92,7 @@ spec:
               }
 
               info "Connecting to the PostgreSQL instance $POSTGRESQL_CLIENT_DATABASE_HOST:$POSTGRESQL_CLIENT_DATABASE_PORT_NUMBER"
-              if ! retry_while "check_postgresql_connection"; then
+              if ! retry_while "check_postgresql_connection" 12 30; then
                   error "Could not connect to the database server"
                   return 1
               else
