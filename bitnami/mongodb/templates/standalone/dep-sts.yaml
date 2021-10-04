@@ -158,7 +158,7 @@ spec:
               DNS.3 = $my_hostname.$svc.$MY_POD_NAMESPACE.svc.cluster.local
               DNS.4 = localhost
               DNS.5 = 127.0.0.1
-             {{- if .Values.tls.extraDnsNames }}
+              {{- if .Values.tls.extraDnsNames }}
               {{- range $key, $dnsName := .Values.tls.extraDnsNames }}
               {{ $key }} = {{ $dnsName }}
               {{- end }}
