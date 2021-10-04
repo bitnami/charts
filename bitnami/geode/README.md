@@ -115,13 +115,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `locator.livenessProbe.enabled`                 | Enable livenessProbe on Locator containers                                                                  | `true`              |
 | `locator.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                     | `30`                |
 | `locator.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                            | `10`                |
-| `locator.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                           | `3`                 |
+| `locator.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                           | `10`                |
 | `locator.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                         | `3`                 |
 | `locator.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                         | `1`                 |
 | `locator.readinessProbe.enabled`                | Enable readinessProbe on Locator containers                                                                 | `true`              |
 | `locator.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                    | `30`                |
 | `locator.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                           | `10`                |
-| `locator.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                          | `3`                 |
+| `locator.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                          | `10`                |
 | `locator.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                        | `3`                 |
 | `locator.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                        | `1`                 |
 | `locator.startupProbe.enabled`                  | Enable startupProbe on Locator containers                                                                   | `false`             |
@@ -206,13 +206,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.livenessProbe.enabled`                 | Enable livenessProbe on Cache server containers                                                                  | `true`              |
 | `server.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                          | `40`                |
 | `server.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                                 | `10`                |
-| `server.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                                | `3`                 |
+| `server.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                                | `10`                |
 | `server.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                              | `3`                 |
 | `server.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                              | `1`                 |
 | `server.readinessProbe.enabled`                | Enable readinessProbe on Cache server containers                                                                 | `true`              |
 | `server.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                         | `40`                |
 | `server.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                                | `10`                |
-| `server.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                               | `4`                 |
+| `server.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                               | `10`                |
 | `server.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                             | `3`                 |
 | `server.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                             | `1`                 |
 | `server.startupProbe.enabled`                  | Enable startupProbe on Cache server containers                                                                   | `false`             |
@@ -274,7 +274,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
 | `ingress.enabled`     | Enable ingress record generation for Apache Geode                                                                                | `false`                  |
 | `ingress.pathType`    | Ingress path type                                                                                                                | `ImplementationSpecific` |
-| `ingress.apiVersion`  | Force Ingress API version (automatically detected if not set)                                                                    | `nil`                    |
+| `ingress.apiVersion`  | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
 | `ingress.hostname`    | Default host for the ingress record                                                                                              | `geode.local`            |
 | `ingress.path`        | Default path for the ingress record                                                                                              | `/pulse`                 |
 | `ingress.annotations` | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
@@ -333,6 +333,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.service.annotations`                   | Annotations for enabling prometheus to access the metrics endpoints              | `{}`                  |
 | `metrics.serviceMonitor.enabled`                | Specify if a ServiceMonitor will be deployed for Prometheus Operator             | `false`               |
 | `metrics.serviceMonitor.namespace`              | Namespace in which Prometheus is running                                         | `""`                  |
+| `metrics.serviceMonitor.labels`                 | Extra labels for the ServiceMonitor                                              | `{}`                  |
 | `metrics.serviceMonitor.jobLabel`               | The name of the label on the target service to use as the job name in Prometheus | `""`                  |
 | `metrics.serviceMonitor.interval`               | How frequently to scrape metrics                                                 | `""`                  |
 | `metrics.serviceMonitor.scrapeTimeout`          | Timeout after which the scrape is ended                                          | `""`                  |
@@ -404,15 +405,21 @@ locator:
 
 Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `XXX.extraEnvVarsCM` or the `XXX.extraEnvVarsSecret` parameters.
 
+> Note: XXX is placeholder you need to replace with the actual component(s).
+
 ### Sidecars
 
-If additional containers are needed in the same pod as geode (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter. If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/infrastructure/geode/administration/configure-use-sidecars/).
+If additional containers are needed in the same pod as geode (such as additional metrics or logging exporters), they can be defined using the `XXX.sidecars` parameter(s). If these sidecars export extra ports, extra port definitions can be added using the `XXX.service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/infrastructure/geode/administration/configure-use-sidecars/).
+
+> Note: XXX is placeholder you need to replace with the actual component(s).
 
 ### Pod affinity
 
 This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
 As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
+
+> Note: XXX is placeholder you need to replace with the actual component(s).
 
 ## Persistence
 

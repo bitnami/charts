@@ -786,7 +786,7 @@ ingress:
   pathType: ImplementationSpecific
   ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
   ##
-  apiVersion:
+  apiVersion: ""
   ## @param ingress.hostname Default host for the ingress record
   ##
   hostname: geode.local
@@ -1009,6 +1009,9 @@ metrics:
     ## @param metrics.serviceMonitor.namespace Namespace in which Prometheus is running
     ##
     namespace: ""
+    ## @param metrics.serviceMonitor.labels Extra labels for the ServiceMonitor
+    ##
+    labels: {}
     ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in Prometheus
     ##
     jobLabel: ""
