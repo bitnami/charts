@@ -12,8 +12,14 @@ metadata:
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
+  {{- if or .Values.arbiter.annotations .Values.commonAnnotations }}
+  annotations:
     {{- if .Values.arbiter.annotations }}
-  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.arbiter.annotations "context" $) | nindent 4 }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.arbiter.annotations "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
   {{- end }}
 spec:
   serviceName: {{ include "mongodb.arbiter.service.nameOverride" . }}

@@ -150,25 +150,25 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Database parameters
 
-| Name                                        | Description                                                                              | Value              |
-| ------------------------------------------- | ---------------------------------------------------------------------------------------- | ------------------ |
-| `mariadb.enabled`                           | Whether to deploy a mariadb server to satisfy the applications database requirements     | `true`             |
-| `mariadb.architecture`                      | MariaDB architecture. Allowed values: `standalone` or `replication`                      | `standalone`       |
-| `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                                                     | `""`               |
-| `mariadb.auth.database`                     | Database name to create                                                                  | `bitnami_owncloud` |
-| `mariadb.auth.username`                     | Database user to create                                                                  | `bn_owncloud`      |
-| `mariadb.auth.password`                     | Password for the database                                                                | `""`               |
-| `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                                                    | `true`             |
-| `mariadb.primary.persistence.storageClass`  | MariaDB primary persistent volume storage Class                                          | `""`               |
-| `mariadb.primary.persistence.accessModes`   | Database Persistent Volume Access Modes                                                  | `[]`               |
-| `mariadb.primary.persistence.size`          | Database Persistent Volume Size                                                          | `8Gi`              |
-| `mariadb.primary.persistence.hostPath`      | Set path in case you want to use local host path volumes (not recommended in production) | `""`               |
-| `mariadb.primary.persistence.existingClaim` | Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas                 | `""`               |
-| `externalDatabase.host`                     | Host of the existing database                                                            | `""`               |
-| `externalDatabase.port`                     | Port of the existing database                                                            | `3306`             |
-| `externalDatabase.user`                     | Existing username in the external db                                                     | `bn_owncloud`      |
-| `externalDatabase.password`                 | Password for the above username                                                          | `""`               |
-| `externalDatabase.database`                 | Name of the existing database                                                            | `bitnami_owncloud` |
+| Name                                        | Description                                                                              | Value               |
+| ------------------------------------------- | ---------------------------------------------------------------------------------------- | ------------------- |
+| `mariadb.enabled`                           | Whether to deploy a mariadb server to satisfy the applications database requirements     | `true`              |
+| `mariadb.architecture`                      | MariaDB architecture. Allowed values: `standalone` or `replication`                      | `standalone`        |
+| `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                                                     | `""`                |
+| `mariadb.auth.database`                     | Database name to create                                                                  | `bitnami_owncloud`  |
+| `mariadb.auth.username`                     | Database user to create                                                                  | `bn_owncloud`       |
+| `mariadb.auth.password`                     | Password for the database                                                                | `""`                |
+| `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                                                    | `true`              |
+| `mariadb.primary.persistence.storageClass`  | MariaDB primary persistent volume storage Class                                          | `""`                |
+| `mariadb.primary.persistence.accessModes`   | Database Persistent Volume Access Modes                                                  | `["ReadWriteOnce"]` |
+| `mariadb.primary.persistence.size`          | Database Persistent Volume Size                                                          | `8Gi`               |
+| `mariadb.primary.persistence.hostPath`      | Set path in case you want to use local host path volumes (not recommended in production) | `""`                |
+| `mariadb.primary.persistence.existingClaim` | Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas                 | `""`                |
+| `externalDatabase.host`                     | Host of the existing database                                                            | `""`                |
+| `externalDatabase.port`                     | Port of the existing database                                                            | `3306`              |
+| `externalDatabase.user`                     | Existing username in the external db                                                     | `bn_owncloud`       |
+| `externalDatabase.password`                 | Password for the above username                                                          | `""`                |
+| `externalDatabase.database`                 | Name of the existing database                                                            | `bitnami_owncloud`  |
 
 
 ### Persistence parameters
@@ -199,26 +199,25 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Traffic Exposure Parameters
 
-| Name                               | Description                                                                                   | Value                    |
-| ---------------------------------- | --------------------------------------------------------------------------------------------- | ------------------------ |
-| `service.type`                     | Kubernetes Service type                                                                       | `LoadBalancer`           |
-| `service.port`                     | Service HTTP port                                                                             | `8080`                   |
-| `service.httpsPort`                | Service HTTPS port                                                                            | `8443`                   |
-| `service.clusterIP`                | Service cluster IP                                                                            | `""`                     |
-| `service.loadBalancerSourceRanges` | Control hosts connecting to "LoadBalancer" only                                               | `[]`                     |
-| `service.loadBalancerIP`           | Load balancer IP for the ownCloud Service (optional, cloud specific)                          | `""`                     |
-| `service.nodePorts.http`           | Kubernetes HTTP node port                                                                     | `""`                     |
-| `service.nodePorts.https`          | Kubernetes HTTPS node port                                                                    | `""`                     |
-| `service.externalTrafficPolicy`    | Enable client source IP preservation                                                          | `Cluster`                |
-| `ingress.enabled`                  | Set to true to enable ingress record generation                                               | `false`                  |
-| `ingress.certManager`              | Set this to true in order to add the corresponding annotations for cert-manager               | `false`                  |
-| `ingress.hostname`                 | Default host for the ingress resource                                                         | `owncloud.local`         |
-| `ingress.pathType`                 | Ingress path type                                                                             | `ImplementationSpecific` |
-| `ingress.annotations`              | Ingress annotations                                                                           | `{}`                     |
-| `ingress.tls`                      | Enable TLS configuration for the hostname defined at ingress.hostname parameter               | `false`                  |
-| `ingress.extraHosts`               | The list of additional hostnames to be covered with this ingress record.                      | `[]`                     |
-| `ingress.extraTls`                 | The tls configuration for additional hostnames to be covered with this ingress record.        | `[]`                     |
-| `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets | `[]`                     |
+| Name                               | Description                                                                                                                      | Value                    |
+| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.type`                     | Kubernetes Service type                                                                                                          | `LoadBalancer`           |
+| `service.port`                     | Service HTTP port                                                                                                                | `8080`                   |
+| `service.httpsPort`                | Service HTTPS port                                                                                                               | `8443`                   |
+| `service.clusterIP`                | Service cluster IP                                                                                                               | `""`                     |
+| `service.loadBalancerSourceRanges` | Control hosts connecting to "LoadBalancer" only                                                                                  | `[]`                     |
+| `service.loadBalancerIP`           | Load balancer IP for the ownCloud Service (optional, cloud specific)                                                             | `""`                     |
+| `service.nodePorts.http`           | Kubernetes HTTP node port                                                                                                        | `""`                     |
+| `service.nodePorts.https`          | Kubernetes HTTPS node port                                                                                                       | `""`                     |
+| `service.externalTrafficPolicy`    | Enable client source IP preservation                                                                                             | `Cluster`                |
+| `ingress.enabled`                  | Set to true to enable ingress record generation                                                                                  | `false`                  |
+| `ingress.hostname`                 | Default host for the ingress resource                                                                                            | `owncloud.local`         |
+| `ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.tls`                      | Enable TLS configuration for the hostname defined at ingress.hostname parameter                                                  | `false`                  |
+| `ingress.extraHosts`               | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
+| `ingress.extraTls`                 | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
+| `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
 
 
 ### Metrics parameters

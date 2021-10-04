@@ -148,52 +148,51 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Traffic Exposure Parameters
 
-| Name                               | Description                                                                                                    | Value                    |
-| ---------------------------------- | -------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `service.type`                     | Service type                                                                                                   | `LoadBalancer`           |
-| `service.port`                     | Service HTTP port                                                                                              | `80`                     |
-| `service.httpsPort`                | Service HTTPS port                                                                                             | `443`                    |
-| `service.clusterIP`                | Service Cluster IP                                                                                             | `""`                     |
-| `service.loadBalancerSourceRanges` | Service load balancer source ranges                                                                            | `[]`                     |
-| `service.loadBalancerIP`           | loadBalancerIP for the Moodle&trade; Service (optional, cloud specific)                                        | `""`                     |
-| `service.nodePorts.http`           | Kubernetes HTTP node port                                                                                      | `""`                     |
-| `service.nodePorts.https`          | Kubernetes HTTPS node port                                                                                     | `""`                     |
-| `service.externalTrafficPolicy`    | Enable client source IP preservation                                                                           | `Cluster`                |
-| `ingress.enabled`                  | Set to true to enable ingress record generation                                                                | `false`                  |
-| `ingress.certManager`              | Set this to true in order to add the corresponding annotations for cert-manager                                | `false`                  |
-| `ingress.pathType`                 | Ingress Path type                                                                                              | `ImplementationSpecific` |
-| `ingress.apiVersion`               | Override API Version (automatically detected if not set)                                                       | `""`                     |
-| `ingress.hostname`                 | When the ingress is enabled, a host pointing to this will be created                                           | `minio.local`            |
-| `ingress.path`                     | The Path to Moodle&trade;. You may need to set this to '/*' in order to use this with ALB ingress controllers. | `/`                      |
-| `ingress.annotations`              | Map of Ingress annotations                                                                                     | `{}`                     |
-| `ingress.tls`                      | Enable TLS configuration for the hostname defined at ingress.hostname parameter                                | `false`                  |
-| `ingress.extraHosts`               | The list of additional hostnames to be covered with this ingress record.                                       | `[]`                     |
-| `ingress.extraPaths`               | Any additional arbitrary paths that may need to be added to the ingress under the main host.                   | `[]`                     |
-| `ingress.extraTls`                 | The tls configuration for additional hostnames to be covered with this ingress record.                         | `[]`                     |
-| `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets                  | `[]`                     |
+| Name                               | Description                                                                                                                      | Value                    |
+| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.type`                     | Service type                                                                                                                     | `LoadBalancer`           |
+| `service.port`                     | Service HTTP port                                                                                                                | `80`                     |
+| `service.httpsPort`                | Service HTTPS port                                                                                                               | `443`                    |
+| `service.clusterIP`                | Service Cluster IP                                                                                                               | `""`                     |
+| `service.loadBalancerSourceRanges` | Service load balancer source ranges                                                                                              | `[]`                     |
+| `service.loadBalancerIP`           | loadBalancerIP for the Moodle&trade; Service (optional, cloud specific)                                                          | `""`                     |
+| `service.nodePorts.http`           | Kubernetes HTTP node port                                                                                                        | `""`                     |
+| `service.nodePorts.https`          | Kubernetes HTTPS node port                                                                                                       | `""`                     |
+| `service.externalTrafficPolicy`    | Enable client source IP preservation                                                                                             | `Cluster`                |
+| `ingress.enabled`                  | Set to true to enable ingress record generation                                                                                  | `false`                  |
+| `ingress.pathType`                 | Ingress Path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.apiVersion`               | Override API Version (automatically detected if not set)                                                                         | `""`                     |
+| `ingress.hostname`                 | When the ingress is enabled, a host pointing to this will be created                                                             | `minio.local`            |
+| `ingress.path`                     | The Path to Moodle&trade;. You may need to set this to '/*' in order to use this with ALB ingress controllers.                   | `/`                      |
+| `ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.tls`                      | Enable TLS configuration for the hostname defined at ingress.hostname parameter                                                  | `false`                  |
+| `ingress.extraHosts`               | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
+| `ingress.extraPaths`               | Any additional arbitrary paths that may need to be added to the ingress under the main host.                                     | `[]`                     |
+| `ingress.extraTls`                 | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
+| `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
 
 
 ### Database parameters
 
-| Name                                        | Description                                                                              | Value            |
-| ------------------------------------------- | ---------------------------------------------------------------------------------------- | ---------------- |
-| `mariadb.enabled`                           | Whether to deploy a mariadb server to satisfy the applications database requirements     | `true`           |
-| `mariadb.architecture`                      | MariaDB architecture (`standalone` or `replication`)                                     | `standalone`     |
-| `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                                                     | `""`             |
-| `mariadb.auth.database`                     | Database name to create                                                                  | `bitnami_moodle` |
-| `mariadb.auth.username`                     | Database user to create                                                                  | `bn_moodle`      |
-| `mariadb.auth.password`                     | Password for the database                                                                | `""`             |
-| `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                                                    | `true`           |
-| `mariadb.primary.persistence.storageClass`  | MariaDB primary persistent volume storage Class                                          | `""`             |
-| `mariadb.primary.persistence.accessModes`   | PVC Access Modes for Moodle&trade; volume                                                | `[]`             |
-| `mariadb.primary.persistence.size`          | Database Persistent Volume Size                                                          | `8Gi`            |
-| `mariadb.primary.persistence.hostPath`      | Set path in case you want to use local host path volumes (not recommended in production) | `""`             |
-| `mariadb.primary.persistence.existingClaim` | Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas                 | `""`             |
-| `externalDatabase.host`                     | Host of the existing database                                                            | `""`             |
-| `externalDatabase.port`                     | Port of the existing database                                                            | `3306`           |
-| `externalDatabase.user`                     | Existing username in the external db                                                     | `bn_moodle`      |
-| `externalDatabase.password`                 | Password for the above username                                                          | `""`             |
-| `externalDatabase.database`                 | Name of the existing database                                                            | `bitnami_moodle` |
+| Name                                        | Description                                                                              | Value               |
+| ------------------------------------------- | ---------------------------------------------------------------------------------------- | ------------------- |
+| `mariadb.enabled`                           | Whether to deploy a mariadb server to satisfy the applications database requirements     | `true`              |
+| `mariadb.architecture`                      | MariaDB architecture (`standalone` or `replication`)                                     | `standalone`        |
+| `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                                                     | `""`                |
+| `mariadb.auth.database`                     | Database name to create                                                                  | `bitnami_moodle`    |
+| `mariadb.auth.username`                     | Database user to create                                                                  | `bn_moodle`         |
+| `mariadb.auth.password`                     | Password for the database                                                                | `""`                |
+| `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                                                    | `true`              |
+| `mariadb.primary.persistence.storageClass`  | MariaDB primary persistent volume storage Class                                          | `""`                |
+| `mariadb.primary.persistence.accessModes`   | PVC Access Modes for Moodle&trade; volume                                                | `["ReadWriteOnce"]` |
+| `mariadb.primary.persistence.size`          | Database Persistent Volume Size                                                          | `8Gi`               |
+| `mariadb.primary.persistence.hostPath`      | Set path in case you want to use local host path volumes (not recommended in production) | `""`                |
+| `mariadb.primary.persistence.existingClaim` | Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas                 | `""`                |
+| `externalDatabase.host`                     | Host of the existing database                                                            | `""`                |
+| `externalDatabase.port`                     | Port of the existing database                                                            | `3306`              |
+| `externalDatabase.user`                     | Existing username in the external db                                                     | `bn_moodle`         |
+| `externalDatabase.password`                 | Password for the above username                                                          | `""`                |
+| `externalDatabase.database`                 | Name of the existing database                                                            | `bitnami_moodle`    |
 
 
 ### Volume Permissions parameters

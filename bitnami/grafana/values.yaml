@@ -47,7 +47,7 @@ clusterDomain: cluster.local
 image:
   registry: docker.io
   repository: bitnami/grafana
-  tag: 8.1.4-debian-10-r0
+  tag: 8.1.5-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -112,14 +112,32 @@ smtp:
 ##
 plugins: ""
 ## Ldap configuration for Grafana
-## @param ldap.enabled Enable LDAP for Grafana
-## @param ldap.allowSignUp Allows LDAP sign up for Grafana
-## @param ldap.configMapName Name of the ConfigMap with the LDAP configuration file for Grafana
 ##
 ldap:
+  ## @param ldap.enabled Enable LDAP for Grafana
+  ##
   enabled: false
+  ## @param ldap.allowSignUp Allows LDAP sign up for Grafana
+  ##
   allowSignUp: false
+  ## @param ldap.configuration Specify content for ldap.toml configuration file
+  ## e.g:
+  ## configuration: |-
+  ##   [[servers]]
+  ##   host = "127.0.0.1"
+  ##   port = 389
+  ##   use_ssl = false
+  ##   ...
+  ##
+  configuration: ""
+  ## @param ldap.configMapName Name of the ConfigMap with the ldap.toml configuration file for Grafana
+  ## NOTE: When it's set the ldap.configuration parameter is ignored
+  ##
   configMapName: ""
+  ## @param ldap.secretName Name of the Secret with the ldap.toml configuration file for Grafana
+  ## NOTE: When it's set the ldap.configuration parameter is ignored
+  ##
+  secretName: ""
 ## @param extraEnvVars Array containing extra env vars to configure Grafana
 ## For example:
 ## extraEnvVars:
@@ -283,6 +301,7 @@ resources:
 ## Grafana containers' liveness probe
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param livenessProbe.enabled Enable livenessProbe
+## @param livenessProbe.scheme Scheme for livenessProbe
 ## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
 ## @param livenessProbe.periodSeconds Period seconds for livenessProbe
 ## @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
@@ -291,6 +310,7 @@ resources:
 ##
 livenessProbe:
   enabled: true
+  scheme: HTTP
   initialDelaySeconds: 120
   periodSeconds: 10
   timeoutSeconds: 5
@@ -299,6 +319,7 @@ livenessProbe:
 ## Grafana containers' readinessProbe probe
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param readinessProbe.enabled Enable readinessProbe
+## @param readinessProbe.scheme Scheme for readinessProbe
 ## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
 ## @param readinessProbe.periodSeconds Period seconds for readinessProbe
 ## @param readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
@@ -307,6 +328,7 @@ livenessProbe:
 ##
 readinessProbe:
   enabled: true
+  scheme: HTTP
   initialDelaySeconds: 30
   periodSeconds: 10
   timeoutSeconds: 5
@@ -411,9 +433,10 @@ ingress:
   ## @param ingress.enabled Set to true to enable ingress record generation
   ##
   enabled: false
-  ## @param ingress.certManager Set this to true in order to add the corresponding annotations for cert-manager
+  ## DEPRECATED: Use ingress.annotations instead of ingress.certManager
+  ## certManager: false
   ##
-  certManager: false
+
   ## @param ingress.pathType Ingress Path type
   ##
   pathType: ImplementationSpecific
@@ -427,11 +450,16 @@ ingress:
   ## The Path to Grafana. You may need to set this to '/*' in order to use this with ALB ingress controllers.
   ##
   path: /
-  ## @param ingress.annotations Ingress annotations
+  ## @param ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
   ## For a full list of possible ingress annotations, please see
   ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+  ## Use this parameter to set the required annotations for cert-manager, see
+  ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
   ##
-  ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+  ## e.g:
+  ## annotations:
+  ##   kubernetes.io/ingress.class: nginx
+  ##   cert-manager.io/cluster-issuer: cluster-issuer-name
   ##
   annotations: {}
   ## @param ingress.tls Enable TLS configuration for the hostname defined at ingress.hostname parameter
@@ -539,7 +567,7 @@ imageRenderer:
   image:
     registry: docker.io
     repository: bitnami/grafana-image-renderer
-    tag: 3.1.0-debian-10-r14
+    tag: 3.2.0-debian-10-r4
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images

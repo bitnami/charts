@@ -158,42 +158,40 @@ The command removes all the Kubernetes components associated with the chart and 
 | `appFromExternalRepo.publish.image.pullSecrets` | .NET SDK image pull secrets                                            | `[]`                                                                |
 | `appFromExternalRepo.publish.subFolder`         | Sub folder under the Git repository containing the ASP.NET Core app    | `aspnetcore/fundamentals/servers/kestrel/samples/3.x/KestrelSample` |
 | `appFromExternalRepo.publish.extraFlags`        | Extra flags to be appended to "dotnet publish" command                 | `[]`                                                                |
-| `appFromExternalRepo.startCommand`              | Command used to start ASP.NET Core app                                 | `[]`                                                                |
+| `appFromExternalRepo.startCommand`              | Command used to start ASP.NET Core app                                 | `["dotnet","KestrelSample.dll"]`                                    |
 | `appFromExistingPVC.enabled`                    | Enable mounting your ASP.NET Core app from an existing PVC             | `false`                                                             |
 | `appFromExistingPVC.existingClaim`              | A existing Persistent Volume Claim containing your ASP.NET Core app    | `""`                                                                |
 
 
 ### Traffic Exposure Parameters
 
-| Name                               | Description                                                                         | Value                    |
-| ---------------------------------- | ----------------------------------------------------------------------------------- | ------------------------ |
-| `service.type`                     | ASP.NET Core service type                                                           | `ClusterIP`              |
-| `service.port`                     | ASP.NET Core service HTTP port                                                      | `80`                     |
-| `service.nodePort`                 | Node ports to expose                                                                | `""`                     |
-| `service.clusterIP`                | ASP.NET Core service Cluster IP                                                     | `""`                     |
-| `service.loadBalancerIP`           | ASP.NET Core service Load Balancer IP                                               | `""`                     |
-| `service.loadBalancerSourceRanges` | ASP.NET Core service Load Balancer sources                                          | `[]`                     |
-| `service.externalTrafficPolicy`    | ASP.NET Core service external traffic policy                                        | `Cluster`                |
-| `service.annotations`              | Additional custom annotations for ASP.NET Core service                              | `{}`                     |
-| `ingress.enabled`                  | Enable ingress record generation for ASP.NET Core                                   | `false`                  |
-| `ingress.pathType`                 | Ingress path type                                                                   | `ImplementationSpecific` |
-| `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                       | `""`                     |
-| `ingress.hostname`                 | Default host for the ingress resource, a host pointing to this will be created      | `aspnet-core.local`      |
-| `ingress.path`                     | Default path for the ingress record                                                 | `/`                      |
-| `ingress.annotations`              | Additional custom annotations for the ingress record                                | `{}`                     |
-| `ingress.tls`                      | Enable TLS configuration for the host defined at `ingress.hostname` parameter       | `false`                  |
-| `ingress.certManager`              | Add the corresponding annotations for cert-manager integration                      | `false`                  |
-| `ingress.extraHosts`               | An array with additional hostname(s) to be covered with the ingress record          | `[]`                     |
-| `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record | `[]`                     |
-| `ingress.secrets`                  | Custom TLS certificates as secrets                                                  | `[]`                     |
-| `healthIngress.enabled`            | Enable healthIngress record generation for ASP.NET Core                             | `false`                  |
-| `healthIngress.hostname`           | When the health ingress is enabled, a host pointing to this will be created         | `aspnet-core.local`      |
-| `healthIngress.annotations`        | Additional custom annotations for the ingress record                                | `{}`                     |
-| `healthIngress.tls`                | Enable TLS configuration for the host defined at `ingress.hostname` parameter       | `false`                  |
-| `healthIngress.certManager`        | Set this to true in order to add the corresponding annotations for cert-manager     | `false`                  |
-| `healthIngress.extraHosts`         | n array with additional hostname(s) to be covered with the ingress record           | `[]`                     |
-| `healthIngress.extraTls`           | TLS configuration for additional hostname(s) to be covered with this ingress record | `[]`                     |
-| `healthIngress.secrets`            | Custom TLS certificates as secrets                                                  | `[]`                     |
+| Name                               | Description                                                                                                                      | Value                    |
+| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.type`                     | ASP.NET Core service type                                                                                                        | `ClusterIP`              |
+| `service.port`                     | ASP.NET Core service HTTP port                                                                                                   | `80`                     |
+| `service.nodePort`                 | Node ports to expose                                                                                                             | `""`                     |
+| `service.clusterIP`                | ASP.NET Core service Cluster IP                                                                                                  | `""`                     |
+| `service.loadBalancerIP`           | ASP.NET Core service Load Balancer IP                                                                                            | `""`                     |
+| `service.loadBalancerSourceRanges` | ASP.NET Core service Load Balancer sources                                                                                       | `[]`                     |
+| `service.externalTrafficPolicy`    | ASP.NET Core service external traffic policy                                                                                     | `Cluster`                |
+| `service.annotations`              | Additional custom annotations for ASP.NET Core service                                                                           | `{}`                     |
+| `ingress.enabled`                  | Enable ingress record generation for ASP.NET Core                                                                                | `false`                  |
+| `ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
+| `ingress.hostname`                 | Default host for the ingress resource, a host pointing to this will be created                                                   | `aspnet-core.local`      |
+| `ingress.path`                     | Default path for the ingress record                                                                                              | `/`                      |
+| `ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.tls`                      | Enable TLS configuration for the host defined at `ingress.hostname` parameter                                                    | `false`                  |
+| `ingress.extraHosts`               | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                     |
+| `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
+| `ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
+| `healthIngress.enabled`            | Enable healthIngress record generation for ASP.NET Core                                                                          | `false`                  |
+| `healthIngress.hostname`           | When the health ingress is enabled, a host pointing to this will be created                                                      | `aspnet-core.local`      |
+| `healthIngress.annotations`        | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `healthIngress.tls`                | Enable TLS configuration for the host defined at `ingress.hostname` parameter                                                    | `false`                  |
+| `healthIngress.extraHosts`         | n array with additional hostname(s) to be covered with the ingress record                                                        | `[]`                     |
+| `healthIngress.extraTls`           | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
+| `healthIngress.secrets`            | Custom TLS certificates as secrets                                                                                               | `[]`                     |
 
 
 ### RBAC parameters

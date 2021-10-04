@@ -73,7 +73,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------- | ------------------------------------------------------------------------------------------------------ | --------------------- |
 | `server.image.registry`                     | Parse image registry                                                                                   | `docker.io`           |
 | `server.image.repository`                   | Parse image repository                                                                                 | `bitnami/parse`       |
-| `server.image.tag`                          | Parse image tag (immutable tags are recommended)                                                       | `4.10.3-debian-10-r0` |
+| `server.image.tag`                          | Parse image tag (immutable tags are recommended)                                                       | `4.10.4-debian-10-r0` |
 | `server.image.pullPolicy`                   | Image pull policy                                                                                      | `IfNotPresent`        |
 | `server.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                       | `[]`                  |
 | `server.hostAliases`                        | Deployment pod host aliases                                                                            | `[]`                  |
@@ -115,28 +115,27 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Traffic Exposure Parameters
 
-| Name                            | Description                                                                                                | Value                    |
-| ------------------------------- | ---------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `service.type`                  | Kubernetes Service type                                                                                    | `LoadBalancer`           |
-| `service.port`                  | Service HTTP port (Dashboard)                                                                              | `80`                     |
-| `service.nodePorts.http`        | Kubernetes HTTP node port                                                                                  | `""`                     |
-| `service.externalTrafficPolicy` | Enable client source IP preservation                                                                       | `Cluster`                |
-| `ingress.enabled`               | Set to true to enable ingress record generation                                                            | `false`                  |
-| `ingress.certManager`           | Set this to true in order to add the corresponding annotations for cert-manager                            | `false`                  |
-| `ingress.tls`                   | Enable TLS configuration for the hostname defined at ingress.hostname parameter                            | `false`                  |
-| `ingress.annotations`           | Ingress annotations                                                                                        | `{}`                     |
-| `ingress.dashboard.hostname`    | Default host for the ingress resource                                                                      | `parse-dashboard.local`  |
-| `ingress.dashboard.path`        | The Path to WordPress. You may need to set this to '/*' in order to use this with ALB ingress controllers. | `/`                      |
-| `ingress.dashboard.pathType`    | Ingress path type                                                                                          | `ImplementationSpecific` |
-| `ingress.dashboard.extraHosts`  | The list of additional hostnames to be covered with this ingress record.                                   | `[]`                     |
-| `ingress.dashboard.extraPaths`  | Any additional arbitrary paths that may need to be added to the ingress under the main host.               | `[]`                     |
-| `ingress.server.hostname`       | Default host for the ingress resource                                                                      | `parse-server.local`     |
-| `ingress.server.path`           | Default path for the ingress resource*' in order to use this with ALB ingress controllers.                 | `/`                      |
-| `ingress.server.pathType`       | Ingress path type                                                                                          | `ImplementationSpecific` |
-| `ingress.server.extraHosts`     | The list of additional hostnames to be covered with this ingress record.                                   | `[]`                     |
-| `ingress.server.extraPaths`     | Any additional arbitrary paths that may need to be added to the ingress under the main host.               | `[]`                     |
-| `ingress.extraTls`              | The tls configuration for additional hostnames to be covered with this ingress record.                     | `[]`                     |
-| `ingress.secrets`               | If you're providing your own certificates, please use this to add the certificates as secrets              | `[]`                     |
+| Name                            | Description                                                                                                                      | Value                    |
+| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.type`                  | Kubernetes Service type                                                                                                          | `LoadBalancer`           |
+| `service.port`                  | Service HTTP port (Dashboard)                                                                                                    | `80`                     |
+| `service.nodePorts.http`        | Kubernetes HTTP node port                                                                                                        | `""`                     |
+| `service.externalTrafficPolicy` | Enable client source IP preservation                                                                                             | `Cluster`                |
+| `ingress.enabled`               | Set to true to enable ingress record generation                                                                                  | `false`                  |
+| `ingress.tls`                   | Enable TLS configuration for the hostname defined at ingress.hostname parameter                                                  | `false`                  |
+| `ingress.annotations`           | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.dashboard.hostname`    | Default host for the ingress resource                                                                                            | `parse-dashboard.local`  |
+| `ingress.dashboard.path`        | The Path to WordPress. You may need to set this to '/*' in order to use this with ALB ingress controllers.                       | `/`                      |
+| `ingress.dashboard.pathType`    | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.dashboard.extraHosts`  | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
+| `ingress.dashboard.extraPaths`  | Any additional arbitrary paths that may need to be added to the ingress under the main host.                                     | `[]`                     |
+| `ingress.server.hostname`       | Default host for the ingress resource                                                                                            | `parse-server.local`     |
+| `ingress.server.path`           | Default path for the ingress resource*' in order to use this with ALB ingress controllers.                                       | `/`                      |
+| `ingress.server.pathType`       | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.server.extraHosts`     | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
+| `ingress.server.extraPaths`     | Any additional arbitrary paths that may need to be added to the ingress under the main host.                                     | `[]`                     |
+| `ingress.extraTls`              | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
+| `ingress.secrets`               | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
 
 
 ### Persistence Parameters
@@ -156,7 +155,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dashboard.enabled`                            | Enable parse dashboard                                                                                    | `true`                    |
 | `dashboard.image.registry`                     | Dashboard image registry                                                                                  | `docker.io`               |
 | `dashboard.image.repository`                   | Dashboard image repository                                                                                | `bitnami/parse-dashboard` |
-| `dashboard.image.tag`                          | Dashboard image tag (immutable tags are recommended)                                                      | `2.2.0-debian-10-r6`      |
+| `dashboard.image.tag`                          | Dashboard image tag (immutable tags are recommended)                                                      | `2.2.0-debian-10-r35`     |
 | `dashboard.image.pullPolicy`                   | Image pull policy                                                                                         | `IfNotPresent`            |
 | `dashboard.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                          | `[]`                      |
 | `dashboard.hostAliases`                        | Deployment pod host aliases                                                                               | `[]`                      |
@@ -200,7 +199,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`           | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
 | `volumePermissions.image.registry`    | Init container volume-permissions image registry                                                                                                          | `docker.io`             |
 | `volumePermissions.image.repository`  | Init container volume-permissions image name                                                                                                              | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                                                                               | `10-debian-10-r180`     |
+| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                                                                               | `10-debian-10-r207`     |
 | `volumePermissions.image.pullPolicy`  | Init container volume-permissions image pull policy                                                                                                       | `Always`                |
 | `volumePermissions.image.pullSecrets` | Init container volume-permissions image pull secrets                                                                                                      | `[]`                    |
 | `volumePermissions.resources`         | The resources for the container                                                                                                                           | `{}`                    |

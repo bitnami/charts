@@ -65,7 +65,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ---------------------------------------- | -------------------------------------------------------------------- | ---------------------- |
 | `image.registry`                         | Kubewatch image registry                                             | `docker.io`            |
 | `image.repository`                       | Kubewatch image repository                                           | `bitnami/kubewatch`    |
-| `image.tag`                              | Kubewatch image tag (immutable tags are recommended)                 | `0.1.0-debian-10-r368` |
+| `image.tag`                              | Kubewatch image tag (immutable tags are recommended)                 | `0.1.0-debian-10-r398` |
 | `image.pullPolicy`                       | Kubewatch image pull policy                                          | `IfNotPresent`         |
 | `image.pullSecrets`                      | Specify docker-registry secret names as an array                     | `[]`                   |
 | `hostAliases`                            | Add deployment host aliases                                          | `[]`                   |

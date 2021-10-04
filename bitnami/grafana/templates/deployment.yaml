@@ -125,7 +125,7 @@ spec:
             - name: datasources
               mountPath: /opt/bitnami/grafana/conf/provisioning/datasources
             {{- end }}
-            {{- if and .Values.ldap.enabled .Values.ldap.configMapName }}
+            {{- if .Values.ldap.enabled }}
             - name: ldap
               mountPath: /opt/bitnami/grafana/conf/ldap.toml
               subPath: ldap.toml
@@ -148,6 +148,7 @@ spec:
             httpGet:
               path: /api/health
               port: dashboard
+              scheme: {{ .Values.livenessProbe.scheme }}
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
@@ -159,6 +160,7 @@ spec:
             httpGet:
               path: /api/health
               port: dashboard
+              scheme: {{ .Values.readinessProbe.scheme }}
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
@@ -177,10 +179,18 @@ spec:
           persistentVolumeClaim:
             claimName: {{ .Values.persistence.existingClaim | default (include "common.names.fullname" .) }}
         {{- end }}
-        {{- if and .Values.ldap.enabled .Values.ldap.configMapName }}
+        {{- if .Values.ldap.enabled }}
         - name: ldap
+          {{- if not (empty .Values.ldap.configMapName) }}
           configMap:
             name: {{ .Values.ldap.configMapName }}
+          {{- else if not (empty .Values.ldap.secretName) }}
+          secret:
+            secretName: {{ .Values.ldap.secretName }}
+          {{- else }}
+          secret:
+            secretName: {{ printf "%s-ldap-conf" (include "common.names.fullname" .) }}
+          {{- end }}
         {{- end }}
         {{- if .Values.dashboardsProvider.enabled }}
         - name: dashboards-provider

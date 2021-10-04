@@ -60,7 +60,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | -------------------------------------------------------------- | -------------------- |
 | `image.registry`    | RabbitMQ image registry                                        | `docker.io`          |
 | `image.repository`  | RabbitMQ image repository                                      | `bitnami/rabbitmq`   |
-| `image.tag`         | RabbitMQ image tag (immutable tags are recommended)            | `3.9.6-debian-10-r0` |
+| `image.tag`         | RabbitMQ image tag (immutable tags are recommended)            | `3.9.7-debian-10-r0` |
 | `image.pullPolicy`  | RabbitMQ image pull policy                                     | `IfNotPresent`       |
 | `image.pullSecrets` | Specify docker-registry secret names as an array               | `[]`                 |
 | `image.debug`       | Set to true if you would like to see extra information on logs | `false`              |
@@ -76,8 +76,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `clusterDomain`                    | Kubernetes Cluster Domain                                                                                                                | `cluster.local`                                   |
 | `extraDeploy`                      | Array of extra objects to deploy with the release                                                                                        | `[]`                                              |
 | `diagnosticMode.enabled`           | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                                                  | `false`                                           |
-| `diagnosticMode.command`           | Command to override all containers in the deployment                                                                                     | `[]`                                              |
-| `diagnosticMode.args`              | Args to override all containers in the deployment                                                                                        | `[]`                                              |
+| `diagnosticMode.command`           | Command to override all containers in the deployment                                                                                     | `["sleep"]`                                       |
+| `diagnosticMode.args`              | Args to override all containers in the deployment                                                                                        | `["infinity"]`                                    |
 | `hostAliases`                      | Deployment pod host aliases                                                                                                              | `[]`                                              |
 | `commonAnnotations`                | Annotations to add to all deployed objects                                                                                               | `{}`                                              |
 | `auth.username`                    | RabbitMQ application username                                                                                                            | `user`                                            |
@@ -205,51 +205,50 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Exposure parameters
 
-| Name                               | Description                                                                                                             | Value                    |
-| ---------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `service.type`                     | Kubernetes Service type                                                                                                 | `ClusterIP`              |
-| `service.portEnabled`              | Amqp port. Cannot be disabled when `auth.tls.enabled` is `false`. Listener can be disabled with `listeners.tcp = none`. | `true`                   |
-| `service.port`                     | Amqp port                                                                                                               | `5672`                   |
-| `service.portName`                 | Amqp service port name                                                                                                  | `amqp`                   |
-| `service.tlsPort`                  | Amqp TLS port                                                                                                           | `5671`                   |
-| `service.tlsPortName`              | Amqp TLS service port name                                                                                              | `amqp-ssl`               |
-| `service.nodePort`                 | Node port override for `amqp` port, if serviceType is `NodePort` or `LoadBalancer`                                      | `""`                     |
-| `service.tlsNodePort`              | Node port override for `amqp-ssl` port, if serviceType is `NodePort` or `LoadBalancer`                                  | `""`                     |
-| `service.distPort`                 | Erlang distribution server port                                                                                         | `25672`                  |
-| `service.distPortName`             | Erlang distribution service port name                                                                                   | `dist`                   |
-| `service.distNodePort`             | Node port override for `dist` port, if serviceType is `NodePort`                                                        | `""`                     |
-| `service.managerPortEnabled`       | RabbitMQ Manager port                                                                                                   | `true`                   |
-| `service.managerPort`              | RabbitMQ Manager port                                                                                                   | `15672`                  |
-| `service.managerPortName`          | RabbitMQ Manager service port name                                                                                      | `http-stats`             |
-| `service.managerNodePort`          | Node port override for `http-stats` port, if serviceType `NodePort`                                                     | `""`                     |
-| `service.metricsPort`              | RabbitMQ Prometheues metrics port                                                                                       | `9419`                   |
-| `service.metricsPortName`          | RabbitMQ Prometheues metrics service port name                                                                          | `metrics`                |
-| `service.metricsNodePort`          | Node port override for `metrics` port, if serviceType is `NodePort`                                                     | `""`                     |
-| `service.epmdNodePort`             | Node port override for `epmd` port, if serviceType is `NodePort`                                                        | `""`                     |
-| `service.epmdPortName`             | EPMD Discovery service port name                                                                                        | `epmd`                   |
-| `service.extraPorts`               | Extra ports to expose in the service                                                                                    | `[]`                     |
-| `service.loadBalancerSourceRanges` | Address(es) that are allowed when service is `LoadBalancer`                                                             | `[]`                     |
-| `service.externalIPs`              | Set the ExternalIPs                                                                                                     | `[]`                     |
-| `service.externalTrafficPolicy`    | Enable client source IP preservation                                                                                    | `Cluster`                |
-| `service.loadBalancerIP`           | Set the LoadBalancerIP                                                                                                  | `""`                     |
-| `service.labels`                   | Service labels. Evaluated as a template                                                                                 | `{}`                     |
-| `service.annotations`              | Service annotations. Evaluated as a template                                                                            | `{}`                     |
-| `service.annotationsHeadless`      | Headless Service annotations. Evaluated as a template                                                                   | `{}`                     |
-| `ingress.enabled`                  | Enable ingress resource for Management console                                                                          | `false`                  |
-| `ingress.path`                     | Path for the default host. You may need to set this to '/*' in order to use this with ALB ingress controllers.          | `/`                      |
-| `ingress.pathType`                 | Ingress path type                                                                                                       | `ImplementationSpecific` |
-| `ingress.hostname`                 | Default host for the ingress resource                                                                                   | `rabbitmq.local`         |
-| `ingress.annotations`              | Ingress annotations                                                                                                     | `{}`                     |
-| `ingress.tls`                      | Enable TLS configuration for the hostname defined at `ingress.hostname` parameter                                       | `false`                  |
-| `ingress.certManager`              | Set this to true in order to add the corresponding annotations for cert-manager                                         | `false`                  |
-| `ingress.selfSigned`               | Set this to true in order to create a TLS secret for this ingress record                                                | `false`                  |
-| `ingress.extraHosts`               | The list of additional hostnames to be covered with this ingress record.                                                | `[]`                     |
-| `ingress.extraTls`                 | The tls configuration for additional hostnames to be covered with this ingress record.                                  | `[]`                     |
-| `ingress.secrets`                  | Custom TLS certificates as secrets                                                                                      | `[]`                     |
-| `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                           | `""`                     |
-| `networkPolicy.enabled`            | Enable creation of NetworkPolicy resources                                                                              | `false`                  |
-| `networkPolicy.allowExternal`      | Don't require client label for connections                                                                              | `true`                   |
-| `networkPolicy.additionalRules`    | Additional NetworkPolicy Ingress "from" rules to set. Note that all rules are OR-ed.                                    | `[]`                     |
+| Name                               | Description                                                                                                                      | Value                    |
+| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.type`                     | Kubernetes Service type                                                                                                          | `ClusterIP`              |
+| `service.portEnabled`              | Amqp port. Cannot be disabled when `auth.tls.enabled` is `false`. Listener can be disabled with `listeners.tcp = none`.          | `true`                   |
+| `service.port`                     | Amqp port                                                                                                                        | `5672`                   |
+| `service.portName`                 | Amqp service port name                                                                                                           | `amqp`                   |
+| `service.tlsPort`                  | Amqp TLS port                                                                                                                    | `5671`                   |
+| `service.tlsPortName`              | Amqp TLS service port name                                                                                                       | `amqp-ssl`               |
+| `service.nodePort`                 | Node port override for `amqp` port, if serviceType is `NodePort` or `LoadBalancer`                                               | `""`                     |
+| `service.tlsNodePort`              | Node port override for `amqp-ssl` port, if serviceType is `NodePort` or `LoadBalancer`                                           | `""`                     |
+| `service.distPort`                 | Erlang distribution server port                                                                                                  | `25672`                  |
+| `service.distPortName`             | Erlang distribution service port name                                                                                            | `dist`                   |
+| `service.distNodePort`             | Node port override for `dist` port, if serviceType is `NodePort`                                                                 | `""`                     |
+| `service.managerPortEnabled`       | RabbitMQ Manager port                                                                                                            | `true`                   |
+| `service.managerPort`              | RabbitMQ Manager port                                                                                                            | `15672`                  |
+| `service.managerPortName`          | RabbitMQ Manager service port name                                                                                               | `http-stats`             |
+| `service.managerNodePort`          | Node port override for `http-stats` port, if serviceType `NodePort`                                                              | `""`                     |
+| `service.metricsPort`              | RabbitMQ Prometheues metrics port                                                                                                | `9419`                   |
+| `service.metricsPortName`          | RabbitMQ Prometheues metrics service port name                                                                                   | `metrics`                |
+| `service.metricsNodePort`          | Node port override for `metrics` port, if serviceType is `NodePort`                                                              | `""`                     |
+| `service.epmdNodePort`             | Node port override for `epmd` port, if serviceType is `NodePort`                                                                 | `""`                     |
+| `service.epmdPortName`             | EPMD Discovery service port name                                                                                                 | `epmd`                   |
+| `service.extraPorts`               | Extra ports to expose in the service                                                                                             | `[]`                     |
+| `service.loadBalancerSourceRanges` | Address(es) that are allowed when service is `LoadBalancer`                                                                      | `[]`                     |
+| `service.externalIPs`              | Set the ExternalIPs                                                                                                              | `[]`                     |
+| `service.externalTrafficPolicy`    | Enable client source IP preservation                                                                                             | `Cluster`                |
+| `service.loadBalancerIP`           | Set the LoadBalancerIP                                                                                                           | `""`                     |
+| `service.labels`                   | Service labels. Evaluated as a template                                                                                          | `{}`                     |
+| `service.annotations`              | Service annotations. Evaluated as a template                                                                                     | `{}`                     |
+| `service.annotationsHeadless`      | Headless Service annotations. Evaluated as a template                                                                            | `{}`                     |
+| `ingress.enabled`                  | Enable ingress resource for Management console                                                                                   | `false`                  |
+| `ingress.path`                     | Path for the default host. You may need to set this to '/*' in order to use this with ALB ingress controllers.                   | `/`                      |
+| `ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.hostname`                 | Default host for the ingress resource                                                                                            | `rabbitmq.local`         |
+| `ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.tls`                      | Enable TLS configuration for the hostname defined at `ingress.hostname` parameter                                                | `false`                  |
+| `ingress.selfSigned`               | Set this to true in order to create a TLS secret for this ingress record                                                         | `false`                  |
+| `ingress.extraHosts`               | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
+| `ingress.extraTls`                 | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
+| `ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
+| `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
+| `networkPolicy.enabled`            | Enable creation of NetworkPolicy resources                                                                                       | `false`                  |
+| `networkPolicy.allowExternal`      | Don't require client label for connections                                                                                       | `true`                   |
+| `networkPolicy.additionalRules`    | Additional NetworkPolicy Ingress "from" rules to set. Note that all rules are OR-ed.                                             | `[]`                     |
 
 
 ### Metrics Parameters
@@ -282,7 +281,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                     | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image repository                                                                   | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                          | `10-debian-10-r194`     |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                          | `10-debian-10-r202`     |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                  | `Always`                |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                     | `[]`                    |
 | `volumePermissions.resources.limits`   | Init container volume-permissions resource limits                                                                    | `{}`                    |

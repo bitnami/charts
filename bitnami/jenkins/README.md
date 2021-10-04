@@ -71,14 +71,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Jenkins Image parameters
 
-| Name                | Description                                        | Value                  |
-| ------------------- | -------------------------------------------------- | ---------------------- |
-| `image.registry`    | Jenkins image registry                             | `docker.io`            |
-| `image.repository`  | Jenkins image repository                           | `bitnami/jenkins`      |
-| `image.tag`         | Jenkins image tag (immutable tags are recommended) | `2.303.1-debian-10-r0` |
-| `image.pullPolicy`  | Jenkins image pull policy                          | `IfNotPresent`         |
-| `image.pullSecrets` | Jenkins image pull secrets                         | `[]`                   |
-| `image.debug`       | Enable image debug mode                            | `false`                |
+| Name                | Description                                        | Value                   |
+| ------------------- | -------------------------------------------------- | ----------------------- |
+| `image.registry`    | Jenkins image registry                             | `docker.io`             |
+| `image.repository`  | Jenkins image repository                           | `bitnami/jenkins`       |
+| `image.tag`         | Jenkins image tag (immutable tags are recommended) | `2.303.1-debian-10-r28` |
+| `image.pullPolicy`  | Jenkins image pull policy                          | `IfNotPresent`          |
+| `image.pullSecrets` | Jenkins image pull secrets                         | `[]`                    |
+| `image.debug`       | Enable image debug mode                            | `false`                 |
 
 
 ### Jenkins Configuration parameters
@@ -147,31 +147,30 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Traffic Exposure Parameters
 
-| Name                               | Description                                                                                           | Value                    |
-| ---------------------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------ |
-| `service.type`                     | Jenkins service type                                                                                  | `LoadBalancer`           |
-| `service.port`                     | Jenkins service HTTP port                                                                             | `80`                     |
-| `service.httpsPort`                | Jenkins service HTTPS port                                                                            | `443`                    |
-| `service.nodePorts.http`           | Node port for HTTP                                                                                    | `""`                     |
-| `service.nodePorts.https`          | Node port for HTTPS                                                                                   | `""`                     |
-| `service.clusterIP`                | Jenkins service Cluster IP                                                                            | `""`                     |
-| `service.loadBalancerIP`           | Jenkins service Load Balancer IP                                                                      | `""`                     |
-| `service.loadBalancerSourceRanges` | Jenkins service Load Balancer sources                                                                 | `[]`                     |
-| `service.externalTrafficPolicy`    | Jenkins service external traffic policy                                                               | `Cluster`                |
-| `service.annotations`              | Additional custom annotations for Jenkins service                                                     | `{}`                     |
-| `ingress.enabled`                  | Enable ingress record generation for Jenkins                                                          | `false`                  |
-| `ingress.pathType`                 | Ingress path type                                                                                     | `ImplementationSpecific` |
-| `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                         | `""`                     |
-| `ingress.hostname`                 | Default host for the ingress record                                                                   | `jenkins.local`          |
-| `ingress.path`                     | Default path for the ingress record                                                                   | `/`                      |
-| `ingress.annotations`              | Additional custom annotations for the ingress record                                                  | `{}`                     |
-| `ingress.tls`                      | Enable TLS configuration for the host defined at `ingress.hostname` parameter                         | `false`                  |
-| `ingress.certManager`              | Add the corresponding annotations for cert-manager integration                                        | `false`                  |
-| `ingress.selfSigned`               | Create a TLS secret for this ingress record using self-signed certificates generated by Helm          | `false`                  |
-| `ingress.extraHosts`               | An array with additional hostname(s) to be covered with the ingress record                            | `[]`                     |
-| `ingress.extraPaths`               | An array with additional arbitrary paths that may need to be added to the ingress under the main host | `[]`                     |
-| `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                   | `[]`                     |
-| `ingress.secrets`                  | Custom TLS certificates as secrets                                                                    | `[]`                     |
+| Name                               | Description                                                                                                                      | Value                    |
+| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.type`                     | Jenkins service type                                                                                                             | `LoadBalancer`           |
+| `service.port`                     | Jenkins service HTTP port                                                                                                        | `80`                     |
+| `service.httpsPort`                | Jenkins service HTTPS port                                                                                                       | `443`                    |
+| `service.nodePorts.http`           | Node port for HTTP                                                                                                               | `""`                     |
+| `service.nodePorts.https`          | Node port for HTTPS                                                                                                              | `""`                     |
+| `service.clusterIP`                | Jenkins service Cluster IP                                                                                                       | `""`                     |
+| `service.loadBalancerIP`           | Jenkins service Load Balancer IP                                                                                                 | `""`                     |
+| `service.loadBalancerSourceRanges` | Jenkins service Load Balancer sources                                                                                            | `[]`                     |
+| `service.externalTrafficPolicy`    | Jenkins service external traffic policy                                                                                          | `Cluster`                |
+| `service.annotations`              | Additional custom annotations for Jenkins service                                                                                | `{}`                     |
+| `ingress.enabled`                  | Enable ingress record generation for Jenkins                                                                                     | `false`                  |
+| `ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
+| `ingress.hostname`                 | Default host for the ingress record                                                                                              | `jenkins.local`          |
+| `ingress.path`                     | Default path for the ingress record                                                                                              | `/`                      |
+| `ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.tls`                      | Enable TLS configuration for the host defined at `ingress.hostname` parameter                                                    | `false`                  |
+| `ingress.selfSigned`               | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
+| `ingress.extraHosts`               | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                     |
+| `ingress.extraPaths`               | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |
+| `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
+| `ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
 
 
 ### Persistence Parameters
@@ -186,7 +185,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                   | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`            | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`          | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r172`     |
+| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r201`     |
 | `volumePermissions.image.pullPolicy`          | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`         | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`          | The resources limits for the init container                                                     | `{}`                    |
@@ -201,7 +200,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                            | Start a sidecar prometheus exporter to expose Jenkins metrics                                    | `false`                       |
 | `metrics.image.registry`                     | Jenkins Exporter image registry                                                                  | `docker.io`                   |
 | `metrics.image.repository`                   | Jenkins Exporter image repository                                                                | `bitnami/jenkins-exporter`    |
-| `metrics.image.tag`                          | Jenkins Jenkins Exporter image tag (immutable tags are recommended)                              | `0.20171225.0-debian-10-r538` |
+| `metrics.image.tag`                          | Jenkins Jenkins Exporter image tag (immutable tags are recommended)                              | `0.20171225.0-debian-10-r567` |
 | `metrics.image.pullPolicy`                   | Jenkins Exporter image pull policy                                                               | `IfNotPresent`                |
 | `metrics.image.pullSecrets`                  | Jenkins Exporter image pull secrets                                                              | `[]`                          |
 | `metrics.containerSecurityContext.enabled`   | Enabled Jenkins exporter containers' Security Context                                            | `true`                        |
