@@ -929,18 +929,24 @@ proxy:
     ## @param proxy.ingress.pathType Ingress path type
     ##
     pathType: ImplementationSpecific
-    ## Set this to true in order to add the corresponding annotations for cert-manager
-    ## @param proxy.ingress.certManager Add cert-manager annotations to the Ingress object
+    ## DEPRECATED: Use ingress.annotations instead of ingress.certManager
+    ## certManager: false
     ##
-    certManager: false
+
     ## When the ingress is enabled, a host pointing to this will be created
     ## @param proxy.ingress.hostname Set ingress rule hostname
     ##
     hostname: jupyterhub.local
-    ## @param proxy.ingress.annotations Add annotations to the Ingress object
+    ## @param proxy.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
     ## For a full list of possible ingress annotations, please see
     ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
-    ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+    ## Use this parameter to set the required annotations for cert-manager, see
+    ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
+    ##
+    ## e.g:
+    ## annotations:
+    ##   kubernetes.io/ingress.class: nginx
+    ##   cert-manager.io/cluster-issuer: cluster-issuer-name
     ##
     annotations: {}
     ## @param proxy.ingress.tls Enable ingress tls configuration for the hostname defined at proxy.ingress.hostname

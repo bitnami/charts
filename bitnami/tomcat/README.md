@@ -134,6 +134,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `nodeSelector`                       | Node labels for pod assignment. Evaluated as a template.                                                                 | `{}`                |
 | `tolerations`                        | Tolerations for pod assignment. Evaluated as a template.                                                                 | `[]`                |
 | `topologySpreadConstraints`          | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`                |
+| `extraPodSpec`                       | Optionally specify extra PodSpec                                                                                         | `{}`                |
 | `extraVolumes`                       | Optionally specify extra list of additional volumes for Tomcat pods in Deployment                                        | `[]`                |
 | `extraVolumeClaimTemplates`          | Optionally specify extra list of additional volume claim templates for Tomcat pods in StatefulSet                        | `[]`                |
 | `extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for Tomcat container(s)                                         | `[]`                |
@@ -150,25 +151,24 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Traffic Exposure parameters
 
-| Name                            | Description                                                                                   | Value                    |
-| ------------------------------- | --------------------------------------------------------------------------------------------- | ------------------------ |
-| `service.type`                  | Kubernetes Service type                                                                       | `LoadBalancer`           |
-| `service.port`                  | Service HTTP port                                                                             | `80`                     |
-| `service.nodePort`              | Kubernetes http node port                                                                     | `""`                     |
-| `service.loadBalancerIP`        | Port Use serviceLoadBalancerIP to request a specific static IP, otherwise leave blank         | `""`                     |
-| `service.externalTrafficPolicy` | Enable client source IP preservation                                                          | `Cluster`                |
-| `service.annotations`           | Annotations for Tomcat service                                                                | `{}`                     |
-| `ingress.enabled`               | Enable ingress controller resource                                                            | `false`                  |
-| `ingress.certManager`           | Set this to true in order to add the corresponding annotations for cert-manager               | `false`                  |
-| `ingress.hostname`              | Default host for the ingress resource                                                         | `tomcat.local`           |
-| `ingress.annotations`           | Ingress annotations                                                                           | `{}`                     |
-| `ingress.tls`                   | Enable TLS configuration for the hostname defined at `ingress.hostname` parameter             | `false`                  |
-| `ingress.extraHosts`            | The list of additional hostnames to be covered with this ingress record.                      | `[]`                     |
-| `ingress.extraTls`              | The tls configuration for additional hostnames to be covered with this ingress record.        | `[]`                     |
-| `ingress.secrets`               | If you're providing your own certificates, please use this to add the certificates as secrets | `[]`                     |
-| `ingress.apiVersion`            | Force Ingress API version (automatically detected if not set)                                 | `""`                     |
-| `ingress.path`                  | Ingress path                                                                                  | `/`                      |
-| `ingress.pathType`              | Ingress path type                                                                             | `ImplementationSpecific` |
+| Name                            | Description                                                                                                                      | Value                    |
+| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.type`                  | Kubernetes Service type                                                                                                          | `LoadBalancer`           |
+| `service.port`                  | Service HTTP port                                                                                                                | `80`                     |
+| `service.nodePort`              | Kubernetes http node port                                                                                                        | `""`                     |
+| `service.loadBalancerIP`        | Port Use serviceLoadBalancerIP to request a specific static IP, otherwise leave blank                                            | `""`                     |
+| `service.externalTrafficPolicy` | Enable client source IP preservation                                                                                             | `Cluster`                |
+| `service.annotations`           | Annotations for Tomcat service                                                                                                   | `{}`                     |
+| `ingress.enabled`               | Enable ingress controller resource                                                                                               | `false`                  |
+| `ingress.hostname`              | Default host for the ingress resource                                                                                            | `tomcat.local`           |
+| `ingress.annotations`           | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.tls`                   | Enable TLS configuration for the hostname defined at `ingress.hostname` parameter                                                | `false`                  |
+| `ingress.extraHosts`            | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
+| `ingress.extraTls`              | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
+| `ingress.secrets`               | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
+| `ingress.apiVersion`            | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
+| `ingress.path`                  | Ingress path                                                                                                                     | `/`                      |
+| `ingress.pathType`              | Ingress path type                                                                                                                | `ImplementationSpecific` |
 
 
 ### Volume Permissions parameters

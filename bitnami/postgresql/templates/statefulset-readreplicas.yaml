@@ -389,6 +389,9 @@ spec:
         {{- if .Values.readReplicas.extraVolumes }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.readReplicas.extraVolumes "context" $ ) | nindent 8 }}
         {{- end }}
+      {{- if .Values.readReplicas.extraPodSpec }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.readReplicas.extraPodSpec "context" $) | nindent 6 }}
+      {{- end }}
   updateStrategy:
     type: {{ .Values.updateStrategy.type }}
     {{- if (eq "Recreate" .Values.updateStrategy.type) }}

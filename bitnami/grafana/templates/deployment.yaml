@@ -148,6 +148,7 @@ spec:
             httpGet:
               path: /api/health
               port: dashboard
+              scheme: {{ .Values.livenessProbe.scheme }}
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
@@ -159,6 +160,7 @@ spec:
             httpGet:
               path: /api/health
               port: dashboard
+              scheme: {{ .Values.readinessProbe.scheme }}
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}

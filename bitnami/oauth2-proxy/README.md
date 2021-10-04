@@ -75,27 +75,26 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Traffic Exposure Parameters
 
-| Name                               | Description                                                                                           | Value                    |
-| ---------------------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------ |
-| `service.type`                     | OAuth2 Proxy service type                                                                             | `ClusterIP`              |
-| `service.port`                     | OAuth2 Proxy service HTTP port                                                                        | `80`                     |
-| `service.nodePorts.http`           | Node port for HTTP                                                                                    | `""`                     |
-| `service.clusterIP`                | OAuth2 Proxy service Cluster IP                                                                       | `""`                     |
-| `service.loadBalancerIP`           | OAuth2 Proxy service Load Balancer IP                                                                 | `""`                     |
-| `service.loadBalancerSourceRanges` | OAuth2 Proxy service Load Balancer sources                                                            | `[]`                     |
-| `service.externalTrafficPolicy`    | OAuth2 Proxy service external traffic policy                                                          | `Cluster`                |
-| `service.annotations`              | Additional custom annotations for OAuth2 Proxy service                                                | `{}`                     |
-| `ingress.enabled`                  | Enable ingress record generation for WordPress                                                        | `false`                  |
-| `ingress.certManager`              | Add the corresponding annotations for cert-manager integration                                        | `false`                  |
-| `ingress.pathType`                 | Ingress path type                                                                                     | `ImplementationSpecific` |
-| `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                         | `""`                     |
-| `ingress.hostname`                 | Default host for the ingress record                                                                   | `oaut2-proxy.local`      |
-| `ingress.path`                     | Default path for the ingress record                                                                   | `/`                      |
-| `ingress.annotations`              | Additional custom annotations for the ingress record                                                  | `{}`                     |
-| `ingress.tls`                      | Enable TLS configuration for the host defined at `ingress.hostname` parameter                         | `false`                  |
-| `ingress.extraHosts`               | An array with additional hostname(s) to be covered with the ingress record                            | `[]`                     |
-| `ingress.extraPaths`               | An array with additional arbitrary paths that may need to be added to the ingress under the main host | `[]`                     |
-| `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                   | `[]`                     |
+| Name                               | Description                                                                                                                      | Value                    |
+| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.type`                     | OAuth2 Proxy service type                                                                                                        | `ClusterIP`              |
+| `service.port`                     | OAuth2 Proxy service HTTP port                                                                                                   | `80`                     |
+| `service.nodePorts.http`           | Node port for HTTP                                                                                                               | `""`                     |
+| `service.clusterIP`                | OAuth2 Proxy service Cluster IP                                                                                                  | `""`                     |
+| `service.loadBalancerIP`           | OAuth2 Proxy service Load Balancer IP                                                                                            | `""`                     |
+| `service.loadBalancerSourceRanges` | OAuth2 Proxy service Load Balancer sources                                                                                       | `[]`                     |
+| `service.externalTrafficPolicy`    | OAuth2 Proxy service external traffic policy                                                                                     | `Cluster`                |
+| `service.annotations`              | Additional custom annotations for OAuth2 Proxy service                                                                           | `{}`                     |
+| `ingress.enabled`                  | Enable ingress record generation for WordPress                                                                                   | `false`                  |
+| `ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
+| `ingress.hostname`                 | Default host for the ingress record                                                                                              | `oaut2-proxy.local`      |
+| `ingress.path`                     | Default path for the ingress record                                                                                              | `/`                      |
+| `ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.tls`                      | Enable TLS configuration for the host defined at `ingress.hostname` parameter                                                    | `false`                  |
+| `ingress.extraHosts`               | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                     |
+| `ingress.extraPaths`               | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |
+| `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
 
 
 ### OAuth2 Proxy Image parameters

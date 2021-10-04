@@ -1,0 +1,611 @@
+{
+    "title": "Chart Values",
+    "type": "object",
+    "properties": {
+        "global": {
+            "type": "object",
+            "properties": {
+                "imageRegistry": {
+                    "type": "string",
+                    "default": "\"\"",
+                    "description": "Global Docker image registry"
+                },
+                "imagePullSecrets": {
+                    "type": "array",
+                    "default": "[]",
+                    "description": "Global Docker registry secret names as an array"
+                },
+                "storageClass": {
+                    "type": "string",
+                    "default": "\"\"",
+                    "description": "Global StorageClass for Persistent Volume(s)"
+                }
+            }
+        },
+        "kubeVersion": {
+            "type": "string",
+            "default": "\"\"",
+            "description": "Force target Kubernetes version (using Helm capabilities if not set)"
+        },
+        "nameOverride": {
+            "type": "string",
+            "default": "\"\"",
+            "description": "String to partially override common.names.fullname template (will maintain the release name)"
+        },
+        "fullnameOverride": {
+            "type": "string",
+            "default": "\"\"",
+            "description": "String to fully override common.names.fullname template"
+        },
+        "commonLabels": {
+            "type": "object",
+            "default": "{}",
+            "description": "Add labels to all the deployed resources"
+        },
+        "commonAnnotations": {
+            "type": "object",
+            "default": "{}",
+            "description": "Add annotations to all the deployed resources"
+        },
+        "clusterDomain": {
+            "type": "string",
+            "default": "cluster.local",
+            "description": "Kubernetes Cluster Domain"
+        },
+        "extraDeploy": {
+            "type": "array",
+            "default": "[]",
+            "description": "Array of extra objects to deploy with the release"
+        },
+        "image": {
+            "type": "object",
+            "properties": {
+                "registry": {
+                    "type": "string",
+                    "default": "docker.io",
+                    "description": "Tomcat image registry"
+                },
+                "repository": {
+                    "type": "string",
+                    "default": "bitnami/tomcat",
+                    "description": "Tomcat image repository"
+                },
+                "tag": {
+                    "type": "string",
+                    "default": "10.0.11-debian-10-r10",
+                    "description": "Tomcat image tag (immutable tags are recommended)"
+                },
+                "pullPolicy": {
+                    "type": "string",
+                    "default": "IfNotPresent",
+                    "description": "Tomcat image pull policy"
+                },
+                "pullSecrets": {
+                    "type": "array",
+                    "default": "[]",
+                    "description": "Specify docker-registry secret names as an array"
+                },
+                "debug": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Specify if debug logs should be enabled"
+                }
+            }
+        },
+        "hostAliases": {
+            "type": "array",
+            "default": "[]",
+            "description": "Deployment pod host aliases"
+        },
+        "tomcatUsername": {
+            "type": "string",
+            "default": "user",
+            "description": "Tomcat admin user"
+        },
+        "tomcatPassword": {
+            "type": "string",
+            "default": "\"\"",
+            "description": "Tomcat admin password"
+        },
+        "tomcatAllowRemoteManagement": {
+            "type": "number",
+            "default": 0,
+            "description": "Enable remote access to management interface"
+        },
+        "command": {
+            "type": "array",
+            "default": "[]",
+            "description": "Override default container command (useful when using custom images)"
+        },
+        "args": {
+            "type": "array",
+            "default": "[]",
+            "description": "Override default container args (useful when using custom images)"
+        },
+        "extraEnvVars": {
+            "type": "array",
+            "default": "[]",
+            "description": "Extra environment variables to be set on Tomcat container"
+        },
+        "extraEnvVarsCM": {
+            "type": "string",
+            "default": "\"\"",
+            "description": "Name of existing ConfigMap containing extra environment variables"
+        },
+        "extraEnvVarsSecret": {
+            "type": "string",
+            "default": "\"\"",
+            "description": "Name of existing Secret containing extra environment variables"
+        },
+        "replicaCount": {
+            "type": "number",
+            "default": 1,
+            "description": "Specify number of Tomcat replicas"
+        },
+        "deployment": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "default": "deployment",
+                    "description": "Use Deployment or StatefulSet"
+                }
+            }
+        },
+        "updateStrategy": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "default": "RollingUpdate",
+                    "description": "StrategyType"
+                }
+            }
+        },
+        "containerPort": {
+            "type": "number",
+            "default": 8080,
+            "description": "HTTP port to expose at container level"
+        },
+        "containerExtraPorts": {
+            "type": "object",
+            "default": "{}",
+            "description": "Extra ports to expose at container level"
+        },
+        "podSecurityContext": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Enable Tomcat pods' Security Context"
+                },
+                "fsGroup": {
+                    "type": "number",
+                    "default": 1001,
+                    "description": "Set Tomcat pod's Security Context fsGroup"
+                }
+            }
+        },
+        "containerSecurityContext": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Enable Tomcat containers' SecurityContext"
+                },
+                "runAsUser": {
+                    "type": "number",
+                    "default": 1001,
+                    "description": "User ID for the Tomcat container"
+                }
+            }
+        },
+        "resources": {
+            "type": "object",
+            "properties": {
+                "limits": {
+                    "type": "object",
+                    "default": "{}",
+                    "description": "The resources limits for the Tomcat container"
+                },
+                "requests": {
+                    "type": "object",
+                    "default": "{}",
+                    "description": "The requested resources for the Tomcat container"
+                }
+            }
+        },
+        "livenessProbe": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Enable livenessProbe"
+                },
+                "httpGet": {
+                    "type": "object",
+                    "properties": {
+                        "path": {
+                            "type": "string",
+                            "default": "/",
+                            "description": "Request path for livenessProbe"
+                        },
+                        "port": {
+                            "type": "string",
+                            "default": "http",
+                            "description": "Port for livenessProbe"
+                        }
+                    }
+                },
+                "initialDelaySeconds": {
+                    "type": "number",
+                    "default": 120,
+                    "description": "Initial delay seconds for livenessProbe"
+                },
+                "periodSeconds": {
+                    "type": "number",
+                    "default": 10,
+                    "description": "Period seconds for livenessProbe"
+                },
+                "timeoutSeconds": {
+                    "type": "number",
+                    "default": 5,
+                    "description": "Timeout seconds for livenessProbe"
+                },
+                "failureThreshold": {
+                    "type": "number",
+                    "default": 6,
+                    "description": "Failure threshold for livenessProbe"
+                },
+                "successThreshold": {
+                    "type": "number",
+                    "default": 1,
+                    "description": "Success threshold for livenessProbe"
+                }
+            }
+        },
+        "readinessProbe": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Enable readinessProbe"
+                },
+                "httpGet": {
+                    "type": "object",
+                    "properties": {
+                        "path": {
+                            "type": "string",
+                            "default": "/",
+                            "description": "Request path for readinessProbe"
+                        },
+                        "port": {
+                            "type": "string",
+                            "default": "http",
+                            "description": "Port for readinessProbe"
+                        }
+                    }
+                },
+                "initialDelaySeconds": {
+                    "type": "number",
+                    "default": 30,
+                    "description": "Initial delay seconds for readinessProbe"
+                },
+                "periodSeconds": {
+                    "type": "number",
+                    "default": 5,
+                    "description": "Period seconds for readinessProbe"
+                },
+                "timeoutSeconds": {
+                    "type": "number",
+                    "default": 3,
+                    "description": "Timeout seconds for readinessProbe"
+                },
+                "failureThreshold": {
+                    "type": "number",
+                    "default": 3,
+                    "description": "Failure threshold for readinessProbe"
+                },
+                "successThreshold": {
+                    "type": "number",
+                    "default": 1,
+                    "description": "Success threshold for readinessProbe"
+                }
+            }
+        },
+        "customLivenessProbe": {
+            "type": "object",
+            "default": "{}",
+            "description": "Override default liveness probe"
+        },
+        "customReadinessProbe": {
+            "type": "object",
+            "default": "{}",
+            "description": "Override default readiness probe"
+        },
+        "podLabels": {
+            "type": "object",
+            "default": "{}",
+            "description": "Extra labels for Tomcat pods"
+        },
+        "podAnnotations": {
+            "type": "object",
+            "default": "{}",
+            "description": "Annotations for Tomcat pods"
+        },
+        "podAffinityPreset": {
+            "type": "string",
+            "default": "\"\"",
+            "description": "Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`"
+        },
+        "podAntiAffinityPreset": {
+            "type": "string",
+            "default": "soft",
+            "description": "Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`"
+        },
+        "nodeAffinityPreset": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "default": "\"\"",
+                    "description": "Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`"
+                },
+                "key": {
+                    "type": "string",
+                    "default": "\"\"",
+                    "description": "Node label key to match. Ignored if `affinity` is set."
+                },
+                "values": {
+                    "type": "array",
+                    "default": "[]",
+                    "description": "Node label values to match. Ignored if `affinity` is set."
+                }
+            }
+        },
+        "affinity": {
+            "type": "object",
+            "default": "{}",
+            "description": "Affinity for pod assignment. Evaluated as a template."
+        },
+        "nodeSelector": {
+            "type": "object",
+            "default": "{}",
+            "description": "Node labels for pod assignment. Evaluated as a template."
+        },
+        "tolerations": {
+            "type": "array",
+            "default": "[]",
+            "description": "Tolerations for pod assignment. Evaluated as a template."
+        },
+        "topologySpreadConstraints": {
+            "type": "array",
+            "default": "[]",
+            "description": "Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template"
+        },
+        "extraPodSpec": {
+            "type": "object",
+            "default": "{}",
+            "description": "Optionally specify extra PodSpec"
+        },
+        "extraVolumes": {
+            "type": "array",
+            "default": "[]",
+            "description": "Optionally specify extra list of additional volumes for Tomcat pods in Deployment"
+        },
+        "extraVolumeClaimTemplates": {
+            "type": "array",
+            "default": "[]",
+            "description": "Optionally specify extra list of additional volume claim templates for Tomcat pods in StatefulSet"
+        },
+        "extraVolumeMounts": {
+            "type": "array",
+            "default": "[]",
+            "description": "Optionally specify extra list of additional volumeMounts for Tomcat container(s)"
+        },
+        "initContainers": {
+            "type": "array",
+            "default": "[]",
+            "description": "Add init containers to the Tomcat pods."
+        },
+        "sidecars": {
+            "type": "array",
+            "default": "[]",
+            "description": "Add sidecars to the Tomcat pods."
+        },
+        "persistence": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Enable persistence"
+                },
+                "storageClass": {
+                    "type": "string",
+                    "default": "\"\"",
+                    "description": "PVC Storage Class for Tomcat volume"
+                },
+                "annotations": {
+                    "type": "object",
+                    "default": "{}",
+                    "description": "Persistent Volume Claim annotations"
+                },
+                "accessModes": {
+                    "type": "array",
+                    "default": "[\"ReadWriteOnce\"]",
+                    "description": "PVC Access Modes for Tomcat volume"
+                },
+                "size": {
+                    "type": "string",
+                    "default": "8Gi",
+                    "description": "PVC Storage Request for Tomcat volume"
+                },
+                "existingClaim": {
+                    "type": "string",
+                    "default": "\"\"",
+                    "description": "An Existing PVC name for Tomcat volume"
+                },
+                "selectorLabels": {
+                    "type": "object",
+                    "default": "{}",
+                    "description": "Selector labels to use in volume claim template in statefulset"
+                }
+            }
+        },
+        "service": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "default": "LoadBalancer",
+                    "description": "Kubernetes Service type"
+                },
+                "port": {
+                    "type": "number",
+                    "default": 80,
+                    "description": "Service HTTP port"
+                },
+                "nodePort": {
+                    "type": "string",
+                    "default": "\"\"",
+                    "description": "Kubernetes http node port"
+                },
+                "loadBalancerIP": {
+                    "type": "string",
+                    "default": "\"\"",
+                    "description": "Port Use serviceLoadBalancerIP to request a specific static IP, otherwise leave blank"
+                },
+                "externalTrafficPolicy": {
+                    "type": "string",
+                    "default": "Cluster",
+                    "description": "Enable client source IP preservation"
+                },
+                "annotations": {
+                    "type": "object",
+                    "default": "{}",
+                    "description": "Annotations for Tomcat service"
+                }
+            }
+        },
+        "ingress": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Enable ingress controller resource"
+                },
+                "certManager": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Set this to true in order to add the corresponding annotations for cert-manager"
+                },
+                "hostname": {
+                    "type": "string",
+                    "default": "tomcat.local",
+                    "description": "Default host for the ingress resource"
+                },
+                "annotations": {
+                    "type": "object",
+                    "default": "{}",
+                    "description": "Ingress annotations"
+                },
+                "tls": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Enable TLS configuration for the hostname defined at `ingress.hostname` parameter"
+                },
+                "extraHosts": {
+                    "type": "array",
+                    "default": "[]",
+                    "description": "The list of additional hostnames to be covered with this ingress record."
+                },
+                "extraTls": {
+                    "type": "array",
+                    "default": "[]",
+                    "description": "The tls configuration for additional hostnames to be covered with this ingress record."
+                },
+                "secrets": {
+                    "type": "array",
+                    "default": "[]",
+                    "description": "If you're providing your own certificates, please use this to add the certificates as secrets"
+                },
+                "apiVersion": {
+                    "type": "string",
+                    "default": "\"\"",
+                    "description": "Force Ingress API version (automatically detected if not set)"
+                },
+                "path": {
+                    "type": "string",
+                    "default": "/",
+                    "description": "Ingress path"
+                },
+                "pathType": {
+                    "type": "string",
+                    "default": "ImplementationSpecific",
+                    "description": "Ingress path type"
+                }
+            }
+        },
+        "volumePermissions": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Enable init container that changes volume permissions in the data directory"
+                },
+                "image": {
+                    "type": "object",
+                    "properties": {
+                        "registry": {
+                            "type": "string",
+                            "default": "docker.io",
+                            "description": "Init container volume-permissions image registry"
+                        },
+                        "repository": {
+                            "type": "string",
+                            "default": "bitnami/bitnami-shell",
+                            "description": "Init container volume-permissions image repository"
+                        },
+                        "tag": {
+                            "type": "string",
+                            "default": "10-debian-10-r201",
+                            "description": "Init container volume-permissions image tag"
+                        },
+                        "pullPolicy": {
+                            "type": "string",
+                            "default": "Always",
+                            "description": "Init container volume-permissions image pull policy"
+                        },
+                        "pullSecrets": {
+                            "type": "array",
+                            "default": "[]",
+                            "description": "Specify docker-registry secret names as an array"
+                        }
+                    }
+                },
+                "resources": {
+                    "type": "object",
+                    "properties": {
+                        "limits": {
+                            "type": "object",
+                            "default": "{}",
+                            "description": "Init container volume-permissions resource  limits"
+                        },
+                        "requests": {
+                            "type": "object",
+                            "default": "{}",
+                            "description": "Init container volume-permissions resource  requests"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
