@@ -131,26 +131,25 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Traffic Exposure Parameters
 
-| Name                            | Description                                                                                   | Value                    |
-| ------------------------------- | --------------------------------------------------------------------------------------------- | ------------------------ |
-| `service.type`                  | Kubernetes Service type                                                                       | `LoadBalancer`           |
-| `service.loadBalancerIP`        | Use serviceLoadBalancerIP to request a specific static IP, otherwise leave blank              | `""`                     |
-| `service.port`                  | Service HTTP port                                                                             | `80`                     |
-| `service.httpsPort`             | Service HTTPS port                                                                            | `443`                    |
-| `service.nodePorts`             | Use nodePorts to request some specific ports when using NodePort                              | `{}`                     |
-| `service.externalTrafficPolicy` | Enable client source IP preservation                                                          | `Cluster`                |
-| `ingress.enabled`               | Set to true to enable ingress record generation                                               | `false`                  |
-| `ingress.certManager`           | Set this to true in order to add the corresponding annotations for cert-manager               | `false`                  |
-| `ingress.pathType`              | Ingress Path type                                                                             | `ImplementationSpecific` |
-| `ingress.apiVersion`            | Override API Version (automatically detected if not set)                                      | `""`                     |
-| `ingress.hostname`              | When the ingress is enabled, a host pointing to this will be created                          | `dokuwiki.local`         |
-| `ingress.path`                  | The Path to Dokuwiki. You may need to set this to '/*' in order to use this                   | `/`                      |
-| `ingress.annotations`           | Ingress annotations done as key:value pairs                                                   | `{}`                     |
-| `ingress.tls`                   | Enable TLS configuration for the hostname defined at ingress.hostname parameter               | `false`                  |
-| `ingress.extraHosts`            | The list of additional hostnames to be covered with this ingress record.                      | `[]`                     |
-| `ingress.extraPaths`            | Any additional arbitrary paths that may need to be added to the ingress under the main host.  | `[]`                     |
-| `ingress.extraTls`              | The tls configuration for additional hostnames to be covered with this ingress record.        | `[]`                     |
-| `ingress.secrets`               | If you're providing your own certificates, please use this to add the certificates as secrets | `[]`                     |
+| Name                            | Description                                                                                                                      | Value                    |
+| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.type`                  | Kubernetes Service type                                                                                                          | `LoadBalancer`           |
+| `service.loadBalancerIP`        | Use serviceLoadBalancerIP to request a specific static IP, otherwise leave blank                                                 | `""`                     |
+| `service.port`                  | Service HTTP port                                                                                                                | `80`                     |
+| `service.httpsPort`             | Service HTTPS port                                                                                                               | `443`                    |
+| `service.nodePorts`             | Use nodePorts to request some specific ports when using NodePort                                                                 | `{}`                     |
+| `service.externalTrafficPolicy` | Enable client source IP preservation                                                                                             | `Cluster`                |
+| `ingress.enabled`               | Set to true to enable ingress record generation                                                                                  | `false`                  |
+| `ingress.pathType`              | Ingress Path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.apiVersion`            | Override API Version (automatically detected if not set)                                                                         | `""`                     |
+| `ingress.hostname`              | When the ingress is enabled, a host pointing to this will be created                                                             | `dokuwiki.local`         |
+| `ingress.path`                  | The Path to Dokuwiki. You may need to set this to '/*' in order to use this                                                      | `/`                      |
+| `ingress.annotations`           | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.tls`                   | Enable TLS configuration for the hostname defined at ingress.hostname parameter                                                  | `false`                  |
+| `ingress.extraHosts`            | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
+| `ingress.extraPaths`            | Any additional arbitrary paths that may need to be added to the ingress under the main host.                                     | `[]`                     |
+| `ingress.extraTls`              | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
+| `ingress.secrets`               | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
 
 
 ### Volume Permissions parameters

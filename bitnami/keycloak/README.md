@@ -168,7 +168,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                    | `30`                  |
 | `startupProbe.periodSeconds`            | Period seconds for startupProbe                                                           | `5`                   |
 | `startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                          | `1`                   |
-| `startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                        | `60`                 |
+| `startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                        | `60`                  |
 | `startupProbe.successThreshold`         | Success threshold for startupProbe                                                        | `1`                   |
 | `livenessProbe.enabled`                 | Enable livenessProbe                                                                      | `true`                |
 | `livenessProbe.httpGet.path`            | Request path for livenessProbe                                                            | `/auth/`              |
@@ -210,34 +210,33 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Exposure parameters
 
-| Name                               | Description                                                                                   | Value                    |
-| ---------------------------------- | --------------------------------------------------------------------------------------------- | ------------------------ |
-| `service.type`                     | Kubernetes service type                                                                       | `LoadBalancer`           |
-| `service.port`                     | Service HTTP port                                                                             | `80`                     |
-| `service.httpsPort`                | HTTPS Port                                                                                    | `443`                    |
-| `service.nodePorts`                | Specify the nodePort values for the LoadBalancer and NodePort service types.                  | `{}`                     |
-| `service.clusterIP`                | Keycloak service clusterIP IP                                                                 | `""`                     |
-| `service.loadBalancerIP`           | loadBalancerIP for the SuiteCRM Service (optional, cloud specific)                            | `""`                     |
-| `service.loadBalancerSourceRanges` | Address that are allowed when service is LoadBalancer                                         | `[]`                     |
-| `service.externalTrafficPolicy`    | Enable client source IP preservation                                                          | `Cluster`                |
-| `service.annotations`              | Annotations for Keycloak service                                                              | `{}`                     |
-| `ingress.enabled`                  | Enable ingress controller resource                                                            | `false`                  |
-| `ingress.certManager`              | Add annotations for cert-manager                                                              | `false`                  |
-| `ingress.hostname`                 | Default host for the ingress resource                                                         | `keycloak.local`         |
-| `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                 | `""`                     |
-| `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                 | `""`                     |
-| `ingress.path`                     | Ingress path                                                                                  | `/`                      |
-| `ingress.pathType`                 | Ingress path type                                                                             | `ImplementationSpecific` |
-| `ingress.annotations`              | Ingress annotations                                                                           | `{}`                     |
-| `ingress.tls`                      | Enable TLS configuration for the hostname defined at `ingress.hostname` parameter             | `false`                  |
-| `ingress.extraHosts`               | The list of additional hostnames to be covered with this ingress record.                      | `[]`                     |
-| `ingress.extraTls`                 | The tls configuration for additional hostnames to be covered with this ingress record.        | `[]`                     |
-| `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets | `[]`                     |
-| `ingress.existingSecret`           | It is you own the certificate as secret.                                                      | `""`                     |
-| `ingress.servicePort`              | Service port to be used                                                                       | `http`                   |
-| `networkPolicy.enabled`            | Enable the default NetworkPolicy policy                                                       | `false`                  |
-| `networkPolicy.allowExternal`      | Don't require client label for connections                                                    | `true`                   |
-| `networkPolicy.additionalRules`    | Additional NetworkPolicy rules                                                                | `{}`                     |
+| Name                               | Description                                                                                                                      | Value                    |
+| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.type`                     | Kubernetes service type                                                                                                          | `LoadBalancer`           |
+| `service.port`                     | Service HTTP port                                                                                                                | `80`                     |
+| `service.httpsPort`                | HTTPS Port                                                                                                                       | `443`                    |
+| `service.nodePorts`                | Specify the nodePort values for the LoadBalancer and NodePort service types.                                                     | `{}`                     |
+| `service.clusterIP`                | Keycloak service clusterIP IP                                                                                                    | `""`                     |
+| `service.loadBalancerIP`           | loadBalancerIP for the SuiteCRM Service (optional, cloud specific)                                                               | `""`                     |
+| `service.loadBalancerSourceRanges` | Address that are allowed when service is LoadBalancer                                                                            | `[]`                     |
+| `service.externalTrafficPolicy`    | Enable client source IP preservation                                                                                             | `Cluster`                |
+| `service.annotations`              | Annotations for Keycloak service                                                                                                 | `{}`                     |
+| `ingress.enabled`                  | Enable ingress controller resource                                                                                               | `false`                  |
+| `ingress.hostname`                 | Default host for the ingress resource                                                                                            | `keycloak.local`         |
+| `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
+| `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
+| `ingress.path`                     | Ingress path                                                                                                                     | `/`                      |
+| `ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.tls`                      | Enable TLS configuration for the hostname defined at `ingress.hostname` parameter                                                | `false`                  |
+| `ingress.extraHosts`               | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
+| `ingress.extraTls`                 | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
+| `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
+| `ingress.existingSecret`           | It is you own the certificate as secret.                                                                                         | `""`                     |
+| `ingress.servicePort`              | Service port to be used                                                                                                          | `http`                   |
+| `networkPolicy.enabled`            | Enable the default NetworkPolicy policy                                                                                          | `false`                  |
+| `networkPolicy.allowExternal`      | Don't require client label for connections                                                                                       | `true`                   |
+| `networkPolicy.additionalRules`    | Additional NetworkPolicy rules                                                                                                   | `{}`                     |
 
 
 ### RBAC parameters

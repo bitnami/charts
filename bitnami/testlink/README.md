@@ -147,27 +147,26 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Traffic Exposure Parameters
 
-| Name                               | Description                                                                                   | Value                    |
-| ---------------------------------- | --------------------------------------------------------------------------------------------- | ------------------------ |
-| `service.type`                     | Kubernetes Service type                                                                       | `LoadBalancer`           |
-| `service.port`                     | Service HTTP port                                                                             | `80`                     |
-| `service.httpsPort`                | Service HTTPS port                                                                            | `443`                    |
-| `service.clusterIP`                | Service cluster IP                                                                            | `""`                     |
-| `service.loadBalancerSourceRanges` | Control hosts connecting to "LoadBalancer" only                                               | `[]`                     |
-| `service.loadBalancerIP`           | Load balancer IP for the TestLink Service (optional, cloud specific)                          | `""`                     |
-| `service.nodePorts.http`           | Kubernetes HTTP node port                                                                     | `""`                     |
-| `service.nodePorts.https`          | Kubernetes HTTPS node port                                                                    | `""`                     |
-| `service.externalTrafficPolicy`    | Enable client source IP preservation                                                          | `Cluster`                |
-| `ingress.enabled`                  | Enable ingress controller resource                                                            | `false`                  |
-| `ingress.certManager`              | Add annotations for cert-manager                                                              | `false`                  |
-| `ingress.hostname`                 | Default host for the ingress resource                                                         | `testlink.local`         |
-| `ingress.annotations`              | Ingress annotations                                                                           | `{}`                     |
-| `ingress.hosts`                    | The list of additional hostnames to be covered with this ingress record.                      | `[]`                     |
-| `ingress.tls`                      | The tls configuration for the ingress                                                         | `[]`                     |
-| `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets | `[]`                     |
-| `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                 | `""`                     |
-| `ingress.path`                     | Ingress path                                                                                  | `/`                      |
-| `ingress.pathType`                 | Ingress path type                                                                             | `ImplementationSpecific` |
+| Name                               | Description                                                                                                                      | Value                    |
+| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.type`                     | Kubernetes Service type                                                                                                          | `LoadBalancer`           |
+| `service.port`                     | Service HTTP port                                                                                                                | `80`                     |
+| `service.httpsPort`                | Service HTTPS port                                                                                                               | `443`                    |
+| `service.clusterIP`                | Service cluster IP                                                                                                               | `""`                     |
+| `service.loadBalancerSourceRanges` | Control hosts connecting to "LoadBalancer" only                                                                                  | `[]`                     |
+| `service.loadBalancerIP`           | Load balancer IP for the TestLink Service (optional, cloud specific)                                                             | `""`                     |
+| `service.nodePorts.http`           | Kubernetes HTTP node port                                                                                                        | `""`                     |
+| `service.nodePorts.https`          | Kubernetes HTTPS node port                                                                                                       | `""`                     |
+| `service.externalTrafficPolicy`    | Enable client source IP preservation                                                                                             | `Cluster`                |
+| `ingress.enabled`                  | Enable ingress controller resource                                                                                               | `false`                  |
+| `ingress.hostname`                 | Default host for the ingress resource                                                                                            | `testlink.local`         |
+| `ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.hosts`                    | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
+| `ingress.tls`                      | The tls configuration for the ingress                                                                                            | `[]`                     |
+| `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
+| `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
+| `ingress.path`                     | Ingress path                                                                                                                     | `/`                      |
+| `ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
 
 
 ### Database parameters
