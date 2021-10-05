@@ -93,6 +93,8 @@ data:
     {{- else if eq .Values.externalAccess.service.type "NodePort" }}
     {{- if or .Values.externalAccess.service.useHostIPs .Values.externalAccess.autoDiscovery.enabled }}
     export EXTERNAL_ACCESS_IP="${HOST_IP}"
+    {{- elsle if or .Values.externalAccess.service.usePodIPs .Values.externalAccess.autoDiscovery.enabled }}
+    export EXTERNAL_ACCESS_IP="${MY_POD_IP}"
     {{- else if .Values.externalAccess.service.domain }}
     export EXTERNAL_ACCESS_IP={{ .Values.externalAccess.service.domain }}
     {{- else }}

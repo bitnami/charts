@@ -744,6 +744,9 @@ externalAccess:
     ## @param externalAccess.service.annotations Service annotations for external access
     ##
     annotations: {}
+    ## @param externalAccess.service.useHostIPs Use service host IPs to configure Kafka external listener when service type is NodePort
+    ##
+    usePodIPs: false
 
 ## @section Persistence parameters
 
