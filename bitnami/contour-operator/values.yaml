@@ -191,10 +191,12 @@ podSecurityContext:
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param containerSecurityContext.enabled Enabled Contour Operator containers' Security Context
 ## @param containerSecurityContext.runAsUser Set Contour Operator containers' Security Context runAsUser
+## @param containerSecurityContext.runAsNonRoot Set Contour Operator containers' Security Context runAsNonRoot
 ##
 containerSecurityContext:
   enabled: true
   runAsUser: 1001
+  runAsNonRoot: true
 
 ## @param command Override default container command (useful when using custom images)
 ##
@@ -406,9 +408,15 @@ metrics:
     ## @param metrics.serviceMonitor.enabled Specify if a servicemonitor will be deployed for prometheus-operator
     ##
     enabled: false
-    ## @param metrics.serviceMonitor.jobLabel Specify the jobLabel to use for the prometheus-operator
+    ## @param metrics.serviceMonitor.namespace Namespace in which Prometheus is running
     ##
-    jobLabel: app.kubernetes.io/name
+    namespace: ""
+    ## @param metrics.serviceMonitor.labels Extra labels for the ServiceMonitor
+    ##
+    labels: {}
+    ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in Prometheus
+    ##
+    jobLabel: ""
     ## @param metrics.serviceMonitor.interval Scrape interval. If not set, the Prometheus default scrape interval is used
     ##
     interval: ""
@@ -422,5 +430,6 @@ metrics:
     ##
     relabelings: []
     ## @param metrics.serviceMonitor.selector Prometheus instance selector labels
+    ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
     ##
     selector: []
