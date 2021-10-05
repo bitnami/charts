@@ -1,5 +1,5 @@
 {{ $ingressClass := .Values.contour.ingressClass }}
-{{- if (kindIs "map" $ingressClass) }}
+{{- if kindIs "map" $ingressClass }}
 {{- if $ingressClass.create }}
 ---
 apiVersion: networking.k8s.io/v1
