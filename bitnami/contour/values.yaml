@@ -262,13 +262,17 @@ contour:
   ## @param contour.ingressClass.name Name of the ingress class to route through this controller
   ## @param contour.ingressClass.create Whether to create or not the IngressClass resource
   ## @param contour.ingressClass.default Mark IngressClass resource as default for cluster
+  ##
+  ## DEPRECATED: Use a map instead
+  ## You can use the the 'contour.ingressClass' as a string to indicate the ingress
+  ## class name. This will skip the creation of an IngressClass resource.
+  ## e.g:
+  ## ingressClass: contour
+  ##
   ingressClass:
     name: contour
     create: true
     default: true
-  ## You can set ingress class name on contour.ingressClass, if you want to skip creating IngressClass resource
-  ## For example:
-  ## ingressClass: contour
 
 ## @section Envoy parameters
 
