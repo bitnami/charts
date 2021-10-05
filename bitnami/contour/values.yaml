@@ -266,6 +266,9 @@ contour:
     name: contour
     create: true
     default: true
+  ## You can set ingress class name on contour.ingressClass, if you want to skip creating IngressClass resource
+  ## For example:
+  ## ingressClass: contour
 
 ## @section Envoy parameters
 
