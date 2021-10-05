@@ -187,6 +187,23 @@ Should use config from the configmap
 {{- end -}}
 
 {{/*
+Copy DAGs init-container
+*/}}
+{{- define "airflow.loadDAGsInitContainer" -}}
+{{- if .Values.dagsConfigMap -}}
+- name: load-dags
+  image: bitnami/bitnami-shell:10-debian-10-r213
+  imagePullPolicy: IfNotPresent
+  command: ['sh', '-c', 'cp /configmap/* /dags']
+  volumeMounts:
+    - name: load-external-dag-files
+      mountPath: /configmap
+    - name: external-dag-files
+      mountPath: /dags
+{{- else -}}{{- end -}}
+{{- end -}}
+
+{{/*
 Create the name of the service account to use
 */}}
 {{- define "airflow.serviceAccountName" -}}
