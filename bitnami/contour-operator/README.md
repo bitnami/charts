@@ -172,6 +172,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.scrapeTimeout`     | Scrape Timeout duration for prometheus                                      | `""`                     |
 | `metrics.serviceMonitor.metricRelabelings` | Specify additional relabeling of metrics                                    | `[]`                     |
 | `metrics.serviceMonitor.relabelings`       | Specify general relabeling                                                  | `[]`                     |
+| `metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                         | `[]`                     |
 
 
 See [readme-generator-for-helm](https://github.com/bitnami-labs/readme-generator-for-helm) to create the table.

@@ -421,3 +421,6 @@ metrics:
     ## @param metrics.serviceMonitor.relabelings Specify general relabeling
     ##
     relabelings: []
+    ## @param metrics.serviceMonitor.selector Prometheus instance selector labels
+    ##
+    selector: []
