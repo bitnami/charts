@@ -15,7 +15,7 @@ spec:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
   replicas: {{ .Values.cluster.nodes }}
   serviceName: {{ include "common.names.fullname" . }}-headless
-  podManagementPolicy: "Parallel"
+  podManagementPolicy: {{ .Values.redis.podManagementPolicy }}
   template:
     metadata:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
@@ -165,7 +165,7 @@ spec:
               value: {{ ternary "yes" "no" .Values.tls.enabled | quote }}
             {{- if .Values.tls.enabled }}
             - name: REDIS_TLS_PORT
-              value: {{ .Values.redis.port | quote }}
+              value: {{ .Values.redis.ports.redis | quote }}
             - name:  REDIS_TLS_AUTH_CLIENTS
               value: {{ ternary "yes" "no" .Values.tls.authClients | quote }}
             - name:  REDIS_TLS_CERT_FILE
@@ -180,7 +180,7 @@ spec:
             {{- end }}
             {{- else }}
             - name: REDIS_PORT
-              value: {{ .Values.redis.port | quote }}
+              value: {{ .Values.redis.ports.redis | quote }}
             {{- end }}
             {{- if .Values.redis.extraEnvVars }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.redis.extraEnvVars "context" $ ) | nindent 12 }}
@@ -198,9 +198,9 @@ spec:
           {{- end }}
           ports:
             - name: tcp-redis
-              containerPort: {{ .Values.redis.port }}
+              containerPort: {{ .Values.redis.ports.redis }}
             - name: tcp-redis-bus
-              containerPort: {{ .Values.redis.busPort }}
+              containerPort: {{ .Values.redis.ports.bus }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.redis.livenessProbe.enabled }}
           livenessProbe:
@@ -233,6 +233,21 @@ spec:
                 - /scripts/ping_readiness_local.sh {{ .Values.redis.readinessProbe.timeoutSeconds }}
           {{- else if .Values.redis.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.redis.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.redis.startupProbe.enabled }}
+          startupProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - /scripts/ping_liveness_local.sh {{ .Values.redis.startupProbe.timeoutSeconds }}
+            initialDelaySeconds: {{ .Values.redis.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.redis.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.redis.startupProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.redis.startupProbe.successThreshold }}
+            failureThreshold: {{ .Values.redis.startupProbe.failureThreshold }}
+          {{- else if .Values.redis.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.redis.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.redis.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.redis.lifecycleHooks "context" $) | nindent 12 }}
@@ -288,7 +303,7 @@ spec:
             - name: REDIS_ALIAS
               value: {{ template "common.names.fullname" . }}
             - name: REDIS_ADDR
-              value: {{ printf "%s://127.0.0.1:%g" (ternary "rediss" "redis" .Values.tls.enabled) .Values.redis.port | quote }}
+              value: {{ printf "%s://127.0.0.1:%g" (ternary "rediss" "redis" .Values.tls.enabled) .Values.redis.ports.redis | quote }}
             {{- if and .Values.usePassword (not .Values.usePasswordFile) }}
             - name: REDIS_PASSWORD
               valueFrom:
@@ -407,6 +422,10 @@ spec:
   volumeClaimTemplates:
     - metadata:
         name: redis-data
+        labels: {{- include "common.labels.matchLabels" . | nindent 10 }}
+        {{- if .Values.persistence.annotations }}
+        annotations: {{- include "common.tplvalues.render" (dict "value" .Values.persistence.annotations "context" $) | nindent 10 }}
+        {{- end }}
       spec:
         accessModes:
         {{- range .Values.persistence.accessModes }}
@@ -429,13 +448,13 @@ spec:
         {{- end }}
   {{- end }}
   updateStrategy:
-    type: {{ .Values.statefulset.updateStrategy }}
-    {{- if .Values.statefulset.rollingUpdatePartition }}
-    {{- if (eq "Recreate" .Values.statefulset.updateStrategy) }}
+    type: {{ .Values.updateStrategy }}
+    {{- if .Values.rollingUpdatePartition }}
+    {{- if (eq "Recreate" .Values.updateStrategy) }}
     rollingUpdate: null
     {{- else }}
     rollingUpdate:
-      partition: {{ .Values.statefulset.rollingUpdatePartition }}
+      partition: {{ .Values.rollingUpdatePartition }}
     {{- end }}
     {{- end }}
 {{- end }}
