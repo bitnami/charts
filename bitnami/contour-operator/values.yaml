@@ -344,6 +344,10 @@ serviceAccount:
   ## If not set and create is true, a name is generated using the common.names.fullname template
   ##
   name: ""
+  ## @param serviceAccount.automountServiceAccountToken Automount service account token
+  ##
+  automountServiceAccountToken: true
+
 
 ## @section Metrics parameters
 ##
@@ -368,6 +372,10 @@ metrics:
     ##
     nodePorts:
       http: ""
+    ## @param metrics.service.extraPorts [array] Extra ports to expose (normally used with the `sidecar` value)
+    ##
+    extraPorts: []
+
     ## @param metrics.service.clusterIP Contour Operator metrics service Cluster IP
     ## e.g.:
     ## clusterIP: None
