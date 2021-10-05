@@ -391,7 +391,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ### Database support
 
-You may want to have Argo Workflows controller connected to a database to store controller evidences. To achieve this, the chart can be deployed with the PostgreSQL or MySQL dependency (see next section to configure an external database instead of using the dependency). In order to configure the database, just change `postgresql.enabled=true` (default configutaion) or `mysql.enabled=true`. The database will be configured automatically. Here is an example:
+You may want to have Argo Workflows controller connected to a database to store controller evidences. To achieve this, the chart can be deployed with the PostgreSQL or MySQL dependency (see next section to configure an external database instead of using the dependency). In order to configure the database, just change `postgresql.enabled=true` (default configuration) or `mysql.enabled=true`. The database will be configured automatically. Here is an example:
 
 ```console
 postgresql.enabled=true
