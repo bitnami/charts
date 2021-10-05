@@ -112,14 +112,32 @@ smtp:
 ##
 plugins: ""
 ## Ldap configuration for Grafana
-## @param ldap.enabled Enable LDAP for Grafana
-## @param ldap.allowSignUp Allows LDAP sign up for Grafana
-## @param ldap.configMapName Name of the ConfigMap with the LDAP configuration file for Grafana
 ##
 ldap:
+  ## @param ldap.enabled Enable LDAP for Grafana
+  ##
   enabled: false
+  ## @param ldap.allowSignUp Allows LDAP sign up for Grafana
+  ##
   allowSignUp: false
+  ## @param ldap.configuration Specify content for ldap.toml configuration file
+  ## e.g:
+  ## configuration: |-
+  ##   [[servers]]
+  ##   host = "127.0.0.1"
+  ##   port = 389
+  ##   use_ssl = false
+  ##   ...
+  ##
+  configuration: ""
+  ## @param ldap.configMapName Name of the ConfigMap with the ldap.toml configuration file for Grafana
+  ## NOTE: When it's set the ldap.configuration parameter is ignored
+  ##
   configMapName: ""
+  ## @param ldap.secretName Name of the Secret with the ldap.toml configuration file for Grafana
+  ## NOTE: When it's set the ldap.configuration parameter is ignored
+  ##
+  secretName: ""
 ## @param extraEnvVars Array containing extra env vars to configure Grafana
 ## For example:
 ## extraEnvVars:
