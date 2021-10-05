@@ -10,10 +10,13 @@ metadata:
     {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
     {{- end }}
   annotations:
-    {{- if .Values.ingressClass }}
-    kubernetes.io/ingress.class: {{ .Values.ingressClass }}
-    {{- else }}
-    kubernetes.io/ingress.class: contour
+    {{- $ingressClass := .Values.contour.ingressClass }}
+    {{- if and (kindIs "string" $ingressClass) (not (empty $ingressClass)) }}
+    kubernetes.io/ingress.class: {{ $ingressClass }}
+    {{- else if kindIs "map" $ingressClass }}
+      {{- if not (empty $ingressClass.name) }}
+    kubernetes.io/ingress.class: {{ $ingressClass.name }}
+      {{- end }}
     {{- end }}
     {{- if .Values.commonAnnotations }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}

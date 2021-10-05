@@ -69,10 +69,10 @@ spec:
             - --contour-key-file=/certs/tls.key
             - --config-path=/config/contour.yaml
             {{- $ingressClass := .Values.contour.ingressClass }}
-            {{- if and (kindIs "string" $ingressClass) ($ingressClass) }}
+            {{- if and (kindIs "string" $ingressClass) (not (empty $ingressClass)) }}
             - --ingress-class-name={{ $ingressClass }}
             {{- else if kindIs "map" $ingressClass }}
-              {{- if $ingressClass.name }}
+              {{- if not (empty $ingressClass.name) }}
             - --ingress-class-name={{ $ingressClass.name }}
               {{- end }}
             {{- end }}
