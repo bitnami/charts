@@ -180,10 +180,11 @@ tls:
   ## @param tls.image.pullPolicy Init container TLS certs setup image pull policy
   ##
   extraDnsNames: 
-    "DNS.6": "$my_host"
-    "DNS.7": "$test"
   ## @param tls.extraDnsNames Add extra dns names to the CA, can solve x509 auth issue for pod clients
   ##
+  ## example:
+  ##     "DNS.6": "$my_host"
+  ##    "DNS.7": "$test"
   image:
     registry: docker.io
     repository: bitnami/nginx
