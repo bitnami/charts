@@ -174,7 +174,9 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `plugins`                          | Grafana plugins to be installed in deployment time separated by commas            | `""`                 |
 | `ldap.enabled`                     | Enable LDAP for Grafana                                                           | `false`              |
 | `ldap.allowSignUp`                 | Allows LDAP sign up for Grafana                                                   | `false`              |
-| `ldap.configMapName`               | Name of the ConfigMap with the LDAP configuration file for Grafana                | `""`                 |
+| `ldap.configuration`               | Specify content for ldap.toml configuration file                                  | `""`                 |
+| `ldap.configMapName`               | Name of the ConfigMap with the ldap.toml configuration file for Grafana           | `""`                 |
+| `ldap.secretName`                  | Name of the Secret with the ldap.toml configuration file for Grafana              | `""`                 |
 | `extraEnvVars`                     | Array containing extra env vars to configure Grafana                              | `{}`                 |
 | `extraConfigmaps`                  | Array to mount extra ConfigMaps to configure Grafana                              | `{}`                 |
 | `config.useGrafanaIniFile`         | Allows to load a `grafana.ini` file                                               | `false`              |

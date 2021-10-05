@@ -381,7 +381,7 @@ postgresqlPghbaRemoveFilters: ""
 terminationGracePeriodSeconds: ""
 ## LDAP configuration
 ## @param ldap.enabled Enable LDAP support
-## @param ldap.url LDAP URL beginning in the form `ldap[s]://host[:port]/basedn[
+## @param ldap.url LDAP URL beginning in the form `ldap[s]://host[:port]/basedn`
 ## @param ldap.server IP address or name of the LDAP server.
 ## @param ldap.port Port number on the LDAP server to connect to
 ## @param ldap.prefix String to prepend to the user name when forming the DN to bind
