@@ -168,6 +168,21 @@ The command removes all the Kubernetes components associated with the chart and 
 | `hub.service.externalTrafficPolicy`       | External traffic policy for the service                  | `Cluster`   |
 
 
+### Hub Metrics parameters
+
+| Name                                      | Description                                                                                 | Value                       |
+| ----------------------------------------- | ------------------------------------------------------------------------------------------- | --------------------------- |
+| `hub.metrics.authenticatePrometheus`          | Use authentication for Prometheus | `false` |
+| `hub.metrics.serviceMonitor.enabled`          | If the operator is installed in your cluster, set to true to create a Service Monitor Entry | `false`                     |
+| `hub.metrics.serviceMonitor.namespace`        | Namespace which Prometheus is running in                                                    | `""`                        |
+| `hub.metrics.serviceMonitor.path`             | HTTP path to scrape for metrics                                                             | `/hub/metrics` |
+| `hub.metrics.serviceMonitor.interval`         | Interval at which metrics should be scraped                                                 | `30s`                       |
+| `hub.metrics.serviceMonitor.scrapeTimeout`    | Specify the timeout after which the scrape is ended                                         | `""`                        |
+| `hub.metrics.serviceMonitor.relabellings`     | Specify Metric Relabellings to add to the scrape endpoint                                   | `[]`                        |
+| `hub.metrics.serviceMonitor.honorLabels`      | Specify honorLabels parameter to add the scrape endpoint                                    | `false`                     |
+| `hub.metrics.serviceMonitor.additionalLabels` | Used to pass Labels that are required by the installed Prometheus Operator                  | `{}`                        |
+
+
 ### Proxy deployment parameters
 
 | Name                                          | Description                                                                               | Value                             |
@@ -204,6 +219,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `proxy.pdb.minAvailable`                      | Set minimum available proxy instances                                                     | `""`                              |
 | `proxy.pdb.maxUnavailable`                    | Set maximum available proxy instances                                                     | `""`                              |
 | `proxy.containerPort.api`                     | Proxy api container port                                                                  | `8001`                            |
+| `proxy.containerPort.metrics`                 | Proxy metrics container port                                                              | `8002`                            |
 | `proxy.containerPort.http`                    | Proxy http container port                                                                 | `8000`                            |
 | `proxy.priorityClassName`                     | Proxy pod priority class name                                                             | `""`                              |
 | `proxy.resources.limits`                      | The resources limits for the container                                                    | `{}`                              |
@@ -267,6 +283,20 @@ The command removes all the Kubernetes components associated with the chart and 
 | `proxy.ingress.extraTls`                        | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
 | `proxy.ingress.extraPaths`                      | Any additional arbitrary paths that may need to be added to the ingress under the main host.                                     | `[]`                     |
 | `proxy.ingress.secrets`                         | Add extra secrets for the tls configuration                                                                                      | `[]`                     |
+
+
+### Proxy Metrics parameters
+
+| Name                                      | Description                                                                                 | Value                       |
+| ----------------------------------------- | ------------------------------------------------------------------------------------------- | --------------------------- |
+| `proxy.metrics.serviceMonitor.enabled`          | If the operator is installed in your cluster, set to true to create a Service Monitor Entry | `false`                     |
+| `proxy.metrics.serviceMonitor.namespace`        | Namespace which Prometheus is running in                                                    | `""`                        |
+| `proxy.metrics.serviceMonitor.path`             | HTTP path to scrape for metrics                                                             | `/metrics` |
+| `proxy.metrics.serviceMonitor.interval`         | Interval at which metrics should be scraped                                                 | `30s`                       |
+| `proxy.metrics.serviceMonitor.scrapeTimeout`    | Specify the timeout after which the scrape is ended                                         | `""`                        |
+| `proxy.metrics.serviceMonitor.relabellings`     | Specify Metric Relabellings to add to the scrape endpoint                                   | `[]`                        |
+| `proxy.metrics.serviceMonitor.honorLabels`      | Specify honorLabels parameter to add the scrape endpoint                                    | `false`                     |
+| `proxy.metrics.serviceMonitor.additionalLabels` | Used to pass Labels that are required by the installed Prometheus Operator                  | `{}`                        |
 
 
 ### Image puller deployment parameters

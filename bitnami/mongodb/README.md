@@ -109,6 +109,7 @@ Refer to the [chart documentation for more information on each of these architec
 | `tls.existingSecret`     | Existing secret with TLS certificates (keys: `mongodb-ca-cert`, `mongodb-ca-key`, `client-pem`)                               | `""`                   |
 | `tls.caCert`             | Custom CA certificated (base64 encoded)                                                                                       | `""`                   |
 | `tls.caKey`              | CA certificate private key (base64 encoded)                                                                                   | `""`                   |
+| `tls.extraDnsNames`      | Add a of List of extra dns names                                                                                              | `""`                   |
 | `tls.image.registry`     | Init container TLS certs setup image registry                                                                                 | `docker.io`            |
 | `tls.image.repository`   | Init container TLS certs setup image repository                                                                               | `bitnami/nginx`        |
 | `tls.image.tag`          | Init container TLS certs setup image tag (immutable tags are recommended)                                                     | `1.21.3-debian-10-r11` |
