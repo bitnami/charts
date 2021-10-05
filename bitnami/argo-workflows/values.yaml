@@ -1091,7 +1091,7 @@ workflows:
 ## @param postgresql.postgresqlDatabase PortgreSQL database name
 ##
 postgresql:
-  enabled: false
+  enabled: true
   service:
     port: 5432
   postgresqlUsername: postgres

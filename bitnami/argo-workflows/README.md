@@ -325,7 +325,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                            | Description                                                            | Value               |
 | ------------------------------- | ---------------------------------------------------------------------- | ------------------- |
-| `postgresql.enabled`            | Enable PostgreSQL subchart and controller persistence using PostgreSQL | `false`             |
+| `postgresql.enabled`            | Enable PostgreSQL subchart and controller persistence using PostgreSQL | `true`              |
 | `postgresql.service.port`       | PostgreSQL port                                                        | `5432`              |
 | `postgresql.postgresqlUsername` | PostgreSQL username                                                    | `postgres`          |
 | `postgresql.postgresqlDatabase` | PortgreSQL database name                                               | `bn_argo_workflows` |
@@ -391,11 +391,13 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ### Database support
 
-You may want to have Argo Workflows controller connected to a database to store controller evidences. To achieve this, the chart can be deployed with the PostgreSQL or MySQL dependency (see next section to configure an external database instead of using the dependency). In order to configure the database, just change `postgresql.enabled=true` or `mysql.enabled=true`. The database will be configured automatically. Here is an example:
+You may want to have Argo Workflows controller connected to a database to store controller evidences. To achieve this, the chart can be deployed with the PostgreSQL or MySQL dependency (see next section to configure an external database instead of using the dependency). In order to configure the database, just change `postgresql.enabled=true` (default configutaion) or `mysql.enabled=true`. The database will be configured automatically. Here is an example:
 
 ```console
 postgresql.enabled=true
 ```
+
+If your installaion does not require to to store controller evidences, you can disable the controller persistence by setting `postgresql.enabled=false`, `mysql.enabled=false` and ` externalDatabase.enabled=false`.
 
 #### External database
 
