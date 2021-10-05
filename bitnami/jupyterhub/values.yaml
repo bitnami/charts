@@ -180,7 +180,7 @@ hub:
           name: {{ include "jupyterhub.hubconfiguration.imageEntry" ( dict "imageRoot" .Values.auxiliaryImage "global" $) }}
           tag: {{ .Values.auxiliaryImage.tag }}
           pullPolicy: {{ .Values.auxiliaryImage.pullPolicy }}
-          pullSecrets: {{- include "jupyterhub.imagePullSecrets" . | nindent 8 }}
+          pullSecrets: {{- include "jupyterhub.imagePullSecrets.list" . | nindent 8 }}
       cloudMetadata:
         blockWithIptables: false
       events: true
@@ -246,7 +246,7 @@ hub:
         name: {{ include "jupyterhub.hubconfiguration.imageEntry" ( dict "imageRoot" .Values.singleuser.image "global" $) }}
         tag: {{ .Values.singleuser.image.tag }}
         pullPolicy: {{ .Values.singleuser.image.pullPolicy }}
-        pullSecrets: {{- include "jupyterhub.imagePullSecretsList" . | nindent 8 }}
+        pullSecrets: {{- include "jupyterhub.imagePullSecrets.list" . | nindent 8 }}
       startTimeout: 300
       {{- /* We need to replace the Kubernetes memory/cpu terminology (e.g. 10Gi, 10Mi) with one compatible with Python (10G, 10M) */}}
       cpu:
