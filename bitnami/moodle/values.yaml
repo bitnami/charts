@@ -170,6 +170,20 @@ persistence:
   ## @param persistence.enabled Enable persistence using PVC
   ##
   enabled: true
+  ## @param persistence.customStorageClass Create a custom storage class
+  ## Requires persistence.enabled: true
+  ## Requires persistence.storageClass: name
+  ## ref: https://kubernetes.io/docs/concepts/storage/storage-classes/
+  ## E.g.
+  ## provisioner: efs.csi.aws.com
+  ##   parameters:
+  ##     provisioningMode: efs-ap
+  ##     fileSystemId: fs-12345678
+  ##     directoryPerms: "700"
+  ##     gidRangeStart: "1000" # optional
+  ##     gidRangeEnd: "2000" # optional
+  ##
+  customStorageClass: {}
   ## @param persistence.storageClass PVC Storage Class for Moodle
   ## If defined, storageClassName: <storageClass>
   ## If set to "-", storageClassName: "", which disables dynamic provisioning
@@ -180,7 +194,8 @@ persistence:
   storageClass: ""
   ## @param persistence.accessMode PVC Access Mode for Moodle
   ## Requires persistence.enabled: true
-  ## If defined, PVC must be created manually before volume will be bound
+  ## If defined, and no customStorageClass is defined, then
+  ## PVC must be created manually before volume will be bound
   ##
   accessMode: ReadWriteOnce
   ## @param persistence.size PVC Storage Request for Moodle

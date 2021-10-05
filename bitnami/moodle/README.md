@@ -109,6 +109,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sessionAffinity`                    | Control where client requests go, to the same pod or round-robin                                                      | `None`                |
 | `persistence.enabled`                | Enable persistence using PVC                                                                                          | `true`                |
 | `persistence.storageClass`           | PVC Storage Class for Moodle                                                                                          | `""`                  |
+| `persistence.customStorageClass`     | Custom Storage Class for Moodle                                                                                       | `{}`                  |
 | `persistence.accessMode`             | PVC Access Mode for Moodle                                                                                            | `ReadWriteOnce`       |
 | `persistence.size`                   | PVC Storage Request for Moodle                                                                                        | `8Gi`                 |
 | `persistence.existingClaim`          | An Existing PVC name                                                                                                  | `""`                  |
