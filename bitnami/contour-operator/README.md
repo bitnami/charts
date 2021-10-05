@@ -45,6 +45,85 @@ helm delete my-release
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
 
+## Differences between the Bitnami Contour chart and the Bitnami Contour Operator chart
+
+In the Bitnami catalog we offer both the *bitnami/contour* and *bitnami/contour-operator* charts. Each solution covers different needs and use cases.
+
+The *bitnami/contour* chart deploys a single Contour installation using a Kubernetes Deployment object (together with Services, PVCs, ConfigMaps, etc.). The figure below shows a simplified view of the deployed objects in the cluster after executing *helm install*:
+
+```
+                    +--------------+                +-------------+
+                    |              |                |             |
+ Service            |   Contour    |                |    Envoy    |
+<-------------------+              +<---------------+             |
+                    |  Deployment  |                |  DaemonSet  |
+                    |              |                |             |
+                    +-----------+--+                +-------------+
+                                ^
+                                |                +------------+
+                                |                |            |
+                                +----------------+ Configmaps |
+                                                 |            |
+                                                 +------------+
+
+```
+
+Its lifecycle is managed using Helm.
+
+The *bitnami/contour-operator* chart deploys a Contour Operator installation using a Kubernetes Deployment. The figure below shows the Contour Operator deployment after executing *helm install*:
+
+```
++--------------------+
+|                    |      +---------------+
+|  Contour Operator  |      |               |
+|                    |      |     RBAC      |
+|     Deployment     |      | Privileges    |
++-------+------------+      +-------+-------+
+        ^                           |
+        |   +-----------------+     |
+        +---+ Service Account +<----+
+            +-----------------+
+```
+
+The operator will extend the Kubernetes API with the *Contour* object, among others. From that moment, the user will be able to deploy objects of these kinds and the previously deployed Operator will take care of deploying all the required Deployments, ConfigMaps and Services for running a Contour instance. Its lifecycle is managed using *kubectl* on the Contour objects. The following figure shows a simplified view of the deployed objects after deploying a *Contour* object using *kubectl*:
+
+```
+  +--------------------+
+  |                    |      +---------------+
+  |  Contour Operator  |      |               |
+  |                    |      |     RBAC      |
+  |     Deployment     |      | Privileges    |
+  +-------+------------+      +-------+-------+
+    │     ^                           |
+    │     |   +-----------------+     |
+    │     +---+ Service Account +<----+
+    │         +-----------------+
+    │
+    │
+    │
+    │
+    │    ┌───────────────────────────────────────────────────────────────────────┐
+    │    │                                                                       │
+    |    |                       +--------------+                +-------------+ |
+    |────►                       |              |                |             | |
+         |    Service            |   Contour    |                |    Envoy    | |
+         |   <-------------------+              +<---------------+             | |
+         |                       |  Deployment  |                |  DaemonSet  | |
+         |                       |              |                |             | |
+         |                       +-----------+--+                +-------------+ |
+         |                                   ^                                   |
+         |                                   |                +------------+     |
+         │                                   +----------------+ Configmaps |     |
+         │                                                    |  Secrets   |     |
+         │                                                    +------------+     |
+         │                                                                       │
+         │                                                                       │
+         └───────────────────────────────────────────────────────────────────────┘
+
+```
+
+This solution allows to easily deploy multiple Contour instances compared to the *bitnami/contour* chart. As the operator automatically deploys Contour installations, the Contour Operator pods will require a ServiceAccount with privileges to create and destroy multiple Kubernetes objects. This may be problematic for Kubernetes clusters with strict role-based access policies.
+
 ## Parameters
 
 ### Global parameters
