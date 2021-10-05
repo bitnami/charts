@@ -165,6 +165,7 @@ maxUnavailable: ""
 ## Containers Security Context
 ## @param containerSecurityContext.enabled Enable Containers' Security Context
 ## @param containerSecurityContext.runAsUser User ID for the containers.
+## @param containerSecurityContext.runAsNonRoot Run container as non root
 ##
 containerSecurityContext:
   enabled: true
@@ -221,7 +222,7 @@ tls:
 ## Redis&trade; Service properties for standalone mode.
 ##
 service:
-  ## @param service.port Kubernetes Service port
+  ## @param service.ports.redis Kubernetes Redis service port
   ##
   ports:
     redis: 6379
@@ -405,7 +406,7 @@ redis:
   ## @param redis.customReadinessProbe Override default readiness probe
   ##
   customReadinessProbe: {}
-  ## @param customStartupProbe Custom startupProbe that overrides the default one
+  ## @param redis.customStartupProbe Custom startupProbe that overrides the default one
   ##
   customStartupProbe: {}
   ## @param redis.initContainers Extra init containers to add to the deployment
