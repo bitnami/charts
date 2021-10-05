@@ -25,9 +25,6 @@ spec:
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: postgresql
-  {{- if .Values.topologySpreadConstraints }}
-  topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.topologySpreadConstraints "context" .) | nindent 4 }}
-  {{- end }}
   template:
     metadata:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
@@ -71,6 +68,9 @@ spec:
       {{- end }}
       {{- if .Values.serviceAccount.enabled }}
       serviceAccountName: {{ default (include "common.names.fullname" . ) .Values.serviceAccount.name}}
+      {{- end }}
+      {{- if .Values.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       initContainers:
       {{- if .Values.postgresql.tls.enabled }}
