@@ -60,8 +60,8 @@ Return the proper Docker Image Registry Secret Names
 {{- end -}}
 
 {{/*
-Return the proper Docker Image Registry Secret Names (deprecated: use common.images.renderPullSecrets instead)
-{{ include "common.images.pullSecrets" ( dict "images" (list .Values.path.to.the.image1, .Values.path.to.the.image2) "global" .Values.global) }}
+Return the proper Docker Image Registry Secret Names
+{{ include "jupyterhub.imagePullSecretsList" ( dict "images" (list .Values.path.to.the.image1, .Values.path.to.the.image2) "global" .Values.global) }}
 */}}
 {{- define "jupyterhub.imagePullSecretsList" -}}
   {{- $pullSecrets := list }}
