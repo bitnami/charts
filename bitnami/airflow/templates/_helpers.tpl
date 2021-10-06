@@ -191,7 +191,7 @@ Copy DAGs init-container
 */}}
 {{- define "airflow.loadDAGsInitContainer" -}}
 - name: load-dags
-  image: bitnami/bitnami-shell:10-debian-10-r213
+  image: {{ printf "%s/%s:%s" .Values.image.registry .Values.image.repository .Values.image.tag }}
   imagePullPolicy: IfNotPresent
   command: ['sh', '-c', 'cp /configmap/* /dags']
   volumeMounts:

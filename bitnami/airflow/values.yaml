@@ -191,6 +191,26 @@ executor: 'CeleryExecutor'
 ## @param dagsConfigMap Name of an existing config map containing all the DAGs files you want to load in Airflow
 ##
 dagsConfigMap: ""
+## @param certificates.image.registry Container sidecar registry
+## @param certificates.image.repository Container sidecar image
+## @param certificates.image.tag Container sidecar image tag
+## @param certificates.image.pullPolicy Container sidecar image pull policy
+## @param certificates.image.pullSecrets Container sidecar image pull secrets
+##
+image:
+  registry: docker.io
+  repository: bitnami/bitnami-shell
+  tag: 10-debian-10-r213
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  pullPolicy: IfNotPresent
+  ## e.g:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  pullSecrets: []
 ## @param loadExamples Switch to load some Airflow examples
 ##
 loadExamples: false
