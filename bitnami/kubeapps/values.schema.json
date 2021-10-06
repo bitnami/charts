@@ -26,9 +26,9 @@
         }
       }
     },
-    "assetsvc": {
+    "kubeappsapis": {
       "type": "object",
-      "title": "Assetsvc configuration",
+      "title": "kubeappsapis configuration",
       "form": true,
       "properties": {
         "replicaCount": {
