@@ -109,11 +109,11 @@ Refer to the [chart documentation for more information on each of these architec
 | `tls.existingSecret`     | Existing secret with TLS certificates (keys: `mongodb-ca-cert`, `mongodb-ca-key`, `client-pem`)                               | `""`                   |
 | `tls.caCert`             | Custom CA certificated (base64 encoded)                                                                                       | `""`                   |
 | `tls.caKey`              | CA certificate private key (base64 encoded)                                                                                   | `""`                   |
-| `tls.extraDnsNames`      | Add a of List of extra dns names                                                                                              | `""`                   |
 | `tls.image.registry`     | Init container TLS certs setup image registry                                                                                 | `docker.io`            |
 | `tls.image.repository`   | Init container TLS certs setup image repository                                                                               | `bitnami/nginx`        |
 | `tls.image.tag`          | Init container TLS certs setup image tag (immutable tags are recommended)                                                     | `1.21.3-debian-10-r11` |
 | `tls.image.pullPolicy`   | Init container TLS certs setup image pull policy                                                                              | `IfNotPresent`         |
+| `tls.extraDnsNames`      | Add extra dns names to the CA, can solve x509 auth issue for pod clients                                                      | `[]`                   |
 | `hostAliases`            | Add deployment host aliases                                                                                                   | `[]`                   |
 | `replicaSetName`         | Name of the replica set (only when `architecture=replicaset`)                                                                 | `rs0`                  |
 | `replicaSetHostnames`    | Enable DNS hostnames in the replicaset config (only when `architecture=replicaset`)                                           | `true`                 |
