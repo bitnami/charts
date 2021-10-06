@@ -196,7 +196,7 @@ executor: 'CeleryExecutor'
 ## @param dags.image.pullPolicy Container sidecar image pull policy
 ##
 dags:
-  dagsConfigMap: "dags-cm"
+  dagsConfigMap: ""
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
