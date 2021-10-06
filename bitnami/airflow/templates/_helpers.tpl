@@ -190,7 +190,6 @@ Should use config from the configmap
 Copy DAGs init-container
 */}}
 {{- define "airflow.loadDAGsInitContainer" -}}
-{{- if .Values.dagsConfigMap -}}
 - name: load-dags
   image: bitnami/bitnami-shell:10-debian-10-r213
   imagePullPolicy: IfNotPresent
@@ -200,7 +199,6 @@ Copy DAGs init-container
       mountPath: /configmap
     - name: external-dag-files
       mountPath: /dags
-{{- else -}}{{- end -}}
 {{- end -}}
 
 {{/*
