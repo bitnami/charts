@@ -57,7 +57,7 @@ spec:
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
       {{- end }}
       initContainers: {{- include "airflow.git.containers.clone" . | trim | nindent 8 }}
-      {{- if .Values.dagsConfigMap -}}
+      {{- if .Values.dagsConfigMap }}
         {{- include "airflow.loadDAGsInitContainer" . | trim | nindent 8 }}
       {{- end }}
       {{- if .Values.scheduler.initContainers }}
