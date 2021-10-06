@@ -90,6 +90,82 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                            | `["infinity"]` |
 
 
+### Redis&trade; Cluster Common parameters
+
+| Name                                          | Description                                                                                                                                         | Value                   |
+| --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
+| `image.registry`                              | Redis&trade; cluster image registry                                                                                                                 | `docker.io`             |
+| `image.repository`                            | Redis&trade; cluster image repository                                                                                                               | `bitnami/redis-cluster` |
+| `image.tag`                                   | Redis&trade; cluster image tag (immutable tags are recommended)                                                                                     | `6.2.6-debian-10-r0`    |
+| `image.pullPolicy`                            | Redis&trade; cluster image pull policy                                                                                                              | `IfNotPresent`          |
+| `image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                                                    | `[]`                    |
+| `image.debug`                                 | Enable image debug mode                                                                                                                             | `false`                 |
+| `networkPolicy.enabled`                       | Enable NetworkPolicy                                                                                                                                | `false`                 |
+| `networkPolicy.allowExternal`                 | The Policy model to apply. Don't require client label for connections                                                                               | `true`                  |
+| `networkPolicy.ingressNSMatchLabels`          | Allow connections from other namespacess. Just set label for namespace and set label for pods (optional).                                           | `{}`                    |
+| `networkPolicy.ingressNSPodMatchLabels`       | For other namespaces match by pod labels and namespace labels                                                                                       | `{}`                    |
+| `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                                                | `false`                 |
+| `serviceAccount.name`                         | The name of the ServiceAccount to create                                                                                                            | `""`                    |
+| `serviceAccount.annotations`                  | Annotations for Cassandra Service Account                                                                                                           | `{}`                    |
+| `serviceAccount.automountServiceAccountToken` | Automount API credentials for a service account.                                                                                                    | `true`                  |
+| `rbac.create`                                 | Specifies whether RBAC resources should be created                                                                                                  | `false`                 |
+| `rbac.role.rules`                             | Rules to create. It follows the role specification                                                                                                  | `[]`                    |
+| `podSecurityContext.enabled`                  | Enable Redis&trade; pod Security Context                                                                                                            | `true`                  |
+| `podSecurityContext.fsGroup`                  | Group ID for the pods                                                                                                                               | `1001`                  |
+| `podSecurityContext.runAsUser`                | User ID for the pods                                                                                                                                | `1001`                  |
+| `podSecurityContext.sysctls`                  | Set namespaced sysctls for the pods                                                                                                                 | `[]`                    |
+| `podDisruptionBudget`                         | Limits the number of pods of the replicated application that are down simultaneously from voluntary disruptions                                     | `{}`                    |
+| `minAvailable`                                | Min number of pods that must still be available after the eviction                                                                                  | `""`                    |
+| `maxUnavailable`                              | Max number of pods that can be unavailable after the eviction                                                                                       | `""`                    |
+| `containerSecurityContext.enabled`            | Enable Containers' Security Context                                                                                                                 | `true`                  |
+| `containerSecurityContext.runAsUser`          | User ID for the containers.                                                                                                                         | `1001`                  |
+| `containerSecurityContext.runAsNonRoot`       | Run container as non root                                                                                                                           | `true`                  |
+| `usePassword`                                 | Use password authentication                                                                                                                         | `true`                  |
+| `password`                                    | Redis&trade; password (ignored if existingSecret set)                                                                                               | `""`                    |
+| `existingSecret`                              | Name of existing secret object (for password authentication)                                                                                        | `""`                    |
+| `existingSecretPasswordKey`                   | Name of key containing password to be retrieved from the existing secret                                                                            | `""`                    |
+| `usePasswordFile`                             | Mount passwords as files instead of environment variables                                                                                           | `false`                 |
+| `tls.enabled`                                 | Enable TLS support for replication traffic                                                                                                          | `false`                 |
+| `tls.authClients`                             | Require clients to authenticate or not                                                                                                              | `true`                  |
+| `tls.autoGenerated`                           | Generate automatically self-signed TLS certificates                                                                                                 | `false`                 |
+| `tls.existingSecret`                          | The name of the existing secret that contains the TLS certificates                                                                                  | `""`                    |
+| `tls.certificatesSecret`                      | DEPRECATED. Use tls.existingSecret instead                                                                                                          | `""`                    |
+| `tls.certFilename`                            | Certificate filename                                                                                                                                | `""`                    |
+| `tls.certKeyFilename`                         | Certificate key filename                                                                                                                            | `""`                    |
+| `tls.certCAFilename`                          | CA Certificate filename                                                                                                                             | `""`                    |
+| `tls.dhParamsFilename`                        | File containing DH params (in order to support DH based ciphers)                                                                                    | `""`                    |
+| `service.ports.redis`                         | Kubernetes Redis service port                                                                                                                       | `6379`                  |
+| `service.nodePorts.redis`                     | Node port for Redis                                                                                                                                 | `""`                    |
+| `service.extraPorts`                          | Extra ports to expose in the service (normally used with the `sidecar` value)                                                                       | `[]`                    |
+| `service.annotations`                         | Provide any additional annotations which may be required.                                                                                           | `{}`                    |
+| `service.labels`                              | Additional labels for redis service                                                                                                                 | `{}`                    |
+| `service.type`                                | Service type for default redis service                                                                                                              | `ClusterIP`             |
+| `service.clusterIP`                           | Service Cluster IP                                                                                                                                  | `""`                    |
+| `service.loadBalancerIP`                      | Load balancer IP if `service.type` is `LoadBalancer`                                                                                                | `""`                    |
+| `service.loadBalancerSourceRanges`            | Service Load Balancer sources                                                                                                                       | `[]`                    |
+| `service.externalTrafficPolicy`               | Service external traffic policy                                                                                                                     | `Cluster`               |
+| `persistence.enabled`                         | Use a PVC to persist data.                                                                                                                          | `true`                  |
+| `persistence.path`                            | Path to mount the volume at, to use other images Redis&trade; images.                                                                               | `/bitnami/redis/data`   |
+| `persistence.subPath`                         | The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services                                             | `""`                    |
+| `persistence.storageClass`                    | Storage class of backing PVC                                                                                                                        | `""`                    |
+| `persistence.annotations`                     | Persistent Volume Claim annotations                                                                                                                 | `{}`                    |
+| `persistence.accessModes`                     | Persistent Volume Access Modes                                                                                                                      | `["ReadWriteOnce"]`     |
+| `persistence.size`                            | Size of data volume                                                                                                                                 | `8Gi`                   |
+| `persistence.matchLabels`                     | Persistent Volume selectors                                                                                                                         | `{}`                    |
+| `persistence.matchExpressions`                | matchExpressions Persistent Volume selectors                                                                                                        | `{}`                    |
+| `updateStrategy`                              | Update strategy for StatefulSet                                                                                                                     | `RollingUpdate`         |
+| `rollingUpdatePartition`                      | Partition update strategy                                                                                                                           | `""`                    |
+| `volumePermissions.enabled`                   | Enable init container that changes volume permissions in the registry (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
+| `volumePermissions.image.registry`            | Init container volume-permissions image registry                                                                                                    | `docker.io`             |
+| `volumePermissions.image.repository`          | Init container volume-permissions image repository                                                                                                  | `bitnami/bitnami-shell` |
+| `volumePermissions.image.tag`                 | Init container volume-permissions image tag                                                                                                         | `10-debian-10-r212`     |
+| `volumePermissions.image.pullPolicy`          | Init container volume-permissions image pull policy                                                                                                 | `Always`                |
+| `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                                                                                    | `[]`                    |
+| `volumePermissions.resources.limits`          | The resources limits for the container                                                                                                              | `{}`                    |
+| `volumePermissions.resources.requests`        | The requested resources for the container                                                                                                           | `{}`                    |
+| `podSecurityPolicy.create`                    | Specifies whether a PodSecurityPolicy should be created                                                                                             | `false`                 |
+
+
 ### Redis&trade; statefulset parameters
 
 | Name                                       | Description                                                                                                  | Value      |
@@ -99,8 +175,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `redis.podManagementPolicy`                | Statefulset Pod management policy, it needs to be Parallel to be able to complete the cluster join           | `Parallel` |
 | `redis.hostAliases`                        | Deployment pod host aliases                                                                                  | `[]`       |
 | `redis.useAOFPersistence`                  | Whether to use AOF Persistence mode or not                                                                   | `yes`      |
-| `redis.containerPorts.redis`                        | Redis&trade; port                                                                                            | `6379`     |
-| `redis.containerPorts.bus`                          | The busPort should be obtained adding 10000 to the redisPort. By default: 10000 + 6379 = 16379               | `16379`    |
+| `redis.containerPorts.redis`               | Redis&trade; port                                                                                            | `6379`     |
+| `redis.containerPorts.bus`                 | The busPort should be obtained adding 10000 to the redisPort. By default: 10000 + 6379 = 16379               | `16379`    |
 | `redis.lifecycleHooks`                     | LifecycleHook to set additional configuration before or after startup. Evaluated as a template               | `{}`       |
 | `redis.extraVolumes`                       | Extra volumes to add to the deployment                                                                       | `[]`       |
 | `redis.extraVolumeMounts`                  | Extra volume mounts to add to the container                                                                  | `[]`       |
