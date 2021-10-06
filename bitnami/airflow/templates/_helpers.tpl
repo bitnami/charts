@@ -187,11 +187,11 @@ Should use config from the configmap
 {{- end -}}
 
 {{/*
-Copy DAGs init-container
+Load DAGs init-container
 */}}
 {{- define "airflow.loadDAGsInitContainer" -}}
 - name: load-dags
-  image: {{ printf "%s/%s:%s" .Values.image.registry .Values.image.repository .Values.image.tag }}
+  image: {{ printf "%s/%s:%s" .Values.dags.image.registry .Values.dags.image.repository .Values.dags.image.tag }}
   imagePullPolicy: IfNotPresent
   command: ['sh', '-c', 'cp /configmap/* /dags']
   volumeMounts:
