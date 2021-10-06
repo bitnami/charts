@@ -178,18 +178,19 @@ tls:
   ## @param tls.image.repository Init container TLS certs setup image repository
   ## @param tls.image.tag Init container TLS certs setup image tag (immutable tags are recommended)
   ## @param tls.image.pullPolicy Init container TLS certs setup image pull policy
-  ##
-  extraDnsNames: 
   ## @param tls.extraDnsNames Add extra dns names to the CA, can solve x509 auth issue for pod clients
   ##
-  ## example:
-  ##     "DNS.6": "$my_host"
-  ##    "DNS.7": "$test"
   image:
     registry: docker.io
     repository: bitnami/nginx
     tag: 1.21.3-debian-10-r11
     pullPolicy: IfNotPresent
+  ## e.g:
+  ## extraDnsNames
+  ##   - "DNS.6": "$my_host"
+  ##   - "DNS.7": "$test"
+  ##
+  extraDnsNames: []
 ## @param hostAliases Add deployment host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
