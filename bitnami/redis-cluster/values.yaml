@@ -385,10 +385,10 @@ redis:
   ## ref: https://redis.io/topics/cluster-tutorial#creating-and-using-a-redis-cluster
   ##
   useAOFPersistence: "yes"
-  ## @param redis.ports.redis Redis&trade; port
-  ## @param redis.ports.bus The busPort should be obtained adding 10000 to the redisPort. By default: 10000 + 6379 = 16379
+  ## @param redis.containerPorts.redis Redis&trade; port
+  ## @param redis.containerPorts.bus The busPort should be obtained adding 10000 to the redisPort. By default: 10000 + 6379 = 16379
   ##
-  ports:
+  containerPorts:
     redis: 6379
     bus: 16379
   ## @param redis.lifecycleHooks LifecycleHook to set additional configuration before or after startup. Evaluated as a template

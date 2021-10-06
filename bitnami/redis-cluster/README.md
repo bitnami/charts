@@ -99,8 +99,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `redis.podManagementPolicy`                | Statefulset Pod management policy, it needs to be Parallel to be able to complete the cluster join           | `Parallel` |
 | `redis.hostAliases`                        | Deployment pod host aliases                                                                                  | `[]`       |
 | `redis.useAOFPersistence`                  | Whether to use AOF Persistence mode or not                                                                   | `yes`      |
-| `redis.ports.redis`                        | Redis&trade; port                                                                                            | `6379`     |
-| `redis.ports.bus`                          | The busPort should be obtained adding 10000 to the redisPort. By default: 10000 + 6379 = 16379               | `16379`    |
+| `redis.containerPorts.redis`                        | Redis&trade; port                                                                                            | `6379`     |
+| `redis.containerPorts.bus`                          | The busPort should be obtained adding 10000 to the redisPort. By default: 10000 + 6379 = 16379               | `16379`    |
 | `redis.lifecycleHooks`                     | LifecycleHook to set additional configuration before or after startup. Evaluated as a template               | `{}`       |
 | `redis.extraVolumes`                       | Extra volumes to add to the deployment                                                                       | `[]`       |
 | `redis.extraVolumeMounts`                  | Extra volume mounts to add to the container                                                                  | `[]`       |

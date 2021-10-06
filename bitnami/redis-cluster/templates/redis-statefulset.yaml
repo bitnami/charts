@@ -165,7 +165,7 @@ spec:
               value: {{ ternary "yes" "no" .Values.tls.enabled | quote }}
             {{- if .Values.tls.enabled }}
             - name: REDIS_TLS_PORT
-              value: {{ .Values.redis.ports.redis | quote }}
+              value: {{ .Values.redis.containerPorts.redis | quote }}
             - name:  REDIS_TLS_AUTH_CLIENTS
               value: {{ ternary "yes" "no" .Values.tls.authClients | quote }}
             - name:  REDIS_TLS_CERT_FILE
@@ -180,7 +180,7 @@ spec:
             {{- end }}
             {{- else }}
             - name: REDIS_PORT
-              value: {{ .Values.redis.ports.redis | quote }}
+              value: {{ .Values.redis.containerPorts.redis | quote }}
             {{- end }}
             {{- if .Values.redis.extraEnvVars }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.redis.extraEnvVars "context" $ ) | nindent 12 }}
@@ -198,9 +198,9 @@ spec:
           {{- end }}
           ports:
             - name: tcp-redis
-              containerPort: {{ .Values.redis.ports.redis }}
+              containerPort: {{ .Values.redis.containerPorts.redis }}
             - name: tcp-redis-bus
-              containerPort: {{ .Values.redis.ports.bus }}
+              containerPort: {{ .Values.redis.containerPorts.bus }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.redis.livenessProbe.enabled }}
           livenessProbe:
@@ -236,11 +236,8 @@ spec:
           {{- end }}
           {{- if .Values.redis.startupProbe.enabled }}
           startupProbe:
-            exec:
-              command:
-                - sh
-                - -c
-                - /scripts/ping_liveness_local.sh {{ .Values.redis.startupProbe.timeoutSeconds }}
+            tcpSocket:
+              port: tcp-redis
             initialDelaySeconds: {{ .Values.redis.startupProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.redis.startupProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.redis.startupProbe.timeoutSeconds }}
@@ -303,7 +300,7 @@ spec:
             - name: REDIS_ALIAS
               value: {{ template "common.names.fullname" . }}
             - name: REDIS_ADDR
-              value: {{ printf "%s://127.0.0.1:%g" (ternary "rediss" "redis" .Values.tls.enabled) .Values.redis.ports.redis | quote }}
+              value: {{ printf "%s://127.0.0.1:%g" (ternary "rediss" "redis" .Values.tls.enabled) .Values.redis.containerPorts.redis | quote }}
             {{- if and .Values.usePassword (not .Values.usePasswordFile) }}
             - name: REDIS_PASSWORD
               valueFrom:
