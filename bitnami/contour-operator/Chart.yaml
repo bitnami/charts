@@ -23,4 +23,4 @@ name: contour-operator
 sources:
   - https://github.com/projectcontour/contour-operator
   - https://github.com/bitnami/bitnami-docker-contour-operator
-version: 0.1.0
+version: 0.1.1
