@@ -1,10 +1,12 @@
-{{- $locatorsReplicaCount := int .Values.locator.replicaCount }}
+{{- $locatorReplicaCount := int .Values.locator.replicaCount }}
+{{- $serverReplicaCount := int .Values.server.replicaCount }}
 {{- $fullname := include "common.names.fullname" . }}
 {{- $releaseNamespace := .Release.Namespace }}
 {{- $clusterDomain := .Values.clusterDomain }}
 {{- $locatorPort := int .Values.locator.service.ports.locator }}
+{{- $locatorSvc := printf "%s-locator.%s.svc.%s[%d]" $fullname $releaseNamespace $clusterDomain $locatorPort }}
 {{- $locators := list }}
-{{- range $e, $i := until $locatorsReplicaCount }}
+{{- range $e, $i := until $locatorReplicaCount }}
 {{- $locators = append $locators (printf "%s-locator-%d.%s-locator-hl.%s.svc.%s[%d]" $fullname $i $fullname $releaseNamespace $clusterDomain $locatorPort) }}
 {{- end }}
 apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
@@ -301,9 +303,18 @@ spec:
           {{- else if .Values.server.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.server.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
+          {{- end }}
           {{- if .Values.server.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.server.lifecycleHooks "context" $) | nindent 12 }}
-          {{- end }}
+          {{- else if and (gt $serverReplicaCount 1) .Values.server.restoreRedundancyOnContainerTermination }}
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - /bin/bash
+                  - -ec
+                  - |
+                    gfsh -e "connect --locator={{ $locatorSvc }}{{ if .Values.auth.enabled }} --user=$GEODE_SECURITY_USERNAME --password=$GEODE_SECURITY_PASSWORD{{ end }}" -e "restore redundancy"
           {{- end }}
           volumeMounts:
             - name: data

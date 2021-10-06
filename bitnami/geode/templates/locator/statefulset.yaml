@@ -279,9 +279,9 @@ spec:
           {{- else if .Values.locator.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.locator.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
+          {{- end }}
           {{- if .Values.locator.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.locator.lifecycleHooks "context" $) | nindent 12 }}
-          {{- end }}
           {{- end }}
           volumeMounts:
             - name: data

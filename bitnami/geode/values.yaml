@@ -512,6 +512,10 @@ server:
   ## NOTE: When it's set the server.log4j is ignored
   ##
   existingLog4jConfigMap: ""
+  ## @param server.restoreRedundancyOnContainerTermination Use a PreStop hook on container termination to restore redundancy to partitioned regions and reassign which members host the primary copies
+  ## NOTE: Ignored if server.lifecycleHooks is set or server.replicaCount=1
+  ##
+  restoreRedundancyOnContainerTermination: true
   ## @param server.replicaCount Number of Cache Server replicas to deploy
   ##
   replicaCount: 3
