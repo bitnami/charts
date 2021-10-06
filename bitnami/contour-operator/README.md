@@ -284,6 +284,35 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
+### Using private image registries
+
+If the images for Contour and Envoy are in a private registry and require pull secrets to be set, you need to create three service accounts (Contour, Envoy and Contour Certgen) with your pull secrets in the same namespace as you wish to deploy a Contour object. For example, if you want to deploy a Contour object in the `projectcontour` namespace and your image pull secret is `mySecret`, you would need to create the following service accounts first:
+
+```yaml
+kind: ServiceAccount
+metadata:
+  name: contour
+  namespace: projectcontour
+imagePullSecrets:
+  - name: mySecret
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: contour-certgen
+  namespace: projectcontour
+imagePullSecrets:
+  - name: mySecret
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: envoy
+  namespace: projectcontour
+imagePullSecrets:
+  - name: mySecret
+```
+
 ### Additional environment variables
 
 In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property.
