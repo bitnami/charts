@@ -660,9 +660,33 @@ certificates:
     ##
     pullSecrets: []
 
-networkPolicy:
+networkPolicyOld:
   enabled: false
-  block: {}
   destinationName: mariadb
   extraSelectorLabels: {}
   extraMatchLabels: {}
+  block: {}
+
+networkPolicy:
+  enabled: false
+
+  metricsNamespaceLabels:
+    role: monitoring
+
+  ingressNamespaceLabels:
+    role: ingress
+
+
+  ingress:
+    # Mysql only could be accessed from drupal
+    BackendName: mariadb
+    BackendOnlyAccesibleByFronted: true
+
+    # Allow only from the namespace:
+    AllowOnlyFromNamespace: true
+    AllowOnlyFromNamespaceNameLabels:
+      role: app
+
+  egress:
+    # Disallow connections to external
+    DisallowConnectionsToExternal: true

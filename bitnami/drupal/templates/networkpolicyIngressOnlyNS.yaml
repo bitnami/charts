@@ -1,8 +1,8 @@
-{{- if and .Values.networkPolicy.enabled .Values.ingress.enabled }}
+{{- if .Values.networkPolicy.ingress.AllowOnlyFromNamespace }}
 apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
 kind: NetworkPolicy
 metadata:
-  name: {{ include "common.names.fullname" . }}-networkpolicy-ingress
+  name: {{ include "common.names.fullname" . }}-networkpolicy-ingress-from-ns
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -21,8 +21,8 @@ spec:
   - from:
     - namespaceSelector:
         matchLabels:
-          {{- if .Values.networkPolicy.ingressNamespaceLabels }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.networkPolicy.ingressNamespaceLabels "context" $) | nindent 10 }}
+          {{- if .Values.networkPolicy.ingress.AllowOnlyFromNamespaceNameLabels }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.networkPolicy.ingress.AllowOnlyFromNamespaceNameLabels "context" $) | nindent 10 }}
           {{- end }}
   {{- end }}
 {{- end }}

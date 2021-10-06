@@ -1,0 +1,27 @@
+{{- if .Values.networkPolicy.egress.DisallowConnectionsToExternal }}
+apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
+kind: NetworkPolicy
+metadata:
+  name: {{ include "common.names.fullname" . }}-networkpolicy-disallow-egress
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+spec:
+  podSelector:
+    matchLabels:
+      {{- include "networkPolicy.outgoingSelectorLabels" . | nindent 6 }}
+      {{- if .Values.networkPolicy.extraMatchLabels }}
+      {{- include "common.tplvalues.render" ( dict "value" .Values.networkPolicy.extraMatchLabels "context" $ ) | nindent 6 }}
+      {{- end}}
+  policyTypes:
+    - Egress
+  egress:
+    - ports:
+      - port: 53
+        protocol: UDP
+      - port: 53
+        protocol: TCP
+    - to:
+      - namespaceSelector: {}
+{{- end }}
