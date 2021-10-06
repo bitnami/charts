@@ -36,27 +36,3 @@ Create the name of the service account to use
     {{ default "default" .Values.serviceAccount.name }}
 {{- end -}}
 {{- end -}}
-
-{{/*
-Return the proper Docker Image Registry Secret Names (deprecated: use common.images.renderPullSecrets instead)
-{{ include "common.images.pullSecrets" ( dict "images" (list path.to.the.image1, path.to.the.image2) "global" .Values.global) }}
-*/}}
-{{- define "contour-operator.defaultPullSecrets" -}}
-  {{- $pullSecrets := list }}
-  {{- if .global }}
-    {{- range .global.imagePullSecrets -}}
-      {{- $pullSecrets = append $pullSecrets . -}}
-    {{- end -}}
-  {{- end -}}
-
-  {{- range .images -}}
-    {{- range .pullSecrets -}}
-      {{- $pullSecrets = append $pullSecrets . -}}
-    {{- end -}}
-  {{- end -}}
-{{- if (not (empty $pullSecrets)) }}
-{{- range $pullSecrets }}
-- name: {{ . }}
-{{- end }}
-{{- end }}
-{{- end -}}
