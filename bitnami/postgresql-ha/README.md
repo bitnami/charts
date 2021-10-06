@@ -65,20 +65,20 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 
 ### General parameters
 
-| Name                        | Description                                                                                                           | Value           |
-| --------------------------- | --------------------------------------------------------------------------------------------------------------------- | --------------- |
-| `nameOverride`              | String to partially override common.names.fullname template (will maintain the release name)                          | `""`            |
-| `fullnameOverride`          | String to fully override common.names.fullname template                                                               | `""`            |
-| `clusterDomain`             | Kubernetes Cluster Domain                                                                                             | `cluster.local` |
-| `commonAnnotations`         | Common annotations to add to all resources (sub-charts are not considered). Evaluated as a template                   | `{}`            |
-| `commonLabels`              | Common labels to add to all resources (sub-charts are not considered). Evaluated as a template                        | `{}`            |
-| `extraDeploy`               | Array of extra objects to deploy with the release (evaluated as a template)                                           | `[]`            |
-| `serviceAccount.enabled`    | Enable service account (Note: Service Account will only be automatically created if `serviceAccount.name` is not set) | `false`         |
-| `serviceAccount.name`       | Name of an already existing service account. Setting this value disables the automatic service account creation       | `""`            |
-| `diagnosticMode.enabled`    | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                               | `false`         |
-| `diagnosticMode.command`    | Command to override all containers in the deployment                                                                  | `[]`            |
-| `diagnosticMode.args`       | Args to override all containers in the deployment                                                                     | `[]`            |
-| `topologySpreadConstraints` | Topology Spread Constraints for pod assignment                                                                        | `{}`            |
+| Name                        | Description                                                                                                              | Value           |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------------ | --------------- |
+| `nameOverride`              | String to partially override common.names.fullname template (will maintain the release name)                             | `""`            |
+| `fullnameOverride`          | String to fully override common.names.fullname template                                                                  | `""`            |
+| `clusterDomain`             | Kubernetes Cluster Domain                                                                                                | `cluster.local` |
+| `commonAnnotations`         | Common annotations to add to all resources (sub-charts are not considered). Evaluated as a template                      | `{}`            |
+| `commonLabels`              | Common labels to add to all resources (sub-charts are not considered). Evaluated as a template                           | `{}`            |
+| `extraDeploy`               | Array of extra objects to deploy with the release (evaluated as a template)                                              | `[]`            |
+| `serviceAccount.enabled`    | Enable service account (Note: Service Account will only be automatically created if `serviceAccount.name` is not set)    | `false`         |
+| `serviceAccount.name`       | Name of an already existing service account. Setting this value disables the automatic service account creation          | `""`            |
+| `topologySpreadConstraints` | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `{}`            |
+| `diagnosticMode.enabled`    | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                                  | `false`         |
+| `diagnosticMode.command`    | Command to override all containers in the deployment                                                                     | `[]`            |
+| `diagnosticMode.args`       | Args to override all containers in the deployment                                                                        | `[]`            |
 
 
 ### PostgreSQL with Repmgr parameters
