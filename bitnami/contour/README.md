@@ -125,8 +125,9 @@ $ helm uninstall my-release
 | `contour.extraEnvVars`                       | Array containing extra env vars to be added to all Contour containers                                                              | `[]`                   |
 | `contour.extraEnvVarsConfigMap`              | ConfigMap containing extra env vars to be added to all Contour containers                                                          | `""`                   |
 | `contour.extraEnvVarsSecret`                 | Secret containing extra env vars to be added to all Contour containers                                                             | `""`                   |
-| `contour.ingressClass`                       | Name of the ingress class to route through this controller                                                                         | `contour`              |
-
+| `contour.ingressClass.name`                  | Name of the ingress class to route through this controller                                                                         | `contour`              |
+| `contour.ingressClass.create`                | Whether to create or not the IngressClass resource                                                                                 | `false`                |
+| `contour.ingressClass.default`               | Mark IngressClass resource as default for cluster                                                                                  | `false`                |
 
 ### Envoy parameters
 
