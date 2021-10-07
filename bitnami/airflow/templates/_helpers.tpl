@@ -95,6 +95,13 @@ Return the proper Airflow Metrics image name
 {{- end -}}
 
 {{/*
+Return the proper load Airflow DAGs image name
+*/}}
+{{- define "airflow.dags.image" -}}
+{{- include "common.images.image" (dict "imageRoot" .Values.dags.image "global" .Values.global) -}}
+{{- end -}}
+
+{{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "airflow.imagePullSecrets" -}}
@@ -191,8 +198,8 @@ Load DAGs init-container
 */}}
 {{- define "airflow.loadDAGsInitContainer" -}}
 - name: load-dags
-  image: {{ printf "%s/%s:%s" .Values.dags.image.registry .Values.dags.image.repository .Values.dags.image.tag }}
-  imagePullPolicy: IfNotPresent
+  image: {{ include "airflow.dags.image" . }}
+  imagePullPolicy: {{ printf "%s" .Values.dags.image.pullPolicy }}
   command: ['sh', '-c', 'cp /configmap/* /dags']
   volumeMounts:
     - name: load-external-dag-files
