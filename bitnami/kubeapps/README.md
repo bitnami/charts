@@ -342,7 +342,7 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `assetsvc.image.tag`                             | Kubeapps Assetsvc image tag (immutable tags are recommended)                              | `2.4.1-scratch-r0`          |
 | `assetsvc.image.pullPolicy`                      | Kubeapps Assetsvc image pull policy                                                       | `IfNotPresent`              |
 | `assetsvc.image.pullSecrets`                     | Kubeapps Assetsvc image pull secrets                                                      | `[]`                        |
-| `assetsvc.replicaCount`                          | Number of Assetsvc replicas to deploy                                                     | `0`                         |
+| `assetsvc.replicaCount`                          | Number of Assetsvc replicas to deploy                                                     | `1`                         |
 | `assetsvc.extraEnvVars`                          | Array with extra environment variables to add to the Assetsvc container                   | `[]`                        |
 | `assetsvc.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars for the Assetsvc container           | `""`                        |
 | `assetsvc.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for the Assetsvc container              | `""`                        |

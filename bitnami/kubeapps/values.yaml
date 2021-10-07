@@ -1114,7 +1114,7 @@ assetsvc:
     pullSecrets: []
   ## @param assetsvc.replicaCount Number of Assetsvc replicas to deploy
   ##
-  replicaCount: 0
+  replicaCount: 1
   ## @param assetsvc.extraEnvVars Array with extra environment variables to add to the Assetsvc container
   ## e.g:
   ## extraEnvVars:
