@@ -53,7 +53,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/contour-operator
-  tag: 1.18.2-scratch-r0
+  tag: 1.18.2-scratch-r2
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -98,7 +98,7 @@ contourImage:
 envoyImage:
   registry: docker.io
   repository: bitnami/envoy
-  tag: 1.19.1-debian-10-r36
+  tag: 1.19.1-debian-10-r42
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-envoyImage-private-registry/

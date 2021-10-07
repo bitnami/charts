@@ -56,6 +56,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
+
 ### Common parameters
 
 | Name                | Description                                                                                                    | Value |
@@ -66,6 +67,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `commonAnnotations` | Common annotations to add to all PrestaShop resources (sub-charts are not considered). Evaluated as a template | `{}`  |
 | `commonLabels`      | Common labels to add to all PrestaShop resources (sub-charts are not considered). Evaluated as a template      | `{}`  |
 | `extraDeploy`       | Array with extra yaml to deploy with the chart. Evaluated as a template                                        | `[]`  |
+
 
 ### PrestaShop parameters
 
@@ -156,6 +158,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podAnnotations`                     | Pod annotations                                                                           | `{}`                   |
 | `podLabels`                          | Pod extra labels                                                                          | `{}`                   |
 
+
 ### Traffic Exposure Parameters
 
 | Name                               | Description                                                                                                                      | Value                    |
@@ -174,13 +177,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.apiVersion`               | Override API Version (automatically detected if not set)                                                                         | `""`                     |
 | `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `nil`                    |
 | `ingress.hostname`                 | Default host for the ingress resource                                                                                            | `prestashop.local`       |
-| `ingress.path`                     | Default path for the ingress resource\*' in order to use this                                                                    | `/`                      |
+| `ingress.path`                     | Default path for the ingress resource*' in order to use this                                                                     | `/`                      |
 | `ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
 | `ingress.tls`                      | Create TLS Secret                                                                                                                | `false`                  |
 | `ingress.extraHosts`               | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
 | `ingress.extraPaths`               | Any additional arbitrary paths that may need to be added to the ingress under the main host.                                     | `[]`                     |
 | `ingress.extraTls`                 | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
 | `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
+
 
 ### Database parameters
 
@@ -204,6 +208,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.password`                 | Password for the above username                                                          | `""`                 |
 | `externalDatabase.database`                 | Name of the existing database                                                            | `bitnami_prestashop` |
 
+
 ### Volume Permissions parameters
 
 | Name                                   | Description                                                                                                                                               | Value                   |
@@ -217,6 +222,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.resources.limits`   | The resources limits for the container                                                                                                                    | `{}`                    |
 | `volumePermissions.resources.requests` | The requested resources for the container                                                                                                                 | `{}`                    |
 
+
 ### Metrics parameters
 
 | Name                        | Description                                                | Value                     |
@@ -229,6 +235,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.image.pullSecrets` | Specify docker-registry secret names as an array           | `[]`                      |
 | `metrics.resources`         | Metrics exporter resource requests and limits              | `{}`                      |
 | `metrics.podAnnotations`    | Metrics exporter pod annotations                           | `{}`                      |
+
 
 ### Certificate injection parameters
 
@@ -251,6 +258,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `certificates.image.tag`                             | Container sidecar image tag (immutable tags are recommended)         | `10-debian-10-r192`                      |
 | `certificates.image.pullPolicy`                      | Container sidecar image pull policy                                  | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Container sidecar image pull secrets                                 | `[]`                                     |
+
 
 The above parameters map to the env variables defined in [bitnami/prestashop](http://github.com/bitnami/bitnami-docker-prestashop). For more information please refer to the [bitnami/prestashop](http://github.com/bitnami/bitnami-docker-prestashop) image documentation.
 

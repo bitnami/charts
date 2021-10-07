@@ -152,7 +152,7 @@ This solution allows to easily deploy multiple Contour instances compared to the
 | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | -------------------------- |
 | `image.registry`                        | Contour Operator image registry                                                                                          | `docker.io`                |
 | `image.repository`                      | Contour Operator image repository                                                                                        | `bitnami/contour-operator` |
-| `image.tag`                             | Contour Operator image tag (immutable tags are recommended)                                                              | `1.18.2-scratch-r0`        |
+| `image.tag`                             | Contour Operator image tag (immutable tags are recommended)                                                              | `1.18.2-scratch-r2`        |
 | `image.pullPolicy`                      | Contour Operator image pull policy                                                                                       | `IfNotPresent`             |
 | `image.pullSecrets`                     | Contour Operator image pull secrets                                                                                      | `[]`                       |
 | `contourImage.registry`                 | Contour Image registry                                                                                                   | `docker.io`                |
@@ -161,7 +161,7 @@ This solution allows to easily deploy multiple Contour instances compared to the
 | `contourImage.pullSecrets`              | Contour Image pull secrets                                                                                               | `[]`                       |
 | `envoyImage.registry`                   | Envoy Image registry                                                                                                     | `docker.io`                |
 | `envoyImage.repository`                 | Envoy Image repository                                                                                                   | `bitnami/envoy`            |
-| `envoyImage.tag`                        | Envoy Image tag (immutable tags are recommended)                                                                         | `1.19.1-debian-10-r36`     |
+| `envoyImage.tag`                        | Envoy Image tag (immutable tags are recommended)                                                                         | `1.19.1-debian-10-r42`     |
 | `envoyImage.pullSecrets`                | Envoy Image pull secrets                                                                                                 | `[]`                       |
 | `replicaCount`                          | Number of Contour Operator replicas to deploy                                                                            | `1`                        |
 | `livenessProbe.enabled`                 | Enable livenessProbe on Contour Operator nodes                                                                           | `true`                     |
@@ -283,6 +283,35 @@ helm install my-release -f values.yaml bitnami/contour-operator
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+### Using private image registries
+
+If the images for Contour and Envoy are in a private registry and require pull secrets to be set, you need to create three service accounts (Contour, Envoy and Contour Certgen) with your pull secrets in the same namespace as you wish to deploy a Contour object. For example, if you want to deploy a Contour object in the `projectcontour` namespace and your image pull secret is `mySecret`, you would need to create the following service accounts first:
+
+```yaml
+kind: ServiceAccount
+metadata:
+  name: contour
+  namespace: projectcontour
+imagePullSecrets:
+  - name: mySecret
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: contour-certgen
+  namespace: projectcontour
+imagePullSecrets:
+  - name: mySecret
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: envoy
+  namespace: projectcontour
+imagePullSecrets:
+  - name: mySecret
+```
 
 ### Additional environment variables
 
