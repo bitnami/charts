@@ -78,13 +78,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------- | ---------------------------------------------------------------------------------------------------------- | ------------------------- |
 | `image.registry`          | MinIO&reg; image registry                                                                                  | `docker.io`               |
 | `image.repository`        | MinIO&reg; image repository                                                                                | `bitnami/minio`           |
-| `image.tag`               | MinIO&reg; image tag (immutable tags are recommended)                                                      | `2021.10.2-debian-10-r0`  |
+| `image.tag`               | MinIO&reg; image tag (immutable tags are recommended)                                                      | `2021.10.6-debian-10-r0`  |
 | `image.pullPolicy`        | Image pull policy                                                                                          | `IfNotPresent`            |
 | `image.pullSecrets`       | Specify docker-registry secret names as an array                                                           | `[]`                      |
 | `image.debug`             | Specify if debug logs should be enabled                                                                    | `false`                   |
 | `clientImage.registry`    | MinIO&reg; Client image registry                                                                           | `docker.io`               |
 | `clientImage.repository`  | MinIO&reg; Client image repository                                                                         | `bitnami/minio-client`    |
-| `clientImage.tag`         | MinIO&reg; Client image tag (immutable tags are recommended)                                               | `2021.9.23-debian-10-r10` |
+| `clientImage.tag`         | MinIO&reg; Client image tag (immutable tags are recommended)                                               | `2021.9.23-debian-10-r13` |
 | `mode`                    | MinIO&reg; server mode (`standalone` or `distributed`)                                                     | `standalone`              |
 | `accessKey.password`      | MinIO&reg; Access Key. Ignored if existing secret is provided.                                             | `""`                      |
 | `accessKey.forcePassword` | Option to force users to specify a password. That is required for 'helm upgrade' to work properly.         | `false`                   |
@@ -225,7 +225,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                                                     | `docker.io`             |
 | `volumePermissions.image.repository`                   | Init container volume-permissions image repository                                                                   | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)                                         | `10-debian-10-r211`     |
+| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)                                         | `10-debian-10-r214`     |
 | `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                                                                  | `Always`                |
 | `volumePermissions.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                     | `[]`                    |
 | `volumePermissions.resources.limits`                   | Init container volume-permissions resource limits                                                                    | `{}`                    |
