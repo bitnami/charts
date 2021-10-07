@@ -77,7 +77,7 @@ spec:
       {{- end }}
       {{- end }}
       initContainers: {{- include "airflow.git.containers.clone" . | trim | nindent 8 }}
-      {{- if .Values.dags.dagsConfigMap }}
+      {{- if .Values.dags.configMap }}
         {{- include "airflow.loadDAGsInitContainer" . | trim | nindent 8 }}
       {{- end }}
       {{- if .Values.worker.initContainers }}
@@ -161,7 +161,7 @@ spec:
             - name: local-dag-files
               mountPath: /opt/bitnami/airflow/dags/local
           {{- end }}
-          {{- if .Values.dags.dagsConfigMap }}
+          {{- if .Values.dags.configMap }}
             - name: external-dag-files
               mountPath: /opt/bitnami/airflow/dags/external
           {{- end }}
@@ -181,10 +181,10 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | trim | nindent 8 }}
       {{- end }}
       volumes:
-      {{- if .Values.dags.dagsConfigMap }}
+      {{- if .Values.dags.configMap }}
         - name: load-external-dag-files
           configMap:
-            name: {{ .Values.dags.dagsConfigMap }}
+            name: {{ .Values.dags.configMap }}
         - name: external-dag-files
           emptyDir: {}
       {{- end }}

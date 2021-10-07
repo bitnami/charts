@@ -99,7 +99,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `auth.secretKey`         | Secret key to run your flask app                                                                                                                 | `""`                    |
 | `configurationConfigMap` | Name of an existing config map containing the Airflow config file                                                                                | `""`                    |
 | `executor`               | Airflow executor, it should be one of 'SequentialExecutor', 'LocalExecutor', 'CeleryExecutor', 'KubernetesExecutor', 'CeleryKubernetesExecutor'  | `CeleryExecutor`        |
-| `dags.dagsConfigMap`     | Name of an existing config map containing all the DAGs files you want to load in Airflow                                                         | `dags-cm`               |
+| `dags.configMap`         | Name of an existing config map containing all the DAGs files you want to load in Airflow                                                         | `dags-cm`               |
 | `dags.image.registry`    | Container sidecar registry                                                                                                                       | `docker.io`             |
 | `dags.image.repository`  | Container sidecar image                                                                                                                          | `bitnami/bitnami-shell` |
 | `dags.image.tag`         | Container sidecar image tag                                                                                                                      | `10-debian-10-r213`     |

@@ -189,14 +189,14 @@ configurationConfigMap: ""
 ##
 executor: 'CeleryExecutor'
 ## Load DAGs by using a config map
-## @param dags.dagsConfigMap Name of an existing config map containing all the DAGs files you want to load in Airflow
+## @param dags.configMap Name of an existing config map containing all the DAGs files you want to load in Airflow
 ## @param dags.image.registry Container sidecar registry
 ## @param dags.image.repository Container sidecar image
 ## @param dags.image.tag Container sidecar image tag
 ## @param dags.image.pullPolicy Container sidecar image pull policy
 ##
 dags:
-  dagsConfigMap: ""
+  configMap: ""
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
