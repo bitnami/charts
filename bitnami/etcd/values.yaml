@@ -108,6 +108,11 @@ auth:
     ## @param auth.rbac.existingSecretPasswordKey Name of key containing password to be retrieved from the existing secret
     ##
     existingSecretPasswordKey: ""
+  ## @param auth.tokenType Authentication token type
+  ## ref: https://etcd.io/docs/latest/op-guide/configuration/#--auth-token
+  ##      https://etcd.io/docs/latest/learning/design-auth-v3/#two-types-of-tokens-simple-and-jwt
+  ##
+  tokenType: jwt
   ## TLS authentication for client-to-server communications
   ## ref: https://etcd.io/docs/current/op-guide/security/
   ##
@@ -133,8 +138,7 @@ auth:
     ## @param auth.client.caFilename Name of the file containing the client CA certificate
     ## If not specified and `auth.client.enableAuthentication=true` or `auth.rbac.enabled=true`, the default is is `ca.crt`
     ##
-    caFilename: ""
-  ## TLS authentication for server-to-server communications
+    caFilename: ""  ## TLS authentication for server-to-server communications
   ## ref: https://etcd.io/docs/current/op-guide/security/
   ##
   peer:

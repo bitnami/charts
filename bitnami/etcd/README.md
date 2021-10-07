@@ -86,6 +86,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `auth.rbac.rootPassword`              | Root user password. The root user is always `root`                                              | `""`                  |
 | `auth.rbac.existingSecret`            | Name of the existing secret containing credentials for the root user                            | `""`                  |
 | `auth.rbac.existingSecretPasswordKey` | Name of key containing password to be retrieved from the existing secret                        | `""`                  |
+| `auth.tokenType`                      | Authentication token type                                                                       | `jwt`                 |
 | `auth.client.secureTransport`         | Switch to encrypt client-to-server communications using TLS certificates                        | `false`               |
 | `auth.client.useAutoTLS`              | Switch to automatically create the TLS certificates                                             | `false`               |
 | `auth.client.existingSecret`          | Name of the existing secret containing the TLS certificates for client-to-server communications | `""`                  |
