@@ -138,7 +138,8 @@ auth:
     ## @param auth.client.caFilename Name of the file containing the client CA certificate
     ## If not specified and `auth.client.enableAuthentication=true` or `auth.rbac.enabled=true`, the default is is `ca.crt`
     ##
-    caFilename: ""  ## TLS authentication for server-to-server communications
+    caFilename: ""
+  ## TLS authentication for server-to-server communications
   ## ref: https://etcd.io/docs/current/op-guide/security/
   ##
   peer:
