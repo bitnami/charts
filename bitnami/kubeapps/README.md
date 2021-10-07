@@ -175,6 +175,7 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `dashboard.image.pullSecrets`                     | Dashboard image pull secrets                                                               | `[]`                         |
 | `dashboard.image.debug`                           | Enable image debug mode                                                                    | `false`                      |
 | `dashboard.customStyle`                           | Custom CSS injected to the Dashboard to customize Kubeapps look and feel                   | `""`                         |
+| `dashboard.customAppViews`                        | Package names to signal a custom app view                                                  | `[]`                         |
 | `dashboard.customComponents`                      | Custom Form components injected into the BasicDeploymentForm                               | `""`                         |
 | `dashboard.remoteComponentsUrl`                   | Remote URL that can be used to load custom components vs loading from the local filesystem | `""`                         |
 | `dashboard.customLocale`                          | Custom translations injected to the Dashboard to customize the strings used in Kubeapps    | `""`                         |
@@ -243,6 +244,8 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `apprepository.syncImage.pullPolicy`                  | Kubeapps Asset Syncer image pull policy                                                   | `IfNotPresent`                              |
 | `apprepository.syncImage.pullSecrets`                 | Kubeapps Asset Syncer image pull secrets                                                  | `[]`                                        |
 | `apprepository.initialRepos`                          | Initial chart repositories to configure                                                   | `[]`                                        |
+| `apprepository.customAnnotations`                     | Custom annotations be added to each AppRepository-generated CronJob, Job and Pod          | `{}`                                        |
+| `apprepository.customLabels`                          | Custom labels be added to each AppRepository-generated CronJob, Job and Pod               | `{}`                                        |
 | `apprepository.initialReposProxy`                     | Proxy configuration to access chart repositories                                          | `{}`                                        |
 | `apprepository.crontab`                               | Schedule for syncing App repositories (default to 10 minutes)                             | `""`                                        |
 | `apprepository.watchAllNamespaces`                    | Watch all namespaces to support separate AppRepositories per namespace                    | `true`                                      |
@@ -339,7 +342,7 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `assetsvc.image.tag`                             | Kubeapps Assetsvc image tag (immutable tags are recommended)                              | `2.4.1-scratch-r0`          |
 | `assetsvc.image.pullPolicy`                      | Kubeapps Assetsvc image pull policy                                                       | `IfNotPresent`              |
 | `assetsvc.image.pullSecrets`                     | Kubeapps Assetsvc image pull secrets                                                      | `[]`                        |
-| `assetsvc.replicaCount`                          | Number of Assetsvc replicas to deploy                                                     | `2`                         |
+| `assetsvc.replicaCount`                          | Number of Assetsvc replicas to deploy                                                     | `0`                         |
 | `assetsvc.extraEnvVars`                          | Array with extra environment variables to add to the Assetsvc container                   | `[]`                        |
 | `assetsvc.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars for the Assetsvc container           | `""`                        |
 | `assetsvc.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for the Assetsvc container              | `""`                        |
@@ -557,7 +560,7 @@ helm install kubeapps --namespace kubeapps -f custom-values.yaml bitnami/kubeapp
 
 ### Configuring Initial Repositories
 
-By default, Kubeapps will track the [community Helm charts](https://github.com/helm/charts). To change these defaults, override with your desired parameters the `apprepository.initialRepos` object present in the [values.yaml](values.yaml) file.
+By default, Kubeapps will track the [Bitnami Application Catalog](https://github.com/bitnami/charts). To change these defaults, override with your desired parameters the `apprepository.initialRepos` object present in the [values.yaml](values.yaml) file.
 
 ### Enabling Operators
 

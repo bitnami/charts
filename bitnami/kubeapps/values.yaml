@@ -442,6 +442,14 @@ dashboard:
   ##    }
   ##
   customStyle: ""
+  ## @param dashboard.customAppViews Package names to signal a custom app view
+  ## ref: https://github.com/kubeapps/kubeapps/blob/master/docs/developer/custom-app-view-support.md
+  ## e.g:
+  ##  customAppViews:
+  ##    - plugin: helm
+  ##      name: helm-chart
+  ##      repository: bitnami
+  customAppViews: []
   ## @param dashboard.customComponents Custom Form components injected into the BasicDeploymentForm
   ## ref: https://github.com/kubeapps/kubeapps/blob/master/docs/developer/custom-form-component-support.md
   ##
@@ -733,10 +741,24 @@ apprepository:
   ##     ociRepositories:
   ##       - nginx
   ##       - jenkins
+  ##     # Optionally filter out some charts.
+  ##     # The jq query format is not exposed in the UI, so care needs to be taken to use the format which the UI expects to parse,
+  ##     # which is why variables are used in the example below.
+  ##     filterRule:
+  ##       jq: .name == $var0 or .name == $var1
+  ##       variables:
+  ##         $var0: nginx
+  ##         $var1: jenkins
   ##
   initialRepos:
     - name: bitnami
       url: https://charts.bitnami.com/bitnami
+  ## @param apprepository.customAnnotations [object] Custom annotations be added to each AppRepository-generated CronJob, Job and Pod
+  ##
+  customAnnotations: {}
+  ## @param apprepository.customLabels [object] Custom labels be added to each AppRepository-generated CronJob, Job and Pod
+  ##
+  customLabels: {}
   ## @param apprepository.initialReposProxy [object] Proxy configuration to access chart repositories
   ##
   initialReposProxy:
@@ -1092,7 +1114,7 @@ assetsvc:
     pullSecrets: []
   ## @param assetsvc.replicaCount Number of Assetsvc replicas to deploy
   ##
-  replicaCount: 2
+  replicaCount: 0
   ## @param assetsvc.extraEnvVars Array with extra environment variables to add to the Assetsvc container
   ## e.g:
   ## extraEnvVars:
@@ -1363,7 +1385,6 @@ authProxy:
 ## @section Pinniped Proxy parameters
 
 ## Pinniped Proxy configuration for converting user OIDC tokens to k8s client authorization certs
-## NOTE: This component is alpha functionality in Kubeapps until we complete testing and documentation.
 ##
 pinnipedProxy:
   ## @param pinnipedProxy.enabled Specifies whether Kubeapps should configure Pinniped Proxy
@@ -1455,6 +1476,7 @@ allowNamespaceDiscovery: true
 ## - isKubeappsCluster is an optional parameter that allows defining the cluster in which Kubeapps is installed;
 ##   this param is useful when every cluster is using an apiServiceURL (e.g., when using the Pinniped Impersonation Proxy)
 ##   as the chart cannot infer the cluster on which Kubeapps is installed in that case.
+## - pinnipedConfig is an optional parameter that contains configuration options specific to a cluster running the pinniped concierge service.
 ## e.g.:
 ## clusters:
 ## - name: default
@@ -1465,6 +1487,9 @@ allowNamespaceDiscovery: true
 ##   certificateAuthorityData: LS0tLS1CRUdJ...
 ##   serviceToken: ...
 ##   isKubeappsCluster: true
+##   pinnipedConfig:
+##     enable: true
+
 ##
 clusters:
   - name: default
