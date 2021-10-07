@@ -366,14 +366,14 @@ grafana:
     timeoutSeconds: 5
     failureThreshold: 6
     successThreshold: 1
-  ## @param startupProbe.enabled Enable startupProbe
-  ## @param startupProbe.scheme Path for readinessProbe
-  ## @param startupProbe.scheme Scheme for readinessProbe
-  ## @param startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
-  ## @param startupProbe.periodSeconds Period seconds for startupProbe
-  ## @param startupProbe.timeoutSeconds Timeout seconds for startupProbe
-  ## @param startupProbe.failureThreshold Failure threshold for startupProbe
-  ## @param startupProbe.successThreshold Success threshold for startupProbe
+  ## @param grafana.startupProbe.enabled Enable startupProbe
+  ## @param grafana.startupProbe.path Path for readinessProbe
+  ## @param grafana.startupProbe.scheme Scheme for readinessProbe
+  ## @param grafana.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param grafana.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param grafana.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param grafana.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param grafana.startupProbe.successThreshold Success threshold for startupProbe
   ##
   startupProbe:
     enabled: false
@@ -433,10 +433,10 @@ grafana:
   extraVolumeMounts: []
   ## @param grafana.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for %%MAIN_CONTAINER_NAME%% nodes
   ##
-  extraEnvVarsCM:
+  extraEnvVarsCM: ""
   ## @param grafana.extraEnvVarsSecret Name of existing Secret containing extra env vars for %%MAIN_CONTAINER_NAME%% nodes
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret: ""
   ## @param grafana.command Override default container command (useful when using custom images)
   ##
   command: []
@@ -495,7 +495,7 @@ service:
   ## e.g.:
   ## clusterIP: None
   ##
-  clusterIP:
+  clusterIP: ""
   ## @param service.ports.grafana Grafana service port
   ##
   ports:
@@ -613,7 +613,7 @@ ingress:
   ##
   selfSigned: false
   ## @param ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
-  ingressClassName:
+  ingressClassName: ""
 
 ## @section Metrics parameters
 
@@ -657,7 +657,7 @@ metrics:
     ##   prometheus: my-prometheus
     ##
     selector: {}
-    ## @param server.metrics.serviceMonitor.metricRelabelings Specify Metric Relabellings to add to the scrape endpoint
+    ## @param metrics.serviceMonitor.metricRelabelings Specify Metric Relabellings to add to the scrape endpoint
     ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#podmetricsendpoint
     ##
     metricRelabelings: []
@@ -667,7 +667,7 @@ metrics:
     ## @param metrics.serviceMonitor.additionalLabels Additional custom labels for the ServiceMonitor
     ##
     additionalLabels: {}
-    ## @param serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
+    ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
     ##
     jobLabel: ""
 
@@ -776,8 +776,8 @@ imageRenderer:
     ## e.g.:
     ## clusterIP: None
     ##
-    clusterIP:
-    ## @param imageRenderer.service.port Grafana Image Renderer metrics port
+    clusterIP: ""
+    ## @param imageRenderer.service.ports.imageRenderer Grafana Image Renderer metrics port
     ##
     ports:
       imageRenderer: 8080
@@ -802,7 +802,7 @@ imageRenderer:
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
     annotations: {}
-    ## @param service.externalTrafficPolicy Grafana service external traffic policy
+    ## @param imageRenderer.service.externalTrafficPolicy Grafana service external traffic policy
     ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
     externalTrafficPolicy: Cluster
@@ -854,10 +854,10 @@ imageRenderer:
   initContainers: {}
   ## @param imageRenderer.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for %%MAIN_CONTAINER_NAME%% nodes
   ##
-  extraEnvVarsCM:
+  extraEnvVarsCM: ""
   ## @param imageRenderer.extraEnvVarsSecret Name of existing Secret containing extra env vars for %%MAIN_CONTAINER_NAME%% nodes
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret: ""
   ## @param imageRenderer.command Override default container command (useful when using custom images)
   ##
   command: []
