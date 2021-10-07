@@ -203,7 +203,12 @@ Load DAGs init-container
   {{- if .Values.containerSecurityContext.enabled }}
   securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 4 }}
   {{- end }}
-  command: ['sh', '-c', 'cp /configmap/* /dags']
+  command:
+    - /bin/bash
+  args:
+    - -ec
+    - |
+      cp /configmap/* /dags
   volumeMounts:
     - name: load-external-dag-files
       mountPath: /configmap
