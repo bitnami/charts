@@ -893,7 +893,7 @@ proxy:
     public:
       ## @param proxy.service.public.type Public service type
       ##
-      type: ClusterIP
+      type: LoadBalancer
       # HTTP Port
       ## @param proxy.service.public.port Public service port
       ##

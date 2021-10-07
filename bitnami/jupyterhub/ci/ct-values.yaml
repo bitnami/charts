@@ -1,0 +1,4 @@
+proxy:
+  service:
+    public:
+      type: ClusterIP
