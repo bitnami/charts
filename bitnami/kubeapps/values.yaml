@@ -742,7 +742,7 @@ apprepository:
   ##       - nginx
   ##       - jenkins
   ##     # Optionally filter out some charts.
-  ##     # The jq query format is not exposed in the UI, so care needs to be taken to use the format which the UI expects to parse, 
+  ##     # The jq query format is not exposed in the UI, so care needs to be taken to use the format which the UI expects to parse,
   ##     # which is why variables are used in the example below.
   ##     filterRule:
   ##       jq: .name == $var0 or .name == $var1
