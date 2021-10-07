@@ -116,7 +116,7 @@ serviceAccount:
   annotations: {}
   ## @param serviceAccount.automountServiceAccountToken Automount API credentials for a service account.
   ##
-  automountServiceAccountToken: true
+  automountServiceAccountToken: false
 
 rbac:
   ## @param rbac.create Specifies whether RBAC resources should be created
@@ -306,13 +306,6 @@ persistence:
   ##
   matchExpressions: {}
 
-## @param updateStrategy Update strategy for StatefulSet
-##
-updateStrategy: RollingUpdate
-## @param rollingUpdatePartition Partition update strategy
-## https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#partitions
-##
-rollingUpdatePartition: ""
 ## Init containers parameters:
 ## volumePermissions: Change the owner of the persist volume mountpoint to RunAsUser:fsGroup
 ##
@@ -371,6 +364,20 @@ redis:
   ## @param redis.args Arguments for the provided command if needed
   ##
   args: []
+  ## @param redis.updateStrategy.type Argo Workflows statefulset strategy type
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    ## StrategyType
+    ## Can be set to RollingUpdate or OnDelete
+    ##
+    type: RollingUpdate
+
+  ## @param redis.rollingUpdatePartition Partition update strategy
+  ## https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#partitions
+  ##
+  rollingUpdatePartition: ""
+
   ## @param redis.podManagementPolicy Statefulset Pod management policy, it needs to be Parallel to be able to complete the cluster join
   ## Ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
   ##
@@ -808,6 +815,17 @@ metrics:
     ## @param metrics.serviceMonitor.annotations ServiceMonitor annotations
     ##
     annotations: {}
+    ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
+    ##
+    jobLabel: ""
+    ## @param metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+    ##
+    relabelings: []
+    ## @param metrics.serviceMonitor.metricRelabelings MetricRelabelConfigs to apply to samples before ingestion
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+    ##
+    metricRelabelings: []
   ## Custom PrometheusRule to be defined
   ## The value is evaluated as a template, so, for example, the value can depend on .Release or .Chart
   ## ref: https://github.com/coreos/prometheus-operator#customresourcedefinitions

@@ -11,6 +11,16 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
+  updateStrategy:
+    type: {{ .Values.redis.updateStrategy.type }}
+    {{- if .Values.redis.rollingUpdatePartition }}
+    {{- if (eq "Recreate" .Values.redis.updateStrategy.type) }}
+    rollingUpdate: null
+    {{- else }}
+    rollingUpdate:
+      partition: {{ .Values.redis.rollingUpdatePartition }}
+    {{- end }}
+    {{- end }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
   replicas: {{ .Values.cluster.nodes }}
@@ -444,14 +454,4 @@ spec:
         {{- end -}}
         {{- end }}
   {{- end }}
-  updateStrategy:
-    type: {{ .Values.updateStrategy }}
-    {{- if .Values.rollingUpdatePartition }}
-    {{- if (eq "Recreate" .Values.updateStrategy) }}
-    rollingUpdate: null
-    {{- else }}
-    rollingUpdate:
-      partition: {{ .Values.rollingUpdatePartition }}
-    {{- end }}
-    {{- end }}
 {{- end }}
