@@ -199,7 +199,10 @@ Load DAGs init-container
 {{- define "airflow.loadDAGsInitContainer" -}}
 - name: load-dags
   image: {{ include "airflow.dags.image" . }}
-  imagePullPolicy: {{ printf "%s" .Values.dags.image.pullPolicy }}
+  imagePullPolicy: {{ .Values.dags.image.pullPolicy }}
+  {{- if .Values.containerSecurityContext.enabled }}
+  securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+  {{- end }}
   command: ['sh', '-c', 'cp /configmap/* /dags']
   volumeMounts:
     - name: load-external-dag-files
