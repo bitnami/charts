@@ -481,7 +481,7 @@ serviceAccount:
   create: true
   name: ""
   annotations: {}
-  automountServiceAccountToken: true
+  automountServiceAccountToken: false
 
 ## @section Traffic exposure parameters
 
