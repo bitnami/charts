@@ -10,7 +10,7 @@
 global:
   imageRegistry: ""
   imagePullSecrets: []
-#     - myRegistryKeySecretName
+  #     - myRegistryKeySecretName
   storageClass: ""
 
 ## Override Kubernetes version
@@ -105,6 +105,20 @@ livenessProbe:
 ##
 readinessProbe:
   enabled: true
+  failureThreshold: 3
+  initialDelaySeconds: 10
+  periodSeconds: 10
+  successThreshold: 1
+  timeoutSeconds: 1
+## @param startupProbe.enabled Enable startupProbe
+## @param startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+## @param startupProbe.periodSeconds Period seconds for startupProbe
+## @param startupProbe.timeoutSeconds Timeout seconds for startupProbe
+## @param startupProbe.failureThreshold Failure threshold for startupProbe
+## @param startupProbe.successThreshold Success threshold for startupProbe
+##
+startupProbe:
+  enabled: false
   failureThreshold: 3
   initialDelaySeconds: 10
   periodSeconds: 10
@@ -246,15 +260,31 @@ priorityClassName: ""
 ##
 lifecycleHooks: {}
 
+## @param schedulerName Alternative scheduler
+## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+##
+schedulerName: ""
+
+## @param topologySpreadConstraints Topology Spread Constraints for pod assignment
+## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+## The value is evaluated as a template
+##
+topologySpreadConstraints: []
+
 ## Custom Liveness probes for wavefront-hpa-adapter
 ## @param customLivenessProbe  Override default liveness probe
 ##
 customLivenessProbe: {}
 
-## Custom Rediness probes wavefront-hpa-adapter
+## Custom Readiness probes wavefront-hpa-adapter
 ## @param customReadinessProbe  Override default readiness probe
 ##
 customReadinessProbe: {}
+
+## Custom Startup probes wavefront-hpa-adapter
+## @param customStartupProbe  Override default startup probe
+##
+customStartupProbe: {}
 
 ## Update strategy - only really applicable for deployments with RWO PVs attached
 ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
@@ -266,9 +296,10 @@ updateStrategy:
   type: RollingUpdate
 
 ## Adapter Container port
-## @param containerPort Adapter container port
+## @param containerPorts.https Adapter container port
 ##
-containerPort: 6443
+containerPorts:
+  https: 6443
 ## Additional environment variables to set
 ## Example:
 ## extraEnvVars:
@@ -378,9 +409,22 @@ service:
   ##
   type: ClusterIP
   ## HTTP Port
-  ## @param service.port Adapter service port
+  ## @param service.ports.https Adapter service port
   ##
-  port: 443
+  ports:
+    https: 443
+  ## @param service.clusterIP WordPress service Cluster IP
+  ## e.g.:
+  ## clusterIP: None
+  ##
+  clusterIP: ""
+  ## @param service.annotations Additional custom annotations for WordPress service
+  ##
+  annotations: {}
+  ## @param service.extraPorts Extra port to expose on WordPress service
+  ##
+  extraPorts: []
+
   ## loadBalancerIP for the Service (optional, cloud specific)
   ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
   ## @param service.loadBalancerIP Adapter service LoadBalancer IP
@@ -425,6 +469,12 @@ serviceAccount:
   ## If not set and create is true, a name is generated using the fullname template
   ##
   name: ""
+  ## @param serviceAccount.automountServiceAccountToken Automount API credentials for a service account.
+  ##
+  automountServiceAccountToken: true
+  ## @param serviceAccount.annotations Add annotations to the service account
+  ##
+  annotations: {}
 
 ## Specifies if the API Services should be registered in the Kubernetes API
 ## @param apiService.create Create the APIService objects in Kubernetes API
