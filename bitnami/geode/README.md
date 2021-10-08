@@ -159,6 +159,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `locator.priorityClassName`                     | Locator pods' priorityClassName                                                                             | `""`                |
 | `locator.schedulerName`                         | Name of the k8s scheduler (other than default) for Locator pods                                             | `""`                |
 | `locator.lifecycleHooks`                        | for the Locator container(s) to automate configuration before or after startup                              | `{}`                |
+| `locator.extraFlags`                            | Additional command line flags to start Locator nodes                                                        | `[]`                |
 | `locator.extraEnvVars`                          | Array with extra environment variables to add to Locator nodes                                              | `[]`                |
 | `locator.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars for Locator nodes                                      | `""`                |
 | `locator.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for Locator nodes                                         | `""`                |
@@ -251,6 +252,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.priorityClassName`                       | Cache server pods' priorityClassName                                                                                                        | `""`                |
 | `server.schedulerName`                           | Name of the k8s scheduler (other than default) for Cache server pods                                                                        | `""`                |
 | `server.lifecycleHooks`                          | for the Cache server container(s) to automate configuration before or after startup                                                         | `{}`                |
+| `server.extraFlags`                              | Additional command line flags to start Cache server nodes                                                                                   | `[]`                |
 | `server.extraEnvVars`                            | Array with extra environment variables to add to Cache server nodes                                                                         | `[]`                |
 | `server.extraEnvVarsCM`                          | Name of existing ConfigMap containing extra env vars for Cache server nodes                                                                 | `""`                |
 | `server.extraEnvVarsSecret`                      | Name of existing Secret containing extra env vars for Cache server nodes                                                                    | `""`                |
