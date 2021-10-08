@@ -192,7 +192,16 @@ executor: 'CeleryExecutor'
 ## Note: an init container will be used to prepare the DAGs available in the ConfigMap to be consumed by Airflow containers
 ##
 dags:
+  ## @param dags.configMap Name of an existing config map containing all the DAGs files you want to load in Airflow
+  ##
   configMap: ""
+  ## Bitnami Shell image
+  ## ref: https://hub.docker.com/r/bitnami/bitnami-shell/tags/
+  ## @param dags.image.registry Container sidecar registry
+  ## @param dags.image.repository Container sidecar image
+  ## @param dags.image.tag Container sidecar image tag
+  ## @param dags.image.pullPolicy Container sidecar image pull policy
+  ##
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
