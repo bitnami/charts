@@ -188,9 +188,29 @@ configurationConfigMap: ""
 ## ref: http://airflow.apache.org/docs/stable/executor/index.html
 ##
 executor: 'CeleryExecutor'
-## @param dagsConfigMap Name of an existing config map containing all the DAGs files you want to load in Airflow
+## Load custom DAGs from a ConfigMap
+## Note: an init container will be used to prepare the DAGs available in the ConfigMap to be consumed by Airflow containers
 ##
-dagsConfigMap: ""
+dags:
+  ## @param dags.configMap Name of an existing config map containing all the DAGs files you want to load in Airflow
+  ##
+  configMap: ""
+  ## Bitnami Shell image
+  ## ref: https://hub.docker.com/r/bitnami/bitnami-shell/tags/
+  ## @param dags.image.registry Container sidecar registry
+  ## @param dags.image.repository Container sidecar image
+  ## @param dags.image.tag Container sidecar image tag
+  ## @param dags.image.pullPolicy Container sidecar image pull policy
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/bitnami-shell
+    tag: 10-debian-10-r213
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    pullPolicy: IfNotPresent
 ## @param loadExamples Switch to load some Airflow examples
 ##
 loadExamples: false

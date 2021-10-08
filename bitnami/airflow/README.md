@@ -89,18 +89,22 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Airflow common parameters
 
-| Name                     | Description                                                                                                                                      | Value            |
-| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------- |
-| `auth.existingSecret`    | Name of an existing secret containing password, fernet key and secret key ('airflow-password', 'airflow-fernetKey' and 'airflow-secretKey' keys) | `""`             |
-| `auth.fernetKey`         | Fernet key to secure connections                                                                                                                 | `""`             |
-| `auth.forcePassword`     | Force users to specify a password                                                                                                                | `false`          |
-| `auth.password`          | Password to access web UI                                                                                                                        | `""`             |
-| `auth.username`          | Username to access web UI                                                                                                                        | `user`           |
-| `auth.secretKey`         | Secret key to run your flask app                                                                                                                 | `""`             |
-| `configurationConfigMap` | Name of an existing config map containing the Airflow config file                                                                                | `""`             |
-| `executor`               | Airflow executor, it should be one of 'SequentialExecutor', 'LocalExecutor', 'CeleryExecutor', 'KubernetesExecutor', 'CeleryKubernetesExecutor'  | `CeleryExecutor` |
-| `dagsConfigMap`          | Name of an existing config map containing all the DAGs files you want to load in Airflow                                                         | `""`             |
-| `loadExamples`           | Switch to load some Airflow examples                                                                                                             | `false`          |
+| Name                     | Description                                                                                                                                      | Value                   |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------- |
+| `auth.existingSecret`    | Name of an existing secret containing password, fernet key and secret key ('airflow-password', 'airflow-fernetKey' and 'airflow-secretKey' keys) | `""`                    |
+| `auth.fernetKey`         | Fernet key to secure connections                                                                                                                 | `""`                    |
+| `auth.forcePassword`     | Force users to specify a password                                                                                                                | `false`                 |
+| `auth.password`          | Password to access web UI                                                                                                                        | `""`                    |
+| `auth.username`          | Username to access web UI                                                                                                                        | `user`                  |
+| `auth.secretKey`         | Secret key to run your flask app                                                                                                                 | `""`                    |
+| `configurationConfigMap` | Name of an existing config map containing the Airflow config file                                                                                | `""`                    |
+| `executor`               | Airflow executor, it should be one of 'SequentialExecutor', 'LocalExecutor', 'CeleryExecutor', 'KubernetesExecutor', 'CeleryKubernetesExecutor'  | `CeleryExecutor`        |
+| `dags.configMap`         | Name of an existing config map containing all the DAGs files you want to load in Airflow                                                         | `""`                    |
+| `dags.image.registry`    | Container sidecar registry                                                                                                                       | `docker.io`             |
+| `dags.image.repository`  | Container sidecar image                                                                                                                          | `bitnami/bitnami-shell` |
+| `dags.image.tag`         | Container sidecar image tag                                                                                                                      | `10-debian-10-r213`     |
+| `dags.image.pullPolicy`  | Container sidecar image pull policy                                                                                                              | `IfNotPresent`          |
+| `loadExamples`           | Switch to load some Airflow examples                                                                                                             | `false`                 |
 
 
 ### Airflow web parameters
