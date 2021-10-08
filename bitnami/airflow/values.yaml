@@ -188,7 +188,7 @@ configurationConfigMap: ""
 ## ref: http://airflow.apache.org/docs/stable/executor/index.html
 ##
 executor: 'CeleryExecutor'
-## Load custom DAGs frin a ConfigMap
+## Load custom DAGs from a ConfigMap
 ## Note: an init container will be used to prepare the DAGs available in the ConfigMap to be consumed by Airflow containers
 ##
 dags:
