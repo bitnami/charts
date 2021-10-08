@@ -223,7 +223,7 @@ spec:
                 fieldRef:
                   fieldPath: metadata.namespace
             - name: K8S_SERVICE_NAME
-              value: "{{ include "mongodb.fullname" . }}-headless"
+              value: "{{ include "mongodb.service.nameOverride" . }}"
             - name: K8S_HIDDEN_NODE_SERVICE_NAME
               value: "{{ include "mongodb.fullname" . }}-hidden-headless"
             - name: MONGODB_REPLICA_SET_MODE

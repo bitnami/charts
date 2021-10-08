@@ -64,8 +64,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `clusterDomain`          | Kubernetes Cluster Domain                                                                    | `cluster.local` |
 | `extraDeploy`            | Array of extra objects to deploy with the release                                            | `[]`            |
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)      | `false`         |
-| `diagnosticMode.command` | Command to override all containers in the deployment                                         | `[]`            |
-| `diagnosticMode.args`    | Args to override all containers in the deployment                                            | `[]`            |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                         | `["sleep"]`     |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                            | `["infinity"]`  |
 
 
 ### NATS parameters
@@ -74,7 +74,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ---------------------- | ------------------------------------------------------------------------------ | -------------------- |
 | `image.registry`       | NATS image registry                                                            | `docker.io`          |
 | `image.repository`     | NATS image repository                                                          | `bitnami/nats`       |
-| `image.tag`            | NATS image tag (immutable tags are recommended)                                | `2.5.0-debian-10-r0` |
+| `image.tag`            | NATS image tag (immutable tags are recommended)                                | `2.6.1-debian-10-r0` |
 | `image.pullPolicy`     | Image pull policy                                                              | `IfNotPresent`       |
 | `image.pullSecrets`    | Specify docker-registry secret names as an array                               | `[]`                 |
 | `auth.enabled`         | Switch to enable/disable client authentication                                 | `true`               |
@@ -152,39 +152,38 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Traffic Exposure parameters
 
-| Name                                | Description                                                                                           | Value                    |
-| ----------------------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------ |
-| `client.service.type`               | Kubernetes Service type (NATS client)                                                                 | `ClusterIP`              |
-| `client.service.port`               | NATS client port                                                                                      | `4222`                   |
-| `client.service.nodePort`           | Port to bind to for the LoadBalancer and NodePort service type (NATS client)                          | `""`                     |
-| `client.service.annotations`        | Annotations for NATS client service                                                                   | `{}`                     |
-| `client.service.loadBalancerIP`     | loadBalancerIP if NATS client service type is `LoadBalancer`, otherwise leave blank                   | `""`                     |
-| `cluster.connectRetries`            | Configure number of connect retries for implicit routes, otherwise leave blank                        | `""`                     |
-| `cluster.service.type`              | Kubernetes Service type (NATS cluster)                                                                | `ClusterIP`              |
-| `cluster.service.port`              | NATS cluster port                                                                                     | `6222`                   |
-| `cluster.service.nodePort`          | Port to bind to for NodePort service type (NATS cluster)                                              | `""`                     |
-| `cluster.service.annotations`       | Annotations for NATS cluster service                                                                  | `{}`                     |
-| `cluster.service.loadBalancerIP`    | loadBalancerIP if NATS cluster service type is `LoadBalancer`                                         | `""`                     |
-| `monitoring.service.type`           | Kubernetes Service type (NATS monitoring)                                                             | `ClusterIP`              |
-| `monitoring.service.port`           | NATS monitoring port                                                                                  | `8222`                   |
-| `monitoring.service.nodePort`       | Port to bind to for NodePort service type (NATS monitoring)                                           | `""`                     |
-| `monitoring.service.annotations`    | Annotations for NATS monitoring service                                                               | `{}`                     |
-| `monitoring.service.loadBalancerIP` | Use loadBalancerIP to request a specific static IP, otherwise leave blank                             | `""`                     |
-| `ingress.enabled`                   | Set to true to enable ingress record generation                                                       | `false`                  |
-| `ingress.certManager`               | Set this to true in order to add the corresponding annotations for cert-manager                       | `false`                  |
-| `ingress.pathType`                  | Ingress Path type                                                                                     | `ImplementationSpecific` |
-| `ingress.apiVersion`                | Override API Version (automatically detected if not set)                                              | `""`                     |
-| `ingress.hostname`                  | When the ingress is enabled, a host pointing to this will be created                                  | `nats.local`             |
-| `ingress.path`                      | The Path to NATS. You may need to set this to '/*' in order to use this with ALB ingress controllers. | `/`                      |
-| `ingress.annotations`               | Ingress annotations                                                                                   | `{}`                     |
-| `ingress.tls`                       | Enable TLS configuration for the hostname defined at ingress.hostname parameter                       | `false`                  |
-| `ingress.extraHosts`                | The list of additional hostnames to be covered with this ingress record.                              | `[]`                     |
-| `ingress.extraPaths`                | Any additional arbitrary paths that may need to be added to the ingress under the main host.          | `[]`                     |
-| `ingress.extraTls`                  | The tls configuration for additional hostnames to be covered with this ingress record.                | `[]`                     |
-| `ingress.secrets`                   | If you're providing your own certificates, please use this to add the certificates as secrets         | `[]`                     |
-| `networkPolicy.enabled`             | Enable creation of NetworkPolicy resources                                                            | `false`                  |
-| `networkPolicy.allowExternal`       | The Policy model to apply                                                                             | `true`                   |
-| `networkPolicy.additionalRules`     | Additional NetworkPolicy Ingress "from" rules to set. Note that all rules are OR-ed.                  | `{}`                     |
+| Name                                | Description                                                                                                                      | Value                    |
+| ----------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `client.service.type`               | Kubernetes Service type (NATS client)                                                                                            | `ClusterIP`              |
+| `client.service.port`               | NATS client port                                                                                                                 | `4222`                   |
+| `client.service.nodePort`           | Port to bind to for the LoadBalancer and NodePort service type (NATS client)                                                     | `""`                     |
+| `client.service.annotations`        | Annotations for NATS client service                                                                                              | `{}`                     |
+| `client.service.loadBalancerIP`     | loadBalancerIP if NATS client service type is `LoadBalancer`, otherwise leave blank                                              | `""`                     |
+| `cluster.connectRetries`            | Configure number of connect retries for implicit routes, otherwise leave blank                                                   | `""`                     |
+| `cluster.service.type`              | Kubernetes Service type (NATS cluster)                                                                                           | `ClusterIP`              |
+| `cluster.service.port`              | NATS cluster port                                                                                                                | `6222`                   |
+| `cluster.service.nodePort`          | Port to bind to for NodePort service type (NATS cluster)                                                                         | `""`                     |
+| `cluster.service.annotations`       | Annotations for NATS cluster service                                                                                             | `{}`                     |
+| `cluster.service.loadBalancerIP`    | loadBalancerIP if NATS cluster service type is `LoadBalancer`                                                                    | `""`                     |
+| `monitoring.service.type`           | Kubernetes Service type (NATS monitoring)                                                                                        | `ClusterIP`              |
+| `monitoring.service.port`           | NATS monitoring port                                                                                                             | `8222`                   |
+| `monitoring.service.nodePort`       | Port to bind to for NodePort service type (NATS monitoring)                                                                      | `""`                     |
+| `monitoring.service.annotations`    | Annotations for NATS monitoring service                                                                                          | `{}`                     |
+| `monitoring.service.loadBalancerIP` | Use loadBalancerIP to request a specific static IP, otherwise leave blank                                                        | `""`                     |
+| `ingress.enabled`                   | Set to true to enable ingress record generation                                                                                  | `false`                  |
+| `ingress.pathType`                  | Ingress Path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.apiVersion`                | Override API Version (automatically detected if not set)                                                                         | `""`                     |
+| `ingress.hostname`                  | When the ingress is enabled, a host pointing to this will be created                                                             | `nats.local`             |
+| `ingress.path`                      | The Path to NATS. You may need to set this to '/*' in order to use this with ALB ingress controllers.                            | `/`                      |
+| `ingress.annotations`               | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.tls`                       | Enable TLS configuration for the hostname defined at ingress.hostname parameter                                                  | `false`                  |
+| `ingress.extraHosts`                | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
+| `ingress.extraPaths`                | Any additional arbitrary paths that may need to be added to the ingress under the main host.                                     | `[]`                     |
+| `ingress.extraTls`                  | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
+| `ingress.secrets`                   | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
+| `networkPolicy.enabled`             | Enable creation of NetworkPolicy resources                                                                                       | `false`                  |
+| `networkPolicy.allowExternal`       | The Policy model to apply                                                                                                        | `true`                   |
+| `networkPolicy.additionalRules`     | Additional NetworkPolicy Ingress "from" rules to set. Note that all rules are OR-ed.                                             | `{}`                     |
 
 
 ### Metrics parameters
@@ -194,7 +193,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                  | Enable Prometheus metrics via exporter side-car                                                        | `false`                 |
 | `metrics.image.registry`           | Prometheus metrics exporter image registry                                                             | `docker.io`             |
 | `metrics.image.repository`         | Prometheus metrics exporter image repository                                                           | `bitnami/nats-exporter` |
-| `metrics.image.tag`                | Prometheus metrics exporter image tag (immutable tags are recommended)                                 | `0.8.0-debian-10-r71`   |
+| `metrics.image.tag`                | Prometheus metrics exporter image tag (immutable tags are recommended)                                 | `0.8.0-debian-10-r85`   |
 | `metrics.image.pullPolicy`         | Prometheus metrics image pull policy                                                                   | `IfNotPresent`          |
 | `metrics.image.pullSecrets`        | Prometheus metrics image pull secrets                                                                  | `[]`                    |
 | `metrics.resources`                | Metrics exporter resource requests and limits                                                          | `{}`                    |

@@ -72,30 +72,30 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Mediawiki parameters
 
-| Name                 | Description                                                          | Value                  |
-| -------------------- | -------------------------------------------------------------------- | ---------------------- |
-| `image.registry`     | MediaWiki image registry                                             | `docker.io`            |
-| `image.repository`   | MediaWiki image repository                                           | `bitnami/mediawiki`    |
-| `image.tag`          | MediaWiki image tag (immutable tags are recommended)                 | `1.36.1-debian-10-r55` |
-| `image.pullPolicy`   | Image pull policy                                                    | `IfNotPresent`         |
-| `image.pullSecrets`  | Specify docker-registry secret names as an array                     | `[]`                   |
-| `hostAliases`        | Deployment pod host aliases                                          | `[]`                   |
-| `mediawikiUser`      | User of the application                                              | `user`                 |
-| `mediawikiPassword`  | Application password                                                 | `""`                   |
-| `mediawikiEmail`     | Admin email                                                          | `user@example.com`     |
-| `mediawikiName`      | Name for the wiki                                                    | `My Wiki`              |
-| `mediawikiHost`      | Mediawiki host to create application URLs                            | `""`                   |
-| `allowEmptyPassword` | Allow DB blank passwords                                             | `yes`                  |
-| `smtpHost`           | SMTP host                                                            | `""`                   |
-| `smtpPort`           | SMTP port                                                            | `""`                   |
-| `smtpHostID`         | SMTP host ID                                                         | `""`                   |
-| `smtpUser`           | SMTP user                                                            | `""`                   |
-| `smtpPassword`       | SMTP password                                                        | `""`                   |
-| `command`            | Override default container command (useful when using custom images) | `[]`                   |
-| `args`               | Override default container args (useful when using custom images)    | `[]`                   |
-| `extraEnvVars`       | Extra environment variables to be set on Mediawki container          | `[]`                   |
-| `extraEnvVarsCM`     | Name of existing ConfigMap containing extra env vars                 | `""`                   |
-| `extraEnvVarsSecret` | Name of existing Secret containing extra env vars                    | `""`                   |
+| Name                 | Description                                                          | Value                 |
+| -------------------- | -------------------------------------------------------------------- | --------------------- |
+| `image.registry`     | MediaWiki image registry                                             | `docker.io`           |
+| `image.repository`   | MediaWiki image repository                                           | `bitnami/mediawiki`   |
+| `image.tag`          | MediaWiki image tag (immutable tags are recommended)                 | `1.36.2-debian-10-r8` |
+| `image.pullPolicy`   | Image pull policy                                                    | `IfNotPresent`        |
+| `image.pullSecrets`  | Specify docker-registry secret names as an array                     | `[]`                  |
+| `hostAliases`        | Deployment pod host aliases                                          | `[]`                  |
+| `mediawikiUser`      | User of the application                                              | `user`                |
+| `mediawikiPassword`  | Application password                                                 | `""`                  |
+| `mediawikiEmail`     | Admin email                                                          | `user@example.com`    |
+| `mediawikiName`      | Name for the wiki                                                    | `My Wiki`             |
+| `mediawikiHost`      | Mediawiki host to create application URLs                            | `""`                  |
+| `allowEmptyPassword` | Allow DB blank passwords                                             | `yes`                 |
+| `smtpHost`           | SMTP host                                                            | `""`                  |
+| `smtpPort`           | SMTP port                                                            | `""`                  |
+| `smtpHostID`         | SMTP host ID                                                         | `""`                  |
+| `smtpUser`           | SMTP user                                                            | `""`                  |
+| `smtpPassword`       | SMTP password                                                        | `""`                  |
+| `command`            | Override default container command (useful when using custom images) | `[]`                  |
+| `args`               | Override default container args (useful when using custom images)    | `[]`                  |
+| `extraEnvVars`       | Extra environment variables to be set on Mediawki container          | `[]`                  |
+| `extraEnvVarsCM`     | Name of existing ConfigMap containing extra env vars                 | `""`                  |
+| `extraEnvVarsSecret` | Name of existing Secret containing extra env vars                    | `""`                  |
 
 
 ### Mediawiki deployment parameters
@@ -152,27 +152,26 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Traffic Exposure parameters
 
-| Name                            | Description                                                                                                | Value                    |
-| ------------------------------- | ---------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `service.type`                  | Kubernetes Service type                                                                                    | `LoadBalancer`           |
-| `service.loadBalancerIP`        | Use serviceLoadBalancerIP to request a specific static IP,                                                 | `""`                     |
-| `service.port`                  | Service HTTP port                                                                                          | `80`                     |
-| `service.httpsPort`             | HTTPS Port. Set this to any value (recommended: 443) to enable the https service port                      | `""`                     |
-| `service.nodePorts.http`        | Kubernetes http node port                                                                                  | `""`                     |
-| `service.nodePorts.https`       | Kubernetes https node port                                                                                 | `""`                     |
-| `service.externalTrafficPolicy` | Enable client source IP preservation                                                                       | `Cluster`                |
-| `ingress.enabled`               | Set to true to enable ingress record generation                                                            | `false`                  |
-| `ingress.certManager`           | Set this to true in order to add the corresponding annotations for cert-manager                            | `false`                  |
-| `ingress.pathType`              | Ingress path type                                                                                          | `ImplementationSpecific` |
-| `ingress.apiVersion`            | Force Ingress API version (automatically detected if not set)                                              | `""`                     |
-| `ingress.hostname`              | Default host for the ingress resource                                                                      | `mediawiki.local`        |
-| `ingress.path`                  | The Path to Mediawiki. You may need to set this to '/*' in order to use this with ALB ingress controllers. | `/`                      |
-| `ingress.annotations`           | Ingress annotations                                                                                        | `{}`                     |
-| `ingress.tls`                   | Enable TLS configuration for the hostname defined at ingress.hostname parameter                            | `false`                  |
-| `ingress.extraHosts`            | The list of additional hostnames to be covered with this ingress record.                                   | `[]`                     |
-| `ingress.extraPaths`            | Any additional arbitrary paths that may need to be added to the ingress under the main host.               | `[]`                     |
-| `ingress.extraTls`              | The tls configuration for additional hostnames to be covered with this ingress record.                     | `[]`                     |
-| `ingress.secrets`               | If you're providing your own certificates, please use this to add the certificates as secrets              | `[]`                     |
+| Name                            | Description                                                                                                                      | Value                    |
+| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.type`                  | Kubernetes Service type                                                                                                          | `LoadBalancer`           |
+| `service.loadBalancerIP`        | Use serviceLoadBalancerIP to request a specific static IP,                                                                       | `""`                     |
+| `service.port`                  | Service HTTP port                                                                                                                | `80`                     |
+| `service.httpsPort`             | HTTPS Port. Set this to any value (recommended: 443) to enable the https service port                                            | `""`                     |
+| `service.nodePorts.http`        | Kubernetes http node port                                                                                                        | `""`                     |
+| `service.nodePorts.https`       | Kubernetes https node port                                                                                                       | `""`                     |
+| `service.externalTrafficPolicy` | Enable client source IP preservation                                                                                             | `Cluster`                |
+| `ingress.enabled`               | Set to true to enable ingress record generation                                                                                  | `false`                  |
+| `ingress.pathType`              | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.apiVersion`            | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
+| `ingress.hostname`              | Default host for the ingress resource                                                                                            | `mediawiki.local`        |
+| `ingress.path`                  | The Path to Mediawiki. You may need to set this to '/*' in order to use this with ALB ingress controllers.                       | `/`                      |
+| `ingress.annotations`           | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.tls`                   | Enable TLS configuration for the hostname defined at ingress.hostname parameter                                                  | `false`                  |
+| `ingress.extraHosts`            | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
+| `ingress.extraPaths`            | Any additional arbitrary paths that may need to be added to the ingress under the main host.                                     | `[]`                     |
+| `ingress.extraTls`              | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
+| `ingress.secrets`               | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
 
 
 ### Database parameters
@@ -187,7 +186,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `mariadb.auth.password`                     | Password for the database                                                             | `""`                |
 | `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                                                 | `true`              |
 | `mariadb.primary.persistence.storageClass`  | PVC Storage Class                                                                     | `""`                |
-| `mariadb.primary.persistence.accessModes`   | Persistent Volume Access Mode                                                         | `[]`                |
+| `mariadb.primary.persistence.accessModes`   | Persistent Volume Access Mode                                                         | `["ReadWriteOnce"]` |
 | `mariadb.primary.persistence.size`          | Database Persistent Volume Size                                                       | `8Gi`               |
 | `mariadb.primary.persistence.hostPath`      | Host mount path for MariaDB volume                                                    | `""`                |
 | `mariadb.primary.persistence.existingClaim` | Enable persistence using an existing PVC                                              | `""`                |
@@ -206,7 +205,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                         | Start a side-car prometheus exporter                                         | `false`                   |
 | `metrics.image.registry`                  | Apache exporter image registry                                               | `docker.io`               |
 | `metrics.image.repository`                | Apache exporter image repository                                             | `bitnami/apache-exporter` |
-| `metrics.image.tag`                       | Apache exporter image tag (immutable tags are recommended)                   | `0.10.0-debian-10-r26`    |
+| `metrics.image.tag`                       | Apache exporter image tag (immutable tags are recommended)                   | `0.10.1-debian-10-r16`    |
 | `metrics.image.pullPolicy`                | Image pull policy                                                            | `IfNotPresent`            |
 | `metrics.image.pullSecrets`               | Specify docker-registry secret names as an array                             | `[]`                      |
 | `metrics.resources`                       | Exporter resource requests/limit                                             | `{}`                      |

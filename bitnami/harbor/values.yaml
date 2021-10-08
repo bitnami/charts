@@ -55,7 +55,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r173
+    tag: 10-debian-10-r206
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -229,9 +229,10 @@ ingress:
   ## @param ingress.apiVersion Override ingress api version
   ##
   apiVersion: ""
-  ## @param ingress.certManager Add annotations for cert-manager
+  ## DEPRECATED: Use ingress.annotations instead of ingress.certManager
+  ## certManager: false
   ##
-  certManager: false
+
   ## @param ingress.hosts [object] The list of hostnames to be covered with this ingress record
   ##
   hosts:
@@ -243,9 +244,11 @@ ingress:
   ## set to `ncp` if using the NCP (NSX-T Container Plugin) ingress controller
   ##
   controller: default
-  ## @param ingress.annotations [object] Ingress annotations done as key:value pairs
+  ## @param ingress.annotations [object] Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
   ## For a full list of possible ingress annotations, please see
   ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+  ## Use this parameter to set the required annotations for cert-manager, see
+  ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
   ##
   annotations:
     ingress.kubernetes.io/ssl-redirect: 'true'
@@ -480,7 +483,7 @@ nginxImage:
   ##
   registry: docker.io
   repository: bitnami/nginx
-  tag: 1.21.1-debian-10-r46
+  tag: 1.21.3-debian-10-r20
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -675,7 +678,7 @@ portalImage:
   ##
   registry: docker.io
   repository: bitnami/harbor-portal
-  tag: 2.3.2-debian-10-r2
+  tag: 2.3.3-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -874,7 +877,7 @@ coreImage:
   ##
   registry: docker.io
   repository: bitnami/harbor-core
-  tag: 2.3.2-debian-10-r2
+  tag: 2.3.3-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1109,7 +1112,7 @@ jobserviceImage:
   ##
   registry: docker.io
   repository: bitnami/harbor-jobservice
-  tag: 2.3.2-debian-10-r2
+  tag: 2.3.3-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1318,7 +1321,7 @@ registryImage:
   ##
   registry: docker.io
   repository: bitnami/harbor-registry
-  tag: 2.3.2-debian-10-r2
+  tag: 2.3.3-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1349,7 +1352,7 @@ registryctlImage:
   ##
   registry: docker.io
   repository: bitnami/harbor-registryctl
-  tag: 2.3.2-debian-10-r2
+  tag: 2.3.3-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1672,7 +1675,7 @@ chartMuseumImage:
   ##
   registry: docker.io
   repository: bitnami/chartmuseum
-  tag: 0.13.1-debian-10-r149
+  tag: 0.13.1-debian-10-r182
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1920,7 +1923,7 @@ clairImage:
   ##
   registry: docker.io
   repository: bitnami/harbor-clair
-  tag: 2.3.2-debian-10-r2
+  tag: 2.3.3-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1950,7 +1953,7 @@ clairAdapterImage:
   ##
   registry: docker.io
   repository: bitnami/harbor-adapter-clair
-  tag: 2.3.2-debian-10-r2
+  tag: 2.3.3-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -2244,7 +2247,7 @@ notaryServerImage:
   ##
   registry: docker.io
   repository: bitnami/harbor-notary-server
-  tag: 2.3.2-debian-10-r2
+  tag: 2.3.3-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -2275,7 +2278,7 @@ notarySignerImage:
   ##
   registry: docker.io
   repository: bitnami/harbor-notary-signer
-  tag: 2.3.2-debian-10-r2
+  tag: 2.3.3-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -2640,7 +2643,7 @@ trivyImage:
   ##
   registry: docker.io
   repository: bitnami/harbor-adapter-trivy
-  tag: 2.3.2-debian-10-r2
+  tag: 2.3.3-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images

@@ -1,7 +1,7 @@
 annotations:
   category: DeveloperTools
 apiVersion: v2
-appVersion: 1.10.2
+appVersion: 1.10.3
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami

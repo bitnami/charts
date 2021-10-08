@@ -70,8 +70,8 @@ $ helm delete --purge my-release
 | `clusterDomain`          | Kubernetes cluster domain name                                                          | `cluster.local` |
 | `extraDeploy`            | Array of extra objects to deploy with the release                                       | `[]`            |
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
-| `diagnosticMode.command` | Command to override all containers in the deployment                                    | `[]`            |
-| `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `[]`            |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`     |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]`  |
 
 
 ### HashiCorp Consul parameters
@@ -191,13 +191,13 @@ $ helm delete --purge my-release
 
 ### Persistence parameters
 
-| Name                       | Description                                                                                               | Value  |
-| -------------------------- | --------------------------------------------------------------------------------------------------------- | ------ |
-| `persistence.enabled`      | Enable HashiCorp Consul data persistence using PVC, use a Persistent Volume Claim, If false, use emptyDir | `true` |
-| `persistence.storageClass` | Persistent Volume storage class                                                                           | `""`   |
-| `persistence.annotations`  | Persistent Volume Claim annotations                                                                       | `{}`   |
-| `persistence.accessModes`  | Persistent Volume Access Mode                                                                             | `[]`   |
-| `persistence.size`         | PVC Storage Request for HashiCorp Consul data volume                                                      | `8Gi`  |
+| Name                       | Description                                                                                               | Value               |
+| -------------------------- | --------------------------------------------------------------------------------------------------------- | ------------------- |
+| `persistence.enabled`      | Enable HashiCorp Consul data persistence using PVC, use a Persistent Volume Claim, If false, use emptyDir | `true`              |
+| `persistence.storageClass` | Persistent Volume storage class                                                                           | `""`                |
+| `persistence.annotations`  | Persistent Volume Claim annotations                                                                       | `{}`                |
+| `persistence.accessModes`  | Persistent Volume Access Mode                                                                             | `["ReadWriteOnce"]` |
+| `persistence.size`         | PVC Storage Request for HashiCorp Consul data volume                                                      | `8Gi`               |
 
 
 ### Volume Permissions parameters
@@ -207,7 +207,7 @@ $ helm delete --purge my-release
 | `volumePermissions.enabled`            | Enable init container that changes the owner and group of the persistent volume | `false`                 |
 | `volumePermissions.image.registry`     | Bitnami Shell image registry                                                    | `docker.io`             |
 | `volumePermissions.image.repository`   | Bitnami Shell image repository                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Bitnami Shell image tag (immutable tags are recommended)                        | `10-debian-10-r174`     |
+| `volumePermissions.image.tag`          | Bitnami Shell image tag (immutable tags are recommended)                        | `10-debian-10-r205`     |
 | `volumePermissions.image.pullPolicy`   | Bitnami Shell image pull policy                                                 | `Always`                |
 | `volumePermissions.image.pullSecrets`  | Bitnami Shell image pull secrets                                                | `[]`                    |
 | `volumePermissions.resources.limits`   | The resources limits for the container                                          | `{}`                    |
@@ -239,7 +239,6 @@ $ helm delete --purge my-release
 | `metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in prometheus.                                           | `""`                      |
 | `metrics.serviceMonitor.selector`          | ServiceMonitor selector labels                                                                                              | `{}`                      |
 | `metrics.serviceMonitor.additionalLabels`  | Used to pass Labels that are used by the Prometheus installed in your cluster to select Service Monitors to work with       | `{}`                      |
-
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

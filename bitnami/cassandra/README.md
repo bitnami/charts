@@ -66,8 +66,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `clusterDomain`          | Kubernetes cluster domain name                                                          | `cluster.local` |
 | `extraDeploy`            | Array of extra objects to deploy with the release                                       | `[]`            |
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
-| `diagnosticMode.command` | Command to override all containers in the deployment                                    | `[]`            |
-| `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `[]`            |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`     |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]`  |
 
 ### Cassandra parameters
 
@@ -104,6 +104,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraEnvVars`                | Extra environment variables to be set on cassandra container                                                           | `[]`                 |
 | `extraEnvVarsCM`              | Name of existing ConfigMap containing extra env vars                                                                   | `""`                 |
 | `extraEnvVarsSecret`          | Name of existing Secret containing extra env vars                                                                      | `""`                 |
+
 
 ### Statefulset parameters
 
@@ -203,7 +204,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.storageClass`       | PVC Storage Class for Cassandra data volume                                                        | `""`                 |
 | `persistence.commitStorageClass` | PVC Storage Class for Cassandra Commit Log volume                                                  | `""`                 |
 | `persistence.annotations`        | Persistent Volume Claim annotations                                                                | `{}`                 |
-| `persistence.accessModes`        | Persistent Volume Access Mode                                                                      | `[]`                 |
+| `persistence.accessModes`        | Persistent Volume Access Mode                                                                      | `["ReadWriteOnce"]`  |
 | `persistence.size`               | PVC Storage Request for Cassandra data volume                                                      | `8Gi`                |
 | `persistence.mountPath`          | The path the data volume will be mounted at                                                        | `/bitnami/cassandra` |
 
@@ -214,7 +215,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                   | Enable init container that changes the owner and group of the persistent volume | `false`                 |
 | `volumePermissions.image.registry`            | Init container volume                                                           | `docker.io`             |
 | `volumePermissions.image.repository`          | Init container volume                                                           | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Init container volume                                                           | `10-debian-10-r185`     |
+| `volumePermissions.image.tag`                 | Init container volume                                                           | `10-debian-10-r214`     |
 | `volumePermissions.image.pullPolicy`          | Init container volume                                                           | `Always`                |
 | `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                | `[]`                    |
 | `volumePermissions.resources.limits`          | The resources limits for the container                                          | `{}`                    |
