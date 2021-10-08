@@ -66,7 +66,7 @@ spec:
             - /apprepository-controller
           args:
             - --user-agent-comment=kubeapps/{{ .Chart.AppVersion }}
-            - --repo-sync-image={{ include "common.images.image" (dict "imageRoot" .Values.apprepository.syncImage "global" .Values.global) }}
+            - --repo-sync-image=$(REPO_SYNC_IMAGE)
             {{- if .Values.global }}
               {{- if.Values.global.imagePullSecrets }}
                 {{- range $key, $value := .Values.global.imagePullSecrets }}
@@ -89,6 +89,19 @@ spec:
             - --crontab={{ .Values.apprepository.crontab }}
             {{- end }}
             - --repos-per-namespace={{ .Values.apprepository.watchAllNamespaces }}
+              {{- if.Values.apprepository.customAnnotations }}
+                {{- range $key, $value := .Values.apprepository.customAnnotations }}
+            -  --custom-annotations={{ (print $key "=" $value) | quote }}
+                {{- end }}
+              {{- end }}
+              {{- if.Values.apprepository.customLabels }}
+                {{- range $key, $value := .Values.apprepository.customLabels }}
+            -  --custom-labels={{ (print $key "=" $value) | quote }}
+                {{- end }}
+              {{- end }}
+          env:
+            - name: REPO_SYNC_IMAGE
+              value: {{ include "common.images.image" (dict "imageRoot" .Values.apprepository.syncImage "global" .Values.global) }}
           {{- if .Values.apprepository.resources }}
           resources: {{- toYaml .Values.apprepository.resources | nindent 12 }}
           {{- end }}

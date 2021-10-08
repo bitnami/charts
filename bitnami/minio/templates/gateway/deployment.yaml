@@ -90,6 +90,8 @@ spec:
             - {{ default "/opt/bitnami/minio/certs" .Values.tls.mountPath }}
             - gateway
             - {{ .Values.gateway.type }}
+            - --console-address 
+            - :{{ .Values.containerPorts.console }}
             {{- if eq .Values.gateway.type "gcs" }}
             - {{ .Values.gateway.auth.gcs.projectID }}
             {{- else if eq .Values.gateway.type "nas" }}
@@ -136,6 +138,8 @@ spec:
                   key: secret-key
             - name: MINIO_PROMETHEUS_AUTH_TYPE
               value: {{ .Values.metrics.prometheusAuthType | quote }}
+            - name: MINIO_CONSOLE_PORT_NUMBER
+              value: {{ .Values.containerPorts.console | quote }}
             {{- if .Values.extraEnv }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnv "context" $) | nindent 12 }}
             {{- end }}
@@ -149,8 +153,11 @@ spec:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.extraEnvVarsSecret "context" $) }}
             {{- end }}
           ports:
-            - name: minio
-              containerPort: {{ .Values.containerPort }}
+            - name: minio-api
+              containerPort: {{ .Values.containerPorts.api }}
+              protocol: TCP
+            - name: minio-console
+              containerPort: {{ .Values.containerPorts.console }}
               protocol: TCP
           {{- if .Values.resources }}
           resources: {{- toYaml .Values.resources | nindent 12 }}

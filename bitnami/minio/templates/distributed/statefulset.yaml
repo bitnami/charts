@@ -170,6 +170,8 @@ spec:
             {{- if .Values.tls.mountPath }}
             - name: MINIO_CERTSDIR
               value: {{ .Values.tls.mountPath | quote }}
+            - name: MINIO_CONSOLE_PORT_NUMBER
+              value: {{ .Values.containerPorts.console | quote }}
             {{- end }}
             {{- if .Values.extraEnv }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnv "context" $) | nindent 12 }}
@@ -184,14 +186,17 @@ spec:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.extraEnvVarsSecret "context" $) }}
             {{- end }}
           ports:
-            - name: minio
-              containerPort: {{ .Values.containerPort }}
+            - name: minio-api
+              containerPort: {{ .Values.containerPorts.api }}
+              protocol: TCP
+            - name: minio-console
+              containerPort: {{ .Values.containerPorts.console }}
               protocol: TCP
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
               path: /minio/health/live
-              port: minio
+              port: minio-api
               scheme: {{ ternary "HTTPS" "HTTP" .Values.tls.enabled | quote }}
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
@@ -204,7 +209,7 @@ spec:
           {{- if .Values.readinessProbe.enabled }}
           readinessProbe:
             tcpSocket:
-              port: minio
+              port: minio-api
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
@@ -216,7 +221,7 @@ spec:
           {{- if .Values.startupProbe.enabled }}
           startupProbe:
             tcpSocket:
-              port: minio
+              port: minio-api
             initialDelaySeconds: {{ .Values.startupProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.startupProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.startupProbe.timeoutSeconds }}

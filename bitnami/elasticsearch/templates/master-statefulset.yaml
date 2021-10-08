@@ -56,6 +56,9 @@ spec:
       {{- if .Values.master.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.master.tolerations "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.master.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.master.topologySpreadConstraints "context" $) | nindent 8 }}
+      {{- end }}
       serviceAccountName: {{ template "elasticsearch.master.serviceAccountName" . }}
       {{- if .Values.master.securityContext.enabled }}
       securityContext:
@@ -72,7 +75,8 @@ spec:
             - /bin/bash
             - -ec
             - |
-              sysctl -w vm.max_map_count=262144 && sysctl -w fs.file-max=65536
+              {{- include "elasticsearch.sysctlIfLess" (dict "key" "vm.max_map_count" "value" "262144") | nindent 14 }}
+              {{- include "elasticsearch.sysctlIfLess" (dict "key" "fs.file-max" "value" "65536") | nindent 14 }}
           securityContext:
             privileged: true
           {{- if .Values.sysctlImage.resources }}

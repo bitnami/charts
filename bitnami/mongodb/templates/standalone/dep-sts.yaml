@@ -29,7 +29,11 @@ spec:
   {{- else }}
   strategy:
   {{- end }}
+    {{- if .Values.useStatefulSet }}
     type: {{ .Values.strategyType }}
+    {{- else }}
+    type: Recreate
+    {{- end -}}
     {{- if or (and (not .Values.useStatefulSet) (eq "Recreate" .Values.strategyType)) (and .Values.useStatefulSet (eq "OnDelete" .Values.strategyType))  }}
     rollingUpdate: null
     {{- end }}
@@ -154,6 +158,11 @@ spec:
               DNS.3 = $my_hostname.$svc.$MY_POD_NAMESPACE.svc.cluster.local
               DNS.4 = localhost
               DNS.5 = 127.0.0.1
+              {{- if .Values.tls.extraDnsNames }}
+              {{- range $key, $dnsName := .Values.tls.extraDnsNames }}
+              {{ $key }} = {{ $dnsName }}
+              {{- end }}
+              {{- end }}
               EOL
 
               export RANDFILE=/certs/.rnd && openssl genrsa -out /certs/mongo.key 2048
@@ -199,6 +208,10 @@ spec:
             - name: MONGODB_DATABASE
               value: {{ .Values.auth.database | quote }}
             {{- end }}
+            {{- if .Values.metrics.username }}
+            - name: MONGODB_METRICS_USERNAME
+              value: {{ .Values.metrics.username | quote }}
+            {{- end }}
             {{- if .Values.auth.enabled }}
             {{- if and .Values.auth.username .Values.auth.database }}
             - name: MONGODB_PASSWORD
@@ -207,6 +220,15 @@ spec:
                   name: {{ include "mongodb.secretName" . }}
                   key: mongodb-password
             {{- end }}
+            {{- if .Values.metrics.username }}
+            - name: MONGODB_METRICS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "mongodb.secretName" . }}
+                  key: mongodb-metrics-password
+            {{- end }}
+            - name: MONGODB_ROOT_USER
+              value: {{ .Values.auth.rootUser | quote }}
             - name: MONGODB_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -369,11 +391,23 @@ spec:
               /bin/mongodb_exporter --web.listen-address ":{{ .Values.metrics.containerPort }}" --mongodb.uri "{{ include "mongodb.mongodb_exporter.uri" . }}" {{ .Values.metrics.extraFlags }}
           env:
           {{- if .Values.auth.enabled }}
+          {{- if not .Values.metrics.username }}
+          - name: MONGODB_ROOT_USER
+            value: {{ .Values.auth.rootUser | quote }}
           - name: MONGODB_ROOT_PASSWORD
             valueFrom:
               secretKeyRef:
                 name: {{ include "mongodb.secretName" . }}
                 key: mongodb-root-password
+          {{- else }}
+          - name: MONGODB_METRICS_USERNAME
+            value: {{ .Values.metrics.username | quote }}
+          - name: MONGODB_METRICS_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "mongodb.secretName" . }}
+                key: mongodb-metrics-password
+          {{- end }}
           {{- end }}
           volumeMounts:
           {{- if .Values.tls.enabled }}

@@ -62,7 +62,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/minio
-  tag: 2021.6.17-debian-10-r58
+  tag: 2021.10.6-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -88,7 +88,7 @@ image:
 clientImage:
   registry: docker.io
   repository: bitnami/minio-client
-  tag: 2021.7.27-debian-10-r28
+  tag: 2021.9.23-debian-10-r13
 ## @param mode MinIO&reg; server mode (`standalone` or `distributed`)
 ## ref: https://docs.minio.io/docs/distributed-minio-quickstart-guide
 ##
@@ -213,9 +213,12 @@ statefulset:
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
 hostAliases: []
-## @param containerPort MinIO&reg; container port to open
+## @param containerPorts.api MinIO&reg; container port to open for MinIO&reg; API
+## @param containerPorts.console MinIO&reg; container port to open for MinIO&reg; Console
 ##
-containerPort: 9000
+containerPorts:
+  api: 9000
+  console: 9001
 ## MinIO&reg; pod Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param podSecurityContext.enabled Enable pod Security Context
@@ -396,13 +399,19 @@ service:
   ## @param service.type MinIO&reg; service type
   ##
   type: ClusterIP
-  ## @param service.port MinIO&reg; service port
+  ## @param service.ports.api MinIO&reg; API service port
+  ## @param service.ports.console MinIO&reg; Console service port
   ##
-  port: 9000
-  ## @param service.nodePort Specify the nodePort value for the LoadBalancer and NodePort service types
+  ports:
+    api: 9000
+    console: 9001
+  ## @param service.nodePorts.api Specify the MinIO&reg API nodePort value for the LoadBalancer and NodePort service types
+  ## @param service.nodePorts.console Specify the MinIO&reg Console nodePort value for the LoadBalancer and NodePort service types
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ##
-  nodePort: ""
+  nodePorts:
+    api: ""
+    console: ""
   ## @param service.loadBalancerIP loadBalancerIP if service type is `LoadBalancer` (optional, cloud specific)
   ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
   ##
@@ -424,16 +433,17 @@ service:
   ##
   annotations: {}
 ## Configure the ingress resource that allows you to access the
-## MinIO&reg; installation. Set up the URL
+## MinIO&reg; Console. Set up the URL
 ## ref: http://kubernetes.io/docs/user-guide/ingress/
 ##
 ingress:
   ## @param ingress.enabled Enable ingress controller resource
   ##
   enabled: false
-  ## @param ingress.certManager Set this to true in order to add the corresponding annotations for cert-manager
+  ## DEPRECATED: Use ingress.annotations instead of ingress.certManager
+  ## certManager: false
   ##
-  certManager: false
+
   ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
   ##
   apiVersion: ""
@@ -449,12 +459,17 @@ ingress:
   ## @param ingress.servicePort Service port to be used
   ## Default is http. Alternative is https.
   ##
-  servicePort: minio
-  ## @param ingress.annotations Ingress annotations
+  servicePort: minio-console
+  ## @param ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
   ## For a full list of possible ingress annotations, please see
   ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+  ## Use this parameter to set the required annotations for cert-manager, see
+  ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
   ##
-  ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+  ## e.g:
+  ## annotations:
+  ##   kubernetes.io/ingress.class: nginx
+  ##   cert-manager.io/cluster-issuer: cluster-issuer-name
   ##
   annotations: {}
   ## @param ingress.tls Enable TLS configuration for the hostname defined at `ingress.hostname` parameter
@@ -504,6 +519,95 @@ ingress:
   ##     certificate: ""
   ##
   secrets: []
+
+## Configure the ingress resource that allows you to access the
+## MinIO&reg; API. Set up the URL
+## ref: http://kubernetes.io/docs/user-guide/ingress/
+##
+apiIngress:
+  ## @param apiIngress.enabled Enable ingress controller resource
+  ##
+  enabled: false
+  ## DEPRECATED: Use apiIngress.annotations instead of apiIngress.certManager
+  ## certManager: false
+  ##
+
+  ## @param apiIngress.apiVersion Force Ingress API version (automatically detected if not set)
+  ##
+  apiVersion: ""
+  ## @param apiIngress.hostname Default host for the ingress resource
+  ##
+  hostname: minio.local
+  ## @param apiIngress.path The Path to MinIO&reg;. You may need to set this to '/*' in order to use this with ALB ingress controllers.
+  ##
+  path: /
+  ## @param apiIngress.pathType Ingress path type
+  ##
+  pathType: ImplementationSpecific
+  ## @param apiIngress.servicePort Service port to be used
+  ## Default is http. Alternative is https.
+  ##
+  servicePort: minio-api
+  ## @param apiIngress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
+  ## For a full list of possible ingress annotations, please see
+  ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+  ## Use this parameter to set the required annotations for cert-manager, see
+  ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
+  ##
+  ## e.g:
+  ## annotations:
+  ##   kubernetes.io/ingress.class: nginx
+  ##   cert-manager.io/cluster-issuer: cluster-issuer-name
+  ##
+  annotations: {}
+  ## @param apiIngress.tls Enable TLS configuration for the hostname defined at `apiIngress.hostname` parameter
+  ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.apiIngress.hostname }}
+  ## You can use the apiIngress.secrets parameter to create this TLS secret or relay on cert-manager to create it
+  ##
+  tls: false
+  ## @param apiIngress.extraHosts The list of additional hostnames to be covered with this ingress record.
+  ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
+  ## e.g:
+  ## extraHosts:
+  ##   - name: minio.local
+  ##     path: /
+  ##
+  extraHosts: []
+  ## @param apiIngress.extraPaths Any additional paths that may need to be added to the ingress under the main host
+  ## For example: The ALB ingress controller requires a special rule for handling SSL redirection.
+  ## extraPaths:
+  ## - path: /*
+  ##   backend:
+  ##     serviceName: ssl-redirect
+  ##     servicePort: use-annotation
+  ##
+  extraPaths: []
+  ## @param apiIngress.extraTls The tls configuration for additional hostnames to be covered with this ingress record.
+  ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+  ## e.g:
+  ## extraTls:
+  ## - hosts:
+  ##     - minio.local
+  ##   secretName: minio.local-tls
+  ##
+  extraTls: []
+  ## @param apiIngress.secrets If you're providing your own certificates, please use this to add the certificates as secrets
+  ## key and certificate are expected in PEM format
+  ## name should line up with a secretName set further up
+  ##
+  ## If it is not set and you're using cert-manager, this is unneeded, as it will create a secret for you with valid certificates
+  ## If it is not set and you're NOT using cert-manager either, self-signed certificates will be created valid for 365 days
+  ## It is also possible to create and manage the certificates outside of this helm chart
+  ## Please see README.md for more information
+  ##
+  ## Example
+  ## secrets:
+  ##   - name: minio.local-tls
+  ##     key: ""
+  ##     certificate: ""
+  ##
+  secrets: []
+
 ## NetworkPolicy parameters
 ##
 networkPolicy:
@@ -568,7 +672,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r172
+    tag: 10-debian-10-r214
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

@@ -156,7 +156,7 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | ---------------------------------- | --------------------------------------------------------------------------------- | -------------------- |
 | `image.registry`                   | Grafana image registry                                                            | `docker.io`          |
 | `image.repository`                 | Grafana image repository                                                          | `bitnami/grafana`    |
-| `image.tag`                        | Grafana image tag (immutable tags are recommended)                                | `8.1.2-debian-10-r6` |
+| `image.tag`                        | Grafana image tag (immutable tags are recommended)                                | `8.1.7-debian-10-r0` |
 | `image.pullPolicy`                 | Grafana image pull policy                                                         | `IfNotPresent`       |
 | `image.pullSecrets`                | Grafana image pull secrets                                                        | `[]`                 |
 | `hostAliases`                      | Add deployment host aliases                                                       | `[]`                 |
@@ -174,7 +174,9 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `plugins`                          | Grafana plugins to be installed in deployment time separated by commas            | `""`                 |
 | `ldap.enabled`                     | Enable LDAP for Grafana                                                           | `false`              |
 | `ldap.allowSignUp`                 | Allows LDAP sign up for Grafana                                                   | `false`              |
-| `ldap.configMapName`               | Name of the ConfigMap with the LDAP configuration file for Grafana                | `""`                 |
+| `ldap.configuration`               | Specify content for ldap.toml configuration file                                  | `""`                 |
+| `ldap.configMapName`               | Name of the ConfigMap with the ldap.toml configuration file for Grafana           | `""`                 |
+| `ldap.secretName`                  | Name of the Secret with the ldap.toml configuration file for Grafana              | `""`                 |
 | `extraEnvVars`                     | Array containing extra env vars to configure Grafana                              | `{}`                 |
 | `extraConfigmaps`                  | Array to mount extra ConfigMaps to configure Grafana                              | `{}`                 |
 | `config.useGrafanaIniFile`         | Allows to load a `grafana.ini` file                                               | `false`              |
@@ -211,12 +213,14 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `resources.limits`                   | The resources limits for Grafana containers                                               | `{}`            |
 | `resources.requests`                 | The requested resources for Grafana containers                                            | `{}`            |
 | `livenessProbe.enabled`              | Enable livenessProbe                                                                      | `true`          |
+| `livenessProbe.scheme`               | Scheme for livenessProbe                                                                  | `HTTP`          |
 | `livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                   | `120`           |
 | `livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                          | `10`            |
 | `livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                         | `5`             |
 | `livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                       | `6`             |
 | `livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                       | `1`             |
 | `readinessProbe.enabled`             | Enable readinessProbe                                                                     | `true`          |
+| `readinessProbe.scheme`              | Scheme for readinessProbe                                                                 | `HTTP`          |
 | `readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                  | `30`            |
 | `readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                         | `10`            |
 | `readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                        | `5`             |
@@ -249,27 +253,26 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 
 ### Traffic exposure parameters
 
-| Name                               | Description                                                                                   | Value                    |
-| ---------------------------------- | --------------------------------------------------------------------------------------------- | ------------------------ |
-| `service.type`                     | Kubernetes Service type                                                                       | `ClusterIP`              |
-| `service.port`                     | Grafana service port                                                                          | `3000`                   |
-| `service.nodePort`                 | Specify the nodePort value for the LoadBalancer and NodePort service types                    | `""`                     |
-| `service.loadBalancerIP`           | loadBalancerIP if Grafana service type is `LoadBalancer` (optional, cloud specific)           | `""`                     |
-| `service.loadBalancerSourceRanges` | loadBalancerSourceRanges if Grafana service type is `LoadBalancer` (optional, cloud specific) | `[]`                     |
-| `service.annotations`              | Provide any additional annotations which may be required.                                     | `{}`                     |
-| `ingress.enabled`                  | Set to true to enable ingress record generation                                               | `false`                  |
-| `ingress.certManager`              | Set this to true in order to add the corresponding annotations for cert-manager               | `false`                  |
-| `ingress.pathType`                 | Ingress Path type                                                                             | `ImplementationSpecific` |
-| `ingress.apiVersion`               | Override API Version (automatically detected if not set)                                      | `""`                     |
-| `ingress.hostname`                 | When the ingress is enabled, a host pointing to this will be created                          | `grafana.local`          |
-| `ingress.path`                     | Default path for the ingress resource                                                         | `/`                      |
-| `ingress.annotations`              | Ingress annotations                                                                           | `{}`                     |
-| `ingress.tls`                      | Enable TLS configuration for the hostname defined at ingress.hostname parameter               | `false`                  |
-| `ingress.extraHosts`               | The list of additional hostnames to be covered with this ingress record.                      | `[]`                     |
-| `ingress.extraPaths`               | Any additional arbitrary paths that may need to be added to the ingress under the main host.  | `[]`                     |
-| `ingress.extraTls`                 | The tls configuration for additional hostnames to be covered with this ingress record.        | `[]`                     |
-| `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets | `[]`                     |
-| `ingress.secrets`                  | It is also possible to create and manage the certificates outside of this helm chart          | `[]`                     |
+| Name                               | Description                                                                                                                      | Value                    |
+| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.type`                     | Kubernetes Service type                                                                                                          | `ClusterIP`              |
+| `service.port`                     | Grafana service port                                                                                                             | `3000`                   |
+| `service.nodePort`                 | Specify the nodePort value for the LoadBalancer and NodePort service types                                                       | `""`                     |
+| `service.loadBalancerIP`           | loadBalancerIP if Grafana service type is `LoadBalancer` (optional, cloud specific)                                              | `""`                     |
+| `service.loadBalancerSourceRanges` | loadBalancerSourceRanges if Grafana service type is `LoadBalancer` (optional, cloud specific)                                    | `[]`                     |
+| `service.annotations`              | Provide any additional annotations which may be required.                                                                        | `{}`                     |
+| `ingress.enabled`                  | Set to true to enable ingress record generation                                                                                  | `false`                  |
+| `ingress.pathType`                 | Ingress Path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.apiVersion`               | Override API Version (automatically detected if not set)                                                                         | `""`                     |
+| `ingress.hostname`                 | When the ingress is enabled, a host pointing to this will be created                                                             | `grafana.local`          |
+| `ingress.path`                     | Default path for the ingress resource                                                                                            | `/`                      |
+| `ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.tls`                      | Enable TLS configuration for the hostname defined at ingress.hostname parameter                                                  | `false`                  |
+| `ingress.extraHosts`               | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
+| `ingress.extraPaths`               | Any additional arbitrary paths that may need to be added to the ingress under the main host.                                     | `[]`                     |
+| `ingress.extraTls`                 | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
+| `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
+| `ingress.secrets`                  | It is also possible to create and manage the certificates outside of this helm chart                                             | `[]`                     |
 
 
 ### Metrics parameters
@@ -292,7 +295,7 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `imageRenderer.enabled`                              | Enable using a remote rendering service to render PNG images                                           | `false`                          |
 | `imageRenderer.image.registry`                       | Grafana Image Renderer image registry                                                                  | `docker.io`                      |
 | `imageRenderer.image.repository`                     | Grafana Image Renderer image repository                                                                | `bitnami/grafana-image-renderer` |
-| `imageRenderer.image.tag`                            | Grafana Image Renderer image tag (immutable tags are recommended)                                      | `3.0.1-debian-10-r58`            |
+| `imageRenderer.image.tag`                            | Grafana Image Renderer image tag (immutable tags are recommended)                                      | `3.2.0-debian-10-r19`            |
 | `imageRenderer.image.pullPolicy`                     | Grafana Image Renderer image pull policy                                                               | `IfNotPresent`                   |
 | `imageRenderer.image.pullSecrets`                    | Grafana image Renderer pull secrets                                                                    | `[]`                             |
 | `imageRenderer.replicaCount`                         | Number of Grafana Image Renderer Pod replicas                                                          | `1`                              |
