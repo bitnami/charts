@@ -372,11 +372,11 @@ redis:
     ## Can be set to RollingUpdate or OnDelete
     ##
     type: RollingUpdate
-
-  ## @param redis.rollingUpdatePartition Partition update strategy
-  ## https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#partitions
-  ##
-  rollingUpdatePartition: ""
+    ## @param redis.updateStrategy.rollingUpdate.partition Partition update strategy
+    ## https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#partitions
+    ##
+    rollingUpdate:
+      partition: ""
 
   ## @param redis.podManagementPolicy Statefulset Pod management policy, it needs to be Parallel to be able to complete the cluster join
   ## Ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
