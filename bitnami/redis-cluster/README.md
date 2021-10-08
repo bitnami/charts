@@ -166,64 +166,64 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Redis&trade; statefulset parameters
 
-| Name                                       | Description                                                                                                  | Value           |
-| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------ | --------------- |
-| `redis.command`                            | Redis&trade; entrypoint string. The command `redis-server` is executed if this is not provided               | `[]`            |
-| `redis.args`                               | Arguments for the provided command if needed                                                                 | `[]`            |
-| `redis.updateStrategy.type`                | Argo Workflows statefulset strategy type                                                                     | `RollingUpdate` |
-| `redis.rollingUpdatePartition`             | Partition update strategy                                                                                    | `""`            |
-| `redis.podManagementPolicy`                | Statefulset Pod management policy, it needs to be Parallel to be able to complete the cluster join           | `Parallel`      |
-| `redis.hostAliases`                        | Deployment pod host aliases                                                                                  | `[]`            |
-| `redis.useAOFPersistence`                  | Whether to use AOF Persistence mode or not                                                                   | `yes`           |
-| `redis.containerPorts.redis`               | Redis&trade; port                                                                                            | `6379`          |
-| `redis.containerPorts.bus`                 | The busPort should be obtained adding 10000 to the redisPort. By default: 10000 + 6379 = 16379               | `16379`         |
-| `redis.lifecycleHooks`                     | LifecycleHook to set additional configuration before or after startup. Evaluated as a template               | `{}`            |
-| `redis.extraVolumes`                       | Extra volumes to add to the deployment                                                                       | `[]`            |
-| `redis.extraVolumeMounts`                  | Extra volume mounts to add to the container                                                                  | `[]`            |
-| `redis.customLivenessProbe`                | Override default liveness probe                                                                              | `{}`            |
-| `redis.customReadinessProbe`               | Override default readiness probe                                                                             | `{}`            |
-| `redis.customStartupProbe`                 | Custom startupProbe that overrides the default one                                                           | `{}`            |
-| `redis.initContainers`                     | Extra init containers to add to the deployment                                                               | `[]`            |
-| `redis.sidecars`                           | Extra sidecar containers to add to the deployment                                                            | `[]`            |
-| `redis.podLabels`                          | Additional labels for Redis&trade; pod                                                                       | `{}`            |
-| `redis.priorityClassName`                  | Redis&trade; Master pod priorityClassName                                                                    | `""`            |
-| `redis.configmap`                          | Additional Redis&trade; configuration for the nodes                                                          | `""`            |
-| `redis.extraEnvVars`                       | An array to add extra environment variables                                                                  | `[]`            |
-| `redis.extraEnvVarsCM`                     | ConfigMap with extra environment variables                                                                   | `""`            |
-| `redis.extraEnvVarsSecret`                 | Secret with extra environment variables                                                                      | `""`            |
-| `redis.podAnnotations`                     | Redis&trade; additional annotations                                                                          | `{}`            |
-| `redis.resources.limits`                   | The resources limits for the container                                                                       | `{}`            |
-| `redis.resources.requests`                 | The requested resources for the container                                                                    | `{}`            |
-| `redis.schedulerName`                      | Use an alternate scheduler, e.g. "stork".                                                                    | `""`            |
-| `redis.shareProcessNamespace`              | Enable shared process namespace in a pod.                                                                    | `false`         |
-| `redis.livenessProbe.enabled`              | Enable livenessProbe                                                                                         | `true`          |
-| `redis.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                      | `5`             |
-| `redis.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                             | `5`             |
-| `redis.livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                                            | `5`             |
-| `redis.livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                                          | `5`             |
-| `redis.livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                                          | `1`             |
-| `redis.readinessProbe.enabled`             | Enable readinessProbe                                                                                        | `true`          |
-| `redis.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                                     | `5`             |
-| `redis.readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                                            | `5`             |
-| `redis.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                           | `1`             |
-| `redis.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                                         | `5`             |
-| `redis.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                         | `1`             |
-| `redis.startupProbe.enabled`               | Enable startupProbe                                                                                          | `false`         |
-| `redis.startupProbe.path`                  | Path to check for startupProbe                                                                               | `/`             |
-| `redis.startupProbe.initialDelaySeconds`   | Initial delay seconds for startupProbe                                                                       | `300`           |
-| `redis.startupProbe.periodSeconds`         | Period seconds for startupProbe                                                                              | `10`            |
-| `redis.startupProbe.timeoutSeconds`        | Timeout seconds for startupProbe                                                                             | `5`             |
-| `redis.startupProbe.failureThreshold`      | Failure threshold for startupProbe                                                                           | `6`             |
-| `redis.startupProbe.successThreshold`      | Success threshold for startupProbe                                                                           | `1`             |
-| `redis.podAffinityPreset`                  | Redis&trade; pod affinity preset. Ignored if `redis.affinity` is set. Allowed values: `soft` or `hard`       | `""`            |
-| `redis.podAntiAffinityPreset`              | Redis&trade; pod anti-affinity preset. Ignored if `redis.affinity` is set. Allowed values: `soft` or `hard`  | `soft`          |
-| `redis.nodeAffinityPreset.type`            | Redis&trade; node affinity preset type. Ignored if `redis.affinity` is set. Allowed values: `soft` or `hard` | `""`            |
-| `redis.nodeAffinityPreset.key`             | Redis&trade; node label key to match Ignored if `redis.affinity` is set.                                     | `""`            |
-| `redis.nodeAffinityPreset.values`          | Redis&trade; node label values to match. Ignored if `redis.affinity` is set.                                 | `[]`            |
-| `redis.affinity`                           | Affinity settings for Redis&trade; pod assignment                                                            | `{}`            |
-| `redis.nodeSelector`                       | Node labels for Redis&trade; pods assignment                                                                 | `{}`            |
-| `redis.tolerations`                        | Tolerations for Redis&trade; pods assignment                                                                 | `[]`            |
-| `redis.topologySpreadConstraints`          | Pod topology spread constraints for Redis&trade; pod                                                         | `[]`            |
+| Name                                           | Description                                                                                                  | Value           |
+| ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------ | --------------- |
+| `redis.command`                                | Redis&trade; entrypoint string. The command `redis-server` is executed if this is not provided               | `[]`            |
+| `redis.args`                                   | Arguments for the provided command if needed                                                                 | `[]`            |
+| `redis.updateStrategy.type`                    | Argo Workflows statefulset strategy type                                                                     | `RollingUpdate` |
+| `redis.updateStrategy.rollingUpdate.partition` | Partition update strategy                                                                                    | `0`             |
+| `redis.podManagementPolicy`                    | Statefulset Pod management policy, it needs to be Parallel to be able to complete the cluster join           | `Parallel`      |
+| `redis.hostAliases`                            | Deployment pod host aliases                                                                                  | `[]`            |
+| `redis.useAOFPersistence`                      | Whether to use AOF Persistence mode or not                                                                   | `yes`           |
+| `redis.containerPorts.redis`                   | Redis&trade; port                                                                                            | `6379`          |
+| `redis.containerPorts.bus`                     | The busPort should be obtained adding 10000 to the redisPort. By default: 10000 + 6379 = 16379               | `16379`         |
+| `redis.lifecycleHooks`                         | LifecycleHook to set additional configuration before or after startup. Evaluated as a template               | `{}`            |
+| `redis.extraVolumes`                           | Extra volumes to add to the deployment                                                                       | `[]`            |
+| `redis.extraVolumeMounts`                      | Extra volume mounts to add to the container                                                                  | `[]`            |
+| `redis.customLivenessProbe`                    | Override default liveness probe                                                                              | `{}`            |
+| `redis.customReadinessProbe`                   | Override default readiness probe                                                                             | `{}`            |
+| `redis.customStartupProbe`                     | Custom startupProbe that overrides the default one                                                           | `{}`            |
+| `redis.initContainers`                         | Extra init containers to add to the deployment                                                               | `[]`            |
+| `redis.sidecars`                               | Extra sidecar containers to add to the deployment                                                            | `[]`            |
+| `redis.podLabels`                              | Additional labels for Redis&trade; pod                                                                       | `{}`            |
+| `redis.priorityClassName`                      | Redis&trade; Master pod priorityClassName                                                                    | `""`            |
+| `redis.configmap`                              | Additional Redis&trade; configuration for the nodes                                                          | `""`            |
+| `redis.extraEnvVars`                           | An array to add extra environment variables                                                                  | `[]`            |
+| `redis.extraEnvVarsCM`                         | ConfigMap with extra environment variables                                                                   | `""`            |
+| `redis.extraEnvVarsSecret`                     | Secret with extra environment variables                                                                      | `""`            |
+| `redis.podAnnotations`                         | Redis&trade; additional annotations                                                                          | `{}`            |
+| `redis.resources.limits`                       | The resources limits for the container                                                                       | `{}`            |
+| `redis.resources.requests`                     | The requested resources for the container                                                                    | `{}`            |
+| `redis.schedulerName`                          | Use an alternate scheduler, e.g. "stork".                                                                    | `""`            |
+| `redis.shareProcessNamespace`                  | Enable shared process namespace in a pod.                                                                    | `false`         |
+| `redis.livenessProbe.enabled`                  | Enable livenessProbe                                                                                         | `true`          |
+| `redis.livenessProbe.initialDelaySeconds`      | Initial delay seconds for livenessProbe                                                                      | `5`             |
+| `redis.livenessProbe.periodSeconds`            | Period seconds for livenessProbe                                                                             | `5`             |
+| `redis.livenessProbe.timeoutSeconds`           | Timeout seconds for livenessProbe                                                                            | `5`             |
+| `redis.livenessProbe.failureThreshold`         | Failure threshold for livenessProbe                                                                          | `5`             |
+| `redis.livenessProbe.successThreshold`         | Success threshold for livenessProbe                                                                          | `1`             |
+| `redis.readinessProbe.enabled`                 | Enable readinessProbe                                                                                        | `true`          |
+| `redis.readinessProbe.initialDelaySeconds`     | Initial delay seconds for readinessProbe                                                                     | `5`             |
+| `redis.readinessProbe.periodSeconds`           | Period seconds for readinessProbe                                                                            | `5`             |
+| `redis.readinessProbe.timeoutSeconds`          | Timeout seconds for readinessProbe                                                                           | `1`             |
+| `redis.readinessProbe.failureThreshold`        | Failure threshold for readinessProbe                                                                         | `5`             |
+| `redis.readinessProbe.successThreshold`        | Success threshold for readinessProbe                                                                         | `1`             |
+| `redis.startupProbe.enabled`                   | Enable startupProbe                                                                                          | `false`         |
+| `redis.startupProbe.path`                      | Path to check for startupProbe                                                                               | `/`             |
+| `redis.startupProbe.initialDelaySeconds`       | Initial delay seconds for startupProbe                                                                       | `300`           |
+| `redis.startupProbe.periodSeconds`             | Period seconds for startupProbe                                                                              | `10`            |
+| `redis.startupProbe.timeoutSeconds`            | Timeout seconds for startupProbe                                                                             | `5`             |
+| `redis.startupProbe.failureThreshold`          | Failure threshold for startupProbe                                                                           | `6`             |
+| `redis.startupProbe.successThreshold`          | Success threshold for startupProbe                                                                           | `1`             |
+| `redis.podAffinityPreset`                      | Redis&trade; pod affinity preset. Ignored if `redis.affinity` is set. Allowed values: `soft` or `hard`       | `""`            |
+| `redis.podAntiAffinityPreset`                  | Redis&trade; pod anti-affinity preset. Ignored if `redis.affinity` is set. Allowed values: `soft` or `hard`  | `soft`          |
+| `redis.nodeAffinityPreset.type`                | Redis&trade; node affinity preset type. Ignored if `redis.affinity` is set. Allowed values: `soft` or `hard` | `""`            |
+| `redis.nodeAffinityPreset.key`                 | Redis&trade; node label key to match Ignored if `redis.affinity` is set.                                     | `""`            |
+| `redis.nodeAffinityPreset.values`              | Redis&trade; node label values to match. Ignored if `redis.affinity` is set.                                 | `[]`            |
+| `redis.affinity`                               | Affinity settings for Redis&trade; pod assignment                                                            | `{}`            |
+| `redis.nodeSelector`                           | Node labels for Redis&trade; pods assignment                                                                 | `{}`            |
+| `redis.tolerations`                            | Tolerations for Redis&trade; pods assignment                                                                 | `[]`            |
+| `redis.topologySpreadConstraints`              | Pod topology spread constraints for Redis&trade; pod                                                         | `[]`            |
 
 
 ### Cluster update job parameters
