@@ -588,6 +588,17 @@ Find more information about how to deal with common errors related to Bitnami’
 
 ## Upgrading
 
+### To 7.0.0
+
+This major release renames several values in this chart and adds missing features, in order to be inline with the rest of assets in the Bitnami charts repository.
+
+Since the volume access mode when persistence is enabled is `ReadWriteOnce` in order to upgrade the deployment you will need to either use the `Recreate` strategy or delete the old deployment.
+
+```bash
+kubectl delete deployment <deployment-name>
+helm upgrade <release-name> bitnami/grafana
+```
+
 ### To 4.1.0
 
 This version also introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
