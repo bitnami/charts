@@ -197,7 +197,7 @@ containerPorts:
   rpcServer: 8300
   serfLAN: 8301
 
-## @param lifecycleHooks Add lifecycle hooks to the ASP.NET Core deployment
+## @param lifecycleHooks Add lifecycle hooks to the deployment
 ##
 lifecycleHooks: {}
 
