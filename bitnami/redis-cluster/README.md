@@ -586,6 +586,17 @@ Find more information about how to deal with common errors related to Bitnami’
 
 ## Upgrading
 
+### To 7.0.0
+
+This major release renames several values in this chart and adds missing features, in order to be inline with the rest of assets in the Bitnami charts repository.
+
+Since this version performs changes in the statefulset, in order to upgrade from previous versions you need to delete the statefulset object before the upgrade.
+
+```console
+kubectl delete statefulset <statefulsetName>
+helm upgrade <release-name>  bitnami/redis-cluster --set redis.password=<REDIS_PASSWORD>
+```
+
 ### To 6.0.0
 
 The cluster initialization job have been removed. Instead, the pod with index 0 from the statefulset will handle the initialization of the cluster.
