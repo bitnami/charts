@@ -75,7 +75,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------ | -------------------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`                     | Magento image registry                                                                                               | `docker.io`           |
 | `image.repository`                   | Magento image repository                                                                                             | `bitnami/magento`     |
-| `image.tag`                          | Magento image tag (immutable tags are recommended)                                                                   | `2.4.3-debian-10-r27` |
+| `image.tag`                          | Magento image tag (immutable tags are recommended)                                                                   | `2.4.3-debian-10-r39` |
 | `image.pullPolicy`                   | Magento image pull policy                                                                                            | `IfNotPresent`        |
 | `image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                     | `[]`                  |
 | `image.debug`                        | Specify if debug logs should be enabled                                                                              | `false`               |
@@ -160,7 +160,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `mariadb.enabled`                           | Whether to deploy a mariadb server to satisfy the applications database requirements.    | `true`                  |
 | `mariadb.image.registry`                    | MariaDB image registry                                                                   | `docker.io`             |
 | `mariadb.image.repository`                  | MariaDB image repository                                                                 | `bitnami/mariadb`       |
-| `mariadb.image.tag`                         | MariaDB image tag (immutable tags are recommended)                                       | `10.3.31-debian-10-r49` |
+| `mariadb.image.tag`                         | MariaDB image tag (immutable tags are recommended)                                       | `10.3.31-debian-10-r60` |
 | `mariadb.architecture`                      | MariaDB architecture. Allowed values: `standalone` or `replication`                      | `standalone`            |
 | `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                                                     | `""`                    |
 | `mariadb.auth.database`                     | Database name to create                                                                  | `bitnami_magento`       |
@@ -211,7 +211,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image repository                                                                                                        | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                                                                              | `10-debian-10-r203`     |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                                                                              | `10-debian-10-r215`     |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `Always`                |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                                          | `[]`                    |
 | `volumePermissions.resources.limits`   | The resources limits for the init container                                                                                                               | `{}`                    |
@@ -220,28 +220,27 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Traffic Exposure Parameters
 
-| Name                               | Description                                                                                   | Value                    |
-| ---------------------------------- | --------------------------------------------------------------------------------------------- | ------------------------ |
-| `service.type`                     | Kubernetes Service type                                                                       | `LoadBalancer`           |
-| `service.port`                     | Service HTTP port                                                                             | `8080`                   |
-| `service.httpsPort`                | Service HTTPS port                                                                            | `8443`                   |
-| `service.clusterIP`                | Static clusterIP or None for headless services                                                | `""`                     |
-| `service.loadBalancerSourceRanges` | Control hosts connecting to "LoadBalancer" only                                               | `[]`                     |
-| `service.loadBalancerIP`           | loadBalancerIP for the Magento Service (optional, cloud specific)                             | `""`                     |
-| `service.nodePorts.http`           | Kubernetes http node port                                                                     | `""`                     |
-| `service.nodePorts.https`          | Kubernetes https node port                                                                    | `""`                     |
-| `service.externalTrafficPolicy`    | Enable client source IP preservation                                                          | `Cluster`                |
-| `ingress.enabled`                  | Enable ingress controller resource                                                            | `false`                  |
-| `ingress.certManager`              | Add annotations for cert-manager                                                              | `false`                  |
-| `ingress.pathType`                 | Default path type for the ingress resource                                                    | `ImplementationSpecific` |
-| `ingress.apiVersion`               | Override API Version (automatically detected if not set)                                      | `""`                     |
-| `ingress.hostname`                 | Default host for the ingress resource                                                         | `magento.local`          |
-| `ingress.path`                     | Default path for the ingress resource                                                         | `/`                      |
-| `ingress.annotations`              | Ingress annotations                                                                           | `{}`                     |
-| `ingress.tls`                      | Enable TLS for `ingress.hostname` parameter                                                   | `false`                  |
-| `ingress.extraHosts`               | The list of additional hostnames to be covered with this ingress record.                      | `[]`                     |
-| `ingress.extraTls`                 | The tls configuration for additional hostnames to be covered with this ingress record.        | `[]`                     |
-| `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets | `[]`                     |
+| Name                               | Description                                                                                                                      | Value                    |
+| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.type`                     | Kubernetes Service type                                                                                                          | `LoadBalancer`           |
+| `service.port`                     | Service HTTP port                                                                                                                | `8080`                   |
+| `service.httpsPort`                | Service HTTPS port                                                                                                               | `8443`                   |
+| `service.clusterIP`                | Static clusterIP or None for headless services                                                                                   | `""`                     |
+| `service.loadBalancerSourceRanges` | Control hosts connecting to "LoadBalancer" only                                                                                  | `[]`                     |
+| `service.loadBalancerIP`           | loadBalancerIP for the Magento Service (optional, cloud specific)                                                                | `""`                     |
+| `service.nodePorts.http`           | Kubernetes http node port                                                                                                        | `""`                     |
+| `service.nodePorts.https`          | Kubernetes https node port                                                                                                       | `""`                     |
+| `service.externalTrafficPolicy`    | Enable client source IP preservation                                                                                             | `Cluster`                |
+| `ingress.enabled`                  | Enable ingress controller resource                                                                                               | `false`                  |
+| `ingress.pathType`                 | Default path type for the ingress resource                                                                                       | `ImplementationSpecific` |
+| `ingress.apiVersion`               | Override API Version (automatically detected if not set)                                                                         | `""`                     |
+| `ingress.hostname`                 | Default host for the ingress resource                                                                                            | `magento.local`          |
+| `ingress.path`                     | Default path for the ingress resource                                                                                            | `/`                      |
+| `ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.tls`                      | Enable TLS for `ingress.hostname` parameter                                                                                      | `false`                  |
+| `ingress.extraHosts`               | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
+| `ingress.extraTls`                 | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
+| `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
 
 
 ### Metrics parameters
@@ -251,7 +250,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`             | Start a side-car prometheus exporter                       | `false`                   |
 | `metrics.image.registry`      | Apache exporter image registry                             | `docker.io`               |
 | `metrics.image.repository`    | Apache exporter image repository                           | `bitnami/apache-exporter` |
-| `metrics.image.tag`           | Apache exporter image tag (immutable tags are recommended) | `0.10.1-debian-10-r4`     |
+| `metrics.image.tag`           | Apache exporter image tag (immutable tags are recommended) | `0.10.1-debian-10-r16`    |
 | `metrics.image.pullPolicy`    | Image pull policy                                          | `IfNotPresent`            |
 | `metrics.image.pullSecrets`   | Specify docker-registry secret names as an array           | `[]`                      |
 | `metrics.resources.limits`    | The resources limits for the metrics container             | `{}`                      |
@@ -279,7 +278,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `certificates.extraEnvVarsSecret`                    | Secret containing extra env vars (in case of sensitive data)         | `""`                                     |
 | `certificates.image.registry`                        | Container sidecar registry                                           | `docker.io`                              |
 | `certificates.image.repository`                      | Container sidecar image                                              | `bitnami/bitnami-shell`                  |
-| `certificates.image.tag`                             | Container sidecar image tag (immutable tags are recommended)         | `10-debian-10-r203`                      |
+| `certificates.image.tag`                             | Container sidecar image tag (immutable tags are recommended)         | `10-debian-10-r215`                      |
 | `certificates.image.pullPolicy`                      | Container sidecar image pull policy                                  | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Container sidecar image pull secrets                                 | `[]`                                     |
 

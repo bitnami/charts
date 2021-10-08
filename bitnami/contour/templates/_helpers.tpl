@@ -93,3 +93,15 @@ contour: envoy.kind
     "deployment". Please set a valid kind (--set envoy.kind="xxxx")
 {{- end -}}
 {{- end -}}
+
+{{/* Create the name of the IngressClass to use. */}}
+{{- define "contour.ingressClassName" -}}
+{{- $ingressClass := .Values.contour.ingressClass }}
+{{- if kindIs "string" $ingressClass -}}
+    {{ default "contour" $ingressClass }}
+{{- else if kindIs "map" $ingressClass -}}
+    {{ default "contour" $ingressClass.name }}
+{{- else -}}
+    contour
+{{- end -}}
+{{- end -}}

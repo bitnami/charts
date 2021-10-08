@@ -168,6 +168,21 @@ The command removes all the Kubernetes components associated with the chart and 
 | `hub.service.externalTrafficPolicy`       | External traffic policy for the service                  | `Cluster`   |
 
 
+### Hub Metrics parameters
+
+| Name                                          | Description                                                                                 | Value          |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------- | -------------- |
+| `hub.metrics.authenticatePrometheus`          | Use authentication for Prometheus                                                           | `false`        |
+| `hub.metrics.serviceMonitor.enabled`          | If the operator is installed in your cluster, set to true to create a Service Monitor Entry | `false`        |
+| `hub.metrics.serviceMonitor.namespace`        | Namespace which Prometheus is running in                                                    | `""`           |
+| `hub.metrics.serviceMonitor.path`             | HTTP path to scrape for metrics                                                             | `/hub/metrics` |
+| `hub.metrics.serviceMonitor.interval`         | Interval at which metrics should be scraped                                                 | `30s`          |
+| `hub.metrics.serviceMonitor.scrapeTimeout`    | Specify the timeout after which the scrape is ended                                         | `""`           |
+| `hub.metrics.serviceMonitor.relabellings`     | Specify Metric Relabellings to add to the scrape endpoint                                   | `[]`           |
+| `hub.metrics.serviceMonitor.honorLabels`      | Specify honorLabels parameter to add the scrape endpoint                                    | `false`        |
+| `hub.metrics.serviceMonitor.additionalLabels` | Used to pass Labels that are required by the installed Prometheus Operator                  | `{}`           |
+
+
 ### Proxy deployment parameters
 
 | Name                                          | Description                                                                               | Value                             |
@@ -204,6 +219,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `proxy.pdb.minAvailable`                      | Set minimum available proxy instances                                                     | `""`                              |
 | `proxy.pdb.maxUnavailable`                    | Set maximum available proxy instances                                                     | `""`                              |
 | `proxy.containerPort.api`                     | Proxy api container port                                                                  | `8001`                            |
+| `proxy.containerPort.metrics`                 | Proxy metrics container port                                                              | `8002`                            |
 | `proxy.containerPort.http`                    | Proxy http container port                                                                 | `8000`                            |
 | `proxy.priorityClassName`                     | Proxy pod priority class name                                                             | `""`                              |
 | `proxy.resources.limits`                      | The resources limits for the container                                                    | `{}`                              |
@@ -239,35 +255,54 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Proxy Traffic Exposure Parameters
 
-| Name                                            | Description                                                                                  | Value                    |
-| ----------------------------------------------- | -------------------------------------------------------------------------------------------- | ------------------------ |
-| `proxy.networkPolicy.enabled`                   | Deploy Proxy network policies                                                                | `true`                   |
-| `proxy.networkPolicy.allowInterspaceAccess`     | Allow communication between pods in different namespaces                                     | `true`                   |
-| `proxy.networkPolicy.extraIngress`              | Add extra ingress rules to the NetworkPolicy                                                 | `""`                     |
-| `proxy.networkPolicy.extraEgress`               | Add extra egress rules to the NetworkPolicy                                                  | `""`                     |
-| `proxy.service.api.type`                        | API service type                                                                             | `ClusterIP`              |
-| `proxy.service.api.port`                        | API service port                                                                             | `8001`                   |
-| `proxy.service.api.loadBalancerIP`              | API service LoadBalancer IP (optional, cloud specific)                                       | `""`                     |
-| `proxy.service.api.loadBalancerSourceRanges`    | loadBalancerIP source ranges for the Service                                                 | `[]`                     |
-| `proxy.service.api.nodePorts.http`              | NodePort for the HTTP endpoint                                                               | `""`                     |
-| `proxy.service.api.externalTrafficPolicy`       | External traffic policy for the service                                                      | `Cluster`                |
-| `proxy.service.public.type`                     | Public service type                                                                          | `LoadBalancer`           |
-| `proxy.service.public.port`                     | Public service port                                                                          | `80`                     |
-| `proxy.service.public.loadBalancerIP`           | Public service LoadBalancer IP (optional, cloud specific)                                    | `""`                     |
-| `proxy.service.public.loadBalancerSourceRanges` | loadBalancerIP source ranges for the Service                                                 | `[]`                     |
-| `proxy.service.public.nodePorts.http`           | NodePort for the HTTP endpoint                                                               | `""`                     |
-| `proxy.service.public.externalTrafficPolicy`    | External traffic policy for the service                                                      | `Cluster`                |
-| `proxy.ingress.enabled`                         | Set to true to enable ingress record generation                                              | `false`                  |
-| `proxy.ingress.path`                            | Path to the Proxy pod.                                                                       | `/`                      |
-| `proxy.ingress.pathType`                        | Ingress path type                                                                            | `ImplementationSpecific` |
-| `proxy.ingress.certManager`                     | Add cert-manager annotations to the Ingress object                                           | `false`                  |
-| `proxy.ingress.hostname`                        | Set ingress rule hostname                                                                    | `jupyterhub.local`       |
-| `proxy.ingress.annotations`                     | Add annotations to the Ingress object                                                        | `{}`                     |
-| `proxy.ingress.tls`                             | Enable ingress tls configuration for the hostname defined at proxy.ingress.hostname          | `false`                  |
-| `proxy.ingress.extraHosts`                      | The list of additional hostnames to be covered with this ingress record.                     | `[]`                     |
-| `proxy.ingress.extraTls`                        | The tls configuration for additional hostnames to be covered with this ingress record.       | `[]`                     |
-| `proxy.ingress.extraPaths`                      | Any additional arbitrary paths that may need to be added to the ingress under the main host. | `[]`                     |
-| `proxy.ingress.secrets`                         | Add extra secrets for the tls configuration                                                  | `[]`                     |
+| Name                                             | Description                                                                                                                      | Value                    |
+| ------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `proxy.networkPolicy.enabled`                    | Deploy Proxy network policies                                                                                                    | `true`                   |
+| `proxy.networkPolicy.allowInterspaceAccess`      | Allow communication between pods in different namespaces                                                                         | `true`                   |
+| `proxy.networkPolicy.extraIngress`               | Add extra ingress rules to the NetworkPolicy                                                                                     | `""`                     |
+| `proxy.networkPolicy.extraEgress`                | Add extra egress rules to the NetworkPolicy                                                                                      | `""`                     |
+| `proxy.service.api.type`                         | API service type                                                                                                                 | `ClusterIP`              |
+| `proxy.service.api.port`                         | API service port                                                                                                                 | `8001`                   |
+| `proxy.service.api.loadBalancerIP`               | API service LoadBalancer IP (optional, cloud specific)                                                                           | `""`                     |
+| `proxy.service.api.loadBalancerSourceRanges`     | loadBalancerIP source ranges for the Service                                                                                     | `[]`                     |
+| `proxy.service.api.nodePorts.http`               | NodePort for the HTTP endpoint                                                                                                   | `""`                     |
+| `proxy.service.api.externalTrafficPolicy`        | External traffic policy for the service                                                                                          | `Cluster`                |
+| `proxy.service.metrics.type`                     | Metrics service type                                                                                                             | `ClusterIP`              |
+| `proxy.service.metrics.port`                     | Metrics service port                                                                                                             | `8002`                   |
+| `proxy.service.metrics.loadBalancerIP`           | Metrics service LoadBalancer IP (optional, cloud specific)                                                                       | `""`                     |
+| `proxy.service.metrics.loadBalancerSourceRanges` | loadBalancerIP source ranges for the Service                                                                                     | `[]`                     |
+| `proxy.service.metrics.nodePorts.http`           | NodePort for the HTTP endpoint                                                                                                   | `""`                     |
+| `proxy.service.metrics.externalTrafficPolicy`    | External traffic policy for the service                                                                                          | `Cluster`                |
+| `proxy.service.public.type`                      | Public service type                                                                                                              | `ClusterIP`              |
+| `proxy.service.public.port`                      | Public service port                                                                                                              | `80`                     |
+| `proxy.service.public.loadBalancerIP`            | Public service LoadBalancer IP (optional, cloud specific)                                                                        | `""`                     |
+| `proxy.service.public.loadBalancerSourceRanges`  | loadBalancerIP source ranges for the Service                                                                                     | `[]`                     |
+| `proxy.service.public.nodePorts.http`            | NodePort for the HTTP endpoint                                                                                                   | `""`                     |
+| `proxy.service.public.externalTrafficPolicy`     | External traffic policy for the service                                                                                          | `Cluster`                |
+| `proxy.ingress.enabled`                          | Set to true to enable ingress record generation                                                                                  | `false`                  |
+| `proxy.ingress.path`                             | Path to the Proxy pod.                                                                                                           | `/`                      |
+| `proxy.ingress.pathType`                         | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `proxy.ingress.hostname`                         | Set ingress rule hostname                                                                                                        | `jupyterhub.local`       |
+| `proxy.ingress.annotations`                      | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `proxy.ingress.tls`                              | Enable ingress tls configuration for the hostname defined at proxy.ingress.hostname                                              | `false`                  |
+| `proxy.ingress.extraHosts`                       | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
+| `proxy.ingress.extraTls`                         | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
+| `proxy.ingress.extraPaths`                       | Any additional arbitrary paths that may need to be added to the ingress under the main host.                                     | `[]`                     |
+| `proxy.ingress.secrets`                          | Add extra secrets for the tls configuration                                                                                      | `[]`                     |
+
+
+### Proxy Metrics parameters
+
+| Name                                            | Description                                                                                 | Value      |
+| ----------------------------------------------- | ------------------------------------------------------------------------------------------- | ---------- |
+| `proxy.metrics.serviceMonitor.enabled`          | If the operator is installed in your cluster, set to true to create a Service Monitor Entry | `false`    |
+| `proxy.metrics.serviceMonitor.namespace`        | Namespace which Prometheus is running in                                                    | `""`       |
+| `proxy.metrics.serviceMonitor.path`             | HTTP path to scrape for metrics                                                             | `/metrics` |
+| `proxy.metrics.serviceMonitor.interval`         | Interval at which metrics should be scraped                                                 | `30s`      |
+| `proxy.metrics.serviceMonitor.scrapeTimeout`    | Specify the timeout after which the scrape is ended                                         | `""`       |
+| `proxy.metrics.serviceMonitor.relabellings`     | Specify Metric Relabellings to add to the scrape endpoint                                   | `[]`       |
+| `proxy.metrics.serviceMonitor.honorLabels`      | Specify honorLabels parameter to add the scrape endpoint                                    | `false`    |
+| `proxy.metrics.serviceMonitor.additionalLabels` | Used to pass Labels that are required by the installed Prometheus Operator                  | `{}`       |
 
 
 ### Image puller deployment parameters
