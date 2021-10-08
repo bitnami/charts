@@ -325,7 +325,7 @@ primary:
   ##
   startupProbe:
     enabled: true
-    initialDelaySeconds: 15
+    initialDelaySeconds: 120
     periodSeconds: 10
     timeoutSeconds: 1
     failureThreshold: 10
