@@ -663,7 +663,7 @@ metrics:
     ## @param metrics.serviceMonitor.scrapeTimeout The timeout after which the scrape is ended
     ##
     scrapeTimeout: ""
-    ## @param metrics.serviceMonitor.metricRelabelings Metrics relabellings to add to the scrape endpoint
+    ## @param metrics.serviceMonitor.metricRelabelings Metrics relabelings to add to the scrape endpoint
     ##
     metricRelabelings: []
     ## @param metrics.serviceMonitor.honorLabels Specify honorLabels parameter to add the scrape endpoint
