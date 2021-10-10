@@ -442,6 +442,10 @@ podManagementPolicy: Parallel
 ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
 ##
 schedulerName: ""
+## @param serviceAccountName Name of the service account to use for Kafka pods.
+## By default, the service account created by the chart will be used if serviceAccount.create is set to `true`.
+##
+serviceAccountName: ""
 ## @param podLabels Kafka pod labels
 ## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
@@ -943,6 +947,10 @@ metrics:
     ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
     ##
     schedulerName: ""
+    ## @param serviceAccountName Name of the service account to use for Kafka Exporter pods.
+    ## By default, the service account created by the chart will be used if serviceAccount.create is set to `true`.
+    ##
+    serviceAccountName: ""
     ## @param metrics.kafka.extraFlags Extra flags to be passed to Kafka exporter
     ## Example:
     ## extraFlags:
