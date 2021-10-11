@@ -640,10 +640,10 @@ serviceAccount:
   create: true
   ## @param serviceAccount.name Name of the created serviceAccount
   ## If not set and create is true, a name is generated using the rabbitmq.fullname template
-  ##  
+  ##
   name: ""
-  ## @param automountServiceAccountToken Auto-mount the service account token in the pod  
-  ##  
+  ## @param serviceAccount.automountServiceAccountToken Auto-mount the service account token in the pod
+  ##
   automountServiceAccountToken: true
 
 ## Role Based Access
