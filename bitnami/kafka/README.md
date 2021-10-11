@@ -230,7 +230,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalAccess.service.useHostIPs`               | Use service host IPs to configure Kafka external listener when service type is NodePort       | `false`                |
 | `externalAccess.service.domain`                   | Domain or external ip used to configure Kafka external listener when service type is NodePort | `""`                   |
 | `externalAccess.service.annotations`              | Service annotations for external access                                                       | `{}`                   |
-
+| `externalAccess.service.usePodIPs`               | Use MY_POD_IP (K8S provide) to configure Kafka external listener when service type is 
 
 ### Persistence parameters
 
