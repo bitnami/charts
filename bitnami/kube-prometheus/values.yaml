@@ -1536,6 +1536,7 @@ node-exporter:
 kube-state-metrics:
   serviceMonitor:
     enabled: true
+    honorLabels: true
 ## Component scraping for kubelet and kubelet hosted cAdvisor
 ##
 kubelet:
