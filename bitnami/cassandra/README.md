@@ -49,18 +49,18 @@ The command removes all the Kubernetes components associated with the chart and 
 ### Global parameters
 
 | Name                      | Description                                     | Value |
-| ------------------------- | ----------------------------------------------- | ----- |
+|---------------------------|-------------------------------------------------|-------|
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                     | Description                                                                             | Value           |
-| ------------------------ | --------------------------------------------------------------------------------------- | --------------- |
+|--------------------------|-----------------------------------------------------------------------------------------|-----------------|
 | `nameOverride`           | String to partially override common.names.fullname                                      | `""`            |
 | `fullnameOverride`       | String to fully override common.names.fullname                                          | `""`            |
+| `kubeVersion`            | Force target Kubernetes version (using Helm capabilities if not set)                    | `""`            |
 | `commonLabels`           | Labels to add to all deployed objects (sub-charts are not considered)                   | `{}`            |
 | `commonAnnotations`      | Annotations to add to all deployed objects                                              | `{}`            |
 | `clusterDomain`          | Kubernetes cluster domain name                                                          | `cluster.local` |
@@ -69,11 +69,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]`  |
 
-
 ### Cassandra parameters
 
 | Name                          | Description                                                                                                            | Value                |
-| ----------------------------- | ---------------------------------------------------------------------------------------------------------------------- | -------------------- |
+|-------------------------------|------------------------------------------------------------------------------------------------------------------------|----------------------|
 | `image.registry`              | Cassandra image registry                                                                                               | `docker.io`          |
 | `image.repository`            | Cassandra image repository                                                                                             | `bitnami/cassandra`  |
 | `image.tag`                   | Cassandra image tag (immutable tags are recommended)                                                                   | `4.0.1-debian-10-r0` |
@@ -96,6 +95,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cluster.internodeEncryption` | DEPRECATED: use tls.internode and tls.client instead. Encryption values.                                               | `none`               |
 | `cluster.clientEncryption`    | Client Encryption                                                                                                      | `false`              |
 | `cluster.extraSeeds`          | For an external/second cassandra ring.                                                                                 | `[]`                 |
+| `cluster.enableUDF`           | Enable User defined functions                                                                                          | `false`              |
 | `jvm.extraOpts`               | Set the value for Java Virtual Machine extra options                                                                   | `""`                 |
 | `jvm.maxHeapSize`             | Set Java Virtual Machine maximum heap size (MAX_HEAP_SIZE). Calculated automatically if `nil`                          | `""`                 |
 | `jvm.newHeapSize`             | Set Java Virtual Machine new heap size (HEAP_NEWSIZE). Calculated automatically if `nil`                               | `""`                 |
@@ -108,87 +108,98 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Statefulset parameters
 
-| Name                                 | Description                                                                               | Value           |
-| ------------------------------------ | ----------------------------------------------------------------------------------------- | --------------- |
-| `replicaCount`                       | Number of Cassandra replicas                                                              | `1`             |
-| `updateStrategy`                     | updateStrategy for Cassandra statefulset                                                  | `RollingUpdate` |
-| `hostAliases`                        | Add deployment host aliases                                                               | `[]`            |
-| `rollingUpdatePartition`             | Partition update strategy                                                                 | `""`            |
-| `podManagementPolicy`                | StatefulSet pod management policy                                                         | `OrderedReady`  |
-| `priorityClassName`                  | Cassandra pods' priority.                                                                 | `""`            |
-| `podAnnotations`                     | Additional pod annotations                                                                | `{}`            |
-| `podLabels`                          | Additional pod labels                                                                     | `{}`            |
-| `podAffinityPreset`                  | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`            |
-| `podAntiAffinityPreset`              | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`          |
-| `nodeAffinityPreset.type`            | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`            |
-| `nodeAffinityPreset.key`             | Node label key to match. Ignored if `affinity` is set                                     | `""`            |
-| `nodeAffinityPreset.values`          | Node label values to match. Ignored if `affinity` is set                                  | `[]`            |
-| `affinity`                           | Affinity for pod assignment                                                               | `{}`            |
-| `nodeSelector`                       | Node labels for pod assignment                                                            | `{}`            |
-| `tolerations`                        | Tolerations for pod assignment                                                            | `[]`            |
-| `topologySpreadConstraints`          | Topology Spread Constraints for pod assignment                                            | `[]`            |
-| `podSecurityContext.enabled`         | Enabled Cassandra pods' Security Context                                                  | `true`          |
-| `podSecurityContext.fsGroup`         | Set Cassandra pod's Security Context fsGroup                                              | `1001`          |
-| `containerSecurityContext.enabled`   | Enabled Cassandra containers' Security Context                                            | `true`          |
-| `containerSecurityContext.runAsUser` | et Cassandra container's Security Context runAsUser                                       | `1001`          |
-| `resources.limits`                   | The resources limits for Cassandra containers                                             | `{}`            |
-| `resources.requests`                 | The requested resources for Cassandra containers                                          | `{}`            |
-| `livenessProbe.enabled`              | Enable livenessProbe                                                                      | `true`          |
-| `livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                   | `60`            |
-| `livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                          | `30`            |
-| `livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                         | `5`             |
-| `livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                       | `5`             |
-| `livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                       | `1`             |
-| `readinessProbe.enabled`             | Enable readinessProbe                                                                     | `true`          |
-| `readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                  | `60`            |
-| `readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                         | `10`            |
-| `readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                        | `5`             |
-| `readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                      | `5`             |
-| `readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                      | `1`             |
-| `customLivenessProbe`                | Custom livenessProbe that overrides the default one                                       | `{}`            |
-| `customReadinessProbe`               | Custom readinessProbe that overrides the default one                                      | `{}`            |
-| `extraVolumes`                       | Optionally specify extra list of additional volumes for cassandra container               | `[]`            |
-| `extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for cassandra container          | `[]`            |
-| `initContainers`                     | Add additional init containers to the cassandra pods                                      | `[]`            |
-| `sidecars`                           | Add additional sidecar containers to the cassandra pods                                   | `[]`            |
-| `pdb.create`                         | Enable/disable a Pod Disruption Budget creation                                           | `false`         |
-| `pdb.minAvailable`                   | Mininimum number of pods that must still be available after the eviction                  | `1`             |
-| `pdb.maxUnavailable`                 | Max number of pods that can be unavailable after the eviction                             | `""`            |
-| `hostNetwork`                        | Enable HOST Network                                                                       | `false`         |
-| `containerPorts.intra`               | Intra Port on the Host and Container                                                      | `7000`          |
-| `containerPorts.tls`                 | TLS Port on the Host and Container                                                        | `7001`          |
-| `containerPorts.jmx`                 | JMX Port on the Host and Container                                                        | `7199`          |
-| `containerPorts.cql`                 | CQL Port on the Host and Container                                                        | `9042`          |
-
+| Name                                    | Description                                                                               | Value           |
+|-----------------------------------------|-------------------------------------------------------------------------------------------|-----------------|
+| `replicaCount`                          | Number of Cassandra replicas                                                              | `1`             |
+| `updateStrategy.type`                   | updateStrategy for Cassandra statefulset                                                  | `RollingUpdate` |
+| `hostAliases`                           | Add deployment host aliases                                                               | `[]`            |
+| `podManagementPolicy`                   | StatefulSet pod management policy                                                         | `OrderedReady`  |
+| `priorityClassName`                     | Cassandra pods' priority.                                                                 | `""`            |
+| `podAnnotations`                        | Additional pod annotations                                                                | `{}`            |
+| `podLabels`                             | Additional pod labels                                                                     | `{}`            |
+| `podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`            |
+| `podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`          |
+| `nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`            |
+| `nodeAffinityPreset.key`                | Node label key to match. Ignored if `affinity` is set                                     | `""`            |
+| `nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set                                  | `[]`            |
+| `affinity`                              | Affinity for pod assignment                                                               | `{}`            |
+| `nodeSelector`                          | Node labels for pod assignment                                                            | `{}`            |
+| `tolerations`                           | Tolerations for pod assignment                                                            | `[]`            |
+| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment                                            | `[]`            |
+| `podSecurityContext.enabled`            | Enabled Cassandra pods' Security Context                                                  | `true`          |
+| `podSecurityContext.fsGroup`            | Set Cassandra pod's Security Context fsGroup                                              | `1001`          |
+| `containerSecurityContext.enabled`      | Enabled Cassandra containers' Security Context                                            | `true`          |
+| `containerSecurityContext.runAsUser`    | Set Cassandra container's Security Context runAsUser                                      | `1001`          |
+| `containerSecurityContext.runAsNonRoot` | Force the container to be run as non root                                                 | `true`          |
+| `resources.limits`                      | The resources limits for Cassandra containers                                             | `{}`            |
+| `resources.requests`                    | The requested resources for Cassandra containers                                          | `{}`            |
+| `livenessProbe.enabled`                 | Enable livenessProbe                                                                      | `true`          |
+| `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                   | `60`            |
+| `livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                          | `30`            |
+| `livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                         | `5`             |
+| `livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                       | `5`             |
+| `livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                       | `1`             |
+| `readinessProbe.enabled`                | Enable readinessProbe                                                                     | `true`          |
+| `readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                  | `60`            |
+| `readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                         | `10`            |
+| `readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                        | `5`             |
+| `readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                      | `5`             |
+| `readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                      | `1`             |
+| `startupProbe.enabled`                  | Enable startupProbe                                                                       | `false`         |
+| `startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                    | `0`             |
+| `startupProbe.periodSeconds`            | Period seconds for startupProbe                                                           | `10`            |
+| `startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                          | `5`             |
+| `startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                        | `60`            |
+| `startupProbe.successThreshold`         | Success threshold for startupProbe                                                        | `1`             |
+| `customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                       | `{}`            |
+| `customReadinessProbe`                  | Custom readinessProbe that overrides the default one                                      | `{}`            |
+| `customStartupProbe`                    | Override default startup probe                                                            | `{}`            |
+| `lifecycleHooks`                        | Override default etcd container hooks                                                     | `{}`            |
+| `schedulerName`                         | Alternative scheduler                                                                     | `""`            |
+| `extraVolumes`                          | Optionally specify extra list of additional volumes for cassandra container               | `[]`            |
+| `extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for cassandra container          | `[]`            |
+| `initContainers`                        | Add additional init containers to the cassandra pods                                      | `[]`            |
+| `sidecars`                              | Add additional sidecar containers to the cassandra pods                                   | `[]`            |
+| `pdb.create`                            | Enable/disable a Pod Disruption Budget creation                                           | `false`         |
+| `pdb.minAvailable`                      | Mininimum number of pods that must still be available after the eviction                  | `1`             |
+| `pdb.maxUnavailable`                    | Max number of pods that can be unavailable after the eviction                             | `""`            |
+| `hostNetwork`                           | Enable HOST Network                                                                       | `false`         |
+| `containerPorts.intra`                  | Intra Port on the Host and Container                                                      | `7000`          |
+| `containerPorts.tls`                    | TLS Port on the Host and Container                                                        | `7001`          |
+| `containerPorts.jmx`                    | JMX Port on the Host and Container                                                        | `7199`          |
+| `containerPorts.cql`                    | CQL Port on the Host and Container                                                        | `9042`          |
 
 ### RBAC parameters
 
-| Name                         | Description                                                | Value  |
-| ---------------------------- | ---------------------------------------------------------- | ------ |
-| `serviceAccount.create`      | Enable the creation of a ServiceAccount for Cassandra pods | `true` |
-| `serviceAccount.name`        | The name of the ServiceAccount to use.                     | `""`   |
-| `serviceAccount.annotations` | Annotations for Cassandra Service Account                  | `{}`   |
-
+| Name                                          | Description                                                | Value  |
+|-----------------------------------------------|------------------------------------------------------------|--------|
+| `serviceAccount.create`                       | Enable the creation of a ServiceAccount for Cassandra pods | `true` |
+| `serviceAccount.name`                         | The name of the ServiceAccount to use.                     | `""`   |
+| `serviceAccount.annotations`                  | Annotations for Cassandra Service Account                  | `{}`   |
+| `serviceAccount.automountServiceAccountToken` | Automount API credentials for a service account.           | `true` |
 
 ### Traffic Exposure Parameters
 
-| Name                          | Description                                               | Value       |
-| ----------------------------- | --------------------------------------------------------- | ----------- |
-| `service.type`                | Cassandra service type                                    | `ClusterIP` |
-| `service.port`                | Cassandra service CQL Port                                | `9042`      |
-| `service.metricsPort`         | Cassandra service metrics port                            | `8080`      |
-| `service.nodePorts.cql`       | Node port for CQL                                         | `""`        |
-| `service.nodePorts.metrics`   | Node port for metrics                                     | `""`        |
-| `service.loadBalancerIP`      | LoadBalancerIP if service type is `LoadBalancer`          | `""`        |
-| `service.annotations`         | Provide any additional annotations which may be required. | `{}`        |
-| `networkPolicy.enabled`       | Specifies whether a NetworkPolicy should be created       | `false`     |
-| `networkPolicy.allowExternal` | Don't require client label for connections                | `true`      |
-
+| Name                               | Description                                                                   | Value       |
+|------------------------------------|-------------------------------------------------------------------------------|-------------|
+| `service.type`                     | Cassandra service type                                                        | `ClusterIP` |
+| `service.ports.cql`                | Cassandra service CQL Port                                                    | `9042`      |
+| `service.ports.metrics`            | Cassandra service metrics port                                                | `8080`      |
+| `service.nodePorts.cql`            | Node port for CQL                                                             | `""`        |
+| `service.nodePorts.metrics`        | Node port for metrics                                                         | `""`        |
+| `service.extraPorts`               | Extra ports to expose in the service (normally used with the `sidecar` value) | `[]`        |
+| `service.loadBalancerIP`           | LoadBalancerIP if service type is `LoadBalancer`                              | `""`        |
+| `service.loadBalancerSourceRanges` | Service Load Balancer sources                                                 | `[]`        |
+| `service.clusterIP`                | Service Cluster IP                                                            | `""`        |
+| `service.externalTrafficPolicy`    | Service external traffic policy                                               | `Cluster`   |
+| `service.annotations`              | Provide any additional annotations which may be required.                     | `{}`        |
+| `networkPolicy.enabled`            | Specifies whether a NetworkPolicy should be created                           | `false`     |
+| `networkPolicy.allowExternal`      | Don't require client label for connections                                    | `true`      |
 
 ### Persistence parameters
 
 | Name                             | Description                                                                                        | Value                |
-| -------------------------------- | -------------------------------------------------------------------------------------------------- | -------------------- |
+|----------------------------------|----------------------------------------------------------------------------------------------------|----------------------|
 | `persistence.enabled`            | Enable Cassandra data persistence using PVC, use a Persistent Volume Claim, If false, use emptyDir | `true`               |
 | `persistence.storageClass`       | PVC Storage Class for Cassandra data volume                                                        | `""`                 |
 | `persistence.commitStorageClass` | PVC Storage Class for Cassandra Commit Log volume                                                  | `""`                 |
@@ -197,58 +208,60 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.size`               | PVC Storage Request for Cassandra data volume                                                      | `8Gi`                |
 | `persistence.mountPath`          | The path the data volume will be mounted at                                                        | `/bitnami/cassandra` |
 
-
 ### Volume Permissions parameters
 
 | Name                                          | Description                                                                     | Value                   |
-| --------------------------------------------- | ------------------------------------------------------------------------------- | ----------------------- |
+|-----------------------------------------------|---------------------------------------------------------------------------------|-------------------------|
 | `volumePermissions.enabled`                   | Enable init container that changes the owner and group of the persistent volume | `false`                 |
 | `volumePermissions.image.registry`            | Init container volume                                                           | `docker.io`             |
 | `volumePermissions.image.repository`          | Init container volume                                                           | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Init container volume                                                           | `10-debian-10-r185`     |
+| `volumePermissions.image.tag`                 | Init container volume                                                           | `10-debian-10-r214`     |
 | `volumePermissions.image.pullPolicy`          | Init container volume                                                           | `Always`                |
 | `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                | `[]`                    |
 | `volumePermissions.resources.limits`          | The resources limits for the container                                          | `{}`                    |
 | `volumePermissions.resources.requests`        | The requested resources for the container                                       | `{}`                    |
 | `volumePermissions.securityContext.runAsUser` | User ID for the init container                                                  | `0`                     |
 
-
 ### Metrics parameters
 
-| Name                                   | Description                                                                                            | Value                        |
-| -------------------------------------- | ------------------------------------------------------------------------------------------------------ | ---------------------------- |
-| `metrics.enabled`                      | Start a side-car prometheus exporter                                                                   | `false`                      |
-| `metrics.image.registry`               | Cassandra exporter image registry                                                                      | `docker.io`                  |
-| `metrics.image.repository`             | Cassandra exporter image name                                                                          | `bitnami/cassandra-exporter` |
-| `metrics.image.tag`                    | Cassandra exporter image tag                                                                           | `2.3.4-debian-10-r510`       |
-| `metrics.image.pullPolicy`             | image pull policy                                                                                      | `IfNotPresent`               |
-| `metrics.image.pullSecrets`            | Specify docker-registry secret names as an array                                                       | `[]`                         |
-| `metrics.resources.limits`             | The resources limits for the container                                                                 | `{}`                         |
-| `metrics.resources.requests`           | The requested resources for the container                                                              | `{}`                         |
-| `metrics.podAnnotations`               | Metrics exporter pod Annotation and Labels                                                             | `{}`                         |
-| `metrics.serviceMonitor.enabled`       | If `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`) | `false`                      |
-| `metrics.serviceMonitor.namespace`     | Namespace in which Prometheus is running                                                               | `monitoring`                 |
-| `metrics.serviceMonitor.interval`      | Interval at which metrics should be scraped.                                                           | `""`                         |
-| `metrics.serviceMonitor.scrapeTimeout` | Timeout after which the scrape is ended                                                                | `""`                         |
-| `metrics.serviceMonitor.selector`      | Prometheus instance selector labels                                                                    | `{}`                         |
-| `metrics.containerPorts.http`          | HTTP Port on the Host and Container                                                                    | `8080`                       |
-| `metrics.containerPorts.jmx`           | JMX Port on the Host and Container                                                                     | `5555`                       |
-
+| Name                                       | Description                                                                                            | Value                        |
+|--------------------------------------------|--------------------------------------------------------------------------------------------------------|------------------------------|
+| `metrics.enabled`                          | Start a side-car prometheus exporter                                                                   | `false`                      |
+| `metrics.image.registry`                   | Cassandra exporter image registry                                                                      | `docker.io`                  |
+| `metrics.image.repository`                 | Cassandra exporter image name                                                                          | `bitnami/cassandra-exporter` |
+| `metrics.image.tag`                        | Cassandra exporter image tag                                                                           | `2.3.4-debian-10-r510`       |
+| `metrics.image.pullPolicy`                 | image pull policy                                                                                      | `IfNotPresent`               |
+| `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                                                       | `[]`                         |
+| `metrics.resources.limits`                 | The resources limits for the container                                                                 | `{}`                         |
+| `metrics.resources.requests`               | The requested resources for the container                                                              | `{}`                         |
+| `metrics.podAnnotations`                   | Metrics exporter pod Annotation and Labels                                                             | `{}`                         |
+| `metrics.serviceMonitor.enabled`           | If `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`) | `false`                      |
+| `metrics.serviceMonitor.namespace`         | Namespace in which Prometheus is running                                                               | `monitoring`                 |
+| `metrics.serviceMonitor.interval`          | Interval at which metrics should be scraped.                                                           | `""`                         |
+| `metrics.serviceMonitor.scrapeTimeout`     | Timeout after which the scrape is ended                                                                | `""`                         |
+| `metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                                                    | `{}`                         |
+| `metrics.serviceMonitor.metricRelabelings` | Specify Metric Relabelings to add to the scrape endpoint                                               | `[]`                         |
+| `metrics.serviceMonitor.honorLabels`       | Specify honorLabels parameter to add the scrape endpoint                                               | `false`                      |
+| `metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in prometheus.                      | `""`                         |
+| `metrics.serviceMonitor.additionalLabels`  | Used to pass Labels that are required by the installed Prometheus Operator                             | `{}`                         |
+| `metrics.containerPorts.http`              | HTTP Port on the Host and Container                                                                    | `8080`                       |
+| `metrics.containerPorts.jmx`               | JMX Port on the Host and Container                                                                     | `5555`                       |
 
 ### TLS/SSL parameters
 
-| Name                      | Description                                                                                   | Value   |
-| ------------------------- | --------------------------------------------------------------------------------------------- | ------- |
-| `tls.internodeEncryption` | Set internode encryption                                                                      | `none`  |
-| `tls.clientEncryption`    | Set client-server encryption                                                                  | `false` |
-| `tls.autoGenerated`       | Generate automatically self-signed TLS certificates. Currently only supports PEM certificates | `false` |
-| `tls.existingSecret`      | Existing secret that contains Cassandra Keystore and truststore                               | `""`    |
-| `tls.passwordsSecret`     | Secret containing the Keystore and Truststore passwords if needed                             | `""`    |
-| `tls.keystorePassword`    | Password for the keystore, if needed.                                                         | `""`    |
-| `tls.truststorePassword`  | Password for the truststore, if needed.                                                       | `""`    |
-| `tls.resources.limits`    | The resources limits for the TLS init container                                               | `{}`    |
-| `tls.resources.requests`  | The requested resources for the TLS init container                                            | `{}`    |
-
+| Name                          | Description                                                                                   | Value   |
+|-------------------------------|-----------------------------------------------------------------------------------------------|---------|
+| `tls.internodeEncryption`     | Set internode encryption                                                                      | `none`  |
+| `tls.clientEncryption`        | Set client-server encryption                                                                  | `false` |
+| `tls.autoGenerated`           | Generate automatically self-signed TLS certificates. Currently only supports PEM certificates | `false` |
+| `tls.existingSecret`          | Existing secret that contains Cassandra Keystore and truststore                               | `""`    |
+| `tls.passwordsSecret`         | Secret containing the Keystore and Truststore passwords if needed                             | `""`    |
+| `tls.keystorePassword`        | Password for the keystore, if needed.                                                         | `""`    |
+| `tls.truststorePassword`      | Password for the truststore, if needed.                                                       | `""`    |
+| `tls.resources.limits`        | The resources limits for the TLS init container                                               | `{}`    |
+| `tls.resources.requests`      | The requested resources for the TLS init container                                            | `{}`    |
+| `tls.certificatesSecret`      | Secret with the TLS certificates.                                                             | `""`    |
+| `tls.tlsEncryptionSecretName` | Secret with the encryption of the TLS certificates                                            | `""`    |
 
 The above parameters map to the env variables defined in [bitnami/cassandra](http://github.com/bitnami/bitnami-docker-cassandra). For more information please refer to the [bitnami/cassandra](http://github.com/bitnami/bitnami-docker-cassandra) image documentation.
 
@@ -340,6 +353,18 @@ $ helm upgrade my-release bitnami/cassandra --set dbUser.password=[PASSWORD]
 ```
 
 | Note: you need to substitute the placeholder _[PASSWORD]_ with the value obtained in the installation notes.
+
+### To 9.0.0
+This major release renames several values in this chart and adds missing features, in order to be inline with the rest of assets in the Bitnami charts repository.
+
+Affected values:
+
+- `serviceMonitor.labels` renamed as `serviceMonitor.selector`.
+- `service.port` renamed as `service.ports.cql`.
+- `service.metricsPort` renamed as `service.ports.metrics`.
+- `service.nodePort` renamed as `service.nodePorts.cql`.
+- `updateStrategy` changed from String type (previously default to 'rollingUpdate') to Object type, allowing users to configure other updateStrategy parameters, similar to other charts.
+- Removed value `rollingUpdatePartition`, now configured using `updateStrategy` setting `updateStrategy.rollingUpdate.partition`.
 
 ### To 8.0.0
 

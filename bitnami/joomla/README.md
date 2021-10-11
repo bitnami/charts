@@ -75,7 +75,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------ | -------------------------------------------------------------------------------------------------------------------- | ---------------------- |
 | `image.registry`                     | Joomla! image registry                                                                                               | `docker.io`            |
 | `image.repository`                   | Joomla! Image name                                                                                                   | `bitnami/joomla`       |
-| `image.tag`                          | Joomla! Image tag                                                                                                    | `3.10.2-debian-10-r23` |
+| `image.tag`                          | Joomla! Image tag                                                                                                    | `3.10.2-debian-10-r24` |
 | `image.pullPolicy`                   | Joomla! image pull policy                                                                                            | `IfNotPresent`         |
 | `image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                     | `[]`                   |
 | `image.debug`                        | Specify if debug logs should be enabled                                                                              | `false`                |
