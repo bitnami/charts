@@ -1078,6 +1078,39 @@ metrics:
     timeoutSeconds: 5
     successThreshold: 1
     failureThreshold: 10
+  ## Metrics service parameters
+  ##
+  service:
+    ## @param metrics.service.type PostgreSQL Prometheus exporter metrics service type
+    ##
+    type: ClusterIP
+    ## @param metrics.service.port PostgreSQL Prometheus exporter metrics service port
+    ##
+    port: 9187
+    ## @param metrics.service.nodePort PostgreSQL Prometheus exporter Node Port
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+    ##
+    nodePort: ""
+    ## @param metrics.service.clusterIP PostgreSQL Prometheus exporter metrics service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param metrics.service.loadBalancerIP PostgreSQL Prometheus exporter service Load Balancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerIP: ""
+    ## @param metrics.service.loadBalancerSourceRanges PostgreSQL Prometheus exporter service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param metrics.service.externalTrafficPolicy PostgreSQL Prometheus exporter service external traffic policy
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
   ## @param metrics.annotations [object] Annotations for PostgreSQL Prometheus exporter service
   ##
   annotations:
