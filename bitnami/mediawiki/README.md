@@ -76,7 +76,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------- | -------------------------------------------------------------------- | --------------------- |
 | `image.registry`     | MediaWiki image registry                                             | `docker.io`           |
 | `image.repository`   | MediaWiki image repository                                           | `bitnami/mediawiki`   |
-| `image.tag`          | MediaWiki image tag (immutable tags are recommended)                 | `1.36.2-debian-10-r7` |
+| `image.tag`          | MediaWiki image tag (immutable tags are recommended)                 | `1.36.2-debian-10-r8` |
 | `image.pullPolicy`   | Image pull policy                                                    | `IfNotPresent`        |
 | `image.pullSecrets`  | Specify docker-registry secret names as an array                     | `[]`                  |
 | `hostAliases`        | Deployment pod host aliases                                          | `[]`                  |
