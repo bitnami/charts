@@ -80,7 +80,7 @@ $ helm delete --purge my-release
 | --------------------------- | -------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`            | HashiCorp Consul image registry                                                              | `docker.io`           |
 | `image.repository`          | HashiCorp Consul image repository                                                            | `bitnami/consul`      |
-| `image.tag`                 | HashiCorp Consul image tag (immutable tags are recommended)                                  | `1.10.2-debian-10-r0` |
+| `image.tag`                 | HashiCorp Consul image tag (immutable tags are recommended)                                  | `1.10.3-debian-10-r0` |
 | `image.pullPolicy`          | HashiCorp Consul image pull policy                                                           | `IfNotPresent`        |
 | `image.pullSecrets`         | HashiCorp Consul image pull secrets                                                          | `[]`                  |
 | `image.debug`               | Enable image debug mode                                                                      | `false`               |
@@ -107,7 +107,7 @@ $ helm delete --purge my-release
 | `containerPorts.rpc`        | Port to open for RPC in Consul                                                               | `8400`                |
 | `containerPorts.rpcServer`  | Port to open for RPC Server in Consul                                                        | `8300`                |
 | `containerPorts.serfLAN`    | Port to open for Serf LAN in Consul                                                          | `8301`                |
-| `lifecycleHooks`            | Add lifecycle hooks to the ASP.NET Core deployment                                           | `{}`                  |
+| `lifecycleHooks`            | Add lifecycle hooks to the deployment                                                        | `{}`                  |
 
 
 ### Statefulset parameters
@@ -165,28 +165,27 @@ $ helm delete --purge my-release
 
 ### Exposure parameters
 
-| Name                            | Description                                                                                   | Value                    |
-| ------------------------------- | --------------------------------------------------------------------------------------------- | ------------------------ |
-| `service.enabled`               | Use a service to access HashiCorp Consul Ui                                                   | `true`                   |
-| `service.ports.http`            | HashiCorp Consul UI svc port                                                                  | `80`                     |
-| `service.type`                  | HashiCorp Consul UI Service Type                                                              | `ClusterIP`              |
-| `service.nodePorts.http`        | Node port for HashiCorp Consul UI                                                             | `""`                     |
-| `service.loadBalancerIP`        | HashiCorp Consul UI service Load Balancer IP                                                  | `""`                     |
-| `service.annotations`           | Annotations for HashiCorp Consul UI service                                                   | `{}`                     |
-| `service.externalTrafficPolicy` | Service external traffic policy                                                               | `Cluster`                |
-| `ingress.enabled`               | Enable ingress resource for Management console                                                | `false`                  |
-| `ingress.path`                  | Path for the default host                                                                     | `/`                      |
-| `ingress.apiVersion`            | Override API Version (automatically detected if not set)                                      | `""`                     |
-| `ingress.pathType`              | Ingress path type                                                                             | `ImplementationSpecific` |
-| `ingress.certManager`           | Add annotations for cert-manager                                                              | `false`                  |
-| `ingress.hostname`              | Default host for the ingress resource, a host pointing to this will be created                | `consul-ui.local`        |
-| `ingress.annotations`           | Ingress annotations done as key:value pairs                                                   | `{}`                     |
-| `ingress.tls`                   | Enable TLS configuration for the hostname defined at ingress.hostname parameter               | `false`                  |
-| `ingress.extraHosts`            | An array with additional hostname(s) to be covered with the ingress record                    | `[]`                     |
-| `ingress.extraPaths`            | Any additional arbitrary paths that may need to be added to the ingress under the main host.  | `[]`                     |
-| `ingress.selfSigned`            | Create a TLS secret for this ingress record using self-signed certificates generated by Helm  | `false`                  |
-| `ingress.extraTls`              | TLS configuration for additional hostname(s) to be covered with this ingress record           | `[]`                     |
-| `ingress.secrets`               | If you're providing your own certificates, please use this to add the certificates as secrets | `[]`                     |
+| Name                            | Description                                                                                                                      | Value                    |
+| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.enabled`               | Use a service to access HashiCorp Consul Ui                                                                                      | `true`                   |
+| `service.ports.http`            | HashiCorp Consul UI svc port                                                                                                     | `80`                     |
+| `service.type`                  | HashiCorp Consul UI Service Type                                                                                                 | `ClusterIP`              |
+| `service.nodePorts.http`        | Node port for HashiCorp Consul UI                                                                                                | `""`                     |
+| `service.loadBalancerIP`        | HashiCorp Consul UI service Load Balancer IP                                                                                     | `""`                     |
+| `service.annotations`           | Annotations for HashiCorp Consul UI service                                                                                      | `{}`                     |
+| `service.externalTrafficPolicy` | Service external traffic policy                                                                                                  | `Cluster`                |
+| `ingress.enabled`               | Enable ingress resource for Management console                                                                                   | `false`                  |
+| `ingress.path`                  | Path for the default host                                                                                                        | `/`                      |
+| `ingress.apiVersion`            | Override API Version (automatically detected if not set)                                                                         | `""`                     |
+| `ingress.pathType`              | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.hostname`              | Default host for the ingress resource, a host pointing to this will be created                                                   | `consul-ui.local`        |
+| `ingress.annotations`           | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.tls`                   | Enable TLS configuration for the hostname defined at ingress.hostname parameter                                                  | `false`                  |
+| `ingress.extraHosts`            | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                     |
+| `ingress.extraPaths`            | Any additional arbitrary paths that may need to be added to the ingress under the main host.                                     | `[]`                     |
+| `ingress.selfSigned`            | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
+| `ingress.extraTls`              | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
+| `ingress.secrets`               | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
 
 
 ### Persistence parameters
@@ -221,7 +220,7 @@ $ helm delete --purge my-release
 | `metrics.enabled`                          | Start a side-car prometheus exporter                                                                                        | `false`                   |
 | `metrics.image.registry`                   | HashiCorp Consul Prometheus Exporter image registry                                                                         | `docker.io`               |
 | `metrics.image.repository`                 | HashiCorp Consul Prometheus Exporter image repository                                                                       | `bitnami/consul-exporter` |
-| `metrics.image.tag`                        | HashiCorp Consul Prometheus Exporter image tag (immutable tags are recommended)                                             | `0.7.1-debian-10-r374`    |
+| `metrics.image.tag`                        | HashiCorp Consul Prometheus Exporter image tag (immutable tags are recommended)                                             | `0.7.1-debian-10-r405`    |
 | `metrics.image.pullPolicy`                 | HashiCorp Consul Prometheus Exporter image pull policy                                                                      | `IfNotPresent`            |
 | `metrics.image.pullSecrets`                | HashiCorp Consul Prometheus Exporter image pull secrets                                                                     | `[]`                      |
 | `metrics.service.type`                     | Kubernetes Service type                                                                                                     | `ClusterIP`               |
@@ -234,11 +233,12 @@ $ helm delete --purge my-release
 | `metrics.serviceMonitor.namespace`         | The namespace in which the ServiceMonitor will be created                                                                   | `""`                      |
 | `metrics.serviceMonitor.interval`          | Interval at which metrics should be scraped                                                                                 | `30s`                     |
 | `metrics.serviceMonitor.scrapeTimeout`     | The timeout after which the scrape is ended                                                                                 | `""`                      |
-| `metrics.serviceMonitor.metricRelabelings` | Metrics relabellings to add to the scrape endpoint                                                                          | `[]`                      |
+| `metrics.serviceMonitor.metricRelabelings` | Metrics relabelings to add to the scrape endpoint                                                                           | `[]`                      |
 | `metrics.serviceMonitor.honorLabels`       | Specify honorLabels parameter to add the scrape endpoint                                                                    | `false`                   |
 | `metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in prometheus.                                           | `""`                      |
 | `metrics.serviceMonitor.selector`          | ServiceMonitor selector labels                                                                                              | `{}`                      |
 | `metrics.serviceMonitor.additionalLabels`  | Used to pass Labels that are used by the Prometheus installed in your cluster to select Service Monitors to work with       | `{}`                      |
+
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

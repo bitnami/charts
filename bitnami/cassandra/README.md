@@ -49,15 +49,16 @@ The command removes all the Kubernetes components associated with the chart and 
 ### Global parameters
 
 | Name                      | Description                                     | Value |
-|---------------------------|-------------------------------------------------|-------|
+| ------------------------- | ----------------------------------------------- | ----- |
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
+
 ### Common parameters
 
 | Name                     | Description                                                                             | Value           |
-|--------------------------|-----------------------------------------------------------------------------------------|-----------------|
+| ------------------------ | --------------------------------------------------------------------------------------- | --------------- |
 | `nameOverride`           | String to partially override common.names.fullname                                      | `""`            |
 | `fullnameOverride`       | String to fully override common.names.fullname                                          | `""`            |
 | `kubeVersion`            | Force target Kubernetes version (using Helm capabilities if not set)                    | `""`            |
@@ -69,47 +70,48 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]`  |
 
+
 ### Cassandra parameters
 
-| Name                          | Description                                                                                                            | Value                |
-|-------------------------------|------------------------------------------------------------------------------------------------------------------------|----------------------|
-| `image.registry`              | Cassandra image registry                                                                                               | `docker.io`          |
-| `image.repository`            | Cassandra image repository                                                                                             | `bitnami/cassandra`  |
-| `image.tag`                   | Cassandra image tag (immutable tags are recommended)                                                                   | `4.0.1-debian-10-r0` |
-| `image.pullPolicy`            | image pull policy                                                                                                      | `IfNotPresent`       |
-| `image.pullSecrets`           | Cassandra image pull secrets                                                                                           | `[]`                 |
-| `image.debug`                 | Enable image debug mode                                                                                                | `false`              |
-| `dbUser.user`                 | Cassandra admin user                                                                                                   | `cassandra`          |
-| `dbUser.forcePassword`        | Force the user to provide a non                                                                                        | `false`              |
-| `dbUser.password`             | Password for `dbUser.user`. Randomly generated if empty                                                                | `""`                 |
-| `dbUser.existingSecret`       | Use an existing secret object for `dbUser.user` password (will ignore `dbUser.password`)                               | `""`                 |
-| `initDBConfigMap`             | ConfigMap with cql scripts. Useful for creating a keyspace and pre-populating data                                     | `""`                 |
-| `initDBSecret`                | Secret with cql script (with sensitive data). Useful for creating a keyspace and pre-populating data                   | `""`                 |
-| `existingConfiguration`       | ConfigMap with custom cassandra configuration files. This overrides any other Cassandra configuration set in the chart | `""`                 |
-| `cluster.name`                | Cassandra cluster name                                                                                                 | `cassandra`          |
-| `cluster.seedCount`           | Number of seed nodes                                                                                                   | `1`                  |
-| `cluster.numTokens`           | Number of tokens for each node                                                                                         | `256`                |
-| `cluster.datacenter`          | Datacenter name                                                                                                        | `dc1`                |
-| `cluster.rack`                | Rack name                                                                                                              | `rack1`              |
-| `cluster.endpointSnitch`      | Endpoint Snitch                                                                                                        | `SimpleSnitch`       |
-| `cluster.internodeEncryption` | DEPRECATED: use tls.internode and tls.client instead. Encryption values.                                               | `none`               |
-| `cluster.clientEncryption`    | Client Encryption                                                                                                      | `false`              |
-| `cluster.extraSeeds`          | For an external/second cassandra ring.                                                                                 | `[]`                 |
-| `cluster.enableUDF`           | Enable User defined functions                                                                                          | `false`              |
-| `jvm.extraOpts`               | Set the value for Java Virtual Machine extra options                                                                   | `""`                 |
-| `jvm.maxHeapSize`             | Set Java Virtual Machine maximum heap size (MAX_HEAP_SIZE). Calculated automatically if `nil`                          | `""`                 |
-| `jvm.newHeapSize`             | Set Java Virtual Machine new heap size (HEAP_NEWSIZE). Calculated automatically if `nil`                               | `""`                 |
-| `command`                     | Command for running the container (set to default if not set). Use array form                                          | `[]`                 |
-| `args`                        | Args for running the container (set to default if not set). Use array form                                             | `[]`                 |
-| `extraEnvVars`                | Extra environment variables to be set on cassandra container                                                           | `[]`                 |
-| `extraEnvVarsCM`              | Name of existing ConfigMap containing extra env vars                                                                   | `""`                 |
-| `extraEnvVarsSecret`          | Name of existing Secret containing extra env vars                                                                      | `""`                 |
+| Name                          | Description                                                                                                            | Value                 |
+| ----------------------------- | ---------------------------------------------------------------------------------------------------------------------- | --------------------- |
+| `image.registry`              | Cassandra image registry                                                                                               | `docker.io`           |
+| `image.repository`            | Cassandra image repository                                                                                             | `bitnami/cassandra`   |
+| `image.tag`                   | Cassandra image tag (immutable tags are recommended)                                                                   | `4.0.1-debian-10-r28` |
+| `image.pullPolicy`            | image pull policy                                                                                                      | `IfNotPresent`        |
+| `image.pullSecrets`           | Cassandra image pull secrets                                                                                           | `[]`                  |
+| `image.debug`                 | Enable image debug mode                                                                                                | `false`               |
+| `dbUser.user`                 | Cassandra admin user                                                                                                   | `cassandra`           |
+| `dbUser.forcePassword`        | Force the user to provide a non                                                                                        | `false`               |
+| `dbUser.password`             | Password for `dbUser.user`. Randomly generated if empty                                                                | `""`                  |
+| `dbUser.existingSecret`       | Use an existing secret object for `dbUser.user` password (will ignore `dbUser.password`)                               | `""`                  |
+| `initDBConfigMap`             | ConfigMap with cql scripts. Useful for creating a keyspace and pre-populating data                                     | `""`                  |
+| `initDBSecret`                | Secret with cql script (with sensitive data). Useful for creating a keyspace and pre-populating data                   | `""`                  |
+| `existingConfiguration`       | ConfigMap with custom cassandra configuration files. This overrides any other Cassandra configuration set in the chart | `""`                  |
+| `cluster.name`                | Cassandra cluster name                                                                                                 | `cassandra`           |
+| `cluster.seedCount`           | Number of seed nodes                                                                                                   | `1`                   |
+| `cluster.numTokens`           | Number of tokens for each node                                                                                         | `256`                 |
+| `cluster.datacenter`          | Datacenter name                                                                                                        | `dc1`                 |
+| `cluster.rack`                | Rack name                                                                                                              | `rack1`               |
+| `cluster.endpointSnitch`      | Endpoint Snitch                                                                                                        | `SimpleSnitch`        |
+| `cluster.internodeEncryption` | DEPRECATED: use tls.internode and tls.client instead. Encryption values.                                               | `none`                |
+| `cluster.clientEncryption`    | Client Encryption                                                                                                      | `false`               |
+| `cluster.extraSeeds`          | For an external/second cassandra ring.                                                                                 | `[]`                  |
+| `cluster.enableUDF`           | Enable User defined functions                                                                                          | `false`               |
+| `jvm.extraOpts`               | Set the value for Java Virtual Machine extra options                                                                   | `""`                  |
+| `jvm.maxHeapSize`             | Set Java Virtual Machine maximum heap size (MAX_HEAP_SIZE). Calculated automatically if `nil`                          | `""`                  |
+| `jvm.newHeapSize`             | Set Java Virtual Machine new heap size (HEAP_NEWSIZE). Calculated automatically if `nil`                               | `""`                  |
+| `command`                     | Command for running the container (set to default if not set). Use array form                                          | `[]`                  |
+| `args`                        | Args for running the container (set to default if not set). Use array form                                             | `[]`                  |
+| `extraEnvVars`                | Extra environment variables to be set on cassandra container                                                           | `[]`                  |
+| `extraEnvVarsCM`              | Name of existing ConfigMap containing extra env vars                                                                   | `""`                  |
+| `extraEnvVarsSecret`          | Name of existing Secret containing extra env vars                                                                      | `""`                  |
 
 
 ### Statefulset parameters
 
 | Name                                    | Description                                                                               | Value           |
-|-----------------------------------------|-------------------------------------------------------------------------------------------|-----------------|
+| --------------------------------------- | ----------------------------------------------------------------------------------------- | --------------- |
 | `replicaCount`                          | Number of Cassandra replicas                                                              | `1`             |
 | `updateStrategy.type`                   | updateStrategy for Cassandra statefulset                                                  | `RollingUpdate` |
 | `hostAliases`                           | Add deployment host aliases                                                               | `[]`            |
@@ -169,19 +171,21 @@ The command removes all the Kubernetes components associated with the chart and 
 | `containerPorts.jmx`                    | JMX Port on the Host and Container                                                        | `7199`          |
 | `containerPorts.cql`                    | CQL Port on the Host and Container                                                        | `9042`          |
 
+
 ### RBAC parameters
 
 | Name                                          | Description                                                | Value  |
-|-----------------------------------------------|------------------------------------------------------------|--------|
+| --------------------------------------------- | ---------------------------------------------------------- | ------ |
 | `serviceAccount.create`                       | Enable the creation of a ServiceAccount for Cassandra pods | `true` |
 | `serviceAccount.name`                         | The name of the ServiceAccount to use.                     | `""`   |
 | `serviceAccount.annotations`                  | Annotations for Cassandra Service Account                  | `{}`   |
 | `serviceAccount.automountServiceAccountToken` | Automount API credentials for a service account.           | `true` |
 
+
 ### Traffic Exposure Parameters
 
 | Name                               | Description                                                                   | Value       |
-|------------------------------------|-------------------------------------------------------------------------------|-------------|
+| ---------------------------------- | ----------------------------------------------------------------------------- | ----------- |
 | `service.type`                     | Cassandra service type                                                        | `ClusterIP` |
 | `service.ports.cql`                | Cassandra service CQL Port                                                    | `9042`      |
 | `service.ports.metrics`            | Cassandra service metrics port                                                | `8080`      |
@@ -196,10 +200,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.enabled`            | Specifies whether a NetworkPolicy should be created                           | `false`     |
 | `networkPolicy.allowExternal`      | Don't require client label for connections                                    | `true`      |
 
+
 ### Persistence parameters
 
 | Name                             | Description                                                                                        | Value                |
-|----------------------------------|----------------------------------------------------------------------------------------------------|----------------------|
+| -------------------------------- | -------------------------------------------------------------------------------------------------- | -------------------- |
 | `persistence.enabled`            | Enable Cassandra data persistence using PVC, use a Persistent Volume Claim, If false, use emptyDir | `true`               |
 | `persistence.storageClass`       | PVC Storage Class for Cassandra data volume                                                        | `""`                 |
 | `persistence.commitStorageClass` | PVC Storage Class for Cassandra Commit Log volume                                                  | `""`                 |
@@ -208,10 +213,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.size`               | PVC Storage Request for Cassandra data volume                                                      | `8Gi`                |
 | `persistence.mountPath`          | The path the data volume will be mounted at                                                        | `/bitnami/cassandra` |
 
+
 ### Volume Permissions parameters
 
 | Name                                          | Description                                                                     | Value                   |
-|-----------------------------------------------|---------------------------------------------------------------------------------|-------------------------|
+| --------------------------------------------- | ------------------------------------------------------------------------------- | ----------------------- |
 | `volumePermissions.enabled`                   | Enable init container that changes the owner and group of the persistent volume | `false`                 |
 | `volumePermissions.image.registry`            | Init container volume                                                           | `docker.io`             |
 | `volumePermissions.image.repository`          | Init container volume                                                           | `bitnami/bitnami-shell` |
@@ -222,14 +228,15 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.resources.requests`        | The requested resources for the container                                       | `{}`                    |
 | `volumePermissions.securityContext.runAsUser` | User ID for the init container                                                  | `0`                     |
 
+
 ### Metrics parameters
 
 | Name                                       | Description                                                                                            | Value                        |
-|--------------------------------------------|--------------------------------------------------------------------------------------------------------|------------------------------|
+| ------------------------------------------ | ------------------------------------------------------------------------------------------------------ | ---------------------------- |
 | `metrics.enabled`                          | Start a side-car prometheus exporter                                                                   | `false`                      |
 | `metrics.image.registry`                   | Cassandra exporter image registry                                                                      | `docker.io`                  |
 | `metrics.image.repository`                 | Cassandra exporter image name                                                                          | `bitnami/cassandra-exporter` |
-| `metrics.image.tag`                        | Cassandra exporter image tag                                                                           | `2.3.4-debian-10-r510`       |
+| `metrics.image.tag`                        | Cassandra exporter image tag                                                                           | `2.3.4-debian-10-r539`       |
 | `metrics.image.pullPolicy`                 | image pull policy                                                                                      | `IfNotPresent`               |
 | `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                                                       | `[]`                         |
 | `metrics.resources.limits`                 | The resources limits for the container                                                                 | `{}`                         |
@@ -247,10 +254,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.containerPorts.http`              | HTTP Port on the Host and Container                                                                    | `8080`                       |
 | `metrics.containerPorts.jmx`               | JMX Port on the Host and Container                                                                     | `5555`                       |
 
+
 ### TLS/SSL parameters
 
 | Name                          | Description                                                                                   | Value   |
-|-------------------------------|-----------------------------------------------------------------------------------------------|---------|
+| ----------------------------- | --------------------------------------------------------------------------------------------- | ------- |
 | `tls.internodeEncryption`     | Set internode encryption                                                                      | `none`  |
 | `tls.clientEncryption`        | Set client-server encryption                                                                  | `false` |
 | `tls.autoGenerated`           | Generate automatically self-signed TLS certificates. Currently only supports PEM certificates | `false` |
@@ -262,6 +270,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `tls.resources.requests`      | The requested resources for the TLS init container                                            | `{}`    |
 | `tls.certificatesSecret`      | Secret with the TLS certificates.                                                             | `""`    |
 | `tls.tlsEncryptionSecretName` | Secret with the encryption of the TLS certificates                                            | `""`    |
+
 
 The above parameters map to the env variables defined in [bitnami/cassandra](http://github.com/bitnami/bitnami-docker-cassandra). For more information please refer to the [bitnami/cassandra](http://github.com/bitnami/bitnami-docker-cassandra) image documentation.
 
