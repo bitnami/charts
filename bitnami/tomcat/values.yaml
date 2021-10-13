@@ -559,12 +559,10 @@ metrics:
       ##    cpu: 100m
       ##    memory: 128Mi
       requests: {}
-    ## @param metrics.jmx.portName specify the port name used by jmx_exporter
+    ## @param metrics.jmx.portName JMX Exporter container metrics ports
     ##
-    portName: metrics
-    ## @param metrics.jmx.port specify the port bind by jmx_exporter
-    ##
-    port: 5556
+    ports:
+      metrics: 5556
     ## @param metrics.jmx.existingConfigmap Name of existing ConfigMap with JMX exporter configuration
     ## NOTE: This will override metrics.jmx.config
     ##
