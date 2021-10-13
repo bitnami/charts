@@ -157,7 +157,7 @@ spec:
             - name: minio-api
               containerPort: {{ .Values.containerPorts.api }}
               protocol: TCP
-            - name: minio-console
+            - name: minio-api
               containerPort: {{ .Values.containerPorts.console }}
               protocol: TCP
           {{- if .Values.livenessProbe.enabled }}
