@@ -182,11 +182,12 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### RBAC parameters
 
-| Name                    | Description                                         | Value  |
-| ----------------------- | --------------------------------------------------- | ------ |
-| `serviceAccount.create` | Enable creation of ServiceAccount for RabbitMQ pods | `true` |
-| `serviceAccount.name`   | Name of the created serviceAccount                  | `""`   |
-| `rbac.create`           | Whether RBAC rules should be created                | `true` |
+| Name                                            | Description                                         | Value  |
+| ----------------------------------------------- | --------------------------------------------------- | ------ |
+| `serviceAccount.create`                         | Enable creation of ServiceAccount for RabbitMQ pods | `true` |
+| `serviceAccount.name`                           | Name of the created serviceAccount                  | `""`   |
+| `serviceAccount.automountServiceAccountToken`   | Auto-mount the service account token in the pod     | `true` |
+| `rbac.create`                                   | Whether RBAC rules should be created                | `true` |
 
 
 ### Persistence parameters
