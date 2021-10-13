@@ -129,6 +129,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraVolumes`                     | Optionally specify extra list of additional volumes .                                                                                    | `[]`                                              |
 | `extraSecrets`                     | Optionally specify extra secrets to be created by the chart.                                                                             | `{}`                                              |
 | `extraSecretsPrependReleaseName`   | Set this flag to true if extraSecrets should be created with <release-name> prepended.                                                   | `false`                                           |
+| `guestLoopbackOnly`                | Bind guest user to lookpack or allow remote access                                                                                       | `true`                                            |
 
 
 ### Statefulset parameters
