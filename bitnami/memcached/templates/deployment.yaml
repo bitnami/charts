@@ -96,13 +96,13 @@ spec:
               containerPort: 11211
           livenessProbe:
             tcpSocket:
-              port: memcache
+              port: {{ .Values.portName }}
             initialDelaySeconds: 30
             timeoutSeconds: 5
             failureThreshold: 6
           readinessProbe:
             tcpSocket:
-              port: memcache
+              port: {{ .Values.portName }}
             initialDelaySeconds: 5
             timeoutSeconds: 3
             periodSeconds: 5
@@ -126,13 +126,13 @@ spec:
           livenessProbe:
             httpGet:
               path: /metrics
-              port: metrics
+              port: {{ .Values.metrics.portName }}
             initialDelaySeconds: 15
             timeoutSeconds: 5
           readinessProbe:
             httpGet:
               path: /metrics
-              port: metrics
+              port: {{ .Values.metrics.portName }}
             initialDelaySeconds: 5
             timeoutSeconds: 1
           {{- if .Values.metrics.resources }}

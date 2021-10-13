@@ -15,9 +15,9 @@ spec:
   publishNotReadyAddresses: true
   ports:
     - name: tcp-redis
-      port: {{ .Values.redis.port }}
+      port: {{ .Values.redis.containerPorts.redis }}
       targetPort: tcp-redis
     - name: tcp-redis-bus
-      port: {{ .Values.redis.busPort }}
+      port: {{ .Values.redis.containerPorts.bus }}
       targetPort: tcp-redis-bus
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}

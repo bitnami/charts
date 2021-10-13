@@ -75,6 +75,10 @@ serviceAccount:
   ## @param serviceAccount.name Name of an already existing service account. Setting this value disables the automatic service account creation
   ##
   name: ""
+## @param topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
+## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+##
+topologySpreadConstraints: {}
 
 ## Diagnostic mode in the deployment
 ##
@@ -106,7 +110,7 @@ diagnosticMode:
 postgresqlImage:
   registry: docker.io
   repository: bitnami/postgresql-repmgr
-  tag: 11.13.0-debian-10-r40
+  tag: 11.13.0-debian-10-r57
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -557,7 +561,7 @@ postgresql:
 pgpoolImage:
   registry: docker.io
   repository: bitnami/pgpool
-  tag: 4.2.5-debian-10-r8
+  tag: 4.2.5-debian-10-r26
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -974,7 +978,7 @@ ldap:
 metricsImage:
   registry: docker.io
   repository: bitnami/postgres-exporter
-  tag: 0.10.0-debian-10-r68
+  tag: 0.10.0-debian-10-r85
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -1074,6 +1078,39 @@ metrics:
     timeoutSeconds: 5
     successThreshold: 1
     failureThreshold: 10
+  ## Metrics service parameters
+  ##
+  service:
+    ## @param metrics.service.type PostgreSQL Prometheus exporter metrics service type
+    ##
+    type: ClusterIP
+    ## @param metrics.service.port PostgreSQL Prometheus exporter metrics service port
+    ##
+    port: 9187
+    ## @param metrics.service.nodePort PostgreSQL Prometheus exporter Node Port
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+    ##
+    nodePort: ""
+    ## @param metrics.service.clusterIP PostgreSQL Prometheus exporter metrics service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param metrics.service.loadBalancerIP PostgreSQL Prometheus exporter service Load Balancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerIP: ""
+    ## @param metrics.service.loadBalancerSourceRanges PostgreSQL Prometheus exporter service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param metrics.service.externalTrafficPolicy PostgreSQL Prometheus exporter service external traffic policy
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
   ## @param metrics.annotations [object] Annotations for PostgreSQL Prometheus exporter service
   ##
   annotations:
@@ -1150,7 +1187,7 @@ metrics:
 volumePermissionsImage:
   registry: docker.io
   repository: bitnami/bitnami-shell
-  tag: 10-debian-10-r200
+  tag: 10-debian-10-r218
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##

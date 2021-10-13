@@ -67,20 +67,20 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 
 ### Common parameters
 
-| Name                | Description                                        | Value                 |
-| ------------------- | -------------------------------------------------- | --------------------- |
-| `kubeVersion`       | Override Kubernetes version                        | `""`                  |
-| `nameOverride`      | String to partially override common.names.fullname | `""`                  |
-| `fullnameOverride`  | String to fully override common.names.fullname     | `""`                  |
-| `commonLabels`      | Labels to add to all deployed objects              | `{}`                  |
-| `commonAnnotations` | Annotations to add to all deployed objects         | `{}`                  |
-| `extraDeploy`       | Array of extra objects to deploy with the release  | `[]`                  |
-| `image.registry`    | Redmine image registry                             | `docker.io`           |
-| `image.repository`  | Redmine image repository                           | `bitnami/redmine`     |
-| `image.tag`         | Redmine image tag (immutable tags are recommended) | `4.2.2-debian-10-r42` |
-| `image.pullPolicy`  | Redmine image pull policy                          | `IfNotPresent`        |
-| `image.pullSecrets` | Redmine image pull secrets                         | `[]`                  |
-| `image.debug`       | Enable image debug mode                            | `false`               |
+| Name                | Description                                        | Value                |
+| ------------------- | -------------------------------------------------- | -------------------- |
+| `kubeVersion`       | Override Kubernetes version                        | `""`                 |
+| `nameOverride`      | String to partially override common.names.fullname | `""`                 |
+| `fullnameOverride`  | String to fully override common.names.fullname     | `""`                 |
+| `commonLabels`      | Labels to add to all deployed objects              | `{}`                 |
+| `commonAnnotations` | Annotations to add to all deployed objects         | `{}`                 |
+| `extraDeploy`       | Array of extra objects to deploy with the release  | `[]`                 |
+| `image.registry`    | Redmine image registry                             | `docker.io`          |
+| `image.repository`  | Redmine image repository                           | `bitnami/redmine`    |
+| `image.tag`         | Redmine image tag (immutable tags are recommended) | `4.2.3-debian-10-r0` |
+| `image.pullPolicy`  | Redmine image pull policy                          | `IfNotPresent`       |
+| `image.pullSecrets` | Redmine image pull secrets                         | `[]`                 |
+| `image.debug`       | Enable image debug mode                            | `false`              |
 
 
 ### Redmine Configuration parameters
@@ -326,7 +326,7 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 | `certificates.customCA`                              | Defines a list of secrets to import into the container trust store | `[]`                                     |
 | `certificates.image.registry`                        | Redmine image registry                                             | `docker.io`                              |
 | `certificates.image.repository`                      | Redmine image repository                                           | `bitnami/bitnami-shell`                  |
-| `certificates.image.tag`                             | Redmine image tag (immutable tags are recommended)                 | `10-debian-10-r203`                      |
+| `certificates.image.tag`                             | Redmine image tag (immutable tags are recommended)                 | `10-debian-10-r217`                      |
 | `certificates.image.pullPolicy`                      | Redmine image pull policy                                          | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Redmine image pull secrets                                         | `[]`                                     |
 | `certificates.extraEnvVars`                          | Container sidecar extra environment variables (e.g. proxy)         | `[]`                                     |

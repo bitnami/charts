@@ -1,7 +1,7 @@
 annotations:
   category: DeveloperTools
 apiVersion: v2
-appVersion: 2.8.2
+appVersion: 2.8.3
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -39,4 +39,4 @@ sources:
   - https://github.com/bitnami/bitnami-docker-spring-cloud-dataflow
   - https://github.com/bitnami/bitnami-docker-spring-cloud-skipper
   - https://dataflow.spring.io/
-version: 4.1.1
+version: 4.1.2

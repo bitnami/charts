@@ -103,7 +103,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | ----------------------------- | ----------------------------------------------------------------------------------------- | ------------------- |
 | `image.registry`              | Thanos image registry                                                                     | `docker.io`         |
 | `image.repository`            | Thanos image repository                                                                   | `bitnami/thanos`    |
-| `image.tag`                   | Thanos image tag (immutable tags are recommended)                                         | `0.23.0-scratch-r1` |
+| `image.tag`                   | Thanos image tag (immutable tags are recommended)                                         | `0.23.1-scratch-r0` |
 | `image.pullPolicy`            | Thanos image pull policy                                                                  | `IfNotPresent`      |
 | `image.pullSecrets`           | Specify docker-registry secret names as an array                                          | `[]`                |
 | `objstoreConfig`              | The [objstore configuration](https://thanos.io/storage.md/)                               | `""`                |
@@ -406,7 +406,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `compactor.extraVolumes`                                      | Extra volumes to add to Thanos Compactor                                                                                         | `[]`                     |
 | `compactor.extraVolumeMounts`                                 | Extra volume mounts to add to the compactor container                                                                            | `[]`                     |
 | `compactor.extraFlags`                                        | Extra Flags to passed to Thanos Compactor                                                                                        | `[]`                     |
-| `compactor.strategyType`                                      | Deployment Strategy Type, can be set to RollingUpdate or Recreate by default                                                     | `RollingUpdate`          |
+| `compactor.strategyType`                                      | Deployment Strategy Type, can be set to RollingUpdate or Recreate by default                                                     | `Recreate`               |
 | `compactor.podAffinityPreset`                                 | Thanos Compactor pod affinity preset                                                                                             | `""`                     |
 | `compactor.podAntiAffinityPreset`                             | Thanos Compactor pod anti-affinity preset. Ignored if `compactor.affinity` is set. Allowed values: `soft` or `hard`              | `soft`                   |
 | `compactor.nodeAffinityPreset.type`                           | Thanos Compactor node affinity preset type. Ignored if `compactor.affinity` is set. Allowed values: `soft` or `hard`             | `""`                     |
@@ -797,7 +797,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `volumePermissions.enabled`           | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`    | Init container volume-permissions image registry                                                                     | `docker.io`             |
 | `volumePermissions.image.repository`  | Init container volume-permissions image repository                                                                   | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                                          | `10-debian-10-r207`     |
+| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                                          | `10-debian-10-r213`     |
 | `volumePermissions.image.pullPolicy`  | Init container volume-permissions image pull policy                                                                  | `Always`                |
 | `volumePermissions.image.pullSecrets` | Specify docker-registry secret names as an array                                                                     | `[]`                    |
 

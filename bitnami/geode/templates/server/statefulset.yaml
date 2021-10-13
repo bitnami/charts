@@ -1,10 +1,12 @@
-{{- $locatorsReplicaCount := int .Values.locator.replicaCount }}
+{{- $locatorReplicaCount := int .Values.locator.replicaCount }}
+{{- $serverReplicaCount := int .Values.server.replicaCount }}
 {{- $fullname := include "common.names.fullname" . }}
 {{- $releaseNamespace := .Release.Namespace }}
 {{- $clusterDomain := .Values.clusterDomain }}
 {{- $locatorPort := int .Values.locator.service.ports.locator }}
+{{- $locatorSvc := printf "%s-locator.%s.svc.%s[%d]" $fullname $releaseNamespace $clusterDomain $locatorPort }}
 {{- $locators := list }}
-{{- range $e, $i := until $locatorsReplicaCount }}
+{{- range $e, $i := until $locatorReplicaCount }}
 {{- $locators = append $locators (printf "%s-locator-%d.%s-locator-hl.%s.svc.%s[%d]" $fullname $i $fullname $releaseNamespace $clusterDomain $locatorPort) }}
 {{- end }}
 apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
@@ -153,7 +155,7 @@ spec:
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
           {{- else if .Values.server.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.server.command "context" $) | nindent 12 }}
-          {{- else if .Values.auth.tls.enabled }}
+          {{- else }}
           command:
             - /bin/bash
           {{- end }}
@@ -161,10 +163,11 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
           {{- else if .Values.server.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.server.args "context" $) | nindent 12 }}
-          {{- else if .Values.auth.tls.enabled }}
+          {{- else }}
           args:
             - -ec
             - |
+              {{- if .Values.auth.tls.enabled }}
               ID="${MY_POD_NAME#"{{ $fullname }}-"}"
               mkdir -p /opt/bitnami/geode/config/certs
               if [[ -f "/certs/geode.truststore.jks" ]] && [[ -f "/certs/geode-server-${ID}.truststore.jks" ]]; then
@@ -174,7 +177,8 @@ spec:
                   echo "Couldn't find the expected Java Key Stores (JKS) files! They are mandatory when encryption via TLS is enabled."
                   exit 1
               fi
-              exec /opt/bitnami/scripts/geode/entrypoint.sh /opt/bitnami/scripts/geode/run.sh
+              {{- end }}
+              /opt/bitnami/scripts/geode/entrypoint.sh /opt/bitnami/scripts/geode/run.sh {{ join " " .Values.server.extraFlags }}
           {{- end }}
           env:
             - name: BITNAMI_DEBUG
@@ -301,9 +305,18 @@ spec:
           {{- else if .Values.server.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.server.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
+          {{- end }}
           {{- if .Values.server.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.server.lifecycleHooks "context" $) | nindent 12 }}
-          {{- end }}
+          {{- else if and (gt $serverReplicaCount 1) .Values.server.restoreRedundancyOnContainerTermination }}
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - /bin/bash
+                  - -ec
+                  - |
+                    gfsh -e "connect --locator={{ $locatorSvc }}{{ if .Values.auth.enabled }} --user=$GEODE_SECURITY_USERNAME --password=$GEODE_SECURITY_PASSWORD{{ end }}" -e "restore redundancy"
           {{- end }}
           volumeMounts:
             - name: data

@@ -7,9 +7,6 @@ metadata:
   namespace: {{ . }}
   {{- end }}
   labels: {{ include "external-dns.labels" . | nindent 4 }}
-    {{- with .Values.metrics.serviceMonitor.selector }}
-    {{ toYaml . | nindent 4 }}
-    {{- end }}
 spec:
   endpoints:
     - port: http
@@ -25,4 +22,7 @@ spec:
       - {{ .Release.Namespace }}
   selector:
     matchLabels: {{ include "external-dns.matchLabels" . | nindent 6 }}
+      {{- if .Values.metrics.serviceMonitor.selector }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.metrics.serviceMonitor.selector "context" $) | nindent 6 }}
+      {{- end }}
 {{- end }}
