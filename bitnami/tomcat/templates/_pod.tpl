@@ -131,11 +131,13 @@ containers:
     - -XshowSettings:vm
     - -jar
     - jmx_prometheus_httpserver.jar
-    - "5556"
+    - {{ .Values.metrics.jmx.ports.metrics | quote }}
     - /etc/jmx-tomcat/jmx-tomcat-prometheus.yml  
   ports:
-    - name: {{ .Values.metrics.jmx.portName }}
-      containerPort: {{ .Values.metrics.jmx.port }}	
+{{- range $key, $val :=  .Values.metrics.jmx.ports }}
+    - name: {{ $key }}
+      containerPort: {{ $val }}
+{{- end }} 
   {{- if .Values.metrics.jmx.resources }}
   resources: {{- toYaml .Values.metrics.jmx.resources | nindent 4 }}
   {{- end }}      
