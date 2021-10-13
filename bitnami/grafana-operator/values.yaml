@@ -393,7 +393,8 @@ grafana:
   client:
     timeout: 5
     preferService: true
-  ## Add additional labels to the grafana deployment, service and ingress resources
+  ## @param grafana.labels Add additional labels to the grafana deployment, service and ingress resources
+  ##
   labels: {}
   ## Configure the ingress resource that allows you to access the
   ## Grafana web. Set up the URL
