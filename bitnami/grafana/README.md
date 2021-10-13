@@ -271,12 +271,12 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 
 ### RBAC parameters
 
-| Name                                          | Description                                                                                                           | Value  |
-| --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ------ |
-| `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                  | `true` |
-| `serviceAccount.name`                         | The name of the ServiceAccount to use. If not set and create is true, a name is generated using the fullname template | `""`   |
-| `serviceAccount.annotations`                  | Annotations to add to the ServiceAccount Metadata                                                                     | `{}`   |
-| `serviceAccount.automountServiceAccountToken` | Automount service account token for the application controller service account                                        | `true` |
+| Name                                          | Description                                                                                                           | Value   |
+| --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ------- |
+| `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                  | `true`  |
+| `serviceAccount.name`                         | The name of the ServiceAccount to use. If not set and create is true, a name is generated using the fullname template | `""`    |
+| `serviceAccount.annotations`                  | Annotations to add to the ServiceAccount Metadata                                                                     | `{}`    |
+| `serviceAccount.automountServiceAccountToken` | Automount service account token for the application controller service account                                        | `false` |
 
 
 ### Traffic exposure parameters
@@ -327,40 +327,12 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 
 ### Grafana Image Renderer parameters
 
-<<<<<<< HEAD
-| Name                                                 | Description                                                                                            | Value                            |
-| ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------ | -------------------------------- |
-| `imageRenderer.enabled`                              | Enable using a remote rendering service to render PNG images                                           | `false`                          |
-| `imageRenderer.image.registry`                       | Grafana Image Renderer image registry                                                                  | `docker.io`                      |
-| `imageRenderer.image.repository`                     | Grafana Image Renderer image repository                                                                | `bitnami/grafana-image-renderer` |
-| `imageRenderer.image.tag`                            | Grafana Image Renderer image tag (immutable tags are recommended)                                      | `3.2.1-debian-10-r3`             |
-| `imageRenderer.image.pullPolicy`                     | Grafana Image Renderer image pull policy                                                               | `IfNotPresent`                   |
-| `imageRenderer.image.pullSecrets`                    | Grafana image Renderer pull secrets                                                                    | `[]`                             |
-| `imageRenderer.replicaCount`                         | Number of Grafana Image Renderer Pod replicas                                                          | `1`                              |
-| `imageRenderer.podAnnotations`                       | Grafana Image Renderer Pod annotations                                                                 | `{}`                             |
-| `imageRenderer.nodeSelector`                         | Node labels for pod assignment                                                                         | `{}`                             |
-| `imageRenderer.tolerations`                          | Tolerations for pod assignment                                                                         | `[]`                             |
-| `imageRenderer.affinity`                             | Affinity for pod assignment                                                                            | `{}`                             |
-| `imageRenderer.resources.limits`                     | The resources limits for Grafana containers                                                            | `{}`                             |
-| `imageRenderer.resources.requests`                   | The requested resources for Grafana containers                                                         | `{}`                             |
-| `imageRenderer.securityContext.enabled`              | Enable securityContext on for Grafana Image Renderer deployment                                        | `true`                           |
-| `imageRenderer.securityContext.fsGroup`              | Group to configure permissions for volumes                                                             | `1001`                           |
-| `imageRenderer.securityContext.runAsUser`            | User for the security context                                                                          | `1001`                           |
-| `imageRenderer.securityContext.runAsNonRoot`         | Run containers as non-root users                                                                       | `true`                           |
-| `imageRenderer.service.port`                         | Grafana Image Renderer metrics port                                                                    | `8080`                           |
-| `imageRenderer.metrics.enabled`                      | Enable the export of Prometheus metrics                                                                | `false`                          |
-| `imageRenderer.metrics.annotations`                  | Prometheus annotations                                                                                 | `{}`                             |
-| `imageRenderer.metrics.serviceMonitor.enabled`       | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`) | `false`                          |
-| `imageRenderer.metrics.serviceMonitor.namespace`     | Namespace in which Prometheus is running                                                               | `""`                             |
-| `imageRenderer.metrics.serviceMonitor.interval`      | Interval at which metrics should be scraped.                                                           | `""`                             |
-| `imageRenderer.metrics.serviceMonitor.scrapeTimeout` | Timeout after which the scrape is ended                                                                | `""`                             |
-=======
 | Name                                                 | Description                                                                                             | Value                            |
 | ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | -------------------------------- |
 | `imageRenderer.enabled`                              | Enable using a remote rendering service to render PNG images                                            | `false`                          |
 | `imageRenderer.image.registry`                       | Grafana Image Renderer image registry                                                                   | `docker.io`                      |
 | `imageRenderer.image.repository`                     | Grafana Image Renderer image repository                                                                 | `bitnami/grafana-image-renderer` |
-| `imageRenderer.image.tag`                            | Grafana Image Renderer image tag (immutable tags are recommended)                                       | `3.2.0-debian-10-r19`            |
+| `imageRenderer.image.tag`                            | Grafana Image Renderer image tag (immutable tags are recommended)                                       | `3.2.1-debian-10-r3`             |
 | `imageRenderer.image.pullPolicy`                     | Grafana Image Renderer image pull policy                                                                | `IfNotPresent`                   |
 | `imageRenderer.image.pullSecrets`                    | Grafana image Renderer pull secrets                                                                     | `[]`                             |
 | `imageRenderer.replicaCount`                         | Number of Grafana Image Renderer Pod replicas                                                           | `1`                              |
@@ -421,7 +393,6 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`        |
 | `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`    |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]` |
->>>>>>> e1a7815ee (Fix metadata)
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
@@ -594,7 +565,7 @@ This major release renames several values in this chart and adds missing feature
 
 Since the volume access mode when persistence is enabled is `ReadWriteOnce` in order to upgrade the deployment you will need to either use the `Recreate` strategy or delete the old deployment.
 
-```bash
+```console
 kubectl delete deployment <deployment-name>
 helm upgrade <release-name> bitnami/grafana
 ```
