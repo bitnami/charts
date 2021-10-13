@@ -40,7 +40,7 @@ spec:
       {{- toYaml .Values.metrics.podAnnotations | nindent 8 }}
       {{- end }}
     spec:
-      {{- if and (semverCompare ">= 1.13" .Capabilities.KubeVersion.Version) }}
+      {{- if semverCompare ">= 1.13" (include "common.capabilities.kubeVersion" .) }}
       enableServiceLinks: false
       {{- end }}
       {{- include "redis-cluster.imagePullSecrets" . | nindent 6 }}
