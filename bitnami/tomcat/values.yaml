@@ -559,7 +559,7 @@ metrics:
       ##    cpu: 100m
       ##    memory: 128Mi
       requests: {}
-    ## @param metrics.jmx.portName JMX Exporter container metrics ports
+    ## @param metrics.jmx.ports.metrics JMX Exporter container metrics ports
     ##
     ports:
       metrics: 5556
