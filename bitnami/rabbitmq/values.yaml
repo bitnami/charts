@@ -288,7 +288,7 @@ configuration: |-
   # queue master locator
   queue_master_locator = min-masters
   # enable guest user
-  loopback_users.guest = false
+  loopback_users.guest = {{ .Values.guestLoopbackOnly | default "true" }}
   {{ tpl .Values.extraConfiguration . }}
   {{- if .Values.auth.tls.enabled }}
   ssl_options.verify = {{ .Values.auth.tls.sslOptionsVerify }}
