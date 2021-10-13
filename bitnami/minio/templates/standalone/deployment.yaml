@@ -151,14 +151,14 @@ spec:
             - name: minio-api
               containerPort: {{ .Values.containerPorts.api }}
               protocol: TCP
-            - name: minio-console
+            - name: minio-api
               containerPort: {{ .Values.containerPorts.console }}
               protocol: TCP
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
               path: /minio/health/live
-              port: minio-console
+              port: minio-api
               scheme: {{ ternary "HTTPS" "HTTP" .Values.tls.enabled | quote }}
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
