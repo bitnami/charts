@@ -164,7 +164,7 @@ spec:
           livenessProbe:
             httpGet:
               path: /minio/health/live
-              port: minio-console
+              port: minio-api
               scheme: {{ ternary "HTTPS" "HTTP" .Values.tls.enabled | quote }}
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
