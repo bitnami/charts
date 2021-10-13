@@ -402,7 +402,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 A Fernet key is required in order to encrypt password within connections. The Fernet key must be a base64-encoded 32-byte key.
 
-Learn how to generate one [here](https://bcb.github.io/airflow/fernet-key)
+Learn how to generate one [here](https://airflow.apache.org/docs/apache-airflow/stable/security/secrets/fernet.html#generating-fernet-key)
 
 ### Generate a Secret key
 
