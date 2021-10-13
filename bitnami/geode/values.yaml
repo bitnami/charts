@@ -359,6 +359,12 @@ locator:
   ## @param locator.lifecycleHooks for the Locator container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
+  ## @param locator.extraFlags Additional command line flags to start Locator nodes
+  ## e.g.
+  ## extraFlags:
+  ##   - "--J=-Dfoo.bar=true"
+  ##
+  extraFlags: []
   ## @param locator.extraEnvVars Array with extra environment variables to add to Locator nodes
   ## e.g:
   ## extraEnvVars:
@@ -695,6 +701,12 @@ server:
   ## @param server.lifecycleHooks for the Cache server container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
+  ## @param server.extraFlags Additional command line flags to start Cache server nodes
+  ## e.g.
+  ## extraFlags:
+  ##   - "--J=-Dfoo.bar=true"
+  ##
+  extraFlags: []
   ## @param server.extraEnvVars Array with extra environment variables to add to Cache server nodes
   ## e.g:
   ## extraEnvVars:

@@ -125,7 +125,7 @@ externaldb:
 image:
   registry: docker.io
   repository: bitnami/node
-  tag: 14.18.0-debian-10-r0
+  tag: 14.18.1-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -326,7 +326,7 @@ git:
   image:
     registry: docker.io
     repository: bitnami/git
-    tag: 2.33.0-debian-10-r44
+    tag: 2.33.0-debian-10-r58
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -377,7 +377,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r206
+    tag: 10-debian-10-r219
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

@@ -121,7 +121,7 @@ spec:
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
           {{- else if .Values.locator.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.locator.command "context" $) | nindent 12 }}
-          {{- else if .Values.auth.tls.enabled }}
+          {{- else }}
           command:
             - /bin/bash
           {{- end }}
@@ -129,10 +129,11 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
           {{- else if .Values.locator.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.locator.args "context" $) | nindent 12 }}
-          {{- else if .Values.auth.tls.enabled }}
+          {{- else }}
           args:
             - -ec
             - |
+              {{- if .Values.auth.tls.enabled }}
               ID="${MY_POD_NAME#"{{ $fullname }}-"}"
               mkdir -p /opt/bitnami/geode/config/certs
               if [[ -f "/certs/geode.truststore.jks" ]] && [[ -f "/certs/geode-locator-${ID}.truststore.jks" ]]; then
@@ -142,7 +143,8 @@ spec:
                   echo "Couldn't find the expected Java Key Stores (JKS) files! They are mandatory when encryption via TLS is enabled."
                   exit 1
               fi
-              exec /opt/bitnami/scripts/geode/entrypoint.sh /opt/bitnami/scripts/geode/run.sh
+              {{- end }}
+              /opt/bitnami/scripts/geode/entrypoint.sh /opt/bitnami/scripts/geode/run.sh {{ join " " .Values.locator.extraFlags }}
           {{- end }}
           env:
             - name: BITNAMI_DEBUG

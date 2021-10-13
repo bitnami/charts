@@ -1,7 +1,7 @@
 annotations:
   category: Infrastructure
 apiVersion: v2
-appVersion: 2.6.1
+appVersion: 2.6.2
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -24,4 +24,4 @@ name: nats
 sources:
   - https://github.com/bitnami/bitnami-docker-nats
   - https://nats.io/
-version: 6.4.10
+version: 6.4.11

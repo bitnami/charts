@@ -642,6 +642,9 @@ serviceAccount:
   ## If not set and create is true, a name is generated using the rabbitmq.fullname template
   ##
   name: ""
+  ## @param serviceAccount.automountServiceAccountToken Auto-mount the service account token in the pod
+  ##
+  automountServiceAccountToken: true
 
 ## Role Based Access
 ## ref: https://kubernetes.io/docs/admin/authorization/rbac/
