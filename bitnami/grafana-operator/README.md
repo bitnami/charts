@@ -171,7 +171,7 @@ For more information, refer to the [documentation on the differences between the
 | `grafana.envFrom`                                           | Extra environment variable to pass to the running container                                   | `[]`                 |
 | `grafana.client.timeout`                                    | The timeout in seconds for the Grafana Rest API on that instance                              | `5`                  |
 | `grafana.client.preferService`                              | If the API should be used via Ingress or via the internal service                             | `true`               |
-| `grafana.labels`                                            | Add additional labels to the pod, service and ingress resources                               | `true`               |
+| `grafana.labels`                                            | Add additional labels to the pod, service and ingress resources                               | `{}`                 |
 | `grafana.ingress.enabled`                                   | If an ingress or OpenShift Route should be created                                            | `false`              |
 | `grafana.ingress.hostname`                                  | The hostname under which the grafana instance should be reachable                             | `grafana.local`      |
 | `grafana.ingress.path`                                      | The path for the ingress instance to forward to the grafana app                               | `/`                  |
