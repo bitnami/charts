@@ -134,10 +134,10 @@ containers:
     - {{ .Values.metrics.jmx.ports.metrics | quote }}
     - /etc/jmx-tomcat/jmx-tomcat-prometheus.yml  
   ports:
-{{- range $key, $val :=  .Values.metrics.jmx.ports }}
+  {{- range $key, $val := .Values.metrics.jmx.ports }}
     - name: {{ $key }}
       containerPort: {{ $val }}
-{{- end }} 
+  {{- end }} 
   {{- if .Values.metrics.jmx.resources }}
   resources: {{- toYaml .Values.metrics.jmx.resources | nindent 4 }}
   {{- end }}      
