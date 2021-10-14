@@ -70,39 +70,39 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### NATS parameters
 
-| Name                   | Description                                                                    | Value                |
-| ---------------------- | ------------------------------------------------------------------------------ | -------------------- |
-| `image.registry`       | NATS image registry                                                            | `docker.io`          |
-| `image.repository`     | NATS image repository                                                          | `bitnami/nats`       |
-| `image.tag`            | NATS image tag (immutable tags are recommended)                                | `2.6.2-debian-10-r0` |
-| `image.pullPolicy`     | Image pull policy                                                              | `IfNotPresent`       |
-| `image.pullSecrets`    | Specify docker-registry secret names as an array                               | `[]`                 |
-| `auth.enabled`         | Switch to enable/disable client authentication                                 | `true`               |
-| `auth.user`            | Client authentication user                                                     | `nats_client`        |
-| `auth.password`        | Client authentication password                                                 | `""`                 |
-| `auth.token`           | Client authentication token                                                    | `""`                 |
-| `auth.timeout`         | Client authentication timeout (seconds)                                        | `1`                  |
-| `auth.usersCredentials`| Client authentication users credentials collection                             | `[]`                 |
-| `auth.noAuthUser`      | Username from `auth.usersCredentials` to use if client credentials missing     | `""`                 |
-| `clusterAuth.enabled`  | Switch to enable/disable cluster authentication                                | `true`               |
-| `clusterAuth.user`     | Cluster authentication user                                                    | `nats_cluster`       |
-| `clusterAuth.password` | Cluster authentication password                                                | `""`                 |
-| `clusterAuth.token`    | Cluster authentication token                                                   | `""`                 |
-| `debug.enabled`        | Switch to enable/disable debug on logging                                      | `false`              |
-| `debug.trace`          | Switch to enable/disable trace debug level on logging                          | `false`              |
-| `debug.logtime`        | Switch to enable/disable logtime on logging                                    | `false`              |
-| `maxConnections`       | Max. number of client connections                                              | `""`                 |
-| `maxControlLine`       | Max. protocol control line                                                     | `""`                 |
-| `maxPayload`           | Max. payload                                                                   | `""`                 |
-| `writeDeadline`        | Duration the server can block on a socket write to a client                    | `""`                 |
-| `natsFilename`         | Filename used by several NATS files (binary, configurarion file, and pid file) | `nats-server`        |
-| `command`              | Override default container command (useful when using custom images)           | `[]`                 |
-| `args`                 | Override default container args (useful when using custom images)              | `[]`                 |
-| `hostAliases`          | Deployment pod host aliases                                                    | `[]`                 |
-| `extraFlags`           | Extra flags to be passed to NATS                                               | `{}`                 |
-| `extraEnvVars`         | Extra environment variables to be set on NATS container                        | `[]`                 |
-| `extraEnvVarsCM`       | ConfigMap with extra environment variables                                     | `""`                 |
-| `extraEnvVarsSecret`   | Secret with extra environment variables                                        | `""`                 |
+| Name                    | Description                                                                                           | Value                |
+| ----------------------- | ----------------------------------------------------------------------------------------------------- | -------------------- |
+| `image.registry`        | NATS image registry                                                                                   | `docker.io`          |
+| `image.repository`      | NATS image repository                                                                                 | `bitnami/nats`       |
+| `image.tag`             | NATS image tag (immutable tags are recommended)                                                       | `2.6.2-debian-10-r0` |
+| `image.pullPolicy`      | Image pull policy                                                                                     | `IfNotPresent`       |
+| `image.pullSecrets`     | Specify docker-registry secret names as an array                                                      | `[]`                 |
+| `auth.enabled`          | Switch to enable/disable client authentication                                                        | `true`               |
+| `auth.user`             | Client authentication user                                                                            | `nats_client`        |
+| `auth.password`         | Client authentication password                                                                        | `""`                 |
+| `auth.token`            | Client authentication token                                                                           | `""`                 |
+| `auth.timeout`          | Client authentication timeout (seconds)                                                               | `1`                  |
+| `auth.usersCredentials` | Client authentication users credentials collection                                                    | `[]`                 |
+| `auth.noAuthUser`       | Client authentication username from auth.usersCredentials map to be used when no credentials provided | `""`                 |
+| `clusterAuth.enabled`   | Switch to enable/disable cluster authentication                                                       | `true`               |
+| `clusterAuth.user`      | Cluster authentication user                                                                           | `nats_cluster`       |
+| `clusterAuth.password`  | Cluster authentication password                                                                       | `""`                 |
+| `clusterAuth.token`     | Cluster authentication token                                                                          | `""`                 |
+| `debug.enabled`         | Switch to enable/disable debug on logging                                                             | `false`              |
+| `debug.trace`           | Switch to enable/disable trace debug level on logging                                                 | `false`              |
+| `debug.logtime`         | Switch to enable/disable logtime on logging                                                           | `false`              |
+| `maxConnections`        | Max. number of client connections                                                                     | `""`                 |
+| `maxControlLine`        | Max. protocol control line                                                                            | `""`                 |
+| `maxPayload`            | Max. payload                                                                                          | `""`                 |
+| `writeDeadline`         | Duration the server can block on a socket write to a client                                           | `""`                 |
+| `natsFilename`          | Filename used by several NATS files (binary, configurarion file, and pid file)                        | `nats-server`        |
+| `command`               | Override default container command (useful when using custom images)                                  | `[]`                 |
+| `args`                  | Override default container args (useful when using custom images)                                     | `[]`                 |
+| `hostAliases`           | Deployment pod host aliases                                                                           | `[]`                 |
+| `extraFlags`            | Extra flags to be passed to NATS                                                                      | `{}`                 |
+| `extraEnvVars`          | Extra environment variables to be set on NATS container                                               | `[]`                 |
+| `extraEnvVarsCM`        | ConfigMap with extra environment variables                                                            | `""`                 |
+| `extraEnvVarsSecret`    | Secret with extra environment variables                                                               | `""`                 |
 
 
 ### NATS deployment/statefulset parameters
