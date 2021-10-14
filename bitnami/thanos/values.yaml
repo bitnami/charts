@@ -60,15 +60,15 @@ image:
   ##   - myRegistryKeySecretName
   ##
   pullSecrets: []
-## @param objstoreConfig The [objstore configuration](https://thanos.io/storage.md/)
+## @param objstoreConfig The [objstore configuration](https://thanos.io/tip/thanos/storage.md/)
 ## Specify content for objstore.yml
 ##
 objstoreConfig: ""
-## @param indexCacheConfig The [index cache configuration](https://thanos.io/components/store.md/)
+## @param indexCacheConfig The [index cache configuration](https://thanos.io/tip/components/store.md/)
 ## Specify content for index-cache.yml
 ##
 indexCacheConfig: ""
-## @param bucketCacheConfig The [bucket cache configuration](https://thanos.io/components/store.md/)
+## @param bucketCacheConfig The [bucket cache configuration](https://thanos.io/tip/components/store.md/)
 ## Specify content for bucket-cache.yml
 ##
 bucketCacheConfig: ""

@@ -106,9 +106,9 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `image.tag`                   | Thanos image tag (immutable tags are recommended)                                         | `0.23.1-scratch-r0` |
 | `image.pullPolicy`            | Thanos image pull policy                                                                  | `IfNotPresent`      |
 | `image.pullSecrets`           | Specify docker-registry secret names as an array                                          | `[]`                |
-| `objstoreConfig`              | The [objstore configuration](https://thanos.io/tip/thanos/storage.md/)                               | `""`                |
-| `indexCacheConfig`            | The [index cache configuration](https://thanos.io/tip/components/store.md/)                   | `""`                |
-| `bucketCacheConfig`           | The [bucket cache configuration](https://thanos.io/tip/components/store.md/)                  | `""`                |
+| `objstoreConfig`              | The [objstore configuration](https://thanos.io/tip/thanos/storage.md/)                    | `""`                |
+| `indexCacheConfig`            | The [index cache configuration](https://thanos.io/tip/components/store.md/)               | `""`                |
+| `bucketCacheConfig`           | The [bucket cache configuration](https://thanos.io/tip/components/store.md/)              | `""`                |
 | `existingObjstoreSecret`      | Secret with Objstore Configuration                                                        | `""`                |
 | `existingObjstoreSecretItems` | Optional item list for specifying a custom Secret key. If so, path should be objstore.yml | `[]`                |
 | `existingServiceAccount`      | Provide a common service account to be shared with all components                         | `""`                |
@@ -124,7 +124,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `query.serviceAccount.annotations`                        | Annotations for Thanos Query Service Account                                                                                            | `{}`                     |
 | `query.serviceAccount.existingServiceAccount`             | Provide an existing service account for query                                                                                           | `""`                     |
 | `query.hostAliases`                                       | Deployment pod host aliases                                                                                                             | `[]`                     |
-| `query.replicaLabel`                                      | Replica indicator(s) along which data is deduplicated                                                                                   | `["replica"]`            |
+| `query.replicaLabel`                                      | Replica indicator(s) along which data is deduplicated                                                                                   | `[]`                     |
 | `query.dnsDiscovery.enabled`                              | Enable store APIs discovery via DNS                                                                                                     | `true`                   |
 | `query.dnsDiscovery.sidecarsService`                      | Sidecars service name to discover them using DNS discovery                                                                              | `""`                     |
 | `query.dnsDiscovery.sidecarsNamespace`                    | Sidecars namespace to discover them using DNS discovery                                                                                 | `""`                     |
@@ -462,7 +462,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `compactor.persistence.enabled`                               | Enable data persistence                                                                                                          | `true`                   |
 | `compactor.persistence.existingClaim`                         | Use a existing PVC which must be created manually before bound                                                                   | `""`                     |
 | `compactor.persistence.storageClass`                          | Specify the `storageClass` used to provision the volume                                                                          | `""`                     |
-| `compactor.persistence.accessModes`                           | Access modes of data volume                                                                                                      | `["ReadWriteOnce"]`      |
+| `compactor.persistence.accessModes`                           | Access modes of data volume                                                                                                      | `[]`                     |
 | `compactor.persistence.size`                                  | Size of data volume                                                                                                              | `8Gi`                    |
 
 
@@ -538,7 +538,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `storegateway.persistence.enabled`                               | Enable data persistence                                                                                                                  | `true`                      |
 | `storegateway.persistence.existingClaim`                         | Use a existing PVC which must be created manually before bound                                                                           | `""`                        |
 | `storegateway.persistence.storageClass`                          | Specify the `storageClass` used to provision the volume                                                                                  | `""`                        |
-| `storegateway.persistence.accessModes`                           | Access modes of data volume                                                                                                              | `["ReadWriteOnce"]`         |
+| `storegateway.persistence.accessModes`                           | Access modes of data volume                                                                                                              | `[]`                        |
 | `storegateway.persistence.size`                                  | Size of data volume                                                                                                                      | `8Gi`                       |
 | `storegateway.autoscaling.enabled`                               | Enable autoscaling for Thanos Store Gateway                                                                                              | `false`                     |
 | `storegateway.autoscaling.minReplicas`                           | Minimum number of Thanos Store Gateway replicas                                                                                          | `""`                        |
@@ -642,7 +642,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `ruler.persistence.enabled`                               | Enable data persistence                                                                                                          | `true`                   |
 | `ruler.persistence.existingClaim`                         | Use a existing PVC which must be created manually before bound                                                                   | `""`                     |
 | `ruler.persistence.storageClass`                          | Specify the `storageClass` used to provision the volume                                                                          | `""`                     |
-| `ruler.persistence.accessModes`                           | Access modes of data volume                                                                                                      | `["ReadWriteOnce"]`      |
+| `ruler.persistence.accessModes`                           | Access modes of data volume                                                                                                      | `[]`                     |
 | `ruler.persistence.size`                                  | Size of data volume                                                                                                              | `8Gi`                    |
 | `ruler.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                  | `false`                  |
 | `ruler.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                   | `1`                      |
@@ -756,7 +756,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `receive.persistence.enabled`                               | Enable data persistence                                                                                                            | `true`                   |
 | `receive.persistence.existingClaim`                         | Use a existing PVC which must be created manually before bound                                                                     | `""`                     |
 | `receive.persistence.storageClass`                          | Specify the `storageClass` used to provision the volume                                                                            | `""`                     |
-| `receive.persistence.accessModes`                           | Access modes of data volume                                                                                                        | `["ReadWriteOnce"]`      |
+| `receive.persistence.accessModes`                           | Access modes of data volume                                                                                                        | `[]`                     |
 | `receive.persistence.size`                                  | Size of data volume                                                                                                                | `8Gi`                    |
 | `receive.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                    | `false`                  |
 | `receive.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                     | `1`                      |
