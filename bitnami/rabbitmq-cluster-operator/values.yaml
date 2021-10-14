@@ -158,10 +158,6 @@ resources:
   limits: {}
   requests: {}
 
-## @param installCRDs Install RabbitMQ Cluster CRD
-##
-installCRDs: true
-
 ## Configure Pods Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param podSecurityContext.enabled Enabled RabbitMQ Cluster Operator pods' Security Context

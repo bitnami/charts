@@ -184,7 +184,6 @@ This solution allows to easily deploy multiple RabbitMQ instances compared to th
 | `customStartupProbe`                 | Custom startupProbe that overrides the default one                                                      | `{}`                                |
 | `resources.limits`                   | The resources limits for the RabbitMQ Cluster Operator containers                                       | `{}`                                |
 | `resources.requests`                 | The requested resources for the RabbitMQ Cluster Operator containers                                    | `{}`                                |
-| `installCRDs`                        | Install RabbitMQ Cluster CRD                                                                            | `true`                              |
 | `podSecurityContext.enabled`         | Enabled RabbitMQ Cluster Operator pods' Security Context                                                | `true`                              |
 | `podSecurityContext.fsGroup`         | Set RabbitMQ Cluster Operator pod's Security Context fsGroup                                            | `1001`                              |
 | `containerSecurityContext.enabled`   | Enabled RabbitMQ Cluster Operator containers' Security Context                                          | `true`                              |
@@ -318,3 +317,16 @@ extraDeploy:
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+
+## Upgrading
+
+### To 1.0.0
+
+The CRD was updated according to the latest changes in the upstream project. Thanks to the improvements in the latest changes, the CRD is not templated anymore abd can be placed under the `crds` directory following [Helm best practices for CRDS](https://helm.sh/docs/chart_best_practices/custom_resource_definitions/).
+
+You need to manually delete the old CRD before upgrading the release.
+
+```console
+kubectl delete crd rabbitmqclusters.rabbitmq.com
+helm upgrade my-release bitnami/rabbitmq-cluster-operator
+```
