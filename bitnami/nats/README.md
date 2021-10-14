@@ -82,8 +82,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `auth.password`        | Client authentication password                                                 | `""`                 |
 | `auth.token`           | Client authentication token                                                    | `""`                 |
 | `auth.timeout`         | Client authentication timeout (seconds)                                        | `1`                  |
-| `auth.users`           | Client authentication map in `user: password` format                           | `[]`                 |
-| `auth.noAuthUser`      | Username from `auth.users` map to be used when no client credentials provided  | `""`                 |
+| `auth.usersCredentials`| Client authentication users credentials collection                             | `[]`                 |
+| `auth.noAuthUser`      | Username from `auth.usersCredentials` to use if client credentials missing     | `""`                 |
 | `clusterAuth.enabled`  | Switch to enable/disable cluster authentication                                | `true`               |
 | `clusterAuth.user`     | Cluster authentication user                                                    | `nats_cluster`       |
 | `clusterAuth.password` | Cluster authentication password                                                | `""`                 |
