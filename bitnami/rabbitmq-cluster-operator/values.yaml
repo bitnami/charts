@@ -56,7 +56,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/rabbitmq-cluster-operator
-  tag: 1.10.0-scratch-r0
+  tag: 1.10.0-scratch-r1
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -157,10 +157,6 @@ customStartupProbe: {}
 resources:
   limits: {}
   requests: {}
-
-## @param installCRDs Install RabbitMQ Cluster CRD
-##
-installCRDs: true
 
 ## Configure Pods Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
