@@ -387,7 +387,9 @@ spec:
             path: /sys
         {{- end }}
         - name: redis-tmp-conf
-          emptyDir: {}
+          emptyDir: {
+            medium: "Memory"
+          }
         {{- if .Values.tls.enabled }}
         - name: redis-certificates
           secret:
@@ -402,7 +404,9 @@ spec:
         {{- end }}
   {{- if not .Values.replica.persistence.enabled }}
         - name: redis-data
-          emptyDir: {}
+          emptyDir: {
+            medium: "Memory"
+          }
   {{- else }}
   volumeClaimTemplates:
     - metadata:

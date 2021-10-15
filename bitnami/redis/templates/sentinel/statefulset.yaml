@@ -542,11 +542,17 @@ spec:
             path: /sys
         {{- end }}
         - name: sentinel-tmp-conf
-          emptyDir: {}
+          emptyDir: {
+            medium: "Memory"
+          }
         - name: redis-tmp-conf
-          emptyDir: {}
+          emptyDir: {
+            medium: "Memory"
+          }
         - name: tmp
-          emptyDir: {}
+          emptyDir: {
+            medium: "Memory"
+          }
         {{- if .Values.replica.extraVolumes }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.replica.extraVolumes "context" $ ) | nindent 8 }}
         {{- end }}
@@ -561,7 +567,9 @@ spec:
         {{- end }}
   {{- if not .Values.replica.persistence.enabled }}
         - name: redis-data
-          emptyDir: {}
+          emptyDir: {
+            medium: "Memory"
+          }
   {{- else }}
   volumeClaimTemplates:
     - metadata:

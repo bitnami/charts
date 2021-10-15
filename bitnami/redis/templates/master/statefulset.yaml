@@ -375,9 +375,13 @@ spec:
             path: /sys
         {{- end }}
         - name: redis-tmp-conf
-          emptyDir: {}
+          emptyDir: {
+            medium: "Memory"
+          }
         - name: tmp
-          emptyDir: {}
+          emptyDir: {
+            medium: "Memory"
+          }
         {{- if .Values.tls.enabled }}
         - name: redis-certificates
           secret:
@@ -392,7 +396,9 @@ spec:
         {{- end }}
   {{- if not .Values.master.persistence.enabled }}
         - name: redis-data
-          emptyDir: {}
+          emptyDir: {
+            medium: "Memory"
+          }
   {{- else if .Values.master.persistence.existingClaim }}
         - name: redis-data
           persistentVolumeClaim:
