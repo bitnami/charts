@@ -18,7 +18,7 @@ spec:
     # Allow inbound connections
     # CQL port
     - ports:
-        - port: {{ .Values.service.port }}
+        - port: {{ .Values.service.ports.cql }}
       from:
       {{- if not .Values.networkPolicy.allowExternal }}
         - podSelector:
