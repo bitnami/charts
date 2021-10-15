@@ -1354,6 +1354,13 @@ authProxy:
   ##   - --oidc-issuer-url=https://accounts.google.com # Only needed if provider is oidc
   ##
   additionalFlags: []
+  ## @param authProxy.extraEnvVars Array with extra environment variables to add to the Auth Proxy container
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
   ## @param authProxy.containerPort Auth Proxy HTTP container port
   ##
   containerPort: 3000
