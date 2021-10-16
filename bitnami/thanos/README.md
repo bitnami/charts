@@ -106,9 +106,9 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `image.tag`                   | Thanos image tag (immutable tags are recommended)                                         | `0.23.1-scratch-r0` |
 | `image.pullPolicy`            | Thanos image pull policy                                                                  | `IfNotPresent`      |
 | `image.pullSecrets`           | Specify docker-registry secret names as an array                                          | `[]`                |
-| `objstoreConfig`              | The [objstore configuration](https://thanos.io/storage.md/)                               | `""`                |
-| `indexCacheConfig`            | The [index cache configuration](https://thanos.io/components/store.md/)                   | `""`                |
-| `bucketCacheConfig`           | The [bucket cache configuration](https://thanos.io/components/store.md/)                  | `""`                |
+| `objstoreConfig`              | The [objstore configuration](https://thanos.io/tip/thanos/storage.md/)                    | `""`                |
+| `indexCacheConfig`            | The [index cache configuration](https://thanos.io/tip/components/store.md/)               | `""`                |
+| `bucketCacheConfig`           | The [bucket cache configuration](https://thanos.io/tip/components/store.md/)              | `""`                |
 | `existingObjstoreSecret`      | Secret with Objstore Configuration                                                        | `""`                |
 | `existingObjstoreSecretItems` | Optional item list for specifying a custom Secret key. If so, path should be objstore.yml | `[]`                |
 | `existingServiceAccount`      | Provide a common service account to be shared with all components                         | `""`                |

@@ -51,7 +51,7 @@ hub:
     repository: bitnami/jupyterhub
     ## @param hub.image.tag Hub image tag (immutabe tags are recommended)
     ##
-    tag: 1.4.2-debian-10-r65
+    tag: 1.4.2-debian-10-r76
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -180,7 +180,7 @@ hub:
           name: {{ include "jupyterhub.hubconfiguration.imageEntry" ( dict "imageRoot" .Values.auxiliaryImage "global" $) }}
           tag: {{ .Values.auxiliaryImage.tag }}
           pullPolicy: {{ .Values.auxiliaryImage.pullPolicy }}
-          pullSecrets: {{- include "jupyterhub.imagePullSecrets" . | nindent 8 }}
+          pullSecrets: {{- include "jupyterhub.imagePullSecrets.list" . | nindent 8 }}
       cloudMetadata:
         blockWithIptables: false
       events: true
@@ -246,7 +246,7 @@ hub:
         name: {{ include "jupyterhub.hubconfiguration.imageEntry" ( dict "imageRoot" .Values.singleuser.image "global" $) }}
         tag: {{ .Values.singleuser.image.tag }}
         pullPolicy: {{ .Values.singleuser.image.pullPolicy }}
-        pullSecrets: {{- include "jupyterhub.imagePullSecrets" . | nindent 8 }}
+        pullSecrets: {{- include "jupyterhub.imagePullSecrets.list" . | nindent 8 }}
       startTimeout: 300
       {{- /* We need to replace the Kubernetes memory/cpu terminology (e.g. 10Gi, 10Mi) with one compatible with Python (10G, 10M) */}}
       cpu:
@@ -566,7 +566,7 @@ proxy:
   image:
     registry: docker.io
     repository: bitnami/configurable-http-proxy
-    tag: 4.5.0-debian-10-r65
+    tag: 4.5.0-debian-10-r85
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -893,7 +893,7 @@ proxy:
     public:
       ## @param proxy.service.public.type Public service type
       ##
-      type: ClusterIP
+      type: LoadBalancer
       # HTTP Port
       ## @param proxy.service.public.port Public service port
       ##
@@ -1205,7 +1205,7 @@ singleuser:
   image:
     registry: docker.io
     repository: bitnami/jupyter-base-notebook
-    tag: 1.4.2-debian-10-r33
+    tag: 1.4.2-debian-10-r52
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1396,7 +1396,7 @@ singleuser:
 auxiliaryImage:
   registry: docker.io
   repository: bitnami/bitnami-shell
-  tag: 10-debian-10-r202
+  tag: 10-debian-10-r221
   pullPolicy: Always
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.

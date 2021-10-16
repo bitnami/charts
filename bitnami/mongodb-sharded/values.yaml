@@ -58,7 +58,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mongodb-sharded
-  tag: 4.4.9-debian-10-r22
+  tag: 4.4.10-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -208,7 +208,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r218
+    tag: 10-debian-10-r220
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1115,7 +1115,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mongodb-exporter
-    tag: 0.11.2-debian-10-r307
+    tag: 0.11.2-debian-10-r308
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

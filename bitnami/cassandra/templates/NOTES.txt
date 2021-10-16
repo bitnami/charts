@@ -25,7 +25,7 @@ In order to replicate the container startup scripts execute this command:
 
 Cassandra can be accessed through the following URLs from within the cluster:
 
-  - CQL: {{ include "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}:{{ .Values.service.port }}
+  - CQL: {{ include "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}:{{ .Values.service.ports.cql }}
 
 To get your password run:
 
@@ -74,8 +74,8 @@ To connect to your database from outside the cluster execute the following comma
 
 {{- else if contains "ClusterIP" .Values.service.type }}
 
-   kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "common.names.fullname" . }} {{ .Values.service.port }}:{{ .Values.service.port }} &
-   cqlsh -u {{ .Values.dbUser.user }} -p $CASSANDRA_PASSWORD 127.0.0.1 {{ .Values.service.port }}
+   kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "common.names.fullname" . }} {{ .Values.service.ports.cql }}:{{ .Values.service.ports.cql }} &
+   cqlsh -u {{ .Values.dbUser.user }} -p $CASSANDRA_PASSWORD 127.0.0.1 {{ .Values.service.ports.cql }}
 
 {{- end }}
 {{- end }}
