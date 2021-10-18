@@ -16,5 +16,5 @@ rules:
     verbs: ["use"]
     resourceNames:
       - {{ template "common.names.fullname" . }}
-        {{- end }}
   {{- end }}
+{{- end }}

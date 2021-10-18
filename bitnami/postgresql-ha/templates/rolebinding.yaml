@@ -17,4 +17,4 @@ subjects:
   - kind: ServiceAccount
     name: {{ default (include "common.names.fullname" . ) .Values.serviceAccount.name }}
     namespace: {{ .Release.Namespace }}
-  {{- end }}
+{{- end }}
