@@ -107,21 +107,25 @@ existingSecret: ""
 sonarqubeEmail: user@example.com
 ## @param minHeapSize Minimum heap size for SonarQube
 ##
-minHeapSize: ""
+minHeapSize: 1024m
 ## @param maxHeapSize Maximum heap size for SonarQube
 ##
-maxHeapSize: ""
+maxHeapSize: 2048m
 ## @param startTimeout Timeout for the application to start in seconds
 ##
-startTimeout: 300
+startTimeout: 150
+## @param extraProperties List of extra properties to be set in the sonar.properties file (key=value format)
+## e.g:
+## extraProperties:
+##   - my.sonar.property1=property_value1
+##   - my.sonar.property2=property_value2
+##
+extraProperties: []
 ## @param sonarqubeSkipInstall Skip wizard installation
 ## NOTE: useful if you use an external database that already contains SonarQube data
 ## ref: https://github.com/bitnami/bitnami-docker-sonarqube#connect-sonarqube-container-to-an-existing-database
 ##
 sonarqubeSkipInstall: false
-## @param existingConfigmap The name of an existing ConfigMap with your custom configuration for SonarQube
-##
-existingConfigmap:
 ## SMTP mail delivery configuration
 ## ref: https://github.com/bitnami/bitnami-docker-sonarqube/#smtp-configuration
 ## @param smtpHost SMTP server host
@@ -158,7 +162,7 @@ extraEnvVars: []
 extraEnvVarsCM:
 ## @param extraEnvVarsSecret Name of existing Secret containing extra env vars for SonarQube nodes
 ##
-extraEnvVarsSecret:
+extraEnvVarsSecret: ""
 
 ## @section SonarQube deployment parameters
 
@@ -170,8 +174,8 @@ replicaCount: 1
 ## @param containerPorts.elastic SonarQube Elasticsearch container port
 ##
 containerPorts:
-  http: 80
-  elastic: 443
+  http: 9000
+  elastic: 9001
 ## Configure extra options for SonarQube containers' liveness and readiness probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param livenessProbe.enabled Enable livenessProbe on SonarQube containers
@@ -183,7 +187,7 @@ containerPorts:
 ##
 livenessProbe:
   enabled: true
-  initialDelaySeconds: 300
+  initialDelaySeconds: 100
   periodSeconds: 10
   timeoutSeconds: 5
   failureThreshold: 6
@@ -197,7 +201,7 @@ livenessProbe:
 ##
 readinessProbe:
   enabled: true
-  initialDelaySeconds: 300
+  initialDelaySeconds: 100
   periodSeconds: 10
   timeoutSeconds: 5
   failureThreshold: 6
@@ -228,11 +232,13 @@ customStartupProbe: {}
 ## SonarQube resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ## @param resources.limits The resources limits for the SonarQube containers
-## @param resources.requests The requested resources for the SonarQube containers
+## @param resources.requests [object] The requested resources for the SonarQube containers
 ##
 resources:
   limits: {}
-  requests: {}
+  requests:
+    cpu: 100m
+    memory: 2048Mi
 ## Configure Pods Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param podSecurityContext.enabled Enabled SonarQube pods' Security Context
@@ -359,25 +365,25 @@ service:
   ## @param service.ports.elastic SonarQube service ElasticSearch port
   ##
   ports:
-    http: 80
-    elastic: 443
+    http: 9000
+    elastic: 9001
   ## Node ports to expose
   ## @param service.nodePorts.http Node port for HTTP
   ## @param service.nodePorts.elastic Node port for ElasticSearch
   ## NOTE: choose port between <30000-32767>
   ##
   nodePorts:
-    http:
-    elastic:
+    http: ""
+    elastic: ""
   ## @param service.clusterIP SonarQube service Cluster IP
   ## e.g.:
   ## clusterIP: None
   ##
-  clusterIP:
+  clusterIP: ""
   ## @param service.loadBalancerIP SonarQube service Load Balancer IP
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
   ##
-  loadBalancerIP:
+  loadBalancerIP: ""
   ## @param service.loadBalancerSourceRanges SonarQube service Load Balancer sources
   ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
   ## e.g:
@@ -407,7 +413,7 @@ ingress:
   pathType: ImplementationSpecific
   ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
   ##
-  apiVersion:
+  apiVersion: ""
   ## @param ingress.hostname Default host for the ingress record
   ##
   hostname: sonarqube.local
@@ -555,6 +561,44 @@ volumePermissions:
   ##
   containerSecurityContext:
     runAsUser: 0
+
+## @section Sysctl Image parameters
+
+## Kernel settings modifier image
+##
+sysctl:
+  ## @param sysctl.enabled Enable kernel settings modifier image
+  ##
+  enabled: true
+  ## Bitnami Shell image
+  ## ref: https://hub.docker.com/r/bitnami/bitnami-shell/tags/
+  ## @param sysctl.image.registry Bitnami Shell image registry
+  ## @param sysctl.image.repository Bitnami Shell image repository
+  ## @param sysctl.image.tag Bitnami Shell image tag (immutable tags are recommended)
+  ## @param sysctl.image.pullPolicy Bitnami Shell image pull policy
+  ## @param sysctl.image.pullSecrets Bitnami Shell image pull secrets
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/bitnami-shell
+    tag: "10"
+    pullPolicy: Always
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+  ## Init container's resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param sysctl.resources.limits The resources limits for the init container
+  ## @param sysctl.resources.requests The requested resources for the init container
+  ##
+  resources:
+    limits: {}
+    requests: {}
 
 ## @section Other Parameters
 

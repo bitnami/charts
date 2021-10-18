@@ -55,8 +55,26 @@ spec:
       {{- if .Values.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
+      {{- if or .Values.initContainers .Values.sysctl.enabled (and .Values.volumePermissions.enabled .Values.persistence.enabled) }}
       initContainers:
-        {{- if .Values.volumePermissions.enabled }}
+        {{- if .Values.sysctl.enabled }}
+        ## Image that performs the sysctl operation to modify Kernel settings (needed sometimes to avoid boot errors)
+        - name: sysctl
+          image: {{ include "sonarqube.sysctl.image" . }}
+          imagePullPolicy: {{ .Values.sysctl.image.pullPolicy | quote }}
+          command:
+            - /bin/bash
+            - -ec
+            - |
+              {{- include "sonarqube.sysctl.ifLess" (dict "key" "vm.max_map_count" "value" "262144") | nindent 14 }}
+              {{- include "sonarqube.sysctl.ifLess" (dict "key" "fs.file-max" "value" "65536") | nindent 14 }}
+          securityContext:
+            privileged: true
+          {{- if .Values.sysctl.resources }}
+          resources: {{- toYaml .Values.sysctl.resources | nindent 12 }}
+          {{- end }}
+        {{- end }}
+        {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
         - name: volume-permissions
           image: {{ include "sonarqube.volumePermissions.image" . }}
           imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
@@ -81,6 +99,7 @@ spec:
         {{- if .Values.initContainers }}
           {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
         {{- end }}
+      {{- end }}
       containers:
         - name: sonarqube
           image: {{ template "sonarqube.image" . }}
@@ -162,6 +181,10 @@ spec:
               value: {{ .Values.containerPorts.http | quote }}
             - name: SONARQUBE_ELASTICSEARCH_PORT_NUMBER
               value: {{ .Values.containerPorts.elastic | quote }}
+            {{- if .Values.extraProperties }}
+            - name: SONARQUBE_EXTRA_PROPERTIES
+              value: {{ join "," .Values.extraProperties | quote }}
+            {{- end }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}

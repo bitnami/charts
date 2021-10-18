@@ -13,10 +13,17 @@ Return the proper image name (for the init container volume-permissions image)
 {{- end -}}
 
 {{/*
+Return the proper sysctl image name
+*/}}
+{{- define "sonarqube.sysctl.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.sysctl.image "global" .Values.global) }}
+{{- end -}}
+
+{{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "sonarqube.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.volumePermissions.image) "global" .Values.global) -}}
+{{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.volumePermissions.image .Values.sysctl.image) "global" .Values.global) -}}
 {{- end -}}
 
 {{/*
@@ -119,6 +126,17 @@ Return the SMTP Secret Name
 {{- else -}}
     {{- printf "%s" (include "common.names.fullname" .) -}}
 {{- end -}}
+{{- end -}}
+
+{{/*
+Sysctl set a property if less than a given value
+*/}}
+{{- define "sonarqube.sysctl.ifLess" -}}
+CURRENT="$(sysctl -n {{ .key }})"
+DESIRED="{{ .value }}"
+if [[ "$DESIRED" -gt "$CURRENT" ]]; then
+    sysctl -w {{ .key }}={{ .value }}
+fi
 {{- end -}}
 
 {{/*
