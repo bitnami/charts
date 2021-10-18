@@ -386,7 +386,6 @@ If your ingress controller has the SSL Termination, you can add the following en
 - name: KEYCLOAK_FRONTEND_URL
   value: "https://keycloak.xxx"
 ```
-[Source](https://github.com/bitnami/charts/issues/6940)
 
 ### Manage secrets and passwords
 
