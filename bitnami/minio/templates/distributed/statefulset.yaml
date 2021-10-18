@@ -136,26 +136,26 @@ spec:
             - name: MINIO_SCHEME
               value: {{ ternary "https" "http" .Values.tls.enabled | quote }}
             - name: MINIO_FORCE_NEW_KEYS
-              value: {{ ternary "yes" "no" .Values.forceNewKeys | quote }}
-            {{- if .Values.useCredentialsFile }}
-            - name: MINIO_ACCESS_KEY_FILE
-              value: "/opt/bitnami/minio/secrets/access-key"
+              value: {{ ternary "yes" "no" .Values.auth.forceNewKeys | quote }}
+            {{- if .Values.auth.useCredentialsFiles }}
+            - name: MINIO_ROOT_USER_FILE
+              value: "/opt/bitnami/minio/secrets/root-username"
             {{- else }}
-            - name: MINIO_ACCESS_KEY
+            - name: MINIO_ROOT_USER
               valueFrom:
                 secretKeyRef:
                   name: {{ include "minio.secretName" . }}
-                  key: access-key
+                  key: root-username
             {{- end }}
-            {{- if .Values.useCredentialsFile }}
-            - name: MINIO_SECRET_KEY_FILE
-              value: "/opt/bitnami/minio/secrets/secret-key"
+            {{- if .Values.auth.useCredentialsFiles }}
+            - name: MINIO_ROOT_PASSWORD_FILE
+              value: "/opt/bitnami/minio/secrets/root-password"
             {{- else }}
-            - name: MINIO_SECRET_KEY
+            - name: MINIO_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "minio.secretName" . }}
-                  key: secret-key
+                  key: root-password
             {{- end }}
             - name: MINIO_SKIP_CLIENT
               value: {{ ternary "yes" "no" (empty .Values.defaultBuckets) | quote }}
@@ -234,7 +234,7 @@ spec:
           resources: {{- toYaml .Values.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
-            {{- if .Values.useCredentialsFile }}
+            {{- if .Values.auth.useCredentialsFiles }}
             - name: minio-credentials
               mountPath: /opt/bitnami/minio/secrets/
             {{- end }}
@@ -258,7 +258,7 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
-        {{- if .Values.useCredentialsFile }}
+        {{- if .Values.auth.useCredentialsFiles }}
         - name: minio-credentials
           secret:
             secretName: {{ include "minio.secretName" . }}
