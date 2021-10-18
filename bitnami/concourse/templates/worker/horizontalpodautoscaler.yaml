@@ -1,0 +1,25 @@
+{{- if and .Values.worker.autoscaling.enabled .Values.worker.autoscaling.maxReplicas }}
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "common.names.fullname" . }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: worker
+    {{- if .Values.commonLabels }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
+    {{- end }}
+spec:
+  minReplicas: {{ .Values.worker.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.worker.autoscaling.maxReplicas }}
+  metrics:
+    {{- if .Values.worker.autoscaling.builtInMetrics }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.worker.autoscaling.builtInMetrics "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.worker.autoscaling.customMetrics }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.worker.autoscaling.customMetrics "context" $) | nindent 4 }}
+    {{- end }}
+  scaleTargetRef:
+    apiVersion: {{ template "common.capabilities.deployment.apiVersion" . }}
+    kind: {{ .Values.worker.mode }}
+    name: {{ include "common.names.fullname" . }}
+{{- end }}

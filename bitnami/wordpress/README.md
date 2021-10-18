@@ -52,21 +52,26 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                      | Description                                     | Value |
 | ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `nil` |
+| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `nil` |
+| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
+
 
 ### Common parameters
 
-| Name                | Description                                        | Value           |
-| ------------------- | -------------------------------------------------- | --------------- |
-| `kubeVersion`       | Override Kubernetes version                        | `nil`           |
-| `nameOverride`      | String to partially override common.names.fullname | `nil`           |
-| `fullnameOverride`  | String to fully override common.names.fullname     | `nil`           |
-| `commonLabels`      | Labels to add to all deployed objects              | `{}`            |
-| `commonAnnotations` | Annotations to add to all deployed objects         | `{}`            |
-| `clusterDomain`     | Kubernetes cluster domain name                     | `cluster.local` |
-| `extraDeploy`       | Array of extra objects to deploy with the release  | `[]`            |
+| Name                     | Description                                                                             | Value           |
+| ------------------------ | --------------------------------------------------------------------------------------- | --------------- |
+| `kubeVersion`            | Override Kubernetes version                                                             | `""`            |
+| `nameOverride`           | String to partially override common.names.fullname                                      | `""`            |
+| `fullnameOverride`       | String to fully override common.names.fullname                                          | `""`            |
+| `commonLabels`           | Labels to add to all deployed objects                                                   | `{}`            |
+| `commonAnnotations`      | Annotations to add to all deployed objects                                              | `{}`            |
+| `clusterDomain`          | Kubernetes cluster domain name                                                          | `cluster.local` |
+| `extraDeploy`            | Array of extra objects to deploy with the release                                       | `[]`            |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`     |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]`  |
+
 
 ### WordPress Image parameters
 
@@ -74,58 +79,61 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ---------------------------------------------------- | --------------------- |
 | `image.registry`    | WordPress image registry                             | `docker.io`           |
 | `image.repository`  | WordPress image repository                           | `bitnami/wordpress`   |
-| `image.tag`         | WordPress image tag (immutable tags are recommended) | `5.7.1-debian-10-r11` |
+| `image.tag`         | WordPress image tag (immutable tags are recommended) | `5.8.1-debian-10-r36` |
 | `image.pullPolicy`  | WordPress image pull policy                          | `IfNotPresent`        |
 | `image.pullSecrets` | WordPress image pull secrets                         | `[]`                  |
 | `image.debug`       | Enable image debug mode                              | `false`               |
 
+
 ### WordPress Configuration parameters
 
-| Name                                   | Description                                                                               | Value              |
-| -------------------------------------- | ----------------------------------------------------------------------------------------- | ------------------ |
-| `wordpressUsername`                    | WordPress username                                                                        | `user`             |
-| `wordpressPassword`                    | WordPress user password                                                                   | `""`               |
-| `existingSecret`                       | Name of existing secret containing WordPress credentials                                  | `nil`              |
-| `wordpressEmail`                       | WordPress user email                                                                      | `user@example.com` |
-| `wordpressFirstName`                   | WordPress user first name                                                                 | `FirstName`        |
-| `wordpressLastName`                    | WordPress user last name                                                                  | `LastName`         |
-| `wordpressBlogName`                    | Blog name                                                                                 | `User's Blog!`     |
-| `wordpressTablePrefix`                 | Prefix to use for WordPress database tables                                               | `wp_`              |
-| `wordpressScheme`                      | Scheme to use to generate WordPress URLs                                                  | `http`             |
-| `wordpressSkipInstall`                 | Skip wizard installation                                                                  | `false`            |
-| `wordpressExtraConfigContent`          | Add extra content to the default wp-config.php file                                       | `nil`              |
-| `wordpressConfiguration`               | The content for your custom wp-config.php file (experimental feature)                     | `nil`              |
-| `existingWordPressConfigurationSecret` | The name of an existing secret with your custom wp-config.php file (experimental feature) | `nil`              |
-| `wordpressConfigureCache`              | Enable W3 Total Cache plugin and configure cache settings                                 | `false`            |
-| `wordpressAutoUpdateLevel`             | Level of auto-updates to allow. Allowed values: `major`, `minor` or `none`.               | `none`             |
-| `wordpressPlugins`                     | Array of plugins to install and activate. Can be specified as `all` or `none`.            | `none`             |
-| `apacheConfiguration`                  | The content for your custom httpd.conf file (advanced feature)                            | `nil`              |
-| `existingApacheConfigurationConfigMap` | The name of an existing secret with your custom wp-config.php file (advanced feature)     | `nil`              |
-| `customPostInitScripts`                | Custom post-init.d user scripts                                                           | `{}`               |
-| `smtpHost`                             | SMTP server host                                                                          | `""`               |
-| `smtpPort`                             | SMTP server port                                                                          | `""`               |
-| `smtpUser`                             | SMTP username                                                                             | `""`               |
-| `smtpPassword`                         | SMTP user password                                                                        | `""`               |
-| `smtpProtocol`                         | SMTP protocol                                                                             | `""`               |
-| `smtpExistingSecret`                   | The name of an existing secret with SMTP credentials                                      | `nil`              |
-| `allowEmptyPassword`                   | Allow the container to be started with blank passwords                                    | `true`             |
-| `allowOverrideNone`                    | Configure Apache to prohibit overriding directives with htaccess files                    | `false`            |
-| `htaccessPersistenceEnabled`           | Persist custom changes on htaccess files                                                  | `false`            |
-| `customHTAccessCM`                     | The name of an existing ConfigMap with custom htaccess rules                              | `nil`              |
-| `command`                              | Override default container command (useful when using custom images)                      | `[]`               |
-| `args`                                 | Override default container args (useful when using custom images)                         | `[]`               |
-| `extraEnvVars`                         | Array with extra environment variables to add to the WordPress container                  | `[]`               |
-| `extraEnvVarsCM`                       | Name of existing ConfigMap containing extra env vars                                      | `nil`              |
-| `extraEnvVarsSecret`                   | Name of existing Secret containing extra env vars                                         | `nil`              |
+| Name                                   | Description                                                                           | Value              |
+| -------------------------------------- | ------------------------------------------------------------------------------------- | ------------------ |
+| `wordpressUsername`                    | WordPress username                                                                    | `user`             |
+| `wordpressPassword`                    | WordPress user password                                                               | `""`               |
+| `existingSecret`                       | Name of existing secret containing WordPress credentials                              | `""`               |
+| `wordpressEmail`                       | WordPress user email                                                                  | `user@example.com` |
+| `wordpressFirstName`                   | WordPress user first name                                                             | `FirstName`        |
+| `wordpressLastName`                    | WordPress user last name                                                              | `LastName`         |
+| `wordpressBlogName`                    | Blog name                                                                             | `User's Blog!`     |
+| `wordpressTablePrefix`                 | Prefix to use for WordPress database tables                                           | `wp_`              |
+| `wordpressScheme`                      | Scheme to use to generate WordPress URLs                                              | `http`             |
+| `wordpressSkipInstall`                 | Skip wizard installation                                                              | `false`            |
+| `wordpressExtraConfigContent`          | Add extra content to the default wp-config.php file                                   | `""`               |
+| `wordpressConfiguration`               | The content for your custom wp-config.php file (advanced feature)                     | `""`               |
+| `existingWordPressConfigurationSecret` | The name of an existing secret with your custom wp-config.php file (advanced feature) | `""`               |
+| `wordpressConfigureCache`              | Enable W3 Total Cache plugin and configure cache settings                             | `false`            |
+| `wordpressAutoUpdateLevel`             | Level of auto-updates to allow. Allowed values: `major`, `minor` or `none`.           | `none`             |
+| `wordpressPlugins`                     | Array of plugins to install and activate. Can be specified as `all` or `none`.        | `none`             |
+| `apacheConfiguration`                  | The content for your custom httpd.conf file (advanced feature)                        | `""`               |
+| `existingApacheConfigurationConfigMap` | The name of an existing secret with your custom httpd.conf file (advanced feature)    | `""`               |
+| `customPostInitScripts`                | Custom post-init.d user scripts                                                       | `{}`               |
+| `smtpHost`                             | SMTP server host                                                                      | `""`               |
+| `smtpPort`                             | SMTP server port                                                                      | `""`               |
+| `smtpUser`                             | SMTP username                                                                         | `""`               |
+| `smtpPassword`                         | SMTP user password                                                                    | `""`               |
+| `smtpProtocol`                         | SMTP protocol                                                                         | `""`               |
+| `smtpExistingSecret`                   | The name of an existing secret with SMTP credentials                                  | `""`               |
+| `allowEmptyPassword`                   | Allow the container to be started with blank passwords                                | `true`             |
+| `allowOverrideNone`                    | Configure Apache to prohibit overriding directives with htaccess files                | `false`            |
+| `htaccessPersistenceEnabled`           | Persist custom changes on htaccess files                                              | `false`            |
+| `customHTAccessCM`                     | The name of an existing ConfigMap with custom htaccess rules                          | `""`               |
+| `command`                              | Override default container command (useful when using custom images)                  | `[]`               |
+| `args`                                 | Override default container args (useful when using custom images)                     | `[]`               |
+| `extraEnvVars`                         | Array with extra environment variables to add to the WordPress container              | `[]`               |
+| `extraEnvVarsCM`                       | Name of existing ConfigMap containing extra env vars                                  | `""`               |
+| `extraEnvVarsSecret`                   | Name of existing Secret containing extra env vars                                     | `""`               |
+
 
 ### WordPress Multisite Configuration parameters
 
-| Name                            | Description                                                                                                                        | Value              |
-| ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
-| `multisite.enable`              | Whether to enable WordPress Multisite configuration.                                                                               | `false`            |
-| `multisite.host`                | WordPress Multisite hostname/address. This value is mandatory when enabling Multisite mode.                                        | `""`               |
-| `multisite.networkType`         | WordPress Multisite network type to enable. Allowed values: `subfolder`, `subdirectory` or `subdomain`.                            | `subdomain`        |
-| `multisite.enableNipIoRedirect` | Whether to enable IP address redirection to nip.io wildcard DNS. Useful when running on an IP address with subdomain network type. | `false`            |
+| Name                            | Description                                                                                                                        | Value       |
+| ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| `multisite.enable`              | Whether to enable WordPress Multisite configuration.                                                                               | `false`     |
+| `multisite.host`                | WordPress Multisite hostname/address. This value is mandatory when enabling Multisite mode.                                        | `""`        |
+| `multisite.networkType`         | WordPress Multisite network type to enable. Allowed values: `subfolder`, `subdirectory` or `subdomain`.                            | `subdomain` |
+| `multisite.enableNipIoRedirect` | Whether to enable IP address redirection to nip.io wildcard DNS. Useful when running on an IP address with subdomain network type. | `false`     |
+
 
 ### WordPress deployment parameters
 
@@ -134,13 +142,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `replicaCount`                          | Number of WordPress replicas to deploy                                                    | `1`             |
 | `updateStrategy.type`                   | WordPress deployment strategy type                                                        | `RollingUpdate` |
 | `updateStrategy.rollingUpdate`          | WordPress deployment rolling update configuration parameters                              | `{}`            |
-| `schedulerName`                         | Alternate scheduler                                                                       | `nil`           |
+| `schedulerName`                         | Alternate scheduler                                                                       | `""`            |
 | `serviceAccountName`                    | ServiceAccount name                                                                       | `default`       |
 | `hostAliases`                           | WordPress pod host aliases                                                                | `[]`            |
 | `extraVolumes`                          | Optionally specify extra list of additional volumes for WordPress pods                    | `[]`            |
 | `extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for WordPress container(s)       | `[]`            |
-| `sidecars`                              | Add additional sidecar containers to the WordPress pod                                    | `{}`            |
-| `initContainers`                        | Add additional init containers to the WordPress pods                                      | `{}`            |
+| `extraContainerPorts`                   | Optionally specify extra list of additional ports for WordPress container(s)              | `[]`            |
+| `sidecars`                              | Add additional sidecar containers to the WordPress pod                                    | `[]`            |
+| `initContainers`                        | Add additional init containers to the WordPress pods                                      | `[]`            |
 | `podLabels`                             | Extra labels for WordPress pods                                                           | `{}`            |
 | `podAnnotations`                        | Annotations for WordPress pods                                                            | `{}`            |
 | `podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`            |
@@ -175,55 +184,58 @@ The command removes all the Kubernetes components associated with the chart and 
 | `customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                       | `{}`            |
 | `customReadinessProbe`                  | Custom readinessProbe that overrides the default one                                      | `{}`            |
 
+
 ### Traffic Exposure Parameters
 
-| Name                               | Description                                                                                           | Value                    |
-| ---------------------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------ |
-| `service.type`                     | WordPress service type                                                                                | `LoadBalancer`           |
-| `service.port`                     | WordPress service HTTP port                                                                           | `80`                     |
-| `service.httpsPort`                | WordPress service HTTPS port                                                                          | `443`                    |
-| `service.httpsTargetPort`          | Target port for HTTPS                                                                                 | `https`                  |
-| `service.nodePorts.http`           | Node port for HTTP                                                                                    | `nil`                    |
-| `service.nodePorts.https`          | Node port for HTTPS                                                                                   | `nil`                    |
-| `service.clusterIP`                | WordPress service Cluster IP                                                                          | `nil`                    |
-| `service.loadBalancerIP`           | WordPress service Load Balancer IP                                                                    | `nil`                    |
-| `service.loadBalancerSourceRanges` | WordPress service Load Balancer sources                                                               | `[]`                     |
-| `service.externalTrafficPolicy`    | WordPress service external traffic policy                                                             | `Cluster`                |
-| `service.annotations`              | Additional custom annotations for WordPress service                                                   | `{}`                     |
-| `service.extraPorts`               | Extra port to expose on WordPress service                                                             | `[]`                     |
-| `ingress.enabled`                  | Enable ingress record generation for WordPress                                                        | `false`                  |
-| `ingress.certManager`              | Add the corresponding annotations for cert-manager integration                                        | `false`                  |
-| `ingress.pathType`                 | Ingress path type                                                                                     | `ImplementationSpecific` |
-| `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                         | `nil`                    |
-| `ingress.hostname`                 | Default host for the ingress record                                                                   | `wordpress.local`        |
-| `ingress.path`                     | Default path for the ingress record                                                                   | `/`                      |
-| `ingress.annotations`              | Additional custom annotations for the ingress record                                                  | `{}`                     |
-| `ingress.tls`                      | Enable TLS configuration for the host defined at `ingress.hostname` parameter                         | `false`                  |
-| `ingress.extraHosts`               | An array with additional hostname(s) to be covered with the ingress record                            | `[]`                     |
-| `ingress.extraPaths`               | An array with additional arbitrary paths that may need to be added to the ingress under the main host | `[]`                     |
-| `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                   | `[]`                     |
-| `ingress.secrets`                  | Custom TLS certificates as secrets                                                                    | `[]`                     |
+| Name                               | Description                                                                                                                      | Value                    |
+| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.type`                     | WordPress service type                                                                                                           | `LoadBalancer`           |
+| `service.port`                     | WordPress service HTTP port                                                                                                      | `80`                     |
+| `service.httpsPort`                | WordPress service HTTPS port                                                                                                     | `443`                    |
+| `service.httpsTargetPort`          | Target port for HTTPS                                                                                                            | `https`                  |
+| `service.nodePorts.http`           | Node port for HTTP                                                                                                               | `""`                     |
+| `service.nodePorts.https`          | Node port for HTTPS                                                                                                              | `""`                     |
+| `service.clusterIP`                | WordPress service Cluster IP                                                                                                     | `""`                     |
+| `service.loadBalancerIP`           | WordPress service Load Balancer IP                                                                                               | `""`                     |
+| `service.loadBalancerSourceRanges` | WordPress service Load Balancer sources                                                                                          | `[]`                     |
+| `service.externalTrafficPolicy`    | WordPress service external traffic policy                                                                                        | `Cluster`                |
+| `service.annotations`              | Additional custom annotations for WordPress service                                                                              | `{}`                     |
+| `service.extraPorts`               | Extra port to expose on WordPress service                                                                                        | `[]`                     |
+| `ingress.enabled`                  | Enable ingress record generation for WordPress                                                                                   | `false`                  |
+| `ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
+| `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
+| `ingress.hostname`                 | Default host for the ingress record                                                                                              | `wordpress.local`        |
+| `ingress.path`                     | Default path for the ingress record                                                                                              | `/`                      |
+| `ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.tls`                      | Enable TLS configuration for the host defined at `ingress.hostname` parameter                                                    | `false`                  |
+| `ingress.extraHosts`               | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                     |
+| `ingress.extraPaths`               | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |
+| `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
+| `ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
+
 
 ### Persistence Parameters
 
 | Name                                          | Description                                                                                     | Value                   |
 | --------------------------------------------- | ----------------------------------------------------------------------------------------------- | ----------------------- |
 | `persistence.enabled`                         | Enable persistence using Persistent Volume Claims                                               | `true`                  |
-| `persistence.storageClass`                    | Persistent Volume storage class                                                                 | `nil`                   |
-| `persistence.accessModes`                     | Persistent Volume access modes                                                                  | `[ReadWriteOnce]`       |
+| `persistence.storageClass`                    | Persistent Volume storage class                                                                 | `""`                    |
+| `persistence.accessModes`                     | Persistent Volume access modes                                                                  | `[]`                    |
 | `persistence.accessMode`                      | Persistent Volume access mode (DEPRECATED: use `persistence.accessModes` instead)               | `ReadWriteOnce`         |
 | `persistence.size`                            | Persistent Volume size                                                                          | `10Gi`                  |
 | `persistence.dataSource`                      | Custom PVC data source                                                                          | `{}`                    |
-| `persistence.existingClaim`                   | The name of an existing PVC to use for persistence                                              | `nil`                   |
+| `persistence.existingClaim`                   | The name of an existing PVC to use for persistence                                              | `""`                    |
 | `volumePermissions.enabled`                   | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`            | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`          | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                        | `10`                    |
+| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r220`     |
 | `volumePermissions.image.pullPolicy`          | Bitnami Shell image pull policy                                                                 | `Always`                |
 | `volumePermissions.image.pullSecrets`         | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`          | The resources limits for the init container                                                     | `{}`                    |
 | `volumePermissions.resources.requests`        | The requested resources for the init container                                                  | `{}`                    |
 | `volumePermissions.securityContext.runAsUser` | Set init container's Security Context runAsUser                                                 | `0`                     |
+
 
 ### Other Parameters
 
@@ -231,12 +243,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------- | -------------------------------------------------------------- | ------- |
 | `pdb.create`               | Enable a Pod Disruption Budget creation                        | `false` |
 | `pdb.minAvailable`         | Minimum number/percentage of pods that should remain scheduled | `1`     |
-| `pdb.maxUnavailable`       | Maximum number/percentage of pods that may be made unavailable | `nil`   |
+| `pdb.maxUnavailable`       | Maximum number/percentage of pods that may be made unavailable | `""`    |
 | `autoscaling.enabled`      | Enable Horizontal POD autoscaling for WordPress                | `false` |
 | `autoscaling.minReplicas`  | Minimum number of WordPress replicas                           | `1`     |
 | `autoscaling.maxReplicas`  | Maximum number of WordPress replicas                           | `11`    |
 | `autoscaling.targetCPU`    | Target CPU utilization percentage                              | `50`    |
 | `autoscaling.targetMemory` | Target Memory utilization percentage                           | `50`    |
+
 
 ### Metrics Parameters
 
@@ -245,7 +258,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                         | Start a sidecar prometheus exporter to expose metrics                        | `false`                   |
 | `metrics.image.registry`                  | Apache Exporter image registry                                               | `docker.io`               |
 | `metrics.image.repository`                | Apache Exporter image repository                                             | `bitnami/apache-exporter` |
-| `metrics.image.tag`                       | Apache Exporter image tag (immutable tags are recommended)                   | `0.8.0-debian-10-r364`    |
+| `metrics.image.tag`                       | Apache Exporter image tag (immutable tags are recommended)                   | `0.10.1-debian-10-r22`    |
 | `metrics.image.pullPolicy`                | Apache Exporter image pull policy                                            | `IfNotPresent`            |
 | `metrics.image.pullSecrets`               | Apache Exporter image pull secrets                                           | `[]`                      |
 | `metrics.resources.limits`                | The resources limits for the Prometheus exporter container                   | `{}`                      |
@@ -253,10 +266,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.service.port`                    | Metrics service port                                                         | `9117`                    |
 | `metrics.service.annotations`             | Additional custom annotations for Metrics service                            | `{}`                      |
 | `metrics.serviceMonitor.enabled`          | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator | `false`                   |
-| `metrics.serviceMonitor.namespace`        | The namespace in which the ServiceMonitor will be created                    | `nil`                     |
+| `metrics.serviceMonitor.namespace`        | The namespace in which the ServiceMonitor will be created                    | `""`                      |
 | `metrics.serviceMonitor.interval`         | The interval at which metrics should be scraped                              | `30s`                     |
-| `metrics.serviceMonitor.scrapeTimeout`    | The timeout after which the scrape is ended                                  | `nil`                     |
-| `metrics.serviceMonitor.relabellings`     | Metrics relabellings to add to the scrape endpoint                           | `nil`                     |
+| `metrics.serviceMonitor.scrapeTimeout`    | The timeout after which the scrape is ended                                  | `""`                      |
+| `metrics.serviceMonitor.relabellings`     | Metrics relabellings to add to the scrape endpoint                           | `[]`                      |
 | `metrics.serviceMonitor.honorLabels`      | Labels to honor to add to the scrape endpoint                                | `false`                   |
 | `metrics.serviceMonitor.additionalLabels` | Additional custom labels for the ServiceMonitor                              | `{}`                      |
 
@@ -272,19 +285,20 @@ The command removes all the Kubernetes components associated with the chart and 
 | `mariadb.auth.username`                    | MariaDB custom user name                                                  | `bn_wordpress`      |
 | `mariadb.auth.password`                    | MariaDB custom user password                                              | `""`                |
 | `mariadb.primary.persistence.enabled`      | Enable persistence on MariaDB using PVC(s)                                | `true`              |
-| `mariadb.primary.persistence.storageClass` | Persistent Volume storage class                                           | `nil`               |
-| `mariadb.primary.persistence.accessModes`  | Persistent Volume access modes                                            | `[ReadWriteOnce]`   |
+| `mariadb.primary.persistence.storageClass` | Persistent Volume storage class                                           | `""`                |
+| `mariadb.primary.persistence.accessModes`  | Persistent Volume access modes                                            | `[]`                |
 | `mariadb.primary.persistence.size`         | Persistent Volume size                                                    | `8Gi`               |
 | `externalDatabase.host`                    | External Database server host                                             | `localhost`         |
 | `externalDatabase.port`                    | External Database server port                                             | `3306`              |
 | `externalDatabase.user`                    | External Database username                                                | `bn_wordpress`      |
 | `externalDatabase.password`                | External Database user password                                           | `""`                |
 | `externalDatabase.database`                | External Database database name                                           | `bitnami_wordpress` |
-| `externalDatabase.existingSecret`          | The name of an existing secret with database credentials                  | `nil`               |
+| `externalDatabase.existingSecret`          | The name of an existing secret with database credentials                  | `""`                |
 | `memcached.enabled`                        | Deploy a Memcached server for caching database queries                    | `false`             |
 | `memcached.service.port`                   | Memcached service port                                                    | `11211`             |
 | `externalCache.host`                       | External cache server host                                                | `localhost`         |
 | `externalCache.port`                       | External cache server port                                                | `11211`             |
+
 
 The above parameters map to the env variables defined in [bitnami/wordpress](http://github.com/bitnami/bitnami-docker-wordpress). For more information please refer to the [bitnami/wordpress](http://github.com/bitnami/bitnami-docker-wordpress) image documentation.
 
@@ -426,6 +440,12 @@ In addition, several new features have been implemented:
 To enable the new features, it is not possible to do it by upgrading an existing deployment. Instead, it is necessary to perform a fresh deploy.
 
 ## Upgrading
+
+### To 12.0.0
+
+WordPress version was bumped to its latest major, `5.8.x`. Though no incompatibilities are expected while upgrading from previous versions, WordPress recommends backing up your application first.
+
+Site backups can be easily performed using tools such as [VaultPress](https://vaultpress.com/) or [All-in-One WP Migration](https://wordpress.org/plugins/all-in-one-wp-migration/).
 
 ### To 11.0.0
 

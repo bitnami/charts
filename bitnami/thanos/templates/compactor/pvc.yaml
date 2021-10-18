@@ -5,6 +5,9 @@ metadata:
   name: {{ include "common.names.fullname" . }}-compactor
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: compactor
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
 spec:
   accessModes:
   {{- range .Values.compactor.persistence.accessModes }}

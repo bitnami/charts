@@ -51,13 +51,63 @@ Return  the proper Storage Class
 {{- end -}}
 
 {{/*
+Return the Postgresql hostname
+*/}}
+{{- define "odoo.databaseHost" -}}
+{{- if .Values.postgresql.enabled }}
+    {{- printf "%s" (include "odoo.postgresql.fullname" .) -}}
+{{- else -}}
+    {{- printf "%s" .Values.externalDatabase.host -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the Postgresql port
+*/}}
+{{- define "odoo.databasePort" -}}
+{{- if .Values.postgresql.enabled }}
+    {{- printf "5432" | quote -}}
+{{- else -}}
+    {{- .Values.externalDatabase.port | quote -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the Postgresql database name
+*/}}
+{{- define "odoo.databaseName" -}}
+{{- if .Values.postgresql.enabled }}
+    {{- printf "%s" .Values.postgresql.postgresqlDatabase -}}
+{{- else -}}
+    {{- printf "%s" .Values.externalDatabase.database -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the Postgresql user
+*/}}
+{{- define "odoo.databaseUser" -}}
+{{- if .Values.postgresql.enabled }}
+    {{- printf "%s" .Values.postgresql.postgresqlUsername -}}
+{{- else -}}
+    {{- printf "%s" .Values.externalDatabase.user -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the PostgreSQL Secret Name
 */}}
 {{- define "odoo.databaseSecretName" -}}
 {{- if .Values.postgresql.enabled }}
-    {{- printf "%s" (include "odoo.postgresql.fullname" .) -}}
+    {{- if .Values.postgresql.existingSecret }}
+        {{- printf "%s" .Values.postgresql.existingSecret -}}
+    {{- else -}}
+        {{- printf "%s" (include "odoo.postgresql.fullname" .) -}}
+    {{- end -}}
+{{- else if .Values.externalDatabase.existingSecret }}
+    {{- printf "%s" .Values.externalDatabase.existingSecret -}}
 {{- else -}}
-    {{- printf "%s-%s" .Release.Name "externaldb" -}}
+    {{- printf "%s-externaldb" (include "common.names.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 
@@ -66,4 +116,32 @@ Odoo credential secret name
 */}}
 {{- define "odoo.secretName" -}}
 {{- coalesce .Values.existingSecret (include "odoo.fullname" .) -}}
+{{- end -}}
+
+{{/*
+Return the SMTP Secret Name
+*/}}
+{{- define "odoo.smtpSecretName" -}}
+{{- coalesce .Values.smtpExistingSecret (include "common.names.fullname" .) -}}
+{{- end -}}
+
+{{/*
+ Create the name of the service account to use
+ */}}
+{{- define "odoo.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create -}}
+    {{ default (include "odoo.fullname" .) .Values.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return true if cert-manager required annotations for TLS signed certificates are set in the Ingress annotations
+Ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
+*/}}
+{{- define "odoo.ingress.certManagerRequest" -}}
+{{ if or (hasKey . "cert-manager.io/cluster-issuer") (hasKey . "cert-manager.io/issuer") }}
+    {{- true -}}
+{{- end -}}
 {{- end -}}

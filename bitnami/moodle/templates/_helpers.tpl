@@ -14,7 +14,7 @@ Return the proper certificate image name
 {{- end -}}
 
 {{/*
-Return the proper Moodle(TM) image name
+Return the proper Moodle&trade; image name
 */}}
 {{- define "moodle.image" -}}
 {{- include "common.images.image" (dict "imageRoot" .Values.image "global" .Values.global) -}}
@@ -49,7 +49,7 @@ Return  the proper Storage Class
 {{- end -}}
 
 {{/*
-Moodle(TM) credential secret name
+Moodle&trade; credential secret name
 */}}
 {{- define "moodle.secretName" -}}
 {{- coalesce .Values.existingSecret (include "common.names.fullname" .) -}}

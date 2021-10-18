@@ -6,7 +6,8 @@
       "type": "string",
       "title": "Redis architecture",
       "form": true,
-      "description": "Allowed values: `standalone` or `replication`"
+      "description": "Allowed values: `standalone` or `replication`",
+      "enum": ["standalone", "replication"]
     },
     "auth": {
       "type": "object",

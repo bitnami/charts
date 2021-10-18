@@ -2,31 +2,31 @@
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  name: {{ include "fluentd.fullname" . }}
+  name: {{ include "common.names.fullname" . }}
   {{- if .Values.forwarder.annotations }}
-  annotations: {{- include "fluentd.tplValue" (dict "value" .Values.forwarder.annotations "context" $) | nindent 4 }}
+  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.forwarder.annotations "context" $) | nindent 4 }}
   {{- end }}
-  labels: {{- include "fluentd.labels" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: forwarder
     ## Istio Labels: https://istio.io/docs/ops/deployment/requirements/
     app: forwarder
 spec:
   selector:
-    matchLabels: {{- include "fluentd.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: forwarder
   updateStrategy: {{- toYaml .Values.forwarder.updateStrategy | nindent 4 }}
   template:
     metadata:
-      labels: {{- include "fluentd.labels" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: forwarder
         app: forwarder
         {{- if .Values.forwarder.podLabels }}
-        {{- include "fluentd.tplValue" ( dict "value" $.Values.forwarder.podLabels "context" $ ) | nindent 8 }}
+        {{- include "common.tplvalues.render" ( dict "value" $.Values.forwarder.podLabels "context" $ ) | nindent 8 }}
         {{- end }}
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/forwarder-configmap.yaml") . | sha256sum }}
         {{- if .Values.forwarder.podAnnotations }}
-        {{- include "fluentd.tplValue" (dict "value" .Values.forwarder.podAnnotations "context" $) | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.forwarder.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
         {{- if .Values.forwarder.rbac.pspEnabled }}
         checksum/psp: {{ include (print $.Template.BasePath "/forwarder-psp.yaml") . | sha256sum }}
@@ -39,7 +39,7 @@ spec:
       serviceAccountName: {{ template "fluentd.forwarder.serviceAccountName" . }}
       priorityClassName: {{ .Values.forwarder.priorityClassName | quote }}
       {{- if .Values.forwarder.affinity }}
-      affinity: {{- include "fluentd.tplValue" (dict "value" .Values.forwarder.affinity "context" $) | nindent 8 }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.forwarder.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
         podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.forwarder.podAffinityPreset "component" "forwarder" "context" $) | nindent 10 }}
@@ -47,23 +47,32 @@ spec:
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.forwarder.nodeAffinityPreset.type "key" .Values.forwarder.nodeAffinityPreset.key "values" .Values.forwarder.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.forwarder.nodeSelector }}
-      nodeSelector: {{- include "fluentd.tplValue" (dict "value" .Values.forwarder.nodeSelector "context" $) | nindent 8 }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.forwarder.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.forwarder.tolerations }}
-      tolerations: {{- include "fluentd.tplValue" (dict "value" .Values.forwarder.tolerations "context" $) | nindent 8 }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.forwarder.tolerations "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.forwarder.securityContext.enabled }}
       securityContext: {{- omit .Values.forwarder.securityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       {{- if .Values.forwarder.initContainers }}
-      initContainers: {{- include "fluentd.tplValue" ( dict "value" .Values.forwarder.initContainers "context" $ ) | nindent 8 }}
+      initContainers: {{- include "common.tplvalues.render" ( dict "value" .Values.forwarder.initContainers "context" $ ) | nindent 8 }}
       {{- end }}
       terminationGracePeriodSeconds: {{ .Values.forwarder.terminationGracePeriodSeconds }}
       containers:
         - name: fluentd
           image: {{ include "fluentd.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.forwarder.lifecycle }}
+          lifecycle: {{- include "common.tplvalues.render" ( dict "value" .Values.forwarder.lifecycle "context" $ ) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- end }}
           env:
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
             - name: FLUENTD_CONF
               value: {{ .Values.forwarder.configFile }}
             - name: FLUENTD_OPT
@@ -84,6 +93,7 @@ spec:
               containerPort: {{ .Values.metrics.service.port }}
               protocol: TCP
             {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.forwarder.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
@@ -106,6 +116,7 @@ spec:
             successThreshold: {{ .Values.forwarder.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.forwarder.readinessProbe.failureThreshold }}
           {{- end }}
+          {{- end }}
           {{- if .Values.forwarder.resources }}
           resources: {{- toYaml .Values.forwarder.resources | nindent 12 }}
           {{- end }}
@@ -125,8 +136,9 @@ spec:
               mountPath: /opt/bitnami/fluentd/logs/buffers
             {{- end }}
             {{- if .Values.tls.enabled }}
-            - name: certs
-              mountPath: /opt/bitnami/fluentd/certs
+            - name: fluentd-forwarder-certificates
+              mountPath: /opt/bitnami/fluentd/certs/out_forward
+              readOnly: true
             {{- end }}
             - name: varlog
               mountPath: /var/log
@@ -137,23 +149,17 @@ spec:
             {{- toYaml .Values.forwarder.extraVolumeMounts | nindent 12 }}
             {{- end }}
         {{- if .Values.forwarder.sidecars }}
-        {{- include "fluentd.tplValue" ( dict "value" .Values.forwarder.sidecars "context" $ ) | nindent 8 }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.forwarder.sidecars "context" $ ) | nindent 8 }}
         {{- end }}
       volumes:
         {{- if .Values.forwarder.extraVolumes }}
             {{- toYaml .Values.forwarder.extraVolumes | nindent 8 }}
         {{- end }}
         {{- if .Values.tls.enabled }}
-        - name: certs
+        - name: fluentd-forwarder-certificates
           secret:
-            secretName: {{ template "fluentd.tls.secretName" . }}
-            items:
-              - key: tls.crt
-                path: tls.crt
-              - key: tls.key
-                path: tls.key
-              - key: rootCA.crt
-                path: rootCA.crt  
+            secretName: {{ include "fluentd.forwarder.tlsSecretName" . }}
+            defaultMode: 256
         {{- end }}
         - name: fluentd-config
           configMap:

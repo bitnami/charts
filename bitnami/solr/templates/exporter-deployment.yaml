@@ -66,8 +66,8 @@ spec:
         {{- end }}
       containers:
         - name: solr-exporter
-          image: {{ include "exporter.image" . }}
-          imagePullPolicy: {{ .Values.exporter.image.pullPolicy }}
+          image: {{ include "solr.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.exporter.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.exporter.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
@@ -102,7 +102,7 @@ spec:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.exporter.extraEnvVarsSecret "context" $) }}
             {{- end }}
           ports:
-            - name: exporter-port
+            - name: http
               containerPort: {{ .Values.exporter.port }}
           {{- if .Values.exporter.resources }}
           resources: {{- toYaml .Values.exporter.resources | nindent 12 }}
@@ -112,11 +112,6 @@ spec:
             httpGet:
               path: "/metrics"
               port: {{ .Values.exporter.port }}
-            initialDelaySeconds: {{ .Values.exporter.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.exporter.livenessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.exporter.livenessProbe.timeoutSeconds }}
-            failureThreshold: {{ .Values.exporter.livenessProbe.failureThreshold }}
-            successThreshold: {{ .Values.exporter.livenessProbe.successThreshold }}
           {{- else if .Values.exporter.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.exporter.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
@@ -125,11 +120,6 @@ spec:
             httpGet:
               path: "/metrics"
               port: {{ .Values.exporter.port }}
-            initialDelaySeconds: {{ .Values.exporter.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.exporter.readinessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.exporter.readinessProbe.timeoutSeconds }}
-            failureThreshold: {{ .Values.exporter.readinessProbe.failureThreshold }}
-            successThreshold: {{ .Values.exporter.readinessProbe.successThreshold }}
           {{- else if .Values.exporter.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.exporter.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}

@@ -20,7 +20,7 @@ spec:
   template:
     metadata:
       {{- if .Values.defaultBackend.podAnnotations }}
-      annotations: {{- include "nginx-ingress-controller.annotations" (dict "annotations" .Values.defaultBackend.podAnnotations "context" $) | trim | nindent 8 }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: default-backend

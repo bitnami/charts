@@ -74,7 +74,7 @@ spec:
             - --clusters-config-path=/config/clusters.conf
             {{- end }}
             {{- if .Values.pinnipedProxy.enabled }}
-            - --pinniped-proxy-url=http://{{ template "kubeapps.pinniped-proxy.fullname" . }}.{{ .Release.Namespace }}:{{ .Values.pinnipedProxy.service.port }}
+            - --pinniped-proxy-url=http://{{ template "kubeapps.pinniped-proxy.fullname" . }}.{{ .Release.Namespace }}:{{ .Values.pinnipedProxy.containerPort }}
             {{- end }}
             {{- if .Values.kubeops.burst }}
             - --burst={{ .Values.kubeops.burst }}
@@ -83,10 +83,10 @@ spec:
             - --qps={{ .Values.kubeops.QPS }}
             {{- end }}
             {{- if .Values.kubeops.namespaceHeaderName }}
-            - --ns-header-name={{ .Values.kubeops.namespaceHeaderName }}
+            - --namespace-header-name={{ .Values.kubeops.namespaceHeaderName }}
             {{- end }}
             {{- if .Values.kubeops.namespaceHeaderPattern }}
-            - --ns-header-pattern={{ .Values.kubeops.namespaceHeaderPattern }}
+            - --namespace-header-pattern={{ .Values.kubeops.namespaceHeaderPattern }}
             {{- end }}
           env:
             - name: POD_NAMESPACE
@@ -127,16 +127,16 @@ spec:
           {{- end }}
           {{- if .Values.clusters }}
           volumeMounts:
-            - name: kubeops-config
+            - name: clusters-config
               mountPath: /config
             - name: ca-certs
               mountPath: /etc/additional-clusters-cafiles
           {{- end }}
       {{- if .Values.clusters }}
       volumes:
-        - name: kubeops-config
+        - name: clusters-config
           configMap:
-            name: {{ template "kubeapps.kubeops-config.fullname" . }}
+            name: {{ template "kubeapps.clusters-config.fullname" . }}
         - name: ca-certs
           emptyDir: {}
       {{- end }}

@@ -68,9 +68,8 @@ spec:
       {{- if .Values.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
       {{- end }}
-      {{- if .Values.securityContext.enabled }}
-      securityContext:
-        fsGroup: {{ .Values.securityContext.fsGroup }}
+      {{- if .Values.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       {{- if or .Values.initContainers (and .Values.volumePermissions.enabled .Values.persistence.enabled) }}
       initContainers:
@@ -86,12 +85,11 @@ spec:
             - -ec
             - |
               {{- if and .Values.persistence.enabled (gt $drivesPerNode 1) }}
-              chown -R {{ .Values.securityContext.runAsUser }}:{{ .Values.securityContext.fsGroup }} {{ range $diskId := until $drivesPerNode }}{{  $mountPath }}-{{ $diskId }} {{ end }}
+              chown -R {{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }} {{ range $diskId := until $drivesPerNode }}{{  $mountPath }}-{{ $diskId }} {{ end }}
               {{- else }}
-              chown -R {{ .Values.securityContext.runAsUser }}:{{ .Values.securityContext.fsGroup }} {{ $mountPath }}
+              chown -R {{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }} {{ $mountPath }}
               {{- end }}
-          securityContext:
-            runAsUser: 0
+          securityContext: {{- .Values.volumePermissions.containerSecurityContext | toYaml | nindent 12 }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
           {{- end }}
@@ -111,9 +109,8 @@ spec:
         - name: minio
           image: {{ include "minio.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
-          {{- if .Values.securityContext.enabled }}
-          securityContext:
-            runAsUser: {{ .Values.securityContext.runAsUser }}
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           {{- if .Values.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}
@@ -173,6 +170,8 @@ spec:
             {{- if .Values.tls.mountPath }}
             - name: MINIO_CERTSDIR
               value: {{ .Values.tls.mountPath | quote }}
+            - name: MINIO_CONSOLE_PORT_NUMBER
+              value: {{ .Values.containerPorts.console | quote }}
             {{- end }}
             {{- if .Values.extraEnv }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnv "context" $) | nindent 12 }}
@@ -187,14 +186,17 @@ spec:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.extraEnvVarsSecret "context" $) }}
             {{- end }}
           ports:
-            - name: minio
-              containerPort: {{ .Values.containerPort }}
+            - name: minio-api
+              containerPort: {{ .Values.containerPorts.api }}
+              protocol: TCP
+            - name: minio-console
+              containerPort: {{ .Values.containerPorts.console }}
               protocol: TCP
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
               path: /minio/health/live
-              port: minio
+              port: minio-api
               scheme: {{ ternary "HTTPS" "HTTP" .Values.tls.enabled | quote }}
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
@@ -207,7 +209,7 @@ spec:
           {{- if .Values.readinessProbe.enabled }}
           readinessProbe:
             tcpSocket:
-              port: minio
+              port: minio-api
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
@@ -219,7 +221,7 @@ spec:
           {{- if .Values.startupProbe.enabled }}
           startupProbe:
             tcpSocket:
-              port: minio
+              port: minio-api
             initialDelaySeconds: {{ .Values.startupProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.startupProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.startupProbe.timeoutSeconds }}
@@ -240,14 +242,14 @@ spec:
             - name: minio-certs
               mountPath: {{ default "/certs" .Values.tls.mountPath }}
             {{- end }}
-            {{- if and .Values.persistence.enabled (gt $drivesPerNode 1) }}
+            {{- if gt $drivesPerNode 1 }}
             {{- range $diskId := until $drivesPerNode }}
             - name: data-{{ $diskId }}
-              mountPath: {{  $mountPath }}-{{ $diskId }}
+              mountPath: {{ $mountPath }}-{{ $diskId }}
             {{- end }}
             {{- else }}
             - name: data
-              mountPath: {{  $mountPath }}
+              mountPath: {{ $mountPath }}
             {{- end }}
             {{- if .Values.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
@@ -264,9 +266,9 @@ spec:
         {{- if .Values.tls.enabled }}
         - name: minio-certs
           secret:
-            secretName: {{ .Values.tls.secretName }}
+            secretName: {{ include "minio.tlsSecretName" . }}
             items:
-            - key: tls.crt 
+            - key: tls.crt
               path: public.crt
             - key: tls.key
               path: private.key
@@ -276,7 +278,12 @@ spec:
         {{- if .Values.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
-  {{- if not .Values.persistence.enabled }}
+  {{- if and (not .Values.persistence.enabled) (gt $drivesPerNode 1) }}
+  {{- range $diskId := until $drivesPerNode }}
+        - name: data-{{ $diskId }}
+          emptyDir: {}
+  {{- end }}
+  {{- else if not .Values.persistence.enabled }}
         - name: data
           emptyDir: {}
   {{- else }}

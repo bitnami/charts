@@ -1,0 +1,35 @@
+{{- if .Values.repoServer.autoscaling.enabled }}
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "argocd.repo-server" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: repo-server
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  scaleTargetRef:
+    apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+    kind: Deployment
+    name: {{ include "argocd.repo-server" . }}
+  minReplicas: {{ .Values.repoServer.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.repoServer.autoscaling.maxReplicas }}
+  metrics:
+    {{- if .Values.repoServer.autoscaling.targetCPU }}
+    - type: Resource
+      resource:
+        name: cpu
+        targetAverageUtilization: {{ .Values.repoServer.autoscaling.targetCPU }}
+    {{- end }}
+    {{- if .Values.repoServer.autoscaling.targetMemory }}
+    - type: Resource
+      resource:
+        name: memory
+        targetAverageUtilization: {{ .Values.repoServer.autoscaling.targetMemory  }}
+    {{- end }}
+{{- end }}

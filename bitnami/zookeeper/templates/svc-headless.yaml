@@ -11,7 +11,7 @@ metadata:
   {{- if or .Values.commonAnnotations .Values.service.annotations }}
   annotations:
     {{- if .Values.service.headless.annotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.service.headless.annotations "context" $ ) | nindent 4 }}\
+    {{- include "common.tplvalues.render" ( dict "value" .Values.service.headless.annotations "context" $ ) | nindent 4 }}
     {{- end }}
     {{- if .Values.commonAnnotations }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
@@ -22,21 +22,21 @@ spec:
   clusterIP: None
   publishNotReadyAddresses: {{ .Values.service.publishNotReadyAddresses }}
   ports:
-    {{ if not .Values.service.tls.disable_base_client_port }}
+    {{ if not .Values.service.disableBaseClientPort }}
     - name: tcp-client
-      port: 2181
+      port: {{ .Values.service.port }}
       targetPort: client
     {{ end }}
-    {{ if .Values.service.tls.client_enable }}
+    {{ if .Values.tls.client.enabled }}
     - name: tcp-client-tls
-      port: {{ .Values.service.tls.client_port }}
+      port: {{ .Values.service.tlsClientPort }}
       targetPort: client-tls
     {{ end }}
     - name: follower
-      port: 2888
+      port: {{ .Values.service.followerPort }}
       targetPort: follower
     - name: tcp-election
-      port: 3888
+      port: {{ .Values.service.electionPort }}
       targetPort: election
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: zookeeper

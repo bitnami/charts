@@ -5,7 +5,7 @@ metadata:
   name: {{ include "common.names.fullname" . }}-saved-objects
   labels: {{- include "common.labels.standard" . | nindent 4 }}
 data:
-  {{- $savedObjectsUrl := printf "localhost:%d/api/saved_objects/_import" (int .Values.containerPort) }}
+  {{- $savedObjectsUrl := printf "localhost:%d%s/api/saved_objects/_import" (int .Values.containerPort) (include "kibana.basePath" .)  }}
   import-saved-objects.sh: |
     #!/bin/bash
     echo "==> Saved objects import"

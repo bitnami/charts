@@ -39,6 +39,7 @@ spec:
       {{- else if eq .Values.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
+    {{- if or (eq .Values.service.type "ClusterIP") .Values.exposeManagementConsole }}
     - name: mgmt
       port: {{ .Values.service.mgmtPort}}
       targetPort: mgmt
@@ -47,4 +48,5 @@ spec:
       {{- else if eq .Values.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
+    {{- end }}
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}

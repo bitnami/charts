@@ -4,7 +4,7 @@
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "kubeapps.imagePullSecrets" -}}
-{{ include "common.images.pullSecrets" (dict "images" (list .Values.frontend.image .Values.dashboard.image .Values.apprepository.image .Values.apprepository.syncImage .Values.assetsvc.image .Values.kubeops.image .Values.authProxy.image .Values.pinnipedProxy.image .Values.testImage) "global" .Values.global) }}
+{{ include "common.images.pullSecrets" (dict "images" (list .Values.frontend.image .Values.dashboard.image .Values.apprepository.image .Values.apprepository.syncImage .Values.assetsvc.image .Values.kubeops.image .Values.authProxy.image .Values.pinnipedProxy.image .Values.kubeappsapis.image .Values.testImage) "global" .Values.global) }}
 {{- end -}}
 
 {{/*
@@ -13,6 +13,15 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 */}}
 {{- define "kubeapps.postgresql.fullname" -}}
 {{- $name := default "postgresql" .Values.postgresql.nameOverride -}}
+{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
+Create a default fully qualified app name for Redis dependency.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+*/}}
+{{- define "kubeapps.redis.fullname" -}}
+{{- $name := default "redis" .Values.redis.nameOverride -}}
 {{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
@@ -59,10 +68,10 @@ Create name for kubeops based on the fullname
 {{- end -}}
 
 {{/*
-Create name for the kubeops config based on the fullname
+Create name for the clusters config based on the fullname
 */}}
-{{- define "kubeapps.kubeops-config.fullname" -}}
-{{- printf "%s-kubeops-config" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
+{{- define "kubeapps.clusters-config.fullname" -}}
+{{- printf "%s-clusters-config" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
@@ -70,6 +79,20 @@ Create proxy_pass for the frontend config
 */}}
 {{- define "kubeapps.frontend-config.proxy_pass" -}}
 http://{{ include "kubeapps.kubeops.fullname" . }}:{{ .Values.kubeops.service.port }}
+{{- end -}}
+
+{{/*
+Create proxy_pass for the kubeappsapis
+*/}}
+{{- define "kubeapps.kubeappsapis.proxy_pass" -}}
+http://{{ include "kubeapps.kubeappsapis.fullname" . }}:{{ .Values.kubeappsapis.service.port }}
+{{- end -}}
+
+{{/*
+Create name for kubeappsapis based on the fullname
+*/}}
+{{- define "kubeapps.kubeappsapis.fullname" -}}
+{{- printf "%s-internal-kubeappsapis" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
@@ -153,6 +176,28 @@ Return the Postgresql secret name
 {{- end -}}
 
 {{/*
+Return the Redis secret name
+*/}}
+{{- define "kubeapps.redis.secretName" -}}
+  {{- if .Values.redis.existingSecret }}
+      {{- printf "%s" .Values.redis.existingSecret -}}
+  {{- else -}}
+      {{- printf "%s" (include "kubeapps.redis.fullname" .) -}}
+  {{- end -}}
+{{- end -}}
+
+{{/*
+Return true if cert-manager required annotations for TLS signed certificates are set in the Ingress annotations
+Ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
+*/}}
+{{- define "kubeapps.ingress.certManagerRequest" -}}
+{{ if or (hasKey . "cert-manager.io/cluster-issuer") (hasKey . "cert-manager.io/issuer") }}
+    {{- true -}}
+{{- end -}}
+{{- end -}}
+
+
+{{/*
 Compile all warnings into a single message, and call fail.
 */}}
 {{- define "kubeapps.validateValues" -}}
@@ -170,14 +215,14 @@ Compile all warnings into a single message, and call fail.
 Validate values of Kubeapps - TLS configuration for Ingress
 */}}
 {{- define "kubeapps.validateValues.ingress.tls" -}}
-{{- if and .Values.ingress.enabled .Values.ingress.tls (not .Values.ingress.certManager) (not .Values.ingress.selfSigned) (empty .Values.ingress.extraTls) }}
+{{- if and .Values.ingress.enabled .Values.ingress.tls (not (include "kubeapps.ingress.certManagerRequest" .Values.ingress.annotations)) (not .Values.ingress.selfSigned) (empty .Values.ingress.extraTls) }}
 kubeapps: ingress.tls
     You enabled the TLS configuration for the default ingress hostname but
     you did not enable any of the available mechanisms to create the TLS secret
     to be used by the Ingress Controller.
     Please use any of these alternatives:
       - Use the `ingress.extraTls` and `ingress.secrets` parameters to provide your custom TLS certificates.
-      - Relay on cert-manager to create it by setting `ingress.certManager=true`
+      - Relay on cert-manager to create it by adding its supported annotations in `ingress.annotations`
       - Relay on Helm to create self-signed certificates by setting `ingress.selfSigned=true`
 {{- end -}}
 {{- end -}}
@@ -193,4 +238,5 @@ Check if there are rolling tags in the images
 {{- include "common.warnings.rollingTag" .Values.kubeops.image }}
 {{- include "common.warnings.rollingTag" .Values.authProxy.image }}
 {{- include "common.warnings.rollingTag" .Values.pinnipedProxy.image }}
+{{- include "common.warnings.rollingTag" .Values.kubeappsapis.image }}
 {{- end -}}

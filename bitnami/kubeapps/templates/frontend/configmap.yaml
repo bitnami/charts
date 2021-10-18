@@ -89,7 +89,7 @@ data:
     {{- if .certificateAuthorityData }}
         proxy_set_header PINNIPED_PROXY_API_SERVER_CERT {{ .certificateAuthorityData }};
     {{- end }}
-        proxy_pass http://{{ template "kubeapps.pinniped-proxy.fullname" $ }}.{{ $.Release.Namespace }}:{{ $.Values.pinnipedProxy.service.port }};
+        proxy_pass http://{{ template "kubeapps.pinniped-proxy.fullname" $ }}.{{ $.Release.Namespace }}:{{ $.Values.pinnipedProxy.containerPort }};
     {{- else }}
         # Otherwise we route directly through to the clusters with existing credentials.
         proxy_pass {{ $apiServiceBaseURL }};
@@ -111,14 +111,15 @@ data:
         rewrite ^ $request_uri; # pass the encoded url downstream as is,
         rewrite /api/assetsvc([^?]*) /assetsvc$1?$args break;
 
+    {{- if .Values.frontend.proxypassExtraSetHeader }}
+        proxy_set_header {{ .Values.frontend.proxypassExtraSetHeader }};
+    {{- end }}
+
     {{- if .Values.frontend.proxypassAccessTokenAsBearer }}
         # Google Kubernetes Engine requires the access_token as the Bearer when talking to the k8s api server.
         proxy_set_header Authorization "Bearer $http_x_forwarded_access_token";
     {{- end }}
 
-    {{- if .Values.frontend.proxypassExtraSetHeader }}
-        proxy_set_header {{ .Values.frontend.proxypassExtraSetHeader }};
-    {{- end }}
         proxy_pass {{ include "kubeapps.frontend-config.proxy_pass" . -}};
       }
 
@@ -128,30 +129,52 @@ data:
         proxy_read_timeout 10m;
         rewrite /api/kubeops/(.*) /$1 break;
         rewrite /api/kubeops / break;
+
     {{- if .Values.frontend.proxypassExtraSetHeader }}
         proxy_set_header {{ .Values.frontend.proxypassExtraSetHeader }};
     {{- end }}
-        proxy_pass {{ include "kubeapps.frontend-config.proxy_pass" . -}};
 
     {{- if .Values.frontend.proxypassAccessTokenAsBearer }}
         # Google Kubernetes Engine requires the access_token as the Bearer when talking to the k8s api server.
         proxy_set_header Authorization "Bearer $http_x_forwarded_access_token";
     {{- end }}
+
+        proxy_pass {{ include "kubeapps.frontend-config.proxy_pass" . -}};
       }
+
+    {{- if .Values.featureFlags.kubeappsAPIsServer }}
+      location ~* /apis {
+        rewrite ^ $request_uri; # pass the encoded url downstream as is,
+        rewrite /apis/([^?]*) /$1 break;
+        rewrite /apis / break;
+
+    {{- if .Values.frontend.proxypassExtraSetHeader }}
+        proxy_set_header {{ .Values.frontend.proxypassExtraSetHeader }};
+    {{- end }}
+
+    {{- if .Values.frontend.proxypassAccessTokenAsBearer }}
+        # Google Kubernetes Engine requires the access_token as the Bearer when talking to the k8s api server.
+        proxy_set_header Authorization "Bearer $http_x_forwarded_access_token";
+    {{- end }}
+
+        proxy_pass {{ include "kubeapps.kubeappsapis.proxy_pass" . -}};
+      }
+    {{- end }}
 
       # The route for the Kubeapps backend API is not prefixed.
       location ~* /api/ {
         rewrite /api/(.*) /backend/$1 break;
         rewrite /api/ /backend break;
 
+    {{- if .Values.frontend.proxypassExtraSetHeader }}
+        proxy_set_header {{ .Values.frontend.proxypassExtraSetHeader }};
+    {{- end }}
+
     {{- if .Values.frontend.proxypassAccessTokenAsBearer }}
         # Google Kubernetes Engine requires the access_token as the Bearer when talking to the k8s api server.
         proxy_set_header Authorization "Bearer $http_x_forwarded_access_token";
     {{- end }}
 
-    {{- if .Values.frontend.proxypassExtraSetHeader }}
-        proxy_set_header {{ .Values.frontend.proxypassExtraSetHeader }};
-    {{- end }}
         proxy_pass {{ include "kubeapps.frontend-config.proxy_pass" . -}};
       }
 

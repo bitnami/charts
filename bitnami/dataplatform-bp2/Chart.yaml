@@ -1,12 +1,12 @@
 annotations:
   category: Infrastructure
 apiVersion: v2
-appVersion: 1.0.0
+appVersion: 0.0.10
 dependencies:
   - condition: kafka.enabled
     name: kafka
     repository: https://charts.bitnami.com/bitnami
-    version: 12.x.x
+    version: 14.x.x
   - condition: spark.enabled
     name: spark
     repository: https://charts.bitnami.com/bitnami
@@ -14,7 +14,7 @@ dependencies:
   - condition: elasticsearch.enabled
     name: elasticsearch
     repository: https://charts.bitnami.com/bitnami
-    version: 15.x.x
+    version: 17.x.x
   - condition: logstash.enabled
     name: logstash
     repository: https://charts.bitnami.com/bitnami
@@ -22,7 +22,7 @@ dependencies:
   - condition: wavefront.enabled
     name: wavefront
     repository: https://charts.bitnami.com/bitnami
-    version: 2.x.x
+    version: 3.x.x
   - name: common
     repository: https://charts.bitnami.com/bitnami
     tags:
@@ -58,4 +58,4 @@ sources:
   - https://www.elastic.co/products/logstash
   - https://zookeeper.apache.org/
   - https://github.com/bitnami/bitnami-docker-zookeeper
-version: 1.0.0
+version: 8.0.3

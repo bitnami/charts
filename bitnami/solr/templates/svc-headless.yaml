@@ -19,6 +19,6 @@ spec:
     - name: tcp-client
       port: {{ .Values.service.port }}
       protocol: TCP
-      targetPort: solr-client
+      targetPort: http
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: solr

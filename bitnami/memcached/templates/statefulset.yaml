@@ -62,13 +62,43 @@ spec:
         runAsUser: {{ .Values.securityContext.runAsUser }}
       {{- end }}
       serviceAccountName: {{ template "memcached.serviceAccountName" . }}
+      {{- if or .Values.persistence.enabled .Values.initContainers }}
+      initContainers:
+        {{- if .Values.persistence.enabled }}
+        - name: volume-permissions
+          image: {{ include "memcached.volumePermissions.image" . }}
+          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
+          command:
+            - /bin/bash
+            - -ec
+            - |
+              touch /cache-state/memory_file
+              chown -R {{ .Values.securityContext.runAsUser }}:{{ .Values.securityContext.fsGroup }} /cache-state
+          securityContext:
+            runAsUser: 0
+          {{- if .Values.volumePermissions.resources }}
+          resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: data
+              mountPath: /cache-state
+        {{- end }}
+        {{- if .Values.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+      {{- end }}
       containers:
         - name: memcached
           {{- if .Values.persistence.enabled }}
           lifecycle:
             preStop:
               exec:
-                command: ["/bin/sh", "-c", "/usr/bin/pkill -10 memcached ; sleep 60s"]
+                command:
+                  - /bin/bash
+                  - -ec
+                  - |
+                    /usr/bin/pkill -10 memcached
+                    sleep 60s
           {{- end }}
           image: {{ template "memcached.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
@@ -79,7 +109,7 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.arguments "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.persistence.enabled }}
-            - -e/cache-state/memory_file
+            - --memory-file=/cache-state/memory_file
           {{- end }}
           {{- if or .Values.extraEnv .Values.memcachedUsername .Values.memcachedPassword }}
           env:
@@ -103,13 +133,13 @@ spec:
               containerPort: 11211
           livenessProbe:
             tcpSocket:
-              port: memcache
+              port: {{ .Values.portName }}
             initialDelaySeconds: 30
             timeoutSeconds: 5
             failureThreshold: 6
           readinessProbe:
             tcpSocket:
-              port: memcache
+              port: {{ .Values.portName }}
             initialDelaySeconds: 5
             timeoutSeconds: 3
             periodSeconds: 5
@@ -134,21 +164,34 @@ spec:
           ports:
             - name: {{ .Values.metrics.portName }}
               containerPort: 9150
+          {{- if .Values.metrics.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
               path: /metrics
-              port: metrics
-            initialDelaySeconds: 15
-            timeoutSeconds: 5
+              port: {{ .Values.metrics.portName }}
+            initialDelaySeconds: {{ .Values.metrics.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.metrics.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.metrics.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.metrics.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.metrics.livenessProbe.failureThreshold }}
+          {{- end }}
+          {{- if .Values.metrics.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
               path: /metrics
-              port: metrics
-            initialDelaySeconds: 5
-            timeoutSeconds: 1
+              port: {{ .Values.metrics.portName }}
+            initialDelaySeconds: {{ .Values.metrics.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.metrics.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.metrics.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.metrics.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.metrics.readinessProbe.failureThreshold }}
+          {{- end }}
           {{- if .Values.metrics.resources }}
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
           {{- end }}
+        {{- end }}
+        {{- if .Values.sidecars }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
         - name: tmp

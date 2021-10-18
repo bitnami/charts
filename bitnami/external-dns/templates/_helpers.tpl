@@ -118,9 +118,7 @@ Return true if a secret object should be created
     {{- true -}}
 {{- else if and (eq .Values.provider "aws") .Values.aws.credentials.secretKey .Values.aws.credentials.accessKey (not .Values.aws.credentials.secretName) }}
     {{- true -}}
-{{- else if and (eq .Values.provider "azure") (or (and .Values.azure.resourceGroup .Values.azure.tenantId .Values.azure.subscriptionId .Values.azure.aadClientId .Values.azure.aadClientSecret (not .Values.azure.useManagedIdentityExtension)) (and .Values.azure.resourceGroup .Values.azure.tenantId .Values.azure.subscriptionId .Values.azure.useManagedIdentityExtension)) (not .Values.azure.secretName) -}}
-    {{- true -}}
-{{- else if and (eq .Values.provider "azure-private-dns") (or (and .Values.azure.aadClientId .Values.azure.aadClientSecret) (not .Values.azure.secretName)) -}}
+{{- else if and (or (eq .Values.provider "azure") (eq .Values.provider "azure-private-dns")) (or (and .Values.azure.resourceGroup .Values.azure.tenantId .Values.azure.subscriptionId .Values.azure.aadClientId .Values.azure.aadClientSecret (not .Values.azure.useManagedIdentityExtension)) (and .Values.azure.resourceGroup .Values.azure.tenantId .Values.azure.subscriptionId .Values.azure.useManagedIdentityExtension)) (not .Values.azure.secretName) -}}
     {{- true -}}
 {{- else if and (eq .Values.provider "cloudflare") (or .Values.cloudflare.apiToken .Values.cloudflare.apiKey) (not .Values.cloudflare.secretName) -}}
     {{- true -}}
@@ -136,7 +134,7 @@ Return true if a secret object should be created
     {{- true -}}
 {{- else if and (eq .Values.provider "linode") .Values.linode.apiToken (not .Values.linode.secretName) -}}
     {{- true -}}
-{{- else if and (eq .Values.provider "rfc2136") .Values.rfc2136.tsigSecret (not .Values.rfc2136.secretName) -}}
+{{- else if and (eq .Values.provider "rfc2136") (or .Values.rfc2136.tsigSecret (and .Values.rfc2136.kerberosUsername .Values.rfc2136.kerberosPassword)) (not .Values.rfc2136.secretName) -}}
     {{- true -}}
 {{- else if and (eq .Values.provider "pdns") .Values.pdns.apiKey (not .Values.pdns.secretName) -}}
     {{- true -}}
@@ -151,6 +149,19 @@ Return true if a secret object should be created
 {{- else -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Return true if a configmap object should be created
+*/}}
+{{- define "external-dns.createConfigMap" -}}
+{{- if and (eq .Values.provider "designate") .Values.designate.customCA.enabled }}
+    {{- true -}}
+{{- else if and (eq .Values.provider "rfc2136") .Values.rfc2136.rfc3645Enabled }}
+    {{- true -}}
+{{- else -}}
+{{- end -}}
+{{- end -}}
+
 
 {{/*
 Return the name of the Secret used to store the passwords
@@ -271,6 +282,8 @@ Compile all warnings into a single message, and call fail.
 {{- $messages := append $messages (include "external-dns.validateValues.ovh.consumerKey" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.ovh.applicationKey" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.ovh.applicationSecret" .) -}}
+{{- $messages := append $messages (include "external-dns.validateValues.rfc2136.kerberosRealm" .) -}}
+{{- $messages := append $messages (include "external-dns.validateValues.rfc2136.kerberosConfig" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.scaleway.scwAccessKey" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.scaleway.scwSecretKey" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.scaleway.scwDefaultOrganizationId" .) -}}
@@ -704,6 +717,30 @@ external-dns: ovh.applicationSecret
 {{- end -}}
 
 {{/*
+Validate values of RFC2136 DNS:
+- Must provide the kerberos realm when provider is rfc2136 and rfc3645Enabled is true
+*/}}
+{{- define "external-dns.validateValues.rfc2136.kerberosRealm" -}}
+{{- if and (eq .Values.provider "rfc2136") .Values.rfc2136.rfc3645Enabled (not .Values.rfc2136.kerberosRealm) -}}
+external-dns: rfc2136.kerberosRealm
+    You must provide the kerberos realm when provider is rfc2136 and rfc3645Enabled is true
+    Please set the kerberosRealm parameter (--set rfc2136.kerberosRealm="xxxx")
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of RFC2136 DNS:
+- Must provide the kerberos config when provider is rfc2136 and rfc3645Enabled is true
+*/}}
+{{- define "external-dns.validateValues.rfc2136.kerberosConfig" -}}
+{{- if and (eq .Values.provider "rfc2136") .Values.rfc2136.rfc3645Enabled (not .Values.rfc2136.kerberosConfig) -}}
+external-dns: rfc2136.kerberosConfig
+    You must provide the kerberos config when provider is rfc2136 and rfc3645Enabled is true
+    Please set the kerberosConfig parameter (--set-file rfc2136.kerberosConfig="path/to/krb5.conf")
+{{- end -}}
+{{- end -}}
+
+{{/*
 Validate values of External DNS:
 - must provide the Scaleway access key when provider is "scaleway"
 */}}
@@ -758,5 +795,59 @@ Return the ExternalDNS namespace to be used
     {{ default .Release.Namespace .Values.namespace }}
 {{- else -}}
     {{ .Values.namespace }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the secret containing external-dns TLS certificates
+*/}}
+{{- define "external-dns.tlsSecretName" -}}
+{{- if .Values.coredns.etcdTLS.autoGenerated -}}
+    {{- printf "%s-crt" (include "external-dns.fullname" .) -}}
+{{- else -}}
+{{- $secretName := .Values.coredns.etcdTLS.secretName -}}
+{{- printf "%s" (tpl $secretName $) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the path to the CA cert file.
+*/}}
+{{- define "external-dns.tlsCACert" -}}
+{{- if .Values.coredns.etcdTLS.autoGenerated }}
+    {{- printf "ca.crt" -}}
+{{- else -}}
+    {{- printf "%s" .Values.coredns.etcdTLS.caFilename -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the path to the cert file.
+*/}}
+{{- define "external-dns.tlsCert" -}}
+{{- if .Values.coredns.etcdTLS.autoGenerated }}
+    {{- printf "tls.crt" -}}
+{{- else -}}
+    {{- printf "%s" .Values.coredns.etcdTLS.certFilename -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the path to the cert key file.
+*/}}
+{{- define "external-dns.tlsCertKey" -}}
+{{- if .Values.coredns.etcdTLS.autoGenerated }}
+    {{- printf "tls.key" -}}
+{{- else -}}
+    {{- printf "%s" .Values.coredns.etcdTLS.keyFilename -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return true if a TLS secret object should be created
+*/}}
+{{- define "external-dns.createTlsSecret" -}}
+{{- if and .Values.coredns.etcdTLS.enabled .Values.coredns.etcdTLS.autoGenerated }}
+    {{- true -}}
 {{- end -}}
 {{- end -}}

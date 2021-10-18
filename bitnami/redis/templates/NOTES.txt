@@ -1,5 +1,34 @@
 ** Please be patient while the chart is being deployed **
 
+{{- if .Values.diagnosticMode.enabled }}
+The chart has been deployed in diagnostic mode. All probes have been disabled and the command has been overwritten with:
+
+  command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 4 }}
+  args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 4 }}
+
+Get the list of pods by executing:
+
+  kubectl get pods --namespace {{ .Release.Namespace }} -l app.kubernetes.io/instance={{ .Release.Name }}
+
+Access the pod you want to debug by executing
+
+  kubectl exec --namespace {{ .Release.Namespace }} -ti <NAME OF THE POD> -- bash
+
+In order to replicate the container startup scripts execute this command:
+
+For Redis:
+
+    /opt/bitnami/scripts/redis/entrypoint.sh /opt/bitnami/scripts/redis/run.sh
+
+{{- if .Values.sentinel.enabled }}
+
+For Redis Sentinel:
+
+    /opt/bitnami/scripts/redis-sentinel/entrypoint.sh /opt/bitnami/scripts/redis-sentinel/run.sh
+
+{{- end }}
+{{- else }}
+
 {{- if contains .Values.master.service.type "LoadBalancer" }}
 {{- if not .Values.auth.enabled }}
 {{ if and (not .Values.networkPolicy.enabled) (.Values.networkPolicy.allowExternal) }}
@@ -8,7 +37,7 @@
  WARNING
 
     By specifying "master.service.type=LoadBalancer" and "auth.enabled=false" you have
-    most likely exposed the Redis(TM) service externally without any authentication
+    most likely exposed the Redis&trade; service externally without any authentication
     mechanism.
 
     For security reasons, we strongly suggest that you switch to "ClusterIP" or
@@ -23,15 +52,15 @@
 {{- if eq .Values.architecture "replication" }}
 {{- if .Values.sentinel.enabled }}
 
-Redis(TM) can be accessed via port {{ .Values.sentinel.service.port }} on the following DNS name from within your cluster:
+Redis&trade; can be accessed via port {{ .Values.sentinel.service.port }} on the following DNS name from within your cluster:
 
     {{ template "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} for read only operations
 
-For read/write operations, first access the Redis(TM) Sentinel cluster, which is available in port {{ .Values.sentinel.service.sentinelPort }} using the same domain name above.
+For read/write operations, first access the Redis&trade; Sentinel cluster, which is available in port {{ .Values.sentinel.service.sentinelPort }} using the same domain name above.
 
 {{- else }}
 
-Redis(TM) can be accessed on the following DNS names from within your cluster:
+Redis&trade; can be accessed on the following DNS names from within your cluster:
 
     {{ printf "%s-master.%s.svc.%s" (include "common.names.fullname" .) .Release.Namespace .Values.clusterDomain }} for read/write operations (port {{ .Values.master.service.port }})
     {{ printf "%s-replicas.%s.svc.%s" (include "common.names.fullname" .) .Release.Namespace .Values.clusterDomain }} for read-only operations (port {{ .Values.replica.service.port }})
@@ -39,7 +68,7 @@ Redis(TM) can be accessed on the following DNS names from within your cluster:
 {{- end }}
 {{- else }}
 
-Redis(TM) can be accessed via port {{ .Values.master.service.port }} on the following DNS name from within your cluster:
+Redis&trade; can be accessed via port {{ .Values.master.service.port }} on the following DNS name from within your cluster:
 
     {{ template "common.names.fullname" . }}-master.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
 
@@ -53,9 +82,9 @@ To get your password run:
 
 {{- end }}
 
-To connect to your Redis(TM) server:
+To connect to your Redis&trade; server:
 
-1. Run a Redis(TM) pod that you can use as a client:
+1. Run a Redis&trade; pod that you can use as a client:
 
    kubectl run --namespace {{ .Release.Namespace }} redis-client --restart='Never' {{ if .Values.auth.enabled }} --env REDIS_PASSWORD=$REDIS_PASSWORD {{ end }} --image {{ template "redis.image" . }} --command -- sleep infinity
 
@@ -75,7 +104,7 @@ To connect to your Redis(TM) server:
    {{- if and (.Values.networkPolicy.enabled) (not .Values.networkPolicy.allowExternal) }}--labels="{{ template "common.names.fullname" . }}-client=true" \{{- end }}
    --namespace {{ .Release.Namespace }} -- bash
 
-2. Connect using the Redis(TM) CLI:
+2. Connect using the Redis&trade; CLI:
 
 {{- if eq .Values.architecture "replication" }}
    {{- if .Values.sentinel.enabled }}
@@ -142,15 +171,24 @@ To connect to your database from outside the cluster execute the following comma
 {{- end }}
 
 {{- end }}
-
+{{- end }}
 {{- include "redis.checkRollingTags" . }}
 {{- include "redis.validateValues" . }}
 {{- $requiredPassword := list -}}
 {{- $secretName := include "redis.secretName" . -}}
 {{- $secretPasswordKey := include "redis.secretPasswordKey" . -}}
-{{- if and .Values.auth.enabled (not .Values.auth.existingSecret) -}}
+{{- if and .Values.auth.enabled (not .Values.auth.existingSecret) (not .Values.global.redis.password) -}}
   {{- $requiredRedisPassword := dict "valueKey" "auth.password" "secret" $secretName "field" $secretPasswordKey -}}
   {{- $requiredPassword = append $requiredPassword $requiredRedisPassword -}}
 {{- end -}}
 {{- $requiredRedisPasswordErrors := include "common.validations.values.multiple.empty" (dict "required" $requiredPassword "context" $) -}}
 {{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" (list $requiredRedisPasswordErrors) "context" $) -}}
+
+{{- if and (eq .Values.architecture "replication") .Values.sentinel.enabled (eq .Values.sentinel.service.type "NodePort") (not .Release.IsUpgrade ) }}
+{{- if $.Values.sentinel.service.nodePorts.sentinel  }}
+No need to upgrade, ports and nodeports have been set from values
+{{- else }}
+#!#!#!#!#!#!#!# IMPORTANT #!#!#!#!#!#!#!#
+YOU NEED TO PERFORM AN UPGRADE FOR THE SERVICES AND WORKLOAD TO BE CREATED
+{{- end }}
+{{- end }}

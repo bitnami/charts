@@ -29,5 +29,6 @@
 2. Configure DNS records corresponding to Kubernetes ingress resources to point to the NODE_IP/NODE_HOST
 {{- end }}
 
-{{ include "common.warnings.rollingTag" .Values.contour.image }}
-{{ include "common.warnings.rollingTag" .Values.envoy.image }}
+{{- include "contour.validateValues" . }}
+{{- include "common.warnings.rollingTag" .Values.contour.image }}
+{{- include "common.warnings.rollingTag" .Values.envoy.image }}

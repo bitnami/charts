@@ -23,6 +23,9 @@ tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerat
 {{- if .Values.podSecurityContext.enabled }}
 securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 2 }}
 {{- end }}
+{{- if .Values.topologySpreadConstraints }}
+topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.topologySpreadConstraints "context" $) | nindent 2 }}
+{{- end }}
 initContainers:
 {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
 - name: volume-permissions
@@ -43,7 +46,7 @@ initContainers:
     mountPath: /bitnami/tomcat
 {{- end }}
 {{- if .Values.initContainers }}
-{{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) }}
+{{ include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) }}
 {{- end }}
 containers:
 - name: tomcat
@@ -110,7 +113,7 @@ containers:
   {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 2 }}
   {{- end }}
 {{- if .Values.sidecars }}
-{{- include "common.tplvalues.render" ( dict "value" .Values.sidecars "context" $) }}
+{{ include "common.tplvalues.render" ( dict "value" .Values.sidecars "context" $) }}
 {{- end }}
 volumes:
 {{- if and .Values.persistence.enabled (eq .Values.deployment.type "deployment") }}
@@ -125,5 +128,8 @@ volumes:
 {{- end }}
 {{- if .Values.extraVolumes }}
 {{ include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) }}
+{{- end }}
+{{- if .Values.extraPodSpec }}
+{{- include "common.tplvalues.render" (dict "value" .Values.extraPodSpec "context" $) }}
 {{- end }}
 {{- end -}}

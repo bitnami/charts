@@ -2,8 +2,8 @@
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
 metadata:
-  name: {{ include "fluentd.fullname" . }}
-  labels: {{- include "fluentd.labels" . | nindent 4 }}
+  name: {{ include "common.names.fullname" . }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
 rules:
   - apiGroups:
       - ""
@@ -20,7 +20,7 @@ rules:
     resources:
       - "podsecuritypolicies"
     resourceNames:
-      - {{ include "fluentd.fullname" . }}-forwarder
+      - {{ include "common.names.fullname" . }}-forwarder
     verbs:
       - "use"
   {{- end }}

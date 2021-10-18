@@ -6,6 +6,9 @@ metadata:
   name: {{ include "common.names.fullname" . }}-query
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: query
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
   {{- if $query.service.annotations }}
   annotations: {{- include "common.tplvalues.render" (dict "value" $query.service.annotations "context" $) | nindent 4 }}
   {{- end }}
@@ -42,7 +45,7 @@ spec:
       {{- else if eq $query.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
-  selector: 
+  selector:
     {{- if $query.service.labelSelectorsOverride }}
     {{- include "common.tplvalues.render" (dict "value" $query.service.labelSelectorsOverride "context" $) | nindent 4 }}
     {{- else }}

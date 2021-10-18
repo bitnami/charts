@@ -1,0 +1,53 @@
+{{- if .Values.web.enabled -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "concourse.web.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: web
+    {{- if .Values.service.web.labels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.service.web.labels "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if or .Values.commonAnnotations .Values.service.web.annotations }}
+  annotations:
+    {{- if .Values.service.web.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.service.web.annotations "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+spec:
+  type: {{ .Values.service.web.type }}
+  {{- if (or (eq .Values.service.web.type "LoadBalancer") (eq .Values.service.web.type "nodePort")) }}
+  externalTrafficPolicy: {{ .Values.service.web.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{ if eq .Values.service.web.type "LoadBalancer" }}
+  loadBalancerSourceRanges: {{ .Values.service.web.loadBalancerSourceRanges }}
+  {{ end }}
+  {{- if (and (eq .Values.service.web.type "LoadBalancer") (not (empty .Values.service.web.loadBalancerIP))) }}
+  loadBalancerIP: {{ .Values.service.web.loadBalancerIP }}
+  {{- end }}
+  {{- if .Values.service.web.clusterIP }}
+  clusterIP: {{ .Values.service.web.clusterIP }}
+  {{- end }}
+  ports:
+    - name: http
+      port: {{ .Values.service.web.port }}
+      targetPort: http
+      {{- if and (eq "nodePort" .Values.service.web.type) .Values.service.web.nodePort }}
+      nodePort: {{ .Values.service.web.nodePort }}
+      {{- end }}
+    - name: https
+      port: {{ .Values.service.web.tlsPort }}
+      targetPort: https
+      {{- if and (eq "nodePort" .Values.service.web.type) .Values.service.web.tlsNodePort }}
+      nodePort: {{ .Values.service.web.tlsNodePort }}
+      {{- end }}
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/component: web
+{{- end }}

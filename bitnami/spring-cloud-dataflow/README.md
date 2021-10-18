@@ -44,309 +44,327 @@ helm uninstall my-release
 
 ## Parameters
 
-The following tables lists the configurable parameters of the Spring Cloud Data Flow chart and their default values per section/component:
-
 ### Global parameters
 
-| Parameter                 | Description                                     | Default                                                 |
-|---------------------------|-------------------------------------------------|---------------------------------------------------------|
-| `global.imageRegistry`    | Global Docker image registry                    | `nil`                                                   |
-| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]` (does not add image pull secrets to deployed pods) |
-| `global.storageClass`     | Global storage class for dynamic provisioning   | `nil`                                                   |
+| Name                      | Description                                     | Value |
+| ------------------------- | ----------------------------------------------- | ----- |
+| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
+| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
+| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
+
 
 ### Common parameters
 
-| Parameter           | Description                                                          | Default                        |
-|---------------------|----------------------------------------------------------------------|--------------------------------|
-| `nameOverride`      | String to partially override common.names.fullname                   | `nil`                          |
-| `fullnameOverride`  | String to fully override common.names.fullname                       | `nil`                          |
-| `clusterDomain`     | Default Kubernetes cluster domain                                    | `cluster.local`                |
-| `commonLabels`      | Labels to add to all deployed objects                                | `{}`                           |
-| `commonAnnotations` | Annotations to add to all deployed objects                           | `{}`                           |
-| `extraDeploy`       | Array of extra objects to deploy with the release                    | `[]` (evaluated as a template) |
-| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set) | `nil`                          |
+| Name               | Description                                                                           | Value           |
+| ------------------ | ------------------------------------------------------------------------------------- | --------------- |
+| `nameOverride`     | String to partially override scdf.fullname template (will maintain the release name). | `""`            |
+| `fullnameOverride` | String to fully override scdf.fullname template.                                      | `""`            |
+| `kubeVersion`      | Force target Kubernetes version (using Helm capabilities if not set)                  | `""`            |
+| `clusterDomain`    | Default Kubernetes cluster domain                                                     | `cluster.local` |
+| `extraDeploy`      | Array of extra objects to deploy with the release                                     | `[]`            |
+
 
 ### Dataflow Server parameters
 
-| Parameter                                     | Description                                                                                                      | Default                                                 |
-|-----------------------------------------------|------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
-| `server.image.registry`                       | Spring Cloud Dataflow image registry                                                                             | `docker.io`                                             |
-| `server.image.repository`                     | Spring Cloud Dataflow image name                                                                                 | `bitnami/spring-cloud-dataflow`                         |
-| `server.image.tag`                            | Spring Cloud Dataflow image tag                                                                                  | `{TAG_NAME}`                                            |
-| `server.image.pullPolicy`                     | Spring Cloud Dataflow image pull policy                                                                          | `IfNotPresent`                                          |
-| `server.image.pullSecrets`                    | Specify docker-registry secret names as an array                                                                 | `[]` (does not add image pull secrets to deployed pods) |
-| `server.composedTaskRunner.image.registry`    | Spring Cloud Dataflow Composed Task Runner image registry                                                        | `docker.io`                                             |
-| `server.composedTaskRunner.image.repository`  | Spring Cloud Dataflow Composed Task Runner image name                                                            | `bitnami/spring-cloud-dataflow-composed-task-runner`    |
-| `server.composedTaskRunner.image.tag`         | Spring Cloud Dataflow Composed Task Runner image tag                                                             | `{TAG_NAME}`                                            |
-| `server.composedTaskRunner.image.pullPolicy`  | Spring Cloud Dataflow Composed Task Runner image pull policy                                                     | `IfNotPresent`                                          |
-| `server.composedTaskRunner.image.pullSecrets` | Spring Cloud Dataflow Composed Task Runner image pull secrets                                                    | `[]`                                                    |
-| `server.command`                              | Override sever command                                                                                           | `nil`                                                   |
-| `server.args`                                 | Override server args                                                                                             | `nil`                                                   |
-| `server.configuration.streamingEnabled`       | Enables or disables streaming data processing                                                                    | `true`                                                  |
-| `server.configuration.batchEnabled`           | Enables or disables bath data (tasks and schedules) processing                                                   | `true`                                                  |
-| `server.configuration.accountName`            | The name of the account to configure for the Kubernetes platform                                                 | `default`                                               |
-| `server.configuration.trustK8sCerts`          | Trust K8s certificates when querying the Kubernetes API                                                          | `false`                                                 |
-| `server.configuration.containerRegistries`    | Container registries configuration                                                                               | `{}` (check `values.yaml` for more information)         |
-| `server.configuration.metricsDashboard`       | Endpoint to the metricsDashboard instance                                                                        | `nil`                                                   |
-| `server.existingConfigmap`                    | Name of existing ConfigMap with Dataflow server configuration                                                    | `nil`                                                   |
-| `server.extraEnvVars`                         | Extra environment variables to be set on Dataflow server container                                               | `{}`                                                    |
-| `server.extraEnvVarsCM`                       | Name of existing ConfigMap containing extra env vars                                                             | `nil`                                                   |
-| `server.extraEnvVarsSecret`                   | Name of existing Secret containing extra env vars                                                                | `nil`                                                   |
-| `server.replicaCount`                         | Number of Dataflow server replicas to deploy                                                                     | `1`                                                     |
-| `server.hostAliases`                          | Add deployment host aliases                                                                                      | `[]`                                                    |
-| `server.strategyType`                         | Deployment Strategy Type                                                                                         | `RollingUpdate`                                         |
-| `server.podAffinityPreset`                    | Dataflow server pod affinity preset. Ignored if `server.affinity` is set. Allowed values: `soft` or `hard`       | `""`                                                    |
-| `server.podAntiAffinityPreset`                | Dataflow server pod anti-affinity preset. Ignored if `server.affinity` is set. Allowed values: `soft` or `hard`  | `soft`                                                  |
-| `server.nodeAffinityPreset.type`              | Dataflow server node affinity preset type. Ignored if `server.affinity` is set. Allowed values: `soft` or `hard` | `""`                                                    |
-| `server.nodeAffinityPreset.key`               | Dataflow server node label key to match Ignored if `server.affinity` is set.                                     | `""`                                                    |
-| `server.nodeAffinityPreset.values`            | Dataflow server node label values to match. Ignored if `server.affinity` is set.                                 | `[]`                                                    |
-| `server.affinity`                             | Dataflow server affinity for pod assignment                                                                      | `{}` (evaluated as a template)                          |
-| `server.nodeSelector`                         | Dataflow server node labels for pod assignment                                                                   | `{}` (evaluated as a template)                          |
-| `server.tolerations`                          | Dataflow server tolerations for pod assignment                                                                   | `[]` (evaluated as a template)                          |
-| `server.priorityClassName`                    | Controller priorityClassName                                                                                     | `nil`                                                   |
-| `server.podSecurityContext`                   | Dataflow server pods' Security Context                                                                           | `{ fsGroup: "1001" }`                                   |
-| `server.containerSecurityContext`             | Dataflow server containers' Security Context                                                                     | `{ runAsUser: "1001" }`                                 |
-| `server.resources.limits`                     | The resources limits for the Dataflow server container                                                           | `{}`                                                    |
-| `server.resources.requests`                   | The requested resources for the Dataflow server container                                                        | `{}`                                                    |
-| `server.podAnnotations`                       | Annotations for Dataflow server pods                                                                             | `{}`                                                    |
-| `server.livenessProbe`                        | Liveness probe configuration for Dataflow server                                                                 | Check `values.yaml` file                                |
-| `server.readinessProbe`                       | Readiness probe configuration for Dataflow server                                                                | Check `values.yaml` file                                |
-| `server.customLivenessProbe`                  | Override default liveness probe                                                                                  | `nil`                                                   |
-| `server.customReadinessProbe`                 | Override default readiness probe                                                                                 | `nil`                                                   |
-| `server.service.type`                         | Kubernetes service type                                                                                          | `ClusterIP`                                             |
-| `server.service.port`                         | Service HTTP port                                                                                                | `8080`                                                  |
-| `server.service.nodePort`                     | Service HTTP node port                                                                                           | `nil`                                                   |
-| `server.service.clusterIP`                    | Dataflow server service clusterIP IP                                                                             | `None`                                                  |
-| `server.service.externalTrafficPolicy`        | Enable client source IP preservation                                                                             | `Cluster`                                               |
-| `server.service.loadBalancerIP`               | loadBalancerIP if service type is `LoadBalancer`                                                                 | `nil`                                                   |
-| `server.service.loadBalancerSourceRanges`     | Address that are allowed when service is LoadBalancer                                                            | `[]`                                                    |
-| `server.service.annotations`                  | Annotations for Dataflow server service                                                                          | `{}`                                                    |
-| `server.containerPort`                        | Dataflow server port                                                                                             | `8080                                                   |
-| `server.ingress.enabled`                      | Enable ingress controller resource                                                                               | `false`                                                 |
-| `server.ingress.pathType`                     | Ingress path type                                                                                                | `ImplementationSpecific`                                |
-| `server.ingress.path`                         | Ingress path                                                                                                     | `/`                                                     |
-| `server.ingress.certManager`                  | Add annotations for cert-manager                                                                                 | `false`                                                 |
-| `server.ingress.hostname`                     | Default host for the ingress resource                                                                            | `dataflow.local`                                        |
-| `server.ingress.annotations`                  | Ingress annotations                                                                                              | `[]`                                                    |
-| `server.ingress.extraHosts[0].name`           | Additional hostnames to be covered                                                                               | `nil`                                                   |
-| `server.ingress.extraHosts[0].path`           | Additional hostnames to be covered                                                                               | `nil`                                                   |
-| `server.ingress.extraTls[0].hosts[0]`         | TLS configuration for additional hostnames to be covered                                                         | `nil`                                                   |
-| `server.ingress.extraTls[0].secretName`       | TLS configuration for additional hostnames to be covered                                                         | `nil`                                                   |
-| `server.ingress.tls`                          | Enables TLS configuration for the Ingress component                                                              | `false`                                                 |
-| `server.ingress.secrets[0].name`              | TLS Secret Name                                                                                                  | `nil`                                                   |
-| `server.ingress.secrets[0].certificate`       | TLS Secret Certificate                                                                                           | `nil`                                                   |
-| `server.ingress.secrets[0].key`               | TLS Secret Key                                                                                                   | `nil`                                                   |
-| `server.initContainers`                       | Add additional init containers to the Dataflow server pods                                                       | `{}` (evaluated as a template)                          |
-| `server.sidecars`                             | Add additional sidecar containers to the Dataflow server pods                                                    | `{}` (evaluated as a template)                          |
-| `server.pdb.create`                           | Enable/disable a Pod Disruption Budget creation                                                                  | `false`                                                 |
-| `server.pdb.minAvailable`                     | Minimum number/percentage of pods that should remain scheduled                                                   | `1`                                                     |
-| `server.pdb.maxUnavailable`                   | Maximum number/percentage of pods that may be made unavailable                                                   | `nil`                                                   |
-| `server.autoscaling.enabled`                  | Enable autoscaling for Dataflow server                                                                           | `false`                                                 |
-| `server.autoscaling.minReplicas`              | Minimum number of Dataflow server replicas                                                                       | `nil`                                                   |
-| `server.autoscaling.maxReplicas`              | Maximum number of Dataflow server replicas                                                                       | `nil`                                                   |
-| `server.autoscaling.targetCPU`                | Target CPU utilization percentage                                                                                | `nil`                                                   |
-| `server.autoscaling.targetMemory`             | Target Memory utilization percentage                                                                             | `nil`                                                   |
-| `server.jdwp.enabled`                         | Enable Java Debug Wire Protocol (JDWP)                                                                           | `false`                                                 |
-| `server.jdwp.port`                            | JDWP TCP port                                                                                                    | `5005`                                                  |
-| `server.extraVolumes`                         | Extra Volumes to be set on the Dataflow Server Pod                                                               | `nil`                                                   |
-| `server.extraVolumeMounts`                    | Extra VolumeMounts to be set on the Dataflow Container                                                           | `nil`                                                   |
-| `server.proxy.host`                           | Proxy host                                                                                                       | `nil`                                                   |
-| `server.proxy.port`                           | Proxy port                                                                                                       | `nil`                                                   |
-| `server.proxy.user`                           | Proxy username (if authentication is required)                                                                   | `nil`                                                   |
-| `server.proxy.password`                       | Proxy password (if authentication is required)                                                                   | `nil`                                                   |
+| Name                                         | Description                                                                                                                      | Value                                                |
+| -------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
+| `server.image.registry`                      | Spring Cloud Dataflow image registry                                                                                             | `docker.io`                                          |
+| `server.image.repository`                    | Spring Cloud Dataflow image repository                                                                                           | `bitnami/spring-cloud-dataflow`                      |
+| `server.image.tag`                           | Spring Cloud Dataflow image tag (immutable tags are recommended)                                                                 | `2.8.3-debian-10-r0`                                 |
+| `server.image.pullPolicy`                    | Spring Cloud Dataflow image pull policy                                                                                          | `IfNotPresent`                                       |
+| `server.image.pullSecrets`                   | Specify docker-registry secret names as an array                                                                                 | `[]`                                                 |
+| `server.image.debug`                         | Enable image debug mode                                                                                                          | `false`                                              |
+| `server.hostAliases`                         | Deployment pod host aliases                                                                                                      | `[]`                                                 |
+| `server.composedTaskRunner.image.registry`   | Spring Cloud Dataflow Composed Task Runner image registry                                                                        | `docker.io`                                          |
+| `server.composedTaskRunner.image.repository` | Spring Cloud Dataflow Composed Task Runner image repository                                                                      | `bitnami/spring-cloud-dataflow-composed-task-runner` |
+| `server.composedTaskRunner.image.tag`        | Spring Cloud Dataflow Composed Task Runner image tag (immutable tags are recommended)                                            | `2.8.2-debian-10-r41`                                |
+| `server.configuration.streamingEnabled`      | Enables or disables streaming data processing                                                                                    | `true`                                               |
+| `server.configuration.batchEnabled`          | Enables or disables batch data (tasks and schedules) processing                                                                  | `true`                                               |
+| `server.configuration.accountName`           | The name of the account to configure for the Kubernetes platform                                                                 | `default`                                            |
+| `server.configuration.trustK8sCerts`         | Trust K8s certificates when querying the Kubernetes API                                                                          | `false`                                              |
+| `server.configuration.containerRegistries`   | Container registries configuration                                                                                               | `{}`                                                 |
+| `server.configuration.grafanaInfo`           | Endpoint to the grafana instance (Deprecated: use the metricsDashboard instead)                                                  | `""`                                                 |
+| `server.configuration.metricsDashboard`      | Endpoint to the metricsDashboard instance                                                                                        | `""`                                                 |
+| `server.existingConfigmap`                   | ConfigMap with Spring Cloud Dataflow Server Configuration                                                                        | `""`                                                 |
+| `server.extraEnvVars`                        | Extra environment variables to be set on Dataflow server container                                                               | `[]`                                                 |
+| `server.extraEnvVarsCM`                      | ConfigMap with extra environment variables                                                                                       | `""`                                                 |
+| `server.extraEnvVarsSecret`                  | Secret with extra environment variables                                                                                          | `""`                                                 |
+| `server.replicaCount`                        | Number of Dataflow server replicas to deploy                                                                                     | `1`                                                  |
+| `server.strategyType`                        | StrategyType, can be set to RollingUpdate or Recreate by default                                                                 | `RollingUpdate`                                      |
+| `server.podAffinityPreset`                   | Dataflow server pod affinity preset. Ignored if `server.affinity` is set. Allowed values: `soft` or `hard`                       | `""`                                                 |
+| `server.podAntiAffinityPreset`               | Dataflow server pod anti-affinity preset. Ignored if `server.affinity` is set. Allowed values: `soft` or `hard`                  | `soft`                                               |
+| `server.containerPort`                       | Dataflow server port                                                                                                             | `8080`                                               |
+| `server.nodeAffinityPreset.type`             | Dataflow server node affinity preset type. Ignored if `server.affinity` is set. Allowed values: `soft` or `hard`                 | `""`                                                 |
+| `server.nodeAffinityPreset.key`              | Dataflow server node label key to match Ignored if `server.affinity` is set.                                                     | `""`                                                 |
+| `server.nodeAffinityPreset.values`           | Dataflow server node label values to match. Ignored if `server.affinity` is set.                                                 | `[]`                                                 |
+| `server.affinity`                            | Dataflow server affinity for pod assignment                                                                                      | `{}`                                                 |
+| `server.nodeSelector`                        | Dataflow server node labels for pod assignment                                                                                   | `{}`                                                 |
+| `server.tolerations`                         | Dataflow server tolerations for pod assignment                                                                                   | `[]`                                                 |
+| `server.podAnnotations`                      | Annotations for Dataflow server pods                                                                                             | `{}`                                                 |
+| `server.priorityClassName`                   | Dataflow Server pods' priority                                                                                                   | `""`                                                 |
+| `server.podSecurityContext.fsGroup`          | Group ID for the volumes of the pod                                                                                              | `1001`                                               |
+| `server.containerSecurityContext.runAsUser`  | Set Dataflow Server container's Security Context runAsUser                                                                       | `1001`                                               |
+| `server.resources.limits`                    | The resources limits for the Dataflow server container                                                                           | `{}`                                                 |
+| `server.resources.requests`                  | The requested resources for the Dataflow server container                                                                        | `{}`                                                 |
+| `server.livenessProbe.enabled`               | Enable livenessProbe                                                                                                             | `true`                                               |
+| `server.livenessProbe.initialDelaySeconds`   | Initial delay seconds for livenessProbe                                                                                          | `120`                                                |
+| `server.livenessProbe.periodSeconds`         | Period seconds for livenessProbe                                                                                                 | `20`                                                 |
+| `server.livenessProbe.timeoutSeconds`        | Timeout seconds for livenessProbe                                                                                                | `1`                                                  |
+| `server.livenessProbe.failureThreshold`      | Failure threshold for livenessProbe                                                                                              | `6`                                                  |
+| `server.livenessProbe.successThreshold`      | Success threshold for livenessProbe                                                                                              | `1`                                                  |
+| `server.readinessProbe.enabled`              | Enable readinessProbe                                                                                                            | `true`                                               |
+| `server.readinessProbe.initialDelaySeconds`  | Initial delay seconds for readinessProbe                                                                                         | `120`                                                |
+| `server.readinessProbe.periodSeconds`        | Period seconds for readinessProbe                                                                                                | `20`                                                 |
+| `server.readinessProbe.timeoutSeconds`       | Timeout seconds for readinessProbe                                                                                               | `1`                                                  |
+| `server.readinessProbe.failureThreshold`     | Failure threshold for readinessProbe                                                                                             | `6`                                                  |
+| `server.readinessProbe.successThreshold`     | Success threshold for readinessProbe                                                                                             | `1`                                                  |
+| `server.customLivenessProbe`                 | Override default liveness probe                                                                                                  | `{}`                                                 |
+| `server.customReadinessProbe`                | Override default readiness probe                                                                                                 | `{}`                                                 |
+| `server.service.type`                        | Kubernetes service type                                                                                                          | `ClusterIP`                                          |
+| `server.service.port`                        | Service HTTP port                                                                                                                | `8080`                                               |
+| `server.service.nodePort`                    | Specify the nodePort value for the LoadBalancer and NodePort service types                                                       | `""`                                                 |
+| `server.service.clusterIP`                   | Dataflow server service cluster IP                                                                                               | `""`                                                 |
+| `server.service.externalTrafficPolicy`       | Enable client source IP preservation                                                                                             | `Cluster`                                            |
+| `server.service.loadBalancerIP`              | Load balancer IP if service type is `LoadBalancer`                                                                               | `""`                                                 |
+| `server.service.loadBalancerSourceRanges`    | Addresses that are allowed when service is LoadBalancer                                                                          | `[]`                                                 |
+| `server.service.annotations`                 | Provide any additional annotations which may be required. Evaluated as a template.                                               | `{}`                                                 |
+| `server.ingress.enabled`                     | Enable ingress controller resource                                                                                               | `false`                                              |
+| `server.ingress.path`                        | The Path to WordPress. You may need to set this to '/*' in order to use this with ALB ingress controllers.                       | `/`                                                  |
+| `server.ingress.pathType`                    | Ingress path type                                                                                                                | `ImplementationSpecific`                             |
+| `server.ingress.hostname`                    | Default host for the ingress resource                                                                                            | `dataflow.local`                                     |
+| `server.ingress.annotations`                 | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                                                 |
+| `server.ingress.tls`                         | Enable TLS configuration for the hostname defined at ingress.hostname parameter                                                  | `false`                                              |
+| `server.ingress.extraHosts`                  | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                                                 |
+| `server.ingress.extraTls`                    | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                                                 |
+| `server.ingress.secrets`                     | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                                                 |
+| `server.initContainers`                      | Add init containers to the Dataflow Server pods                                                                                  | `[]`                                                 |
+| `server.sidecars`                            | Add sidecars to the Dataflow Server pods                                                                                         | `[]`                                                 |
+| `server.pdb.create`                          | Enable/disable a Pod Disruption Budget creation                                                                                  | `false`                                              |
+| `server.pdb.minAvailable`                    | Minimum number/percentage of pods that should remain scheduled                                                                   | `1`                                                  |
+| `server.pdb.maxUnavailable`                  | Maximum number/percentage of pods that may be made unavailable                                                                   | `""`                                                 |
+| `server.autoscaling.enabled`                 | Enable autoscaling for Dataflow server                                                                                           | `false`                                              |
+| `server.autoscaling.minReplicas`             | Minimum number of Dataflow server replicas                                                                                       | `""`                                                 |
+| `server.autoscaling.maxReplicas`             | Maximum number of Dataflow server replicas                                                                                       | `""`                                                 |
+| `server.autoscaling.targetCPU`               | Target CPU utilization percentage                                                                                                | `""`                                                 |
+| `server.autoscaling.targetMemory`            | Target Memory utilization percentage                                                                                             | `""`                                                 |
+| `server.extraVolumes`                        | Extra Volumes to be set on the Dataflow Server Pod                                                                               | `[]`                                                 |
+| `server.extraVolumeMounts`                   | Extra VolumeMounts to be set on the Dataflow Container                                                                           | `[]`                                                 |
+| `server.jdwp.enabled`                        | Set to true to enable Java debugger                                                                                              | `false`                                              |
+| `server.jdwp.port`                           | Specify port for remote debugging                                                                                                | `5005`                                               |
+| `server.proxy`                               | Add proxy configuration for SCDF server                                                                                          | `{}`                                                 |
+
 
 ### Dataflow Skipper parameters
 
-| Parameter                                  | Description                                                                                               | Default                                                 |
-|--------------------------------------------|-----------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
-| `skipper.enabled`                          | Enable Spring Cloud Skipper component                                                                     | `true`                                                  |
-| `skipper.image.registry`                   | Spring Cloud Skipper image registry                                                                       | `docker.io`                                             |
-| `skipper.image.repository`                 | Spring Cloud Skipper image name                                                                           | `bitnami/spring-cloud-dataflow`                         |
-| `skipper.image.tag`                        | Spring Cloud Skipper image tag                                                                            | `{TAG_NAME}`                                            |
-| `skipper.image.pullPolicy`                 | Spring Cloud Skipper image pull policy                                                                    | `IfNotPresent`                                          |
-| `skipper.image.pullSecrets`                | Specify docker-registry secret names as an array                                                          | `[]` (does not add image pull secrets to deployed pods) |
-| `skipper.configuration.accountName`        | The name of the account to configure for the Kubernetes platform                                          | `default`                                               |
-| `skipper.configuration.trustK8sCerts`      | Trust K8s certificates when querying the Kubernetes API                                                   | `false`                                                 |
-| `skipper.existingConfigmap`                | Name of existing ConfigMap with Skipper server configuration                                              | `nil`                                                   |
-| `skipper.extraEnvVars`                     | Extra environment variables to be set on Skipper server container                                         | `{}`                                                    |
-| `skipper.extraEnvVarsCM`                   | Name of existing ConfigMap containing extra env vars                                                      | `nil`                                                   |
-| `skipper.extraEnvVarsSecret`               | Name of existing Secret containing extra env vars                                                         | `nil`                                                   |
-| `skipper.replicaCount`                     | Number of Skipper server replicas to deploy                                                               | `1`                                                     |
-| `skipper.strategyType`                     | Deployment Strategy Type                                                                                  | `RollingUpdate`                                         |
-| `skipper.podAffinityPreset`                | Skipper pod affinity preset. Ignored if `skipper.affinity` is set. Allowed values: `soft` or `hard`       | `""`                                                    |
-| `skipper.podAntiAffinityPreset`            | Skipper pod anti-affinity preset. Ignored if `skipper.affinity` is set. Allowed values: `soft` or `hard`  | `soft`                                                  |
-| `skipper.nodeAffinityPreset.type`          | Skipper node affinity preset type. Ignored if `skipper.affinity` is set. Allowed values: `soft` or `hard` | `""`                                                    |
-| `skipper.nodeAffinityPreset.key`           | Skipper node label key to match Ignored if `skipper.affinity` is set.                                     | `""`                                                    |
-| `skipper.nodeAffinityPreset.values`        | Skipper node label values to match. Ignored if `skipper.affinity` is set.                                 | `[]`                                                    |
-| `skipper.hostAliases`                      | Add deployment host aliases                                                                               | `[]`                                                    |
-| `skipper.affinity`                         | Skipper affinity for pod assignment                                                                       | `{}` (evaluated as a template)                          |
-| `skipper.nodeSelector`                     | Skipper node labels for pod assignment                                                                    | `{}` (evaluated as a template)                          |
-| `skipper.tolerations`                      | Skipper tolerations for pod assignment                                                                    | `[]` (evaluated as a template)                          |
-| `skipper.priorityClassName`                | Controller priorityClassName                                                                              | `nil`                                                   |
-| `skipper.podSecurityContext`               | Skipper server pods' Security Context                                                                     | `{ fsGroup: "1001" }`                                   |
-| `skipper.containerSecurityContext`         | Skipper server containers' Security Context                                                               | `{ runAsUser: "1001" }`                                 |
-| `skipper.resources.limits`                 | The resources limits for the Skipper server container                                                     | `{}`                                                    |
-| `skipper.resources.requests`               | The requested resources for the Skipper server container                                                  | `{}`                                                    |
-| `skipper.podAnnotations`                   | Annotations for Skipper server pods                                                                       | `{}`                                                    |
-| `skipper.livenessProbe`                    | Liveness probe configuration for Skipper server                                                           | Check `values.yaml` file                                |
-| `skipper.readinessProbe`                   | Readiness probe configuration for Skipper server                                                          | Check `values.yaml` file                                |
-| `skipper.customLivenessProbe`              | Override default liveness probe                                                                           | `nil`                                                   |
-| `skipper.customReadinessProbe`             | Override default readiness probe                                                                          | `nil`                                                   |
-| `skipper.service.type`                     | Kubernetes service type                                                                                   | `ClusterIP`                                             |
-| `skipper.service.port`                     | Service HTTP port                                                                                         | `8080`                                                  |
-| `skipper.service.nodePort`                 | Service HTTP node port                                                                                    | `nil`                                                   |
-| `skipper.service.clusterIP`                | Skipper server service clusterIP IP                                                                       | `None`                                                  |
-| `skipper.service.externalTrafficPolicy`    | Enable client source IP preservation                                                                      | `Cluster`                                               |
-| `skipper.service.loadBalancerIP`           | loadBalancerIP if service type is `LoadBalancer`                                                          | `nil`                                                   |
-| `skipper.service.loadBalancerSourceRanges` | Address that are allowed when service is LoadBalancer                                                     | `[]`                                                    |
-| `skipper.service.annotations`              | Annotations for Skipper server service                                                                    | `{}`                                                    |
-| `skipper.initContainers`                   | Add additional init containers to the Skipper pods                                                        | `{}` (evaluated as a template)                          |
-| `skipper.sidecars`                         | Add additional sidecar containers to the Skipper pods                                                     | `{}` (evaluated as a template)                          |
-| `skipper.pdb.create`                       | Enable/disable a Pod Disruption Budget creation                                                           | `false`                                                 |
-| `skipper.pdb.minAvailable`                 | Minimum number/percentage of pods that should remain scheduled                                            | `1`                                                     |
-| `skipper.pdb.maxUnavailable`               | Maximum number/percentage of pods that may be made unavailable                                            | `nil`                                                   |
-| `skipper.autoscaling.enabled`              | Enable autoscaling for Skipper server                                                                     | `false`                                                 |
-| `skipper.autoscaling.minReplicas`          | Minimum number of Skipper server replicas                                                                 | `nil`                                                   |
-| `skipper.autoscaling.maxReplicas`          | Maximum number of Skipper server replicas                                                                 | `nil`                                                   |
-| `skipper.autoscaling.targetCPU`            | Target CPU utilization percentage                                                                         | `nil`                                                   |
-| `skipper.autoscaling.targetMemory`         | Target Memory utilization percentage                                                                      | `nil`                                                   |
-| `skipper.jdwp.enabled`                     | Enable Java Debug Wire Protocol (JDWP)                                                                    | `false`                                                 |
-| `skipper.jdwp.port`                        | JDWP TCP port                                                                                             | `5005`                                                  |
-| `skipper.extraVolumes`                     | Extra Volumes to be set on the Skipper Pod                                                                | `nil`                                                   |
-| `skipper.extraVolumeMounts`                | Extra VolumeMounts to be set on the Skipper Container                                                     | `nil`                                                   |
-| `externalSkipper.host`                     | Host of a external Skipper Server                                                                         | `localhost`                                             |
-| `externalSkipper.port`                     | External Skipper Server port number                                                                       | `7577`                                                  |
+| Name                                         | Description                                                                                               | Value                          |
+| -------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ------------------------------ |
+| `skipper.enabled`                            | Enable Spring Cloud Skipper component                                                                     | `true`                         |
+| `skipper.hostAliases`                        | Deployment pod host aliases                                                                               | `[]`                           |
+| `skipper.image.registry`                     | Spring Cloud Skipper image registry                                                                       | `docker.io`                    |
+| `skipper.image.repository`                   | Spring Cloud Skipper image repository                                                                     | `bitnami/spring-cloud-skipper` |
+| `skipper.image.tag`                          | Spring Cloud Skipper image tag (immutable tags are recommended)                                           | `2.7.2-debian-10-r42`          |
+| `skipper.image.pullPolicy`                   | Spring Cloud Skipper image pull policy                                                                    | `IfNotPresent`                 |
+| `skipper.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                          | `[]`                           |
+| `skipper.image.debug`                        | Enable image debug mode                                                                                   | `false`                        |
+| `skipper.configuration.accountName`          | The name of the account to configure for the Kubernetes platform                                          | `default`                      |
+| `skipper.configuration.trustK8sCerts`        | Trust K8s certificates when querying the Kubernetes API                                                   | `false`                        |
+| `skipper.existingConfigmap`                  | Name of existing ConfigMap with Skipper server configuration                                              | `""`                           |
+| `skipper.extraEnvVars`                       | Extra environment variables to be set on Skipper server container                                         | `[]`                           |
+| `skipper.extraEnvVarsCM`                     | Name of existing ConfigMap containing extra environment variables                                         | `""`                           |
+| `skipper.extraEnvVarsSecret`                 | Name of existing Secret containing extra environment variables                                            | `""`                           |
+| `skipper.replicaCount`                       | Number of Skipper server replicas to deploy                                                               | `1`                            |
+| `skipper.strategyType`                       | Deployment Strategy Type                                                                                  | `RollingUpdate`                |
+| `skipper.podAffinityPreset`                  | Skipper pod affinity preset. Ignored if `skipper.affinity` is set. Allowed values: `soft` or `hard`       | `""`                           |
+| `skipper.podAntiAffinityPreset`              | Skipper pod anti-affinity preset. Ignored if `skipper.affinity` is set. Allowed values: `soft` or `hard`  | `soft`                         |
+| `skipper.nodeAffinityPreset.type`            | Skipper node affinity preset type. Ignored if `skipper.affinity` is set. Allowed values: `soft` or `hard` | `""`                           |
+| `skipper.nodeAffinityPreset.key`             | Skipper node label key to match Ignored if `skipper.affinity` is set.                                     | `""`                           |
+| `skipper.nodeAffinityPreset.values`          | Skipper node label values to match. Ignored if `skipper.affinity` is set.                                 | `[]`                           |
+| `skipper.affinity`                           | Skipper affinity for pod assignment                                                                       | `{}`                           |
+| `skipper.nodeSelector`                       | Skipper node labels for pod assignment                                                                    | `{}`                           |
+| `skipper.tolerations`                        | Skipper tolerations for pod assignment                                                                    | `[]`                           |
+| `skipper.podAnnotations`                     | Annotations for Skipper server pods                                                                       | `{}`                           |
+| `skipper.priorityClassName`                  | Controller priorityClassName                                                                              | `""`                           |
+| `skipper.podSecurityContext.fsGroup`         | Group ID for the volumes of the pod                                                                       | `1001`                         |
+| `skipper.containerSecurityContext.runAsUser` | Set Dataflow Skipper container's Security Context runAsUser                                               | `1001`                         |
+| `skipper.resources.limits`                   | The resources limits for the Skipper server container                                                     | `{}`                           |
+| `skipper.resources.requests`                 | The requested resources for the Skipper server container                                                  | `{}`                           |
+| `skipper.livenessProbe.enabled`              | Enable livenessProbe                                                                                      | `true`                         |
+| `skipper.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                   | `120`                          |
+| `skipper.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                          | `20`                           |
+| `skipper.livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                                         | `1`                            |
+| `skipper.livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                                       | `6`                            |
+| `skipper.livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                                       | `1`                            |
+| `skipper.readinessProbe.enabled`             | Enable readinessProbe                                                                                     | `true`                         |
+| `skipper.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                                  | `120`                          |
+| `skipper.readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                                         | `20`                           |
+| `skipper.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                        | `1`                            |
+| `skipper.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                                      | `6`                            |
+| `skipper.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                      | `1`                            |
+| `skipper.customLivenessProbe`                | Override default liveness probe                                                                           | `{}`                           |
+| `skipper.customReadinessProbe`               | Override default readiness probe                                                                          | `{}`                           |
+| `skipper.service.type`                       | Kubernetes service type                                                                                   | `ClusterIP`                    |
+| `skipper.service.port`                       | Service HTTP port                                                                                         | `80`                           |
+| `skipper.service.nodePort`                   | Service HTTP node port                                                                                    | `""`                           |
+| `skipper.service.clusterIP`                  | Skipper server service cluster IP                                                                         | `""`                           |
+| `skipper.service.externalTrafficPolicy`      | Enable client source IP preservation                                                                      | `Cluster`                      |
+| `skipper.service.loadBalancerIP`             | Load balancer IP if service type is `LoadBalancer`                                                        | `""`                           |
+| `skipper.service.loadBalancerSourceRanges`   | Address that are allowed when service is LoadBalancer                                                     | `[]`                           |
+| `skipper.service.annotations`                | Annotations for Skipper server service                                                                    | `{}`                           |
+| `skipper.initContainers`                     | Add init containers to the Dataflow Skipper pods                                                          | `[]`                           |
+| `skipper.sidecars`                           | Add sidecars to the Skipper pods                                                                          | `[]`                           |
+| `skipper.pdb.create`                         | Enable/disable a Pod Disruption Budget creation                                                           | `false`                        |
+| `skipper.pdb.minAvailable`                   | Minimum number/percentage of pods that should remain scheduled                                            | `1`                            |
+| `skipper.pdb.maxUnavailable`                 | Maximum number/percentage of pods that may be made unavailable                                            | `""`                           |
+| `skipper.autoscaling.enabled`                | Enable autoscaling for Skipper server                                                                     | `false`                        |
+| `skipper.autoscaling.minReplicas`            | Minimum number of Skipper server replicas                                                                 | `""`                           |
+| `skipper.autoscaling.maxReplicas`            | Maximum number of Skipper server replicas                                                                 | `""`                           |
+| `skipper.autoscaling.targetCPU`              | Target CPU utilization percentage                                                                         | `""`                           |
+| `skipper.autoscaling.targetMemory`           | Target Memory utilization percentage                                                                      | `""`                           |
+| `skipper.extraVolumes`                       | Extra Volumes to be set on the Skipper Pod                                                                | `[]`                           |
+| `skipper.extraVolumeMounts`                  | Extra VolumeMounts to be set on the Skipper Container                                                     | `[]`                           |
+| `skipper.jdwp.enabled`                       | Enable Java Debug Wire Protocol (JDWP)                                                                    | `false`                        |
+| `skipper.jdwp.port`                          | JDWP TCP port for remote debugging                                                                        | `5005`                         |
+| `externalSkipper.host`                       | Host of a external Skipper Server                                                                         | `localhost`                    |
+| `externalSkipper.port`                       | External Skipper Server port number                                                                       | `7577`                         |
+
 
 ### Deployer parameters
 
-| Parameter                           | Description                                      | Default                             |
-|-------------------------------------|--------------------------------------------------|-------------------------------------|
-| `deployer.resources.limits`         | Streaming applications resource limits           | `{ cpu: "500m", memory: "1024Mi" }` |
-| `deployer.resources.requests`       | Streaming applications resource requests         | `{}`                                |
-| `deployer.resources.readinessProbe` | Streaming applications readiness probes requests | Check `values.yaml` file            |
-| `deployer.resources.livenessProbe`  | Streaming applications liveness probes  requests | Check `values.yaml` file            |
-| `deployer.nodeSelector`             | Streaming applications nodeSelector              | `""`                                |
-| `deployer.tolerations`              | Streaming applications tolerations               | `{}`                                |
-| `deployer.volumeMounts`             | Streaming applications extra volume mounts       | `{}`                                |
-| `deployer.volumes`                  | Streaming applications extra volumes             | `{}`                                |
-| `deployer.environmentVariables`     | Streaming applications environment variables     | `""`                                |
-| `deployer.podSecurityContext`       | Streaming applications Security Context.         | `{runAsUser: 1001}`                 |
+| Name                                          | Description                                                                                 | Value  |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------- | ------ |
+| `deployer.resources.limits`                   | Streaming applications resource limits                                                      | `{}`   |
+| `deployer.resources.requests`                 | Streaming applications resource requests                                                    | `{}`   |
+| `deployer.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                     | `90`   |
+| `deployer.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                    | `120`  |
+| `deployer.nodeSelector`                       | The node selectors to apply to the streaming applications deployments in "key:value" format | `""`   |
+| `deployer.tolerations`                        | Streaming applications tolerations                                                          | `{}`   |
+| `deployer.volumeMounts`                       | Streaming applications extra volume mounts                                                  | `{}`   |
+| `deployer.volumes`                            | Streaming applications extra volumes                                                        | `{}`   |
+| `deployer.environmentVariables`               | Streaming applications environment variables                                                | `""`   |
+| `deployer.podSecurityContext.runAsUser`       | Set Dataflow Streams container's Security Context runAsUser                                 | `1001` |
+
 
 ### RBAC parameters
 
-| Parameter               | Description                                                                         | Default                                              |
-|-------------------------|-------------------------------------------------------------------------------------|------------------------------------------------------|
-| `serviceAccount.create` | Enable the creation of a ServiceAccount for Dataflow server and Skipper server pods | `true`                                               |
-| `serviceAccount.name`   | Name of the created serviceAccount                                                  | Generated using the `common.names.fullname` template |
-| `rbac.create`           | Whether to create & use RBAC resources or not                                       | `true`                                               |
+| Name                    | Description                                                                         | Value  |
+| ----------------------- | ----------------------------------------------------------------------------------- | ------ |
+| `serviceAccount.create` | Enable the creation of a ServiceAccount for Dataflow server and Skipper server pods | `true` |
+| `serviceAccount.name`   | Name of the created serviceAccount                                                  | `""`   |
+| `rbac.create`           | Whether to create and use RBAC resources or not                                     | `true` |
+
 
 ### Metrics parameters
 
-| Parameter                              | Description                                                                                                                  | Default                                                 |
-|----------------------------------------|------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
-| `metrics.metrics`                      | Enable the export of Prometheus metrics                                                                                      | `false`                                                 |
-| `metrics.image.registry`               | Prometheus Rsocket Proxy image registry                                                                                      | `docker.io`                                             |
-| `metrics.image.repository`             | Prometheus Rsocket Proxy image name                                                                                          | `bitnami/prometheus-rsocket-proxy`                      |
-| `metrics.image.tag`                    | Prometheus Rsocket Proxy image tag                                                                                           | `{TAG_NAME}`                                            |
-| `metrics.image.pullPolicy`             | Prometheus Rsocket Proxy image pull policy                                                                                   | `IfNotPresent`                                          |
-| `metrics.image.pullSecrets`            | Specify docker-registry secret names as an array                                                                             | `[]` (does not add image pull secrets to deployed pods) |
-| `metrics.replicaCount`                 | Number of Prometheus Rsocket Proxy replicas to deploy                                                                        | `1`                                                     |
-| `metrics.podAffinityPreset`            | Prometheus Rsocket Proxy pod affinity preset. Ignored if `metrics.affinity` is set. Allowed values: `soft` or `hard`         | `""`                                                    |
-| `metrics.podAntiAffinityPreset`        | Prometheus Rsocket Proxy pod anti-affinity preset. Ignored if `metrics.affinity` is set. Allowed values: `soft` or `hard`    | `soft`                                                  |
-| `metrics.nodeAffinityPreset.type`      | Prometheus Rsocket Proxy node affinity preset type. Ignored if `metrics.affinity` is set. Allowed values: `soft` or `hard`   | `""`                                                    |
-| `metrics.nodeAffinityPreset.key`       | Prometheus Rsocket Proxy node label key to match Ignored if `metrics.affinity` is set.                                       | `""`                                                    |
-| `metrics.nodeAffinityPreset.values`    | Prometheus Rsocket Proxy node label values to match. Ignored if `metrics.affinity` is set.                                   | `[]`                                                    |
-| `metrics.affinity`                     | Prometheus Rsocket Proxy affinity for pod assignment                                                                         | `{}` (evaluated as a template)                          |
-| `metrics.nodeSelector`                 | Prometheus Rsocket Proxy node labels for pod assignment                                                                      | `{}` (evaluated as a template)                          |
-| `metrics.tolerations`                  | Prometheus Rsocket Proxy tolerations for pod assignment                                                                      | `[]` (evaluated as a template)                          |
-| `metrics.priorityClassName`            | Controller priorityClassName                                                                                                 | `nil`                                                   |
-| `metrics.resources.limits`             | The resources limits for the Prometheus Rsocket Proxy container                                                              | `{}`                                                    |
-| `metrics.resources.requests`           | The requested resources for the Prometheus Rsocket Proxy container                                                           | `{}`                                                    |
-| `metrics.podAnnotations`               | Annotations for Prometheus Rsocket Proxy pods                                                                                | `{}`                                                    |
-| `metrics.kafka.service.httpPort`       | Prometheus Rsocket Proxy HTTP port                                                                                           | `8080`                                                  |
-| `metrics.kafka.service.rsocketPort`    | Prometheus Rsocket Proxy Rsocket port                                                                                        | `8080`                                                  |
-| `metrics.kafka.service.annotations`    | Annotations for Prometheus Rsocket Proxy service                                                                             | `Check values.yaml file`                                |
-| `metrics.serviceMonitor.enabled`       | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)                       | `false`                                                 |
-| `metrics.serviceMonitor.namespace`     | Namespace in which ServiceMonitor is created if different from release                                                       | `nil`                                                   |
-| `metrics.serviceMonitor.extraLabels`   | Labels to add to ServiceMonitor                                                                                              | `{}`                                                    |
-| `metrics.serviceMonitor.interval`      | Interval at which metrics should be scraped.                                                                                 | `nil` (Prometheus Operator default value)               |
-| `metrics.serviceMonitor.scrapeTimeout` | Timeout after which the scrape is ended                                                                                      | `nil` (Prometheus Operator default value)               |
-| `metrics.pdb.create`                   | Enable/disable a Pod Disruption Budget creation                                                                              | `false`                                                 |
-| `metrics.pdb.minAvailable`             | Minimum number/percentage of pods that should remain scheduled                                                               | `1`                                                     |
-| `metrics.pdb.maxUnavailable`           | Maximum number/percentage of pods that may be made unavailable                                                               | `nil`                                                   |
-| `metrics.autoscaling.enabled`          | Enable autoscaling for Prometheus Rsocket Proxy                                                                              | `false`                                                 |
-| `metrics.autoscaling.minReplicas`      | Minimum number of Prometheus Rsocket Proxy replicas                                                                          | `nil`                                                   |
-| `metrics.autoscaling.maxReplicas`      | Maximum number of Prometheus Rsocket Proxy replicas                                                                          | `nil`                                                   |
-| `metrics.autoscaling.targetCPU`        | Target CPU utilization percentage                                                                                            | `nil`                                                   |
-| `metrics.autoscaling.targetMemory`     | Target Memory utilization percentage                                                                                         | `nil`                                                   |
+| Name                                   | Description                                                                                                                | Value                              |
+| -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
+| `metrics.enabled`                      | Enable Prometheus metrics                                                                                                  | `false`                            |
+| `metrics.image.registry`               | Prometheus Rsocket Proxy image registry                                                                                    | `docker.io`                        |
+| `metrics.image.repository`             | Prometheus Rsocket Proxy image repository                                                                                  | `bitnami/prometheus-rsocket-proxy` |
+| `metrics.image.tag`                    | Prometheus Rsocket Proxy image tag (immutable tags are recommended)                                                        | `1.3.0-debian-10-r289`             |
+| `metrics.image.pullPolicy`             | Prometheus Rsocket Proxy image pull policy                                                                                 | `IfNotPresent`                     |
+| `metrics.image.pullSecrets`            | Specify docker-registry secret names as an array                                                                           | `[]`                               |
+| `metrics.resources.limits`             | The resources limits for the Prometheus Rsocket Proxy container                                                            | `{}`                               |
+| `metrics.resources.requests`           | The requested resources for the Prometheus Rsocket Proxy container                                                         | `{}`                               |
+| `metrics.replicaCount`                 | Number of Prometheus Rsocket Proxy replicas to deploy                                                                      | `1`                                |
+| `metrics.podAffinityPreset`            | Prometheus Rsocket Proxy pod affinity preset. Ignored if `metrics.affinity` is set. Allowed values: `soft` or `hard`       | `""`                               |
+| `metrics.podAntiAffinityPreset`        | Prometheus Rsocket Proxy pod anti-affinity preset. Ignored if `metrics.affinity` is set. Allowed values: `soft` or `hard`  | `soft`                             |
+| `metrics.nodeAffinityPreset.type`      | Prometheus Rsocket Proxy node affinity preset type. Ignored if `metrics.affinity` is set. Allowed values: `soft` or `hard` | `""`                               |
+| `metrics.nodeAffinityPreset.key`       | Prometheus Rsocket Proxy node label key to match Ignored if `metrics.affinity` is set.                                     | `""`                               |
+| `metrics.nodeAffinityPreset.values`    | Prometheus Rsocket Proxy node label values to match. Ignored if `metrics.affinity` is set.                                 | `[]`                               |
+| `metrics.affinity`                     | Prometheus Rsocket Proxy affinity for pod assignment                                                                       | `{}`                               |
+| `metrics.nodeSelector`                 | Prometheus Rsocket Proxy node labels for pod assignment                                                                    | `{}`                               |
+| `metrics.tolerations`                  | Prometheus Rsocket Proxy tolerations for pod assignment                                                                    | `[]`                               |
+| `metrics.podAnnotations`               | Annotations for Prometheus Rsocket Proxy pods                                                                              | `{}`                               |
+| `metrics.priorityClassName`            | Prometheus Rsocket Proxy pods' priority.                                                                                   | `""`                               |
+| `metrics.service.httpPort`             | Prometheus Rsocket Proxy HTTP port                                                                                         | `8080`                             |
+| `metrics.service.rsocketPort`          | Prometheus Rsocket Proxy Rsocket port                                                                                      | `7001`                             |
+| `metrics.service.annotations`          | Annotations for the Prometheus Rsocket Proxy service                                                                       | `{}`                               |
+| `metrics.serviceMonitor.enabled`       | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)                     | `false`                            |
+| `metrics.serviceMonitor.extraLabels`   | Labels to add to ServiceMonitor, in case prometheus operator is configured with serviceMonitorSelector                     | `{}`                               |
+| `metrics.serviceMonitor.namespace`     | Namespace in which ServiceMonitor is created if different from release                                                     | `""`                               |
+| `metrics.serviceMonitor.interval`      | Interval at which metrics should be scraped.                                                                               | `""`                               |
+| `metrics.serviceMonitor.scrapeTimeout` | Timeout after which the scrape is ended                                                                                    | `""`                               |
+| `metrics.pdb.create`                   | Enable/disable a Pod Disruption Budget creation                                                                            | `false`                            |
+| `metrics.pdb.minAvailable`             | Minimum number/percentage of pods that should remain scheduled                                                             | `1`                                |
+| `metrics.pdb.maxUnavailable`           | Maximum number/percentage of pods that may be made unavailable                                                             | `""`                               |
+| `metrics.autoscaling.enabled`          | Enable autoscaling for Prometheus Rsocket Proxy                                                                            | `false`                            |
+| `metrics.autoscaling.minReplicas`      | Minimum number of Prometheus Rsocket Proxy replicas                                                                        | `""`                               |
+| `metrics.autoscaling.maxReplicas`      | Maximum number of Prometheus Rsocket Proxy replicas                                                                        | `""`                               |
+| `metrics.autoscaling.targetCPU`        | Target CPU utilization percentage                                                                                          | `""`                               |
+| `metrics.autoscaling.targetMemory`     | Target Memory utilization percentage                                                                                       | `""`                               |
 
 
 ### Init Container parameters
 
-| Parameter                            | Description                                                                                       | Default                                                 |
-|--------------------------------------|---------------------------------------------------------------------------------------------------|---------------------------------------------------------|
-| `waitForBackends.enabled`            | Wait for the database and other services (such as Kafka or RabbitMQ) used when enabling streaming | `true`                                                  |
-| `waitForBackends.image.registry`     | Init container wait-for-backend image registry                                                    | `docker.io`                                             |
-| `waitForBackends.image.repository`   | Init container wait-for-backend image name                                                        | `bitnami/kubectl`                                       |
-| `waitForBackends.image.tag`          | Init container wait-for-backend image tag                                                         | `{TAG_NAME}`                                            |
-| `waitForBackends.image.pullPolicy`   | Init container wait-for-backend image pull policy                                                 | `IfNotPresent`                                          |
-| `waitForBackends.image.pullSecrets`  | Specify docker-registry secret names as an array                                                  | `[]` (does not add image pull secrets to deployed pods) |
-| `waitForBackends.resources.limits`   | Init container wait-for-backend resource  limits                                                  | `{}`                                                    |
-| `waitForBackends.resources.requests` | Init container wait-for-backend resource  requests                                                | `{}`                                                    |
+| Name                                 | Description                                                                                       | Value                   |
+| ------------------------------------ | ------------------------------------------------------------------------------------------------- | ----------------------- |
+| `waitForBackends.enabled`            | Wait for the database and other services (such as Kafka or RabbitMQ) used when enabling streaming | `true`                  |
+| `waitForBackends.image.registry`     | Init container wait-for-backend image registry                                                    | `docker.io`             |
+| `waitForBackends.image.repository`   | Init container wait-for-backend image name                                                        | `bitnami/kubectl`       |
+| `waitForBackends.image.tag`          | Init container wait-for-backend image tag                                                         | `1.19.15-debian-10-r23` |
+| `waitForBackends.image.pullPolicy`   | Init container wait-for-backend image pull policy                                                 | `IfNotPresent`          |
+| `waitForBackends.image.pullSecrets`  | Specify docker-registry secret names as an array                                                  | `[]`                    |
+| `waitForBackends.resources.limits`   | Init container wait-for-backend resource limits                                                   | `{}`                    |
+| `waitForBackends.resources.requests` | Init container wait-for-backend resource requests                                                 | `{}`                    |
+
 
 ### Database parameters
 
-| Parameter                                 | Description                                                                                         | Default                                   |
-|-------------------------------------------|-----------------------------------------------------------------------------------------------------|-------------------------------------------|
-| `mariadb.enabled`                         | Enable/disable MariaDB chart installation                                                           | `true`                                    |
-| `mariadb.architecture`                    | MariaDB architecture (`standalone` or `replication`)                                                | `standalone`                              |
-| `mariadb.auth.database`                   | Database name to create                                                                             | `dataflow`                                |
-| `mariadb.auth.username`                   | Username of new user to create                                                                      | `dataflow`                                |
-| `mariadb.auth.password`                   | Password for the new user                                                                           | `change-me`                               |
-| `mariadb.auth.rootPassword`               | Password for the MariaDB `root` user                                                                | _random 10 character alphanumeric string_ |
-| `mariadb.initdbScripts`                   | Dictionary of initdb scripts                                                                        | Check `values.yaml` file                  |
-| `externalDatabase.driver`                 | The fully qualified name of the JDBC Driver class                                                   | `""`                                      |
-| `externalDatabase.scheme`                 | The scheme is a vendor-specific or shared protocol string that follows the "jdbc:" of the URL       | `""`                                      |
-| `externalDatabase.host`                   | Host of the external database                                                                       | `localhost`                               |
-| `externalDatabase.port`                   | External database port number                                                                       | `3306`                                    |
-| `externalDatabase.password`               | Password for the above username                                                                     | `""`                                      |
-| `externalDatabase.existingPasswordSecret` | Existing secret with database password                                                              | `""`                                      |
-| `externalDatabase.existingPasswordKey`    | Key of the existing secret with database password                                                   | `datasource-password`                     |
-| `externalDatabase.dataflow.url`           | JDBC URL for dataflow server. Overrides external scheme, host, port, database, and jdbc parameters. | `""`                                      |
-| `externalDatabase.dataflow.username`      | Existing username in the external db to be used by Dataflow server                                  | `dataflow`                                |
-| `externalDatabase.dataflow.database`      | Name of the existing database to be used by Dataflow server                                         | `dataflow`                                |
-| `externalDatabase.skipper.url`            | JDBC URL for skipper. Overrides external scheme, host, port, database, and jdbc parameters.         | `""`                                      |
-| `externalDatabase.skipper.username`       | Existing username in the external db to be used by Skipper server                                   | `skipper`                                 |
-| `externalDatabase.skipper.database`       | Name of the existing database to be used by Skipper server                                          | `skipper`                                 |
-| `externalDatabase.hibernateDialect`       | Hibernate Dialect used by Dataflow/Skipper servers                                                  | `""`                                      |
+| Name                                      | Description                                                                                         | Value        |
+| ----------------------------------------- | --------------------------------------------------------------------------------------------------- | ------------ |
+| `mariadb.enabled`                         | Enable/disable MariaDB chart installation                                                           | `true`       |
+| `mariadb.architecture`                    | MariaDB architecture. Allowed values: `standalone` or `replication`                                 | `standalone` |
+| `mariadb.auth.rootPassword`               | Password for the MariaDB `root` user                                                                | `""`         |
+| `mariadb.auth.username`                   | Username of new user to create                                                                      | `dataflow`   |
+| `mariadb.auth.password`                   | Password for the new user                                                                           | `change-me`  |
+| `mariadb.auth.database`                   | Database name to create                                                                             | `dataflow`   |
+| `mariadb.auth.forcePassword`              | Force users to specify required passwords in the database                                           | `false`      |
+| `mariadb.auth.usePasswordFiles`           | Mount credentials as a file instead of using an environment variable                                | `false`      |
+| `mariadb.initdbScripts`                   | Specify dictionary of scripts to be run at first boot                                               | `{}`         |
+| `flyway.enabled`                          | Enable/disable flyway running Dataflow and Skipper Database creation scripts on startup             | `true`       |
+| `externalDatabase.host`                   | Host of the external database                                                                       | `localhost`  |
+| `externalDatabase.port`                   | External database port number                                                                       | `3306`       |
+| `externalDatabase.driver`                 | The fully qualified name of the JDBC Driver class                                                   | `""`         |
+| `externalDatabase.scheme`                 | The scheme is a vendor-specific or shared protocol string that follows the "jdbc:" of the URL       | `""`         |
+| `externalDatabase.password`               | Password for the above username                                                                     | `""`         |
+| `externalDatabase.existingPasswordSecret` | Existing secret with database password                                                              | `""`         |
+| `externalDatabase.existingPasswordKey`    | Key of the existing secret with database password, defaults to `datasource-password`                | `""`         |
+| `externalDatabase.dataflow.url`           | JDBC URL for dataflow server. Overrides external scheme, host, port, database, and jdbc parameters. | `""`         |
+| `externalDatabase.dataflow.database`      | Name of the existing database to be used by Dataflow server                                         | `dataflow`   |
+| `externalDatabase.dataflow.username`      | Existing username in the external db to be used by Dataflow server                                  | `dataflow`   |
+| `externalDatabase.skipper.url`            | JDBC URL for skipper. Overrides external scheme, host, port, database, and jdbc parameters.         | `""`         |
+| `externalDatabase.skipper.database`       | Name of the existing database to be used by Skipper server                                          | `skipper`    |
+| `externalDatabase.skipper.username`       | Existing username in the external db to be used by Skipper server                                   | `skipper`    |
+| `externalDatabase.hibernateDialect`       | Hibernate Dialect used by Dataflow/Skipper servers                                                  | `""`         |
+
 
 ### RabbitMQ chart parameters
 
-| Parameter                                 | Description                                | Default                                   |
-|-------------------------------------------|--------------------------------------------|-------------------------------------------|
-| `rabbitmq.enabled`                        | Enable/disable RabbitMQ chart installation | `true`                                    |
-| `rabbitmq.auth.username`                  | RabbitMQ username                          | `user`                                    |
-| `rabbitmq.auth.password`                  | RabbitMQ password                          | _random 40 character alphanumeric string_ |
-| `externalRabbitmq.enabled`                | Enable/disable external RabbitMQ           | `false`                                   |
-| `externalRabbitmq.host`                   | Host of the external RabbitMQ              | `localhost`                               |
-| `externalRabbitmq.port`                   | External RabbitMQ port number              | `5672`                                    |
-| `externalRabbitmq.username`               | External RabbitMQ username                 | `guest`                                   |
-| `externalRabbitmq.password`               | External RabbitMQ password                 | `guest`                                   |
-| `externalRabbitmq.vhost`                  | External RabbitMQ virtual host             | `/`                                       |
-| `externalRabbitmq.existingPasswordSecret` | Existing secret with RabbitMQ password     | `""`                                      |
+| Name                                      | Description                                                                     | Value       |
+| ----------------------------------------- | ------------------------------------------------------------------------------- | ----------- |
+| `rabbitmq.enabled`                        | Enable/disable RabbitMQ chart installation                                      | `true`      |
+| `rabbitmq.auth.username`                  | RabbitMQ username                                                               | `user`      |
+| `externalRabbitmq.enabled`                | Enable/disable external RabbitMQ                                                | `false`     |
+| `externalRabbitmq.host`                   | Host of the external RabbitMQ                                                   | `localhost` |
+| `externalRabbitmq.port`                   | External RabbitMQ port number                                                   | `5672`      |
+| `externalRabbitmq.username`               | External RabbitMQ username                                                      | `guest`     |
+| `externalRabbitmq.password`               | External RabbitMQ password. It will be saved in a kubernetes secret             | `guest`     |
+| `externalRabbitmq.vhost`                  | External RabbitMQ virtual host. It will be saved in a kubernetes secret         | `""`        |
+| `externalRabbitmq.existingPasswordSecret` | Existing secret with RabbitMQ password. It will be saved in a kubernetes secret | `""`        |
+
 
 ### Kafka chart parameters
 
-| Parameter                             | Description                                 | Default          |
-|---------------------------------------|---------------------------------------------|------------------|
-| `kafka.enabled`                       | Enable/disable Kafka chart installation     | `false`          |
-| `kafka.replicaCount`                  | Number of Kafka brokers                     | `1`              |
-| `kafka.offsetsTopicReplicationFactor` | Kafka Secret Key                            | `1`              |
-| `kafka.zookeeper.enabled`             | Enable/disable Zookeeper chart installation | `nil`            |
-| `kafka.zookeeper.replicaCount`        | Number of Zookeeper replicas                | `1`              |
-| `externalKafka.enabled`               | Enable/disable external Kafka               | `false`          |
-| `externalKafka.brokers`               | External Kafka brokers                      | `localhost:9092` |
-| `externalKafka.zkNodes`               | External Zookeeper nodes                    | `localhost:2181` |
+| Name                                  | Description                             | Value            |
+| ------------------------------------- | --------------------------------------- | ---------------- |
+| `kafka.enabled`                       | Enable/disable Kafka chart installation | `false`          |
+| `kafka.replicaCount`                  | Number of Kafka brokers                 | `1`              |
+| `kafka.offsetsTopicReplicationFactor` | Kafka Secret Key                        | `1`              |
+| `kafka.zookeeper.replicaCount`        | Number of Zookeeper replicas            | `1`              |
+| `externalKafka.enabled`               | Enable/disable external Kafka           | `false`          |
+| `externalKafka.brokers`               | External Kafka brokers                  | `localhost:9092` |
+| `externalKafka.zkNodes`               | External Zookeeper nodes                | `localhost:2181` |
+
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -550,6 +568,14 @@ Find more information about how to deal with common errors related to Bitnami He
 ## Upgrading
 
 If you enabled RabbitMQ chart to be used as the messaging solution for Skipper to manage streaming content, then it's necessary to set the `rabbitmq.auth.password` and `rabbitmq.auth.erlangCookie` parameters when upgrading for readiness/liveness probes to work properly. Inspect the RabbitMQ secret to obtain the password and the Erlang cookie, then you can upgrade your chart using the command below:
+
+### To 4.0.0
+
+This major updates the Kafka subchart its newest major, 14.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/kafka#to-1400) you can find more information about the changes introduced in this version.
+
+### To 3.0.0
+
+This major updates the Kafka subchart to its newest major 13.0.0. For more information on this subchart's major, please refer to [kafka upgrade notes](https://github.com/bitnami/charts/tree/master/bitnami/kafka#to-1300).
 
 ### To 2.0.0
 

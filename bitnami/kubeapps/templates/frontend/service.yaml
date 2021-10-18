@@ -67,7 +67,7 @@ metadata:
 spec:
   type: ClusterIP
   ports:
-    - port: {{ .Values.pinnipedProxy.service.port }}
+    - port: {{ .Values.pinnipedProxy.containerPort }}
       targetPort: pinniped-proxy
       protocol: TCP
       name: pinniped-proxy

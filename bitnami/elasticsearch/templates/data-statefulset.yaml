@@ -30,9 +30,13 @@ spec:
         {{- if .Values.data.podLabels }}
         {{- include "common.tplvalues.render" (dict "value" .Values.data.podLabels "context" $) | nindent 8 }}
         {{- end }}
-      {{- with .Values.data.podAnnotations }}
-      annotations: {{- toYaml . | nindent 8 }}
-      {{- end }}
+      annotations:
+        {{- if and (include "elasticsearch.createTlsSecret" .) (not .Values.security.tls.data.existingSecret) }}
+        checksum/tls: {{ include (print $.Template.BasePath "/tls-secret.yaml") . | sha256sum }}
+        {{- end }}
+        {{- if .Values.data.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.data.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
     spec:
       {{- include "elasticsearch.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.data.affinity }}
@@ -55,12 +59,15 @@ spec:
       {{- if .Values.data.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.data.tolerations "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.data.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.data.topologySpreadConstraints "context" $) | nindent 8 }}
+      {{- end }}
       serviceAccountName: {{ template "elasticsearch.data.serviceAccountName" . }}
       {{- if .Values.data.securityContext.enabled }}
       securityContext:
         fsGroup: {{ .Values.data.securityContext.fsGroup }}
       {{- end }}
-      {{- if or .Values.sysctlImage.enabled (and .Values.volumePermissions.enabled .Values.data.persistence.enabled) }}
+      {{- if or .Values.data.initContainers .Values.sysctlImage.enabled (and .Values.volumePermissions.enabled .Values.data.persistence.enabled) }}
       initContainers:
         {{- if .Values.sysctlImage.enabled }}
         ## Image that performs the sysctl operation to modify Kernel settings (needed sometimes to avoid boot errors)
@@ -71,7 +78,8 @@ spec:
             - /bin/bash
             - -ec
             - |
-              sysctl -w vm.max_map_count=262144 && sysctl -w fs.file-max=65536
+              {{- include "elasticsearch.sysctlIfLess" (dict "key" "vm.max_map_count" "value" "262144") | nindent 14 }}
+              {{- include "elasticsearch.sysctlIfLess" (dict "key" "fs.file-max" "value" "65536") | nindent 14 }}
           securityContext:
             privileged: true
           {{- if .Values.sysctlImage.resources }}
@@ -96,6 +104,9 @@ spec:
             - name: data
               mountPath: "/bitnami/elasticsearch/data"
         {{- end }}
+        {{- if .Values.data.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.data.initContainers "context" $) | nindent 8 }}
+        {{- end }}
       {{- end }}
       containers:
         - name: elasticsearch
@@ -105,9 +116,17 @@ spec:
           securityContext:
             runAsUser: {{ .Values.data.securityContext.runAsUser }}
           {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- end }}
           env:
+            - name: MY_POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
             - name: BITNAMI_DEBUG
-              value: {{ ternary "true" "false" .Values.image.debug | quote }}
+              value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
             - name: ELASTICSEARCH_CLUSTER_NAME
               value: {{ .Values.name | quote }}
             - name: ELASTICSEARCH_CLUSTER_HOSTS
@@ -128,6 +147,11 @@ spec:
               value: "yes"
             - name: ELASTICSEARCH_NODE_TYPE
               value: "data"
+            - name: ELASTICSEARCH_ADVERTISED_HOSTNAME
+              value: "$(MY_POD_NAME).{{ include "elasticsearch.data.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
+            {{- if .Values.security.enabled }}
+            {{- include "elasticsearch.configure.security" . | nindent 12 }}
+            {{- end }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.extraEnvVars "context" $ ) | nindent 12 }}
             {{- end }}
@@ -147,6 +171,20 @@ spec:
               containerPort: 9200
             - name: transport
               containerPort: 9300
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.data.startupProbe.enabled }}
+          startupProbe:
+            initialDelaySeconds: {{ .Values.data.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.data.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.data.startupProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.data.startupProbe.successThreshold }}
+            failureThreshold: {{ .Values.data.startupProbe.failureThreshold }}
+            exec:
+              command:
+                - /opt/bitnami/scripts/elasticsearch/healthcheck.sh
+          {{- else if .Values.data.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.data.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
           {{- if .Values.data.livenessProbe.enabled }}
           livenessProbe:
             initialDelaySeconds: {{ .Values.data.livenessProbe.initialDelaySeconds }}
@@ -154,20 +192,25 @@ spec:
             timeoutSeconds: {{ .Values.data.livenessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.data.livenessProbe.successThreshold }}
             failureThreshold: {{ .Values.data.livenessProbe.failureThreshold }}
-            httpGet:
-              path: /_cluster/health?local=true
-              port: 9200
+            exec:
+              command:
+                - /opt/bitnami/scripts/elasticsearch/healthcheck.sh
+          {{- else if .Values.data.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.data.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.data.readinessProbe.enabled }}
           readinessProbe:
-            initialDelaySeconds: {{ .Values.data.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.data.livenessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.data.livenessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.data.livenessProbe.successThreshold }}
-            failureThreshold: {{ .Values.data.livenessProbe.failureThreshold }}
-            httpGet:
-              path: /_cluster/health?local=true
-              port: 9200
+            initialDelaySeconds: {{ .Values.data.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.data.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.data.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.data.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.data.readinessProbe.failureThreshold }}
+            exec:
+              command:
+                - /opt/bitnami/scripts/elasticsearch/healthcheck.sh
+          {{- else if .Values.data.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.data.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
           {{- end }}
           {{- if .Values.data.resources }}
           resources: {{- toYaml .Values.data.resources | nindent 12 }}
@@ -178,8 +221,18 @@ spec:
               name: "config"
               subPath: elasticsearch.yml
             {{- end }}
+            {{- if .Values.extraConfig }}
+            - mountPath: /opt/bitnami/elasticsearch/config/my_elasticsearch.yml
+              name: config
+              subPath: my_elasticsearch.yml
+            {{- end }}
             - name: "data"
               mountPath: "/bitnami/elasticsearch/data"
+            {{- if .Values.security.enabled }}
+            - name: elasticsearch-certificates
+              mountPath: /opt/bitnami/elasticsearch/config/certs
+              readOnly: true
+            {{- end }}
             {{- if .Values.extraVolumeMounts }}
             {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
             {{- end }}
@@ -195,11 +248,20 @@ spec:
             - name: custom-init-scripts-secret
               mountPath: /docker-entrypoint-initdb.d/init-scripts-secret
             {{- end }}
+        {{- if .Values.data.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.data.sidecars "context" $) | nindent 8 }}
+        {{- end }}
       volumes:
-        {{- if .Values.config }}
+        {{- if or .Values.config .Values.extraConfig }}
         - name: "config"
           configMap:
             name: {{ template "common.names.fullname" . }}
+        {{- end }}
+        {{- if .Values.security.enabled }}
+        - name: elasticsearch-certificates
+          secret:
+            secretName: {{ include "elasticsearch.data.tlsSecretName" . }}
+            defaultMode: 256
         {{- end }}
         {{- if .Values.extraVolumes }}
         {{- toYaml .Values.extraVolumes | nindent 8 }}

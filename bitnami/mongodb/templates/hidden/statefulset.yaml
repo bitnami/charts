@@ -12,6 +12,9 @@ metadata:
     {{- if .Values.hidden.labels }}
     {{- include "common.tplvalues.render" (dict "value" .Values.hidden.labels "context" $) | nindent 4 }}
     {{- end }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
   {{- if .Values.hidden.annotations }}
   annotations: {{- include "common.tplvalues.render" (dict "value" .Values.hidden.annotations "context" $) | nindent 4 }}
   {{- end }}
@@ -65,6 +68,9 @@ spec:
       {{- end }}
       {{- if .Values.hidden.priorityClassName }}
       priorityClassName: {{ .Values.hidden.priorityClassName }}
+      {{- end }}
+      {{- if .Values.hidden.runtimeClassName }}
+      runtimeClassName: {{ .Values.hidden.runtimeClassName }}
       {{- end }}
       {{- if .Values.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
@@ -188,18 +194,22 @@ spec:
           {{- if .Values.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
-          {{- if .Values.hidden.command }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.hidden.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.hidden.command "context" $) | nindent 12 }}
           {{- else }}
           command:
             - /scripts/setup-hidden.sh
           {{- end }}
-          {{- if .Values.hidden.args }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.hidden.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.hidden.args "context" $) | nindent 12 }}
           {{- end }}
           env:
             - name: BITNAMI_DEBUG
-              value: {{ ternary "true" "false" .Values.image.debug | quote }}
+              value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
             {{- if and .Values.externalAccess.hidden.enabled .Values.externalAccess.autoDiscovery.enabled (eq .Values.externalAccess.hidden.service.type "LoadBalancer") }}
             - name: SHARED_FILE
               value: "/shared/info.txt"
@@ -213,7 +223,7 @@ spec:
                 fieldRef:
                   fieldPath: metadata.namespace
             - name: K8S_SERVICE_NAME
-              value: "{{ include "mongodb.fullname" . }}-headless"
+              value: "{{ include "mongodb.service.nameOverride" . }}"
             - name: K8S_HIDDEN_NODE_SERVICE_NAME
               value: "{{ include "mongodb.fullname" . }}-hidden-headless"
             - name: MONGODB_REPLICA_SET_MODE
@@ -234,6 +244,10 @@ spec:
             - name: MONGODB_DATABASE
               value: {{ .Values.auth.database | quote }}
             {{- end }}
+            {{- if .Values.metrics.username }}
+            - name: MONGODB_METRICS_USERNAME
+              value: {{ .Values.metrics.username | quote }}
+            {{- end }}
             {{- if .Values.auth.enabled }}
             {{- if and .Values.auth.username .Values.auth.database }}
             - name: MONGODB_PASSWORD
@@ -241,6 +255,13 @@ spec:
                 secretKeyRef:
                   name: {{ include "mongodb.secretName" . }}
                   key: mongodb-password
+            {{- end }}
+            {{- if .Values.metrics.username }}
+            - name: MONGODB_METRICS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "mongodb.secretName" . }}
+                  key: mongodb-metrics-password
             {{- end }}
             - name: MONGODB_ROOT_PASSWORD
               valueFrom:
@@ -296,6 +317,7 @@ spec:
           ports:
             - containerPort: 27017
               name: mongodb
+          {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.hidden.livenessProbe.enabled }}
           livenessProbe:
             exec:
@@ -336,6 +358,7 @@ spec:
           {{- else if .Values.hidden.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.hidden.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
+          {{- end }}
           {{- if .Values.hidden.resources }}
           resources: {{- toYaml .Values.hidden.resources | nindent 12 }}
           {{- end }}
@@ -373,19 +396,39 @@ spec:
           {{- if .Values.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else }}
           command:
             - /bin/bash
             - -ec
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else }}
           args:
             - |
               /bin/mongodb_exporter --mongodb.uri "{{ include "mongodb.mongodb_exporter.uri" . }}" {{ .Values.metrics.extraFlags }}
+          {{- end }}
           env:
           {{- if .Values.auth.enabled }}
+          {{- if not .Values.metrics.username }}
+          - name: MONGODB_ROOT_USER
+            value: {{ .Values.auth.rootUser | quote }}
           - name: MONGODB_ROOT_PASSWORD
             valueFrom:
               secretKeyRef:
                 name: {{ include "mongodb.secretName" . }}
                 key: mongodb-root-password
+          {{- else }}
+          - name: MONGODB_METRICS_USERNAME
+            value: {{ .Values.metrics.username | quote }}
+          - name: MONGODB_METRICS_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "mongodb.secretName" . }}
+                key: mongodb-metrics-password
+          {{- end }}
           {{- end }}
           volumeMounts:
           {{- if .Values.tls.enabled }}
@@ -395,6 +438,7 @@ spec:
           ports:
             - name: metrics
               containerPort: 9216
+          {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.metrics.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
@@ -416,6 +460,7 @@ spec:
             timeoutSeconds: {{ .Values.metrics.readinessProbe.timeoutSeconds }}
             failureThreshold: {{ .Values.metrics.readinessProbe.failureThreshold }}
             successThreshold: {{ .Values.metrics.readinessProbe.successThreshold }}
+          {{- end }}
           {{- end }}
           {{- if .Values.metrics.resources }}
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
@@ -451,7 +496,7 @@ spec:
           emptyDir: {}
         - name: certs-volume
           secret:
-            secretName: {{ template "mongodb.caSecretName" . }}
+            secretName: {{ template "mongodb.tlsSecretName" . }}
             items:
             - key: mongodb-ca-cert
               path: mongodb-ca-cert

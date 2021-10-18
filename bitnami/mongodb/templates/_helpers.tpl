@@ -46,7 +46,7 @@ Create a default mongo arbiter service name which can be overridden.
 {{- end }}
 
 {{/*
-Return the proper MongoDB(R) image name
+Return the proper MongoDB&reg; image name
 */}}
 {{- define "mongodb.image" -}}
 {{ include "common.images.image" (dict "imageRoot" .Values.image "global" .Values.global) }}
@@ -130,7 +130,7 @@ is true or default otherwise.
 {{- end -}}
 
 {{/*
-Return the configmap with the MongoDB(R) configuration
+Return the configmap with the MongoDB&reg; configuration
 */}}
 {{- define "mongodb.configmapName" -}}
 {{- if .Values.existingConfigmap -}}
@@ -141,7 +141,7 @@ Return the configmap with the MongoDB(R) configuration
 {{- end -}}
 
 {{/*
-Return true if a configmap object should be created for MongoDB(R)
+Return true if a configmap object should be created for MongoDB&reg;
 */}}
 {{- define "mongodb.createConfigmap" -}}
 {{- if and .Values.configuration (not .Values.existingConfigmap) }}
@@ -151,34 +151,23 @@ Return true if a configmap object should be created for MongoDB(R)
 {{- end -}}
 
 {{/*
-Return the secret with MongoDB(R) credentials
+Return the secret with MongoDB&reg; credentials
 */}}
 {{- define "mongodb.secretName" -}}
     {{- if .Values.auth.existingSecret -}}
-        {{- printf "%s" .Values.auth.existingSecret -}}
+        {{- printf "%s" (tpl .Values.auth.existingSecret $) -}}
     {{- else -}}
         {{- printf "%s" (include "mongodb.fullname" .) -}}
     {{- end -}}
 {{- end -}}
 
 {{/*
-Return true if a secret object should be created for MongoDB(R)
+Return true if a secret object should be created for MongoDB&reg;
 */}}
 {{- define "mongodb.createSecret" -}}
 {{- if and .Values.auth.enabled (not .Values.auth.existingSecret) }}
     {{- true -}}
 {{- else -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return true if a secret object should be created for MongoDB(R)
-*/}}
-{{- define "mongodb.caSecretName" -}}
-{{- if .Values.tls.existingSecret -}}
-    {{ .Values.tls.existingSecret }}
-{{- else -}}
-    {{ include "mongodb.fullname" . }}-ca
 {{- end -}}
 {{- end -}}
 
@@ -204,7 +193,7 @@ Return true if the Arbiter should be deployed
 {{- end -}}
 
 {{/*
-Return the configmap with the MongoDB(R) configuration for the Arbiter
+Return the configmap with the MongoDB&reg; configuration for the Arbiter
 */}}
 {{- define "mongodb.arbiter.configmapName" -}}
 {{- if .Values.arbiter.existingConfigmap -}}
@@ -215,7 +204,7 @@ Return the configmap with the MongoDB(R) configuration for the Arbiter
 {{- end -}}
 
 {{/*
-Return true if a configmap object should be created for MongoDB(R) Arbiter
+Return true if a configmap object should be created for MongoDB&reg; Arbiter
 */}}
 {{- define "mongodb.arbiter.createConfigmap" -}}
 {{- if and (eq .Values.architecture "replicaset") .Values.arbiter.enabled .Values.arbiter.configuration (not .Values.arbiter.existingConfigmap) }}
@@ -234,7 +223,7 @@ Return true if the Hidden should be deployed
 {{- end -}}
 
 {{/*
-Return the configmap with the MongoDB(R) configuration for the Hidden
+Return the configmap with the MongoDB&reg; configuration for the Hidden
 */}}
 {{- define "mongodb.hidden.configmapName" -}}
 {{- if .Values.hidden.existingConfigmap -}}
@@ -245,7 +234,7 @@ Return the configmap with the MongoDB(R) configuration for the Hidden
 {{- end -}}
 
 {{/*
-Return true if a configmap object should be created for MongoDB(R) Hidden
+Return true if a configmap object should be created for MongoDB&reg; Hidden
 */}}
 {{- define "mongodb.hidden.createConfigmap" -}}
 {{- if and  (include "mongodb.hidden.enabled" .) .Values.hidden.enabled .Values.hidden.configuration (not .Values.hidden.existingConfigmap) }}
@@ -282,7 +271,7 @@ mongodb: podSecurityPolicy.create, rbac.create
 {{- end -}}
 {{- end -}}
 
-{{/* Validate values of MongoDB(R) - must provide a valid architecture */}}
+{{/* Validate values of MongoDB&reg; - must provide a valid architecture */}}
 {{- define "mongodb.validateValues.architecture" -}}
 {{- if and (ne .Values.architecture "standalone") (ne .Values.architecture "replicaset") -}}
 mongodb: architecture
@@ -292,7 +281,7 @@ mongodb: architecture
 {{- end -}}
 
 {{/*
-Validate values of MongoDB(R) - both auth.username and auth.database are necessary
+Validate values of MongoDB&reg; - both auth.username and auth.database are necessary
 to create a custom user and database during 1st initialization
 */}}
 {{- define "mongodb.validateValues.customDatabase" -}}
@@ -306,7 +295,7 @@ mongodb: auth.username, auth.database
 
 
 {{/*
-Validate values of MongoDB(R) - service type for external access
+Validate values of MongoDB&reg; - service type for external access
 */}}
 {{- define "mongodb.validateValues.externalAccessServiceType" -}}
 {{- if and (eq .Values.architecture "replicaset") (not (eq .Values.externalAccess.service.type "NodePort")) (not (eq .Values.externalAccess.service.type "LoadBalancer")) (not (eq .Values.externalAccess.service.type "ClusterIP")) -}}
@@ -316,7 +305,7 @@ mongodb: externalAccess.service.type
 {{- end -}}
 
 {{/*
-Validate values of MongoDB(R) - number of replicas must be the same than LoadBalancer IPs list
+Validate values of MongoDB&reg; - number of replicas must be the same than LoadBalancer IPs list
 */}}
 {{- define "mongodb.validateValues.loadBalancerIPsListLength" -}}
 {{- $replicaCount := int .Values.replicaCount }}
@@ -328,7 +317,7 @@ mongodb: .Values.externalAccess.service.loadBalancerIPs
 {{- end -}}
 
 {{/*
-Validate values of MongoDB(R) - number of replicas must be the same than NodePort list
+Validate values of MongoDB&reg; - number of replicas must be the same than NodePort list
 */}}
 {{- define "mongodb.validateValues.nodePortListLength" -}}
 {{- $replicaCount := int .Values.replicaCount }}
@@ -340,7 +329,7 @@ mongodb: .Values.externalAccess.service.nodePorts
 {{- end -}}
 
 {{/*
-Validate values of MongoDB(R) - RBAC should be enabled when autoDiscovery is enabled
+Validate values of MongoDB&reg; - RBAC should be enabled when autoDiscovery is enabled
 */}}
 {{- define "mongodb.validateValues.externalAccessAutoDiscoveryRBAC" -}}
 {{- if and (eq .Values.architecture "replicaset") .Values.externalAccess.enabled .Values.externalAccess.autoDiscovery.enabled (not .Values.rbac.create )}}
@@ -353,13 +342,17 @@ mongodb: rbac.create
 {{- end -}}
 
 {{/*
-Validate values of MongoDB(R) exporter URI string - auth.enabled and/or tls.enabled must be enabled or it defaults
+Validate values of MongoDB&reg; exporter URI string - auth.enabled and/or tls.enabled must be enabled or it defaults
 */}}
 {{- define "mongodb.mongodb_exporter.uri" -}}
     {{- $uriTlsArgs := ternary "tls=true&tlsCertificateKeyFile=/certs/mongodb.pem&tlsCAFile=/certs/mongodb-ca-cert" "" .Values.tls.enabled -}}
-    {{- $uriAuth := ternary "root:$(echo $MONGODB_ROOT_PASSWORD | sed -r \"s/@/%40/g;s/:/%3A/g\")@" "" .Values.auth.enabled -}}
-
-    {{- printf "mongodb://%slocalhost:27017/admin?%s" $uriAuth $uriTlsArgs -}}
+    {{- if .Values.metrics.username }}
+        {{- $uriAuth := ternary "$(echo $MONGODB_METRICS_USERNAME | sed -r \"s/@/%40/g;s/:/%3A/g\"):$(echo $MONGODB_METRICS_PASSWORD | sed -r \"s/@/%40/g;s/:/%3A/g\")@" "" .Values.auth.enabled -}}
+        {{- printf "mongodb://%slocalhost:27017/admin?%s" $uriAuth $uriTlsArgs -}}
+    {{- else -}}
+        {{- $uriAuth := ternary "$MONGODB_ROOT_USER:$(echo $MONGODB_ROOT_PASSWORD | sed -r \"s/@/%40/g;s/:/%3A/g\")@" "" .Values.auth.enabled -}}
+        {{- printf "mongodb://%slocalhost:27017/admin?%s" $uriAuth $uriTlsArgs -}}
+    {{- end -}}
 {{- end -}}
 
 
@@ -382,5 +375,26 @@ Return the appropriate apiVersion for PodSecurityPolicy.
 {{- print "policy/v1beta1" -}}
 {{- else -}}
 {{- print "extensions/v1beta1" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return true if a TLS secret object should be created
+*/}}
+{{- define "mongodb.createTlsSecret" -}}
+{{- if and .Values.tls.enabled (not .Values.tls.existingSecret) }}
+    {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the secret containing MongoDB&reg; TLS certificates
+*/}}
+{{- define "mongodb.tlsSecretName" -}}
+{{- $secretName := .Values.tls.existingSecret -}}
+{{- if $secretName -}}
+    {{- printf "%s" (tpl $secretName $) -}}
+{{- else -}}
+    {{- printf "%s-ca" (include "mongodb.fullname" .) -}}
 {{- end -}}
 {{- end -}}

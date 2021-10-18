@@ -84,6 +84,61 @@ spec:
         {{- if .Values.initContainers }}
           {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
         {{- end }}
+        {{- if .Values.tls.enabled}}
+        {{- $fullname := include "solr.fullname" . }}
+        - name: init-certs
+          image: {{ include "solr.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          command:
+          - /bin/bash
+          - -ec
+          - |-
+            if [[ -f "/certs/ca.crt" ]] && [[ -f "/certs/tls.key" ]] && [[ -f "/certs/tls.crt" ]]; then
+              openssl pkcs12 -export -in "/certs/tls.crt" \
+                  -inkey "/certs/tls.key" -out "/tmp/keystore.p12" \
+                  -passin pass:"/certs/tls.key" -passout pass:"${SOLR_SSL_KEY_STORE_PASSWORD}"
+
+              keytool -importkeystore -srckeystore "/tmp/keystore.p12" \
+                  -srcstoretype PKCS12 \
+                  -srcstorepass "${SOLR_SSL_KEY_STORE_PASSWORD}" \
+                  -deststorepass "${SOLR_SSL_KEY_STORE_PASSWORD}" \
+                  -destkeystore "/opt/bitnami/solr/certs/keystore.p12"
+
+              rm "/tmp/keystore.p12"
+
+              keytool -import -file "/certs/ca.crt" -keystore "/opt/bitnami/solr/certs/truststore.p12" -storepass "${SOLR_SSL_TRUST_STORE_PASSWORD}" -noprompt
+            else
+              cp "/certs/keystore.p12" "/opt/bitnami/solr/certs/keystore.p12"
+              cp "/certs/truststore.p12" "/opt/bitnami/solr/certs/truststore.p12"
+            fi
+          env:
+          - name: MY_POD_NAME
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.name
+          - name: SOLR_SSL_KEY_STORE_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "solr.tlsPasswordsSecret" . }}
+                key: tls-keystore-password
+          - name: SOLR_SSL_TRUST_STORE_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "solr.tlsPasswordsSecret" . }}
+                key: tls-truststore-password
+          {{- if .Values.resources }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.tls.resources "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+          - name: certs
+            mountPath: '/certs'
+          - name: certs-shared
+            mountPath: '/opt/bitnami/solr/certs'
+        {{- end }}
       containers:
         - name: solr
           image: {{ include "solr.image" . }}
@@ -162,19 +217,25 @@ spec:
             {{- if .Values.tls.enabled }}
             - name: SOLR_SSL_ENABLED
               value: "yes"
+            {{- if (include "solr.createTlsSecret" .) }}
+            - name: SOLR_SSL_KEY_STORE_TYPE
+              value: "JKS"
+            - name: SOLR_SSL_TRUST_STORE_TYPE
+              value: "JKS"
+            {{- end }}
             - name: SOLR_SSL_KEY_STORE
               value: /opt/bitnami/solr/certs/keystore.p12
             - name: SOLR_SSL_KEY_STORE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.tls.passwordsSecretName | quote }}
+                  name: {{ include "solr.tlsPasswordsSecret" . }}
                   key: tls-keystore-password
             - name: SOLR_SSL_TRUST_STORE
               value: /opt/bitnami/solr/certs/truststore.p12
             - name: SOLR_SSL_TRUST_STORE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.tls.passwordsSecretName | quote }}
+                  name: {{ include "solr.tlsPasswordsSecret" . }}
                   key: tls-truststore-password
             - name: SOLR_SSL_CHECK_PEER_NAME
               value: "false"
@@ -192,7 +253,7 @@ spec:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.extraEnvVarsSecret "context" $) }}
             {{- end }}
           ports:
-            - name: solr-client
+            - name: http
               containerPort: {{ .Values.containerPort }}
           {{- if .Values.resources }}
           resources: {{- include "common.tplvalues.render" (dict "value" .Values.resources "context" $) | nindent 12 }}
@@ -211,7 +272,7 @@ spec:
               scheme: "HTTP"
               {{- end }}
               path: "/solr"
-              port: {{ .Values.service.port }}
+              port: {{ .Values.containerPort }}
           {{- else if .Values.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
@@ -229,17 +290,18 @@ spec:
               scheme: "HTTP"
               {{- end }}
               path: "/solr"
-              port: {{ .Values.service.port }}
+              port: {{ .Values.containerPort }}
           {{- else if .Values.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: data
               mountPath: {{ .Values.persistence.mountPath }}
-            {{- if .Values.tls.certificatesSecretName }}
-            - name: certs
+            {{- if .Values.tls.enabled }}
+            - name: certs-shared
               mountPath: '/opt/bitnami/solr/certs'
-              readOnly: true
+            - name: certs
+              mountPath: '/certs'
             {{- end }}
 
           {{- if .Values.extraVolumeMounts }}
@@ -260,10 +322,12 @@ spec:
         - name: data
           emptyDir: {}
         {{- end }}
-        {{- if .Values.tls.certificatesSecretName }}
+        {{- if .Values.tls.enabled }}
         - name: certs
           secret:
-            secretName: {{ .Values.tls.certificatesSecretName }}
+            secretName: {{ include "solr.tlsSecretName" . }}
+        - name: certs-shared
+          emptyDir: {}
         {{- end }}
   {{- if and .Values.persistence.enabled (not .Values.persistence.existingClaim) }}
   volumeClaimTemplates:

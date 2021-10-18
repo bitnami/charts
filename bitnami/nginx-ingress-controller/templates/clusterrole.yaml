@@ -50,7 +50,7 @@ rules:
       - watch
   - apiGroups:
       - extensions
-      - "networking.k8s.io"
+      - networking.k8s.io
     resources:
       - ingresses
     verbs:
@@ -66,13 +66,14 @@ rules:
       - patch
   - apiGroups:
       - extensions
-      - "networking.k8s.io"
+      - networking.k8s.io
     resources:
       - ingresses/status
     verbs:
       - update
   - apiGroups:
-      - "networking.k8s.io"  # k8s 1.14+
+      - extensions
+      - networking.k8s.io
     resources:
       - ingressclasses
     verbs:

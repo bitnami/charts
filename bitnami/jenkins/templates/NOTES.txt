@@ -1,21 +1,19 @@
 
 ** Please be patient while the chart is being deployed **
 
-1. Get the Jenkins URL by running:
-
 {{- if .Values.ingress.enabled }}
 
-  Jenkins URL(s):
-{{- if .Values.ingress.hostname }}
-    - http://{{ .Values.ingress.hostname }}
-{{- end }}
-{{- range $host := .Values.ingress.hosts }}
-  {{- range .paths }}
-    - http://{{ $host.name }}{{ . }}
-  {{- end }}
-{{- end }}
+1. Get the Jenkins URL and associate its hostname to your cluster external IP:
 
-{{- else if contains "NodePort" .Values.service.type }}
+   export CLUSTER_IP=$(minikube ip) # On Minikube. Use: `kubectl cluster-info` on others K8s clusters
+   echo "Jenkins URL: http{{ if .Values.ingress.tls }}s{{ end }}://{{ .Values.ingress.hostname }}"
+   echo "$CLUSTER_IP  {{ .Values.ingress.hostname }}" | sudo tee -a /etc/hosts
+
+{{- else }}
+
+1. Get the Jenkins URL by running:
+
+{{- if contains "NodePort" .Values.service.type }}
 
   export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "common.names.fullname" . }})
   export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
@@ -36,15 +34,17 @@
   kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "common.names.fullname" . }} 8080:{{ .Values.service.port }}
 
 {{- end }}
+{{- end }}
 
 2. Login with the following credentials
 
   echo Username: {{ .Values.jenkinsUser }}
   echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} -o jsonpath="{.data.jenkins-password}" | base64 --decode)
 
-{{- if and (contains "bitnami/" .Values.image.repository) (not (.Values.image.tag | toString | regexFind "-r\\d+$|sha256:")) }}
-
-WARNING: Rolling tag detected ({{ .Values.image.repository }}:{{ .Values.image.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
-+info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
-
-{{- end }}
+{{- include "jenkins.checkRollingTags" . }}
+{{- $passwordValidationErrors := list -}}
+{{- $secretName := include "common.names.fullname" . -}}
+{{- $requiredJenkinsPassword := dict "valueKey" "jenkinsPassword" "secret" $secretName "field" "jenkins-password" "context" $ -}}
+{{- $requiredJenkinsPasswordError := include "common.validations.values.single.empty" $requiredJenkinsPassword -}}
+{{- $passwordValidationErrors = append $passwordValidationErrors $requiredJenkinsPasswordError -}}
+{{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordValidationErrors "context" $) -}}

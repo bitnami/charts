@@ -1,3 +1,4 @@
+{{- if or .Release.IsUpgrade (ne .Values.sentinel.service.type "NodePort")  .Values.sentinel.service.nodePorts.redis -}}
 {{- if and (eq .Values.architecture "replication") .Values.sentinel.enabled }}
 apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
@@ -84,19 +85,25 @@ spec:
         - name: redis
           image: {{ template "redis.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.replica.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.replica.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
           {{- end }}
           {{- if .Values.replica.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.replica.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
-          {{- if .Values.replica.command }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.replica.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.replica.command "context" $) | nindent 12 }}
           {{- else }}
           command:
             - /bin/bash
           {{- end }}
-          {{- if .Values.replica.args }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.replica.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.replica.args "context" $) | nindent 12 }}
           {{- else }}
           args:
@@ -105,7 +112,7 @@ spec:
           {{- end }}
           env:
             - name: BITNAMI_DEBUG
-              value: {{ ternary "true" "false" .Values.image.debug | quote }}
+              value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
             - name: REDIS_MASTER_PORT_NUMBER
               value: {{ .Values.replica.containerPort | quote }}
             - name: ALLOW_EMPTY_PASSWORD
@@ -169,6 +176,7 @@ spec:
           ports:
             - name: redis
               containerPort: {{ .Values.replica.containerPort }}
+          {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.replica.livenessProbe.enabled }}
           livenessProbe:
             initialDelaySeconds: {{ .Values.replica.livenessProbe.initialDelaySeconds }}
@@ -199,6 +207,7 @@ spec:
           {{- else if .Values.replica.customReadinessProbe }}
           readinessProbe: {{- toYaml .Values.replica.customReadinessProbe | nindent 12 }}
           {{- end }}
+          {{- end }}
           {{- if .Values.replica.resources }}
           resources: {{- toYaml .Values.replica.resources | nindent 12 }}
           {{- end }}
@@ -224,7 +233,7 @@ spec:
             - name: redis-certificates
               mountPath: /opt/bitnami/redis/certs
               readOnly: true
-            {{- end }}            
+            {{- end }}
             {{- if .Values.replica.extraVolumeMounts }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.replica.extraVolumeMounts "context" $ ) | nindent 12 }}
             {{- end }}
@@ -244,13 +253,17 @@ spec:
           {{- if .Values.sentinel.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.sentinel.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
-          {{- if .Values.sentinel.command }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.sentinel.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.sentinel.command "context" $) | nindent 12 }}
           {{- else }}
           command:
             - /bin/bash
           {{- end }}
-          {{- if .Values.sentinel.args }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.sentinel.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.sentinel.args "context" $) | nindent 12 }}
           {{- else }}
           args:
@@ -259,7 +272,7 @@ spec:
           {{- end }}
           env:
             - name: BITNAMI_DEBUG
-              value: {{ ternary "true" "false" .Values.sentinel.image.debug | quote }}
+              value: {{ ternary "true" "false" (or .Values.sentinel.image.debug .Values.diagnosticMode.enabled) | quote }}
             {{- if .Values.auth.enabled }}
             {{- if .Values.auth.usePasswordFiles }}
             - name: REDIS_PASSWORD_FILE
@@ -296,9 +309,24 @@ spec:
             - name: REDIS_SENTINEL_PORT
               value: {{ .Values.sentinel.containerPort | quote }}
             {{- end }}
+            {{- if .Values.sentinel.extraEnvVars }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.sentinel.extraEnvVars "context" $ ) | nindent 12 }}
+            {{- end }}
+          {{- if or .Values.sentinel.extraEnvVarsCM .Values.sentinel.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.sentinel.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ .Values.sentinel.extraEnvVarsCM }}
+            {{- end }}
+            {{- if .Values.sentinel.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ .Values.sentinel.extraEnvVarsSecret }}
+            {{- end }}
+          {{- end }}
           ports:
             - name: redis-sentinel
               containerPort: {{ .Values.sentinel.containerPort }}
+          {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.sentinel.livenessProbe.enabled }}
           livenessProbe:
             initialDelaySeconds: {{ .Values.sentinel.livenessProbe.initialDelaySeconds }}
@@ -314,6 +342,8 @@ spec:
           {{- else if .Values.sentinel.customLivenessProbe }}
           livenessProbe: {{- toYaml .Values.sentinel.customLivenessProbe | nindent 12 }}
           {{- end }}
+          {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.sentinel.readinessProbe.enabled}}
           readinessProbe:
             initialDelaySeconds: {{ .Values.sentinel.readinessProbe.initialDelaySeconds }}
@@ -329,6 +359,8 @@ spec:
           {{- else if .Values.sentinel.customReadinessProbe }}
           readinessProbe: {{- toYaml .Values.sentinel.customReadinessProbe | nindent 12 }}
           {{- end }}
+          {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
           lifecycle:
             preStop:
               exec:
@@ -336,6 +368,7 @@ spec:
                   - /bin/bash
                   - -c
                   - /opt/bitnami/scripts/start-scripts/prestop-sentinel.sh
+          {{- end }}
           {{- if .Values.sentinel.resources }}
           resources: {{- toYaml .Values.sentinel.resources | nindent 12 }}
           {{- end }}
@@ -370,6 +403,9 @@ spec:
           {{- if .Values.metrics.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.metrics.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else }}
           command:
             - /bin/bash
             - -c
@@ -378,6 +414,10 @@ spec:
                   export REDIS_PASSWORD=$(cat /secrets/redis-password)
               fi
               redis_exporter{{- range $key, $value := .Values.metrics.extraArgs }} --{{ $key }}={{ $value }}{{- end }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- end }}
           env:
             - name: REDIS_ALIAS
               value: {{ template "common.names.fullname" . }}
@@ -420,39 +460,6 @@ spec:
               mountPath: /opt/bitnami/redis/certs
               readOnly: true
             {{- end }}
-        {{- end }}
-        {{- if .Values.metrics.sentinel.enabled }}
-        - name: sentinel-metrics
-          image: {{ include "redis.metrics.sentinel.image" . }}
-          imagePullPolicy: {{ .Values.metrics.sentinel.image.pullPolicy | quote }}
-          {{- if .Values.metrics.sentinel.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.metrics.sentinel.containerSecurityContext "enabled" | toYaml | nindent 12 }}
-          {{- end }}
-          command:
-            - redis_sentinel_exporter{{- range $key, $value := .Values.metrics.sentinel.extraArgs }} --{{ $key }}={{ $value }}{{- end }}
-          env:
-            {{- if and .Values.auth.sentinel (and .Values.auth.enabled (not .Values.auth.usePasswordFiles)) }}
-            - name: SENTINEL_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "redis.secretName" . }}
-                  key: {{ include "redis.secretPasswordKey" . }}
-            {{- end }}
-            {{- if and .Values.auth.sentinel .Values.auth.enabled .Values.auth.usePasswordFiles }}
-            - name: SENTINEL_PASSWORD_FILE
-              value: /secrets/redis-password
-            {{- end }}
-          ports:
-            - name: sentinelmetrics
-              containerPort: 9355
-          {{- if .Values.metrics.sentinel.resources }}
-          resources: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.sentinel.resources "context" $) | nindent 12 }}
-          {{- end }}
-          {{- if and .Values.auth.sentinel .Values.auth.enabled .Values.auth.usePasswordFiles }}
-          volumeMounts:
-            - name: redis-password
-              mountPath: /secrets/
-          {{- end }}
         {{- end }}
         {{- if .Values.replica.sidecars }}
         {{- include "common.tplvalues.render" (dict "value" .Values.replica.sidecars "context" $) | nindent 8 }}
@@ -549,7 +556,7 @@ spec:
         {{- if .Values.tls.enabled }}
         - name: redis-certificates
           secret:
-            secretName: {{ required "A secret containing the certificates for the TLS traffic is required when TLS in enabled" .Values.tls.certificatesSecret }}
+            secretName: {{ include "redis.tlsSecretName" . }}
             defaultMode: 256
         {{- end }}
   {{- if not .Values.replica.persistence.enabled }}
@@ -577,4 +584,5 @@ spec:
         {{- end }}
         {{- include "common.storage.class" (dict "persistence" .Values.replica.persistence "global" .Values.global) | nindent 8 }}
   {{- end }}
+{{- end }}
 {{- end }}

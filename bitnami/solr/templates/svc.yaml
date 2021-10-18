@@ -29,7 +29,7 @@ spec:
     - name: tcp-client
       port: {{ .Values.service.port }}
       protocol: TCP
-      targetPort: solr-client
+      targetPort: http
       {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.http)) }}
       nodePort: {{ .Values.service.nodePorts.http }}
       {{- else if eq .Values.service.type "ClusterIP" }}

@@ -30,13 +30,6 @@ Return the proper Docker Image Registry Secret Names
 {{- end -}}
 
 {{/*
-Return  the proper Storage Class
-*/}}
-{{- define "ghost.storageClass" -}}
-{{ include "common.storage.class" ( dict "persistence" .Values.persistence "global" .Values.global) }}
-{{- end -}}
-
-{{/*
 Get the user defined LoadBalancerIP for this release.
 Note, returns 127.0.0.1 if using ClusterIP.
 */}}
@@ -53,18 +46,13 @@ Gets the host to be used for this application.
 If not using ClusterIP, or if a host or LoadBalancerIP is not defined, the value will be empty.
 */}}
 {{- define "ghost.host" -}}
-{{- default (include "ghost.serviceIP" .) .Values.ghostHost -}}
+{{- if .Values.ingress.enabled }}
+    {{- printf "%s%s" .Values.ingress.hostname .Values.ingress.path | default "" -}}
+{{- else if .Values.ghostHost -}}
+    {{- printf "%s%s" .Values.ghostHost .Values.ghostPath | default "" -}}
+{{- else -}}
+    {{- include "ghost.serviceIP" . -}}
 {{- end -}}
-
-{{/*
-Gets the endpoint to be used for this application.
-If not using ClusterIP, or if a host or LoadBalancerIP is not defined, the value will be empty.
-*/}}
-{{- define "ghost.endpoint" -}}
-{{- $host := include "ghost.host" . -}}
-{{- $path := trimSuffix "/" (trimPrefix "/" .Values.ghostPath) -}}
-
-{{- printf "%s/%s" $host $path -}}
 {{- end -}}
 
 {{/*
@@ -120,10 +108,51 @@ Return the MariaDB Secret Name
 */}}
 {{- define "ghost.databaseSecretName" -}}
 {{- if .Values.mariadb.enabled }}
-    {{- printf "%s" (include "ghost.mariadb.fullname" .) -}}
+    {{- if .Values.mariadb.auth.existingSecret -}}
+        {{- printf "%s" .Values.mariadb.auth.existingSecret -}}
+    {{- else -}}
+        {{- printf "%s" (include "ghost.mariadb.fullname" .) -}}
+    {{- end -}}
 {{- else if .Values.externalDatabase.existingSecret -}}
     {{- printf "%s" .Values.externalDatabase.existingSecret -}}
 {{- else -}}
-    {{- printf "%s-%s" (include "common.names.fullname" .) "external-db" -}}
+    {{- printf "%s-externaldb" (include "common.names.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Compile all warnings into a single message.
+*/}}
+{{- define "ghost.validateValues" -}}
+{{- $messages := list -}}
+{{- $messages := append $messages (include "ghost.validateValues.database" .) -}}
+{{- $messages := without $messages "" -}}
+{{- $message := join "\n" $messages -}}
+{{- if $message -}}
+{{-   printf "\nVALUES VALIDATION:\n%s" $message | fail -}}
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of Ghost - Database */}}
+{{- define "ghost.validateValues.database" -}}
+{{- if and (not .Values.mariadb.enabled) (or (empty .Values.externalDatabase.host) (empty .Values.externalDatabase.port) (empty .Values.externalDatabase.database)) -}}
+ghost: database
+   You disable the MariaDB installation but you did not provide the required parameters
+   to use an external database. To use an external database, please ensure you provide
+   (at least) the following values:
+
+       externalDatabase.host=DB_SERVER_HOST
+       externalDatabase.database=DB_NAME
+       externalDatabase.port=DB_SERVER_PORT
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return true if cert-manager required annotations for TLS signed certificates are set in the Ingress annotations
+Ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
+*/}}
+{{- define "ghost.ingress.certManagerRequest" -}}
+{{ if or (hasKey . "cert-manager.io/cluster-issuer") (hasKey . "cert-manager.io/issuer") }}
+    {{- true -}}
 {{- end -}}
 {{- end -}}

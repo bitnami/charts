@@ -3,6 +3,7 @@ apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
   name: {{ template "redmine.mailReceiver.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: mail-receiver
     {{- if .Values.commonLabels }}
@@ -64,8 +65,8 @@ spec:
           {{- end }}
           containers:
             - name: {{ template "redmine.mailReceiver.fullname" . }}
-              image: {{ template "redmine.mailReceiver.image" . }}
-              imagePullPolicy: {{ .Values.mailReceiver.image.pullPolicy | quote }}
+              image: {{ template "redmine.image" . }}
+              imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
               {{- if .Values.mailReceiver.containerSecurityContext.enabled }}
               securityContext: {{- omit .Values.mailReceiver.containerSecurityContext "enabled" | toYaml | nindent 16 }}
               {{- end }}
@@ -83,6 +84,8 @@ spec:
                 {{- end }}
               resources: {{- toYaml .Values.mailReceiver.resources | nindent 16 }}
               env:
+                - name: REDMINE_DATABASE_TYPE
+                  value: {{ .Values.databaseType | quote }}
                 {{- if eq .Values.databaseType "mariadb" }}
                 - name: REDMINE_MAIL_RECEIVER_DB_MYSQL
                 {{- else }}

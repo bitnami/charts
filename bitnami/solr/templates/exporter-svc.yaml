@@ -33,7 +33,7 @@ spec:
     - name: tcp-client
       port: {{ .Values.exporter.service.port }}
       protocol: TCP
-      targetPort: exporter-port
+      targetPort: http
       {{- if and (or (eq .Values.exporter.service.type "NodePort") (eq .Values.exporter.service.type "LoadBalancer")) (not (empty .Values.exporter.service.nodePorts.http)) }}
       nodePort: {{ .Values.exporter.service.nodePorts.http }}
       {{- else if eq .Values.exporter.service.type "ClusterIP" }}
