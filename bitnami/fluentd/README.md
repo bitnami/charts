@@ -67,8 +67,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `clusterDomain`          | Cluster Domain                                                                               | `cluster.local` |
 | `extraDeploy`            | Array of extra objects to deploy with the release                                            | `[]`            |
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)      | `false`         |
-| `diagnosticMode.command` | Command to override all containers in the deployment                                         | `["sleep"]`     |
-| `diagnosticMode.args`    | Args to override all containers in the deployment                                            | `["infinity"]`  |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                         | `[]`            |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                            | `[]`            |
 
 
 ### Fluentd parameters
@@ -231,6 +231,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `aggregator.sidecars`                                          | Add sidecars to aggregator pods                                                                                                  | `[]`                                                       |
 | `aggregator.extraVolumes`                                      | Extra volumes                                                                                                                    | `[]`                                                       |
 | `aggregator.extraVolumeMounts`                                 | Mount extra volume(s)                                                                                                            | `[]`                                                       |
+| `aggregator.extraVolumeClaimTemplates`                         | Optionally specify extra list of additional volume claim templates for the Fluentd Aggregator pods in StatefulSet                | `[]`                                                       |
 | `serviceAccount`                                               | Pods Service Account. This top-level global entry is DEPRECATED. Please use "forwarder.serviceAccount" instead.                  | `{}`                                                       |
 | `rbac`                                                         | Role Based Access. This top-level global entry is DEPRECATED. Please use "forwarder.rbac" instead.                               | `{}`                                                       |
 | `metrics.enabled`                                              | Enable the export of Prometheus metrics                                                                                          | `false`                                                    |
