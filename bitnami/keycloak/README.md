@@ -377,6 +377,17 @@ To enable Ingress integration, set `ingress.enabled` to `true`. The `ingress.hos
 
 The chart also facilitates the creation of TLS secrets for use with the Ingress controller, with different options for certificate management. [Learn more about TLS secrets](https://docs.bitnami.com/kubernetes/apps/keycloak/administration/enable-tls-ingress/).
 
+### Use with ingress offloading SSL
+
+If your ingress controller has the SSL Termination, you can add the following env vars in `extraEnvVars` 
+```yaml
+- name: KEYCLOAK_PROXY_ADDRESS_FORWARDING
+  value: "true"
+- name: KEYCLOAK_FRONTEND_URL
+  value: "https://keycloak.xxx"
+```
+[Source](https://github.com/bitnami/charts/issues/6940)
+
 ### Manage secrets and passwords
 
 This chart provides several ways to manage passwords:
