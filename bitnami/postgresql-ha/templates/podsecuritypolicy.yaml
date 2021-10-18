@@ -11,6 +11,8 @@ metadata:
   namespace: {{ .Release.Namespace }}
 spec:
   privileged: false
+  allowedCapabilities:
+    - CHOWN
   volumes:
     - 'configMap'
     - 'secret'
