@@ -1,2 +1,4 @@
+## @param service.type SonarQube service type
+##
 service:
   type: ClusterIP

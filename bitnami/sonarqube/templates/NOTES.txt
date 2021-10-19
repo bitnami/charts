@@ -72,7 +72,7 @@ To access your SonarQube site from outside the cluster follow the steps below:
 {{- end }}
 
 {{- include "common.warnings.rollingTag" .Values.image }}
-{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }|
+{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
 {{- include "common.warnings.rollingTag" .Values.sysctl.image }}
 {{- include "sonarqube.validateValues" . }}
 {{- $passwordValidationErrors := list -}}
