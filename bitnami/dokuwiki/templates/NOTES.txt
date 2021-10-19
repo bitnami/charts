@@ -44,8 +44,6 @@
   echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "dokuwiki.secretName" . }} -o jsonpath="{.data.dokuwiki-password}" | base64 --decode)
 
 {{- include "dokuwiki.checkRollingTags" . }}
-{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
-{{- include "common.warnings.rollingTag" .Values.certificates.image }}
 
 {{- $requiredPasswords := list -}}
 {{- $secretNameDockuwiki := include "dokuwiki.secretName" . -}}

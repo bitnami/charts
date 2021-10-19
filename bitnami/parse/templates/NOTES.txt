@@ -98,7 +98,6 @@ service:
 
 {{ include "parse.validateValues" . }}
 {{ include "parse.checkRollingTags" . }}
-{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
 
 {{- $passwordValidationErrors := list }}
 

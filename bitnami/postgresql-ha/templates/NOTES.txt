@@ -77,7 +77,6 @@ To connect to your database from outside the cluster execute the following comma
 
 {{- include "postgresql-ha.validateValues" . }}
 {{- include "postgresql-ha.checkRollingTags" . }}
-{{- include "common.warnings.rollingTag" .Values.volumePermissionsImage }}
 
 {{- $passwordValidationErrors := list -}}
 {{- $requiredPasswords := list -}}

@@ -44,4 +44,3 @@ Examples for the different methods can be found in the README (see https://githu
 
 {{- include "mxnet.validateValues" . }}
 {{- include "mxnet.checkRollingTags" . }}
-{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}

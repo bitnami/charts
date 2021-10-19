@@ -73,4 +73,3 @@ WARNING: You deployed Thanos without enabling Thanos Query!!
 
 {{- include "thanos.validateValues" . }}
 {{- include "thanos.checkRollingTags" . }}
-{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
