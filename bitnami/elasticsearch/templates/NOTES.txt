@@ -122,7 +122,7 @@ In order to replicate the container startup scripts execute this command:
 
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
-{{- include "common.warnings.rollingTag" .Values.sysctl.image }}
+{{- include "common.warnings.rollingTag" .Values.sysctlImage }}
 
 {{- end }}
 {{ include "elasticsearch.validateValues" . }}
