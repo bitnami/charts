@@ -20,7 +20,7 @@ To connect to your MinIO&reg; server using a client:
    kubectl run --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }}-client \
      --rm --tty -i --restart='Never' \
      --env MINIO_SERVER_ROOT_USER=$ROOT_USER \
-     --env MINIO_SERVER_ROOT_PASSWORDY=$ROOT_PASSWORD \
+     --env MINIO_SERVER_ROOT_PASSWORD=$ROOT_PASSWORD \
      --env MINIO_SERVER_HOST={{ include "common.names.fullname" . }} \
      {{- if and (.Values.networkPolicy.enabled) (not .Values.networkPolicy.allowExternal) }}
      --labels="{{ include "common.names.fullname" . }}-client=true" \
