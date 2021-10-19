@@ -405,10 +405,10 @@ grafana:
     ## @param grafana.ingress.enabled If an ingress or OpenShift Route should be created
     ##
     enabled: false
-    ## @param grafana.ingress.hostname The hostname under which the grafana instance should be reachable
+    ## @param grafana.ingress.ingressClassName The name of the Ingress class if Ingress should be assigned to it
     ##
     ingressClassName: ""
-    ## @param grafana.ingress.ingressClassName The name of the Ingress class if Ingress should be assigned to it
+    ## @param grafana.ingress.hostname The hostname under which the grafana instance should be reachable
     ##
     hostname: grafana.local
     ## @param grafana.ingress.path The path for the ingress instance to forward to the grafana app
