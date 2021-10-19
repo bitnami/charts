@@ -63,6 +63,7 @@ To connect to your Solr from outside the cluster execute the following commands:
 {{- end }}
 
 {{- include "common.warnings.rollingTag" .Values.image }}
+{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
 
 {{- if .Values.authentication.enabled -}}
 {{- $requiredPasswords := list -}}

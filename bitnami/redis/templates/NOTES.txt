@@ -173,6 +173,8 @@ To connect to your database from outside the cluster execute the following comma
 {{- end }}
 {{- end }}
 {{- include "redis.checkRollingTags" . }}
+{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
+{{- include "common.warnings.rollingTag" .Values.sysctl.image }}
 {{- include "redis.validateValues" . }}
 {{- $requiredPassword := list -}}
 {{- $secretName := include "redis.secretName" . -}}

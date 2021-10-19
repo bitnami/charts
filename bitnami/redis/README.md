@@ -409,7 +409,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
 | `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r212`     |
-| `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `Always`                |
+| `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                    |
 | `volumePermissions.resources.requests`                 | The requested resources for the init container                                                  | `{}`                    |
@@ -418,7 +418,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sysctl.image.registry`                                | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `sysctl.image.repository`                              | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
 | `sysctl.image.tag`                                     | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r212`     |
-| `sysctl.image.pullPolicy`                              | Bitnami Shell image pull policy                                                                 | `Always`                |
+| `sysctl.image.pullPolicy`                              | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `sysctl.image.pullSecrets`                             | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `sysctl.command`                                       | Override default init-sysctl container command (useful when using custom images)                | `[]`                    |
 | `sysctl.mountHostSys`                                  | Mount the host `/sys` folder to `/host-sys`                                                     | `false`                 |

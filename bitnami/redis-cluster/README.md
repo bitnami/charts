@@ -157,7 +157,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.image.registry`            | Init container volume-permissions image registry                                                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`          | Init container volume-permissions image repository                                                                                                  | `bitnami/bitnami-shell` |
 | `volumePermissions.image.tag`                 | Init container volume-permissions image tag                                                                                                         | `10-debian-10-r212`     |
-| `volumePermissions.image.pullPolicy`          | Init container volume-permissions image pull policy                                                                                                 | `Always`                |
+| `volumePermissions.image.pullPolicy`          | Init container volume-permissions image pull policy                                                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                                                                                    | `[]`                    |
 | `volumePermissions.resources.limits`          | The resources limits for the container                                                                                                              | `{}`                    |
 | `volumePermissions.resources.requests`        | The requested resources for the container                                                                                                           | `{}`                    |
@@ -317,7 +317,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sysctlImage.registry`           | sysctlImage Init container registry                | `docker.io`             |
 | `sysctlImage.repository`         | sysctlImage Init container repository              | `bitnami/bitnami-shell` |
 | `sysctlImage.tag`                | sysctlImage Init container tag                     | `10-debian-10-r212`     |
-| `sysctlImage.pullPolicy`         | sysctlImage Init container pull policy             | `Always`                |
+| `sysctlImage.pullPolicy`         | sysctlImage Init container pull policy             | `IfNotPresent`          |
 | `sysctlImage.pullSecrets`        | Specify docker-registry secret names as an array   | `[]`                    |
 | `sysctlImage.mountHostSys`       | Mount the host `/sys` folder to `/host-sys`        | `false`                 |
 | `sysctlImage.resources.limits`   | The resources limits for the container             | `{}`                    |

@@ -72,6 +72,7 @@ To access the MinIO&reg; web UI:
 
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- include "common.warnings.rollingTag" .Values.clientImage }}
+{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
 {{- include "minio.validateValues" . }}
 
 {{- $requiredPasswords := list -}}

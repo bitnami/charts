@@ -26,6 +26,7 @@ Check if there are rolling tags in the images
 */}}
 {{- define "tomcat.checkRollingTags" -}}
 {{- include "common.warnings.rollingTag" .Values.image }}
+{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
 {{- end -}}
 
 {{/*

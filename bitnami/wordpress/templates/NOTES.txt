@@ -88,6 +88,7 @@ You can access Apache Prometheus metrics following the steps below:
 {{- include "wordpress.validateValues" . }}
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- include "common.warnings.rollingTag" .Values.metrics.image }}
+{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
 {{- $passwordValidationErrors := list -}}
 {{- if not .Values.existingSecret -}}
     {{- $secretName := include "wordpress.secretName" . -}}
