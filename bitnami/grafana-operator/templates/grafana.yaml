@@ -117,9 +117,9 @@ spec:
   {{- end }}
   ingress:
     enabled: {{ .Values.grafana.ingress.enabled }}
-    {{ - if .Values.grafana.ingress.ingressClassName }}
+    {{- if .Values.grafana.ingress.ingressClassName }}
     ingressClassName: {{ .Values.grafana.ingress.ingressClassName }}
-    {{ - end }}
+    {{- end }}
     hostname: {{ include "common.tplvalues.render" (dict "value" .Values.grafana.ingress.hostname "context" $) }}
     tlsEnabled: {{ .Values.grafana.ingress.tls }}
     tlsSecretName: {{ .Values.grafana.ingress.tlsSecret }}

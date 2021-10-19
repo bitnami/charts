@@ -408,7 +408,7 @@ grafana:
     ## @param grafana.ingress.hostname The hostname under which the grafana instance should be reachable
     ##
     ingressClassName: ""
-    ## @param grafana.ingress.hostname The name of the Ingress class if Ingress should be assigned to it
+    ## @param grafana.ingress.ingressClassName The name of the Ingress class if Ingress should be assigned to it
     ##
     hostname: grafana.local
     ## @param grafana.ingress.path The path for the ingress instance to forward to the grafana app
