@@ -387,9 +387,13 @@ spec:
             path: /sys
         {{- end }}
         - name: redis-tmp-conf
+          {{- if .Values.replica.persistence.medium }}
           emptyDir: {
-            medium: "Memory"
+            medium: {{ .Values.replica.persistence.medium | quote }}
           }
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
         {{- if .Values.tls.enabled }}
         - name: redis-certificates
           secret:
@@ -404,9 +408,13 @@ spec:
         {{- end }}
   {{- if not .Values.replica.persistence.enabled }}
         - name: redis-data
+          {{- if .Values.replica.persistence.medium }}
           emptyDir: {
-            medium: "Memory"
+            medium: {{ .Values.replica.persistence.medium | quote }}
           }
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
   {{- else }}
   volumeClaimTemplates:
     - metadata:
