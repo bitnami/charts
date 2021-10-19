@@ -69,6 +69,18 @@ To access your SonarQube site from outside the cluster follow the steps below:
   echo Username: {{ .Values.sonarqubeUsername }}
   echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} -o jsonpath="{.data.sonarqube-password}" | base64 --decode)
 
+{{- if .Values.metrics.jmx.enabled }}
+
+You can access the JMX Prometheus metrics following the steps below:
+
+1. Get the JMX Prometheus metrics URL by running:
+
+    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ printf "%s-jmx-metrics" (include "common.names.fullname" .) }} {{ .Values.metrics.jmx.service.ports.metrics }}:{{ .Values.metrics.jmx.service.ports.metrics }} &
+    echo "JMX Prometheus metrics URL: http://127.0.0.1:{{ .Values.metrics.jmx.service.ports.metrics }}/"
+
+2. Open a browser and access JMX Prometheus metrics using the obtained URL.
+
+{{- end }}
 {{- end }}
 
 {{- include "common.warnings.rollingTag" .Values.image }}

@@ -183,6 +183,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.enabled`                  | Enable ingress record generation for SonarQube                                                                                   | `false`                  |
 | `ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
 | `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
+| `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
 | `ingress.hostname`                 | Default host for the ingress record                                                                                              | `sonarqube.local`        |
 | `ingress.path`                     | Default path for the ingress record                                                                                              | `/`                      |
 | `ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
@@ -237,6 +238,37 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                   | `true`  |
 | `serviceAccount.name`                         | The name of the ServiceAccount to use.                                 | `""`    |
 | `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created | `false` |
+
+
+### Metrics parameters
+
+| Name                                                | Description                                                                                           | Value                  |
+| --------------------------------------------------- | ----------------------------------------------------------------------------------------------------- | ---------------------- |
+| `metrics.jmx.enabled`                               | Whether or not to expose JMX metrics to Prometheus                                                    | `false`                |
+| `metrics.jmx.image.registry`                        | JMX exporter image registry                                                                           | `docker.io`            |
+| `metrics.jmx.image.repository`                      | JMX exporter image repository                                                                         | `bitnami/jmx-exporter` |
+| `metrics.jmx.image.tag`                             | JMX exporter image tag (immutable tags are recommended)                                               | `0.16.1-debian-10-r66` |
+| `metrics.jmx.image.pullPolicy`                      | JMX exporter image pull policy                                                                        | `IfNotPresent`         |
+| `metrics.jmx.image.pullSecrets`                     | Specify docker-registry secret names as an array                                                      | `[]`                   |
+| `metrics.jmx.containerPorts.metrics`                | JMX Exporter metrics container port                                                                   | `10445`                |
+| `metrics.jmx.resources.limits`                      | The resources limits for the init container                                                           | `{}`                   |
+| `metrics.jmx.resources.requests`                    | The requested resources for the init container                                                        | `{}`                   |
+| `metrics.jmx.containerSecurityContext.enabled`      | Enabled JMX Exporter containers' Security Context                                                     | `true`                 |
+| `metrics.jmx.containerSecurityContext.runAsUser`    | Set JMX Exporter containers' Security Context runAsUser                                               | `1001`                 |
+| `metrics.jmx.containerSecurityContext.runAsNonRoot` | Set JMX Exporter containers' Security Context runAsNonRoot                                            | `true`                 |
+| `metrics.jmx.whitelistObjectNames`                  | Allows setting which JMX objects you want to expose to via JMX stats to JMX Exporter                  | `[]`                   |
+| `metrics.jmx.configuration`                         | Configuration file for JMX exporter                                                                   | `""`                   |
+| `metrics.jmx.service.ports.metrics`                 | JMX Exporter Prometheus port                                                                          | `10443`                |
+| `metrics.jmx.service.annotations`                   | Annotations for the JMX Exporter Prometheus metrics service                                           | `{}`                   |
+| `metrics.serviceMonitor.enabled`                    | if `true`, creates a Prometheus Operator ServiceMonitor (requires `metrics.jmx.enabled` to be `true`) | `false`                |
+| `metrics.serviceMonitor.namespace`                  | Namespace in which Prometheus is running                                                              | `""`                   |
+| `metrics.serviceMonitor.labels`                     | Extra labels for the ServiceMonitor                                                                   | `{}`                   |
+| `metrics.serviceMonitor.jobLabel`                   | The name of the label on the target service to use as the job name in Prometheus                      | `""`                   |
+| `metrics.serviceMonitor.interval`                   | How frequently to scrape metrics                                                                      | `""`                   |
+| `metrics.serviceMonitor.scrapeTimeout`              | Timeout after which the scrape is ended                                                               | `""`                   |
+| `metrics.serviceMonitor.metricRelabelings`          | Specify additional relabeling of metrics                                                              | `[]`                   |
+| `metrics.serviceMonitor.relabelings`                | Specify general relabeling                                                                            | `[]`                   |
+| `metrics.serviceMonitor.selector`                   | Prometheus instance selector labels                                                                   | `{}`                   |
 
 
 ### PostgreSQL subchart settings

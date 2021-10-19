@@ -8,6 +8,7 @@ ingress:
 volumePermissions:
   enabled: true
 metrics:
-  enabled: true
+  jmx:
+    enabled: true
   serviceMonitor:
     enabled: true

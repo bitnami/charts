@@ -414,6 +414,11 @@ ingress:
   ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
   ##
   apiVersion: ""
+  ## @param ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+  ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster.
+  ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+  ##
+  ingressClassName: ""
   ## @param ingress.hostname Default host for the ingress record
   ##
   hostname: sonarqube.local
@@ -621,6 +626,140 @@ serviceAccount:
   ## @param serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
   ##
   automountServiceAccountToken: false
+
+## @section Metrics parameters
+
+## Prometheus Exporters / Metrics
+##
+metrics:
+  ## Prometheus JMX Exporter: exposes the majority of SonarQube metrics
+  ##
+  jmx:
+    ## @param metrics.jmx.enabled Whether or not to expose JMX metrics to Prometheus
+    ##
+    enabled: false
+    ## Bitnami JMX exporter image
+    ## ref: https://hub.docker.com/r/bitnami/jmx-exporter/tags/
+    ## @param metrics.jmx.image.registry JMX exporter image registry
+    ## @param metrics.jmx.image.repository JMX exporter image repository
+    ## @param metrics.jmx.image.tag JMX exporter image tag (immutable tags are recommended)
+    ## @param metrics.jmx.image.pullPolicy JMX exporter image pull policy
+    ## @param metrics.jmx.image.pullSecrets Specify docker-registry secret names as an array
+    ##
+    image:
+      registry: docker.io
+      repository: bitnami/jmx-exporter
+      tag: 0.16.1-debian-10-r66
+      pullPolicy: IfNotPresent
+      ## Optionally specify an array of imagePullSecrets.
+      ## Secrets must be manually created in the namespace.
+      ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+      ## e.g:
+      ## pullSecrets:
+      ##   - myRegistryKeySecretName
+      ##
+      pullSecrets: []
+    ## @param metrics.jmx.containerPorts.metrics JMX Exporter metrics container port
+    ##
+    containerPorts:
+      metrics: 10445
+    ## Prometheus JMX Exporter' resource requests and limits
+    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ## @param metrics.jmx.resources.limits The resources limits for the init container
+    ## @param metrics.jmx.resources.requests The requested resources for the init container
+    ##
+    resources:
+      limits: {}
+      requests: {}
+    ## Configure Container Security Context
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+    ## @param metrics.jmx.containerSecurityContext.enabled Enabled JMX Exporter containers' Security Context
+    ## @param metrics.jmx.containerSecurityContext.runAsUser Set JMX Exporter containers' Security Context runAsUser
+    ## @param metrics.jmx.containerSecurityContext.runAsNonRoot Set JMX Exporter containers' Security Context runAsNonRoot
+    ##
+    containerSecurityContext:
+      enabled: true
+      runAsUser: 1001
+      runAsNonRoot: true
+    ## @param metrics.jmx.whitelistObjectNames [array] Allows setting which JMX objects you want to expose to via JMX stats to JMX Exporter
+    ## Only whitelisted values will be exposed via JMX Exporter. They must also be exposed via Rules. To expose all metrics
+    ## (warning its crazy excessive and they aren't formatted in a prometheus style) (1) `whitelistObjectNames: []`
+    ## (2) commented out above `overrideConfig`.
+    ##
+    whitelistObjectNames:
+      - java.lang:*
+      - SonarQube:*
+      - Tomcat:*
+    ## @param metrics.jmx.configuration [string] Configuration file for JMX exporter
+    ## Specify content for jmx-sonarqube-prometheus.yml. Evaluated as a template
+    ##
+    configuration: |-
+      jmxUrl: service:jmx:rmi:///jndi/rmi://127.0.0.1:10443/jmxrmi
+      lowercaseOutputName: true
+      lowercaseOutputLabelNames: true
+      ssl: false
+      {{- if .Values.metrics.jmx.whitelistObjectNames }}
+      whitelistObjectNames: ["{{ join "\",\"" .Values.metrics.jmx.whitelistObjectNames }}"]
+      {{- end }}
+      rules:
+      - pattern: java.lang<type=(.+), name=(.+)><(.+)>(\w+)
+        name: java_lang_$1_$4_$3_$2
+      - pattern: java.lang<type=(.+), name=(.+)><>(\w+)
+        name: java_lang_$1_$3_$2
+      - pattern: java.lang<type=(.*)>
+      - pattern: SonarQube<name=(.+)><>(\w+)
+        name: sonarqube_$1_$2
+      - pattern: Tomcat<type=(.+), name=(.+)><>(\w+)
+        name: tomcat_$1_$3_$2
+    ## Service configuration
+    ##
+    service:
+      ## @param metrics.jmx.service.ports.metrics JMX Exporter Prometheus port
+      ##
+      ports:
+        metrics: 10443
+      ## @param metrics.jmx.service.annotations [object] Annotations for the JMX Exporter Prometheus metrics service
+      ##
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "{{ .Values.metrics.jmx.service.ports.metrics }}"
+        prometheus.io/path: "/"
+  ## Prometheus Operator ServiceMonitor configuration
+  ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+  ##
+  serviceMonitor:
+    ## @param metrics.serviceMonitor.enabled if `true`, creates a Prometheus Operator ServiceMonitor (requires `metrics.jmx.enabled` to be `true`)
+    ##
+    enabled: false
+    ## @param metrics.serviceMonitor.namespace Namespace in which Prometheus is running
+    ##
+    namespace: ""
+    ## @param metrics.serviceMonitor.labels Extra labels for the ServiceMonitor
+    ##
+    labels: {}
+    ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in Prometheus
+    ##
+    jobLabel: ""
+    ## @param metrics.serviceMonitor.interval How frequently to scrape metrics
+    ## e.g:
+    ## interval: 10s
+    ##
+    interval: ""
+    ## @param metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
+    ## e.g:
+    ## scrapeTimeout: 10s
+    ##
+    scrapeTimeout: ""
+    ## @param metrics.serviceMonitor.metricRelabelings [array] Specify additional relabeling of metrics
+    ##
+    metricRelabelings: []
+    ## @param metrics.serviceMonitor.relabelings [array] Specify general relabeling
+    ##
+    relabelings: []
+    ## @param metrics.serviceMonitor.selector Prometheus instance selector labels
+    ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+    ##
+    selector: {}
 
 ## @section PostgreSQL subchart settings
 

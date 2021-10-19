@@ -20,10 +20,17 @@ Return the proper sysctl image name
 {{- end -}}
 
 {{/*
+Return the proper sysctl image name
+*/}}
+{{- define "sonarqube.metrics.jmx.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.metrics.jmx.image "global" .Values.global) }}
+{{- end -}}
+
+{{/*
 Return the proper Container Image Registry Secret Names
 */}}
 {{- define "sonarqube.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.volumePermissions.image .Values.sysctl.image) "global" .Values.global) -}}
+{{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.volumePermissions.image .Values.sysctl.image .Values.metrics.jmx.image) "global" .Values.global) -}}
 {{- end -}}
 
 {{/*
@@ -103,6 +110,15 @@ Return the Database Secret Name
     {{- printf "%s" .Values.externalDatabase.existingSecret -}}
 {{- else -}}
     {{- printf "%s-externaldb" (include "common.names.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return true if a SonarQube authentication credentials secret object should be created
+*/}}
+{{- define "sonarqube.createSecret" -}}
+{{- if or (not .Values.existingSecret) (and (not .Values.smtpExistingSecret) .Values.smtpPassword) }}
+    {{- true -}}
 {{- end -}}
 {{- end -}}
 
