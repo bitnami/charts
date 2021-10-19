@@ -24,6 +24,7 @@
 {{- end }}
 
 {{- include "node.checkRollingTags" . }}
+{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
 {{- include "node.validateValues" . }}
 
 {{- $passwordValidationErrors := list }}

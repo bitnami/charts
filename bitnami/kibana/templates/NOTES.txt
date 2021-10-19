@@ -47,4 +47,5 @@ WARNING: For Prometheus metrics to work, make sure that the kibana-prometheus-ex
 
 {{- include "kibana.validateValues" . }}
 {{- include "kibana.checkRollingTags" . }}
+{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
 {{- end }}

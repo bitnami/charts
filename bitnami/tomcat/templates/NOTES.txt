@@ -45,6 +45,7 @@
   echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} -o jsonpath="{.data.tomcat-password}" | base64 --decode)
 
 {{- include "tomcat.checkRollingTags" . }}
+{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
 {{- $passwordValidationErrors := list -}}
 {{- $secretName := include "common.names.fullname" . -}}
 {{- $requiredTomcatPassword := dict "valueKey" "tomcatPassword" "secret" $secretName "field" "tomcat-password" "context" $ -}}

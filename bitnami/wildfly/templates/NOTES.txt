@@ -70,6 +70,7 @@
   echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} -o jsonpath="{.data.wildfly-password}" | base64 --decode)
 
 {{- include "wildfly.checkRollingTags" . }}
+{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
 {{- $passwordValidationErrors := list -}}
 {{- $secretName := include "common.names.fullname" . -}}
 {{- $requiredWildflyPassword := dict "valueKey" "wildflyPassword" "secret" $secretName "field" "wildfly-password" "context" $ -}}

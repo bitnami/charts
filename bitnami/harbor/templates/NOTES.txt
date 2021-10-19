@@ -55,6 +55,7 @@ https://goharbor.io/docs/latest/administration/vulnerability-scanning/pluggable-
 
 {{ include "harbor.validateValues" . }}
 {{ include "harbor.checkRollingTags" . }}
+{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
 
 {{- $passwordValidationErrors := list -}}
 

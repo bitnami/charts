@@ -83,6 +83,7 @@ To connect to your database from outside the cluster execute the following comma
 
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- include "common.warnings.rollingTag" .Values.metrics.image }}
+{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
 {{- include "cassandra.validateValues" . }}
 
 {{- $secretName := include "common.names.fullname" . }}

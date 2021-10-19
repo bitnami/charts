@@ -60,6 +60,7 @@ host. To configure phpBB to use and external database host:
 {{- end }}
 
 {{- include "phpbb.checkRollingTags" . }}
+{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
 
 {{- $passwordValidationErrors := list -}}
 {{- $secretName := include "phpbb.secretName" . -}}
