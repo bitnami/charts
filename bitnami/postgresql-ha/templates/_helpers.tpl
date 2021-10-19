@@ -564,6 +564,7 @@ Return the appropriate apiVersion for networkPolicy
 {{- include "common.warnings.rollingTag" .Values.postgresqlImage -}}
 {{- include "common.warnings.rollingTag" .Values.pgpoolImage -}}
 {{- include "common.warnings.rollingTag" .Values.metricsImage -}}
+{{- include "common.warnings.rollingTag" .Values.volumePermissionsImage -}}
 {{- end -}}
 
 {{/*

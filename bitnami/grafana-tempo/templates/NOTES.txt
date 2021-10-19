@@ -51,4 +51,5 @@ Installed components:
 {{- include "common.warnings.rollingTag" .Values.tempo.image }}
 {{- include "common.warnings.rollingTag" .Values.queryFrontend.query.image }}
 {{- include "common.warnings.rollingTag" .Values.vulture.image }}
+{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
 {{- include "grafana-tempo.validateValues" . }}
