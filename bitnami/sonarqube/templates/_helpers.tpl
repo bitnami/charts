@@ -20,7 +20,7 @@ Return the proper sysctl image name
 {{- end -}}
 
 {{/*
-Return the proper Docker Image Registry Secret Names
+Return the proper Container Image Registry Secret Names
 */}}
 {{- define "sonarqube.imagePullSecrets" -}}
 {{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.volumePermissions.image .Values.sysctl.image) "global" .Values.global) -}}
@@ -68,7 +68,7 @@ Return the Database Port
 {{- end -}}
 
 {{/*
-Return the Database Database Name
+Return the Database Name
 */}}
 {{- define "sonarqube.database.name" -}}
 {{- if .Values.postgresql.enabled }}
@@ -107,7 +107,7 @@ Return the Database Secret Name
 {{- end -}}
 
 {{/*
-Return the WordPress Secret Name
+Return the SonarQube Secret Name
 */}}
 {{- define "sonarqube.secretName" -}}
 {{- if .Values.existingSecret }}
