@@ -96,7 +96,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `tls.enabled`              | Enable tls in front of the container                                                                                                                                                                             | `false`                   |
 | `tls.existingSecret`       | Name of an existing secret holding the certificate information                                                                                                                                                   | `""`                      |
 | `tls.mountPath`            | The mount path where the secret will be located                                                                                                                                                                  | `""`                      |
-| `extraEnv`                 | Extra environment variables to be set on MinIO&reg; container                                                                                                                                                    | `{}`                      |
+| `extraEnvVars`             | Extra environment variables to be set on MinIO&reg; container                                                                                                                                                    | `{}`                      |
 | `extraEnvVarsCM`           | ConfigMap with extra environment variables                                                                                                                                                                       | `""`                      |
 | `extraEnvVarsSecret`       | Secret with extra environment variables                                                                                                                                                                          | `""`                      |
 | `command`                  | Default container command (useful when using custom images). Use array form                                                                                                                                      | `[]`                      |
@@ -108,8 +108,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                    | Description                                                                                                                                                                                   | Value           |
 | --------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
 | `schedulerName`                         | Specifies the schedulerName, if it's nil uses kube-scheduler                                                                                                                                  | `""`            |
-| `deployment.updateStrategy.type`        | Set to Recreate if you use persistent volume that cannot be mounted by more than one pods to make sure the pods is destroyed first.                                                           | `Recreate`      |
-| `statefulset.updateStrategy`            | Update strategy, can be set to `RollingUpdate` or `OnDelete`                                                                                                                                  | `RollingUpdate` |
+| `deployment.updateStrategy.type`        | Deployment strategy type                                                                                                                                                                      | `Recreate`      |
+| `statefulset.updateStrategy.type`       | StatefulSet strategy type                                                                                                                                                                     | `RollingUpdate` |
 | `statefulset.podManagementPolicy`       | StatefulSet controller supports relax its ordering guarantees while preserving its uniqueness and identity guarantees. There are two valid pod management policies: OrderedReady and Parallel | `Parallel`      |
 | `statefulset.replicaCount`              | Number of pods per zone (only for MinIO&reg; distributed mode). Should be even and `>= 4`                                                                                                     | `4`             |
 | `statefulset.zones`                     | Number of zones (only for MinIO&reg; distributed mode)                                                                                                                                        | `1`             |
@@ -132,6 +132,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `affinity`                              | Affinity for pod assignment. Evaluated as a template.                                                                                                                                         | `{}`            |
 | `nodeSelector`                          | Node labels for pod assignment. Evaluated as a template.                                                                                                                                      | `{}`            |
 | `tolerations`                           | Tolerations for pod assignment. Evaluated as a template.                                                                                                                                      | `[]`            |
+| `topologySpreadConstraints`             | Topology Spread Constraints for MinIO&reg; pods assignment spread across your cluster among failure-domains                                                                                   | `[]`            |
+| `priorityClassName`                     | MinIO&reg; pods' priorityClassName                                                                                                                                                            | `""`            |
 | `resources.limits`                      | The resources limits for the MinIO&reg; container                                                                                                                                             | `{}`            |
 | `resources.requests`                    | The requested resources for the MinIO&reg; container                                                                                                                                          | `{}`            |
 | `livenessProbe.enabled`                 | Enable livenessProbe                                                                                                                                                                          | `true`          |
@@ -155,6 +157,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `customLivenessProbe`                   | Override default liveness probe                                                                                                                                                               | `{}`            |
 | `customReadinessProbe`                  | Override default readiness probe                                                                                                                                                              | `{}`            |
 | `customStartupProbe`                    | Override default startup probe                                                                                                                                                                | `{}`            |
+| `lifecycleHooks`                        | for the MinIO&reg container(s) to automate configuration before or after startup                                                                                                              | `{}`            |
 | `extraVolumes`                          | Optionally specify extra list of additional volumes for MinIO&reg; pods                                                                                                                       | `[]`            |
 | `extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for MinIO&reg; container(s)                                                                                                          | `[]`            |
 | `initContainers`                        | Add additional init containers to the MinIO&reg; pods                                                                                                                                         | `[]`            |
@@ -170,12 +173,15 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.ports.console`            | MinIO&reg; Console service port                                                                                                  | `9001`                   |
 | `service.nodePorts.api`            | Specify the MinIO&reg API nodePort value for the LoadBalancer and NodePort service types                                         | `""`                     |
 | `service.nodePorts.console`        | Specify the MinIO&reg Console nodePort value for the LoadBalancer and NodePort service types                                     | `""`                     |
+| `service.clusterIP`                | Service Cluster IP                                                                                                               | `""`                     |
 | `service.loadBalancerIP`           | loadBalancerIP if service type is `LoadBalancer` (optional, cloud specific)                                                      | `""`                     |
 | `service.loadBalancerSourceRanges` | Addresses that are allowed when service is LoadBalancer                                                                          | `[]`                     |
 | `service.externalTrafficPolicy`    | Enable client source IP preservation                                                                                             | `Cluster`                |
+| `service.extraPorts`               | Extra ports to expose in the service (normally used with the `sidecar` value)                                                    | `[]`                     |
 | `service.annotations`              | Annotations for MinIO&reg; service                                                                                               | `{}`                     |
 | `ingress.enabled`                  | Enable ingress controller resource                                                                                               | `false`                  |
 | `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
+| `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
 | `ingress.hostname`                 | Default host for the ingress resource                                                                                            | `minio.local`            |
 | `ingress.path`                     | The Path to MinIO&reg;. You may need to set this to '/*' in order to use this with ALB ingress controllers.                      | `/`                      |
 | `ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
@@ -189,6 +195,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
 | `apiIngress.enabled`               | Enable ingress controller resource                                                                                               | `false`                  |
 | `apiIngress.apiVersion`            | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
+| `apiIngress.ingressClassName`      | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
 | `apiIngress.hostname`              | Default host for the ingress resource                                                                                            | `minio.local`            |
 | `apiIngress.path`                  | The Path to MinIO&reg;. You may need to set this to '/*' in order to use this with ALB ingress controllers.                      | `/`                      |
 | `apiIngress.pathType`              | Ingress path type                                                                                                                | `ImplementationSpecific` |
@@ -234,10 +241,12 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### RBAC parameters
 
-| Name                    | Description                                                 | Value  |
-| ----------------------- | ----------------------------------------------------------- | ------ |
-| `serviceAccount.create` | Enable the creation of a ServiceAccount for MinIO&reg; pods | `true` |
-| `serviceAccount.name`   | Name of the created ServiceAccount                          | `""`   |
+| Name                                          | Description                                                 | Value  |
+| --------------------------------------------- | ----------------------------------------------------------- | ------ |
+| `serviceAccount.create`                       | Enable the creation of a ServiceAccount for MinIO&reg; pods | `true` |
+| `serviceAccount.name`                         | Name of the created ServiceAccount                          | `""`   |
+| `serviceAccount.automountServiceAccountToken` | Enable/disable auto mounting of the service account token   | `true` |
+| `serviceAccount.annotations`                  | Custom annotations for MinIO&reg; ServiceAccount            | `{}`   |
 
 
 ### Other parameters
@@ -251,19 +260,20 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Metrics parameters
 
-| Name                                   | Description                                                                                 | Value                       |
-| -------------------------------------- | ------------------------------------------------------------------------------------------- | --------------------------- |
-| `metrics.prometheusAuthType`           | Authentication mode for Prometheus (`jwt` or `public`)                                      | `public`                    |
-| `metrics.serviceMonitor.enabled`       | If the operator is installed in your cluster, set to true to create a Service Monitor Entry | `false`                     |
-| `metrics.serviceMonitor.namespace`     | Namespace which Prometheus is running in                                                    | `""`                        |
-| `metrics.serviceMonitor.labels`        | Extra labels for the ServiceMonitor                                                         | `{}`                        |
-| `metrics.serviceMonitor.jobLabel`      | The name of the label on the target service to use as the job name in Prometheus            | `""`                        |
-| `metrics.serviceMonitor.path`          | HTTP path to scrape for metrics                                                             | `/minio/v2/metrics/cluster` |
-| `metrics.serviceMonitor.interval`      | Interval at which metrics should be scraped                                                 | `30s`                       |
-| `metrics.serviceMonitor.scrapeTimeout` | Specify the timeout after which the scrape is ended                                         | `""`                        |
-| `metrics.serviceMonitor.relabellings`  | Specify Metric Relabellings to add to the scrape endpoint                                   | `[]`                        |
-| `metrics.serviceMonitor.honorLabels`   | Specify honorLabels parameter to add the scrape endpoint                                    | `false`                     |
-| `metrics.serviceMonitor.selector`      | Prometheus instance selector labels                                                         | `{}`                        |
+| Name                                       | Description                                                                                 | Value                       |
+| ------------------------------------------ | ------------------------------------------------------------------------------------------- | --------------------------- |
+| `metrics.prometheusAuthType`               | Authentication mode for Prometheus (`jwt` or `public`)                                      | `public`                    |
+| `metrics.serviceMonitor.enabled`           | If the operator is installed in your cluster, set to true to create a Service Monitor Entry | `false`                     |
+| `metrics.serviceMonitor.namespace`         | Namespace which Prometheus is running in                                                    | `""`                        |
+| `metrics.serviceMonitor.labels`            | Extra labels for the ServiceMonitor                                                         | `{}`                        |
+| `metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in Prometheus            | `""`                        |
+| `metrics.serviceMonitor.path`              | HTTP path to scrape for metrics                                                             | `/minio/v2/metrics/cluster` |
+| `metrics.serviceMonitor.interval`          | Interval at which metrics should be scraped                                                 | `30s`                       |
+| `metrics.serviceMonitor.scrapeTimeout`     | Specify the timeout after which the scrape is ended                                         | `""`                        |
+| `metrics.serviceMonitor.metricRelabelings` | MetricRelabelConfigs to apply to samples before ingestion                                   | `[]`                        |
+| `metrics.serviceMonitor.relabelings`       | Metrics relabelings to add to the scrape endpoint, applied before scraping                  | `[]`                        |
+| `metrics.serviceMonitor.honorLabels`       | Specify honorLabels parameter to add the scrape endpoint                                    | `false`                     |
+| `metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                                         | `{}`                        |
 
 
 ### Gateway parameters

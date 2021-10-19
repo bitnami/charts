@@ -127,13 +127,13 @@ tls:
   ## @param tls.mountPath The mount path where the secret will be located
   ## Custom mount path where the certificates will be located, if empty will default to /certs
   mountPath: ""
-## @param extraEnv Extra environment variables to be set on MinIO&reg; container
+## @param extraEnvVars Extra environment variables to be set on MinIO&reg; container
 ## e.g:
-## extraEnv:
+## extraEnvVars:
 ##   - name: FOO
 ##     value: "bar"
 ##
-extraEnv: {}
+extraEnvVars: {}
 ## @param extraEnvVarsCM ConfigMap with extra environment variables
 ##
 extraEnvVarsCM: ""
@@ -157,8 +157,8 @@ schedulerName: ""
 ## Only when 'mode' is 'standalone' or 'gateway.enabled' is 'true'
 ##
 deployment:
-  ## @param deployment.updateStrategy.type Set to Recreate if you use persistent volume that cannot be mounted by more than one pods to make sure the pods is destroyed first.
-  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+  ## @param deployment.updateStrategy.type Deployment strategy type
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ## e.g:
   ## updateStrategy:
   ##  type: RollingUpdate
@@ -172,10 +172,17 @@ deployment:
 ## Only when mode is 'distributed'
 ##
 statefulset:
-  ## @param statefulset.updateStrategy Update strategy, can be set to `RollingUpdate` or `OnDelete`
-  ## ref: https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#updating-statefulsets
+  ## @param statefulset.updateStrategy.type StatefulSet strategy type
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ## e.g:
+  ## updateStrategy:
+  ##  type: RollingUpdate
+  ##  rollingUpdate:
+  ##    maxSurge: 25%
+  ##    maxUnavailable: 25%
   ##
-  updateStrategy: RollingUpdate
+  updateStrategy:
+    type: RollingUpdate
   ## @param statefulset.podManagementPolicy StatefulSet controller supports relax its ordering guarantees while preserving its uniqueness and identity guarantees. There are two valid pod management policies: OrderedReady and Parallel
   ## ref: https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#pod-management-policy
   ##
@@ -265,6 +272,13 @@ nodeSelector: {}
 ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
+## @param topologySpreadConstraints Topology Spread Constraints for MinIO&reg; pods assignment spread across your cluster among failure-domains
+## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+##
+topologySpreadConstraints: []
+## @param priorityClassName MinIO&reg; pods' priorityClassName
+##
+priorityClassName: ""
 ## MinIO&reg; containers' resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -342,6 +356,9 @@ customReadinessProbe: {}
 ## @param customStartupProbe Override default startup probe
 ##
 customStartupProbe: {}
+## @param lifecycleHooks for the MinIO&reg container(s) to automate configuration before or after startup
+##
+lifecycleHooks: {}
 ## @param extraVolumes Optionally specify extra list of additional volumes for MinIO&reg; pods
 ##
 extraVolumes: []
@@ -392,6 +409,11 @@ service:
   nodePorts:
     api: ""
     console: ""
+  ## @param service.clusterIP Service Cluster IP
+  ## e.g.:
+  ## clusterIP: None
+  ##
+  clusterIP: ""
   ## @param service.loadBalancerIP loadBalancerIP if service type is `LoadBalancer` (optional, cloud specific)
   ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
   ##
@@ -407,6 +429,9 @@ service:
   ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
   externalTrafficPolicy: Cluster
+  ## @param service.extraPorts Extra ports to expose in the service (normally used with the `sidecar` value)
+  ##
+  extraPorts: []
   ## @param service.annotations Annotations for MinIO&reg; service
   ## This can be used to set the LoadBalancer service type to internal only.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
@@ -423,6 +448,11 @@ ingress:
   ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
   ##
   apiVersion: ""
+  ## @param ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+  ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster.
+  ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+  ##
+  ingressClassName: ""
   ## @param ingress.hostname Default host for the ingress resource
   ##
   hostname: minio.local
@@ -513,6 +543,11 @@ apiIngress:
   ## @param apiIngress.apiVersion Force Ingress API version (automatically detected if not set)
   ##
   apiVersion: ""
+  ## @param apiIngress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+  ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster.
+  ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+  ##
+  ingressClassName: ""
   ## @param apiIngress.hostname Default host for the ingress resource
   ##
   hostname: minio.local
@@ -702,6 +737,12 @@ serviceAccount:
   ## If not set and create is true, a name is generated using the common.names.fullname template
   ##
   name: ""
+  ## @param serviceAccount.automountServiceAccountToken Enable/disable auto mounting of the service account token
+  ##
+  automountServiceAccountToken: true
+  ## @param serviceAccount.annotations Custom annotations for MinIO&reg; ServiceAccount
+  ##
+  annotations: {}
 
 ## @section Other parameters
 
@@ -752,9 +793,12 @@ metrics:
     ## e.g:
     ## scrapeTimeout: 30s
     scrapeTimeout: ""
-    ## @param metrics.serviceMonitor.relabellings Specify Metric Relabellings to add to the scrape endpoint
+    ## @param metrics.serviceMonitor.metricRelabelings MetricRelabelConfigs to apply to samples before ingestion
     ##
-    relabellings: []
+    metricRelabelings: []
+    ## @param metrics.serviceMonitor.relabelings Metrics relabelings to add to the scrape endpoint, applied before scraping
+    ##
+    relabelings: []
     ## @param metrics.serviceMonitor.honorLabels Specify honorLabels parameter to add the scrape endpoint
     ##
     honorLabels: false
