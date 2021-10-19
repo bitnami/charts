@@ -222,7 +222,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.image.registry`            | Init container volume                                                           | `docker.io`             |
 | `volumePermissions.image.repository`          | Init container volume                                                           | `bitnami/bitnami-shell` |
 | `volumePermissions.image.tag`                 | Init container volume                                                           | `10-debian-10-r221`     |
-| `volumePermissions.image.pullPolicy`          | Init container volume                                                           | `Always`                |
+| `volumePermissions.image.pullPolicy`          | Init container volume                                                           | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                | `[]`                    |
 | `volumePermissions.resources.limits`          | The resources limits for the container                                          | `{}`                    |
 | `volumePermissions.resources.requests`        | The requested resources for the container                                       | `{}`                    |
