@@ -173,7 +173,7 @@ For more information, refer to the [documentation on the differences between the
 | `grafana.client.preferService`                              | If the API should be used via Ingress or via the internal service                             | `true`               |
 | `grafana.labels`                                            | Add additional labels to the grafana deployment, service and ingress resources                | `{}`                 |
 | `grafana.ingress.enabled`                                   | If an ingress or OpenShift Route should be created                                            | `false`              |
-| `grafana.ingress.ingressClassName`                          | The name of the Ingress Class if Ingress should be assigned to it                             | `""`                 |
+| `grafana.ingress.ingressClassName`                          | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                 | `""`                 |
 | `grafana.ingress.hostname`                                  | The hostname under which the grafana instance should be reachable                             | `grafana.local`      |
 | `grafana.ingress.path`                                      | The path for the ingress instance to forward to the grafana app                               | `/`                  |
 | `grafana.ingress.labels`                                    | Additional Labels for the ingress resource                                                    | `{}`                 |
