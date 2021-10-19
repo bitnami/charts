@@ -207,7 +207,7 @@ $ helm delete --purge my-release
 | `volumePermissions.image.registry`     | Bitnami Shell image registry                                                    | `docker.io`             |
 | `volumePermissions.image.repository`   | Bitnami Shell image repository                                                  | `bitnami/bitnami-shell` |
 | `volumePermissions.image.tag`          | Bitnami Shell image tag (immutable tags are recommended)                        | `10-debian-10-r205`     |
-| `volumePermissions.image.pullPolicy`   | Bitnami Shell image pull policy                                                 | `Always`                |
+| `volumePermissions.image.pullPolicy`   | Bitnami Shell image pull policy                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Bitnami Shell image pull secrets                                                | `[]`                    |
 | `volumePermissions.resources.limits`   | The resources limits for the container                                          | `{}`                    |
 | `volumePermissions.resources.requests` | The requested resources for the container                                       | `{}`                    |

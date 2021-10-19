@@ -375,7 +375,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `volumePermissionsImage.registry`             | Init container volume-permissions image registry    | `docker.io`             |
 | `volumePermissionsImage.repository`           | Init container volume-permissions image repository  | `bitnami/bitnami-shell` |
 | `volumePermissionsImage.tag`                  | Init container volume-permissions image tag         | `10-debian-10-r218`     |
-| `volumePermissionsImage.pullPolicy`           | Init container volume-permissions image pull policy | `Always`                |
+| `volumePermissionsImage.pullPolicy`           | Init container volume-permissions image pull policy | `IfNotPresent`          |
 | `volumePermissionsImage.pullSecrets`          | Specify docker-registry secret names as an array    | `[]`                    |
 | `volumePermissions.enabled`                   | Enable init container to adapt volume permissions   | `false`                 |
 | `volumePermissions.securityContext.runAsUser` | Init container volume-permissions User ID           | `0`                     |

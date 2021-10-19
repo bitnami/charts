@@ -483,7 +483,7 @@ $ helm delete --purge my-release
 | `sysctlImage.registry`           | Kernel settings modifier image registry     | `docker.io`             |
 | `sysctlImage.repository`         | Kernel settings modifier image repository   | `bitnami/bitnami-shell` |
 | `sysctlImage.tag`                | Kernel settings modifier image tag          | `10-debian-10-r199`     |
-| `sysctlImage.pullPolicy`         | Kernel settings modifier image pull policy  | `Always`                |
+| `sysctlImage.pullPolicy`         | Kernel settings modifier image pull policy  | `IfNotPresent`          |
 | `sysctlImage.pullSecrets`        | Kernel settings modifier image pull secrets | `[]`                    |
 | `sysctlImage.resources.limits`   | The resources limits for the container      | `{}`                    |
 | `sysctlImage.resources.requests` | The requested resources for the container   | `{}`                    |
@@ -497,7 +497,7 @@ $ helm delete --purge my-release
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                                                              | `bitnami/bitnami-shell` |
 | `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `10-debian-10-r199`     |
-| `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `Always`                |
+| `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Init container volume-permissions image pull secrets                                                                                                      | `[]`                    |
 | `volumePermissions.resources.limits`   | The resources limits for the container                                                                                                                    | `{}`                    |
 | `volumePermissions.resources.requests` | The requested resources for the container                                                                                                                 | `{}`                    |

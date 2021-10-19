@@ -270,7 +270,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.image.registry`            | Init container volume-permissions image registry                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`          | Init container volume-permissions image name                                                                      | `bitnami/bitnami-shell` |
 | `volumePermissions.image.tag`                 | Init container volume-permissions image tag                                                                       | `10-debian-10-r212`     |
-| `volumePermissions.image.pullPolicy`          | Init container volume-permissions image pull policy                                                               | `Always`                |
+| `volumePermissions.image.pullPolicy`          | Init container volume-permissions image pull policy                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                                                  | `[]`                    |
 | `volumePermissions.securityContext.runAsUser` | User ID for the init container (when facing issues in OpenShift or uid unknown, try value "auto")                 | `0`                     |
 
