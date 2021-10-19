@@ -365,7 +365,7 @@ service:
   ## @param service.ports.elastic SonarQube service ElasticSearch port
   ##
   ports:
-    http: 9000
+    http: 80
     elastic: 9001
   ## Node ports to expose
   ## @param service.nodePorts.http Node port for HTTP

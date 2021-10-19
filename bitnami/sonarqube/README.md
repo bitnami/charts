@@ -170,7 +170,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                               | Description                                                                                                                      | Value                    |
 | ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
 | `service.type`                     | SonarQube service type                                                                                                           | `LoadBalancer`           |
-| `service.ports.http`               | SonarQube service HTTP port                                                                                                      | `9000`                   |
+| `service.ports.http`               | SonarQube service HTTP port                                                                                                      | `80`                     |
 | `service.ports.elastic`            | SonarQube service ElasticSearch port                                                                                             | `9001`                   |
 | `service.nodePorts.http`           | Node port for HTTP                                                                                                               | `""`                     |
 | `service.nodePorts.elastic`        | Node port for ElasticSearch                                                                                                      | `""`                     |
