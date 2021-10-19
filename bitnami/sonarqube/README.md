@@ -105,7 +105,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `command`              | Override default container command (useful when using custom images)               | `[]`               |
 | `args`                 | Override default container args (useful when using custom images)                  | `[]`               |
 | `extraEnvVars`         | Array with extra environment variables to add to SonarQube nodes                   | `[]`               |
-| `extraEnvVarsCM`       | Name of existing ConfigMap containing extra env vars for SonarQube nodes           | `nil`              |
+| `extraEnvVarsCM`       | Name of existing ConfigMap containing extra env vars for SonarQube nodes           | `""`               |
 | `extraEnvVarsSecret`   | Name of existing Secret containing extra env vars for SonarQube nodes              | `""`               |
 
 
@@ -207,8 +207,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `10`                    |
-| `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `Always`                |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r225`     |
+| `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                    |
 | `volumePermissions.resources.requests`                 | The requested resources for the init container                                                  | `{}`                    |
@@ -222,8 +222,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sysctl.enabled`            | Enable kernel settings modifier image                    | `true`                  |
 | `sysctl.image.registry`     | Bitnami Shell image registry                             | `docker.io`             |
 | `sysctl.image.repository`   | Bitnami Shell image repository                           | `bitnami/bitnami-shell` |
-| `sysctl.image.tag`          | Bitnami Shell image tag (immutable tags are recommended) | `10`                    |
-| `sysctl.image.pullPolicy`   | Bitnami Shell image pull policy                          | `Always`                |
+| `sysctl.image.tag`          | Bitnami Shell image tag (immutable tags are recommended) | `10-debian-10-r225`     |
+| `sysctl.image.pullPolicy`   | Bitnami Shell image pull policy                          | `IfNotPresent`          |
 | `sysctl.image.pullSecrets`  | Bitnami Shell image pull secrets                         | `[]`                    |
 | `sysctl.resources.limits`   | The resources limits for the init container              | `{}`                    |
 | `sysctl.resources.requests` | The requested resources for the init container           | `{}`                    |
