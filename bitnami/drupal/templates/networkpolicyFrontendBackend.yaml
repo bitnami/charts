@@ -1,4 +1,4 @@
-{{- if .Values.networkPolicy.ingress.BackendOnlyAccesibleByFronted }}
+{{- if and .Values.networkPolicy.enabled .Values.networkPolicy.ingress.BackendOnlyAccesibleByFronted }}
 apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
 kind: NetworkPolicy
 metadata:
@@ -11,11 +11,11 @@ spec:
   podSelector:
     matchLabels:
       app.kubernetes.io/instance: {{ .Release.Name }}
-      app.kubernetes.io/name: {{ .Values.networkPolicy.ingress.BackendName }}
+      {{ include "common.tplvalues.render" (dict "value" .Values.networkPolicy.ingress.BackendLabel "context" $) }}
       app.kubernetes.io/managed-by: {{ .Release.Service }}
   ingress:
   - from:
     - podSelector:
         matchLabels:
-          {{- include "networkPolicy.podSelectorLabels" . | nindent 8 }}
+          {{- include "common.labels.standard" . | nindent 10 }}
 {{- end }}

@@ -603,7 +603,7 @@ metrics:
 
 ## @section Certificate injection parameters
 
-## Add custom certificates and certificate authorities to redmine container
+## Add custom certificates and certificate authorities to drupal container
 ##
 certificates:
   ## @param certificates.customCertificate.certificateSecret Secret containing the certificate and key to add
@@ -660,33 +660,39 @@ certificates:
     ##
     pullSecrets: []
 
-networkPolicyOld:
-  enabled: false
-  destinationName: mariadb
-  extraSelectorLabels: {}
-  extraMatchLabels: {}
-  block: {}
+## @section NetworkPolicy parameters
 
+## Add networkpolcies
+##
 networkPolicy:
+  ## @param networkPolicy.enabled Enable network policies
+  ##
   enabled: false
-
-  metricsNamespaceLabels:
-    role: monitoring
-
-  ingressNamespaceLabels:
-    role: ingress
-
-
+  ## @param networkPolicy.metricsNamespaceLabel [object] Monitoring namespace's label
+  ##
+  metricsNamespaceLabel:
+    label: monitoring
+  ## @param networkPolicy.ingressNamespaceLabel [object] Ingress Proxy namespace's label
+  ##
+  ingressNamespaceLabel:
+    label: ingress
+  ## @param networkPolicy.ingress.BackendOnlyAccesibleByFronted Enable ingress rule that makes the backend (mariadb) only accesible by drupal's pods.
+  ## @param networkPolicy.ingress.BackendLabel [object] Backend's label
+  ## @param networkPolicy.ingress.AllowOnlyFromNamespace Enable ingress rule that makes druapl only accesible from a particular namespace
+  ## @param networkPolicy.ingress.AllowOnlyFromNamespaceNameLabel [object] Namespace's label that is allowed to access drupal
+  ##
   ingress:
     # Mysql only could be accessed from drupal
-    BackendName: mariadb
-    BackendOnlyAccesibleByFronted: true
+    BackendOnlyAccesibleByFronted: false
+    BackendLabel:
+      app.kubernetes.io/name: mariadb
 
     # Allow only from the namespace:
-    AllowOnlyFromNamespace: true
-    AllowOnlyFromNamespaceNameLabels:
-      role: app
-
+    AllowOnlyFromNamespace: false
+    AllowOnlyFromNamespaceNameLabel:
+      label: access
+  ## @param networkPolicy.egress.DenyConnectionsToExternal Disable the connection to outside of the namespace.
+  ##
   egress:
-    # Disallow connections to external
-    DisallowConnectionsToExternal: true
+    # Deny connections to external
+    DenyConnectionsToExternal: false

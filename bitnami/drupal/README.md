@@ -244,6 +244,20 @@ The command removes all the Kubernetes components associated with the chart and 
 | `certificates.image.pullSecrets`                     | Container sidecar image pull secrets                                 | `[]`                                     |
 
 
+### NetworkPolicy parameters
+
+| Name                                                    | Description                                                                           | Value   |
+| ------------------------------------------------------- | ------------------------------------------------------------------------------------- | ------- |
+| `networkPolicy.enabled`                                 | Enable network policies                                                               | `false` |
+| `networkPolicy.metricsNamespaceLabel`                   | Monitoring namespace's label                                                          | `{}`    |
+| `networkPolicy.ingressNamespaceLabel`                   | Ingress Proxy namespace's label                                                       | `{}`    |
+| `networkPolicy.ingress.BackendOnlyAccesibleByFronted`   | Enable ingress rule that makes the backend (mariadb) only accesible by drupal's pods. | `false` |
+| `networkPolicy.ingress.BackendLabel`                    | Backend's label                                                                       | `{}`    |
+| `networkPolicy.ingress.AllowOnlyFromNamespace`          | Enable ingress rule that makes druapl only accesible from a particular namespace      | `false` |
+| `networkPolicy.ingress.AllowOnlyFromNamespaceNameLabel` | Namespace's label that is allowed to access drupal                                    | `{}`    |
+| `networkPolicy.egress.DenyConnectionsToExternal`        | Disable the connection to outside of the namespace.                                   | `false` |
+
+
 The above parameters map to the env variables defined in [bitnami/drupal](http://github.com/bitnami/bitnami-docker-drupal). For more information please refer to the [bitnami/drupal](http://github.com/bitnami/bitnami-docker-drupal) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,

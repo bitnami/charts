@@ -1,8 +1,8 @@
-{{- if .Values.networkPolicy.egress.DisallowConnectionsToExternal }}
+{{- if and .Values.networkPolicy.enabled .Values.networkPolicy.egress.DenyConnectionsToExternal }}
 apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
 kind: NetworkPolicy
 metadata:
-  name: {{ include "common.names.fullname" . }}-networkpolicy-disallow-egress
+  name: {{ include "common.names.fullname" . }}-networkpolicy-egress-deny-all
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -11,9 +11,6 @@ spec:
   podSelector:
     matchLabels:
       {{- include "networkPolicy.outgoingSelectorLabels" . | nindent 6 }}
-      {{- if .Values.networkPolicy.extraMatchLabels }}
-      {{- include "common.tplvalues.render" ( dict "value" .Values.networkPolicy.extraMatchLabels "context" $ ) | nindent 6 }}
-      {{- end}}
   policyTypes:
     - Egress
   egress:
