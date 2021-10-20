@@ -1,4 +1,4 @@
-{{- if and .Values.networkPolicy.enabled .Values.ingress.enabled }}
+{{- if .Values.networkPolicy.enabled }}
 apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
 kind: NetworkPolicy
 metadata:
@@ -12,10 +12,28 @@ spec:
     matchLabels:
       {{- include "common.labels.standard" . | nindent 6 }}
   ingress:
+  {{- if .Values.ingress.enabled }}
   - from:
     - namespaceSelector:
         matchLabels:
           {{- if .Values.networkPolicy.ingressNamespaceLabel }}
           {{- include "common.tplvalues.render" (dict "value" .Values.networkPolicy.ingressNamespaceLabel "context" $) | nindent 10 }}
           {{- end }}
+  {{- end }}
+  {{- if .Values.metrics.enabled }}
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          {{- if .Values.networkPolicy.metricsNamespaceLabel }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.networkPolicy.metricsNamespaceLabel "context" $) | nindent 10 }}
+          {{- end }}
+  {{- end }}
+  {{- if .Values.networkPolicy.ingress.allowOnlyFromNamespace }}
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          {{- if .Values.networkPolicy.ingress.allowOnlyFromNamespaceNameLabel }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.networkPolicy.ingress.allowOnlyFromNamespaceNameLabel "context" $) | nindent 10 }}
+          {{- end }}
+  {{- end }}
 {{- end }}
