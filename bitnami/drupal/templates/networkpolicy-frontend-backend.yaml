@@ -1,8 +1,8 @@
-{{- if and .Values.networkPolicy.enabled .Values.networkPolicy.ingress.backendOnlyAccesibleByFronted }}
+{{- if and .Values.networkPolicy.enabled .Values.networkPolicy.ingress.backendOnlyAccesibleByFrontend }}
 apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
 kind: NetworkPolicy
 metadata:
-  name: {{ printf "$s-frontend" (include "common.names.fullname" .) }}
+  name: {{ printf "%s-frontend" (include "common.names.fullname" .) }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
