@@ -10,8 +10,8 @@ MinIO&reg; can be accessed via port {{ .Values.service.port }} on the following 
 
 To get your credentials run:
 
-   export ACCESS_KEY=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "minio.secretName" . }} -o jsonpath="{.data.access-key}" | base64 --decode)
-   export SECRET_KEY=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "minio.secretName" . }} -o jsonpath="{.data.secret-key}" | base64 --decode)
+   export ROOT_USER=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "minio.secretName" . }} -o jsonpath="{.data.root-user}" | base64 --decode)
+   export ROOT_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "minio.secretName" . }} -o jsonpath="{.data.root-password}" | base64 --decode)
 
 To connect to your MinIO&reg; server using a client:
 
@@ -19,8 +19,8 @@ To connect to your MinIO&reg; server using a client:
 
    kubectl run --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }}-client \
      --rm --tty -i --restart='Never' \
-     --env MINIO_SERVER_ACCESS_KEY=$ACCESS_KEY \
-     --env MINIO_SERVER_SECRET_KEY=$SECRET_KEY \
+     --env MINIO_SERVER_ROOT_USER=$ROOT_USER \
+     --env MINIO_SERVER_ROOT_PASSWORD=$ROOT_PASSWORD \
      --env MINIO_SERVER_HOST={{ include "common.names.fullname" . }} \
      {{- if and (.Values.networkPolicy.enabled) (not .Values.networkPolicy.allowExternal) }}
      --labels="{{ include "common.names.fullname" . }}-client=true" \
@@ -75,13 +75,13 @@ To access the MinIO&reg; web UI:
 {{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
 {{- include "minio.validateValues" . }}
 
-{{- $requiredPassword := list -}}
+{{- $requiredPasswords := list -}}
 {{- $secretName := include "minio.secretName" . -}}
-{{- if and (not .Values.existingSecret) (not .Values.forceNewKeys) (not .Values.gateway.enabled) -}}
-  {{- $requiredAccessKey := dict "valueKey" "accessKey.password" "secret" $secretName "field" "access-key" -}}
-  {{- $requiredSecretKey := dict "valueKey" "secretKey.password" "secret" $secretName "field" "secret-key" -}}
-  {{- $requiredPassword = append $requiredPassword $requiredAccessKey -}}
-  {{- $requiredPassword = append $requiredPassword $requiredSecretKey -}}
+{{- if and (not .Values.auth.existingSecret) (not .Values.auth.forceNewKeys) (not .Values.gateway.enabled) -}}
+  {{- $requiredRootUser := dict "valueKey" "auth.rootUser" "secret" $secretName "field" "root-user" -}}
+  {{- $requiredRootPassword := dict "valueKey" "auth.rootPassword" "secret" $secretName "field" "root-password" -}}
+  {{- $requiredPasswords = append $requiredPasswords $requiredRootUser -}}
+  {{- $requiredPasswords = append $requiredPasswords $requiredRootPassword -}}
 {{- end -}}
-{{- $requiredMinioPasswordErrors := include "common.validations.values.multiple.empty" (dict "required" $requiredPassword "context" $) -}}
+{{- $requiredMinioPasswordErrors := include "common.validations.values.multiple.empty" (dict "required" $requiredPasswords "context" $) -}}
 {{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" (list $requiredMinioPasswordErrors) "context" $) -}}

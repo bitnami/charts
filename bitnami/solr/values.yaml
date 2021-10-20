@@ -394,6 +394,16 @@ persistence:
   ## @param persistence.mountPath Persistence mount path for Solr
   ##
   mountPath: /bitnami/solr
+
+  ## @param persistence.extraVolumeClaimTemplates Additional pod instance specific volumes
+  ##
+  ## Example
+  ## extraVolumeClaimTemplates:
+  ## - name: "extra"
+  ##   size: 8Gi
+  ##   mountPath: "/extra"
+  extraVolumeClaimTemplates: []
+
 serviceAccount:
   ## @param serviceAccount.create Specifies whether a ServiceAccount should be created
   ##

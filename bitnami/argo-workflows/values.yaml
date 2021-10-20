@@ -62,7 +62,7 @@ server:
   image:
     registry: docker.io
     repository: bitnami/argo-workflow-cli
-    tag: 3.2.0-scratch-r6
+    tag: 3.2.1-scratch-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -462,7 +462,7 @@ controller:
   image:
     registry: docker.io
     repository: bitnami/argo-workflow-controller
-    tag: 3.2.0-scratch-r0
+    tag: 3.2.1-scratch-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -934,7 +934,7 @@ executor:
   image:
     registry: docker.io
     repository: bitnami/argo-workflow-exec
-    tag: 3.2.0-debian-10-r5
+    tag: 3.2.1-debian-10-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1089,6 +1089,7 @@ workflows:
 ## @param postgresql.service.port PostgreSQL port
 ## @param postgresql.postgresqlUsername PostgreSQL username
 ## @param postgresql.postgresqlDatabase PortgreSQL database name
+## @param postgresql.postgresqlPassword PortgreSQL database password
 ##
 postgresql:
   enabled: true
@@ -1096,6 +1097,7 @@ postgresql:
     port: 5432
   postgresqlUsername: postgres
   postgresqlDatabase: bn_argo_workflows
+  postgresqlPassword: ""
 
 ## @section MySQL subchart
 
@@ -1104,6 +1106,7 @@ postgresql:
 ## @param mysql.service.port MySQL port
 ## @param mysql.auth.username MySQL username
 ## @param mysql.auth.database MySQL database name
+## @param mysql.auth.password MySQL database password
 ##
 mysql:
   enabled: false
@@ -1112,6 +1115,7 @@ mysql:
   auth:
     username: mysql
     database: bn_argo_workflows
+    password: ""
 
 ## @section External Database configuration
 
