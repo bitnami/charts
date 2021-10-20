@@ -60,6 +60,8 @@ host. To configure TestLink to use and external database host:
 
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- include "common.warnings.rollingTag" .Values.metrics.image }}
+{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
+{{- include "common.warnings.rollingTag" .Values.certificates.image }}
 
 {{- $passwordErrors := list -}}
 {{- $secretName := include "testlink.secretName" . -}}

@@ -80,7 +80,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------- | ---------------------------------------------------------- | ----------------------------- |
 | `tempo.image.registry`                 | Grafana Tempo image registry                               | `docker.io`                   |
 | `tempo.image.repository`               | Grafana Tempo image repository                             | `bitnami/grafana-tempo`       |
-| `tempo.image.tag`                      | Grafana Tempo image tag (immutable tags are recommended)   | `1.1.0-debian-10-r14`         |
+| `tempo.image.tag`                      | Grafana Tempo image tag (immutable tags are recommended)   | `1.1.0-debian-10-r41`         |
 | `tempo.image.pullPolicy`               | Grafana Tempo image pull policy                            | `IfNotPresent`                |
 | `tempo.image.pullSecrets`              | Grafana Tempo image pull secrets                           | `[]`                          |
 | `tempo.containerPort`                  | Tempo components web port                                  | `3100`                        |
@@ -432,7 +432,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryFrontend.initContainers`                           | Add additional init containers to the queryFrontend pod(s)                                              | `[]`                          |
 | `queryFrontend.query.image.registry`                     | Grafana Tempo Query image registry                                                                      | `docker.io`                   |
 | `queryFrontend.query.image.repository`                   | Grafana Tempo Query image repository                                                                    | `bitnami/grafana-tempo-query` |
-| `queryFrontend.query.image.tag`                          | Grafana Tempo Query image tag (immutable tags are recommended)                                          | `1.1.0-debian-10-r17`         |
+| `queryFrontend.query.image.tag`                          | Grafana Tempo Query image tag (immutable tags are recommended)                                          | `1.1.0-debian-10-r45`         |
 | `queryFrontend.query.image.pullPolicy`                   | Grafana Tempo Query image pull policy                                                                   | `IfNotPresent`                |
 | `queryFrontend.query.image.pullSecrets`                  | Grafana Tempo Query image pull secrets                                                                  | `[]`                          |
 | `queryFrontend.query.command`                            | Override default container command (useful when using custom images)                                    | `[]`                          |
@@ -489,7 +489,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `vulture.enabled`                            | Enable vulture deployment                                                                         | `true`                          |
 | `vulture.image.registry`                     | Grafana Vulture image registry                                                                    | `docker.io`                     |
 | `vulture.image.repository`                   | Grafana Vulture image repository                                                                  | `bitnami/grafana-tempo-vulture` |
-| `vulture.image.tag`                          | Grafana Vulture image tag (immutable tags are recommended)                                        | `1.1.0-debian-10-r14`           |
+| `vulture.image.tag`                          | Grafana Vulture image tag (immutable tags are recommended)                                        | `1.1.0-debian-10-r46`           |
 | `vulture.image.pullPolicy`                   | Grafana Vulture image pull policy                                                                 | `IfNotPresent`                  |
 | `vulture.image.pullSecrets`                  | Grafana Vulture image pull secrets                                                                | `[]`                            |
 | `vulture.replicaCount`                       | Number of vulture replicas to deploy                                                              | `1`                             |
@@ -560,8 +560,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `10`                    |
-| `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `Always`                |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r225`     |
+| `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                    |
 | `volumePermissions.resources.requests`                 | The requested resources for the init container                                                  | `{}`                    |

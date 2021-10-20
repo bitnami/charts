@@ -75,7 +75,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------------- | -------------------------------------------------------------------- | ----------------------- |
 | `image.registry`              | Tomcat image registry                                                | `docker.io`             |
 | `image.repository`            | Tomcat image repository                                              | `bitnami/tomcat`        |
-| `image.tag`                   | Tomcat image tag (immutable tags are recommended)                    | `10.0.12-debian-10-r1`  |
+| `image.tag`                   | Tomcat image tag (immutable tags are recommended)                    | `10.0.12-debian-10-r14` |
 | `image.pullPolicy`            | Tomcat image pull policy                                             | `IfNotPresent`          |
 | `image.pullSecrets`           | Specify docker-registry secret names as an array                     | `[]`                    |
 | `image.debug`                 | Specify if debug logs should be enabled                              | `false`                 |
@@ -179,8 +179,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                            | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image repository                          | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                 | `10-debian-10-r212`     |
-| `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                         | `Always`                |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                 | `10-debian-10-r225`     |
+| `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                         | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                            | `[]`                    |
 | `volumePermissions.resources.limits`   | Init container volume-permissions resource  limits                          | `{}`                    |
 | `volumePermissions.resources.requests` | Init container volume-permissions resource  requests                        | `{}`                    |

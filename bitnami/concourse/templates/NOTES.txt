@@ -73,6 +73,7 @@ host. To configure Concourse with the URL of your service:
 {{ include "concourse.validateValues" . }}
 
 {{- include "common.warnings.rollingTag" .Values.image }}
+{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
 
 {{- $passwordValidationErrors := list -}}
 

@@ -182,6 +182,7 @@ You can access the Prometheus metrics following the steps below:
 
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- include "common.warnings.rollingTag" .Values.metrics.image }}
+{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
 {{- include "geode.validateValues" . }}
 {{- if and .Values.auth.enabled (not .Values.auth.existingSecret) -}}
     {{- $passwordValidationErrors := list -}}
