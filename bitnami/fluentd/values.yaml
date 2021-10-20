@@ -999,6 +999,9 @@ aggregator:
   ##     mountPath: /tmp
   ##
   extraVolumeMounts: []
+  ## @param aggregator.extraVolumeClaimTemplates Optionally specify extra list of additional volume claim templates for the Fluentd Aggregator pods in StatefulSet
+  ##
+  extraVolumeClaimTemplates: []
 ## @param serviceAccount Pods Service Account. This top-level global entry is DEPRECATED. Please use "forwarder.serviceAccount" instead.
 ## Only the forwarder was affected by the historical usage here.
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/

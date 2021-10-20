@@ -103,6 +103,7 @@ To connect to your etcd server from outside the cluster execute the following co
 {{- end }}
 
 {{- include "common.warnings.rollingTag" .Values.image }}
+{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
 {{- include "etcd.validateValues" . }}
 {{- $requiredPassword := list -}}
 {{- $secretName := include "etcd.secretName" . -}}

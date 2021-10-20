@@ -151,7 +151,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `affinity`                           | Affinity for pod assignment. Evaluated as a template                                                                     | `{}`            |
 | `nodeSelector`                       | Node labels for pod assignment. Evaluated as a template                                                                  | `{}`            |
 | `tolerations`                        | Tolerations for pod assignment. Evaluated as a template                                                                  | `[]`            |
-| `topologySpreadConstraints`          | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `{}`            |
+| `topologySpreadConstraints`          | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`            |
 | `podSecurityContext.enabled`         | Enable RabbitMQ pods' Security Context                                                                                   | `true`          |
 | `podSecurityContext.fsGroup`         | Group ID for the filesystem used by the containers                                                                       | `1001`          |
 | `podSecurityContext.runAsUser`       | User ID for the service user running the pod                                                                             | `1001`          |
@@ -283,7 +283,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                     | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image repository                                                                   | `bitnami/bitnami-shell` |
 | `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                          | `10-debian-10-r202`     |
-| `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                  | `Always`                |
+| `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                  | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                     | `[]`                    |
 | `volumePermissions.resources.limits`   | Init container volume-permissions resource limits                                                                    | `{}`                    |
 | `volumePermissions.resources.requests` | Init container volume-permissions resource requests                                                                  | `{}`                    |

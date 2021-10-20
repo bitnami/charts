@@ -60,15 +60,15 @@ image:
   ##   - myRegistryKeySecretName
   ##
   pullSecrets: []
-## @param objstoreConfig The [objstore configuration](https://thanos.io/storage.md/)
+## @param objstoreConfig The [objstore configuration](https://thanos.io/tip/thanos/storage.md/)
 ## Specify content for objstore.yml
 ##
 objstoreConfig: ""
-## @param indexCacheConfig The [index cache configuration](https://thanos.io/components/store.md/)
+## @param indexCacheConfig The [index cache configuration](https://thanos.io/tip/components/store.md/)
 ## Specify content for index-cache.yml
 ##
 indexCacheConfig: ""
-## @param bucketCacheConfig The [bucket cache configuration](https://thanos.io/components/store.md/)
+## @param bucketCacheConfig The [bucket cache configuration](https://thanos.io/tip/components/store.md/)
 ## Specify content for bucket-cache.yml
 ##
 bucketCacheConfig: ""
@@ -3104,7 +3104,7 @@ volumePermissions:
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
-    pullPolicy: Always
+    pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
