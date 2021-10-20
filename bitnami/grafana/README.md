@@ -179,8 +179,6 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `ldap.configuration`               | Specify content for ldap.toml configuration file                                  | `""`                 |
 | `ldap.configMapName`               | Name of the ConfigMap with the ldap.toml configuration file for Grafana           | `""`                 |
 | `ldap.secretName`                  | Name of the Secret with the ldap.toml configuration file for Grafana              | `""`                 |
-| `extraEnvVars`                     | Array containing extra env vars to configure Grafana                              | `{}`                 |
-| `extraConfigmaps`                  | Array to mount extra ConfigMaps to configure Grafana                              | `{}`                 |
 | `config.useGrafanaIniFile`         | Allows to load a `grafana.ini` file                                               | `false`              |
 | `config.grafanaIniConfigMap`       | Name of the ConfigMap containing the `grafana.ini` file                           | `""`                 |
 | `config.grafanaIniSecret`          | Name of the Secret containing the `grafana.ini` file                              | `""`                 |
@@ -250,6 +248,8 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `grafana.initContainers`                     | Add additional init containers to the Grafana pod(s)                                                    | `{}`            |
 | `grafana.extraVolumes`                       | Additional volumes for the Grafana pod                                                                  | `[]`            |
 | `grafana.extraVolumeMounts`                  | Additional volume mounts for the Grafana container                                                      | `[]`            |
+| `grafana.extraConfigmaps  `                  | Array to mount extra ConfigMaps to configure Grafana                                                    | `{}`            |
+| `grafana.extraEnvVars`                       | Array containing extra env vars to configure Grafana                                                    | `{}`            |
 | `grafana.extraEnvVarsCM`                     | Name of existing ConfigMap containing extra env vars for %%MAIN_CONTAINER_NAME%% nodes                  | `""`            |
 | `grafana.extraEnvVarsSecret`                 | Name of existing Secret containing extra env vars for %%MAIN_CONTAINER_NAME%% nodes                     | `""`            |
 | `grafana.command`                            | Override default container command (useful when using custom images)                                    | `[]`            |
