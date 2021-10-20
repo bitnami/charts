@@ -218,9 +218,9 @@ clustering:
   ##
   forceBoot: false
 
-  ## @param clustering.clusterPartitionHandling The way to deal with network partitions automatically
+  ## @param clustering.partitionHandling The way to deal with network partitions automatically
   ## ref: https://www.rabbitmq.com/partitions.html#automatic-handling
-  clusterPartitionHandling: autoheal
+  partitionHandling: autoheal
 
 ## Loading a RabbitMQ definitions file to configure RabbitMQ
 ##
@@ -287,7 +287,7 @@ configuration: |-
   cluster_formation.k8s.host = kubernetes.default.svc.{{ .Values.clusterDomain }}
   cluster_formation.node_cleanup.interval = 10
   cluster_formation.node_cleanup.only_log_warning = true
-  cluster_partition_handling = {{ .Values.clustering.clusterPartitionHandling }}
+  cluster_partition_handling = {{ .Values.clustering.partitionHandling }}
   {{- end }}
   # queue master locator
   queue_master_locator = min-masters
