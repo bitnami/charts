@@ -3121,14 +3121,15 @@ minio:
   ## to be used as an objstore for Thanos
   ##
   enabled: false
-  ## MinIO&reg; credentials
-  ## @param minio.accessKey.password MinIO&reg; Access Key
-  ## @param minio.secretKey.password MinIO&reg; Secret Key
+  ## MinIO&reg; authentication parameters
   ##
-  accessKey:
-    password: ""
-  secretKey:
-    password: ""
+  auth:
+    ## @param minio.auth.rootUser MinIO&reg; root username
+    ##
+    rootUser: admin
+    ## @param minio.auth.rootPassword Password for MinIO&reg; root user
+    ##
+    rootPassword: ""
   ## @param minio.defaultBuckets Comma, semi-colon or space separated list of MinIO&reg; buckets to create
   ##
   defaultBuckets: 'thanos'

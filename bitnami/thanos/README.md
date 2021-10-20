@@ -804,12 +804,12 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 
 ### MinIO&reg; chart parameters
 
-| Name                       | Description                                                               | Value    |
-| -------------------------- | ------------------------------------------------------------------------- | -------- |
-| `minio.enabled`            | Enable/disable MinIO&reg; chart installation                              | `false`  |
-| `minio.accessKey.password` | MinIO&reg; Access Key                                                     | `""`     |
-| `minio.secretKey.password` | MinIO&reg; Secret Key                                                     | `""`     |
-| `minio.defaultBuckets`     | Comma, semi-colon or space separated list of MinIO&reg; buckets to create | `thanos` |
+| Name                      | Description                                                               | Value    |
+| ------------------------- | ------------------------------------------------------------------------- | -------- |
+| `minio.enabled`           | Enable/disable MinIO&reg; chart installation                              | `false`  |
+| `minio.auth.rootUser`     | MinIO&reg; root username                                                  | `admin`  |
+| `minio.auth.rootPassword` | Password for MinIO&reg; root user                                         | `""`     |
+| `minio.defaultBuckets`    | Comma, semi-colon or space separated list of MinIO&reg; buckets to create | `thanos` |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
@@ -1009,6 +1009,10 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 7.0.0
+
+This major updates the MinIO&reg; subchart to its newest major, 9.0.0, which updates authentication parameters. Check [MinIO&reg; Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/minio#to-900) for more information.
 
 ### To 6.0.0
 
