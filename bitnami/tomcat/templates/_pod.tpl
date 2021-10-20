@@ -37,7 +37,7 @@ initContainers:
   - |
       chown -R {{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }} /bitnami/tomcat
   securityContext:
-  runAsUser: 0
+    runAsUser: 0
   {{- if .Values.volumePermissions.resources }}
   resources: {{- toYaml .Values.volumePermissions.resources | nindent 4 }}
   {{- end }}
@@ -73,6 +73,10 @@ containers:
         key: tomcat-password
   - name: TOMCAT_ALLOW_REMOTE_MANAGEMENT
     value: {{ .Values.tomcatAllowRemoteManagement | quote }}
+  {{- if or .Values.catalinaOpts .Values.metrics.jmx.enabled }}    
+  - name: CATALINA_OPTS
+    value: {{ include "tomcat.catalinaOpts" . | quote }}
+  {{- end }}
   {{- if .Values.extraEnvVars }}
   {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 2 }}
   {{- end }}
@@ -115,6 +119,32 @@ containers:
 {{- if .Values.sidecars }}
 {{ include "common.tplvalues.render" ( dict "value" .Values.sidecars "context" $) }}
 {{- end }}
+{{- if .Values.metrics.jmx.enabled }}
+- name: jmx-exporter
+  image: {{ template "tomcat.metrics.jmx.image" . }}
+  imagePullPolicy: {{ .Values.metrics.jmx.image.pullPolicy | quote }}
+  command:
+    - java
+    - -XX:+UnlockExperimentalVMOptions
+    - -XX:+UseCGroupMemoryLimitForHeap
+    - -XX:MaxRAMFraction=1
+    - -XshowSettings:vm
+    - -jar
+    - jmx_prometheus_httpserver.jar
+    - {{ .Values.metrics.jmx.ports.metrics | quote }}
+    - /etc/jmx-tomcat/jmx-tomcat-prometheus.yml  
+  ports:
+  {{- range $key, $val := .Values.metrics.jmx.ports }}
+    - name: {{ $key }}
+      containerPort: {{ $val }}
+  {{- end }} 
+  {{- if .Values.metrics.jmx.resources }}
+  resources: {{- toYaml .Values.metrics.jmx.resources | nindent 4 }}
+  {{- end }}      
+  volumeMounts:
+    - name: jmx-config
+      mountPath: /etc/jmx-tomcat	  
+{{- end }}
 volumes:
 {{- if and .Values.persistence.enabled (eq .Values.deployment.type "deployment") }}
 - name: data
@@ -125,6 +155,11 @@ volumes:
 {{- else }}
 - name: data
   emptyDir: {}
+{{- end }}
+{{- if .Values.metrics.jmx.enabled }}
+- name: jmx-config
+  configMap:
+    name: {{ include "tomcat.metrics.jmx.configmapName" . }}
 {{- end }}
 {{- if .Values.extraVolumes }}
 {{ include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) }}
