@@ -96,9 +96,18 @@ reportNodeInternalIp: false
 ## @param watchIngressWithoutClass Process Ingress objects without ingressClass annotation/ingressClassName field
 ##
 watchIngressWithoutClass: false
-## @param ingressClass Name of the ingress class to route through this controller
-##
-ingressClass: nginx
+## Configuring this doesn't affect `kubernetes.io/ingress.class` annotation. See `extraArgs` below how to configure processing of custom annotation.
+## @param ingressClassResource.name Name of the IngressClass resource
+## @param ingressClassResource.enabled Create the IngressClass resource
+## @param ingressClassResource.default Sets if the created IngressClass should be a default IngressClass
+## @param ingressClassResource.controller IngressClass identifier for the controller
+## @param ingressClassResource.parameters Optional parameters for the controller
+ingressClassResource:
+  name: nginx
+  enabled: true
+  default: false
+  controllerClass: "k8s.io/ingress-nginx"
+  parameters: {}
 ## Allows customization of the external service
 ## the ingress will be bound to via DNS
 ##
@@ -157,6 +166,7 @@ args: []
 ## E.g. to specify the default SSL certificate you can use
 ## extraArgs:
 ##   default-ssl-certificate: "<namespace>/<secret_name>"
+##   ingress-class: nginx
 ##
 extraArgs: {}
 ## @param extraEnvVars Extra environment variables to be set on Nginx Ingress container
