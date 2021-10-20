@@ -151,6 +151,9 @@ spec:
                 secretKeyRef:
                   name: {{ template "kubeapps.oauth2_proxy-secret.name" . }}
                   key: cookieSecret
+            {{- if .Values.authProxy.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.authProxy.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
           ports:
             - name: proxy
               containerPort: {{ .Values.authProxy.containerPort }}

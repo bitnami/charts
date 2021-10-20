@@ -51,3 +51,4 @@
 {{- $requiredTomcatPasswordError := include "common.validations.values.single.empty" $requiredTomcatPassword -}}
 {{- $passwordValidationErrors = append $passwordValidationErrors $requiredTomcatPasswordError -}}
 {{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordValidationErrors "context" $) -}}
+{{- include "tomcat.validateValues" . -}}

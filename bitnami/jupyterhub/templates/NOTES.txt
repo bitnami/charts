@@ -46,6 +46,7 @@
 {{- include "common.warnings.rollingTag" .Values.hub.image }}
 {{- include "common.warnings.rollingTag" .Values.proxy.image }}
 {{- include "common.warnings.rollingTag" .Values.singleuser.image }}
+{{- include "common.warnings.rollingTag" .Values.auxiliaryImage }}
 
 {{- $passwordValidationErrors := list -}}
 

@@ -62,6 +62,7 @@ To upgrade this helm chart:
 
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- include "common.warnings.rollingTag" .Values.metrics.image }}
+{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
 {{- include "mariadb.validateValues" . }}
 {{- if not .Values.auth.customPasswordFiles -}}
   {{- $passwordValidationErrors := include "common.validations.values.mariadb.passwords" (dict "secret" (include "common.names.fullname" .) "context" $) -}}
