@@ -626,6 +626,20 @@ serviceAccount:
   ## @param serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
   ##
   automountServiceAccountToken: false
+## SonarQube Autoscaling configuration
+## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
+## @param autoscaling.enabled Enable Horizontal POD autoscaling for SonarQube
+## @param autoscaling.minReplicas Minimum number of SonarQube replicas
+## @param autoscaling.maxReplicas Maximum number of SonarQube replicas
+## @param autoscaling.targetCPU Target CPU utilization percentage
+## @param autoscaling.targetMemory Target Memory utilization percentage
+##
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 11
+  targetCPU: 50
+  targetMemory: 50
 
 ## @section Metrics parameters
 

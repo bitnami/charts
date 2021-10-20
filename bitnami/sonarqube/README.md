@@ -238,6 +238,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                   | `true`  |
 | `serviceAccount.name`                         | The name of the ServiceAccount to use.                                 | `""`    |
 | `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created | `false` |
+| `autoscaling.enabled`                         | Enable Horizontal POD autoscaling for SonarQube                        | `false` |
+| `autoscaling.minReplicas`                     | Minimum number of SonarQube replicas                                   | `1`     |
+| `autoscaling.maxReplicas`                     | Maximum number of SonarQube replicas                                   | `11`    |
+| `autoscaling.targetCPU`                       | Target CPU utilization percentage                                      | `50`    |
+| `autoscaling.targetMemory`                    | Target Memory utilization percentage                                   | `50`    |
 
 
 ### Metrics parameters
