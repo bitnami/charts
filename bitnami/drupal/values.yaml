@@ -676,23 +676,23 @@ networkPolicy:
   ##
   ingressNamespaceLabel:
     label: ingress
-  ## @param networkPolicy.ingress.BackendOnlyAccesibleByFronted Enable ingress rule that makes the backend (mariadb) only accesible by drupal's pods.
-  ## @param networkPolicy.ingress.BackendLabel [object] Backend's label
-  ## @param networkPolicy.ingress.AllowOnlyFromNamespace Enable ingress rule that makes druapl only accesible from a particular namespace
-  ## @param networkPolicy.ingress.AllowOnlyFromNamespaceNameLabel [object] Namespace's label that is allowed to access drupal
+  ## @param networkPolicy.ingress.backendOnlyAccesibleByFrontend Enable ingress rule that makes the backend (mariadb) only accesible by drupal's pods.
+  ## @param networkPolicy.ingress.backendLabel [object] Backend's label
+  ## @param networkPolicy.ingress.allowOnlyFromNamespace Enable ingress rule that makes druapl only accesible from a particular namespace
+  ## @param networkPolicy.ingress.allowOnlyFromNamespaceNameLabel [object] Namespace's label that is allowed to access drupal
   ##
   ingress:
     # Mysql only could be accessed from drupal
-    BackendOnlyAccesibleByFronted: false
-    BackendLabel:
+    backendOnlyAccesibleByFrontend: false
+    backendLabel:
       app.kubernetes.io/name: mariadb
 
     # Allow only from the namespace:
-    AllowOnlyFromNamespace: false
-    AllowOnlyFromNamespaceNameLabel:
+    allowOnlyFromNamespace: false
+    allowOnlyFromNamespaceNameLabel:
       label: access
-  ## @param networkPolicy.egress.DenyConnectionsToExternal Disable the connection to outside of the namespace.
+  ## @param networkPolicy.egress.denyConnectionsToExternal Disable the connection to outside of the namespace.
   ##
   egress:
     # Deny connections to external
-    DenyConnectionsToExternal: false
+    denyConnectionsToExternal: false
