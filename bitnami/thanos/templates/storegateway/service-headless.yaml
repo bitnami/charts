@@ -16,11 +16,11 @@ spec:
   type: ClusterIP
   clusterIP: None
   ports:
-    - port: {{ .Values.storegateway.service.http.port }}
+    - port: {{ if .Values.storegateway.service.http }}{{ coalesce .Values.storegateway.service.ports.http .Values.storegateway.service.http.port }}{{ else }}{{ .Values.storegateway.service.ports.http }}{{ end }}
       targetPort: http
       protocol: TCP
       name: http
-    - port: {{ .Values.storegateway.service.grpc.port }}
+    - port: {{ if .Values.storegateway.service.grpc }}{{ coalesce .Values.storegateway.service.ports.grpc .Values.storegateway.service.grpc.port }}{{ else }}{{ .Values.storegateway.service.ports.grpc }}{{ end }}
       targetPort: grpc
       protocol: TCP
       name: grpc

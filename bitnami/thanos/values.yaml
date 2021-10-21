@@ -398,30 +398,24 @@ query:
     ## @param query.service.type Kubernetes service type
     ##
     type: ClusterIP
+    ## @param query.service.ports.http Thanos Query service HTTP port
+    ## @param query.service.ports.grpc Thanos Query service GRPC port
+    ##
+    ports:
+      http: 9090
+      grpc: 10901
+    ## @param query.service.nodePorts.http Specify the Thanos Query HTTP nodePort value for the LoadBalancer and NodePort service types
+    ## @param query.service.nodePorts.grpc Specify the Thanos Query GRPC nodePort value for the LoadBalancer and NodePort service types
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+    ##
+    nodePorts:
+      http: ""
+      grpc: ""
     ## @param query.service.clusterIP Thanos Query service clusterIP IP
     ## e.g:
     ## clusterIP: None
     ##
     clusterIP: ""
-    http:
-      ## @param query.service.http.port Service HTTP port
-      ##
-      port: 9090
-      ## @param query.service.http.nodePort Service HTTP node port
-      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
-      ##
-      nodePort: ""
-    ## @param query.service.targetPort Service targetPort override
-    ##
-    targetPort: http
-    grpc:
-      ## @param query.service.grpc.port Service GRPC port
-      ##
-      port: 10901
-      ## @param query.service.grpc.nodePort Service GRPC node port
-      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
-      ##
-      nodePort: ""
     ## @param query.service.loadBalancerIP Load balancer IP if service type is `LoadBalancer`
     ## Set the LoadBalancer service type to internal only
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
@@ -441,6 +435,9 @@ query:
     ## @param query.service.annotations Annotations for Thanos Query service
     ##
     annotations: {}
+    ## @param query.service.extraPorts Extra ports to expose in the Thanos Query service
+    ##
+    extraPorts: []
     ## @param query.service.labelSelectorsOverride Selector for Thanos query service
     ##
     labelSelectorsOverride: {}
@@ -854,22 +851,20 @@ queryFrontend:
     ## @param queryFrontend.service.type Kubernetes service type
     ##
     type: ClusterIP
+    ## @param queryFrontend.service.ports.http Thanos Query Frontend service HTTP port
+    ##
+    ports:
+      http: 9090
+    ## @param queryFrontend.service.nodePorts.http Specify the Thanos Query Frontend HTTP nodePort value for the LoadBalancer and NodePort service types
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+    ##
+    nodePorts:
+      http: ""
     ## @param queryFrontend.service.clusterIP Thanos Query Frontend service clusterIP IP
     ## e.g:
     ## clusterIP: None
     ##
     clusterIP: ""
-    http:
-      ## @param queryFrontend.service.http.port Service HTTP port
-      ##
-      port: 9090
-      ## @param queryFrontend.service.http.nodePort Service HTTP node port
-      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
-      ##
-      nodePort: ""
-    ## @param queryFrontend.service.targetPort Service targetPort override
-    ##
-    targetPort: http
     ## @param queryFrontend.service.loadBalancerIP Load balancer IP if service type is `LoadBalancer`
     ## Set the LoadBalancer service type to internal only
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
@@ -889,6 +884,9 @@ queryFrontend:
     ## @param queryFrontend.service.annotations Annotations for Thanos Query Frontend service
     ##
     annotations: {}
+    ## @param queryFrontend.service.extraPorts Extra ports to expose in the Thanos Query Frontend service
+    ##
+    extraPorts: []
     ## @param queryFrontend.service.labelSelectorsOverride Selector for Thanos query service
     ##
     labelSelectorsOverride: {}
@@ -1211,22 +1209,20 @@ bucketweb:
     ## @param bucketweb.service.type Kubernetes service type
     ##
     type: ClusterIP
+    ## @param bucketweb.service.ports.http Thanos Bucket Web service HTTP port
+    ##
+    ports:
+      http: 8080
+    ## @param bucketweb.service.nodePorts.http Specify the Thanos Bucket Web HTTP nodePort value for the LoadBalancer and NodePort service types
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+    ##
+    nodePorts:
+      http: ""
     ## @param bucketweb.service.clusterIP Thanos Bucket Web service clusterIP IP
     ## e.g:
     ## clusterIP: None
     ##
     clusterIP: ""
-    http:
-      ## @param bucketweb.service.http.port Service HTTP port
-      ##
-      port: 8080
-      ## @param bucketweb.service.http.nodePort Service HTTP node port
-      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
-      ##
-      nodePort: ""
-    ## @param bucketweb.service.targetPort Service targetPort override
-    ##
-    targetPort: http
     ## @param bucketweb.service.loadBalancerIP Load balancer IP if service type is `LoadBalancer`
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
@@ -1244,6 +1240,9 @@ bucketweb:
     ## @param bucketweb.service.annotations Annotations for Thanos Bucket Web service
     ##
     annotations: {}
+    ## @param bucketweb.service.extraPorts Extra ports to expose in the Thanos Bucket Web service
+    ##
+    extraPorts: []
     ## @param bucketweb.service.labelSelectorsOverride Selector for Thanos query service
     ##
     labelSelectorsOverride: {}
@@ -1544,19 +1543,20 @@ compactor:
     ## @param compactor.service.type Kubernetes service type
     ##
     type: ClusterIP
+    ## @param compactor.service.ports.http Thanos Compactor service HTTP port
+    ##
+    ports:
+      http: 9090
+    ## @param compactor.service.nodePorts.http Specify the Thanos Compactor HTTP nodePort value for the LoadBalancer and NodePort service types
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+    ##
+    nodePorts:
+      http: ""
     ## @param compactor.service.clusterIP Thanos Compactor service clusterIP IP
     ## e.g:
     ## clusterIP: None
     ##
     clusterIP: ""
-    http:
-      ## @param compactor.service.http.port Service HTTP port
-      ##
-      port: 9090
-      ## @param compactor.service.http.nodePort Service HTTP node port
-      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
-      ##
-      nodePort: ""
     ## @param compactor.service.loadBalancerIP Load balancer IP if service type is `LoadBalancer`
     ## Set the LoadBalancer service type to internal only
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
@@ -1576,6 +1576,9 @@ compactor:
     ## @param compactor.service.annotations Annotations for Thanos Compactor service
     ##
     annotations: {}
+    ## @param compactor.service.extraPorts Extra ports to expose in the Thanos Compactor service
+    ##
+    extraPorts: []
     ## @param compactor.service.labelSelectorsOverride Selector for Thanos query service
     ##
     labelSelectorsOverride: {}
@@ -1941,29 +1944,24 @@ storegateway:
     ## @param storegateway.service.type Kubernetes service type
     ##
     type: ClusterIP
+    ## @param storegateway.service.ports.http Thanos Store Gateway service HTTP port
+    ## @param storegateway.service.ports.grpc Thanos Store Gateway service GRPC port
+    ##
+    ports:
+      http: 9090
+      grpc: 10901
+    ## @param storegateway.service.nodePorts.http Specify the Thanos Store Gateway HTTP nodePort value for the LoadBalancer and NodePort service types
+    ## @param storegateway.service.nodePorts.grpc Specify the Thanos Store Gateway GRPC nodePort value for the LoadBalancer and NodePort service types
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+    ##
+    nodePorts:
+      http: ""
+      grpc: ""
     ## @param storegateway.service.clusterIP Thanos Store Gateway service clusterIP IP
     ## e.g:
     ## clusterIP: None
     ##
     clusterIP: ""
-    http:
-      ## @param storegateway.service.http.port Service HTTP port
-      ##
-      port: 9090
-      ## @param storegateway.service.http.nodePort Service HTTP node port
-      ## Specify the nodePort value for the LoadBalancer and NodePort service types
-      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
-      ##
-      nodePort: ""
-    grpc:
-      ## @param storegateway.service.grpc.port Service GRPC port
-      ##
-      port: 10901
-      ## @param storegateway.service.grpc.nodePort Service GRPC node port
-      ## Specify the nodePort value for the LoadBalancer and NodePort service types
-      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
-      ##
-      nodePort: ""
     ## @param storegateway.service.loadBalancerIP Load balancer IP if service type is `LoadBalancer`
     ## Set the LoadBalancer service type to internal only
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
@@ -1983,6 +1981,9 @@ storegateway:
     ## @param storegateway.service.annotations Annotations for Thanos Store Gateway service
     ##
     annotations: {}
+    ## @param storegateway.service.extraPorts Extra ports to expose in the Thanos Store Gateway service
+    ##
+    extraPorts: []
     ## @param storegateway.service.labelSelectorsOverride Selector for Thanos query service
     ##
     labelSelectorsOverride: {}
@@ -2415,30 +2416,24 @@ ruler:
     ## @param ruler.service.type Kubernetes service type
     ##
     type: ClusterIP
+    ## @param ruler.service.ports.http Thanos Ruler service HTTP port
+    ## @param ruler.service.ports.grpc Thanos Ruler service GRPC port
+    ##
+    ports:
+      http: 9090
+      grpc: 10901
+    ## @param ruler.service.nodePorts.http Specify the Thanos Ruler HTTP nodePort value for the LoadBalancer and NodePort service types
+    ## @param ruler.service.nodePorts.grpc Specify the Thanos Ruler GRPC nodePort value for the LoadBalancer and NodePort service types
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+    ##
+    nodePorts:
+      http: ""
+      grpc: ""
     ## @param ruler.service.clusterIP Thanos Ruler service clusterIP IP
     ## e.g:
     ## clusterIP: None
     ##
     clusterIP: ""
-    http:
-      ## @param ruler.service.http.port Service HTTP port
-      ##
-      port: 9090
-      ## @param ruler.service.http.nodePort Service HTTP node port
-      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
-      ##
-      nodePort: ""
-    ## @param ruler.service.targetPort Service targetPort override
-    ##
-    targetPort: http
-    grpc:
-      ## @param ruler.service.grpc.port Service GRPC port
-      ##
-      port: 10901
-      ## @param ruler.service.grpc.nodePort Service GRPC node port
-      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
-      ##
-      nodePort: ""
     ## @param ruler.service.loadBalancerIP Load balancer IP if service type is `LoadBalancer`
     ## Set the LoadBalancer service type to internal only
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
@@ -2458,6 +2453,9 @@ ruler:
     ## @param ruler.service.annotations Annotations for Thanos Ruler service
     ##
     annotations: {}
+    ## @param ruler.service.extraPorts Extra ports to expose in the Thanos Ruler service
+    ##
+    extraPorts: []
     ## @param ruler.service.labelSelectorsOverride Selector for Thanos query service
     ##
     labelSelectorsOverride: {}
@@ -2921,38 +2919,28 @@ receive:
     ## @param receive.service.type Kubernetes service type
     ##
     type: ClusterIP
+    ## @param receive.service.ports.http Thanos Ruler service HTTP port
+    ## @param receive.service.ports.grpc Thanos Ruler service GRPC port
+    ## @param receive.service.ports.remote Thanos Ruler service remote port
+    ##
+    ports:
+      http: 10902
+      grpc: 10901
+      remote: 19291
+    ## @param receive.service.nodePorts.http Specify the Thanos Ruler HTTP nodePort value for the LoadBalancer and NodePort service types
+    ## @param receive.service.nodePorts.grpc Specify the Thanos Ruler GRPC nodePort value for the LoadBalancer and NodePort service types
+    ## @param receive.service.nodePorts.remote Specify the Thanos Ruler remote nodePort value for the LoadBalancer and NodePort service types
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+    ##
+    nodePorts:
+      http: ""
+      grpc: ""
+      remote: ""
     ## @param receive.service.clusterIP Thanos Ruler service clusterIP IP
     ## e.g:
     ## clusterIP: None
     ##
     clusterIP: ""
-    http:
-      ## @param receive.service.http.port Service HTTP port
-      ##
-      port: 10902
-      ## @param receive.service.http.nodePort Service HTTP node port
-      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
-      ##
-      nodePort: ""
-    ## @param receive.service.targetPort Service targetPort override
-    ##
-    targetPort: http
-    grpc:
-      ## @param receive.service.grpc.port Service GRPC port
-      ##
-      port: 10901
-      ## @param receive.service.grpc.nodePort Service GRPC node port
-      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
-      ##
-      nodePort: ""
-    remoteWrite:
-      ## @param receive.service.remoteWrite.port Service remote write port
-      ##
-      port: 19291
-      ## @param receive.service.remoteWrite.nodePort Service remote write node port
-      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
-      ##
-      nodePort: ""
     ## @param receive.service.loadBalancerIP Load balancer IP if service type is `LoadBalancer`
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
@@ -2971,6 +2959,9 @@ receive:
     ## @param receive.service.annotations Annotations for Thanos Receive service
     ##
     annotations: {}
+    ## @param receive.service.extraPorts Extra ports to expose in the Thanos Receive service
+    ##
+    extraPorts: []
     ## @param receive.service.labelSelectorsOverride Selector for Thanos receive service
     ##
     labelSelectorsOverride: {}

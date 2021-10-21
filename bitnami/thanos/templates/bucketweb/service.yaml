@@ -31,14 +31,18 @@ spec:
   loadBalancerSourceRanges: {{- toYaml .Values.bucketweb.service.loadBalancerSourceRanges | nindent 4 }}
   {{- end }}
   ports:
-    - port: {{ .Values.bucketweb.service.http.port }}
-      targetPort: {{ .Values.bucketweb.service.targetPort | default "http" }}
+    - port: {{ if .Values.bucketweb.service.http }}{{ coalesce .Values.bucketweb.service.ports.http .Values.bucketweb.service.http.port }}{{ else }}{{ .Values.bucketweb.service.ports.http }}{{ end }}
+      targetPort: http
       protocol: TCP
       name: http
-      {{- if (and (or (eq .Values.bucketweb.service.type "NodePort") (eq .Values.bucketweb.service.type "LoadBalancer")) .Values.bucketweb.service.http.nodePort) }}
+      {{- if and (or (eq .Values.bucketweb.service.type "NodePort") (eq .Values.bucketweb.service.type "LoadBalancer")) .Values.bucketweb.service.nodePorts.http }}
+      nodePort: {{ .Values.bucketweb.service.nodePorts.http }}
       {{- else if eq .Values.bucketweb.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
+    {{- if .Values.bucketweb.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.bucketweb.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
   selector:
     {{- if .Values.bucketweb.service.labelSelectorsOverride }}
     {{- include "common.tplvalues.render" (dict "value" .Values.bucketweb.service.labelSelectorsOverride "context" $) | nindent 4 }}

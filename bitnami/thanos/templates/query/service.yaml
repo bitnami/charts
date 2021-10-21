@@ -32,24 +32,27 @@ spec:
   loadBalancerSourceRanges: {{- toYaml $query.service.loadBalancerSourceRanges | nindent 4 }}
   {{- end }}
   ports:
-    - port: {{ $query.service.http.port }}
-      targetPort: {{ $query.service.targetPort | default "http" }}
+    - port: {{ if $query.service.http }}{{ coalesce $query.service.ports.http $query.service.http.port }}{{ else }}{{ $query.service.ports.http }}{{ end }}
+      targetPort: http
       protocol: TCP
       name: http
-      {{- if (and (or (eq $query.service.type "NodePort") (eq $query.service.type "LoadBalancer")) $query.service.http.nodePort) }}
-      nodePort: {{ $query.service.http.nodePort }}
+      {{- if and (or (eq $query.service.type "NodePort") (eq $query.service.type "LoadBalancer")) $query.service.nodePorts.http }}
+      nodePort: {{ $query.service.nodePorts.http }}
       {{- else if eq $query.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
-    - port: {{ $query.service.grpc.port }}
+    - port: {{ if $query.service.grpc }}{{ coalesce $query.service.ports.grpc $query.service.grpc.port }}{{ else }}{{ $query.service.ports.grpc }}{{ end }}
       targetPort: grpc
       protocol: TCP
       name: grpc
-      {{- if (and (or (eq $query.service.type "NodePort") (eq $query.service.type "LoadBalancer")) $query.service.grpc.nodePort) }}
-      nodePort: {{ $query.service.grpc.nodePort }}
+      {{- if and (or (eq $query.service.type "NodePort") (eq $query.service.type "LoadBalancer")) $query.service.nodePorts.http }}
+      nodePort: {{ $query.service.nodePorts.http }}
       {{- else if eq $query.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
+    {{- if $query.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" $query.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
   selector:
     {{- if $query.service.labelSelectorsOverride }}
     {{- include "common.tplvalues.render" (dict "value" $query.service.labelSelectorsOverride "context" $) | nindent 4 }}

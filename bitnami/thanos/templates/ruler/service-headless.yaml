@@ -16,11 +16,11 @@ spec:
   type: ClusterIP
   clusterIP: None
   ports:
-    - port: {{ .Values.ruler.service.http.port }}
+    - port: {{ if .Values.ruler.service.http }}{{ coalesce .Values.ruler.service.ports.http .Values.ruler.service.http.port }}{{ else }}{{ .Values.ruler.service.ports.http }}{{ end }}
       targetPort: http
       protocol: TCP
       name: http
-    - port: {{ .Values.ruler.service.grpc.port }}
+    - port: {{ if .Values.ruler.service.grpc }}{{ coalesce .Values.ruler.service.ports.grpc .Values.ruler.service.grpc.port }}{{ else }}{{ .Values.ruler.service.ports.grpc }}{{ end }}
       targetPort: grpc
       protocol: TCP
       name: grpc
