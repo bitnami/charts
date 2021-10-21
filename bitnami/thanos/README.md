@@ -1042,6 +1042,13 @@ Find more information about how to deal with common errors related to Bitnami’
 ### To 7.0.0
 
 This major updates the MinIO&reg; subchart to its newest major, 9.0.0, which updates authentication parameters. Check [MinIO&reg; Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/minio#to-900) for more information.
+This major release renames several values in this chart and adds missing features, in order to be inline with the rest of assets in the Bitnami charts repositor. Some of the affected values are:
+
+- `XXX.extraEnv` parameters were renamed to `XXX.extraEnvVars`.
+- `XXX.extraContainers` parameters were renamed to `XXX.sidecars`.
+- `XXX.service.PROTOCOL.port` parameters were renamed to `XXX.service.ports.PROTOCOL` (e.g. `query.service.http.port` is now `query.service.ports.http`).
+- `XXX.service.PROTOCOL.nodePort`parameters were renamed to `XXX.service.nodePorts.PROTOCOL` (e.g. `query.service.http.nodePort` is now `query.service.nodePorts.http`).
+- `XXX.ingress.certManager` parmaeters were deprecated, use `XXX.ingress.annotations` to set the required annotations for CertManager instead.
 
 ### To 6.0.0
 
