@@ -3,14 +3,19 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "common.names.fullname" . }}-receive
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: receive
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
-  {{- if .Values.receive.service.annotations }}
-  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.receive.service.annotations "context" $) | nindent 4 }}
-  {{- end }}
+  annotations:
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.receive.service.annotations }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.receive.service.annotations "context" $) | nindent 4 }}
+    {{- end }}
 spec:
   type: {{ .Values.receive.service.type }}
   {{- if and .Values.receive.service.clusterIP (eq .Values.receive.service.type "ClusterIP") }}

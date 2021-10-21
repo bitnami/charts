@@ -3,6 +3,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "common.names.fullname" . }}-storegateway
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: storegateway
     {{- if and .Values.metrics.enabled .Values.metrics.serviceMonitor.enabled }}
@@ -11,9 +12,13 @@ metadata:
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
-  {{- if .Values.storegateway.service.annotations }}
-  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.service.annotations "context" $) | nindent 4 }}
-  {{- end }}
+  annotations:
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.storegateway.service.annotations }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.service.annotations "context" $) | nindent 4 }}
+    {{- end }}
 spec:
   type: {{ .Values.storegateway.service.type }}
   {{- if and .Values.storegateway.service.clusterIP (eq .Values.storegateway.service.type "ClusterIP") }}
