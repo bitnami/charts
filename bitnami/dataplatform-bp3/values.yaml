@@ -1092,29 +1092,6 @@ wavefront:
       ## Ref: https://github.com/wavefrontHQ/wavefront-collector-for-kubernetes/blob/master/docs/discovery.md#runtime-configurations
       ##
       enableRuntimeConfigs: true
-      ## Can be used to add additional discovery rules
-      ##
-      # config:
-      #   ## auto-discover rabbitmq
-      #   ##
-      #   - name: rabbitmq-discovery
-      #     type: prometheus
-      #     selectors:
-      #       images:
-      #         - '*tanzu-rabbitmq-instance*'
-      #     port: 15692
-      #     path: /metrics
-      #     scheme: http
-      #   ## auto-discover postgresql
-      #   ##
-      #   - name: postgres-discovery
-      #     type: prometheus
-      #     selectors:
-      #       images:
-      #         - '*bitnami/postgres-exporter*'
-      #     port: 9187
-      #     path: /metrics
-      #     scheme: http
   proxy:
     ## Wavefront Proxy resource requests and limits
     ## ref: http://kubernetes.io/docs/user-guide/compute-resources/

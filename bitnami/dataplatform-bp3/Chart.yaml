@@ -19,7 +19,7 @@ dependencies:
     name: wavefront
     repository: https://charts.bitnami.com/bitnami
     version: 3.x.x
-description: OCTO Data platform rabbitmq-geode-postgreSQL Helm Chart
+description: OCTO Data platform RabbitMQ-Apache Geode-PostgreSQL Helm Chart
 engine: gotpl
 home: https://gitlab.eng.vmware.com/octo-app-platforms/dataplatforms/-/tree/dp-bp3/blueprints/blueprint3/dataplatform-bp3
 icon: https://bitnami.com/assets/stacks/dataplatform-bp1/img/dataplatform-bp1-stack-220x234.png
@@ -32,8 +32,8 @@ keywords:
   - observability
   - tanzuobservability
 maintainers:
-  - email: octo-data-platforms-a-aaaadlxvh4liotabwaqeivlgke@vmware.org.slack.com
-    name: OCTO Data Platforms Team
+  - email: containers@bitnami.com
+    name: Bitnami
 name: dataplatform-bp3
 sources:
   - https://github.com/bitnami/bitnami-docker-wavefront-kubernetes-collector
