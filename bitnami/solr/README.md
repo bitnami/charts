@@ -162,6 +162,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.size`                                        | Size of data volume                                                                                                                                 | `8Gi`                   |
 | `persistence.annotations`                                 | Persistence annotations for Solr                                                                                                                    | `{}`                    |
 | `persistence.mountPath`                                   | Persistence mount path for Solr                                                                                                                     | `/bitnami/solr`         |
+| `persistence.extraVolumeClaimTemplates`                   | Additional pod instance specific volumes                                                                                                            | `[]`                    |
 | `serviceAccount.create`                                   | Specifies whether a ServiceAccount should be created                                                                                                | `false`                 |
 | `serviceAccount.name`                                     | The name of the ServiceAccount to create                                                                                                            | `""`                    |
 

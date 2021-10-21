@@ -76,7 +76,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | --------------------------- |
 | `server.image.registry`                              | server image registry                                                                                   | `docker.io`                 |
 | `server.image.repository`                            | server image repository                                                                                 | `bitnami/argo-workflow-cli` |
-| `server.image.tag`                                   | server image tag (immutable tags are recommended)                                                       | `3.2.0-scratch-r6`          |
+| `server.image.tag`                                   | server image tag (immutable tags are recommended)                                                       | `3.2.1-scratch-r0`          |
 | `server.image.pullPolicy`                            | server image pull policy                                                                                | `Always`                    |
 | `server.image.pullSecrets`                           | server image pull secrets                                                                               | `[]`                        |
 | `server.enabled`                                     | Enable server deployment                                                                                | `true`                      |
@@ -177,7 +177,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
 | `controller.image.registry`                              | controller image registry                                                                                                     | `docker.io`                        |
 | `controller.image.repository`                            | controller image repository                                                                                                   | `bitnami/argo-workflow-controller` |
-| `controller.image.tag`                                   | controller image tag (immutable tags are recommended)                                                                         | `3.2.0-scratch-r0`                 |
+| `controller.image.tag`                                   | controller image tag (immutable tags are recommended)                                                                         | `3.2.1-scratch-r0`                 |
 | `controller.image.pullPolicy`                            | controller image pull policy                                                                                                  | `IfNotPresent`                     |
 | `controller.image.pullSecrets`                           | controller image pull secrets                                                                                                 | `[]`                               |
 | `controller.replicaCount`                                | Number of controller replicas to deploy                                                                                       | `1`                                |
@@ -281,7 +281,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------- | ------------------------------------------------------------- | ---------------------------- |
 | `executor.image.registry`                   | executor image registry                                       | `docker.io`                  |
 | `executor.image.repository`                 | executor image repository                                     | `bitnami/argo-workflow-exec` |
-| `executor.image.tag`                        | executor image tag (immutable tags are recommended)           | `3.2.0-debian-10-r5`         |
+| `executor.image.tag`                        | executor image tag (immutable tags are recommended)           | `3.2.1-debian-10-r0`         |
 | `executor.image.pullPolicy`                 | executor image pull policy                                    | `Always`                     |
 | `executor.image.pullSecrets`                | executor image pull secrets                                   | `[]`                         |
 | `executor.resources.limits`                 | The resources limits for the init container                   | `{}`                         |
@@ -329,6 +329,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `postgresql.service.port`       | PostgreSQL port                                                        | `5432`              |
 | `postgresql.postgresqlUsername` | PostgreSQL username                                                    | `postgres`          |
 | `postgresql.postgresqlDatabase` | PortgreSQL database name                                               | `bn_argo_workflows` |
+| `postgresql.postgresqlPassword` | PortgreSQL database password                                           | `""`                |
 
 
 ### MySQL subchart
@@ -339,6 +340,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `mysql.service.port`  | MySQL port                                                   | `3306`              |
 | `mysql.auth.username` | MySQL username                                               | `mysql`             |
 | `mysql.auth.database` | MySQL database name                                          | `bn_argo_workflows` |
+| `mysql.auth.password` | MySQL database password                                      | `""`                |
 
 
 ### External Database configuration
