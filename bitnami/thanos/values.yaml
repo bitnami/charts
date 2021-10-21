@@ -3086,7 +3086,7 @@ receive:
     ##   key:
     ##   certificate:
     ##
-    secrets: []    
+    secrets: []
     ## @param receive.ingress.tls Enable TLS configuration for the hostname defined at `receive.ingress.hostname` parameter
     ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.receive.ingress.hostname }}`
     ## You can:
