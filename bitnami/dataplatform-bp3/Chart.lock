@@ -1,0 +1,15 @@
+dependencies:
+- name: geode
+  repository: https://charts.bitnami.com/bitnami
+  version: 0.3.1
+- name: postgresql-ha
+  repository: https://charts.bitnami.com/bitnami
+  version: 7.12.0
+- name: rabbitmq-cluster-operator
+  repository: https://charts.bitnami.com/bitnami
+  version: 1.0.0
+- name: wavefront
+  repository: https://charts.bitnami.com/bitnami
+  version: 3.1.12
+digest: sha256:7cd2407c3fabfad94410a8ffe506ceee28ef805919b752c5d3062557a0b7c1ee
+generated: "2021-10-21T13:08:17.774699+05:30"

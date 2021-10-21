@@ -1,0 +1,1128 @@
+## @section Global parameters
+## Global Docker image parameters
+## Please, note that this will override the image parameters, including dependencies, configured to use the global value
+## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
+
+## @param global.imageRegistry Global Docker image registry
+## @param global.imagePullSecrets Global Docker registry secret names as an array
+## @param global.storageClass Global StorageClass for Persistent Volume(s)
+##
+global:
+  imageRegistry: ""
+  ## E.g.
+  ## imagePullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  imagePullSecrets: []
+  storageClass: ""
+
+## @section Common parameters
+## @param commonLabels Labels to add to all deployed objects
+##
+commonLabels: {}
+## @param commonAnnotations Annotations to add to all deployed objects
+##
+commonAnnotations: {}
+
+## @section Data Platform Chart parameters
+## Configuration for the dataplatform prometheus exporter
+##
+dataplatform:
+  serviceAccount:
+    ## @param dataplatform.serviceAccount.create Specifies whether a ServiceAccount should be created
+    ##
+    create: true
+    ## @param dataplatform.serviceAccount.name The name of the ServiceAccount to create
+    ## If not set and create is true, a name is generated using the fullname template
+    ##
+    name: ""
+    ## @param dataplatform.serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
+    ## Can be set to false if pods using this serviceAccount do not need to use K8s API
+    ##
+    automountServiceAccountToken: true
+  ## Role Based Access
+  ## ref: https://kubernetes.io/docs/admin/authorization/rbac/
+  ##
+  rbac:
+    ## @param dataplatform.rbac.create Whether to create & use RBAC resources or not
+    ## binding dataplatform ServiceAccount to a role
+    ## that allows dataplatform pods querying the K8s API
+    ##
+    create: true
+  emitter:
+    ## @param dataplatform.emitter.enabled Start Data Platform metrics emitter
+    ##
+    enabled: true
+    ## Data Platform BP1 emitter image
+    ## ref: https://hub.docker.com/r/bitnami/dataplatform-emitter/tags/
+    ## @param dataplatform.emitter.image.registry Data Platform emitter image registry
+    ## @param dataplatform.emitter.image.repository Data Platform emitter image repository
+    ## @param dataplatform.emitter.image.tag Data Platform emitter image tag (immutable tags are recommended)
+    ## @param dataplatform.emitter.image.pullPolicy Data Platform emitter image pull policy
+    ## @param dataplatform.emitter.image.pullSecrets Specify docker-registry secret names as an array
+    ##
+    image:
+      registry: harbor-repo.vmware.com
+      repository: octo_data_platforms/dataplatform-emitter
+      tag: 2.0.0
+      ## Specify a imagePullPolicy
+      ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+      ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+      ##
+      pullPolicy: IfNotPresent
+      ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
+      ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+      ## Example:
+      ## pullSecrets:
+      ##   - myRegistryKeySecretName
+      ##
+      pullSecrets: []
+    ## Configure extra options for liveness probe
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+    ## @param dataplatform.emitter.livenessProbe.enabled Enable livenessProbe
+    ## @param dataplatform.emitter.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+    ## @param dataplatform.emitter.livenessProbe.periodSeconds Period seconds for livenessProbe
+    ## @param dataplatform.emitter.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+    ## @param dataplatform.emitter.livenessProbe.failureThreshold Failure threshold for livenessProbe
+    ## @param dataplatform.emitter.livenessProbe.successThreshold Success threshold for livenessProbe
+    ##
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 10
+      periodSeconds: 5
+      timeoutSeconds: 15
+      failureThreshold: 15
+      successThreshold: 1
+    ## Configure extra options for readiness probe
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+    ## @param dataplatform.emitter.readinessProbe.enabled Enable readinessProbe
+    ## @param dataplatform.emitter.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+    ## @param dataplatform.emitter.readinessProbe.periodSeconds Period seconds for readinessProbe
+    ## @param dataplatform.emitter.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+    ## @param dataplatform.emitter.readinessProbe.failureThreshold Failure threshold for readinessProbe
+    ## @param dataplatform.emitter.readinessProbe.successThreshold Success threshold for readinessProbe
+    ##
+    readinessProbe:
+      enabled: true
+      initialDelaySeconds: 10
+      periodSeconds: 5
+      timeoutSeconds: 15
+      failureThreshold: 15
+      successThreshold: 15
+    ## Configure extra options for startup probe
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-startup-probes/#configure-probes
+    ## @param dataplatform.emitter.startupProbe.enabled Enable startupProbe
+    ## @param dataplatform.emitter.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+    ## @param dataplatform.emitter.startupProbe.periodSeconds Period seconds for startupProbe
+    ## @param dataplatform.emitter.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+    ## @param dataplatform.emitter.startupProbe.failureThreshold Failure threshold for startupProbe
+    ## @param dataplatform.emitter.startupProbe.successThreshold Success threshold for startupProbe
+    ##
+    startupProbe:
+      enabled: false
+      initialDelaySeconds: 10
+      periodSeconds: 5
+      timeoutSeconds: 15
+      failureThreshold: 15
+      successThreshold: 15
+    ## @param dataplatform.emitter.containerPorts.http Data Platform emitter port
+    ##
+    containerPorts:
+      http: 8091
+    ## @param dataplatform.emitter.priorityClassName exporter priorityClassName
+    ## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+    ##
+    priorityClassName: ""
+    ## @param dataplatform.emitter.command Override Data Platform entrypoint string.
+    ##
+    command: []
+    ## @param dataplatform.emitter.args Arguments for the provided command if needed
+    ##
+    args: []
+    ## Data Platform metrics emitter resource requests and limits
+    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ## We usually recommend not to specify default resources and to leave this as a conscious
+    ## choice for the user. This also increases chances charts run on environments with little
+    ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+    ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ## @param dataplatform.emitter.resources.limits The resources limits for the container
+    ## @param dataplatform.emitter.resources.requests.cpu The requested resources for the container
+    ## @param dataplatform.emitter.resources.requests.memory The requested resources for the container
+    ##
+    resources:
+      ## Example:
+      ## limits:
+      ##    cpu: 200m
+      ##    memory: 256Mi
+      ##
+      limits: {}
+      ## Examples:
+      ## requests:
+      ##    cpu: 200m
+      ##    memory: 10Mi
+      ##
+      requests:
+        cpu: 200m
+        memory: 10Mi        
+    ## Data Platform emitter containers' Security Context
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+    ## @param dataplatform.emitter.containerSecurityContext.enabled Enable Data Platform emitter containers' Security Context
+    ## @param dataplatform.emitter.containerSecurityContext.runAsUser User ID for the containers.
+    ## @param dataplatform.emitter.containerSecurityContext.runAsNonRoot Enable Data Platform emitter containers' Security Context runAsNonRoot
+    ##
+    containerSecurityContext:
+      enabled: true
+      runAsUser: 1001
+      runAsNonRoot: true
+    ## Data Platform emitter pods' Security Context
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+    ## @param dataplatform.emitter.podSecurityContext.enabled Enable Data Platform emitter pods' Security Context
+    ## @param dataplatform.emitter.podSecurityContext.fsGroup Group ID for the pods.
+    ##
+    podSecurityContext:
+      enabled: true
+      fsGroup: 1001
+    ## @param dataplatform.emitter.podAffinityPreset Data Platform emitter pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+    ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+    ##
+    podAffinityPreset: ""
+    ## @param dataplatform.emitter.podAntiAffinityPreset Data Platform emitter pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+    ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+    ##
+    podAntiAffinityPreset: soft
+    ## Node affinity preset
+    ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+    ##
+    nodeAffinityPreset:
+      ## @param dataplatform.emitter.nodeAffinityPreset.type Data Platform emitter node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+      ##
+      type: ""
+      ## @param dataplatform.emitter.nodeAffinityPreset.key Data Platform emitter node label key to match Ignored if `affinity` is set.
+      ## E.g.
+      ## key: "kubernetes.io/e2e-az-name"
+      ##
+      key: ""
+      ## @param dataplatform.emitter.nodeAffinityPreset.values Data Platform emitter node label values to match. Ignored if `affinity` is set.
+      ## E.g.
+      ## values:
+      ##   - e2e-az1
+      ##   - e2e-az2
+      ##
+      values: []
+    ## @skip dataplatform.emitter.affinity.podAffinity.preferredDuringSchedulingIgnoredDuringExecution
+    ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+    ##
+    affinity:
+      podAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          podAffinityTerm:
+            labelSelector:
+              matchExpressions:
+                - key: app.kubernetes.io/component
+                  operator: In
+                  values:
+                    - rabbitmq
+                    - postgresql
+                    - server
+                    - locator
+                - key: app.kubernetes.io/name
+                  operator: In
+                  values:
+                    - rabbitmq-custom-configuration
+                    - geode
+                    - postgresql-ha
+                - key: app.kubernetes.io/instance
+                  operator: In
+                  values:
+                    - '{{ .Release.Name }}'
+            topologyKey: "kubernetes.io/hostname"
+    ## @param dataplatform.emitter.nodeSelector Node labels for emitter pods assignment. Evaluated as a template
+    ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+    ##
+    nodeSelector: {}
+    ## @param dataplatform.emitter.tolerations Tolerations for emitter pods assignment. Evaluated as a template
+    ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+    ##
+    tolerations: []
+    ## @param dataplatform.emitter.podLabels Additional labels for Metrics emitter pod
+    ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+    ##
+    podLabels: {}
+    ## @param dataplatform.emitter.podAnnotations Additional annotations for Metrics emitter pod
+    ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+    ##
+    podAnnotations: {}
+    ## @param dataplatform.emitter.customLivenessProbe Override default liveness probe%%MAIN_CONTAINER_NAME%%
+    ##
+    customLivenessProbe: {}
+    ## @param dataplatform.emitter.customReadinessProbe Override default readiness probe%%MAIN_CONTAINER_NAME%%
+    ##
+    customReadinessProbe: {}
+    ## @param dataplatform.emitter.customStartupProbe Override default startup probe
+    ##
+    customStartupProbe: {}
+    ## Update strategy
+    ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
+    ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
+    ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
+    ## @param dataplatform.emitter.updateStrategy.type Update strategy - only really applicable for deployments with RWO PVs attached
+    ## @param dataplatform.emitter.updateStrategy.rollingUpdate Deployment rolling update configuration parameters
+    ##
+    updateStrategy:
+      type: RollingUpdate
+      rollingUpdate: {}
+    ## @param dataplatform.emitter.extraEnvVars Additional environment variables to set
+    ## Example:
+    ## extraEnvVars:
+    ##   - name: FOO
+    ##     value: "bar"
+    ##
+    extraEnvVars: []
+    ## @param dataplatform.emitter.extraEnvVarsCM ConfigMap with extra environment variables
+    ##
+    extraEnvVarsCM: ""
+    ## @param dataplatform.emitter.extraEnvVarsSecret Secret with extra environment variables
+    ##
+    extraEnvVarsSecret: ""
+    ## @param dataplatform.emitter.extraVolumes Extra volumes to add to the deployment
+    ##
+    extraVolumes: []
+    ## @param dataplatform.emitter.extraVolumeMounts Extra volume mounts to add to the container
+    ##
+    extraVolumeMounts: []
+    ## @param dataplatform.emitter.initContainers Add init containers to the %%MAIN_CONTAINER_NAME%% pods
+    ## Example:
+    ## initContainers:
+    ##   - name: your-image-name
+    ##     image: your-image
+    ##     imagePullPolicy: Always
+    ##     ports:
+    ##       - name: portname
+    ##         containerPort: 1234
+    ##
+    initContainers: []
+    ## @param dataplatform.emitter.sidecars Add sidecars to the %%MAIN_CONTAINER_NAME%% pods
+    ## Example:
+    ## sidecars:
+    ##   - name: your-image-name
+    ##     image: your-image
+    ##     imagePullPolicy: Always
+    ##     ports:
+    ##       - name: portname
+    ##         containerPort: 1234
+    ##
+    sidecars: []
+    ## Service for the Data Platform emitter deployment
+    ##
+    service:
+      ## @param dataplatform.emitter.service.type Service type for default Data Platform metrics emitter service
+      ##
+      type: ClusterIP
+      ## @param dataplatform.emitter.service.annotations annotations for Data Platform emitter service
+      ##
+      annotations: {}
+      ## @param dataplatform.emitter.service.labels Additional labels for Data Platform emitter service
+      ##
+      labels: {}
+      ## @param dataplatform.emitter.service.ports.http Kubernetes Service port
+      ##
+      ports:
+        http: 8091
+      ## @param dataplatform.emitter.service.loadBalancerIP Load balancer IP for the dataplatform emitter Service (optional, cloud specific)
+      ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+      ##
+      loadBalancerIP: ""
+      ## @param dataplatform.emitter.service.nodePorts.http Node ports for the HTTP emitter service
+      ## nodePorts:
+      ##   http: <to set explicitly, choose port between 30000-32767>
+      ##   https: <to set explicitly, choose port between 30000-32767>
+      ##
+      nodePorts:
+        http: ""
+      ## @param dataplatform.emitter.service.loadBalancerSourceRanges Data Platform Emitter Load Balancer Source ranges
+      ## loadBalancerSourceRanges:
+      ##   - 10.10.10.0/24
+      ##
+      loadBalancerSourceRanges: []
+    ## @param dataplatform.emitter.hostAliases Deployment pod host aliases
+    ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+    ##
+    hostAliases: []
+
+  exporter:
+    ## @param dataplatform.exporter.enabled Start a prometheus exporter
+    ##
+    enabled: true
+    ## Data Platform BP1 exporter image
+    ## ref: https://hub.docker.com/r/bitnami/dataplatform-exporter/tags/
+    ## @param dataplatform.exporter.image.registry dataplatform exporter image registry
+    ## @param dataplatform.exporter.image.repository dataplatform exporter image repository
+    ## @param dataplatform.exporter.image.tag dataplatform exporter image tag (immutable tags are recommended)
+    ## @param dataplatform.exporter.image.pullPolicy dataplatform exporter image pull policy
+    ## @param dataplatform.exporter.image.pullSecrets Specify docker-registry secret names as an array
+    ##
+    image:
+      registry: harbor-repo.vmware.com
+      repository: octo_data_platforms/dataplatform-exporter
+      tag: 1.0.0
+      ## Specify a imagePullPolicy
+      ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+      ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+      ##
+      pullPolicy: IfNotPresent
+      ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
+      ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+      ## Example:
+      ## pullSecrets:
+      ##   - myRegistryKeySecretName
+      ##
+      pullSecrets: []
+    ## Configuration file passed to the exporter. 
+    ## This exporter metrics configuration is used to emit only the health and state metrics configured below.
+    ## In the below config metrics key,name and guage should not be changed.
+    ## @param dataplatform.exporter.config [string] Data Platform Metrics Configuration emitted in Prometheus format
+    ##      
+    config: |
+      {
+        "blueprintName": "bp3",
+        "metrics": [
+          {
+            "name": "postgres_desired_nodes",
+            "type": "gauge",
+            "helpMessage": "Desired number of postgreSQL nodes in the data platform",
+            "key": "postgresql-ha",
+            "dataComponent": "DesiredNodes"
+          },
+          {
+            "name": "postgres_available_nodes",
+            "type": "gauge",
+            "helpMessage": "Available number of postgreSQL nodes in the data platform",
+            "key": "postgresql-ha",
+            "dataComponent": "AvailableNodes"
+          },
+          {
+            "name": "geode_locator_desired_nodes",
+            "type": "gauge",
+            "helpMessage": "Desired number of geode locator nodes in the data platform",
+            "key": "geode-locator",
+            "dataComponent": "DesiredNodes"
+          },
+          {
+            "name": "geode_locator_available_nodes",
+            "type": "gauge",
+            "helpMessage": "Available number of geode locator nodes in the data platform",
+            "key": "geode-locator",
+            "dataComponent": "AvailableNodes"
+          },
+          {
+            "name": "geode_server_desired_nodes",
+            "type": "gauge",
+            "helpMessage": "Desired number of geode server nodes in the data platform",
+            "key": "geode-server",
+            "dataComponent": "DesiredNodes"
+          },
+          {
+            "name": "geode_server_available_nodes",
+            "type": "gauge",
+            "helpMessage": "Available number of geode server nodes in the data platform",
+            "key": "geode-server",
+            "dataComponent": "AvailableNodes"
+          },
+          {
+            "name": "rabbitmq_desired_nodes",
+            "type": "gauge",
+            "helpMessage": "Desired number of rabbitmq nodes in the data platform",
+            "key": "rabbitmq-custom-configuration",
+            "dataComponent": "DesiredNodes"
+          },
+          {
+            "name": "rabbitmq_available_nodes",
+            "type": "gauge",
+            "helpMessage": "Available number of rabbitmq nodes in the data platform",
+            "key": "rabbitmq-custom-configuration",
+            "dataComponent": "AvailableNodes"
+          }            
+        ]
+      }
+
+    ## Configure extra options for liveness probe
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+    ## @param dataplatform.exporter.livenessProbe.enabled Enable livenessProbe
+    ## @param dataplatform.exporter.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+    ## @param dataplatform.exporter.livenessProbe.periodSeconds Period seconds for livenessProbe
+    ## @param dataplatform.exporter.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+    ## @param dataplatform.exporter.livenessProbe.failureThreshold Failure threshold for livenessProbe
+    ## @param dataplatform.exporter.livenessProbe.successThreshold Success threshold for livenessProbe
+    ##
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 10
+      periodSeconds: 5
+      timeoutSeconds: 15
+      failureThreshold: 15
+      successThreshold: 1
+    ## Configure extra options for readiness probe
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+    ## @param dataplatform.exporter.readinessProbe.enabled Enable readinessProbe
+    ## @param dataplatform.exporter.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+    ## @param dataplatform.exporter.readinessProbe.periodSeconds Period seconds for readinessProbe
+    ## @param dataplatform.exporter.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+    ## @param dataplatform.exporter.readinessProbe.failureThreshold Failure threshold for readinessProbe
+    ## @param dataplatform.exporter.readinessProbe.successThreshold Success threshold for readinessProbe
+    ##
+    readinessProbe:
+      enabled: true
+      initialDelaySeconds: 10
+      periodSeconds: 5
+      timeoutSeconds: 15
+      failureThreshold: 15
+      successThreshold: 15
+    ## Configure extra options for startup probe
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-startup-probes/#configure-probes
+    ## @param dataplatform.exporter.startupProbe.enabled Enable startupProbe
+    ## @param dataplatform.exporter.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+    ## @param dataplatform.exporter.startupProbe.periodSeconds Period seconds for startupProbe
+    ## @param dataplatform.exporter.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+    ## @param dataplatform.exporter.startupProbe.failureThreshold Failure threshold for startupProbe
+    ## @param dataplatform.exporter.startupProbe.successThreshold Success threshold for startupProbe
+    ##
+    startupProbe:
+      enabled: false
+      initialDelaySeconds: 10
+      periodSeconds: 5
+      timeoutSeconds: 15
+      failureThreshold: 15
+      successThreshold: 15
+    ## @param dataplatform.exporter.containerPorts.http Data Platform Prometheus exporter port
+    ##
+    containerPorts:
+      http: 9090
+    ## @param dataplatform.exporter.priorityClassName exporter priorityClassName
+    ## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+    ##
+    priorityClassName: ""
+    ## @param dataplatform.exporter.command Override Data Platform Exporter entrypoint string.
+    ##
+    command: []
+    ## @param dataplatform.exporter.args Arguments for the provided command if needed
+    ##
+    args: []
+    ## Exporter resource requests and limits
+    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ## We usually recommend not to specify default resources and to leave this as a conscious
+    ## choice for the user. This also increases chances charts run on environments with little
+    ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+    ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ## @param dataplatform.exporter.resources.limits The resources limits for the container
+    ## @param dataplatform.exporter.resources.requests.cpu The requested resources for the container
+    ## @param dataplatform.exporter.resources.requests.memory The requested resources for the container
+    ##
+    resources:
+      ## Example:
+      ## limits:
+      ##    cpu: 200m
+      ##    memory: 256Mi
+      ##
+      limits: {}
+      ## Examples:
+      ## requests:
+      ##    cpu: 200m
+      ##    memory: 10Mi
+      ##
+      requests:
+        cpu: 200m
+        memory: 10Mi         
+    ## dataplatform exporter containers' Security Context
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+    ## @param dataplatform.exporter.containerSecurityContext.enabled Enable Data Platform exporter containers' Security Context
+    ## @param dataplatform.exporter.containerSecurityContext.runAsUser User ID for the containers.
+    ## @param dataplatform.exporter.containerSecurityContext.runAsNonRoot Enable Data Platform exporter containers' Security Context runAsNonRoot
+    ##
+    containerSecurityContext:
+      enabled: true
+      runAsUser: 1001
+      runAsNonRoot: true
+    ## dataplatform exporter pods' Security Context
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+    ## @param dataplatform.exporter.podSecurityContext.enabled Enable Data Platform exporter pods' Security Context
+    ## @param dataplatform.exporter.podSecurityContext.fsGroup Group ID for the pods.
+    ##
+    podSecurityContext:
+      enabled: true
+      fsGroup: 1001
+    ## @param dataplatform.exporter.podAffinityPreset Data Platform exporter pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+    ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+    ##
+    podAffinityPreset: ""
+    ## @param dataplatform.exporter.podAntiAffinityPreset Data Platform exporter pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+    ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+    ##
+    podAntiAffinityPreset: soft
+    ## Node affinity preset
+    ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+    ##
+    nodeAffinityPreset:
+      ## @param dataplatform.exporter.nodeAffinityPreset.type Data Platform exporter node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+      ##
+      type: ""
+      ## @param dataplatform.exporter.nodeAffinityPreset.key Data Platform exporter node label key to match Ignored if `affinity` is set.
+      ## E.g.
+      ## key: "kubernetes.io/e2e-az-name"
+      ##
+      key: ""
+      ## @param dataplatform.exporter.nodeAffinityPreset.values Data Platform exporter node label values to match. Ignored if `affinity` is set.
+      ## E.g.
+      ## values:
+      ##   - e2e-az1
+      ##   - e2e-az2
+      ##
+      values: []
+    ## @skip dataplatform.exporter.affinity.podAffinity.preferredDuringSchedulingIgnoredDuringExecution
+    ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+    ##
+    affinity:
+      podAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          podAffinityTerm:
+            labelSelector:
+              matchExpressions:
+                - key: app.kubernetes.io/component
+                  operator: In
+                  values:
+                    - rabbitmq
+                    - postgresql
+                    - server
+                    - locator
+                - key: app.kubernetes.io/name
+                  operator: In
+                  values:
+                    - rabbitmq-custom-configuration
+                    - geode
+                    - postgresql-ha
+                - key: app.kubernetes.io/instance
+                  operator: In
+                  values:
+                    - '{{ .Release.Name }}'
+            topologyKey: "kubernetes.io/hostname"
+    ## @param dataplatform.exporter.nodeSelector Node labels for exporter pods assignment. Evaluated as a template
+    ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+    ##
+    nodeSelector: {}
+    ## @param dataplatform.exporter.tolerations Tolerations for exporter pods assignment. Evaluated as a template
+    ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+    ##
+    tolerations: []
+    ## @param dataplatform.exporter.podLabels Additional labels for Metrics exporter pod
+    ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+    ##
+    podLabels: {}
+    ## @param dataplatform.exporter.podAnnotations Additional annotations for Metrics exporter pod
+    ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+    ##
+    podAnnotations: {}
+    ## @param dataplatform.exporter.customLivenessProbe Override default liveness probe
+    ##
+    customLivenessProbe: {}
+    ## @param dataplatform.exporter.customReadinessProbe Override default readiness probe
+    ##
+    customReadinessProbe: {}
+    ## @param dataplatform.exporter.customStartupProbe Override default startup probe
+    ##
+    customStartupProbe: {}
+    ## Update strategy
+    ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
+    ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
+    ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
+    ## @param dataplatform.exporter.updateStrategy.type Update strategy - only really applicable for deployments with RWO PVs attached
+    ## @param dataplatform.exporter.updateStrategy.rollingUpdate Deployment rolling update configuration parameters
+    ##
+    updateStrategy:
+      type: RollingUpdate
+      rollingUpdate: {}
+    ## @param dataplatform.exporter.extraEnvVars Additional environment variables to set
+    ## Example:
+    ## extraEnvVars:
+    ##   - name: FOO
+    ##     value: "bar"
+    ##
+    extraEnvVars: []
+    ## @param dataplatform.exporter.extraEnvVarsCM ConfigMap with extra environment variables
+    ##
+    extraEnvVarsCM: ""
+    ## @param dataplatform.exporter.extraEnvVarsSecret Secret with extra environment variables
+    ##
+    extraEnvVarsSecret: ""
+    ## @param dataplatform.exporter.extraVolumes Extra volumes to add to the deployment
+    ##
+    extraVolumes: []
+    ## @param dataplatform.exporter.extraVolumeMounts Extra volume mounts to add to the container
+    ##
+    extraVolumeMounts: []
+    ## @param dataplatform.exporter.initContainers Add init containers to the %%MAIN_CONTAINER_NAME%% pods
+    ## Example:
+    ## initContainers:
+    ##   - name: your-image-name
+    ##     image: your-image
+    ##     imagePullPolicy: Always
+    ##     ports:
+    ##       - name: portname
+    ##         containerPort: 1234
+    ##
+    initContainers: []
+    ## @param dataplatform.exporter.sidecars Add sidecars to the %%MAIN_CONTAINER_NAME%% pods
+    ## Example:
+    ## sidecars:
+    ##   - name: your-image-name
+    ##     image: your-image
+    ##     imagePullPolicy: Always
+    ##     ports:
+    ##       - name: portname
+    ##         containerPort: 1234
+    ##
+    sidecars: []
+    ## Service for the Data Platform exporter deployment
+    ##
+    service:
+      ## @param dataplatform.exporter.service.type Service type for default Data Platform Prometheus exporter service
+      ##
+      type: ClusterIP
+      ## @param dataplatform.exporter.service.annotations [object] Metrics exporter service annotations
+      ##
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9090"
+        prometheus.io/path: "/metrics"
+      ## @param dataplatform.exporter.service.labels Additional labels for Data Platform exporter service
+      ##
+      labels: {}
+      ## @param dataplatform.exporter.service.ports.http Kubernetes Service port
+      ##
+      ports:
+        http: 9090
+      ## @param dataplatform.exporter.service.loadBalancerIP Load balancer IP for the Data Platform Exporter Service (optional, cloud specific)
+      ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+      ##
+      loadBalancerIP: ""
+      ## @param dataplatform.exporter.service.nodePorts.http Node ports for the HTTP exporter service
+      ## nodePorts:
+      ##   http: <to set explicitly, choose port between 30000-32767>
+      ##   https: <to set explicitly, choose port between 30000-32767>
+      ##
+      nodePorts:
+        http: ""
+      ## @param dataplatform.exporter.service.loadBalancerSourceRanges Exporter Load Balancer Source ranges
+      ## loadBalancerSourceRanges:
+      ##   - 10.10.10.0/24
+      ##
+      loadBalancerSourceRanges: []
+    ## @param dataplatform.exporter.hostAliases Deployment pod host aliases
+    ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+    ##
+    hostAliases: []
+
+## @section RabbitMQ Cluster Operator Chart parameters
+## Configuration for the RabbitMQ Operator Chart
+##
+rabbitmq-cluster-operator:
+  ## @param rabbitmq-cluster-operator.enabled Switch to enable RabbitMQ chart deployment
+  ##
+  enabled: true
+  ## @param rabbitmq-cluster-operator.extraDeploy [object] Instantiate RabbitMQ cluster
+  ## Locator resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##  
+  extraDeploy:
+    - apiVersion: rabbitmq.com/v1beta1
+      kind: RabbitmqCluster
+      metadata:
+        name: rabbitmq-custom-configuration
+        labels:
+          app.kubernetes.io/name: "{{ include \"common.names.name\" . }}"
+          helm.sh/chart: "{{ include \"common.names.chart\" . }}"
+          app.kubernetes.io/instance: "{{ .Release.Name }}"
+          app.kubernetes.io/managed-by: "{{ .Release.Service }}"
+      spec:
+        replicas: 3
+        resources:
+          limits: {}   
+          requests:
+            cpu: 250m
+            memory: 5Gi 
+        affinity:
+          podAntiAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              - labelSelector:
+                  matchExpressions:
+                    - key: app.kubernetes.io/component
+                      operator: In
+                      values:
+                        - rabbitmq
+                    - key: app.kubernetes.io/name
+                      operator: In
+                      values:
+                        - rabbitmq-custom-configuration
+                topologyKey: "kubernetes.io/hostname"
+          podAffinity:
+            preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: app.kubernetes.io/component
+                      operator: In
+                      values:
+                        - postgresql
+                        - locator
+                        - server
+                    - key: app.kubernetes.io/name
+                      operator: In
+                      values:
+                        - postgresql-ha
+                        - geode
+                    - key: app.kubernetes.io/instance
+                      operator: In
+                      values:
+                        - '{{ .Release.Name }}'
+                topologyKey: "kubernetes.io/hostname"
+  ## @section rabbitmq-cluster-operator Metrics parameters
+  ##
+  metrics:
+    ## @param rabbitmq-cluster-operator.metrics.enabled Expose rabbitmq-cluster-operator metrics
+    ##
+    enabled: false
+## @section Apache Geode Chart parameters
+## Configuration for Apache Geode
+##
+geode:
+  ## @param geode.enabled Enable geode subchart
+  enabled: true
+  ## @section Apache Geode Locator parameters
+  ## Configuration for Apache Geode Locator
+  ##
+  locator:
+    ## @param geode.locator.initialHeapSize Initial size of the heap on Locator nodes
+    ## ref: https://github.com/bitnami/bitnami-docker-geode#apache-geode-configuration
+    ##
+    initialHeapSize: ""
+    ## @param geode.locator.maxHeapSize Maximum size of the heap on Locator nodes
+    ## ref: https://github.com/bitnami/bitnami-docker-geode#apache-geode-configuration
+    ##
+    maxHeapSize: ""
+    ## @param geode.locator.replicaCount Number of Locator replicas to deploy
+    ##
+    replicaCount: 2
+    ## Locator resource requests and limits
+    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ## @param geode.locator.resources.limits The resources limits for the Locator containers
+    ## @param geode.locator.resources.requests.cpu The requested resources for the Locator containers
+    ## @param geode.locator.resources.requests.memory The requested resources for the Locator containers
+    ##
+    resources:
+      limits: {}
+      requests: 
+        cpu: 100m
+        memory: 128Mi        
+    ## @skip geode.locator.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution
+    ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+    ## NOTE: `geode.locator.podAffinityPreset`, `geode.locator.podAntiAffinityPreset`, and `geode.locator.nodeAffinityPreset` will be ignored when it's set
+    ##
+    affinity:
+      podAntiAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+                - key: app.kubernetes.io/component
+                  operator: In
+                  values:
+                    - locator
+                - key: app.kubernetes.io/name
+                  operator: In
+                  values:
+                    - geode
+                - key: app.kubernetes.io/instance
+                  operator: In
+                  values:
+                    - '{{ .Release.Name }}'
+            topologyKey: "kubernetes.io/hostname"
+    ## Apache Geode Locator service parameters
+    ##
+    service:
+      ## @param geode.locator.service.type Locator service type
+      ##
+      type: ClusterIP
+      ## @param geode.locator.service.ports.locator Locator multicast service port
+      ## @param geode.locator.service.ports.http Locator HTTP service port
+      ## @param geode.locator.service.ports.rmi Locator RMI service port
+      ##
+      ports:
+        locator: 10334
+        http: 7070
+        rmi: 1099
+
+  ## @section Apache Geode Cache Server parameters
+  ## Configuration for Apache Geode Server
+  ##
+  server:
+    ## @param geode.server.initialHeapSize Initial size of the heap on Cache server nodes
+    ## ref: https://github.com/bitnami/bitnami-docker-geode#apache-geode-configuration
+    ##
+    initialHeapSize: 4g
+    ## @param geode.server.maxHeapSize Maximum size of the heap on Cache Server nodes
+    ## ref: https://github.com/bitnami/bitnami-docker-geode#apache-geode-configuration
+    ##
+    maxHeapSize: 4g
+    ## @param geode.server.replicaCount Number of Cache Server replicas to deploy
+    ##
+    replicaCount: 3
+    ## Cache server resource requests and limits
+    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ## @param geode.server.resources.limits The resources limits for the Cache server containers
+    ## @param geode.server.resources.requests.cpu The requested resources for the Cache server containers
+    ## @param geode.server.resources.requests.memory The requested resources for the Cache server containers
+    ##
+    resources:
+      limits: {}
+      requests:
+        cpu: 250m
+        memory: 5Gi
+    ## @skip geode.server.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution
+    ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+    ## NOTE: `geode.server.podAffinityPreset`, `geode.server.podAntiAffinityPreset`, and `geode.server.nodeAffinityPreset` will be ignored when it's set
+    ##
+    affinity:
+      podAntiAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+                - key: app.kubernetes.io/component
+                  operator: In
+                  values:
+                    - server
+                - key: app.kubernetes.io/name
+                  operator: In
+                  values:
+                    - geode
+                - key: app.kubernetes.io/instance
+                  operator: In
+                  values:
+                    - '{{ .Release.Name }}'
+            topologyKey: "kubernetes.io/hostname"
+    ## Apache Geode Cache server (headless) service parameters
+    ##
+    service:
+      ## @param geode.server.service.ports.server Cache server multicast service port
+      ## @param geode.server.service.ports.http Cache server HTTP service port
+      ## @param geode.server.service.ports.rmi Cache server RMI service port
+      ##
+      ports:
+        server: 40404
+        http: 7070
+        rmi: 1099
+
+  ## @section Geode Metrics parameters
+  ##
+  metrics:
+    ## @param geode.metrics.enabled Expose Apache Geode metrics
+    ##
+    enabled: false
+    ## @param geode.metrics.containerPort Metrics container port
+    ##
+    containerPort: 9914
+    ## Apache Geode metrics service parameters
+    ##
+    service:
+      ## @param geode.metrics.service.port Service HTTP management port
+      ##
+      port: 9914
+      ## @param geode.metrics.service.annotations [object] Annotations for enabling prometheus to access the metrics endpoints
+      ##
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "{{ .Values.metrics.service.port }}"
+        prometheus.io/path: "/"    
+
+## @section postgresql-ha Chart parameters
+##
+postgresql-ha:
+  ## @param postgresql-ha.enabled Enable PostgreSQL Chart
+  ##
+  enabled: true
+  postgresql:  
+    ## @param postgresql-ha.postgresql.replicaCount Number of replicas to deploy
+    ##
+    replicaCount: 3
+    ## Anti Affinity rules for resiliency
+    ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+    ## Note: postgresql.podAffinityPreset, postgresql.podAntiAffinityPreset, and postgresql.nodeAffinityPreset will be ignored when it's set
+    ## @skip postgresql-ha.postgresql.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution
+    ## @skip postgresql-ha.postgresql.affinity.podAffinity.preferredDuringSchedulingIgnoredDuringExecution
+    ##    
+    affinity: 
+      podAntiAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+                - key: app.kubernetes.io/name
+                  operator: In
+                  values:
+                    - postgresql-ha
+                - key: app.kubernetes.io/component
+                  operator: In
+                  values:
+                    - postgresql                    
+                - key: app.kubernetes.io/instance
+                  operator: In
+                  values:
+                    - '{{ .Release.Name }}'  
+            topologyKey: "kubernetes.io/hostname"    
+      podAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          podAffinityTerm:
+            labelSelector:
+              matchExpressions:
+                - key: app.kubernetes.io/component
+                  operator: In
+                  values:
+                    - rabbitmq
+                    - server
+                    - locator
+                - key: app.kubernetes.io/name
+                  operator: In
+                  values:
+                    - rabbitmq-custom-configuration
+                    - geode
+                - key: app.kubernetes.io/instance
+                  operator: In
+                  values:
+                    - '{{ .Release.Name }}'
+            topologyKey: "kubernetes.io/hostname"
+    ## PostgreSQL containers' resource requests and limits
+    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ## @param postgresql-ha.postgresql.resources.limits The resources limits for the Locator containers
+    ## @param postgresql-ha.postgresql.resources.requests.cpu [object] The requested resources for the Locator containers    
+    ## @param postgresql-ha.postgresql.resources.requests.memory [object] The requested resources for the Locator containers
+    ##
+    resources:
+      # We usually recommend not to specify default resources and to leave this as a conscious
+      # choice for the user. This also increases chances charts run on environments with little
+      # resources, such as Minikube. If you do want to specify resources, uncomment the following
+      # lines, adjust them as necessary, and remove the curly braces after 'resources:'.      
+      limits: {}
+      #   cpu: 250m
+      #   memory: 256Mi
+      requests: 
+        cpu: 250m
+        memory: 5Gi    
+
+  ## PostgreSQL Prometheus exporter parameters
+  ## @param postgresql-ha.metrics.enabled Enable Metrics for PostgreSQL 
+  ##
+  metrics:
+    enabled: false
+
+    ## Prometheus exporter containers' resource requests and limits
+    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ## @param postgresql-ha.metrics.resources.limits The resources limits for the metrics containers
+    ## @param postgresql-ha.metrics.resources.requests [object] The requested resources for the metrics containers    
+    ##
+    resources:
+      # We usually recommend not to specify default resources and to leave this as a conscious
+      # choice for the user. This also increases chances charts run on environments with little
+      # resources, such as Minikube. If you do want to specify resources, uncomment the following
+      # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+      limits: {}
+      #   cpu: 250m
+      #   memory: 256Mi
+      requests: 
+        cpu: 100m
+        memory: 128Mi
+
+    ## Annotations for Prometheus exporter
+    ## @param postgresql-ha.metrics.annotations [object] Annotations for enabling prometheus to access the geode metrics endpoints
+    ##    
+    ##
+    annotations:
+      prometheus.io/scrape: "true"
+      prometheus.io/port: "9187"
+
+## @section Tanzu Observability (Wavefront) chart parameters
+##
+wavefront:
+  ## @param wavefront.enabled Switch to enable or disable the Wavefront helm chart
+  ##
+  enabled: false
+  ## @param wavefront.clusterName Unique name for the Kubernetes cluster (required)
+  ## All metrics will receive a `cluster` tag with this value
+  ##
+  clusterName: KUBERNETES_CLUSTER_NAME
+  ## @param wavefront.wavefront.url Wavefront URL for your cluster (required)
+  ## @param wavefront.wavefront.token Wavefront API Token (required)
+  ## @param wavefront.wavefront.existingSecret Name of an existing secret containing the token
+  ##
+  wavefront:
+    url: https://YOUR_CLUSTER.wavefront.com
+    token: YOUR_API_TOKEN
+    ## Name of an existing secret containing the token
+    ##
+    existingSecret:
+  ## Wavefront Collector is responsible to get all Kubernetes metrics from your cluster.
+  ## It will capture Kubernetes resources metrics available from the kubelets,
+  ## as well as auto-discovery capabilities.
+  ##
+  collector:
+    ## Rules based discovery configuration
+    ## Ref: https://github.com/wavefrontHQ/wavefront-kubernetes-collector/blob/master/docs/discovery.md
+    ## @param wavefront.collector.resources.limits The resources limits for the collector container
+    ## @param wavefront.collector.resources.requests [object] The requested resources for the collector container
+    ##
+    resources:
+      limits: {}
+      requests:
+        cpu: 200m
+        memory: 10Mi
+    discovery:
+      ## @param wavefront.collector.discovery.enabled Rules based and Prometheus endpoints auto-discovery
+      ##
+      enabled: true
+      ## @param wavefront.collector.discovery.enableRuntimeConfigs Enable runtime discovery rules
+      ## Ref: https://github.com/wavefrontHQ/wavefront-collector-for-kubernetes/blob/master/docs/discovery.md#runtime-configurations
+      ##      
+      enableRuntimeConfigs: true
+      ## Can be used to add additional discovery rules
+      ##
+      # config:
+      #   ## auto-discover rabbitmq
+      #   ##
+      #   - name: rabbitmq-discovery
+      #     type: prometheus
+      #     selectors:
+      #       images:
+      #         - '*tanzu-rabbitmq-instance*'
+      #     port: 15692
+      #     path: /metrics
+      #     scheme: http
+      #   ## auto-discover postgresql
+      #   ##
+      #   - name: postgres-discovery
+      #     type: prometheus
+      #     selectors:
+      #       images:
+      #         - '*bitnami/postgres-exporter*'
+      #     port: 9187
+      #     path: /metrics
+      #     scheme: http                
+  proxy:
+    ## Wavefront Proxy resource requests and limits
+    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ## @param wavefront.proxy.resources.limits The resources limits for the proxy container
+    ## @param wavefront.proxy.resources.requests [object] The requested resources for the proxy container
+    ##
+    resources:
+      limits: {}
+      requests:
+        cpu: 100m
+        memory: 5Gi

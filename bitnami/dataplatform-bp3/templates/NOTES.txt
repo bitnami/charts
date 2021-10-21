@@ -1,0 +1,47 @@
+{{- $locatorPort := int .Values.geode.locator.service.ports.locator }}
+{{- $serverPort := int .Values.geode.server.service.ports.server }}
+
+** Data Platform Blueprint 3 is being deployed, it could take some time to be ready **
+
+The following Operators are being deployed to your cluster:
+
+{{- if index .Values "geode" }}
+
+******************
+** Apache Geode **
+******************
+
+
+To access the Apache Geode service from your local machine execute the following:
+
+   kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "subcomponent.service.name" ( dict "componentName" "geode-locator" "context" $ )}} {{ .Values.geode.locator.service.ports.locator }}:{{ .Values.geode.locator.service.ports.locator }} &
+   echo "Locator URL: 127.0.0.1:{{ .Values.geode.locator.service.ports.locator }}"   
+
+{{- end -}}
+
+{{- if index .Values "postgresql-ha" }}
+
+****************
+** PostgreSQL **
+****************
+
+To access the PostgreSQL service from your local machine execute the following:
+
+   kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "subcomponent.service.name" ( dict "componentName" "postgresql-ha-postgresql" "context" $ ) }} 5432:5432 &
+   echo "PostgreSQL service available at : http://127.0.0.1:5432"
+
+{{- end -}}
+
+{{- if index .Values "rabbitmq-cluster-operator" }}
+
+**************
+** RabbitMQ **
+**************
+
+To Check the Operator pod is running or not, execute the following:
+
+   kubectl get pods --namespace {{ .Release.Namespace }}
+
+NOTE: Please deploy rabbitmq instance to access rabbitmq cluster.
+
+{{- end -}}

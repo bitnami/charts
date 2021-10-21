@@ -1,0 +1,48 @@
+annotations:
+  category: Infrastructure
+apiVersion: v2
+appVersion: 0.0.11
+dependencies:
+  - condition: geode.enabled
+    name: geode
+    repository: https://charts.bitnami.com/bitnami
+    version: 0.x.x     
+  - condition: postgresql-ha.enabled
+    name: postgresql-ha
+    repository: https://charts.bitnami.com/bitnami
+    version: 7.x.x   
+  - condition: rabbitmq-cluster-operator.enabled
+    name: rabbitmq-cluster-operator
+    repository: https://charts.bitnami.com/bitnami
+    version: 1.x.x
+  - condition: wavefront.enabled
+    name: wavefront
+    repository: https://charts.bitnami.com/bitnami
+    version: 3.x.x    
+description: OCTO Data platform rabbitmq-geode-postgreSQL Helm Chart
+engine: gotpl
+home: https://gitlab.eng.vmware.com/octo-app-platforms/dataplatforms/-/tree/dp-bp3/blueprints/blueprint3/dataplatform-bp3
+#icon: https://bitnami.com/assets/stacks/dataplatform-bp1/img/dataplatform-bp1-stack-220x234.png
+keywords:
+  - dataplatform
+  - geode
+  - postgres
+  - rabbitmq
+  - wavefront
+  - observability
+  - tanzuobservability  
+maintainers:
+  - email: octo-data-platforms-a-aaaadlxvh4liotabwaqeivlgke@vmware.org.slack.com
+    name: OCTO Data Platforms Team
+name: dataplatform-bp3
+sources:
+  - https://github.com/bitnami/bitnami-docker-wavefront-kubernetes-collector
+  - https://github.com/bitnami/bitnami-docker-wavefront-proxy
+  - https://github.com/wavefrontHQ/wavefront-collector-for-kubernetes
+  - https://github.com/wavefrontHQ/wavefront-proxy
+  - https://github.com/bitnami/bitnami-docker-postgresql
+  - https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha
+  - https://www.postgresql.org/
+  - https://github.com/bitnami/bitnami-docker-geode
+  - https://github.com/apache/geode  
+version: 0.1.0
