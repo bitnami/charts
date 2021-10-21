@@ -379,7 +379,7 @@ dataplatform:
       ##   - myRegistryKeySecretName
       ##
       pullSecrets: []
-    ## Configuration file passed to the exporter. 
+    ## Configuration file passed to the exporter.
     ## This exporter metrics configuration is used to emit only the health and state metrics configured below.
     ## In the below config metrics key,name and guage should not be changed.
     ## @param dataplatform.exporter.config [string] Data Platform Metrics Configuration emitted in Prometheus format
@@ -733,7 +733,7 @@ rabbitmq-cluster-operator:
   ## @param rabbitmq-cluster-operator.extraDeploy [object] Instantiate RabbitMQ cluster
   ## Locator resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ##  
+  ##
   extraDeploy:
     - apiVersion: rabbitmq.com/v1beta1
       kind: RabbitmqCluster
@@ -822,7 +822,7 @@ geode:
     ##
     resources:
       limits: {}
-      requests: 
+      requests:
         cpu: 100m
         memory: 128Mi
     ## @skip geode.locator.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution
@@ -950,7 +950,7 @@ postgresql-ha:
   ## @param postgresql-ha.enabled Enable PostgreSQL Chart
   ##
   enabled: true
-  postgresql:  
+  postgresql:
     ## @param postgresql-ha.postgresql.replicaCount Number of replicas to deploy
     ##
     replicaCount: 3
@@ -976,7 +976,7 @@ postgresql-ha:
                 - key: app.kubernetes.io/instance
                   operator: In
                   values:
-                    - '{{ .Release.Name }}'  
+                    - '{{ .Release.Name }}'
             topologyKey: "kubernetes.io/hostname"
       podAffinity:
         preferredDuringSchedulingIgnoredDuringExecution:
@@ -1014,12 +1014,12 @@ postgresql-ha:
       limits: {}
       #   cpu: 250m
       #   memory: 256Mi
-      requests: 
+      requests:
         cpu: 250m
         memory: 5Gi
 
   ## PostgreSQL Prometheus exporter parameters
-  ## @param postgresql-ha.metrics.enabled Enable Metrics for PostgreSQL 
+  ## @param postgresql-ha.metrics.enabled Enable Metrics for PostgreSQL
   ##
   metrics:
     enabled: false
@@ -1027,7 +1027,7 @@ postgresql-ha:
     ## Prometheus exporter containers' resource requests and limits
     ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
     ## @param postgresql-ha.metrics.resources.limits The resources limits for the metrics containers
-    ## @param postgresql-ha.metrics.resources.requests [object] The requested resources for the metrics containers    
+    ## @param postgresql-ha.metrics.resources.requests [object] The requested resources for the metrics containers
     ##
     resources:
       # We usually recommend not to specify default resources and to leave this as a conscious
@@ -1037,7 +1037,7 @@ postgresql-ha:
       limits: {}
       #   cpu: 250m
       #   memory: 256Mi
-      requests: 
+      requests:
         cpu: 100m
         memory: 128Mi
 
