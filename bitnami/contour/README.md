@@ -419,6 +419,18 @@ Find more information about how to deal with common errors related to Bitnami’
 
 Please carefully read through the guide "Upgrading Contour" at https://projectcontour.io/resources/upgrading/.
 
+### To 6.0.0
+
+This version updates the chart to use Contour's latest release, `1.19.0`. Among other features, this new version introduces support for new kinds of CRDs: `ContourConfiguration` and `ContourDeployment`. For further information on new features, please refer to the [official release notes](https://github.com/projectcontour/contour/releases/tag/v1.19.0) for this version.
+
+Additionally, exisiting CRDs have been syncronised with the official [Contour repository](https://github.com/projectcontour/contour/blob/main/examples/render/contour.yaml)
+
+**Considerations when upgrading to this version**
+
+If you are installing a fresh chart, you can ignore this section.
+
+If you are upgrading from 5.x of this Helm chart, this is a breaking change as the new CRDs will not overwrite the existing ones. Therefore, you will need to delete the CRDs and let the chart recreate them. Make sure to back up any existing CRs (`kubectl get -o yaml extensionservice,httpproxy,tlscertificatedelegation -A > backup.yaml`) unless you have other ways of recreating them.
+
 ### To 5.2.0
 
 This version bumps the Envoy container from 1.17.X to 1.19.X; this Envoy version is officially supported by Contour since 1.18.0, see https://github.com/projectcontour/contour/releases/tag/v1.18.0
