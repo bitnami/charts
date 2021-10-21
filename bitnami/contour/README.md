@@ -79,7 +79,7 @@ $ helm uninstall my-release
 | `contour.enabled`                            | Contour Deployment creation.                                                                                                       | `true`                |
 | `contour.image.registry`                     | Contour image registry                                                                                                             | `docker.io`           |
 | `contour.image.repository`                   | Contour image name                                                                                                                 | `bitnami/contour`     |
-| `contour.image.tag`                          | Contour image tag                                                                                                                  | `1.18.2-debian-10-r0` |
+| `contour.image.tag`                          | Contour image tag                                                                                                                  | `1.19.0-debian-10-r0` |
 | `contour.image.pullPolicy`                   | Contour Image pull policy                                                                                                          | `IfNotPresent`        |
 | `contour.image.pullSecrets`                  | Contour Image pull secrets                                                                                                         | `[]`                  |
 | `contour.hostAliases`                        | Add deployment host aliases                                                                                                        | `[]`                  |
@@ -137,7 +137,7 @@ $ helm uninstall my-release
 | `envoy.enabled`                                     | Envoy Proxy creation                                                                                                  | `true`                 |
 | `envoy.image.registry`                              | Envoy Proxy image registry                                                                                            | `docker.io`            |
 | `envoy.image.repository`                            | Envoy Proxy image repository                                                                                          | `bitnami/envoy`        |
-| `envoy.image.tag`                                   | Envoy Proxy image tag (immutable tags are recommended)                                                                | `1.19.1-debian-10-r40` |
+| `envoy.image.tag`                                   | Envoy Proxy image tag (immutable tags are recommended)                                                                | `1.19.1-debian-10-r55` |
 | `envoy.image.pullPolicy`                            | Envoy image pull policy                                                                                               | `IfNotPresent`         |
 | `envoy.image.pullSecrets`                           | Envoy image pull secrets                                                                                              | `[]`                   |
 | `envoy.extraArgs`                                   | Extra arguments passed to Envoy container                                                                             | `[]`                   |
@@ -223,7 +223,7 @@ $ helm uninstall my-release
 | `defaultBackend.enabled`                            | Enable a default backend based on NGINX                                                              | `false`                |
 | `defaultBackend.image.registry`                     | Default backend image registry                                                                       | `docker.io`            |
 | `defaultBackend.image.repository`                   | Default backend image name                                                                           | `bitnami/nginx`        |
-| `defaultBackend.image.tag`                          | Default backend image tag                                                                            | `1.21.3-debian-10-r26` |
+| `defaultBackend.image.tag`                          | Default backend image tag                                                                            | `1.21.3-debian-10-r42` |
 | `defaultBackend.image.pullPolicy`                   | Image pull policy                                                                                    | `IfNotPresent`         |
 | `defaultBackend.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                     | `[]`                   |
 | `defaultBackend.extraArgs`                          | Additional command line arguments to pass to NGINX container                                         | `{}`                   |
