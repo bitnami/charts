@@ -9,5 +9,5 @@ data:
     include  "/opt/bitnami/nginx/conf/server_blocks/common/*.conf";
 {{- if and .Values.serverBlock (not .Values.existingServerBlockConfigmap) }}
   server-block.conf: |-
-{{- include "common.tplvalues.render" ( dict "value" .Values.serverBlock "context" $ ) | nindent 4 }}
+{{ include "common.tplvalues.render" ( dict "value" .Values.serverBlock "context" $ ) | indent 4 }}
 {{- end }}
