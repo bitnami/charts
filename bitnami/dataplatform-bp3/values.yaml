@@ -164,7 +164,7 @@ dataplatform:
       ##
       requests:
         cpu: 200m
-        memory: 10Mi        
+        memory: 10Mi
     ## Data Platform emitter containers' Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
     ## @param dataplatform.emitter.containerSecurityContext.enabled Enable Data Platform emitter containers' Security Context
@@ -383,7 +383,7 @@ dataplatform:
     ## This exporter metrics configuration is used to emit only the health and state metrics configured below.
     ## In the below config metrics key,name and guage should not be changed.
     ## @param dataplatform.exporter.config [string] Data Platform Metrics Configuration emitted in Prometheus format
-    ##      
+    ##
     config: |
       {
         "blueprintName": "bp3",
@@ -443,7 +443,7 @@ dataplatform:
             "helpMessage": "Available number of rabbitmq nodes in the data platform",
             "key": "rabbitmq-custom-configuration",
             "dataComponent": "AvailableNodes"
-          }            
+          }
         ]
       }
 
@@ -533,7 +533,7 @@ dataplatform:
       ##
       requests:
         cpu: 200m
-        memory: 10Mi         
+        memory: 10Mi
     ## dataplatform exporter containers' Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
     ## @param dataplatform.exporter.containerSecurityContext.enabled Enable Data Platform exporter containers' Security Context
@@ -747,10 +747,10 @@ rabbitmq-cluster-operator:
       spec:
         replicas: 3
         resources:
-          limits: {}   
+          limits: {}
           requests:
             cpu: 250m
-            memory: 5Gi 
+            memory: 5Gi
         affinity:
           podAntiAffinity:
             requiredDuringSchedulingIgnoredDuringExecution:
@@ -824,7 +824,7 @@ geode:
       limits: {}
       requests: 
         cpu: 100m
-        memory: 128Mi        
+        memory: 128Mi
     ## @skip geode.locator.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution
     ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
     ## NOTE: `geode.locator.podAffinityPreset`, `geode.locator.podAntiAffinityPreset`, and `geode.locator.nodeAffinityPreset` will be ignored when it's set
@@ -942,7 +942,7 @@ geode:
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "{{ .Values.metrics.service.port }}"
-        prometheus.io/path: "/"    
+        prometheus.io/path: "/"
 
 ## @section postgresql-ha Chart parameters
 ##
@@ -959,8 +959,8 @@ postgresql-ha:
     ## Note: postgresql.podAffinityPreset, postgresql.podAntiAffinityPreset, and postgresql.nodeAffinityPreset will be ignored when it's set
     ## @skip postgresql-ha.postgresql.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution
     ## @skip postgresql-ha.postgresql.affinity.podAffinity.preferredDuringSchedulingIgnoredDuringExecution
-    ##    
-    affinity: 
+    ##
+    affinity:
       podAntiAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
           - labelSelector:
@@ -972,12 +972,12 @@ postgresql-ha:
                 - key: app.kubernetes.io/component
                   operator: In
                   values:
-                    - postgresql                    
+                    - postgresql
                 - key: app.kubernetes.io/instance
                   operator: In
                   values:
                     - '{{ .Release.Name }}'  
-            topologyKey: "kubernetes.io/hostname"    
+            topologyKey: "kubernetes.io/hostname"
       podAffinity:
         preferredDuringSchedulingIgnoredDuringExecution:
         - weight: 100
@@ -1003,20 +1003,20 @@ postgresql-ha:
     ## PostgreSQL containers' resource requests and limits
     ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
     ## @param postgresql-ha.postgresql.resources.limits The resources limits for the Locator containers
-    ## @param postgresql-ha.postgresql.resources.requests.cpu [object] The requested resources for the Locator containers    
+    ## @param postgresql-ha.postgresql.resources.requests.cpu [object] The requested resources for the Locator containers
     ## @param postgresql-ha.postgresql.resources.requests.memory [object] The requested resources for the Locator containers
     ##
     resources:
       # We usually recommend not to specify default resources and to leave this as a conscious
       # choice for the user. This also increases chances charts run on environments with little
       # resources, such as Minikube. If you do want to specify resources, uncomment the following
-      # lines, adjust them as necessary, and remove the curly braces after 'resources:'.      
+      # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
       limits: {}
       #   cpu: 250m
       #   memory: 256Mi
       requests: 
         cpu: 250m
-        memory: 5Gi    
+        memory: 5Gi
 
   ## PostgreSQL Prometheus exporter parameters
   ## @param postgresql-ha.metrics.enabled Enable Metrics for PostgreSQL 
@@ -1043,7 +1043,7 @@ postgresql-ha:
 
     ## Annotations for Prometheus exporter
     ## @param postgresql-ha.metrics.annotations [object] Annotations for enabling prometheus to access the geode metrics endpoints
-    ##    
+    ##
     ##
     annotations:
       prometheus.io/scrape: "true"
@@ -1090,7 +1090,7 @@ wavefront:
       enabled: true
       ## @param wavefront.collector.discovery.enableRuntimeConfigs Enable runtime discovery rules
       ## Ref: https://github.com/wavefrontHQ/wavefront-collector-for-kubernetes/blob/master/docs/discovery.md#runtime-configurations
-      ##      
+      ##
       enableRuntimeConfigs: true
       ## Can be used to add additional discovery rules
       ##
@@ -1114,7 +1114,7 @@ wavefront:
       #         - '*bitnami/postgres-exporter*'
       #     port: 9187
       #     path: /metrics
-      #     scheme: http                
+      #     scheme: http
   proxy:
     ## Wavefront Proxy resource requests and limits
     ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
