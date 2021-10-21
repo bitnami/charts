@@ -13,18 +13,20 @@ apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ include "common.names.fullname" . }}-query
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: query
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   replicas: {{ $query.replicaCount }}
-  strategy:
-    type: {{ $query.strategyType }}
-    {{- if (eq "Recreate" $query.strategyType) }}
-    rollingUpdate: null
-    {{- end }}
+  {{- if $query.updateStrategy }}
+  strategy: {{- toYaml $query.updateStrategy | nindent 4 }}
+  {{- end }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: query
@@ -74,8 +76,8 @@ spec:
       securityContext: {{- omit $query.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       containers:
-        {{- if $query.extraContainers }}
-        {{- include "common.tplvalues.render" (dict "value" $query.extraContainers "context" $) | nindent 8 }}
+        {{- if $query.sidecars }}
+        {{- include "common.tplvalues.render" (dict "value" $query.sidecars "context" $) | nindent 8 }}
         {{- end }}
         - name: query
           image: {{ include "thanos.image" . }}
@@ -157,9 +159,9 @@ spec:
             {{- if $query.extraFlags }}
             {{- $query.extraFlags | toYaml | nindent 12 }}
             {{- end }}
-          {{- if .Values.query.extraEnv }}
+          {{- if .Values.query.extraEnvVars }}
           env:
-            {{- toYaml .Values.query.extraEnv | nindent 12 }}
+            {{- toYaml .Values.query.extraEnvVars | nindent 12 }}
           {{- end }}
           ports:
             - name: http
