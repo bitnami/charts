@@ -333,7 +333,7 @@ spec:
             {{- end }}
           ports:
             - name: postgresql
-              containerPort: 5432
+              containerPort: {{ .Values.service.port }}
               protocol: TCP
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.postgresql.livenessProbe.enabled }}
@@ -431,7 +431,7 @@ spec:
           {{- end }}
           env:
             - name: DATA_SOURCE_URI
-              value: {{ printf "127.0.0.1:5432/%s?sslmode=disable" (include "postgresql-ha.postgresqlDatabase" .) | quote }}
+              value: {{ printf "127.0.0.1:{{ .Values.service.port }}/%s?sslmode=disable" (include "postgresql-ha.postgresqlDatabase" .) | quote }}
             {{- if .Values.postgresql.usePasswordFile }}
             - name: DATA_SOURCE_PASS_FILE
               value: "/opt/bitnami/postgresql/secrets/postgresql-password"
@@ -449,7 +449,7 @@ spec:
             {{- end }}
           ports:
             - name: metrics
-              containerPort: 9187
+              containerPort: {{ .Values.metrics.service.port }}
               protocol: TCP
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.metrics.livenessProbe.enabled }}
