@@ -1,3 +1,9 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
+** Please be patient while the chart is being deployed **
+
 {{- if or .Values.mariadb.enabled .Values.externalDatabase.host -}}
 
 {{- if empty (include "magento.host" .) -}}
@@ -72,8 +78,6 @@ host. To configure Magento with the URL of your service:
 
 This deployment will be incomplete until you configure Magento with a resolvable database
 host. To configure Magento to use and external database host:
-
-
 1. Complete your Magento deployment by running:
 
 {{- if eq .Values.service.type "NodePort" }}
