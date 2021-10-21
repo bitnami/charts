@@ -9,15 +9,6 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{/*
 Kubernetes standard labels
 */}}
-{{- define "networkPolicy.podSelectorLabels" -}}
-app.kubernetes.io/name: {{ include "common.names.fullname" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
-app.kubernetes.io/managed-by: {{ .Release.Service }}
-{{- end -}}
-
-{{/*
-Kubernetes standard labels
-*/}}
 {{- define "networkPolicy.outgoingSelectorLabels" -}}
 app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}

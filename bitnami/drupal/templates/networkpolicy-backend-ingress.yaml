@@ -2,7 +2,7 @@
 apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
 kind: NetworkPolicy
 metadata:
-  name: {{ printf "%s-frontend" (include "common.names.fullname" .) }}
+  name: {{ printf "%s-backend" (include "common.names.fullname" .) }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -10,9 +10,8 @@ metadata:
 spec:
   podSelector:
     matchLabels:
-      app.kubernetes.io/instance: {{ .Release.Name }}
       {{ include "common.tplvalues.render" (dict "value" .Values.networkPolicy.ingress.backendLabel "context" $) }}
-      app.kubernetes.io/managed-by: {{ .Release.Service }}
+      {{- include "networkPolicy.outgoingSelectorLabels" . | nindent 6 }}
   ingress:
   - from:
     - podSelector:
