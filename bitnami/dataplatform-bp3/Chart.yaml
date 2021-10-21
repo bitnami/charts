@@ -6,11 +6,11 @@ dependencies:
   - condition: geode.enabled
     name: geode
     repository: https://charts.bitnami.com/bitnami
-    version: 0.x.x     
+    version: 0.x.x
   - condition: postgresql-ha.enabled
     name: postgresql-ha
     repository: https://charts.bitnami.com/bitnami
-    version: 7.x.x   
+    version: 7.x.x
   - condition: rabbitmq-cluster-operator.enabled
     name: rabbitmq-cluster-operator
     repository: https://charts.bitnami.com/bitnami
@@ -18,11 +18,11 @@ dependencies:
   - condition: wavefront.enabled
     name: wavefront
     repository: https://charts.bitnami.com/bitnami
-    version: 3.x.x    
+    version: 3.x.x
 description: OCTO Data platform rabbitmq-geode-postgreSQL Helm Chart
 engine: gotpl
 home: https://gitlab.eng.vmware.com/octo-app-platforms/dataplatforms/-/tree/dp-bp3/blueprints/blueprint3/dataplatform-bp3
-#icon: https://bitnami.com/assets/stacks/dataplatform-bp1/img/dataplatform-bp1-stack-220x234.png
+icon: https://bitnami.com/assets/stacks/dataplatform-bp1/img/dataplatform-bp1-stack-220x234.png
 keywords:
   - dataplatform
   - geode
@@ -30,7 +30,7 @@ keywords:
   - rabbitmq
   - wavefront
   - observability
-  - tanzuobservability  
+  - tanzuobservability
 maintainers:
   - email: octo-data-platforms-a-aaaadlxvh4liotabwaqeivlgke@vmware.org.slack.com
     name: OCTO Data Platforms Team
