@@ -255,7 +255,7 @@ $ helm upgrade my-release bitnami/grafana-operator
 
 ### To 2.0.0
 
-- CRDs were updated to the latest prometheus-operator 3.10.4 release artifacts:
+- CRDs were updated to the latest Grafana Operator 3.10.4 release artifacts:
   - The apiVersion of CRDs was updated from `apiextensions.k8s.io/v1beta1` to `apiextensions.k8s.io/v1`.
   - Kubernetes 1.16 or higher is now required.
 
