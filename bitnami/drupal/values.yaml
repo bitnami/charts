@@ -668,31 +668,83 @@ networkPolicy:
   ## @param networkPolicy.enabled Enable network policies
   ##
   enabled: false
-  ## @param networkPolicy.metricsNamespaceLabel [object] Monitoring namespace's label
+  ## @param networkPolicy.metrics.enabled Enable network policy for metrics (prometheus)
+  ## @param networkPolicy.metrics.namespaceLabel [object] Monitoring namespace's label. This label will be used to identify the prometheus' namespace.
+  ## @param networkPolicy.metrics.podLabel [object] Monitoring namespace's label. This label will be used to identify the prometheus' pods.
   ##
-  metricsNamespaceLabel:
-    label: monitoring
-  ## @param networkPolicy.ingressNamespaceLabel [object] Ingress Proxy namespace's label
-  ##
-  ingressNamespaceLabel:
-    label: ingress
-  ## @param networkPolicy.ingress.backendOnlyAccesibleByFrontend Enable ingress rule that makes the backend (mariadb) only accesible by drupal's pods.
-  ## @param networkPolicy.ingress.backendLabel [object] Backend's label
-  ## @param networkPolicy.ingress.allowOnlyFromNamespace Enable ingress rule that makes druapl only accesible from a particular namespace
-  ## @param networkPolicy.ingress.allowOnlyFromNamespaceNameLabel [object] Namespace's label that is allowed to access drupal
+  metrics:
+    enabled: true
+    ## e.g:
+    ## podLabel:
+    ##   label: monitoring
+    ##
+    podLabel: {}
+    ## e.g:
+    ## namespaceLabel:
+    ##   label: monitoring
+    ##
+    namespaceLabel: {}
+  ## @param networkPolicy.ingress.enabled Enable network policy for Ingres Proxy
+  ## @param networkPolicy.ingress.namespaceLabel [object] Monitoring namespace's label. This label will be used to identify the Ingress Proxy's namespace.
+  ## @param networkPolicy.ingress.podLabel [object] Monitoring namespace's label. This label will be used to identify the Ingress Proxy's pods.
   ##
   ingress:
-    # Mysql only could be accessed from drupal
+    enabled: true
+    ## e.g:
+    ## podLabel:
+    ##   label: ingress
+    ##
+    podLabel: {}
+    ## e.g:
+    ## namespaceLabel:
+    ##   label: ingress
+    ##
+  ## @param networkPolicy.ingressRules.backendOnlyAccesibleByFrontend Enable ingress rule that makes the backend (mariadb) only accesible by drupal's pods.
+  ## @param networkPolicy.ingressRules.backendLabel [object] Backend's label
+  ## @param networkPolicy.ingressRules.allowOnlyFrom.enabled Enable ingress rule that makes druapl only accesible from a particular origin
+  ## @param networkPolicy.ingressRules.allowOnlyFrom.namespaceLabel [object] Namespace's label that is allowed to access drupal. This label will be used to identified the allowed namespace(s).
+  ## @param networkPolicy.ingressRules.allowOnlyFrom.podLabel [object] Namespace's label that is allowed to access drupal. This label will be used to identified the allowed pod(s).
+  ## @param networkPolicy.ingressRules.customRules [object] Custom network policy rule
+  ##
+  ingressRules:
+    ## Mysql backend only could be accessed from drupal
     backendOnlyAccesibleByFrontend: false
     backendLabel:
       app.kubernetes.io/name: mariadb
 
-    # Allow only from the namespace:
-    allowOnlyFromNamespace: false
-    allowOnlyFromNamespaceNameLabel:
-      label: access
-  ## @param networkPolicy.egress.denyConnectionsToExternal Disable the connection to outside of the namespace.
+    ## Allow only from the indicated:
+    allowOnlyFrom:
+      enabled: false
+      ## e.g:
+      ## namespaceLabel:
+      ##   label: ingress
+      ##
+      namespaceLabel: {}
+      ## e.g:
+      ## podLabel:
+      ##   label: access
+      ##
+      podLabel: {}
+
+    ## custom ingress rules
+    ## e.g:
+    ## customRules:
+    ##   - from:
+    ##       - namespaceSelector:
+    ##           matchLabels:
+    ##             label: example
+    customRules: {}
+  ## @param networkPolicy.egressRules.denyConnectionsToExternal Disable the connection to outside of the namespace.
+  ## @param networkPolicy.egressRules.customRules [object] Custom network policy rule
   ##
-  egress:
+  egressRules:
     # Deny connections to external
     denyConnectionsToExternal: false
+    ## custom egress rules
+    ## e.g:
+    ## customRules:
+    ##   - to:
+    ##       - namespaceSelector:
+    ##           matchLabels:
+    ##             label: example
+    customRules: {}

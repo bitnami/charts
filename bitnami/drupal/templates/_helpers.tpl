@@ -11,7 +11,6 @@ Kubernetes standard labels
 */}}
 {{- define "networkPolicy.outgoingSelectorLabels" -}}
 app.kubernetes.io/instance: {{ .Release.Name }}
-app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end -}}
 
 {{/*
