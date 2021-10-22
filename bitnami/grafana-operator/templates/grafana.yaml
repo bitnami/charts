@@ -77,15 +77,17 @@ spec:
     {{- if .Values.grafana.tolerations }}
     tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.tolerations "context" $) | nindent 6 }}
     {{- end }}
-    {{- if .Values.affinity }}
+    {{- if .Values.grafana.affinity }}
     affinity: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.affinity "context" $) | nindent 6 }}
     {{- else }}
     affinity:
-      {{- if .Values.grafana.podAffinityPreset }}
+      {{- if not (empty .Values.grafana.podAffinityPreset) }}
       podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.grafana.podAffinityPreset "component" "grafana" "context" $) | nindent 8 }}
       {{- end }}
+      {{- if not (empty .Values.grafana.podAntiAffinityPreset) }}
       podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.grafana.podAntiAffinityPreset "component" "grafana" "context" $) | nindent 8 }}
-      {{- if .Values.grafana.nodeAffinityPreset.type }}
+      {{- end }}
+      {{- if not (empty .Values.grafana.nodeAffinityPreset.type) }}
       nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.grafana.nodeAffinityPreset.type "key" .Values.grafana.nodeAffinityPreset.key "values" .Values.grafana.nodeAffinityPreset.values) | nindent 8 }}
       {{- end }}
     {{- end }}
