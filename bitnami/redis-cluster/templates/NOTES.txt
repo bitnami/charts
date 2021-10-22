@@ -1,3 +1,7 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
 {{- $secretName := include "redis-cluster.secretName" . -}}
 {{- $secretPasswordKey := include "redis-cluster.secretPasswordKey" . -}}
 
