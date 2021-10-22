@@ -54,7 +54,7 @@ spec:
           image: {{ include "common.images.image" (dict "imageRoot" .Values.operator.image "global" .Values.global) }}
           imagePullPolicy: {{ .Values.operator.image.pullPolicy }}
           ports:
-            - containerPort: 8080
+            - containerPort: {{ .Values.operator.containerPorts.metrics }}
               name: metrics
           command:
             - grafana-operator
@@ -68,13 +68,13 @@ spec:
             {{- else if .Values.operator.args.scanNamespaces }}
             - --namespaces={{ include "grafana-operator.joinListWithComma" .Values.operator.args.scanNamespaces }}
             {{- end }}
-        {{- if .Values.operator.resources }}
+          {{- if .Values.operator.resources }}
           resources: {{- toYaml .Values.operator.resources | nindent 12 }}
-        {{- end }}
-        {{- if .Values.operator.containerSecurityContext.enabled }}
+          {{- end }}
+          {{- if .Values.operator.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.operator.containerSecurityContext "enabled" | toYaml | nindent 12 }}
-        {{- end }}
-        {{- if .Values.operator.readinessProbe.enabled }}
+          {{- end }}
+          {{- if .Values.operator.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
               path: /metrics
@@ -84,8 +84,8 @@ spec:
             timeoutSeconds: {{ .Values.operator.readinessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.operator.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.operator.readinessProbe.failureThreshold }}
-        {{- end }}
-        {{- if .Values.operator.livenessProbe.enabled }}
+          {{- end }}
+          {{- if .Values.operator.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
               path: /metrics
@@ -95,18 +95,18 @@ spec:
             timeoutSeconds: {{ .Values.operator.livenessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.operator.livenessProbe.successThreshold }}
             failureThreshold: {{ .Values.operator.livenessProbe.failureThreshold }}
-        {{- end }}
+          {{- end }}
           env:
             - name: TEMPLATE_PATH
               value: /usr/local/bin/templates
             - name: WATCH_NAMESPACE
-          {{- if .Values.operator.watchNamespace }}
+              {{- if .Values.operator.watchNamespace }}
               value: {{ .Values.operator.watchNamespace }}
-          {{- else }}
+              {{- else }}
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
-          {{- end }}
+              {{- end }}
             - name: POD_NAME
               valueFrom:
                 fieldRef:

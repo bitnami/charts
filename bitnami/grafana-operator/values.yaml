@@ -67,7 +67,7 @@ operator:
   image:
     registry: docker.io
     repository: bitnami/grafana-operator
-    tag: 3.10.3-debian-10-r61
+    tag: 3.10.4-debian-10-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## Ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -96,10 +96,18 @@ operator:
     create: true
   ## @param operator.serviceAccount.create Specifies whether a service account should be created
   ## @param operator.serviceAccount.name The name of the service account to use. If not set and create is true, a name is generated using the fullname template
+  ## @param operator.serviceAccount.automountServiceAccountToken Enable/disable auto mounting of the service account token
+  ## @param operator.serviceAccount.annotations Custom annotations for Grafana Operator ServiceAccount
   ##
   serviceAccount:
     create: true
     name: ""
+    automountServiceAccountToken: true
+    annotations: {}
+  ## @param operator.containerPorts.metrics Grafana Operator container port to open for metrics
+  ##
+  containerPorts:
+    metrics: 8080
   ## Pod securityContext
   ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param operator.podSecurityContext.enabled Enable pods security context

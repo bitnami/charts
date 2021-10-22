@@ -18,7 +18,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 ## Prerequisites
 
-- Kubernetes 1.12+
+- Kubernetes 1.16+
 - Helm 3.1.0
 
 ## Installing the Chart
@@ -86,7 +86,7 @@ For more information, refer to the [documentation on the differences between the
 | `operator.updateStrategy.type`                               | Set up update strategy for Grafana Operator installation.                                                              | `Recreate`                 |
 | `operator.image.registry`                                    | Grafana Operator image registry                                                                                        | `docker.io`                |
 | `operator.image.repository`                                  | Grafana Operator image name                                                                                            | `bitnami/grafana-operator` |
-| `operator.image.tag`                                         | Grafana Operator image tag                                                                                             | `3.10.3-debian-10-r61`     |
+| `operator.image.tag`                                         | Grafana Operator image tag                                                                                             | `3.10.4-debian-10-r0`      |
 | `operator.image.pullPolicy`                                  | Grafana Operator image pull policy                                                                                     | `IfNotPresent`             |
 | `operator.image.pullSecrets`                                 | Grafana Operator image pull secrets                                                                                    | `[]`                       |
 | `operator.args.scanAllNamespaces`                            | Specify if all namespace should be scanned for dashboards and datasources. (Creates ClusterRole)                       | `false`                    |
@@ -252,6 +252,12 @@ Find more information about how to deal with common errors related to Bitnami’
 ```bash
 $ helm upgrade my-release bitnami/grafana-operator
 ```
+
+### To 2.0.0
+
+- CRDs were updated to the latest prometheus-operator 3.10.4 release artifacts:
+  - The apiVersion of CRDs was updated from `apiextensions.k8s.io/v1beta1` to `apiextensions.k8s.io/v1`.
+  - Kubernetes 1.16 or higher is now required.
 
 ### To 1.0.0
 
