@@ -99,6 +99,9 @@ watchIngressWithoutClass: false
 ## @param ingressClass Name of the ingress class to route through this controller
 ##
 ingressClass: nginx
+## @param controllerClass Name of the controller class to route through this controller
+##
+controllerClass: k8s.io/ingress-nginx
 ## Allows customization of the external service
 ## the ingress will be bound to via DNS
 ##

@@ -129,7 +129,7 @@ spec:
               value: {{ ternary "True" "False" .Values.ldap.tls.enabled | quote }}
             {{- if .Values.ldap.tls.enabled }}
             - name: AIRFLOW_LDAP_ALLOW_SELF_SIGNED
-              value: {{ .Values.ldap.tls.allowSelfSigned }}
+              value: {{ .Values.ldap.tls.allowSelfSigned | quote }}
             - name: AIRFLOW_LDAP_TLS_CA_CERTIFICATE
               value: {{ include "airflow.ldapCAFilename" . | quote }}
             {{- end }}

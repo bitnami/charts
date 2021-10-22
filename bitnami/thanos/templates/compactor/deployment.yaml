@@ -3,18 +3,20 @@ apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ include "common.names.fullname" . }}-compactor
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: compactor
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   replicas: 1
-  strategy:
-    type: {{ .Values.compactor.strategyType }}
-    {{- if (eq "Recreate" .Values.compactor.strategyType) }}
-    rollingUpdate: null
-    {{- end }}
+  {{- if .Values.compactor.updateStrategy }}
+  strategy: {{- toYaml .Values.compactor.updateStrategy | nindent 4 }}
+  {{- end }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: compactor
@@ -77,6 +79,9 @@ spec:
               mountPath: /data
       {{- end }}
       containers:
+        {{- if .Values.compactor.sidecars }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.compactor.sidecars "context" $) | nindent 8 }}
+        {{- end }}
         - name: compactor
           image: {{ include "thanos.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
@@ -98,9 +103,9 @@ spec:
             {{- .Values.compactor.extraFlags | toYaml | nindent 12 }}
             {{- end }}
             - --wait
-          {{- if .Values.compactor.extraEnv }}
+          {{- if .Values.compactor.extraEnvVars }}
           env:
-            {{- toYaml .Values.compactor.extraEnv | nindent 12 }}
+            {{- toYaml .Values.compactor.extraEnvVars | nindent 12 }}
           {{- end }}
           ports:
             - name: http

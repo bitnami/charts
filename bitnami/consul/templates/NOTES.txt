@@ -78,3 +78,4 @@ Furthermore, to know which Consul node is the cluster leader run this other comm
 
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- include "common.warnings.rollingTag" .Values.metrics.image }}
+{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
