@@ -60,6 +60,39 @@ Return the proper Docker Image Registry Secret Names
 {{- end -}}
 
 {{/*
+Return the proper Docker Image Registry Secret Names
+{{ include "jupyterhub.imagePullSecretsList" ( dict "images" (list .Values.path.to.the.image1, .Values.path.to.the.image2) "global" .Values.global) }}
+*/}}
+{{- define "jupyterhub.imagePullSecretsList" -}}
+  {{- $pullSecrets := list }}
+
+  {{- if .global }}
+    {{- range .global.imagePullSecrets -}}
+      {{- $pullSecrets = append $pullSecrets . -}}
+    {{- end -}}
+  {{- end -}}
+
+  {{- range .images -}}
+    {{- range .pullSecrets -}}
+      {{- $pullSecrets = append $pullSecrets . -}}
+    {{- end -}}
+  {{- end -}}
+
+  {{- if (not (empty $pullSecrets)) }}
+    {{- range $pullSecrets }}
+  - {{ . }}
+    {{- end }}
+  {{- end }}
+{{- end -}}
+
+{{/*
+Return the proper Docker Image Registry Secret Names list
+*/}}
+{{- define "jupyterhub.imagePullSecrets.list" -}}
+{{- include "jupyterhub.imagePullSecretsList" (dict "images" (list .Values.hub.image .Values.proxy.image .Values.auxiliaryImage) "global" .Values.global) -}}
+{{- end -}}
+
+{{/*
 Create the name of the service account to use
 */}}
 {{- define "jupyterhub.hubServiceAccountName" -}}

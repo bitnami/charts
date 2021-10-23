@@ -158,6 +158,11 @@ spec:
               DNS.3 = $my_hostname.$svc.$MY_POD_NAMESPACE.svc.cluster.local
               DNS.4 = localhost
               DNS.5 = 127.0.0.1
+              {{- if .Values.tls.extraDnsNames }}
+              {{- range $key, $dnsName := .Values.tls.extraDnsNames }}
+              {{ $key }} = {{ $dnsName }}
+              {{- end }}
+              {{- end }}
               EOL
 
               export RANDFILE=/certs/.rnd && openssl genrsa -out /certs/mongo.key 2048
@@ -223,7 +228,7 @@ spec:
                   key: mongodb-metrics-password
             {{- end }}
             - name: MONGODB_ROOT_USER
-              value: {{ .Values.auth.rootUser | quote }}            
+              value: {{ .Values.auth.rootUser | quote }}
             - name: MONGODB_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:

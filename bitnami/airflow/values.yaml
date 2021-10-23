@@ -188,9 +188,29 @@ configurationConfigMap: ""
 ## ref: http://airflow.apache.org/docs/stable/executor/index.html
 ##
 executor: 'CeleryExecutor'
-## @param dagsConfigMap Name of an existing config map containing all the DAGs files you want to load in Airflow
+## Load custom DAGs from a ConfigMap
+## Note: an init container will be used to prepare the DAGs available in the ConfigMap to be consumed by Airflow containers
 ##
-dagsConfigMap: ""
+dags:
+  ## @param dags.configMap Name of an existing config map containing all the DAGs files you want to load in Airflow
+  ##
+  configMap: ""
+  ## Bitnami Shell image
+  ## ref: https://hub.docker.com/r/bitnami/bitnami-shell/tags/
+  ## @param dags.image.registry Container sidecar registry
+  ## @param dags.image.repository Container sidecar image
+  ## @param dags.image.tag Container sidecar image tag
+  ## @param dags.image.pullPolicy Container sidecar image pull policy
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/bitnami-shell
+    tag: 10-debian-10-r225
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    pullPolicy: IfNotPresent
 ## @param loadExamples Switch to load some Airflow examples
 ##
 loadExamples: false
@@ -209,7 +229,7 @@ web:
   image:
     registry: docker.io
     repository: bitnami/airflow
-    tag: 2.1.4-debian-10-r5
+    tag: 2.2.0-debian-10-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -398,7 +418,7 @@ scheduler:
   image:
     registry: docker.io
     repository: bitnami/airflow-scheduler
-    tag: 2.1.4-debian-10-r10
+    tag: 2.2.0-debian-10-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -530,7 +550,7 @@ worker:
   image:
     registry: docker.io
     repository: bitnami/airflow-worker
-    tag: 2.1.4-debian-10-r9
+    tag: 2.2.0-debian-10-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -739,7 +759,7 @@ git:
   image:
     registry: docker.io
     repository: bitnami/git
-    tag: 2.33.0-debian-10-r45
+    tag: 2.33.0-debian-10-r63
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -793,7 +813,7 @@ git:
         ## An unique identifier for repository, must be unique for each repository
         ##
         name: ""
-        ## Path to a folder in the repository containing the dags
+        ## Path to a folder in the repository containing the plugins
         ##
         path: ""
   ## Properties for the Clone init container
@@ -1037,7 +1057,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/airflow-exporter
-    tag: 0.20210126.0-debian-10-r231
+    tag: 0.20210126.0-debian-10-r250
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

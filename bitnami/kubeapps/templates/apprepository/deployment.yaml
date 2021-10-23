@@ -89,6 +89,16 @@ spec:
             - --crontab={{ .Values.apprepository.crontab }}
             {{- end }}
             - --repos-per-namespace={{ .Values.apprepository.watchAllNamespaces }}
+              {{- if.Values.apprepository.customAnnotations }}
+                {{- range $key, $value := .Values.apprepository.customAnnotations }}
+            -  --custom-annotations={{ (print $key "=" $value) | quote }}
+                {{- end }}
+              {{- end }}
+              {{- if.Values.apprepository.customLabels }}
+                {{- range $key, $value := .Values.apprepository.customLabels }}
+            -  --custom-labels={{ (print $key "=" $value) | quote }}
+                {{- end }}
+              {{- end }}
           env:
             - name: REPO_SYNC_IMAGE
               value: {{ include "common.images.image" (dict "imageRoot" .Values.apprepository.syncImage "global" .Values.global) }}

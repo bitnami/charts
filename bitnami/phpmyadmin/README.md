@@ -67,18 +67,18 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### phpMyAdmin parameters
 
-| Name                 | Description                                                          | Value                 |
-| -------------------- | -------------------------------------------------------------------- | --------------------- |
-| `image.registry`     | phpMyAdmin image registry                                            | `docker.io`           |
-| `image.repository`   | phpMyAdmin image repository                                          | `bitnami/phpmyadmin`  |
-| `image.tag`          | phpMyAdmin image tag (immutable tags are recommended)                | `5.1.1-debian-10-r98` |
-| `image.pullPolicy`   | Image pull policy                                                    | `IfNotPresent`        |
-| `image.pullSecrets`  | Specify docker-registry secret names as an array                     | `[]`                  |
-| `command`            | Override default container command (useful when using custom images) | `[]`                  |
-| `args`               | Override default container args (useful when using custom images)    | `[]`                  |
-| `extraEnvVars`       | Extra environment variables to be set on PhpMyAdmin container        | `[]`                  |
-| `extraEnvVarsCM`     | Name of a existing ConfigMap containing extra env vars               | `""`                  |
-| `extraEnvVarsSecret` | Name of a existing Secret containing extra env vars                  | `""`                  |
+| Name                 | Description                                                          | Value                  |
+| -------------------- | -------------------------------------------------------------------- | ---------------------- |
+| `image.registry`     | phpMyAdmin image registry                                            | `docker.io`            |
+| `image.repository`   | phpMyAdmin image repository                                          | `bitnami/phpmyadmin`   |
+| `image.tag`          | phpMyAdmin image tag (immutable tags are recommended)                | `5.1.1-debian-10-r112` |
+| `image.pullPolicy`   | Image pull policy                                                    | `IfNotPresent`         |
+| `image.pullSecrets`  | Specify docker-registry secret names as an array                     | `[]`                   |
+| `command`            | Override default container command (useful when using custom images) | `[]`                   |
+| `args`               | Override default container args (useful when using custom images)    | `[]`                   |
+| `extraEnvVars`       | Extra environment variables to be set on PhpMyAdmin container        | `[]`                   |
+| `extraEnvVarsCM`     | Name of a existing ConfigMap containing extra env vars               | `""`                   |
+| `extraEnvVarsSecret` | Name of a existing Secret containing extra env vars                  | `""`                   |
 
 
 ### phpMyAdmin deployment parameters
@@ -178,7 +178,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                          | Start a side-car prometheus exporter                                              | `false`                   |
 | `metrics.image.registry`                   | Apache exporter image registry                                                    | `docker.io`               |
 | `metrics.image.repository`                 | Apache exporter image repository                                                  | `bitnami/apache-exporter` |
-| `metrics.image.tag`                        | Apache exporter image tag (immutable tags are recommended)                        | `0.10.1-debian-10-r3`     |
+| `metrics.image.tag`                        | Apache exporter image tag (immutable tags are recommended)                        | `0.10.1-debian-10-r16`    |
 | `metrics.image.pullPolicy`                 | Image pull policy                                                                 | `IfNotPresent`            |
 | `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                                  | `[]`                      |
 | `metrics.resources`                        | Metrics exporter resource requests and limits                                     | `{}`                      |

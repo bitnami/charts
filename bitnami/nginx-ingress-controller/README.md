@@ -72,7 +72,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
 | `image.registry`              | Nginx Ingress Controller image registry                                                                                                            | `docker.io`                        |
 | `image.repository`            | Nginx Ingress Controller image repository                                                                                                          | `bitnami/nginx-ingress-controller` |
-| `image.tag`                   | Nginx Ingress Controller image tag (immutable tags are recommended)                                                                                | `1.0.2-debian-10-r5`               |
+| `image.tag`                   | Nginx Ingress Controller image tag (immutable tags are recommended)                                                                                | `1.0.4-debian-10-r4`               |
 | `image.pullPolicy`            | Nginx Ingress Controller image pull policy                                                                                                         | `IfNotPresent`                     |
 | `image.pullSecrets`           | Specify docker-registry secret names as an array                                                                                                   | `[]`                               |
 | `containerPorts`              | Controller container ports to open                                                                                                                 | `{}`                               |
@@ -85,6 +85,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `reportNodeInternalIp`        | If using `hostNetwork=true`, setting `reportNodeInternalIp=true`, will pass the flag `report-node-internal-ip-address` to Nginx Ingress Controller | `false`                            |
 | `watchIngressWithoutClass`    | Process Ingress objects without ingressClass annotation/ingressClassName field                                                                     | `false`                            |
 | `ingressClass`                | Name of the ingress class to route through this controller                                                                                         | `nginx`                            |
+| `controllerClass`             | Name of the controller class to route through this controller                                                                                      | `k8s.io/ingress-nginx`             |
 | `publishService.enabled`      | Set the endpoint records on the Ingress objects to reflect those on the service                                                                    | `false`                            |
 | `publishService.pathOverride` | Allows overriding of the publish service to bind to                                                                                                | `""`                               |
 | `scope.enabled`               | Limit the scope of the controller. Defaults to `.Release.Namespace`                                                                                | `false`                            |
@@ -175,7 +176,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `defaultBackend.hostAliases`                        | Add deployment host aliases                                                               | `[]`                   |
 | `defaultBackend.image.registry`                     | Default backend image registry                                                            | `docker.io`            |
 | `defaultBackend.image.repository`                   | Default backend image repository                                                          | `bitnami/nginx`        |
-| `defaultBackend.image.tag`                          | Default backend image tag (immutable tags are recommended)                                | `1.21.3-debian-10-r23` |
+| `defaultBackend.image.tag`                          | Default backend image tag (immutable tags are recommended)                                | `1.21.3-debian-10-r37` |
 | `defaultBackend.image.pullPolicy`                   | Image pull policy                                                                         | `IfNotPresent`         |
 | `defaultBackend.image.pullSecrets`                  | Specify docker-registry secret names as an array                                          | `[]`                   |
 | `defaultBackend.extraArgs`                          | Additional command line arguments to pass to Nginx container                              | `{}`                   |

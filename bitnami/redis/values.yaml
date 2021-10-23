@@ -361,6 +361,9 @@ master:
     ## @param master.persistence.enabled Enable persistence on Redis&trade; master nodes using Persistent Volume Claims
     ##
     enabled: true
+    ## @param master.persistence.medium Provide a medium for `emptyDir` volumes.
+    ##
+    medium: ""
     ## @param master.persistence.path The path the volume will be mounted at on Redis&trade; master containers
     ## NOTE: Useful when using different Redis&trade; images
     ##
@@ -670,6 +673,9 @@ replica:
     ## @param replica.persistence.enabled Enable persistence on Redis&trade; replicas nodes using Persistent Volume Claims
     ##
     enabled: true
+    ## @param replica.persistence.medium Provide a medium for `emptyDir` volumes.
+    ##
+    medium: ""
     ## @param replica.persistence.path The path the volume will be mounted at on Redis&trade; replicas containers
     ## NOTE: Useful when using different Redis&trade; images
     ##
@@ -1296,7 +1302,7 @@ volumePermissions:
     registry: docker.io
     repository: bitnami/bitnami-shell
     tag: 10-debian-10-r212
-    pullPolicy: Always
+    pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -1342,7 +1348,7 @@ sysctl:
     registry: docker.io
     repository: bitnami/bitnami-shell
     tag: 10-debian-10-r212
-    pullPolicy: Always
+    pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/

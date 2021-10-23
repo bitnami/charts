@@ -89,18 +89,22 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Airflow common parameters
 
-| Name                     | Description                                                                                                                                      | Value            |
-| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------- |
-| `auth.existingSecret`    | Name of an existing secret containing password, fernet key and secret key ('airflow-password', 'airflow-fernetKey' and 'airflow-secretKey' keys) | `""`             |
-| `auth.fernetKey`         | Fernet key to secure connections                                                                                                                 | `""`             |
-| `auth.forcePassword`     | Force users to specify a password                                                                                                                | `false`          |
-| `auth.password`          | Password to access web UI                                                                                                                        | `""`             |
-| `auth.username`          | Username to access web UI                                                                                                                        | `user`           |
-| `auth.secretKey`         | Secret key to run your flask app                                                                                                                 | `""`             |
-| `configurationConfigMap` | Name of an existing config map containing the Airflow config file                                                                                | `""`             |
-| `executor`               | Airflow executor, it should be one of 'SequentialExecutor', 'LocalExecutor', 'CeleryExecutor', 'KubernetesExecutor', 'CeleryKubernetesExecutor'  | `CeleryExecutor` |
-| `dagsConfigMap`          | Name of an existing config map containing all the DAGs files you want to load in Airflow                                                         | `""`             |
-| `loadExamples`           | Switch to load some Airflow examples                                                                                                             | `false`          |
+| Name                     | Description                                                                                                                                      | Value                   |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------- |
+| `auth.existingSecret`    | Name of an existing secret containing password, fernet key and secret key ('airflow-password', 'airflow-fernetKey' and 'airflow-secretKey' keys) | `""`                    |
+| `auth.fernetKey`         | Fernet key to secure connections                                                                                                                 | `""`                    |
+| `auth.forcePassword`     | Force users to specify a password                                                                                                                | `false`                 |
+| `auth.password`          | Password to access web UI                                                                                                                        | `""`                    |
+| `auth.username`          | Username to access web UI                                                                                                                        | `user`                  |
+| `auth.secretKey`         | Secret key to run your flask app                                                                                                                 | `""`                    |
+| `configurationConfigMap` | Name of an existing config map containing the Airflow config file                                                                                | `""`                    |
+| `executor`               | Airflow executor, it should be one of 'SequentialExecutor', 'LocalExecutor', 'CeleryExecutor', 'KubernetesExecutor', 'CeleryKubernetesExecutor'  | `CeleryExecutor`        |
+| `dags.configMap`         | Name of an existing config map containing all the DAGs files you want to load in Airflow                                                         | `""`                    |
+| `dags.image.registry`    | Container sidecar registry                                                                                                                       | `docker.io`             |
+| `dags.image.repository`  | Container sidecar image                                                                                                                          | `bitnami/bitnami-shell` |
+| `dags.image.tag`         | Container sidecar image tag                                                                                                                      | `10-debian-10-r225`     |
+| `dags.image.pullPolicy`  | Container sidecar image pull policy                                                                                                              | `IfNotPresent`          |
+| `loadExamples`           | Switch to load some Airflow examples                                                                                                             | `false`                 |
 
 
 ### Airflow web parameters
@@ -109,7 +113,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ---------------------------------------- | --------------------------------------------------------------------------- | -------------------- |
 | `web.image.registry`                     | Airflow image registry                                                      | `docker.io`          |
 | `web.image.repository`                   | Airflow image repository                                                    | `bitnami/airflow`    |
-| `web.image.tag`                          | Airflow image tag (immutable tags are recommended)                          | `2.1.4-debian-10-r5` |
+| `web.image.tag`                          | Airflow image tag (immutable tags are recommended)                          | `2.2.0-debian-10-r0` |
 | `web.image.pullPolicy`                   | Airflow image pull policy                                                   | `IfNotPresent`       |
 | `web.image.pullSecrets`                  | Airflow image pull secrets                                                  | `[]`                 |
 | `web.image.debug`                        | Enable image debug mode                                                     | `false`              |
@@ -163,7 +167,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------------- | ----------------------------------------------------------------------- | --------------------------- |
 | `scheduler.image.registry`                   | Airflow Scheduler image registry                                        | `docker.io`                 |
 | `scheduler.image.repository`                 | Airflow Scheduler image repository                                      | `bitnami/airflow-scheduler` |
-| `scheduler.image.tag`                        | Airflow Scheduler image tag (immutable tags are recommended)            | `2.1.4-debian-10-r10`       |
+| `scheduler.image.tag`                        | Airflow Scheduler image tag (immutable tags are recommended)            | `2.2.0-debian-10-r0`        |
 | `scheduler.image.pullPolicy`                 | Airflow Scheduler image pull policy                                     | `IfNotPresent`              |
 | `scheduler.image.pullSecrets`                | Airflow Scheduler image pull secrets                                    | `[]`                        |
 | `scheduler.image.debug`                      | Enable image debug mode                                                 | `false`                     |
@@ -196,7 +200,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ------------------------ |
 | `worker.image.registry`                     | Airflow Worker image registry                                                                                        | `docker.io`              |
 | `worker.image.repository`                   | Airflow Worker image repository                                                                                      | `bitnami/airflow-worker` |
-| `worker.image.tag`                          | Airflow Worker image tag (immutable tags are recommended)                                                            | `2.1.4-debian-10-r9`     |
+| `worker.image.tag`                          | Airflow Worker image tag (immutable tags are recommended)                                                            | `2.2.0-debian-10-r0`     |
 | `worker.image.pullPolicy`                   | Airflow Worker image pull policy                                                                                     | `IfNotPresent`           |
 | `worker.image.pullSecrets`                  | Airflow Worker image pull secrets                                                                                    | `[]`                     |
 | `worker.image.debug`                        | Enable image debug mode                                                                                              | `false`                  |
@@ -254,7 +258,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------ | -------------------------------------------------------------------------------------- | ---------------------- |
 | `git.image.registry`           | Git image registry                                                                     | `docker.io`            |
 | `git.image.repository`         | Git image repository                                                                   | `bitnami/git`          |
-| `git.image.tag`                | Git image tag (immutable tags are recommended)                                         | `2.33.0-debian-10-r45` |
+| `git.image.tag`                | Git image tag (immutable tags are recommended)                                         | `2.33.0-debian-10-r63` |
 | `git.image.pullPolicy`         | Git image pull policy                                                                  | `IfNotPresent`         |
 | `git.image.pullSecrets`        | Git image pull secrets                                                                 | `[]`                   |
 | `git.dags.enabled`             | Enable in order to download DAG files from git repositories.                           | `false`                |
@@ -345,7 +349,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                      | Start a side-car prometheus exporter                                      | `false`                       |
 | `metrics.image.registry`               | Airflow Exporter image registry                                           | `docker.io`                   |
 | `metrics.image.repository`             | Airflow Exporter image repository                                         | `bitnami/airflow-exporter`    |
-| `metrics.image.tag`                    | Airflow Exporter image tag (immutable tags are recommended)               | `0.20210126.0-debian-10-r231` |
+| `metrics.image.tag`                    | Airflow Exporter image tag (immutable tags are recommended)               | `0.20210126.0-debian-10-r250` |
 | `metrics.image.pullPolicy`             | Airflow Exporter image pull policy                                        | `IfNotPresent`                |
 | `metrics.image.pullSecrets`            | Airflow Exporter image pull secrets                                       | `[]`                          |
 | `metrics.hostAliases`                  | Deployment pod host aliases                                               | `[]`                          |
@@ -398,7 +402,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 A Fernet key is required in order to encrypt password within connections. The Fernet key must be a base64-encoded 32-byte key.
 
-Learn how to generate one [here](https://bcb.github.io/airflow/fernet-key)
+Learn how to generate one [here](https://airflow.apache.org/docs/apache-airflow/stable/security/secrets/fernet.html#generating-fernet-key)
 
 ### Generate a Secret key
 
