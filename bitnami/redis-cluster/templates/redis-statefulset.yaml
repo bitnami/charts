@@ -330,7 +330,7 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.redis.sidecars "context" $ ) | nindent 8 }}
         {{- end }}
       {{- $needsVolumePermissions := and .Values.volumePermissions.enabled (and  .Values.persistence.enabled .Values.containerSecurityContext.enabled) }}
-      {{- if or $needsVolumePermissions (or .Values.redis.initContainers .Values.sysctlImage.enabled) }}
+      {{- if or $needsVolumePermissions .Values.sysctlImage.enabled .Values.redis.initContainers }}
       initContainers:
         {{- if $needsVolumePermissions }}
         - name: volume-permissions
