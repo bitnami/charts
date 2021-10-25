@@ -17,41 +17,41 @@ spec:
   ingress:
     {{- if .Values.ingress.enabled }}
     - from:
-        {{- if .Values.networkPolicy.ingress.namespaceLabel }}
+        {{- if .Values.networkPolicy.ingress.namespaceSelector }}
         - namespaceSelector:
             matchLabels:
-              {{- include "common.tplvalues.render" (dict "value" .Values.networkPolicy.ingress.namespaceLabel "context" $) | nindent 14 }}
+              {{- include "common.tplvalues.render" (dict "value" .Values.networkPolicy.ingress.namespaceSelector "context" $) | nindent 14 }}
         {{- end }}
-        {{- if .Values.networkPolicy.ingress.podLabel }}
+        {{- if .Values.networkPolicy.ingress.podSelector }}
         - podSelector:
             matchLabels:
-              {{- include "common.tplvalues.render" (dict "value" .Values.networkPolicy.ingress.podLabel "context" $) | nindent 14 }}
+              {{- include "common.tplvalues.render" (dict "value" .Values.networkPolicy.ingress.podSelector "context" $) | nindent 14 }}
         {{- end}}
     {{- end }}
     {{- if .Values.metrics.enabled }}
     - from:
-        {{- if .Values.networkPolicy.metrics.namespaceLabel }}
+        {{- if .Values.networkPolicy.metrics.namespaceSelector }}
         - namespaceSelector:
             matchLabels:
-              {{- include "common.tplvalues.render" (dict "value" .Values.networkPolicy.metrics.namespaceLabel "context" $) | nindent 14 }}
+              {{- include "common.tplvalues.render" (dict "value" .Values.networkPolicy.metrics.namespaceSelector "context" $) | nindent 14 }}
         {{- end }}
-        {{- if .Values.networkPolicy.metrics.podLabel }}
+        {{- if .Values.networkPolicy.metrics.podSelector }}
         - podSelector:
             matchLabels:
-              {{- include "common.tplvalues.render" (dict "value" .Values.networkPolicy.metrics.podLabel "context" $) | nindent 14 }}
+              {{- include "common.tplvalues.render" (dict "value" .Values.networkPolicy.metrics.podSelector "context" $) | nindent 14 }}
         {{- end }}
     {{- end }}
-    {{- if .Values.networkPolicy.ingressRules.allowOnlyFrom.enabled }}
+    {{- if .Values.networkPolicy.ingressRules.accessOnlyFrom.enabled }}
     - from:
-        {{- if .Values.networkPolicy.ingressRules.allowOnlyFrom.namespaceLabel }}
+        {{- if .Values.networkPolicy.ingressRules.accessOnlyFrom.namespaceSelector }}
         - namespaceSelector:
             matchLabels:
-              {{- include "common.tplvalues.render" (dict "value" .Values.networkPolicy.ingressRules.allowOnlyFrom.namespaceLabel "context" $) | nindent 14 }}
+              {{- include "common.tplvalues.render" (dict "value" .Values.networkPolicy.ingressRules.accessOnlyFrom.namespaceSelector "context" $) | nindent 14 }}
         {{- end }}
-        {{- if .Values.networkPolicy.ingressRules.allowOnlyFrom.podLabel }}
+        {{- if .Values.networkPolicy.ingressRules.accessOnlyFrom.podSelector }}
         - PodSelector:
             matchLabels:
-              {{- include "common.tplvalues.render" (dict "value" .Values.networkPolicy.ingressRules.allowOnlyFrom.podLabel "context" $) | nindent 14 }}
+              {{- include "common.tplvalues.render" (dict "value" .Values.networkPolicy.ingressRules.accessOnlyFrom.podSelector "context" $) | nindent 14 }}
         {{- end }}
     {{- end }}
     {{- if .Values.networkPolicy.ingressRules.customRules }}

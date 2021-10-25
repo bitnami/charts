@@ -246,23 +246,23 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### NetworkPolicy parameters
 
-| Name                                                        | Description                                                                                                         | Value   |
-| ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------- |
-| `networkPolicy.enabled`                                     | Enable network policies                                                                                             | `false` |
-| `networkPolicy.metrics.enabled`                             | Enable network policy for metrics (prometheus)                                                                      | `true`  |
-| `networkPolicy.metrics.namespaceLabel`                      | Monitoring namespace's label. This label will be used to identify the prometheus' namespace.                        | `{}`    |
-| `networkPolicy.metrics.podLabel`                            | Monitoring namespace's label. This label will be used to identify the prometheus' namespace.                        | `{}`    |
-| `networkPolicy.ingress.enabled`                             | Enable network policy for Ingres Proxy                                                                              | `true`  |
-| `networkPolicy.ingress.namespaceLabel`                      | Monitoring namespace's label. This label will be used to identify the prometheus' namespace.                        | `{}`    |
-| `networkPolicy.ingress.podLabel`                            | Monitoring namespace's label. This label will be used to identify the prometheus' namespace.                        | `{}`    |
-| `networkPolicy.ingressRules.backendOnlyAccesibleByFrontend` | Enable ingress rule that makes the backend (mariadb) only accesible by drupal's pods.                               | `false` |
-| `networkPolicy.ingressRules.backendLabel`                   | Backend's label                                                                                                     | `{}`    |
-| `networkPolicy.ingressRules.allowOnlyFrom.enabled`          | Enable ingress rule that makes druapl only accesible from a particular origin                                       | `false` |
-| `networkPolicy.ingressRules.allowOnlyFrom.namespaceLabel`   | Namespace's label that is allowed to access drupal. This label will be used to identified the allowed namespace(s). | `{}`    |
-| `networkPolicy.ingressRules.allowOnlyFrom.podLabel`         | Namespace's label that is allowed to access drupal. This label will be used to identified the allowed namespace(s). | `{}`    |
-| `networkPolicy.ingressRules.customRules`                    | Custom network policy rule                                                                                          | `{}`    |
-| `networkPolicy.egressRules.denyConnectionsToExternal`       | Disable the connection to outside of the namespace.                                                                 | `false` |
-| `networkPolicy.egressRules.customRules`                     | Custom network policy rule                                                                                          | `{}`    |
+| Name                                                          | Description                                                                                                                | Value   |
+| ------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `networkPolicy.enabled`                                       | Enable network policies                                                                                                    | `false` |
+| `networkPolicy.metrics.enabled`                               | Enable network policy for metrics (prometheus)                                                                             | `true`  |
+| `networkPolicy.metrics.namespaceSelector`                     | Monitoring namespace selector label. This label will be used to identify the prometheus' namespace.                        | `{}`    |
+| `networkPolicy.metrics.podSelector`                           | Monitoring pods selector label. This label will be used to identify the Propmetheus pods.                                  | `{}`    |
+| `networkPolicy.ingress.enabled`                               | Enable network policy for Ingress Proxy                                                                                    | `true`  |
+| `networkPolicy.ingress.namespaceSelector`                     | Monitoring namespace selector label. This label will be used to identify the Ingress Proxy's namespace.                    | `{}`    |
+| `networkPolicy.ingress.podSelector`                           | Monitoring pods selector label. This label will be used to identify the Ingress Proxy pods.                                | `{}`    |
+| `networkPolicy.ingressRules.backendOnlyAccessibleByFrontend`  | Enable ingress rule that makes the backend (mariadb) only accesible by drupal's pods.                                      | `false` |
+| `networkPolicy.ingressRules.backendSelector`                  | Backend selector label                                                                                                     | `{}`    |
+| `networkPolicy.ingressRules.accessOnlyFrom.enabled`           | Enable ingress rule that makes druapl only accesible from a particular origin                                              | `false` |
+| `networkPolicy.ingressRules.accessOnlyFrom.namespaceSelector` | Namespace selector label that is allowed to access drupal. This label will be used to identified the allowed namespace(s). | `{}`    |
+| `networkPolicy.ingressRules.accessOnlyFrom.podSelector`       | Pods selector label that is allowed to access drupal. This label will be used to identified the allowed pod(s).            | `{}`    |
+| `networkPolicy.ingressRules.customRules`                      | Custom network policy rule                                                                                                 | `{}`    |
+| `networkPolicy.egressRules.denyConnectionsToExternal`         | Disable the connection to outside of the namespace.                                                                        | `false` |
+| `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                 | `{}`    |
 
 
 The above parameters map to the env variables defined in [bitnami/drupal](http://github.com/bitnami/bitnami-docker-drupal). For more information please refer to the [bitnami/drupal](http://github.com/bitnami/bitnami-docker-drupal) image documentation.
