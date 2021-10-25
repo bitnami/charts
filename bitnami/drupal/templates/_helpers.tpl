@@ -7,7 +7,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*
-Kubernetes standard labels
+Labels to select all the pods to which outgoing communication are allowed
 */}}
 {{- define "networkPolicy.outgoingSelectorLabels" -}}
 app.kubernetes.io/instance: {{ .Release.Name }}

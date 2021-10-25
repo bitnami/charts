@@ -670,7 +670,7 @@ networkPolicy:
   enabled: false
   ## @param networkPolicy.metrics.enabled Enable network policy for metrics (prometheus)
   ## @param networkPolicy.metrics.namespaceSelector [object] Monitoring namespace selector label. This label will be used to identify the prometheus' namespace.
-  ## @param networkPolicy.metrics.podSelector [object] Monitoring pods selector label. This label will be used to identify the Propmetheus pods.
+  ## @param networkPolicy.metrics.podSelector [object] Monitoring pods selector label. This label will be used to identify the Prometheus pods.
   ##
   metrics:
     enabled: true
@@ -735,7 +735,7 @@ networkPolicy:
     ##           matchLabels:
     ##             label: example
     customRules: {}
-  ## @param networkPolicy.egressRules.denyConnectionsToExternal Disable the connection to outside of the namespace.
+  ## @param networkPolicy.egressRules.denyConnectionsToExternal Enable egress rule that denies outgoing traffic outside the namespace.
   ## @param networkPolicy.egressRules.customRules [object] Custom network policy rule
   ##
   egressRules:
