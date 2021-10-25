@@ -87,6 +87,9 @@ tomcatPassword: ""
 ## ref: https://github.com/bitnami/charts/tree/master/bitnami/tomcat#configuration
 ##
 tomcatAllowRemoteManagement: 0
+## @param catalinaOpts Java runtime option used by tomcat JVM
+##
+catalinaOpts: ""
 ## @param command Override default container command (useful when using custom images)
 ##
 command: []
@@ -487,3 +490,120 @@ volumePermissions:
     ##    cpu: 100m
     ##    memory: 128Mi
     requests: {}
+
+## @section Metrics parameters
+
+## Prometheus Exporters / Metrics
+##
+metrics:
+  ## Prometheus JMX Exporter: exposes the majority of tomcat jvm metrics
+  ##
+  jmx:
+    ## @param metrics.jmx.enabled Whether or not to expose JMX metrics to Prometheus
+    ##
+    enabled: false
+    ## @param metrics.jmx.catalinaOpts custom option used to enabled JMX on tomcat jvm evaluated as template
+    ##
+    catalinaOpts: -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=5555 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.local.only=true
+    ## Bitnami JMX exporter image
+    ## ref: https://hub.docker.com/r/bitnami/jmx-exporter/tags/
+    ## @param metrics.jmx.image.registry JMX exporter image registry
+    ## @param metrics.jmx.image.repository JMX exporter image repository
+    ## @param metrics.jmx.image.tag JMX exporter image tag (immutable tags are recommended)
+    ## @param metrics.jmx.image.pullPolicy JMX exporter image pull policy
+    ## @param metrics.jmx.image.pullSecrets Specify docker-registry secret names as an array
+    ##
+    image:
+      registry: docker.io
+      repository: bitnami/jmx-exporter
+      tag: 0.16.1-debian-10-r73
+      ## Specify a imagePullPolicy
+      ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+      ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+      ##
+      pullPolicy: IfNotPresent
+      ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
+      ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+      ## Example:
+      ## pullSecrets:
+      ##   - myRegistryKeySecretName
+      ##
+      pullSecrets: []
+    ## @param metrics.jmx.config [string] Configuration file for JMX exporter
+    ## Specify content for jmx-tomcat-prometheus.yml. Evaluated as a template
+    ##
+    config: |
+      jmxUrl: service:jmx:rmi:///jndi/rmi://127.0.0.1:5555/jmxrmi
+      startDelaySecs: 120
+      ssl: false
+      lowercaseOutputName: true
+      lowercaseOutputLabelNames: true
+      attrNameSnakeCase: true
+    ## Prometheus JMX Exporter' resource requests and limits
+    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ## We usually recommend not to specify default resources and to leave this as a conscious
+    ## choice for the user. This also increases chances charts run on environments with little
+    ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+    ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ## @param metrics.jmx.resources.limits JMX Exporter container resource limits
+    ## @param metrics.jmx.resources.requests JMX Exporter container resource requests
+    ##
+    resources:
+      ## Example:
+      ## limits:
+      ##    cpu: 100m
+      ##    memory: 128Mi
+      limits: {}
+      ## Examples:
+      ## requests:
+      ##    cpu: 100m
+      ##    memory: 128Mi
+      requests: {}
+    ## @param metrics.jmx.ports.metrics JMX Exporter container metrics ports
+    ##
+    ports:
+      metrics: 5556
+    ## @param metrics.jmx.existingConfigmap Name of existing ConfigMap with JMX exporter configuration
+    ## NOTE: This will override metrics.jmx.config
+    ##
+    existingConfigmap: ""
+  ## Prometheus pod Monitor
+  ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#podmonitorspec
+  ##
+  podMonitor:
+    ## @param metrics.podMonitor.podTargetLabels Used to keep given pod's labels in target
+    ## e.g:
+    ## - app.kubernetes.io/name
+    ##
+    podTargetLabels: []
+    ## @param metrics.podMonitor.enabled Create PodMonitor Resource for scraping metrics using PrometheusOperator
+    ##
+    enabled: false
+    ## @param metrics.podMonitor.namespace Namespace in which Prometheus is running
+    ##
+    namespace: monitoring
+    ## @param metrics.podMonitor.interval Specify the interval at which metrics should be scraped
+    ##
+    interval: 30s
+    ## @param metrics.podMonitor.scrapeTimeout Specify the timeout after which the scrape is ended
+    ##
+    scrapeTimeout: 30s
+    ## @param metrics.podMonitor.additionalLabels [object] Additional labels that can be used so PodMonitors will be discovered by Prometheus
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
+    ##
+    additionalLabels: {}
+    ## @param metrics.podMonitor.scheme Scheme to use for scraping
+    ##
+    scheme: http
+    ## @param metrics.podMonitor.tlsConfig [object] TLS configuration used for scrape endpoints used by Prometheus
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#tlsconfig
+    ## e.g:
+    ## tlsConfig:
+    ##   ca:
+    ##     secret:
+    ##       name: existingSecretName
+    ##
+    tlsConfig: {}
+    ## @param metrics.podMonitor.relabelings [array] Prometheus relabeling rules
+    ##
+    relabelings: []

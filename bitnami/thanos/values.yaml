@@ -30,9 +30,15 @@ fullnameOverride: ""
 ## @param commonLabels Add labels to all the deployed resources
 ##
 commonLabels: {}
+## @param commonAnnotations Add annotations to all the deployed resources
+##
+commonAnnotations: {}
 ## @param clusterDomain Kubernetes Cluster Domain
 ##
 clusterDomain: cluster.local
+## @param extraDeploy Array of extra objects to deploy with the release
+##
+extraDeploy: []
 
 ## @section Thanos common parameters
 
@@ -47,7 +53,7 @@ clusterDomain: cluster.local
 image:
   registry: docker.io
   repository: bitnami/thanos
-  tag: 0.23.1-scratch-r0
+  tag: 0.23.1-scratch-r1
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -102,6 +108,9 @@ query:
     ## @param query.serviceAccount.existingServiceAccount Provide an existing service account for query
     ##
     existingServiceAccount: ""
+    ## @param query.serviceAccount.automountServiceAccountToken Enable/disable auto mounting of the service account token
+    ##
+    automountServiceAccountToken: true
   ## @param query.hostAliases Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -138,7 +147,7 @@ query:
   ## NOTE: This will override query.sdConfig
   ##
   existingSDConfigmap: ""
-  ## @param query.extraContainers Extra containers running as sidecars to Thanos query
+  ## @param query.sidecars Extra containers running as sidecars to Thanos query pods
   ## Example:
   ## - name: oAuth2-proxy
   ##   args:
@@ -159,10 +168,10 @@ query:
   ##     - mountPath: /secrets/proxy-tls
   ##       name: secret-proxy-tls
   ##
-  extraContainers: []
-  ## @param query.extraEnv Extra environment variables for Thanos query container
+  sidecars: []
+  ## @param query.extraEnvVars Extra environment variables for Thanos query container
   ##
-  ## extraEnv:
+  ## extraEnvVars:
   ## - name: VARNAME1
   ##   value: value1
   ## - name: VARNAME2
@@ -171,7 +180,7 @@ query:
   ##       name: existing-secret
   ##       key: varname2-key
   ##
-  extraEnv: []
+  extraEnvVars: []
   ## @param query.extraVolumes Extra volumes to add to Thanos Query
   ##
   extraVolumes: []
@@ -184,9 +193,10 @@ query:
   ## @param query.replicaCount Number of Thanos Query replicas to deploy
   ##
   replicaCount: 1
-  ## @param query.strategyType Deployment Strategy Type, can be set to RollingUpdate or Recreate by default
+  ## @param query.updateStrategy.type Update strategy type for Thanos Query replicas
   ##
-  strategyType: RollingUpdate
+  updateStrategy:
+    type: RollingUpdate
   ## @param query.podAffinityPreset Thanos Query pod affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
@@ -388,30 +398,24 @@ query:
     ## @param query.service.type Kubernetes service type
     ##
     type: ClusterIP
+    ## @param query.service.ports.http Thanos Query service HTTP port
+    ## @param query.service.ports.grpc Thanos Query service GRPC port
+    ##
+    ports:
+      http: 9090
+      grpc: 10901
+    ## @param query.service.nodePorts.http Specify the Thanos Query HTTP nodePort value for the LoadBalancer and NodePort service types
+    ## @param query.service.nodePorts.grpc Specify the Thanos Query GRPC nodePort value for the LoadBalancer and NodePort service types
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+    ##
+    nodePorts:
+      http: ""
+      grpc: ""
     ## @param query.service.clusterIP Thanos Query service clusterIP IP
     ## e.g:
     ## clusterIP: None
     ##
     clusterIP: ""
-    http:
-      ## @param query.service.http.port Service HTTP port
-      ##
-      port: 9090
-      ## @param query.service.http.nodePort Service HTTP node port
-      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
-      ##
-      nodePort: ""
-    ## @param query.service.targetPort Service targetPort override
-    ##
-    targetPort: http
-    grpc:
-      ## @param query.service.grpc.port Service GRPC port
-      ##
-      port: 10901
-      ## @param query.service.grpc.nodePort Service GRPC node port
-      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
-      ##
-      nodePort: ""
     ## @param query.service.loadBalancerIP Load balancer IP if service type is `LoadBalancer`
     ## Set the LoadBalancer service type to internal only
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
@@ -431,6 +435,9 @@ query:
     ## @param query.service.annotations Annotations for Thanos Query service
     ##
     annotations: {}
+    ## @param query.service.extraPorts Extra ports to expose in the Thanos Query service
+    ##
+    extraPorts: []
     ## @param query.service.labelSelectorsOverride Selector for Thanos query service
     ##
     labelSelectorsOverride: {}
@@ -467,10 +474,6 @@ query:
     ## @param query.ingress.enabled Enable ingress controller resource
     ##
     enabled: false
-    ## DEPRECATED: Use query.ingress.annotations instead of query.ingress.certManager
-    ## certManager: false
-    ##
-
     ## @param query.ingress.hostname Default host for the ingress resource
     ##
     hostname: thanos.local
@@ -522,10 +525,17 @@ query:
     ##   certificate:
     ##
     secrets: []
-    ## @param query.ingress.tls Create ingress TLS section
-    ## When specifying cert-manager.io/cluster-issuer: nameOfClusterIssuer annotation, enable tls for ingress
+    ## @param query.ingress.tls Enable TLS configuration for the hostname defined at `query.ingress.hostname` parameter
+    ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.query.ingress.hostname }}`
+    ## You can:
+    ##   - Use the `query.ingress.secrets` parameter to create this TLS secret
+    ##   - Relay on cert-manager to create it by setting the corresponding annotations
+    ##   - Relay on Helm to create self-signed certificates by setting `query.ingress.selfSigned=true`
     ##
     tls: false
+    ## @param query.ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
+    ##
+    selfSigned: false
     ## @param query.ingress.apiVersion Force Ingress API version (automatically detected if not set)
     ##
     apiVersion: ""
@@ -549,13 +559,14 @@ query:
       ## @param query.ingress.grpc.enabled Enable ingress controller resource (GRPC)
       ##
       enabled: false
-      ## DEPRECATED: Use query.ingress.grpc.annotations instead of query.ingress.grpc.certManager
-      ## certManager: false
-      ##
-
       ## @param query.ingress.grpc.hostname Default host for the ingress resource (GRPC)
       ##
       hostname: thanos-grpc.local
+      ## @param query.ingress.grpc.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+      ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+      ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+      ##
+      ingressClassName: ""
       ## @param query.ingress.grpc.annotations Additional annotations for the Ingress resource (GRPC). To enable certificate autogeneration, place here your cert-manager annotations.
       ## For a full list of possible ingress annotations, please see
       ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
@@ -597,6 +608,17 @@ query:
       ##   certificate:
       ##
       secrets: []
+      ## @param query.ingress.grpc.tls Enable TLS configuration for the hostname defined at `query.ingress.grpc.hostname` parameter
+      ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.query.ingress.grpc.hostname }}`
+      ## You can:
+      ##   - Use the `query.ingress.grpc.secrets` parameter to create this TLS secret
+      ##   - Relay on cert-manager to create it by setting the corresponding annotations
+      ##   - Relay on Helm to create self-signed certificates by setting `query.ingress.grpc.selfSigned=true`
+      ##
+      tls: false
+      ## @param query.ingress.grpc.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
+      ##
+      selfSigned: false
       ## @param query.ingress.grpc.apiVersion Override API Version (automatically detected if not set)
       ##
       apiVersion: ""
@@ -626,11 +648,14 @@ queryFrontend:
     ## @param queryFrontend.serviceAccount.existingServiceAccount Provide an existing service account for Query Frontend
     ##
     existingServiceAccount: ""
+    ## @param queryFrontend.serviceAccount.automountServiceAccountToken Enable/disable auto mounting of the service account token
+    ##
+    automountServiceAccountToken: true
   ## @param queryFrontend.hostAliases Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
-  ## @param queryFrontend.extraContainers Extra containers running as sidecars to Thanos Query Frontend container
+  ## @param queryFrontend.sidecars Extra containers running as sidecars to Thanos Query Frontend pods
   ## Example:
   ## - name: oAuth2-proxy
   ##   args:
@@ -651,10 +676,10 @@ queryFrontend:
   ##     - mountPath: /secrets/proxy-tls
   ##       name: secret-proxy-tls
   ##
-  extraContainers: []
-  ## @param queryFrontend.extraEnv Extra environment variables for Thanos Query Frontend container
+  sidecars: []
+  ## @param queryFrontend.extraEnvVars Extra environment variables for Thanos Query Frontend container
   ##
-  ## extraEnv:
+  ## extraEnvVars:
   ## - name: VARNAME1
   ##   value: value1
   ## - name: VARNAME2
@@ -663,7 +688,7 @@ queryFrontend:
   ##       name: existing-secret
   ##       key: varname2-key
   ##
-  extraEnv: []
+  extraEnvVars: []
   ## @param queryFrontend.extraVolumes Extra volumes to add to Thanos Query Frontend
   ##
   extraVolumes: []
@@ -684,9 +709,10 @@ queryFrontend:
   ## @param queryFrontend.replicaCount Number of Thanos Query Frontend replicas to deploy
   ##
   replicaCount: 1
-  ## @param queryFrontend.strategyType Deployment Strategy Type, can be set to RollingUpdate or Recreate by default
+  ## @param queryFrontend.updateStrategy.type Update strategy type for Thanos Query Frontend replicas
   ##
-  strategyType: RollingUpdate
+  updateStrategy:
+    type: RollingUpdate
   ## @param queryFrontend.podAffinityPreset Thanos Query Frontend pod affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
@@ -825,22 +851,20 @@ queryFrontend:
     ## @param queryFrontend.service.type Kubernetes service type
     ##
     type: ClusterIP
+    ## @param queryFrontend.service.ports.http Thanos Query Frontend service HTTP port
+    ##
+    ports:
+      http: 9090
+    ## @param queryFrontend.service.nodePorts.http Specify the Thanos Query Frontend HTTP nodePort value for the LoadBalancer and NodePort service types
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+    ##
+    nodePorts:
+      http: ""
     ## @param queryFrontend.service.clusterIP Thanos Query Frontend service clusterIP IP
     ## e.g:
     ## clusterIP: None
     ##
     clusterIP: ""
-    http:
-      ## @param queryFrontend.service.http.port Service HTTP port
-      ##
-      port: 9090
-      ## @param queryFrontend.service.http.nodePort Service HTTP node port
-      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
-      ##
-      nodePort: ""
-    ## @param queryFrontend.service.targetPort Service targetPort override
-    ##
-    targetPort: http
     ## @param queryFrontend.service.loadBalancerIP Load balancer IP if service type is `LoadBalancer`
     ## Set the LoadBalancer service type to internal only
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
@@ -860,6 +884,9 @@ queryFrontend:
     ## @param queryFrontend.service.annotations Annotations for Thanos Query Frontend service
     ##
     annotations: {}
+    ## @param queryFrontend.service.extraPorts Extra ports to expose in the Thanos Query Frontend service
+    ##
+    extraPorts: []
     ## @param queryFrontend.service.labelSelectorsOverride Selector for Thanos query service
     ##
     labelSelectorsOverride: {}
@@ -896,10 +923,6 @@ queryFrontend:
     ## @param queryFrontend.ingress.enabled Enable ingress controller resource
     ##
     enabled: false
-    ## DEPRECATED: Use queryFrontend.ingress.annotations instead of queryFrontend.ingress.certManager
-    ## certManager: false
-    ##
-
     ## @param queryFrontend.ingress.hostname Default host for the ingress resource
     ##
     hostname: thanos.local
@@ -951,10 +974,17 @@ queryFrontend:
     ##   certificate:
     ##
     secrets: []
-    ## @param queryFrontend.ingress.tls Create ingress TLS section
-    ## When specifying cert-manager.io/cluster-issuer: nameOfClusterIssuer annotation, enable tls for ingress
+    ## @param queryFrontend.ingress.tls Enable TLS configuration for the hostname defined at `queryFrontend.ingress.hostname` parameter
+    ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.queryFrontend.ingress.hostname }}`
+    ## You can:
+    ##   - Use the `queryFrontend.ingress.secrets` parameter to create this TLS secret
+    ##   - Relay on cert-manager to create it by setting the corresponding annotations
+    ##   - Relay on Helm to create self-signed certificates by setting `queryFrontend.ingress.selfSigned=true`
     ##
     tls: false
+    ## @param queryFrontend.ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
+    ##
+    selfSigned: false
     ## @param queryFrontend.ingress.apiVersion Force Ingress API version (automatically detected if not set)
     ##
     apiVersion: ""
@@ -984,6 +1014,9 @@ bucketweb:
     ## @param bucketweb.serviceAccount.existingServiceAccount Name for an existing Thanos Bucket Web Service Account
     ##
     existingServiceAccount: ""
+    ## @param bucketweb.serviceAccount.automountServiceAccountToken Enable/disable auto mounting of the service account token
+    ##
+    automountServiceAccountToken: true
   ## @param bucketweb.refresh Refresh interval to download metadata from remote storage
   ##
   refresh: 30m
@@ -994,7 +1027,7 @@ bucketweb:
   ## @param bucketweb.timeout Timeout to download metadata from remote storage
   ##
   timeout: 5m
-  ## @param bucketweb.extraContainers Extra containers running as sidecars to Thanos Bucket Web container
+  ## @param bucketweb.sidecars Extra containers running as sidecars to Thanos Bucket Web pods
   ## Example:
   ## - name: oAuth2-proxy
   ##   args:
@@ -1015,10 +1048,10 @@ bucketweb:
   ##     - mountPath: /secrets/proxy-tls
   ##       name: secret-proxy-tls
   ##
-  extraContainers: []
-  ## @param bucketweb.extraEnv Extra environment variables for Thanos Bucket Web container
+  sidecars: []
+  ## @param bucketweb.extraEnvVars Extra environment variables for Thanos Bucket Web container
   ##
-  ## extraEnv:
+  ## extraEnvVars:
   ## - name: VARNAME1
   ##   value: value1
   ## - name: VARNAME2
@@ -1027,7 +1060,7 @@ bucketweb:
   ##       name: existing-secret
   ##       key: varname2-key
   ##
-  extraEnv: []
+  extraEnvVars: []
   ## @param bucketweb.extraVolumes Extra volumes to add to Bucket Web
   ##
   extraVolumes: []
@@ -1040,9 +1073,10 @@ bucketweb:
   ## @param bucketweb.replicaCount Number of Thanos Bucket Web replicas to deploy
   ##
   replicaCount: 1
-  ## @param bucketweb.strategyType Deployment Strategy Type, can be set to RollingUpdate or Recreate by default
+  ## @param bucketweb.updateStrategy.type Update strategy type for Thanos Bucket Web replicas
   ##
-  strategyType: RollingUpdate
+  updateStrategy:
+    type: RollingUpdate
   ## @param bucketweb.podAffinityPreset Thanos Bucket Web pod affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
@@ -1175,22 +1209,20 @@ bucketweb:
     ## @param bucketweb.service.type Kubernetes service type
     ##
     type: ClusterIP
+    ## @param bucketweb.service.ports.http Thanos Bucket Web service HTTP port
+    ##
+    ports:
+      http: 8080
+    ## @param bucketweb.service.nodePorts.http Specify the Thanos Bucket Web HTTP nodePort value for the LoadBalancer and NodePort service types
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+    ##
+    nodePorts:
+      http: ""
     ## @param bucketweb.service.clusterIP Thanos Bucket Web service clusterIP IP
     ## e.g:
     ## clusterIP: None
     ##
     clusterIP: ""
-    http:
-      ## @param bucketweb.service.http.port Service HTTP port
-      ##
-      port: 8080
-      ## @param bucketweb.service.http.nodePort Service HTTP node port
-      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
-      ##
-      nodePort: ""
-    ## @param bucketweb.service.targetPort Service targetPort override
-    ##
-    targetPort: http
     ## @param bucketweb.service.loadBalancerIP Load balancer IP if service type is `LoadBalancer`
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
@@ -1208,6 +1240,9 @@ bucketweb:
     ## @param bucketweb.service.annotations Annotations for Thanos Bucket Web service
     ##
     annotations: {}
+    ## @param bucketweb.service.extraPorts Extra ports to expose in the Thanos Bucket Web service
+    ##
+    extraPorts: []
     ## @param bucketweb.service.labelSelectorsOverride Selector for Thanos query service
     ##
     labelSelectorsOverride: {}
@@ -1231,10 +1266,6 @@ bucketweb:
     ## @param bucketweb.ingress.enabled Enable ingress controller resource
     ##
     enabled: false
-    ## DEPRECATED: Use bucketweb.ingress.annotations instead of bucketweb.ingress.certManager
-    ## certManager: false
-    ##
-
     ## @param bucketweb.ingress.hostname Default host for the ingress resource
     ##
     hostname: thanos-bucketweb.local
@@ -1286,10 +1317,17 @@ bucketweb:
     ##   certificate:
     ##
     secrets: []
-    ## @param bucketweb.ingress.tls Create ingress TLS section
-    ## When specifying cert-manager.io/cluster-issuer: nameOfClusterIssuer annotation, enable tls for ingress
+    ## @param bucketweb.ingress.tls Enable TLS configuration for the hostname defined at `bucketweb.ingress.hostname` parameter
+    ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.bucketweb.ingress.hostname }}`
+    ## You can:
+    ##   - Use the `bucketweb.ingress.secrets` parameter to create this TLS secret
+    ##   - Relay on cert-manager to create it by setting the corresponding annotations
+    ##   - Relay on Helm to create self-signed certificates by setting `bucketweb.ingress.selfSigned=true`
     ##
     tls: false
+    ## @param bucketweb.ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
+    ##
+    selfSigned: false
     ## @param bucketweb.ingress.apiVersion Force Ingress API version (automatically detected if not set)
     ##
     apiVersion: ""
@@ -1319,6 +1357,9 @@ compactor:
     ## @param compactor.serviceAccount.existingServiceAccount Name for an existing Thanos Compactor Service Account
     ##
     existingServiceAccount: ""
+    ## @param compactor.serviceAccount.automountServiceAccountToken Enable/disable auto mounting of the service account token
+    ##
+    automountServiceAccountToken: true
   ## @param compactor.hostAliases Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1334,9 +1375,20 @@ compactor:
   ## @param compactor.consistencyDelay Minimum age of fresh (non-compacted) blocks before they are being processed
   ##
   consistencyDelay: 30m
-  ## @param compactor.extraEnv Extra environment variables for Thanos Compactor container
+  ## @param compactor.sidecars Extra containers running as sidecars to Thanos Compactor pods
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
   ##
-  ## extraEnv:
+  sidecars: []
+  ## @param compactor.extraEnvVars Extra environment variables for Thanos Compactor container
+  ##
+  ## extraEnvVars:
   ## - name: VARNAME1
   ##   value: value1
   ## - name: VARNAME2
@@ -1345,7 +1397,7 @@ compactor:
   ##       name: existing-secret
   ##       key: varname2-key
   ##
-  extraEnv: []
+  extraEnvVars: []
   ## @param compactor.extraVolumes Extra volumes to add to Thanos Compactor
   ##
   extraVolumes: []
@@ -1355,9 +1407,10 @@ compactor:
   ## @param compactor.extraFlags Extra Flags to passed to Thanos Compactor
   ##
   extraFlags: []
-  ## @param compactor.strategyType Deployment Strategy Type, can be set to RollingUpdate or Recreate by default
+  ## @param compactor.updateStrategy.type Update strategy type for Thanos Compactor replicas
   ##
-  strategyType: Recreate
+  updateStrategy:
+    type: Recreate
   ## @param compactor.podAffinityPreset Thanos Compactor pod affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
@@ -1490,19 +1543,20 @@ compactor:
     ## @param compactor.service.type Kubernetes service type
     ##
     type: ClusterIP
+    ## @param compactor.service.ports.http Thanos Compactor service HTTP port
+    ##
+    ports:
+      http: 9090
+    ## @param compactor.service.nodePorts.http Specify the Thanos Compactor HTTP nodePort value for the LoadBalancer and NodePort service types
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+    ##
+    nodePorts:
+      http: ""
     ## @param compactor.service.clusterIP Thanos Compactor service clusterIP IP
     ## e.g:
     ## clusterIP: None
     ##
     clusterIP: ""
-    http:
-      ## @param compactor.service.http.port Service HTTP port
-      ##
-      port: 9090
-      ## @param compactor.service.http.nodePort Service HTTP node port
-      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
-      ##
-      nodePort: ""
     ## @param compactor.service.loadBalancerIP Load balancer IP if service type is `LoadBalancer`
     ## Set the LoadBalancer service type to internal only
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
@@ -1522,6 +1576,9 @@ compactor:
     ## @param compactor.service.annotations Annotations for Thanos Compactor service
     ##
     annotations: {}
+    ## @param compactor.service.extraPorts Extra ports to expose in the Thanos Compactor service
+    ##
+    extraPorts: []
     ## @param compactor.service.labelSelectorsOverride Selector for Thanos query service
     ##
     labelSelectorsOverride: {}
@@ -1533,10 +1590,6 @@ compactor:
     ## @param compactor.ingress.enabled Enable ingress controller resource
     ##
     enabled: false
-    ## DEPRECATED: Use compactor.ingress.annotations instead of compactor.ingress.certManager
-    ## certManager: false
-    ##
-
     ## @param compactor.ingress.hostname Default host for the ingress resource
     ##
     hostname: thanos-compactor.local
@@ -1588,10 +1641,17 @@ compactor:
     ##   certificate:
     ##
     secrets: []
-    ## @param compactor.ingress.tls Create ingress TLS section
-    ## When specifying cert-manager.io/cluster-issuer: nameOfClusterIssuer annotation, enable tls for ingress
+    ## @param compactor.ingress.tls Enable TLS configuration for the hostname defined at `compactor.ingress.hostname` parameter
+    ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.compactor.ingress.hostname }}`
+    ## You can:
+    ##   - Use the `compactor.ingress.secrets` parameter to create this TLS secret
+    ##   - Relay on cert-manager to create it by setting the corresponding annotations
+    ##   - Relay on Helm to create self-signed certificates by setting `compactor.ingress.selfSigned=true`
     ##
     tls: false
+    ## @param compactor.ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
+    ##
+    selfSigned: false
     ## @param compactor.ingress.apiVersion Force Ingress API version (automatically detected if not set)
     ##
     apiVersion: ""
@@ -1605,14 +1665,9 @@ compactor:
   ## Persistence parameters
   ##
   persistence:
-    ## @param compactor.persistence.enabled Enable data persistence
+    ## @param compactor.persistence.enabled Enable data persistence using PVC(s) on Thanos Compactor pods
     ##
     enabled: true
-    ## @param compactor.persistence.existingClaim Use a existing PVC which must be created manually before bound
-    ## If defined, PVC must be created manually before volume will be bound
-    ## The value is evaluated as a template
-    ##
-    existingClaim: ""
     ## @param compactor.persistence.storageClass Specify the `storageClass` used to provision the volume
     ## If defined, storageClassName: <storageClass>
     ## If set to "-", storageClassName: "", which disables dynamic provisioning
@@ -1620,13 +1675,20 @@ compactor:
     ## set, choosing the default provisioner.
     ##
     storageClass: ""
-    ## @param compactor.persistence.accessModes Access modes of data volume
+    ## @param compactor.persistence.accessModes PVC Access Modes for data volume
     ##
     accessModes:
       - ReadWriteOnce
-    ## @param compactor.persistence.size Size of data volume
+    ## @param compactor.persistence.size PVC Storage Request for data volume
     ##
     size: 8Gi
+    ## @param compactor.persistence.annotations Annotations for the PVC
+    ##
+    annotations: {}
+    ## @param compactor.persistence.existingClaim Name of an existing PVC to use
+    ## If defined, PVC must be created manually before volume will be bound
+    ##
+    existingClaim: ""
 
 ## @section Thanos Store Gateway parameters
 
@@ -1647,13 +1709,27 @@ storegateway:
     ## @param storegateway.serviceAccount.existingServiceAccount Name for an existing Thanos Store Gateway Service Account
     ##
     existingServiceAccount: ""
+    ## @param storegateway.serviceAccount.automountServiceAccountToken Enable/disable auto mounting of the service account token
+    ##
+    automountServiceAccountToken: true
   ## @param storegateway.hostAliases Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
-  ## @param storegateway.extraEnv Extra environment variables for Thanos Store Gateway container
+  ## @param storegateway.sidecars Extra containers running as sidecars to Thanos Store Gateway pods
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
   ##
-  ## extraEnv:
+  sidecars: []
+  ## @param storegateway.extraEnvVars Extra environment variables for Thanos Store Gateway container
+  ##
+  ## extraEnvVars:
   ## - name: VARNAME1
   ##   value: value1
   ## - name: VARNAME2
@@ -1662,7 +1738,7 @@ storegateway:
   ##       name: existing-secret
   ##       key: varname2-key
   ##
-  extraEnv: []
+  extraEnvVars: []
   ## @param storegateway.extraVolumes Extra volumes to add to Thanos Store Gateway
   ##
   extraVolumes: []
@@ -1715,9 +1791,10 @@ storegateway:
   ## @param storegateway.replicaCount Number of Thanos Store Gateway replicas to deploy
   ##
   replicaCount: 1
-  ## @param storegateway.updateStrategyType Statefulset Update Strategy Type, can be set to RollingUpdate or OnDelete by default
+  ## @param storegateway.updateStrategy.type Update strategy type for Thanos Store Gateway replicas
   ##
-  updateStrategyType: RollingUpdate
+  updateStrategy:
+    type: RollingUpdate
   ## @param storegateway.podManagementPolicy Statefulset Pod management policy: OrderedReady (default) or Parallel
   ## Ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
   ##
@@ -1867,29 +1944,24 @@ storegateway:
     ## @param storegateway.service.type Kubernetes service type
     ##
     type: ClusterIP
+    ## @param storegateway.service.ports.http Thanos Store Gateway service HTTP port
+    ## @param storegateway.service.ports.grpc Thanos Store Gateway service GRPC port
+    ##
+    ports:
+      http: 9090
+      grpc: 10901
+    ## @param storegateway.service.nodePorts.http Specify the Thanos Store Gateway HTTP nodePort value for the LoadBalancer and NodePort service types
+    ## @param storegateway.service.nodePorts.grpc Specify the Thanos Store Gateway GRPC nodePort value for the LoadBalancer and NodePort service types
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+    ##
+    nodePorts:
+      http: ""
+      grpc: ""
     ## @param storegateway.service.clusterIP Thanos Store Gateway service clusterIP IP
     ## e.g:
     ## clusterIP: None
     ##
     clusterIP: ""
-    http:
-      ## @param storegateway.service.http.port Service HTTP port
-      ##
-      port: 9090
-      ## @param storegateway.service.http.nodePort Service HTTP node port
-      ## Specify the nodePort value for the LoadBalancer and NodePort service types
-      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
-      ##
-      nodePort: ""
-    grpc:
-      ## @param storegateway.service.grpc.port Service GRPC port
-      ##
-      port: 10901
-      ## @param storegateway.service.grpc.nodePort Service GRPC node port
-      ## Specify the nodePort value for the LoadBalancer and NodePort service types
-      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
-      ##
-      nodePort: ""
     ## @param storegateway.service.loadBalancerIP Load balancer IP if service type is `LoadBalancer`
     ## Set the LoadBalancer service type to internal only
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
@@ -1909,6 +1981,9 @@ storegateway:
     ## @param storegateway.service.annotations Annotations for Thanos Store Gateway service
     ##
     annotations: {}
+    ## @param storegateway.service.extraPorts Extra ports to expose in the Thanos Store Gateway service
+    ##
+    extraPorts: []
     ## @param storegateway.service.labelSelectorsOverride Selector for Thanos query service
     ##
     labelSelectorsOverride: {}
@@ -1918,14 +1993,9 @@ storegateway:
   ## Persistence parameters
   ##
   persistence:
-    ## @param storegateway.persistence.enabled Enable data persistence
+    ## @param storegateway.persistence.enabled Enable data persistence using PVC(s) on Thanos Store Gateway pods
     ##
     enabled: true
-    ## @param storegateway.persistence.existingClaim Use a existing PVC which must be created manually before bound
-    ## If defined, PVC must be created manually before volume will be bound
-    ## The value is evaluated as a template
-    ##
-    existingClaim: ""
     ## @param storegateway.persistence.storageClass Specify the `storageClass` used to provision the volume
     ## If defined, storageClassName: <storageClass>
     ## If set to "-", storageClassName: "", which disables dynamic provisioning
@@ -1933,13 +2003,20 @@ storegateway:
     ## set, choosing the default provisioner.
     ##
     storageClass: ""
-    ## @param storegateway.persistence.accessModes Access modes of data volume
+    ## @param storegateway.persistence.accessModes PVC Access Modes for data volume
     ##
     accessModes:
       - ReadWriteOnce
-    ## @param storegateway.persistence.size Size of data volume
+    ## @param storegateway.persistence.size PVC Storage Request for data volume
     ##
     size: 8Gi
+    ## @param storegateway.persistence.annotations Annotations for the PVC
+    ##
+    annotations: {}
+    ## @param storegateway.persistence.existingClaim Name of an existing PVC to use
+    ## If defined, PVC must be created manually before volume will be bound
+    ##
+    existingClaim: ""
   ## Autoscaling parameters
   ## @param storegateway.autoscaling.enabled Enable autoscaling for Thanos Store Gateway
   ## @param storegateway.autoscaling.minReplicas Minimum number of Thanos Store Gateway replicas
@@ -1974,10 +2051,6 @@ storegateway:
     ## @param storegateway.ingress.enabled Enable ingress controller resource
     ##
     enabled: false
-    ## DEPRECATED: Use storegateway.ingress.annotations instead of storegateway.ingress.certManager
-    ## certManager: false
-    ##
-
     ## @param storegateway.ingress.hostname Default host for the ingress resource
     ##
     hostname: thanos-storegateway.local
@@ -2029,10 +2102,17 @@ storegateway:
     ##   certificate:
     ##
     secrets: []
-    ## @param storegateway.ingress.tls Create ingress TLS section
-    ## When specifying cert-manager.io/cluster-issuer: nameOfClusterIssuer annotation, enable tls for ingress
+    ## @param storegateway.ingress.tls Enable TLS configuration for the hostname defined at `storegateway.ingress.hostname` parameter
+    ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.storegateway.ingress.hostname }}`
+    ## You can:
+    ##   - Use the `storegateway.ingress.secrets` parameter to create this TLS secret
+    ##   - Relay on cert-manager to create it by setting the corresponding annotations
+    ##   - Relay on Helm to create self-signed certificates by setting `storegateway.ingress.selfSigned=true`
     ##
     tls: false
+    ## @param storegateway.ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
+    ##
+    selfSigned: false
     ## @param storegateway.ingress.apiVersion Force Ingress API version (automatically detected if not set)
     ##
     apiVersion: ""
@@ -2105,6 +2185,9 @@ ruler:
     ## @param ruler.serviceAccount.existingServiceAccount Name for an existing Thanos Ruler Service Account
     ##
     existingServiceAccount: ""
+    ## @param ruler.serviceAccount.automountServiceAccountToken Enable/disable auto mounting of the service account token
+    ##
+    automountServiceAccountToken: true
   ## @param ruler.hostAliases Add deployment host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -2139,7 +2222,7 @@ ruler:
   ## @param ruler.clusterName Used to set the 'ruler_cluster' label
   ##
   clusterName: ""
-  ## @param ruler.extraContainers Extra containers running as sidecars to Thanos Ruler container
+  ## @param ruler.sidecars Extra containers running as sidecars to Thanos Ruler pods
   ## Example:
   ## - name: oAuth2-proxy
   ##   args:
@@ -2160,10 +2243,10 @@ ruler:
   ##     - mountPath: /secrets/proxy-tls
   ##       name: secret-proxy-tls
   ##
-  extraContainers: []
-  ## @param ruler.extraEnv Extra environment variables for Thanos Ruler container
+  sidecars: []
+  ## @param ruler.extraEnvVars Extra environment variables for Thanos Ruler container
   ##
-  ## extraEnv:
+  ## extraEnvVars:
   ## - name: VARNAME1
   ##   value: value1
   ## - name: VARNAME2
@@ -2172,7 +2255,7 @@ ruler:
   ##       name: existing-secret
   ##       key: varname2-key
   ##
-  extraEnv: []
+  extraEnvVars: []
   ## @param ruler.extraVolumes Extra volumes to add to Thanos Ruler
   ##
   extraVolumes: []
@@ -2193,9 +2276,10 @@ ruler:
   ## @param ruler.replicaCount Number of Thanos Ruler replicas to deploy
   ##
   replicaCount: 1
-  ## @param ruler.updateStrategyType Statefulset Update Strategy Type
+  ## @param ruler.updateStrategy.type Update strategy type for Thanos Ruler replicas
   ##
-  updateStrategyType: RollingUpdate
+  updateStrategy:
+    type: RollingUpdate
   ## @param ruler.podManagementPolicy Statefulset Pod Management Policy Type
   ## Ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
   ##
@@ -2332,30 +2416,24 @@ ruler:
     ## @param ruler.service.type Kubernetes service type
     ##
     type: ClusterIP
+    ## @param ruler.service.ports.http Thanos Ruler service HTTP port
+    ## @param ruler.service.ports.grpc Thanos Ruler service GRPC port
+    ##
+    ports:
+      http: 9090
+      grpc: 10901
+    ## @param ruler.service.nodePorts.http Specify the Thanos Ruler HTTP nodePort value for the LoadBalancer and NodePort service types
+    ## @param ruler.service.nodePorts.grpc Specify the Thanos Ruler GRPC nodePort value for the LoadBalancer and NodePort service types
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+    ##
+    nodePorts:
+      http: ""
+      grpc: ""
     ## @param ruler.service.clusterIP Thanos Ruler service clusterIP IP
     ## e.g:
     ## clusterIP: None
     ##
     clusterIP: ""
-    http:
-      ## @param ruler.service.http.port Service HTTP port
-      ##
-      port: 9090
-      ## @param ruler.service.http.nodePort Service HTTP node port
-      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
-      ##
-      nodePort: ""
-    ## @param ruler.service.targetPort Service targetPort override
-    ##
-    targetPort: http
-    grpc:
-      ## @param ruler.service.grpc.port Service GRPC port
-      ##
-      port: 10901
-      ## @param ruler.service.grpc.nodePort Service GRPC node port
-      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
-      ##
-      nodePort: ""
     ## @param ruler.service.loadBalancerIP Load balancer IP if service type is `LoadBalancer`
     ## Set the LoadBalancer service type to internal only
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
@@ -2375,6 +2453,9 @@ ruler:
     ## @param ruler.service.annotations Annotations for Thanos Ruler service
     ##
     annotations: {}
+    ## @param ruler.service.extraPorts Extra ports to expose in the Thanos Ruler service
+    ##
+    extraPorts: []
     ## @param ruler.service.labelSelectorsOverride Selector for Thanos query service
     ##
     labelSelectorsOverride: {}
@@ -2384,14 +2465,9 @@ ruler:
   ## Persistence parameters
   ##
   persistence:
-    ## @param ruler.persistence.enabled Enable data persistence
+    ## @param ruler.persistence.enabled Enable data persistence using PVC(s) on Thanos Ruler pods
     ##
     enabled: true
-    ## @param ruler.persistence.existingClaim Use a existing PVC which must be created manually before bound
-    ## If defined, PVC must be created manually before volume will be bound
-    ## The value is evaluated as a template
-    ##
-    existingClaim: ""
     ## @param ruler.persistence.storageClass Specify the `storageClass` used to provision the volume
     ## If defined, storageClassName: <storageClass>
     ## If set to "-", storageClassName: "", which disables dynamic provisioning
@@ -2399,13 +2475,20 @@ ruler:
     ## set, choosing the default provisioner.
     ##
     storageClass: ""
-    ## @param ruler.persistence.accessModes Access modes of data volume
+    ## @param ruler.persistence.accessModes PVC Access Modes for data volume
     ##
     accessModes:
       - ReadWriteOnce
-    ## @param ruler.persistence.size Size of data volume
+    ## @param ruler.persistence.size PVC Storage Request for data volume
     ##
     size: 8Gi
+    ## @param ruler.persistence.annotations Annotations for the PVC
+    ##
+    annotations: {}
+    ## @param ruler.persistence.existingClaim Name of an existing PVC to use
+    ## If defined, PVC must be created manually before volume will be bound
+    ##
+    existingClaim: ""
   ## Ruler Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
   ##
@@ -2426,10 +2509,6 @@ ruler:
     ## @param ruler.ingress.enabled Enable ingress controller resource
     ##
     enabled: false
-    ## DEPRECATED: Use ruler.ingress.annotations instead of ruler.ingress.certManager
-    ## certManager: false
-    ##
-
     ## @param ruler.ingress.hostname Default host for the ingress resource
     ##
     hostname: thanos-ruler.local
@@ -2526,7 +2605,7 @@ receive:
       ##    memory: 128Mi
       ##
       requests: {}
-    ## @param receive.distributor.extraContainers Extra containers running as sidecars to Thanos Receive Distributor container
+    ## @param receive.distributor.sidecars Extra containers running as sidecars to Thanos Receive Distributor pods
     ## Example:
     ## - name: oAuth2-proxy
     ##   args:
@@ -2547,10 +2626,10 @@ receive:
     ##     - mountPath: /secrets/proxy-tls
     ##       name: secret-proxy-tls
     ##
-    extraContainers: []
-    ## @param receive.distributor.extraEnv Extra environment variables for Thanos Receive Distributor container
+    sidecars: []
+    ## @param receive.distributor.extraEnvVars Extra environment variables for Thanos Receive Distributor container
     ## Example:
-    ## extraEnv:
+    ## extraEnvVars:
     ## - name: VARNAME1
     ##   value: value1
     ## - name: VARNAME2
@@ -2559,7 +2638,7 @@ receive:
     ##       name: existing-secret
     ##       key: varname2-key
     ##
-    extraEnv: []
+    extraEnvVars: []
     ## @param receive.distributor.extraVolumes Extra volumes to add to Thanos Receive Distributor
     ##
     extraVolumes: []
@@ -2572,9 +2651,10 @@ receive:
     ## @param receive.distributor.replicaCount Number of Thanos Receive Distributor replicas to deploy
     ##
     replicaCount: 1
-    ## @param receive.distributor.strategyType StrategyType, can be set to RollingUpdate or Recreate by default.
+    ## @param receive.distributor.updateStrategy.type Update strategy type for Thanos Receive Distributor replicas
     ##
-    strategyType: RollingUpdate
+    updateStrategy:
+      type: RollingUpdate
     ## @param receive.distributor.affinity Thanos Receive Distributor affinity for pod assignment
     ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
     ## Note: receive.podAffinityPreset, receive.podAntiAffinityPreset, and receive.nodeAffinityPreset will be ignored when it's set
@@ -2611,6 +2691,9 @@ receive:
     ## @param receive.serviceAccount.existingServiceAccount Name for an existing Thanos Receive Service Account
     ##
     existingServiceAccount: ""
+    ## @param receive.serviceAccount.automountServiceAccountToken Enable/disable auto mounting of the service account token
+    ##
+    automountServiceAccountToken: true
   ## @param receive.hostAliases Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -2624,7 +2707,7 @@ receive:
   ##     - "127.0.0.1:10901"
   ##
   config: []
-  ## @param receive.extraContainers Extra containers running as sidecars to Thanos Receive container
+  ## @param receive.sidecars Extra containers running as sidecars to Thanos Receive pods
   ## Example:
   ## - name: oAuth2-proxy
   ##   args:
@@ -2645,10 +2728,10 @@ receive:
   ##     - mountPath: /secrets/proxy-tls
   ##       name: secret-proxy-tls
   ##
-  extraContainers: []
-  ## @param receive.extraEnv Extra environment variables for Thanos Receive container
+  sidecars: []
+  ## @param receive.extraEnvVars Extra environment variables for Thanos Receive container
   ##
-  ## extraEnv:
+  ## extraEnvVars:
   ## - name: VARNAME1
   ##   value: value1
   ## - name: VARNAME2
@@ -2657,7 +2740,7 @@ receive:
   ##       name: existing-secret
   ##       key: varname2-key
   ##
-  extraEnv: []
+  extraEnvVars: []
   ## @param receive.extraVolumes Extra volumes to add to Thanos Receive
   ##
   extraVolumes: []
@@ -2667,15 +2750,13 @@ receive:
   ## @param receive.extraFlags Extra Flags to passed to Thanos Receive
   ##
   extraFlags: []
-  ## @param receive.updateStrategyType Statefulset Update Strategy Type, can be set to RollingUpdate or OnDelete by default
+  ## @param receive.updateStrategy.type Update strategy type for Thanos Receive replicas
   ##
-  updateStrategyType: RollingUpdate
+  updateStrategy:
+    type: RollingUpdate
   ## @param receive.replicaCount Number of Thanos Receive replicas to deploy
   ##
   replicaCount: 1
-  ## @param receive.strategyType StrategyType, can be set to RollingUpdate or Recreate by default.
-  ##
-  strategyType: RollingUpdate
   ## @param receive.podAffinityPreset Thanos Receive pod affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ## Allowed values: soft, hard
@@ -2838,38 +2919,28 @@ receive:
     ## @param receive.service.type Kubernetes service type
     ##
     type: ClusterIP
+    ## @param receive.service.ports.http Thanos Ruler service HTTP port
+    ## @param receive.service.ports.grpc Thanos Ruler service GRPC port
+    ## @param receive.service.ports.remote Thanos Ruler service remote port
+    ##
+    ports:
+      http: 10902
+      grpc: 10901
+      remote: 19291
+    ## @param receive.service.nodePorts.http Specify the Thanos Ruler HTTP nodePort value for the LoadBalancer and NodePort service types
+    ## @param receive.service.nodePorts.grpc Specify the Thanos Ruler GRPC nodePort value for the LoadBalancer and NodePort service types
+    ## @param receive.service.nodePorts.remote Specify the Thanos Ruler remote nodePort value for the LoadBalancer and NodePort service types
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+    ##
+    nodePorts:
+      http: ""
+      grpc: ""
+      remote: ""
     ## @param receive.service.clusterIP Thanos Ruler service clusterIP IP
     ## e.g:
     ## clusterIP: None
     ##
     clusterIP: ""
-    http:
-      ## @param receive.service.http.port Service HTTP port
-      ##
-      port: 10902
-      ## @param receive.service.http.nodePort Service HTTP node port
-      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
-      ##
-      nodePort: ""
-    ## @param receive.service.targetPort Service targetPort override
-    ##
-    targetPort: http
-    grpc:
-      ## @param receive.service.grpc.port Service GRPC port
-      ##
-      port: 10901
-      ## @param receive.service.grpc.nodePort Service GRPC node port
-      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
-      ##
-      nodePort: ""
-    remoteWrite:
-      ## @param receive.service.remoteWrite.port Service remote write port
-      ##
-      port: 19291
-      ## @param receive.service.remoteWrite.nodePort Service remote write node port
-      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
-      ##
-      nodePort: ""
     ## @param receive.service.loadBalancerIP Load balancer IP if service type is `LoadBalancer`
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
@@ -2888,6 +2959,9 @@ receive:
     ## @param receive.service.annotations Annotations for Thanos Receive service
     ##
     annotations: {}
+    ## @param receive.service.extraPorts Extra ports to expose in the Thanos Receive service
+    ##
+    extraPorts: []
     ## @param receive.service.labelSelectorsOverride Selector for Thanos receive service
     ##
     labelSelectorsOverride: {}
@@ -2909,14 +2983,9 @@ receive:
   ## Persistence parameters
   ##
   persistence:
-    ## @param receive.persistence.enabled Enable data persistence
+    ## @param receive.persistence.enabled Enable data persistence using PVC(s) on Thanos Receive pods
     ##
     enabled: true
-    ## @param receive.persistence.existingClaim Use a existing PVC which must be created manually before bound
-    ## If defined, PVC must be created manually before volume will be bound
-    ## The value is evaluated as a template
-    ##
-    existingClaim: ""
     ## @param receive.persistence.storageClass Specify the `storageClass` used to provision the volume
     ## If defined, storageClassName: <storageClass>
     ## If set to "-", storageClassName: "", which disables dynamic provisioning
@@ -2924,13 +2993,20 @@ receive:
     ## set, choosing the default provisioner.
     ##
     storageClass: ""
-    ## @param receive.persistence.accessModes Access modes of data volume
+    ## @param receive.persistence.accessModes PVC Access Modes for data volume
     ##
     accessModes:
       - ReadWriteOnce
-    ## @param receive.persistence.size Size of data volume
+    ## @param receive.persistence.size PVC Storage Request for data volume
     ##
     size: 8Gi
+    ## @param receive.persistence.annotations Annotations for the PVC
+    ##
+    annotations: {}
+    ## @param receive.persistence.existingClaim Name of an existing PVC to use
+    ## If defined, PVC must be created manually before volume will be bound
+    ##
+    existingClaim: ""
   ## Receive Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
   ##
@@ -2951,10 +3027,6 @@ receive:
     ## @param receive.ingress.enabled Set to true to enable ingress record generation
     ##
     enabled: false
-    ## DEPRECATED: Use receive.ingress.annotations instead of receive.ingress.certManager
-    ## certManager: false
-    ##
-
     ## @param receive.ingress.hostname When the ingress is enabled, a host pointing to this will be created
     ##
     hostname: thanos-receive.local
@@ -3005,10 +3077,18 @@ receive:
     ##   key:
     ##   certificate:
     ##
-    ## @param receive.ingress.tls When specifying cert-manager.io/cluster-issuer: nameOfClusterIssuer annotation, enable tls for ingress
+    secrets: []
+    ## @param receive.ingress.tls Enable TLS configuration for the hostname defined at `receive.ingress.hostname` parameter
+    ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.receive.ingress.hostname }}`
+    ## You can:
+    ##   - Use the `receive.ingress.secrets` parameter to create this TLS secret
+    ##   - Relay on cert-manager to create it by setting the corresponding annotations
+    ##   - Relay on Helm to create self-signed certificates by setting `receive.ingress.selfSigned=true`
     ##
     tls: false
-    secrets: []
+    ## @param receive.ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
+    ##
+    selfSigned: false
     ## @param receive.ingress.apiVersion Override API Version (automatically detected if not set)
     ##
     apiVersion: ""
@@ -3100,7 +3180,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r213
+    tag: 10-debian-10-r227
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -3121,14 +3201,15 @@ minio:
   ## to be used as an objstore for Thanos
   ##
   enabled: false
-  ## MinIO&reg; credentials
-  ## @param minio.accessKey.password MinIO&reg; Access Key
-  ## @param minio.secretKey.password MinIO&reg; Secret Key
+  ## MinIO&reg; authentication parameters
   ##
-  accessKey:
-    password: ""
-  secretKey:
-    password: ""
+  auth:
+    ## @param minio.auth.rootUser MinIO&reg; root username
+    ##
+    rootUser: admin
+    ## @param minio.auth.rootPassword Password for MinIO&reg; root user
+    ##
+    rootPassword: ""
   ## @param minio.defaultBuckets Comma, semi-colon or space separated list of MinIO&reg; buckets to create
   ##
   defaultBuckets: 'thanos'
