@@ -46,7 +46,7 @@ jobs:
 
       - name: Prepare readme-generator-for-helm inputs
         run: |
-          cat $HOME/files.txt | tr " " "\n" | grep values\\.yaml > raw-inputs
+          cat $HOME/files.txt | tr " " "\n" | grep \/values\\.yaml > raw-inputs
           cat raw-inputs | sed 's/values.yaml/README.md/' >> raw-inputs
           cat raw-inputs | sed 's/bitnami/charts\/bitnami/' > prepared-inputs
 
