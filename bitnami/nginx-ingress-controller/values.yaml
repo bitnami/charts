@@ -99,9 +99,10 @@ watchIngressWithoutClass: false
 ## Configuring this doesn't affect `kubernetes.io/ingress.class` annotation. See `extraArgs` below how to configure processing of custom annotation.
 ## @param ingressClassResource.name Name of the IngressClass resource
 ## @param ingressClassResource.enabled Create the IngressClass resource
-## @param ingressClassResource.default Set the created IngressClass as default IngressClass
+## @param ingressClassResource.default Set the created IngressClass resource as default class
 ## @param ingressClassResource.controllerClass IngressClass identifier for the controller
 ## @param ingressClassResource.parameters Optional parameters for the controller
+##
 ingressClassResource:
   name: nginx
   enabled: true
