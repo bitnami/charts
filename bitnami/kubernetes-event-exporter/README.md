@@ -66,6 +66,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                                              | Description                                                                               | Value                               |
 | ------------------------------------------------- | ----------------------------------------------------------------------------------------- | ----------------------------------- |
+| `replicaCount`                                    | Desired number of pod replicas                                                            | `1`                                 |
 | `image.registry`                                  | Container image registry                                                                  | `docker.io`                         |
 | `image.repository`                                | Container image name                                                                      | `bitnami/kubernetes-event-exporter` |
 | `image.tag`                                       | Container image tag                                                                       | `0.10.0-debian-10-r117`             |

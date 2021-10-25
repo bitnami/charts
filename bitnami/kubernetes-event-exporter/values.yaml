@@ -34,6 +34,9 @@ extraDeploy: []
 
 ## @section Kubernetes Event Exporter parameters
 
+## @param replicaCount Desired number of pod replicas
+replicaCount: 1
+
 image:
   ## @param image.registry Container image registry
   ## @param image.repository Container image name
