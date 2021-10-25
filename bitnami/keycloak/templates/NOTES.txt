@@ -1,3 +1,6 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
 
 ** Please be patient while the chart is being deployed **
 
@@ -48,9 +51,9 @@ To access Keycloak from outside the cluster execute the following commands:
 3. Access the Administration Console using the following credentials:
 
   echo Username: {{ .Values.auth.adminUser }}
-{{- if not .Values.auth.existingSecretPerPassword }}  
+{{- if not .Values.auth.existingSecretPerPassword }}
   echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "common.secrets.name" (dict "existingSecret" .Values.auth.existingSecret "context" $) }} -o jsonpath="{.data.admin-password}" | base64 --decode)
-{{- else }}  
+{{- else }}
   echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "common.secrets.name" (dict "existingSecret" .Values.auth.existingSecretPerPassword.adminPassword "context" $) }} -o jsonpath="\{ {{ include "common.secrets.key" (dict "existingSecret" .Values.auth.existingSecretPerPassword "key" "adminPassword") }} \}" | base64 --decode)
 {{- end }}
 {{- end }}
