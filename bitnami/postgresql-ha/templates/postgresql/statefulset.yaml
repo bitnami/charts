@@ -430,8 +430,10 @@ spec:
           securityContext: {{- omit .Values.metrics.securityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           env:
+            - name: PG_EXPORTER_WEB_LISTEN_ADDRESS
+              value: :{{ .Values.metrics.service.port }}
             - name: DATA_SOURCE_URI
-              value: {{ printf "127.0.0.1:{{ .Values.service.port }}/%s?sslmode=disable" (include "postgresql-ha.postgresqlDatabase" .) | quote }}
+              value: {{ printf "127.0.0.1:%s/%s?sslmode=disable" .Values.service.port (include "postgresql-ha.postgresqlDatabase" .) | quote }}
             {{- if .Values.postgresql.usePasswordFile }}
             - name: DATA_SOURCE_PASS_FILE
               value: "/opt/bitnami/postgresql/secrets/postgresql-password"
