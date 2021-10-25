@@ -69,7 +69,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/zookeeper
-  tag: 3.7.0-debian-10-r157
+  tag: 3.7.0-debian-10-r185
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -541,8 +541,8 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r202
-    pullPolicy: Always
+    tag: 10-debian-10-r230
+    pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/

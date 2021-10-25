@@ -14,6 +14,7 @@ kind: Service
 metadata:
   {{- $svcNamePrefix := printf "%s-storegateway" (include "common.names.fullname" $) | trunc 61 | trimSuffix "-" }}
   name: {{ printf "%s-%s" $svcNamePrefix (toString $index) }}
+  namespace: {{ $.Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" $ | nindent 4 }}
     app.kubernetes.io/component: storegateway
     {{- if and $.Values.metrics.enabled $.Values.metrics.serviceMonitor.enabled }}
@@ -22,9 +23,13 @@ metadata:
     {{- if $.Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" $.Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
-  {{- if $.Values.storegateway.service.annotations }}
-  annotations: {{- include "common.tplvalues.render" (dict "value" $.Values.storegateway.service.annotations "context" $) | nindent 4 }}
-  {{- end }}
+  annotations:
+    {{- if $.Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" $.Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if $.Values.storegateway.service.annotations }}
+    {{- include "common.tplvalues.render" (dict "value" $.Values.storegateway.service.annotations "context" $) | nindent 4 }}
+    {{- end }}
 spec:
   type: {{ $.Values.storegateway.service.type }}
   {{- if ne "false" (include "thanos.validateValues.storegateway.sharded.length" (dict "property" $.Values.storegateway.sharded.service.clusterIPs "context" $) ) }}
@@ -40,24 +45,27 @@ spec:
   loadBalancerSourceRanges: {{- toYaml $.Values.storegateway.service.loadBalancerSourceRanges | nindent 4 }}
   {{- end }}
   ports:
-    - port: {{ $.Values.storegateway.service.http.port }}
+    - port: {{ if $.Values.storegateway.service.http }}{{ coalesce $.Values.storegateway.service.ports.http $.Values.storegateway.service.http.port }}{{ else }}{{ $.Values.storegateway.service.ports.http }}{{ end }}
       targetPort: http
       protocol: TCP
       name: http
-      {{- if ne "false" (include "thanos.validateValues.storegateway.sharded.length" (dict "property" $.Values.storegateway.sharded.service.http.nodePorts "context" $) ) }}
-      nodePort: {{ index $.Values.storegateway.sharded.service.http.nodePorts $index }}
+      {{- if ne "false" (include "thanos.validateValues.storegateway.sharded.length" (dict "property" $.Values.storegateway.sharded.service.nodePorts.http "context" $) ) }}
+      nodePort: {{ index $.Values.storegateway.sharded.service.nodePorts.http $index }}
       {{- else if eq $.Values.storegateway.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
-    - port: {{ $.Values.storegateway.service.grpc.port }}
+    - port: {{ if $.Values.storegateway.service.grpc }}{{ coalesce $.Values.storegateway.service.ports.grpc $.Values.storegateway.service.grpc.port }}{{ else }}{{ $.Values.storegateway.service.ports.grpc }}{{ end }}
       targetPort: grpc
       protocol: TCP
       name: grpc
-      {{- if ne "false" (include "thanos.validateValues.storegateway.sharded.length" (dict "property" $.Values.storegateway.sharded.service.grpc.nodePorts "context" $) ) }}
-      nodePort: {{ index $.Values.storegateway.sharded.service.grpc.nodePorts $index }}
+      {{- if ne "false" (include "thanos.validateValues.storegateway.sharded.length" (dict "property" $.Values.storegateway.sharded.service.nodePorts.grpc "context" $) ) }}
+      nodePort: {{ index $.Values.storegateway.sharded.service.nodePorts.grpc $index }}
       {{- else if eq $.Values.storegateway.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
+    {{- if $.Values.storegateway.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" $.Values.storegateway.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
   selector:
     {{- if $.Values.storegateway.service.labelSelectorsOverride }}
     {{- include "common.tplvalues.render" (dict "value" $.Values.storegateway.service.labelSelectorsOverride "context" $) | nindent 4 }}

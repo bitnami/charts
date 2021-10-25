@@ -794,6 +794,7 @@ Return the proper Docker Image Registry Secret Names
 {{- include "common.warnings.rollingTag" .Values.clairImage -}}
 {{- include "common.warnings.rollingTag" .Values.clairAdapterImage -}}
 {{- include "common.warnings.rollingTag" .Values.trivyImage -}}
+{{- include "common.warnings.rollingTag" .Values.volumePermissions.image -}}
 {{- end -}}
 
 {{/*

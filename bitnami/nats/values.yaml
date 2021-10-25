@@ -86,6 +86,12 @@ image:
 ## @param auth.password Client authentication password
 ## @param auth.token Client authentication token
 ## @param auth.timeout Client authentication timeout (seconds)
+## @param auth.usersCredentials Client authentication users credentials collection
+## Example:
+## auth.usersCredentials:
+##   - username: "a"
+##     password: "b"
+## @param auth.noAuthUser Client authentication username from auth.usersCredentials map to be used when no credentials provided
 ##
 auth:
   enabled: true
@@ -93,6 +99,8 @@ auth:
   password: ""
   token: ""
   timeout: 1
+  usersCredentials: []
+  noAuthUser: ""
 ## Cluster Authentication
 ## ref: https://github.com/nats-io/gnatsd#authentication
 ## @param clusterAuth.enabled Switch to enable/disable cluster authentication

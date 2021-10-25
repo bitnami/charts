@@ -3,18 +3,20 @@ apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ include "common.names.fullname" . }}-receive-distributor
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: receive-distributor
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   replicas: {{ .Values.receive.distributor.replicaCount }}
-  strategy:
-    type: {{ .Values.receive.distributor.strategyType }}
-    {{- if (eq "Recreate" .Values.receive.distributor.strategyType) }}
-    rollingUpdate: null
-    {{- end }}
+  {{- if .Values.receive.distributor.updateStrategy }}
+  strategy: {{- toYaml .Values.receive.distributor.updateStrategy | nindent 4 }}
+  {{- end }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: receive-distributor
@@ -63,8 +65,8 @@ spec:
       securityContext: {{- omit .Values.receive.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       containers:
-        {{- if .Values.receive.distributor.extraContainers }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.receive.distributor.extraContainers "context" $) | nindent 8 }}
+        {{- if .Values.receive.distributor.sidecars }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.receive.distributor.sidecars "context" $) | nindent 8 }}
         {{- end }}
         - name: receive
           image: {{ include "thanos.image" . }}
@@ -99,8 +101,8 @@ spec:
                 secretKeyRef:
                   key: objstore.yml
                   name: {{ include "thanos.objstoreSecretName" . }}
-            {{- if .Values.receive.distributor.extraEnv }}
-            {{- toYaml .Values.receive.distributor.extraEnv | nindent 12 }}
+            {{- if .Values.receive.distributor.extraEnvVars }}
+            {{- toYaml .Values.receive.distributor.extraEnvVars | nindent 12 }}
             {{- end }}
           ports:
             - containerPort: {{ .Values.receive.service.grpc.port }}

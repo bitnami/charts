@@ -25,9 +25,18 @@ data:
       password: {{ $authPwd | quote }}
       {{- else if .Values.auth.token }}
       token: {{ .Values.auth.token | quote }}
+      {{- else if .Values.auth.users }}
+      users: [
+        {{- range $user := .Values.auth.usersCredentials }}
+          { user: {{ $user.username | quote }}, password: {{ $user.password | quote }} },
+        {{- end }}
+      ],
       {{- end }}
       timeout:  {{ int .Values.auth.timeout }}
     }
+    {{- if .Values.auth.noAuthUser }}
+    no_auth_user: {{ .Values.auth.noAuthUser | quote }}
+    {{- end }}
     {{- end }}
 
     # Logging options

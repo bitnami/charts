@@ -3,18 +3,20 @@ apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ include "common.names.fullname" . }}-bucketweb
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: bucketweb
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   replicas: {{ .Values.bucketweb.replicaCount }}
-  strategy:
-    type: {{ .Values.bucketweb.strategyType }}
-    {{- if (eq "Recreate" .Values.bucketweb.strategyType) }}
-    rollingUpdate: null
-    {{- end }}
+  {{- if .Values.bucketweb.updateStrategy }}
+  strategy: {{- toYaml .Values.bucketweb.updateStrategy | nindent 4 }}
+  {{- end }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: bucketweb
@@ -60,8 +62,8 @@ spec:
       securityContext: {{- omit .Values.bucketweb.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       containers:
-        {{- if .Values.bucketweb.extraContainers }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.bucketweb.extraContainers "context" $) | nindent 8 }}
+        {{- if .Values.bucketweb.sidecars }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.bucketweb.sidecars "context" $) | nindent 8 }}
         {{- end }}
         - name: bucketweb
           image: {{ include "thanos.image" . }}
@@ -86,9 +88,9 @@ spec:
             {{- if .Values.bucketweb.extraFlags }}
             {{- .Values.bucketweb.extraFlags | toYaml | nindent 12 }}
             {{- end }}
-          {{- if .Values.bucketweb.extraEnv }}
+          {{- if .Values.bucketweb.extraEnvVars }}
           env:
-            {{- toYaml .Values.bucketweb.extraEnv | nindent 12 }}
+            {{- toYaml .Values.bucketweb.extraEnvVars | nindent 12 }}
           {{- end }}
           ports:
             - name: http

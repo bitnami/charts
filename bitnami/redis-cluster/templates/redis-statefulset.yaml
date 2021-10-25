@@ -40,7 +40,9 @@ spec:
       {{- toYaml .Values.metrics.podAnnotations | nindent 8 }}
       {{- end }}
     spec:
+      {{- if semverCompare ">= 1.13" (include "common.capabilities.kubeVersion" .) }}
       enableServiceLinks: false
+      {{- end }}
       {{- include "redis-cluster.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
@@ -345,7 +347,7 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.redis.sidecars "context" $ ) | nindent 8 }}
         {{- end }}
       {{- $needsVolumePermissions := and .Values.volumePermissions.enabled (and  .Values.persistence.enabled .Values.containerSecurityContext.enabled) }}
-      {{- if or $needsVolumePermissions .Values.sysctlImage.enabled }}
+      {{- if or $needsVolumePermissions .Values.sysctlImage.enabled .Values.redis.initContainers }}
       initContainers:
         {{- if $needsVolumePermissions }}
         - name: volume-permissions

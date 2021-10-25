@@ -3,11 +3,15 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: {{ include "common.names.fullname" . }}-receive
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: receive
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   replicas: {{ .Values.receive.replicaCount }}
   podManagementPolicy: {{ .Values.receive.podManagementPolicy }}
@@ -65,8 +69,8 @@ spec:
       securityContext: {{- omit .Values.receive.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       containers:
-        {{- if .Values.receive.extraContainers }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.receive.extraContainers "context" $) | nindent 8 }}
+        {{- if .Values.receive.sidecars }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.receive.sidecars "context" $) | nindent 8 }}
         {{- end }}
         - name: receive
           image: {{ include "thanos.image" . }}
@@ -112,8 +116,8 @@ spec:
                 secretKeyRef:
                   key: objstore.yml
                   name: {{ include "thanos.objstoreSecretName" . }}
-            {{- if .Values.receive.extraEnv }}
-            {{- toYaml .Values.receive.extraEnv | nindent 12 }}
+            {{- if .Values.receive.extraEnvVars }}
+            {{- toYaml .Values.receive.extraEnvVars | nindent 12 }}
             {{- end }}
           ports:
             - containerPort: 10901
@@ -176,6 +180,9 @@ spec:
   volumeClaimTemplates:
     - metadata:
         name: data
+        {{- if .Values.receive.persistence.annotations }}
+        annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.receive.persistence.annotations "context" $) | nindent 10 }}
+        {{- end }}
       spec:
         accessModes:
         {{- range .Values.receive.persistence.accessModes }}

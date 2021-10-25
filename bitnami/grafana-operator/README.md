@@ -86,7 +86,7 @@ For more information, refer to the [documentation on the differences between the
 | `operator.updateStrategy.type`                               | Set up update strategy for Grafana Operator installation.                                                              | `Recreate`                 |
 | `operator.image.registry`                                    | Grafana Operator image registry                                                                                        | `docker.io`                |
 | `operator.image.repository`                                  | Grafana Operator image name                                                                                            | `bitnami/grafana-operator` |
-| `operator.image.tag`                                         | Grafana Operator image tag                                                                                             | `3.10.3-debian-10-r61`     |
+| `operator.image.tag`                                         | Grafana Operator image tag                                                                                             | `3.10.4-debian-10-r2`      |
 | `operator.image.pullPolicy`                                  | Grafana Operator image pull policy                                                                                     | `IfNotPresent`             |
 | `operator.image.pullSecrets`                                 | Grafana Operator image pull secrets                                                                                    | `[]`                       |
 | `operator.args.scanAllNamespaces`                            | Specify if all namespace should be scanned for dashboards and datasources. (Creates ClusterRole)                       | `false`                    |
@@ -143,7 +143,7 @@ For more information, refer to the [documentation on the differences between the
 | `grafana.enabled`                                           | Enabled the deployment of the Grafana CRD object into the cluster                             | `true`               |
 | `grafana.image.registry`                                    | Grafana image registry                                                                        | `docker.io`          |
 | `grafana.image.repository`                                  | Grafana image name                                                                            | `bitnami/grafana`    |
-| `grafana.image.tag`                                         | Grafana image tag                                                                             | `8.1.5-debian-10-r2` |
+| `grafana.image.tag`                                         | Grafana image tag                                                                             | `8.2.2-debian-10-r1` |
 | `grafana.image.pullSecrets`                                 | Grafana image pull secrets                                                                    | `[]`                 |
 | `grafana.serviceAccount`                                    | Additional service account configuration                                                      | `{}`                 |
 | `grafana.podSecurityContext.enabled`                        | Enable pods security context                                                                  | `true`               |
@@ -173,6 +173,7 @@ For more information, refer to the [documentation on the differences between the
 | `grafana.client.preferService`                              | If the API should be used via Ingress or via the internal service                             | `true`               |
 | `grafana.labels`                                            | Add additional labels to the grafana deployment, service and ingress resources                | `{}`                 |
 | `grafana.ingress.enabled`                                   | If an ingress or OpenShift Route should be created                                            | `false`              |
+| `grafana.ingress.ingressClassName`                          | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                 | `""`                 |
 | `grafana.ingress.hostname`                                  | The hostname under which the grafana instance should be reachable                             | `grafana.local`      |
 | `grafana.ingress.path`                                      | The path for the ingress instance to forward to the grafana app                               | `/`                  |
 | `grafana.ingress.labels`                                    | Additional Labels for the ingress resource                                                    | `{}`                 |
