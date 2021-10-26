@@ -13,7 +13,12 @@ metadata:
 spec:
   podSelector:
     matchLabels:
-      {{- include "common.tplvalues.render" (dict "value" .Values.networkPolicy.ingressRules.backendSelector "context" $) | nindent 6 }}
+      {{- if .Values.networkPolicy.ingressRules.customBackendSelector }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.networkPolicy.ingressRules.customBackendSelector "context" $) | nindent 6 }}
+      {{- else }}
+      app.kubernetes.io/name: mariadb
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      {{- end }}
   ingress:
     - from:
         - podSelector:
