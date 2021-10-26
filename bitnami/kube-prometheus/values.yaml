@@ -652,6 +652,10 @@ prometheus:
   ## ref: https://prometheus.io/docs/prometheus/latest/querying/api/#tsdb-admin-apis
   ##
   enableAdminAPI: false
+  ## @param prometheus.enableFeatures Enable access to Prometheus disabled features.
+  ## ref: https://prometheus.io/docs/prometheus/latest/disabled_features/
+  ##
+  enableFeatures: []
   ## @param prometheus.alertingEndpoints Alertmanagers to which alerts will be sent
   ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#alertmanagerendpoints
   ##
