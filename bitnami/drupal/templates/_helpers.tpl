@@ -7,13 +7,6 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*
-Labels to select all the pods to which outgoing communication are allowed
-*/}}
-{{- define "networkPolicy.outgoingSelectorLabels" -}}
-app.kubernetes.io/instance: {{ .Release.Name }}
-{{- end -}}
-
-{{/*
 Return the proper certificate image name
 */}}
 {{- define "certificates.image" -}}

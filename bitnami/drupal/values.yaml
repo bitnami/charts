@@ -712,6 +712,7 @@ networkPolicy:
     backendOnlyAccessibleByFrontend: false
     backendSelector:
       app.kubernetes.io/name: mariadb
+      app.kubernetes.io/instance: "{{ .Release.Name }}"
 
     ## Allow only from the indicated:
     accessOnlyFrom:
@@ -735,11 +736,11 @@ networkPolicy:
     ##           matchLabels:
     ##             label: example
     customRules: {}
-  ## @param networkPolicy.egressRules.denyConnectionsToExternal Enable egress rule that denies outgoing traffic outside the namespace.
+  ## @param networkPolicy.egressRules.denyConnectionsToExternal Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).
   ## @param networkPolicy.egressRules.customRules [object] Custom network policy rule
   ##
   egressRules:
-    # Deny connections to external
+    # Deny connections to external. This is not compatible with an external database.
     denyConnectionsToExternal: false
     ## custom egress rules
     ## e.g:

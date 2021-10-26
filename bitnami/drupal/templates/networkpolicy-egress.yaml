@@ -13,7 +13,7 @@ metadata:
 spec:
   podSelector:
     matchLabels:
-      {{- include "networkPolicy.outgoingSelectorLabels" . | nindent 6 }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
   policyTypes:
     - Egress
   egress:

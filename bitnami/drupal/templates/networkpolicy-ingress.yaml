@@ -1,4 +1,4 @@
-{{- if .Values.networkPolicy.enabled }}
+{{- if and .Values.networkPolicy.enabled (or .Values.networkPolicy.ingress.enabled .Values.networkPolicy.metrics.enabled .Values.networkPolicy.ingressRules.accessOnlyFrom.enabled) }}
 apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
 kind: NetworkPolicy
 metadata:
@@ -15,7 +15,7 @@ spec:
     matchLabels:
       {{- include "common.labels.standard" . | nindent 6 }}
   ingress:
-    {{- if .Values.ingress.enabled }}
+    {{- if and .Values.ingress.enabled .Values.networkPolicy.ingress.enabled (or .Values.networkPolicy.ingress.namespaceSelector .Values.networkPolicy.ingress.podSelector) }}
     - from:
         {{- if .Values.networkPolicy.ingress.namespaceSelector }}
         - namespaceSelector:
@@ -28,7 +28,7 @@ spec:
               {{- include "common.tplvalues.render" (dict "value" .Values.networkPolicy.ingress.podSelector "context" $) | nindent 14 }}
         {{- end}}
     {{- end }}
-    {{- if .Values.metrics.enabled }}
+    {{- if and .Values.metrics.enabled .Values.networkPolicy.metrics.enabled (or .Values.networkPolicy.metrics.namespaceSelector .Values.networkPolicy.metrics.podSelector) }}
     - from:
         {{- if .Values.networkPolicy.metrics.namespaceSelector }}
         - namespaceSelector:
@@ -41,7 +41,7 @@ spec:
               {{- include "common.tplvalues.render" (dict "value" .Values.networkPolicy.metrics.podSelector "context" $) | nindent 14 }}
         {{- end }}
     {{- end }}
-    {{- if .Values.networkPolicy.ingressRules.accessOnlyFrom.enabled }}
+    {{- if and .Values.networkPolicy.ingressRules.accessOnlyFrom.enabled (or .Values.networkPolicy.ingressRules.accessOnlyFrom.namespaceSelector .Values.networkPolicy.ingressRules.accessOnlyFrom.podSelector) }}
     - from:
         {{- if .Values.networkPolicy.ingressRules.accessOnlyFrom.namespaceSelector }}
         - namespaceSelector:
@@ -49,7 +49,7 @@ spec:
               {{- include "common.tplvalues.render" (dict "value" .Values.networkPolicy.ingressRules.accessOnlyFrom.namespaceSelector "context" $) | nindent 14 }}
         {{- end }}
         {{- if .Values.networkPolicy.ingressRules.accessOnlyFrom.podSelector }}
-        - PodSelector:
+        - podSelector:
             matchLabels:
               {{- include "common.tplvalues.render" (dict "value" .Values.networkPolicy.ingressRules.accessOnlyFrom.podSelector "context" $) | nindent 14 }}
         {{- end }}

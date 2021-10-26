@@ -1,4 +1,4 @@
-{{- if and .Values.networkPolicy.enabled .Values.networkPolicy.ingress.backendOnlyAccessibleByFrontend }}
+{{- if and .Values.networkPolicy.enabled .Values.networkPolicy.ingressRules.backendOnlyAccessibleByFrontend }}
 apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
 kind: NetworkPolicy
 metadata:
@@ -14,7 +14,6 @@ spec:
   podSelector:
     matchLabels:
       {{- include "common.tplvalues.render" (dict "value" .Values.networkPolicy.ingressRules.backendSelector "context" $) | nindent 6 }}
-      {{- include "networkPolicy.outgoingSelectorLabels" . | nindent 6 }}
   ingress:
     - from:
         - podSelector:

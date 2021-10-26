@@ -251,7 +251,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.enabled`                                       | Enable network policies                                                                                                    | `false` |
 | `networkPolicy.metrics.enabled`                               | Enable network policy for metrics (prometheus)                                                                             | `true`  |
 | `networkPolicy.metrics.namespaceSelector`                     | Monitoring namespace selector label. This label will be used to identify the prometheus' namespace.                        | `{}`    |
-| `networkPolicy.metrics.podSelector`                           | Monitoring pods selector label. This label will be used to identify the Propmetheus pods.                                  | `{}`    |
+| `networkPolicy.metrics.podSelector`                           | Monitoring pods selector label. This label will be used to identify the Prometheus pods.                                   | `{}`    |
 | `networkPolicy.ingress.enabled`                               | Enable network policy for Ingress Proxy                                                                                    | `true`  |
 | `networkPolicy.ingress.namespaceSelector`                     | Monitoring namespace selector label. This label will be used to identify the Ingress Proxy's namespace.                    | `{}`    |
 | `networkPolicy.ingress.podSelector`                           | Monitoring pods selector label. This label will be used to identify the Ingress Proxy pods.                                | `{}`    |
@@ -261,7 +261,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.ingressRules.accessOnlyFrom.namespaceSelector` | Namespace selector label that is allowed to access drupal. This label will be used to identified the allowed namespace(s). | `{}`    |
 | `networkPolicy.ingressRules.accessOnlyFrom.podSelector`       | Pods selector label that is allowed to access drupal. This label will be used to identified the allowed pod(s).            | `{}`    |
 | `networkPolicy.ingressRules.customRules`                      | Custom network policy rule                                                                                                 | `{}`    |
-| `networkPolicy.egressRules.denyConnectionsToExternal`         | Disable the connection to outside of the namespace.                                                                        | `false` |
+| `networkPolicy.egressRules.denyConnectionsToExternal`         | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).                             | `false` |
 | `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                 | `{}`    |
 
 
