@@ -123,8 +123,11 @@ spec:
             - --skip-auth-regex=^\/config\.json$
             - --skip-auth-regex=^\/manifest\.json$
             - --skip-auth-regex=^\/custom_style\.css$
+            - --skip-auth-regex=^\/clr-ui.min\.css$
+            - --skip-auth-regex=^\/clr-ui-dark.min\.css$
             - --skip-auth-regex=^\/custom_locale\.json$
             - --skip-auth-regex=^\/favicon.*\.png$
+            - --skip-auth-regex=^\/favicon.*\.ico$
             - --skip-auth-regex=^\/static\/
             - --skip-auth-regex=^\/$
             - --scope={{ .Values.authProxy.scope }}
@@ -148,6 +151,9 @@ spec:
                 secretKeyRef:
                   name: {{ template "kubeapps.oauth2_proxy-secret.name" . }}
                   key: cookieSecret
+            {{- if .Values.authProxy.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.authProxy.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
           ports:
             - name: proxy
               containerPort: {{ .Values.authProxy.containerPort }}

@@ -52,18 +52,18 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                      | Description                                     | Value |
 | ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `nil` |
+| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `nil` |
+| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
 
 ### Common parameters
 
 | Name                | Description                                        | Value           |
 | ------------------- | -------------------------------------------------- | --------------- |
-| `kubeVersion`       | Override Kubernetes version                        | `nil`           |
-| `nameOverride`      | String to partially override common.names.fullname | `nil`           |
-| `fullnameOverride`  | String to fully override common.names.fullname     | `nil`           |
+| `kubeVersion`       | Override Kubernetes version                        | `""`            |
+| `nameOverride`      | String to partially override common.names.fullname | `""`            |
+| `fullnameOverride`  | String to fully override common.names.fullname     | `""`            |
 | `commonLabels`      | Labels to add to all deployed objects              | `{}`            |
 | `commonAnnotations` | Annotations to add to all deployed objects         | `{}`            |
 | `clusterDomain`     | Kubernetes cluster domain name                     | `cluster.local` |
@@ -72,14 +72,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Ghost Image parameters
 
-| Name                | Description                                      | Value                |
-| ------------------- | ------------------------------------------------ | -------------------- |
-| `image.registry`    | Ghost image registry                             | `docker.io`          |
-| `image.repository`  | Ghost image repository                           | `bitnami/ghost`      |
-| `image.tag`         | Ghost image tag (immutable tags are recommended) | `4.8.3-debian-10-r0` |
-| `image.pullPolicy`  | Ghost image pull policy                          | `IfNotPresent`       |
-| `image.pullSecrets` | Ghost image pull secrets                         | `[]`                 |
-| `image.debug`       | Enable image debug mode                          | `false`              |
+| Name                | Description                                      | Value                 |
+| ------------------- | ------------------------------------------------ | --------------------- |
+| `image.registry`    | Ghost image registry                             | `docker.io`           |
+| `image.repository`  | Ghost image repository                           | `bitnami/ghost`       |
+| `image.tag`         | Ghost image tag (immutable tags are recommended) | `4.20.3-debian-10-r0` |
+| `image.pullPolicy`  | Ghost image pull policy                          | `IfNotPresent`        |
+| `image.pullSecrets` | Ghost image pull secrets                         | `[]`                  |
+| `image.debug`       | Enable image debug mode                          | `false`               |
 
 
 ### Ghost Configuration parameters
@@ -88,24 +88,25 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------- | -------------------------------------------------------------------- | ------------------ |
 | `ghostUsername`      | Ghost user name                                                      | `user`             |
 | `ghostPassword`      | Ghost user password                                                  | `""`               |
-| `existingSecret`     | Name of existing secret containing Ghost credentials                 | `nil`              |
+| `existingSecret`     | Name of existing secret containing Ghost credentials                 | `""`               |
 | `ghostEmail`         | Ghost user email                                                     | `user@example.com` |
 | `ghostBlogTitle`     | Ghost Blog title                                                     | `User's Blog`      |
 | `ghostHost`          | Ghost host to create application URLs                                | `""`               |
+| `ghostPath`          | URL sub path where to server the Ghost application                   | `/`                |
 | `ghostEnableHttps`   | Configure Ghost to build application URLs using https                | `false`            |
 | `smtpHost`           | SMTP server host                                                     | `""`               |
 | `smtpPort`           | SMTP server port                                                     | `""`               |
 | `smtpUser`           | SMTP username                                                        | `""`               |
 | `smtpPassword`       | SMTP user password                                                   | `""`               |
 | `smtpService`        | SMTP service                                                         | `""`               |
-| `smtpExistingSecret` | The name of an existing secret with SMTP credentials                 | `nil`              |
+| `smtpExistingSecret` | The name of an existing secret with SMTP credentials                 | `""`               |
 | `allowEmptyPassword` | Allow the container to be started with blank passwords               | `true`             |
 | `ghostSkipInstall`   | Skip performing the initial bootstrapping for Ghost                  | `false`            |
 | `command`            | Override default container command (useful when using custom images) | `[]`               |
 | `args`               | Override default container args (useful when using custom images)    | `[]`               |
 | `extraEnvVars`       | Array with extra environment variables to add to the Ghost container | `[]`               |
-| `extraEnvVarsCM`     | Name of existing ConfigMap containing extra env vars                 | `nil`              |
-| `extraEnvVarsSecret` | Name of existing Secret containing extra env vars                    | `nil`              |
+| `extraEnvVarsCM`     | Name of existing ConfigMap containing extra env vars                 | `""`               |
+| `extraEnvVarsSecret` | Name of existing Secret containing extra env vars                    | `""`               |
 
 
 ### Ghost deployment parameters
@@ -114,12 +115,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | ----------------------------------------------------------------------------------------- | --------------- |
 | `replicaCount`                          | Number of Ghost replicas to deploy                                                        | `1`             |
 | `updateStrategy.type`                   | Ghost deployment strategy type                                                            | `RollingUpdate` |
-| `priorityClassName`                     | Ghost pod priority class name                                                             | `nil`           |
+| `priorityClassName`                     | Ghost pod priority class name                                                             | `""`            |
+| `schedulerName`                         | Name of the k8s scheduler (other than default)                                            | `""`            |
+| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment                                            | `[]`            |
 | `hostAliases`                           | Ghost pod host aliases                                                                    | `[]`            |
 | `extraVolumes`                          | Optionally specify extra list of additional volumes for Ghost pods                        | `[]`            |
 | `extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for Ghost container(s)           | `[]`            |
-| `sidecars`                              | Add additional sidecar containers to the Ghost pod                                        | `{}`            |
-| `initContainers`                        | Add additional init containers to the Ghost pods                                          | `{}`            |
+| `sidecars`                              | Add additional sidecar containers to the Ghost pod                                        | `[]`            |
+| `initContainers`                        | Add additional init containers to the Ghost pods                                          | `[]`            |
 | `lifecycleHooks`                        | Add lifecycle hooks to the Ghost deployment                                               | `{}`            |
 | `podLabels`                             | Extra labels for Ghost pods                                                               | `{}`            |
 | `podAnnotations`                        | Annotations for Ghost pods                                                                | `{}`            |
@@ -140,6 +143,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `containerSecurityContext.enabled`      | Enabled Ghost containers' Security Context                                                | `true`          |
 | `containerSecurityContext.runAsUser`    | Set Ghost container's Security Context runAsUser                                          | `1001`          |
 | `containerSecurityContext.runAsNonRoot` | Set Ghost container's Security Context runAsNonRoot                                       | `true`          |
+| `startupProbe.enabled`                  | Enable startupProbe                                                                       | `false`         |
+| `startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                    | `120`           |
+| `startupProbe.periodSeconds`            | Period seconds for startupProbe                                                           | `10`            |
+| `startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                          | `5`             |
+| `startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                        | `6`             |
+| `startupProbe.successThreshold`         | Success threshold for startupProbe                                                        | `1`             |
 | `livenessProbe.enabled`                 | Enable livenessProbe                                                                      | `true`          |
 | `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                   | `120`           |
 | `livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                          | `10`            |
@@ -158,32 +167,34 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Traffic Exposure Parameters
 
-| Name                               | Description                                                                                           | Value                    |
-| ---------------------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------ |
-| `service.type`                     | Ghost service type                                                                                    | `LoadBalancer`           |
-| `service.port`                     | Ghost service HTTP port                                                                               | `80`                     |
-| `service.httpsPort`                | Ghost service HTTPS port                                                                              | `443`                    |
-| `service.nodePorts.http`           | Node port for HTTP                                                                                    | `nil`                    |
-| `service.nodePorts.https`          | Node port for HTTPS                                                                                   | `nil`                    |
-| `service.clusterIP`                | Ghost service Cluster IP                                                                              | `nil`                    |
-| `service.loadBalancerIP`           | Ghost service Load Balancer IP                                                                        | `nil`                    |
-| `service.loadBalancerSourceRanges` | Ghost service Load Balancer sources                                                                   | `[]`                     |
-| `service.externalTrafficPolicy`    | Ghost service external traffic policy                                                                 | `Cluster`                |
-| `service.annotations`              | Additional custom annotations for Ghost service                                                       | `{}`                     |
-| `service.extraPorts`               | Extra port to expose on Ghost service                                                                 | `[]`                     |
-| `ingress.enabled`                  | Enable ingress record generation for Ghost                                                            | `false`                  |
-| `ingress.pathType`                 | Ingress path type                                                                                     | `ImplementationSpecific` |
-| `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                         | `nil`                    |
-| `ingress.hostname`                 | Default host for the ingress record                                                                   | `ghost.local`            |
-| `ingress.path`                     | Default path for the ingress record                                                                   | `ImplementationSpecific` |
-| `ingress.annotations`              | Additional custom annotations for the ingress record                                                  | `{}`                     |
-| `ingress.tls`                      | Enable TLS configuration for the host defined at `ingress.hostname` parameter                         | `false`                  |
-| `ingress.certManager`              | Add the corresponding annotations for cert-manager integration                                        | `false`                  |
-| `ingress.selfSigned`               | Create a TLS secret for this ingress record using self-signed certificates generated by Helm          | `false`                  |
-| `ingress.extraHosts`               | An array with additional hostname(s) to be covered with the ingress record                            | `[]`                     |
-| `ingress.extraPaths`               | An array with additional arbitrary paths that may need to be added to the ingress under the main host | `[]`                     |
-| `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                   | `[]`                     |
-| `ingress.secrets`                  | Custom TLS certificates as secrets                                                                    | `[]`                     |
+| Name                               | Description                                                                                                                      | Value                    |
+| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.type`                     | Ghost service type                                                                                                               | `LoadBalancer`           |
+| `service.ports.http`               | Ghost service HTTP port                                                                                                          | `80`                     |
+| `service.ports.https`              | Ghost service HTTPS port                                                                                                         | `443`                    |
+| `service.nodePorts.http`           | Node port for HTTP                                                                                                               | `""`                     |
+| `service.nodePorts.https`          | Node port for HTTPS                                                                                                              | `""`                     |
+| `service.clusterIP`                | Ghost service Cluster IP                                                                                                         | `""`                     |
+| `service.loadBalancerIP`           | Ghost service Load Balancer IP                                                                                                   | `""`                     |
+| `service.loadBalancerSourceRanges` | Ghost service Load Balancer sources                                                                                              | `[]`                     |
+| `service.externalTrafficPolicy`    | Ghost service external traffic policy                                                                                            | `Cluster`                |
+| `service.annotations`              | Additional custom annotations for Ghost service                                                                                  | `{}`                     |
+| `service.extraPorts`               | Extra port to expose on Ghost service                                                                                            | `[]`                     |
+| `service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                             | `None`                   |
+| `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
+| `ingress.enabled`                  | Enable ingress record generation for Ghost                                                                                       | `false`                  |
+| `ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
+| `ingress.hostname`                 | Default host for the ingress record                                                                                              | `ghost.local`            |
+| `ingress.path`                     | Default path for the ingress record                                                                                              | `/`                      |
+| `ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.tls`                      | Enable TLS configuration for the host defined at `ingress.hostname` parameter                                                    | `false`                  |
+| `ingress.selfSigned`               | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
+| `ingress.extraHosts`               | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                     |
+| `ingress.extraPaths`               | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |
+| `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
+| `ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
+| `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
 
 
 ### Persistence Parameters
@@ -191,15 +202,15 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                          | Description                                                                                     | Value                   |
 | --------------------------------------------- | ----------------------------------------------------------------------------------------------- | ----------------------- |
 | `persistence.enabled`                         | Enable persistence using Persistent Volume Claims                                               | `true`                  |
-| `persistence.storageClass`                    | Persistent Volume storage class                                                                 | `nil`                   |
+| `persistence.storageClass`                    | Persistent Volume storage class                                                                 | `""`                    |
 | `persistence.annotations`                     | Additional custom annotations for the PVC                                                       | `{}`                    |
 | `persistence.accessModes`                     | Persistent Volume access modes                                                                  | `[]`                    |
 | `persistence.size`                            | Persistent Volume size                                                                          | `8Gi`                   |
-| `persistence.existingClaim`                   | The name of an existing PVC to use for persistence                                              | `nil`                   |
+| `persistence.existingClaim`                   | The name of an existing PVC to use for persistence                                              | `""`                    |
 | `volumePermissions.enabled`                   | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`            | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`          | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r119`     |
+| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r231`     |
 | `volumePermissions.image.pullPolicy`          | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`         | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`          | The resources limits for the init container                                                     | `{}`                    |
@@ -217,8 +228,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `mariadb.auth.database`                    | MariaDB custom database                                                   | `bitnami_ghost` |
 | `mariadb.auth.username`                    | MariaDB custom user name                                                  | `bn_ghost`      |
 | `mariadb.auth.password`                    | MariaDB custom user password                                              | `""`            |
+| `mariadb.auth.existingSecret`              | Existing secret with MariaDB credentials                                  | `""`            |
 | `mariadb.primary.persistence.enabled`      | Enable persistence on MariaDB using PVC(s)                                | `true`          |
-| `mariadb.primary.persistence.storageClass` | Persistent Volume storage class                                           | `nil`           |
+| `mariadb.primary.persistence.storageClass` | Persistent Volume storage class                                           | `""`            |
 | `mariadb.primary.persistence.accessModes`  | Persistent Volume access modes                                            | `[]`            |
 | `mariadb.primary.persistence.size`         | Persistent Volume size                                                    | `8Gi`           |
 | `externalDatabase.host`                    | External Database server host                                             | `localhost`     |
@@ -226,7 +238,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.user`                    | External Database username                                                | `bn_ghost`      |
 | `externalDatabase.password`                | External Database user password                                           | `""`            |
 | `externalDatabase.database`                | External Database database name                                           | `bitnami_ghost` |
-| `externalDatabase.existingSecret`          | The name of an existing secret with database credentials                  | `nil`           |
+| `externalDatabase.existingSecret`          | The name of an existing secret with database credentials                  | `""`            |
 
 
 The above parameters map to the env variables defined in [bitnami/ghost](http://github.com/bitnami/bitnami-docker-ghost). For more information please refer to the [bitnami/ghost](http://github.com/bitnami/bitnami-docker-ghost) image documentation.
@@ -338,6 +350,17 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 15.0.0
+
+This major release renames several values in this chart and adds missing features, in order to be inline with the rest of assets in the Bitnami charts repository.
+
+Affected values:
+
+- `service.port` was deprecated, we recommend using `service.ports.http` instead.
+- `service.httpsPort` was deprecated, we recommend using `service.ports.https` instead.
+
+Additionally, updates the MariaDB subchart to it newest major, 10.0.0, which contains similar changes.
 
 ### To 14.0.0
 

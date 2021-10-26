@@ -8,25 +8,25 @@
 ## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
 global:
-  imageRegistry:
+  imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass:
+  storageClass: ""
 
 ## @section Common parameters
 
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
-kubeVersion:
+kubeVersion: ""
 ## @param nameOverride String to partially override moodle.fullname template
 ##
-nameOverride:
+nameOverride: ""
 ## @param fullnameOverride String to fully override moodle.fullname template
 ##
-fullnameOverride:
+fullnameOverride: ""
 ## @param commonAnnotations Common annotations to add to all Harbor resources (sub-charts are not considered). Evaluated as a template
 ##
 commonAnnotations: {}
@@ -37,9 +37,9 @@ commonLabels: {}
 ##
 extraDeploy: []
 
-## @section Moodle<sup>TM</sup> parameters
+## @section Moodle&trade; parameters
 
-## Bitnami Moodle(TM) image version
+## Bitnami Moodle&trade; image version
 ## ref: https://hub.docker.com/r/bitnami/moodle/tags/
 ## @param image.registry Moodle image registry
 ## @param image.repository Moodle image repository
@@ -51,7 +51,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/moodle
-  tag: 3.11.1-debian-10-r0
+  tag: 3.11.3-debian-10-r26
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -71,7 +71,7 @@ image:
 ## @param replicaCount Number of Moodle replicas (requires ReadWriteMany PVC support)
 ##
 replicaCount: 1
-## @param moodleSkipInstall Skip Moodle(TM) installation wizard. Useful for migrations and restoring from SQL dump
+## @param moodleSkipInstall Skip Moodle&trade; installation wizard. Useful for migrations and restoring from SQL dump
 ## ref: https://github.com/bitnami/bitnami-docker-moodle#configuration
 ##
 moodleSkipInstall: false
@@ -98,10 +98,10 @@ moodleEmail: user@example.com
 allowEmptyPassword: true
 ## @param command Override default container command (useful when using custom images)
 ##
-command:
+command: []
 ## @param args Override default container args (useful when using custom images)
 ##
-args:
+args: []
 ## @param updateStrategy.type Update strategy - only really applicable for deployments with RWO PVs attached
 ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
 ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
@@ -117,10 +117,10 @@ updateStrategy:
 extraEnvVars: []
 ## @param extraEnvVarsCM ConfigMap with extra environment variables
 ##
-extraEnvVarsCM:
+extraEnvVarsCM: ""
 ## @param extraEnvVarsSecret Secret with extra environment variables (in case of sensitive data)
 ##
-extraEnvVarsSecret:
+extraEnvVarsSecret: ""
 ## @param extraVolumes Array of extra volumes to be added to the deployment (evaluated as template). Requires setting `extraVolumeMounts`
 ##
 extraVolumes: []
@@ -139,7 +139,7 @@ sidecars: []
 tolerations: []
 ## @param existingSecret Name of a secret with the application password
 ##
-existingSecret:
+existingSecret: ""
 ## SMTP mail delivery configuration
 ## ref: https://github.com/bitnami/bitnami-docker-moodle/#smtp-configuration
 ## @param smtpHost SMTP host
@@ -148,11 +148,11 @@ existingSecret:
 ## @param smtpPassword SMTP password
 ## @param smtpProtocol SMTP Protocol (options: ssl,tls, nil)
 ##
-smtpHost:
-smtpPort:
-smtpUser:
-smtpPassword:
-smtpProtocol:
+smtpHost: ""
+smtpPort: ""
+smtpUser: ""
+smtpPassword: ""
+smtpProtocol: ""
 ## @param containerPorts [object] Container ports
 ##
 containerPorts:
@@ -170,6 +170,20 @@ persistence:
   ## @param persistence.enabled Enable persistence using PVC
   ##
   enabled: true
+  ## @param persistence.customStorageClass Create a custom storage class
+  ## Requires persistence.enabled: true
+  ## Requires persistence.storageClass: name
+  ## ref: https://kubernetes.io/docs/concepts/storage/storage-classes/
+  ## E.g.
+  ## provisioner: efs.csi.aws.com
+  ##   parameters:
+  ##     provisioningMode: efs-ap
+  ##     fileSystemId: fs-12345678
+  ##     directoryPerms: "700"
+  ##     gidRangeStart: "1000" # optional
+  ##     gidRangeEnd: "2000" # optional
+  ##
+  customStorageClass: {}
   ## @param persistence.storageClass PVC Storage Class for Moodle
   ## If defined, storageClassName: <storageClass>
   ## If set to "-", storageClassName: "", which disables dynamic provisioning
@@ -177,10 +191,11 @@ persistence:
   ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
   ##   GKE, AWS & OpenStack)
   ##
-  storageClass:
+  storageClass: ""
   ## @param persistence.accessMode PVC Access Mode for Moodle
   ## Requires persistence.enabled: true
-  ## If defined, PVC must be created manually before volume will be bound
+  ## If defined, and no customStorageClass is defined, then
+  ## PVC must be created manually before volume will be bound
   ##
   accessMode: ReadWriteOnce
   ## @param persistence.size PVC Storage Request for Moodle
@@ -190,13 +205,13 @@ persistence:
   ## Requires persistence.enabled: true
   ## If defined, PVC must be created manually before volume will be bound
   ##
-  existingClaim:
+  existingClaim: ""
   ## @param persistence.hostPath Host mount path for Moodle
   ## Requires persistence.enabled: true
   ## Requires persistence.existingClaim: nil|false
   ## Default: nil.
   ##
-  hostPath:
+  hostPath: ""
 ## @param podAffinityPreset Pod affinity preset
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ## Allowed values: soft, hard
@@ -247,25 +262,25 @@ resources:
     cpu: 300m
 ## Configure Pods Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-## @param podSecurityContext.enabled Enable Moodle<sup>TM</sup> pods' Security Context
-## @param podSecurityContext.fsGroup Moodle<sup>TM</sup> pods' group ID
+## @param podSecurityContext.enabled Enable Moodle&trade; pods' Security Context
+## @param podSecurityContext.fsGroup Moodle&trade; pods' group ID
 ##
 podSecurityContext:
   enabled: true
   fsGroup: 1001
 ## Configure Container Security Context (only main container)
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-## @param containerSecurityContext.enabled Enable Moodle<sup>TM</sup> containers' Security Context
-## @param containerSecurityContext.runAsUser Moodle<sup>TM</sup> containers' Security Context
+## @param containerSecurityContext.enabled Enable Moodle&trade; containers' Security Context
+## @param containerSecurityContext.runAsUser Moodle&trade; containers' Security Context
 ##
 containerSecurityContext:
   enabled: true
   runAsUser: 1001
 ## Configure extra options for liveness and readiness probes
-## Moodle(TM) core exposes /user/login to unauthenticated requests, making it a good
+## Moodle&trade; core exposes /user/login to unauthenticated requests, making it a good
 ## default liveness and readiness path. However, that may not always be the
 ## case. For example, if the image value is overridden to an image containing a
-## module that alters that route, or an image that does not auto-install Moodle(TM).
+## module that alters that route, or an image that does not auto-install Moodle&trade;.
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param livenessProbe.enabled Enable livenessProbe
 ## @param livenessProbe.path Request path for livenessProbe
@@ -309,7 +324,7 @@ customLivenessProbe: {}
 customReadinessProbe: {}
 ## @param lifecycleHooks LifecycleHook to set additional configuration at startup Evaluated as a template
 ##
-lifecycleHooks:
+lifecycleHooks: ""
 ## @param podAnnotations Pod annotations
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
@@ -336,17 +351,17 @@ service:
   httpsPort: 443
   ## @param service.clusterIP Service Cluster IP
   ##
-  clusterIP:
+  clusterIP: ""
   ## @param service.loadBalancerSourceRanges Service load balancer source ranges
   ## Control hosts connecting to "LoadBalancer" only
   ## loadBalancerSourceRanges:
   ##   - 0.0.0.0/0
   ##
   loadBalancerSourceRanges: []
-  ## @param service.loadBalancerIP loadBalancerIP for the Moodle(TM) Service (optional, cloud specific)
+  ## @param service.loadBalancerIP loadBalancerIP for the Moodle&trade; Service (optional, cloud specific)
   ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
   ##
-  loadBalancerIP:
+  loadBalancerIP: ""
   ## @param service.nodePorts.http Kubernetes HTTP node port
   ## @param service.nodePorts.https Kubernetes HTTPS node port
   ## nodePorts:
@@ -361,33 +376,39 @@ service:
   ##
   externalTrafficPolicy: Cluster
 ## Configure the ingress resource that allows you to access the
-## Moodle(TM) installation. Set up the URL
+## Moodle&trade; installation. Set up the URL
 ## ref: http://kubernetes.io/docs/user-guide/ingress/
 ##
 ingress:
   ## @param ingress.enabled Set to true to enable ingress record generation
   ##
   enabled: false
-  ## @param ingress.certManager Set this to true in order to add the corresponding annotations for cert-manager
+  ## DEPRECATED: Use ingress.annotations instead of ingress.certManager
+  ## certManager: false
   ##
-  certManager: false
+
   ## @param ingress.pathType Ingress Path type
   ##
   pathType: ImplementationSpecific
   ## @param ingress.apiVersion Override API Version (automatically detected if not set)
   ##
-  apiVersion:
+  apiVersion: ""
   ## @param ingress.hostname When the ingress is enabled, a host pointing to this will be created
   ##
   hostname: minio.local
-  ## @param ingress.path The Path to Moodle(TM). You may need to set this to '/*' in order to use this with ALB ingress controllers.
+  ## @param ingress.path The Path to Moodle&trade;. You may need to set this to '/*' in order to use this with ALB ingress controllers.
   ##
   path: /
-  ## @param ingress.annotations Map of Ingress annotations
+  ## @param ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
   ## For a full list of possible ingress annotations, please see
   ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+  ## Use this parameter to set the required annotations for cert-manager, see
+  ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
   ##
-  ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+  ## e.g:
+  ## annotations:
+  ##   kubernetes.io/ingress.class: nginx
+  ##   cert-manager.io/cluster-issuer: cluster-issuer-name
   ##
   annotations: {}
   ## @param ingress.tls Enable TLS configuration for the hostname defined at ingress.hostname parameter
@@ -481,8 +502,8 @@ mariadb:
       ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
       ##   GKE, AWS & OpenStack)
       ##
-      storageClass:
-      ## @param mariadb.primary.persistence.accessModes PVC Access Modes for Moodle<sup>TM</sup> volume
+      storageClass: ""
+      ## @param mariadb.primary.persistence.accessModes PVC Access Modes for Moodle&trade; volume
       ##
       accessModes:
         - ReadWriteOnce
@@ -491,10 +512,10 @@ mariadb:
       size: 8Gi
       ## @param mariadb.primary.persistence.hostPath Set path in case you want to use local host path volumes (not recommended in production)
       ##
-      hostPath:
+      hostPath: ""
       ## @param mariadb.primary.persistence.existingClaim Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas
       ##
-      existingClaim:
+      existingClaim: ""
 ## External database configuration
 ##
 externalDatabase:
@@ -532,8 +553,8 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r130
-    pullPolicy: Always
+    tag: 10-debian-10-r215
+    pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -576,7 +597,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.9.0-debian-10-r28
+    tag: 0.10.1-debian-10-r16
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -596,7 +617,7 @@ metrics:
     ##
     port: 9117
     ## @param metrics.service.loadBalancerIP Load Balancer IP if the Prometheus metrics server type is `LoadBalancer`, otherwise leave blank
-    loadBalancerIP:
+    loadBalancerIP: ""
     ## @param metrics.service.annotations [object] Annotations for Prometheus Exporter pods. Evaluated as a template.
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
     ##
@@ -615,7 +636,7 @@ metrics:
 
 ## @section Certificate injection parameters
 
-## Add custom certificates and certificate authorities to Moodle(TM) container
+## Add custom certificates and certificate authorities to Moodle&trade; container
 ##
 certificates:
   ## @param certificates.customCertificate.certificateSecret Secret containing the certificate and key to add
@@ -628,8 +649,8 @@ certificates:
   customCertificate:
     certificateSecret: ""
     chainSecret:
-      name:
-      key:
+      name: ""
+      key: ""
     certificateLocation: /etc/ssl/certs/ssl-cert-snakeoil.pem
     keyLocation: /etc/ssl/private/ssl-cert-snakeoil.key
     chainLocation: /etc/ssl/certs/mychain.pem
@@ -638,22 +659,22 @@ certificates:
   customCAs: []
   ## @param certificates.command Override default container command (useful when using custom images)
   ##
-  command:
+  command: []
   ## @param certificates.args Override default container args (useful when using custom images)
   ## e.g:
   ## - secret: custom-CA
   ## - secret: more-custom-CAs
   ##
-  args:
+  args: []
   ## @param certificates.extraEnvVars Container sidecar extra environment variables (eg proxy)
   ##
   extraEnvVars: []
   ## @param certificates.extraEnvVarsCM ConfigMap with extra environment variables
   ##
-  extraEnvVarsCM:
+  extraEnvVarsCM: ""
   ## @param certificates.extraEnvVarsSecret Secret with extra environment variables
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret: ""
   ## @param certificates.image.registry Container sidecar registry
   ## @param certificates.image.repository Container sidecar image repository
   ## @param certificates.image.tag Container sidecar image tag (immutable tags are recommended)
@@ -663,7 +684,7 @@ certificates:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r130
+    tag: 10-debian-10-r215
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images

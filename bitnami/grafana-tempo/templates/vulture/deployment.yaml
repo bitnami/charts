@@ -64,16 +64,17 @@ spec:
         - name: grafana-tempo-vulture
           image: {{ template "grafana-tempo.vultureImage" . }}
           imagePullPolicy: {{ .Values.vulture.image.pullPolicy }}
-          {{- if .Values.vulture.lifecycleHooks }}
-          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.vulture.lifecycleHooks "context" $) | nindent 12 }}
-          {{- end }}
           {{- if .Values.vulture.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.vulture.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
-          {{- if .Values.vulture.command }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.vulture.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.vulture.command "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.vulture.args }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.vulture.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.vulture.args "context" $) | nindent 12 }}
           {{- else }}
           args:
@@ -99,6 +100,7 @@ spec:
           {{- if .Values.vulture.resources }}
           resources: {{- toYaml .Values.vulture.resources | nindent 12 }}
           {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.vulture.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
@@ -124,6 +126,10 @@ spec:
             failureThreshold: {{ .Values.vulture.readinessProbe.failureThreshold }}
           {{- else if .Values.vulture.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.vulture.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.vulture.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.vulture.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
           {{- end }}
           volumeMounts:
             - name: tempo-config

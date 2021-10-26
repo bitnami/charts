@@ -56,6 +56,9 @@ spec:
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
       {{- end }}
       initContainers: {{- include "airflow.git.containers.clone" . | trim | nindent 8 }}
+      {{- if .Values.dags.configMap }}
+        {{- include "airflow.loadDAGsInitContainer" . | trim | nindent 8 }}
+      {{- end }}
       {{- if .Values.web.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.web.initContainers "context" $) | trim | nindent 8 }}
       {{- end }}
@@ -105,6 +108,8 @@ spec:
               value: {{ .Values.ldap.uri }}
             - name: AIRFLOW_LDAP_SEARCH
               value: {{ .Values.ldap.base }}
+            - name: AIRFLOW_LDAP_UID_FIELD
+              value: {{ .Values.ldap.uidField }}
             - name: AIRFLOW_LDAP_BIND_USER
               value: {{ .Values.ldap.binddn }}
             - name: AIRFLOW_LDAP_BIND_PASSWORD
@@ -112,13 +117,19 @@ spec:
                 secretKeyRef:
                   name: {{ include "airflow.ldapSecretName" . }}
                   key: bind-password
-            - name: AIRFLOW_LDAP_UID_FIELD
-              value: {{ .Values.ldap.uidField }}
+            - name: AIRFLOW_LDAP_USER_REGISTRATION
+              value: {{ .Values.ldap.userRegistration | quote }}
+            - name: AIRFLOW_LDAP_USER_REGISTRATION_ROLE
+              value: {{ .Values.ldap.userRegistrationRole }}
+            - name: AIRFLOW_LDAP_ROLES_MAPPING
+              value: {{ .Values.ldap.rolesMapping | quote }}
+            - name: AIRFLOW_LDAP_ROLES_SYNC_AT_LOGIN
+              value: {{ .Values.ldap.rolesSyncAtLogin | quote }}
             - name: AIRFLOW_LDAP_USE_TLS
               value: {{ ternary "True" "False" .Values.ldap.tls.enabled | quote }}
             {{- if .Values.ldap.tls.enabled }}
             - name: AIRFLOW_LDAP_ALLOW_SELF_SIGNED
-              value: {{ .Values.ldap.tls.allowSelfSigned }}
+              value: {{ .Values.ldap.tls.allowSelfSigned | quote }}
             - name: AIRFLOW_LDAP_TLS_CA_CERTIFICATE
               value: {{ include "airflow.ldapCAFilename" . | quote }}
             {{- end }}
@@ -184,7 +195,7 @@ spec:
             - name: local-dag-files
               mountPath: /opt/bitnami/airflow/dags/local
           {{- end }}
-          {{- if .Values.dagsConfigMap }}
+          {{- if .Values.dags.configMap }}
             - name: external-dag-files
               mountPath: /opt/bitnami/airflow/dags/external
           {{- end }}
@@ -217,10 +228,12 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | trim | nindent 8 }}
       {{- end }}
       volumes:
-      {{- if .Values.dagsConfigMap }}
-        - name: external-dag-files
+      {{- if .Values.dags.configMap }}
+        - name: load-external-dag-files
           configMap:
-            name: {{ .Values.dagsConfigMap }}
+            name: {{ .Values.dags.configMap }}
+        - name: external-dag-files
+          emptyDir: {}
       {{- end }}
       {{- if include "airflow.shouldUseConfigFromConfigMap" . }}
         - name: custom-configuration-file

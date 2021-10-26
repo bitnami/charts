@@ -86,7 +86,7 @@ Get the TLS secret.
 */}}
 {{- define "rabbitmq.tlsSecretName" -}}
     {{- if .Values.auth.tls.existingSecret -}}
-        {{- printf "%s" .Values.auth.tls.existingSecret -}}
+        {{- printf "%s" (tpl .Values.auth.tls.existingSecret $) -}}
     {{- else -}}
         {{- printf "%s-certs" (include "rabbitmq.fullname" .) -}}
     {{- end -}}
@@ -149,6 +149,16 @@ Usage:
 {{- else if eq $unit "E" }}
     {{- mul $value 1000 1000 1000 1000 1000 1000 }}
 {{- end }}
+{{- end -}}
+
+{{/*
+Return true if cert-manager required annotations for TLS signed certificates are set in the Ingress annotations
+Ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
+*/}}
+{{- define "rabbitmq.ingress.certManagerRequest" -}}
+{{ if or (hasKey . "cert-manager.io/cluster-issuer") (hasKey . "cert-manager.io/issuer") }}
+    {{- true -}}
+{{- end -}}
 {{- end -}}
 
 {{/*
@@ -220,14 +230,14 @@ rabbitmq: memoryHighWatermark
 Validate values of rabbitmq - TLS configuration for Ingress
 */}}
 {{- define "rabbitmq.validateValues.ingress.tls" -}}
-{{- if and .Values.ingress.enabled .Values.ingress.tls (not .Values.ingress.certManager) (not .Values.ingress.selfSigned) (empty .Values.ingress.extraTls) }}
+{{- if and .Values.ingress.enabled .Values.ingress.tls (not (include "rabbitmq.ingress.certManagerRequest" .Values.ingress.annotations)) (not .Values.ingress.selfSigned) (empty .Values.ingress.extraTls) }}
 rabbitmq: ingress.tls
     You enabled the TLS configuration for the default ingress hostname but
     you did not enable any of the available mechanisms to create the TLS secret
     to be used by the Ingress Controller.
     Please use any of these alternatives:
       - Use the `ingress.extraTls` and `ingress.secrets` parameters to provide your custom TLS certificates.
-      - Relay on cert-manager to create it by setting `ingress.certManager=true`
+      - Relay on cert-manager to create it by setting the corresponding annotations
       - Relay on Helm to create self-signed certificates by setting `ingress.selfSigned=true`
 {{- end -}}
 {{- end -}}

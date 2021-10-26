@@ -7,23 +7,23 @@
 ## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
 global:
-  imageRegistry:
+  imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass:
+  storageClass: ""
 ## @section Common parameters
 ## @param kubeVersion Override Kubernetes version
 ##
-kubeVersion:
+kubeVersion: ""
 ## @param nameOverride String to partially override common.names.fullname
 ##
-nameOverride:
+nameOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname
 ##
-fullnameOverride:
+fullnameOverride: ""
 ## @param commonLabels Labels to add to all deployed objects
 ##
 commonLabels: {}
@@ -47,7 +47,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/concourse
-  tag: 7.3.2-debian-10-r23
+  tag: 7.5.0-debian-10-r27
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -86,12 +86,12 @@ secrets:
   ## Extra Reads: https://github.com/concourse/concourse/issues/1865#issuecomment-464166994
   ## https://concourse-ci.org/global-resources.html#complications-with-reusing-containers
   ##
-  teamAuthorizedKeys:
+  teamAuthorizedKeys: []
 
   ## @param secrets.localUsers List of `username:password` or `username:bcrypted_password` combinations for all your local concourse users. Auto-generated if not set
   ## For details of expected format, see https://concourse-ci.org/local-auth.html
   ##
-  localUsers:
+  localUsers: ""
 
   ## @param secrets.hostKey [string] Concourse Host Keys.
   ## Example value taken from https://github.com/concourse/concourse-chart/blob/master/values.yaml
@@ -126,7 +126,7 @@ secrets:
     y1ZOrWfvON+XjWFFAEej/CpQZkNUkTzjTtSC0dnfAveZlasQHdI=
     -----END RSA PRIVATE KEY-----
 
-  ## @param secrets.hostKeyPub Concourse Host Keys.
+  ## @param secrets.hostKeyPub [string] Concourse Host Keys.
   ##
   hostKeyPub: |-
     ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDYBQ9fG6IML+qsFaMh1Pl+81wyUwRilHdfhItAiAsLVQsOwI5+V4pn5aLhHPBuRQqIqYmbkZ7I1VUIN1+90PVJ3X7l9qqanb85AHMtLujw1j9u0zDyH2XHgpUloknUQzUSLIZjjU3Hn3Uo/XikF+vT8104isO7Ym8Xp7sIcRuvOQ3nuRsFVCRogxpLTVHD/k57rwYVqWWLaKLwvx01ZVXOq4GHk/BVaKa9ODC/dNgbZMfwvVVXuf7/NFGmSMyXb49Si4aoP4Gn7jAX6GngBbm/bgKqO0skQy/ggQm/YVF+s5q4EhleMBLVJKD1VpM5LeLDFpiu/y4bVd8wUcgK+QQ9 Concourse
@@ -205,7 +205,7 @@ secrets:
 
   ## @param secrets.workerAdditionalCerts Additional certificates to add to the worker nodes
   ##
-  workerAdditionalCerts:
+  workerAdditionalCerts: ""
 
 ## @section Concourse Web parameters
 ##
@@ -219,7 +219,7 @@ web:
 
   ## @param web.args Override default args of the startup command for the web component.
   ##
-  args:
+  args: []
 
   ## @param web.baseUrl url
   ##
@@ -231,7 +231,7 @@ web:
 
   ## @param web.clusterName A name for this Concourse cluster, to be displayed on the dashboard page.
   ##
-  clusterName:
+  clusterName: ""
   ## @param web.bindIp IP address on which to listen for HTTP traffic (web UI and API).
   ##
   bindIp: 0.0.0.0
@@ -243,7 +243,7 @@ web:
   ## @param web.peerAddress Network address of this web node, reachable by other web nodes.
   ## Used for forwarded worker addresses. (default: $POD_IP)
   ##
-  peerAddress:
+  peerAddress: ""
 
   ## @param web.externalUrl URL used to reach any ATC from the outside world.
   ## This is *very* important for a proper authentication workflow as
@@ -251,7 +251,7 @@ web:
   ##
   ## Example: http://ci.concourse-ci.org
   ##
-  externalUrl:
+  externalUrl: ""
 
   ## @param web.enableAcrossStep Enable the experimental across step to be used in jobs. The API is subject to change.
   ##
@@ -336,7 +336,7 @@ web:
     ## @param web.serviceAccount.name Override Web service account name
     ## If not set and create is true, a name is generated using the fullname template
     ##
-    name:
+    name: ""
 
   ## @param web.tls.enabled enable serving HTTPS traffic directly through the web component.
   ## @param web.tls.containerPort on which to listen for HTTPS traffic.
@@ -347,7 +347,7 @@ web:
 
   ## @param web.existingConfigmap The name of an existing ConfigMap with your custom configuration for web
   ##
-  existingConfigmap:
+  existingConfigmap: ""
   ## @param web.command Override default container command (useful when using custom images)
   ##
   command: []
@@ -411,11 +411,11 @@ web:
 
     ## @param web.tsa.gardenRequestTimeout How long to wait for requests to Garden to complete. 0 means no timeout.
     ##
-    gardenRequestTimeout:
+    gardenRequestTimeout: ""
 
   ## @param web.configRBAC set RBAC configuration
   ##
-  configRBAC:
+  configRBAC: ""
 
   ## Force sending secure flag on http cookies
   ##
@@ -433,7 +433,7 @@ web:
     ## @param web.auth.passwordConnector The connector to use for password authentication for `fly login -u ... -p ...`.
     ## Either "local" or "ldap". Defaults to "local".
     ##
-    passwordConnector:
+    passwordConnector: ""
 
     mainTeam:
       ## @param web.auth.mainTeam.config Configuration file for specifying the main teams params.
@@ -532,10 +532,10 @@ web:
   extraEnvVars: []
   ## @param web.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for web nodes
   ##
-  extraEnvVarsCM:
+  extraEnvVarsCM: ""
   ## @param web.extraEnvVarsSecret Name of existing Secret containing extra env vars for web nodes
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret: ""
   ## @param web.extraVolumes Optionally specify extra list of additional volumes for the web pod(s)
   ##
   extraVolumes: []
@@ -552,7 +552,7 @@ web:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  sidecars: {}
+  sidecars: []
   ## @param web.initContainers Add additional init containers to the web pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
@@ -562,11 +562,11 @@ web:
   ##    imagePullPolicy: Always
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
-  initContainers: {}
+  initContainers: []
 
   ## @param web.existingSecret Use an existing secret for the Web service credentials
   ##
-  existingSecret:
+  existingSecret: ""
 
 ## @section Concourse Worker parameters
 ##
@@ -630,7 +630,7 @@ worker:
     ## @param worker.serviceAccount.name Override Worker service account name
     ## If not set and create is true, a name is generated using the fullname template
     ##
-    name:
+    name: ""
 
   ## Enable HorizontalPodAutoscaler for worker pods
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
@@ -643,8 +643,8 @@ worker:
   ##
   autoscaling:
     enabled: false
-    maxReplicas:
-    minReplicas:
+    maxReplicas: ""
+    minReplicas: ""
     builtInMetrics: []
     customMetrics: []
 
@@ -823,10 +823,10 @@ worker:
   extraEnvVars: []
   ## @param worker.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for worker nodes
   ##
-  extraEnvVarsCM:
+  extraEnvVarsCM: ""
   ## @param worker.extraEnvVarsSecret Name of existing Secret containing extra env vars for worker nodes
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret: ""
   ## @param worker.extraVolumes Optionally specify extra list of additional volumes for the worker pod(s)
   ##
   extraVolumes: []
@@ -843,7 +843,7 @@ worker:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  sidecars: {}
+  sidecars: []
   ## @param worker.initContainers Add additional init containers to the worker pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
@@ -853,11 +853,11 @@ worker:
   ##    imagePullPolicy: Always
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
-  initContainers: {}
+  initContainers: []
 
   ## @param worker.existingSecret name of an existing secret resource containing the keys and the pub
   ##
-  existingSecret:
+  existingSecret: ""
 
   baggageclaim:
     ## @param worker.baggageclaim.logLevel Minimum level of logs to see. Possible values: debug, info, error
@@ -882,16 +882,16 @@ worker:
 
     ## @param worker.baggageclaim.disableUserNamespaces Disable remapping of user/group IDs in unprivileged volumes.
     ##
-    disableUserNamespaces:
+    disableUserNamespaces: ""
 
     ## @param worker.baggageclaim.volumes Directory in which to place volume data.
     ##
-    volumes:
+    volumes: ""
 
     ## @param worker.baggageclaim.driver Driver to use for managing volumes.
     ## Possible values: detect, naive, btrfs, and overlay.
     ##
-    driver:
+    driver: ""
 
     ## @param worker.baggageclaim.btrfsBin Path to btrfs binary
     ##
@@ -903,7 +903,7 @@ worker:
 
     ## @param worker.baggageclaim.overlaysDir Path to directory in which to store overlay data
     ##
-    overlaysDir:
+    overlaysDir: ""
 
   ## If true, use a Persistent Volume Claim, If false, use emptyDir
   ## @param worker.persistence.enabled Enable persistence using Persistent Volume Claims
@@ -919,7 +919,7 @@ worker:
     ##
     ## @param worker.persistence.storageClass Persistent Volume storage class
     ##
-    storageClass:
+    storageClass: ""
     ## @param worker.persistence.annotations Persistent Volume Claim annotations
     ##
     annotations: {}
@@ -963,16 +963,16 @@ service:
     ## @param service.web.clusterIP When using `service.web.type: ClusterIP`, sets the user-specified cluster IP.
     ## Example: 172.217.1.174
     ##
-    clusterIP:
+    clusterIP: ""
 
     ## @param service.web.loadBalancerIP  When using `service.web.type: LoadBalancer`, sets the user-specified load balancer IP.
     ## Example: 172.217.1.174
     ##
-    loadBalancerIP:
+    loadBalancerIP: ""
 
     ## @param service.web.labels Additional Labels to be added to the web api service.
     ##
-    labels:
+    labels: {}
 
     ## @param service.web.annotations Annotations to be added to the web api service.
     ##
@@ -990,19 +990,19 @@ service:
     ## Example:
     ##   - 192.168.1.10/32
     ##
-    loadBalancerSourceRanges:
+    loadBalancerSourceRanges: []
 
     ## @param service.web.nodePort When using `service.web.type: NodePort`, sets the nodePort for api
     ##
-    nodePort:
+    nodePort: ""
 
-    ## @param service.web.tlsNodePort When using `service.web.type: NodePort`, sets the nodePort for api tls
+    ## @param service.web.tlsnodePort When using `service.web.type: NodePort`, sets the nodePort for api tls
     ##
-    tlsNodePort:
+    tlsnodePort: ""
 
     ## @param service.web.externalTrafficPolicy Set service externalTraffic policy
     ##
-    externalTrafficPolicy:
+    externalTrafficPolicy: ""
 
   workerGateway:
     ## @param service.workerGateway.type For minikube, set this to ClusterIP, elsewhere use LoadBalancer or NodePort
@@ -1013,7 +1013,7 @@ service:
     ## @param service.workerGateway.clusterIP When using `service.workerGateway.type: ClusterIP`, sets the user-specified cluster IP.
     ## Example: 172.217.1.174
     ##
-    clusterIP:
+    clusterIP: ""
 
     ## @param service.workerGateway.port Service HTTP port
     ##
@@ -1022,11 +1022,11 @@ service:
     ## @param service.workerGateway.loadBalancerIP When using `service.workerGateway.type: LoadBalancer`, sets the user-specified load balancer IP.
     ## Example: 172.217.1.174
     ##
-    loadBalancerIP:
+    loadBalancerIP: ""
 
     ## @param service.workerGateway.labels Additional Labels to be added to the web workerGateway service.
     ##
-    labels:
+    labels: {}
 
     ## @param service.workerGateway.annotations Annotations to be added to the web workerGateway service.
     ##
@@ -1043,11 +1043,11 @@ service:
     ## Example:
     ##   - 192.168.1.10/32
     ##
-    loadBalancerSourceRanges:
+    loadBalancerSourceRanges: []
 
     ## @param service.workerGateway.nodePort When using `service.workerGateway.type: NodePort`, sets the nodePort for tsa
     ##
-    nodePort:
+    nodePort: ""
 
 ## Ingress parameters
 ##
@@ -1059,14 +1059,20 @@ ingress:
   ##
   enabled: false
 
-  ## @param ingress.certManager Add annotations for cert-manager
+  ## DEPRECATED: Use ingress.annotations instead of ingress.certManager
+  ## certManager: false
   ##
-  certManager: false
 
-  ## @param ingress.annotations Annotations to be added to the web ingress.
-  ## Example:
+  ## @param ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
+  ## For a full list of possible ingress annotations, please see
+  ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+  ## Use this parameter to set the required annotations for cert-manager, see
+  ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
+  ##
+  ## e.g:
+  ## annotations:
   ##   kubernetes.io/ingress.class: nginx
-  ##   kubernetes.io/tls-acme: 'true'
+  ##   cert-manager.io/cluster-issuer: cluster-issuer-name
   ##
   annotations: {}
 
@@ -1083,7 +1089,7 @@ ingress:
   ## Either `hosts` or `rulesOverride` must be provided if Ingress is enabled.
   ## `rulesOverride` allows the user to define the full set of ingress rules, for more complex Ingress setups.
   ##
-  rulesOverride:
+  rulesOverride: []
 
   ## @param ingress.tls TLS configuration.
   ## Secrets must be manually created in the namespace.
@@ -1151,8 +1157,8 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: "10"
-    pullPolicy: Always
+    tag: 10-debian-10-r223
+    pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -1192,12 +1198,12 @@ volumePermissions:
 ##
 postgresql:
   enabled: true
-  nameOverride:
+  nameOverride: ""
   postgresqlUsername: bn_concourse
   postgresqlDatabase: bitnami_concourse
   ## In case of postgresql.enabled = true, allow the usage of existing secrets for postgresql
   ##
-  existingSecret:
+  existingSecret: ""
 
 ## @section External PostgreSQL configuration
 ## All of these values are only used when postgresql.enabled is set to false
@@ -1219,13 +1225,13 @@ externalDatabase:
   user: bn_concourse
   ## Database password
   ##
-  password:
+  password: ""
   ## Name of an existing secret resource containing the DB password
   ##
-  existingSecret:
+  existingSecret: ""
   ## Name of an existing secret key containing the DB password
   ##
-  existingSecretPasswordKey:
+  existingSecretPasswordKey: ""
   ## Database name
   ##
   database: bitnami_concourse

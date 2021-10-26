@@ -65,19 +65,22 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 
 ### General parameters
 
-| Name                     | Description                                                                                                           | Value           |
-| ------------------------ | --------------------------------------------------------------------------------------------------------------------- | --------------- |
-| `nameOverride`           | String to partially override common.names.fullname template (will maintain the release name)                          | `""`            |
-| `fullnameOverride`       | String to fully override common.names.fullname template                                                               | `""`            |
-| `clusterDomain`          | Kubernetes Cluster Domain                                                                                             | `cluster.local` |
-| `commonAnnotations`      | Common annotations to add to all resources (sub-charts are not considered). Evaluated as a template                   | `{}`            |
-| `commonLabels`           | Common labels to add to all resources (sub-charts are not considered). Evaluated as a template                        | `{}`            |
-| `extraDeploy`            | Array of extra objects to deploy with the release (evaluated as a template)                                           | `[]`            |
-| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                               | `false`         |
-| `diagnosticMode.command` | Command to override all containers in the deployment                                                                  | `[]`            |
-| `diagnosticMode.args`    | Args to override all containers in the deployment                                                                     | `[]`            |
-| `serviceAccount.enabled` | Enable service account (Note: Service Account will only be automatically created if `serviceAccount.name` is not set) | `false`         |
-| `serviceAccount.name`    | Name of an already existing service account. Setting this value disables the automatic service account creation       | `""`            |
+| Name                        | Description                                                                                                              | Value           |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------------ | --------------- |
+| `nameOverride`              | String to partially override common.names.fullname template (will maintain the release name)                             | `""`            |
+| `fullnameOverride`          | String to fully override common.names.fullname template                                                                  | `""`            |
+| `clusterDomain`             | Kubernetes Cluster Domain                                                                                                | `cluster.local` |
+| `commonAnnotations`         | Common annotations to add to all resources (sub-charts are not considered). Evaluated as a template                      | `{}`            |
+| `commonLabels`              | Common labels to add to all resources (sub-charts are not considered). Evaluated as a template                           | `{}`            |
+| `extraDeploy`               | Array of extra objects to deploy with the release (evaluated as a template)                                              | `[]`            |
+| `serviceAccount.enabled`    | Enable service account (Note: Service Account will only be automatically created if `serviceAccount.name` is not set)    | `false`         |
+| `serviceAccount.name`       | Name of an already existing service account. Setting this value disables the automatic service account creation          | `""`            |
+| `psp.create`                | Create Pod Security Policy                                                                                               | `false`         |
+| `rbac.create`               | Create Role and RoleBinding (required for PSP to work)                                                                   | `false`         |
+| `topologySpreadConstraints` | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `{}`            |
+| `diagnosticMode.enabled`    | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                                  | `false`         |
+| `diagnosticMode.command`    | Command to override all containers in the deployment                                                                     | `[]`            |
+| `diagnosticMode.args`       | Args to override all containers in the deployment                                                                        | `[]`            |
 
 
 ### PostgreSQL with Repmgr parameters
@@ -86,7 +89,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
 | `postgresqlImage.registry`                      | PostgreSQL with Repmgr image registry                                                                                                                                                                         | `docker.io`                 |
 | `postgresqlImage.repository`                    | PostgreSQL with Repmgr image repository                                                                                                                                                                       | `bitnami/postgresql-repmgr` |
-| `postgresqlImage.tag`                           | PostgreSQL with Repmgr image tag                                                                                                                                                                              | `11.12.0-debian-10-r44`     |
+| `postgresqlImage.tag`                           | PostgreSQL with Repmgr image tag                                                                                                                                                                              | `11.13.0-debian-10-r57`     |
 | `postgresqlImage.pullPolicy`                    | PostgreSQL with Repmgr image pull policy                                                                                                                                                                      | `IfNotPresent`              |
 | `postgresqlImage.pullSecrets`                   | Specify docker-registry secret names as an array                                                                                                                                                              | `[]`                        |
 | `postgresqlImage.debug`                         | Specify if debug logs should be enabled                                                                                                                                                                       | `false`                     |
@@ -204,7 +207,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | --------------------- |
 | `pgpoolImage.registry`                      | Pgpool image registry                                                                                              | `docker.io`           |
 | `pgpoolImage.repository`                    | Pgpool image repository                                                                                            | `bitnami/pgpool`      |
-| `pgpoolImage.tag`                           | Pgpool image tag                                                                                                   | `4.2.3-debian-10-r38` |
+| `pgpoolImage.tag`                           | Pgpool image tag                                                                                                   | `4.2.5-debian-10-r26` |
 | `pgpoolImage.pullPolicy`                    | Pgpool image pull policy                                                                                           | `IfNotPresent`        |
 | `pgpoolImage.pullSecrets`                   | Specify docker-registry secret names as an array                                                                   | `[]`                  |
 | `pgpoolImage.debug`                         | Specify if debug logs should be enabled                                                                            | `false`               |
@@ -284,6 +287,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `pgpool.clientIdleLimit`                    | The time in seconds to disconnect a client if it remains idle since the last query (PGPOOL_CLIENT_IDLE_LIMIT)      | `""`                  |
 | `pgpool.connectionLifeTime`                 | The time in seconds to terminate the cached connections to the PostgreSQL backend (PGPOOL_CONNECTION_LIFE_TIME)    | `""`                  |
 | `pgpool.useLoadBalancing`                   | Use Pgpool Load-Balancing                                                                                          | `true`                |
+| `pgpool.loadBalancingOnWrite`               | LoadBalancer on write actions behavior                                                                             | `transaction`         |
 | `pgpool.configuration`                      | Pgpool configuration                                                                                               | `{}`                  |
 | `pgpool.configurationCM`                    | ConfigMap with Pgpool configuration                                                                                | `""`                  |
 | `pgpool.initdbScripts`                      | Dictionary of initdb scripts                                                                                       | `{}`                  |
@@ -316,47 +320,54 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 
 ### Metrics parameters
 
-| Name                                         | Description                                                                                            | Value                       |
-| -------------------------------------------- | ------------------------------------------------------------------------------------------------------ | --------------------------- |
-| `metricsImage.registry`                      | PostgreSQL Prometheus exporter image registry                                                          | `docker.io`                 |
-| `metricsImage.repository`                    | PostgreSQL Prometheus exporter image repository                                                        | `bitnami/postgres-exporter` |
-| `metricsImage.tag`                           | PostgreSQL Prometheus exporter image tag                                                               | `0.9.0-debian-10-r108`      |
-| `metricsImage.pullPolicy`                    | PostgreSQL Prometheus exporter image pull policy                                                       | `IfNotPresent`              |
-| `metricsImage.pullSecrets`                   | Specify docker-registry secret names as an array                                                       | `[]`                        |
-| `metricsImage.debug`                         | Specify if debug logs should be enabled                                                                | `false`                     |
-| `metrics.enabled`                            | Enable PostgreSQL Prometheus exporter                                                                  | `false`                     |
-| `metrics.securityContext.enabled`            | Enable security context for PostgreSQL Prometheus exporter                                             | `true`                      |
-| `metrics.securityContext.runAsUser`          | User ID for the PostgreSQL Prometheus exporter container                                               | `1001`                      |
-| `metrics.resources.limits`                   | The resources limits for the container                                                                 | `{}`                        |
-| `metrics.resources.requests`                 | The requested resources for the container                                                              | `{}`                        |
-| `metrics.livenessProbe.enabled`              | Enable livenessProbe                                                                                   | `true`                      |
-| `metrics.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                | `30`                        |
-| `metrics.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                       | `10`                        |
-| `metrics.livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                                      | `5`                         |
-| `metrics.livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                                    | `6`                         |
-| `metrics.livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                                    | `1`                         |
-| `metrics.readinessProbe.enabled`             | Enable readinessProbe                                                                                  | `true`                      |
-| `metrics.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                               | `5`                         |
-| `metrics.readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                                      | `10`                        |
-| `metrics.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                     | `5`                         |
-| `metrics.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                                   | `6`                         |
-| `metrics.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                   | `1`                         |
-| `metrics.startupProbe.enabled`               | Enable startupProbe                                                                                    | `false`                     |
-| `metrics.startupProbe.initialDelaySeconds`   | Initial delay seconds for startupProbe                                                                 | `5`                         |
-| `metrics.startupProbe.periodSeconds`         | Period seconds for startupProbe                                                                        | `10`                        |
-| `metrics.startupProbe.timeoutSeconds`        | Timeout seconds for startupProbe                                                                       | `5`                         |
-| `metrics.startupProbe.failureThreshold`      | Failure threshold for startupProbe                                                                     | `10`                        |
-| `metrics.startupProbe.successThreshold`      | Success threshold for startupProbe                                                                     | `1`                         |
-| `metrics.annotations`                        | Annotations for PostgreSQL Prometheus exporter service                                                 | `{}`                        |
-| `metrics.customMetrics`                      | Additional custom metrics                                                                              | `""`                        |
-| `metrics.extraEnvVars`                       | An array to add extra environment variables to configure postgres-exporter                             | `{}`                        |
-| `metrics.serviceMonitor.enabled`             | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`) | `false`                     |
-| `metrics.serviceMonitor.namespace`           | Optional namespace which Prometheus is running in                                                      | `""`                        |
-| `metrics.serviceMonitor.interval`            | How frequently to scrape metrics (use by default, falling back to Prometheus' default)                 | `""`                        |
-| `metrics.serviceMonitor.scrapeTimeout`       | Service monitor scrape timeout                                                                         | `""`                        |
-| `metrics.serviceMonitor.selector`            | (https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#tldr)                       | `{}`                        |
-| `metrics.serviceMonitor.relabelings`         | ServiceMonitor relabelings. Value is evaluated as a template                                           | `[]`                        |
-| `metrics.serviceMonitor.metricRelabelings`   | ServiceMonitor metricRelabelings. Value is evaluated as a template                                     | `[]`                        |
+| Name                                         | Description                                                                                                                                               | Value                       |
+| -------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
+| `metricsImage.registry`                      | PostgreSQL Prometheus exporter image registry                                                                                                             | `docker.io`                 |
+| `metricsImage.repository`                    | PostgreSQL Prometheus exporter image repository                                                                                                           | `bitnami/postgres-exporter` |
+| `metricsImage.tag`                           | PostgreSQL Prometheus exporter image tag                                                                                                                  | `0.10.0-debian-10-r85`      |
+| `metricsImage.pullPolicy`                    | PostgreSQL Prometheus exporter image pull policy                                                                                                          | `IfNotPresent`              |
+| `metricsImage.pullSecrets`                   | Specify docker-registry secret names as an array                                                                                                          | `[]`                        |
+| `metricsImage.debug`                         | Specify if debug logs should be enabled                                                                                                                   | `false`                     |
+| `metrics.enabled`                            | Enable PostgreSQL Prometheus exporter                                                                                                                     | `false`                     |
+| `metrics.securityContext.enabled`            | Enable security context for PostgreSQL Prometheus exporter                                                                                                | `true`                      |
+| `metrics.securityContext.runAsUser`          | User ID for the PostgreSQL Prometheus exporter container                                                                                                  | `1001`                      |
+| `metrics.resources.limits`                   | The resources limits for the container                                                                                                                    | `{}`                        |
+| `metrics.resources.requests`                 | The requested resources for the container                                                                                                                 | `{}`                        |
+| `metrics.livenessProbe.enabled`              | Enable livenessProbe                                                                                                                                      | `true`                      |
+| `metrics.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                                                                   | `30`                        |
+| `metrics.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                                                                          | `10`                        |
+| `metrics.livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                                                                                         | `5`                         |
+| `metrics.livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                                                                                       | `6`                         |
+| `metrics.livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                                                                                       | `1`                         |
+| `metrics.readinessProbe.enabled`             | Enable readinessProbe                                                                                                                                     | `true`                      |
+| `metrics.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                                                                                  | `5`                         |
+| `metrics.readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                                                                                         | `10`                        |
+| `metrics.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                                                                        | `5`                         |
+| `metrics.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                                                                                      | `6`                         |
+| `metrics.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                                                                      | `1`                         |
+| `metrics.startupProbe.enabled`               | Enable startupProbe                                                                                                                                       | `false`                     |
+| `metrics.startupProbe.initialDelaySeconds`   | Initial delay seconds for startupProbe                                                                                                                    | `5`                         |
+| `metrics.startupProbe.periodSeconds`         | Period seconds for startupProbe                                                                                                                           | `10`                        |
+| `metrics.startupProbe.timeoutSeconds`        | Timeout seconds for startupProbe                                                                                                                          | `5`                         |
+| `metrics.startupProbe.failureThreshold`      | Failure threshold for startupProbe                                                                                                                        | `10`                        |
+| `metrics.startupProbe.successThreshold`      | Success threshold for startupProbe                                                                                                                        | `1`                         |
+| `metrics.service.type`                       | PostgreSQL Prometheus exporter metrics service type                                                                                                       | `ClusterIP`                 |
+| `metrics.service.port`                       | PostgreSQL Prometheus exporter metrics service port                                                                                                       | `9187`                      |
+| `metrics.service.nodePort`                   | PostgreSQL Prometheus exporter Node Port                                                                                                                  | `""`                        |
+| `metrics.service.clusterIP`                  | PostgreSQL Prometheus exporter metrics service Cluster IP                                                                                                 | `""`                        |
+| `metrics.service.loadBalancerIP`             | PostgreSQL Prometheus exporter service Load Balancer IP                                                                                                   | `""`                        |
+| `metrics.service.loadBalancerSourceRanges`   | PostgreSQL Prometheus exporter service Load Balancer sources                                                                                              | `[]`                        |
+| `metrics.service.externalTrafficPolicy`      | PostgreSQL Prometheus exporter service external traffic policy                                                                                            | `Cluster`                   |
+| `metrics.annotations`                        | Annotations for PostgreSQL Prometheus exporter service                                                                                                    | `{}`                        |
+| `metrics.customMetrics`                      | Additional custom metrics                                                                                                                                 | `""`                        |
+| `metrics.extraEnvVars`                       | An array to add extra environment variables to configure postgres-exporter                                                                                | `{}`                        |
+| `metrics.serviceMonitor.enabled`             | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)                                                    | `false`                     |
+| `metrics.serviceMonitor.namespace`           | Optional namespace which Prometheus is running in                                                                                                         | `""`                        |
+| `metrics.serviceMonitor.interval`            | How frequently to scrape metrics (use by default, falling back to Prometheus' default)                                                                    | `""`                        |
+| `metrics.serviceMonitor.scrapeTimeout`       | Service monitor scrape timeout                                                                                                                            | `""`                        |
+| `metrics.serviceMonitor.selector`            | Defaults to what's used if you follow CoreOS Prometheus Install Instructions (https://github.com/bitnami/charts/tree/master/bitnami/kube-prometheus#tldr) | `{}`                        |
+| `metrics.serviceMonitor.relabelings`         | ServiceMonitor relabelings. Value is evaluated as a template                                                                                              | `[]`                        |
+| `metrics.serviceMonitor.metricRelabelings`   | ServiceMonitor metricRelabelings. Value is evaluated as a template                                                                                        | `[]`                        |
 
 
 ### Volume permissions parameters
@@ -365,8 +376,8 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | --------------------------------------------- | --------------------------------------------------- | ----------------------- |
 | `volumePermissionsImage.registry`             | Init container volume-permissions image registry    | `docker.io`             |
 | `volumePermissionsImage.repository`           | Init container volume-permissions image repository  | `bitnami/bitnami-shell` |
-| `volumePermissionsImage.tag`                  | Init container volume-permissions image tag         | `10-debian-10-r125`     |
-| `volumePermissionsImage.pullPolicy`           | Init container volume-permissions image pull policy | `Always`                |
+| `volumePermissionsImage.tag`                  | Init container volume-permissions image tag         | `10-debian-10-r218`     |
+| `volumePermissionsImage.pullPolicy`           | Init container volume-permissions image pull policy | `IfNotPresent`          |
 | `volumePermissionsImage.pullSecrets`          | Specify docker-registry secret names as an array    | `[]`                    |
 | `volumePermissions.enabled`                   | Enable init container to adapt volume permissions   | `false`                 |
 | `volumePermissions.securityContext.runAsUser` | Init container volume-permissions User ID           | `0`                     |
@@ -382,7 +393,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `persistence.existingClaim` | A manually managed Persistent Volume and Claim                                          | `""`                  |
 | `persistence.storageClass`  | Persistent Volume Storage Class                                                         | `""`                  |
 | `persistence.mountPath`     | The path the volume will be mounted at, useful when using different PostgreSQL images.  | `/bitnami/postgresql` |
-| `persistence.accessModes`   | List of access modes of data volume                                                     | `[]`                  |
+| `persistence.accessModes`   | List of access modes of data volume                                                     | `["ReadWriteOnce"]`   |
 | `persistence.size`          | Persistent Volume Claim size                                                            | `8Gi`                 |
 | `persistence.annotations`   | Persistent Volume Claim annotations                                                     | `{}`                  |
 | `persistence.selector`      | Selector to match an existing Persistent Volume (this value is evaluated as a template) | `{}`                  |
@@ -434,9 +445,9 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
-### Change PostgreSQL version
+### Use a different PostgreSQL version
 
-To modify the PostgreSQL version used in this chart you can specify a [valid image tag](https://hub.docker.com/r/bitnami/postgresql-repmgr/tags/) using the `image.tag` parameter. For example, `image.tag=X.Y.Z`. This approach is also applicable to other images like exporters.
+To modify the application version used in this chart, specify a different version of the image using the `image.tag` parameter and/or a different repository using the `image.repository` parameter. Refer to the [chart documentation for more information on these parameters and how to use them with images from a private registry](https://docs.bitnami.com/kubernetes/infrastructure/postgresql-ha/configuration/change-image-version/).
 
 ### Use a volume for /dev/shm
 
@@ -548,8 +559,8 @@ In more complex scenarios, we may have the following tree of dependencies
         v                    v                  v
 +-------+------+    +--------+------+  +--------+------+
 |              |    |               |  |               |
-|PostgreSQL HA |    |  Sub-chart 1  |  |  Sub-chart 2  |
-|              |    |               |  |               |
+| PostgreSQL HA |  | Sub-chart 1 |  | Sub-chart 2 |
+|---------------|--|-------------|--|-------------|
 +--------------+    +---------------+  +---------------+
 ```
 

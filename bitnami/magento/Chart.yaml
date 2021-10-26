@@ -1,7 +1,7 @@
 annotations:
   category: E-Commerce
 apiVersion: v2
-appVersion: 2.4.2
+appVersion: 2.4.3
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -17,7 +17,7 @@ dependencies:
   - condition: elasticsearch.enabled
     name: elasticsearch
     repository: https://charts.bitnami.com/bitnami
-    version: 15.x.x
+    version: 17.x.x
 description: A feature-rich flexible e-commerce solution. It includes transaction options, multi-store functionality, loyalty programs, product categorization and shopper filtering, promotion rules, and more.
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/magento
@@ -35,4 +35,4 @@ name: magento
 sources:
   - https://github.com/bitnami/bitnami-docker-magento
   - https://magento.com/
-version: 18.1.6
+version: 19.0.8

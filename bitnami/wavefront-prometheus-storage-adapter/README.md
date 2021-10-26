@@ -67,7 +67,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | ----------------------------------------------------------------------------------------- | ---------------------------------------------- |
 | `image.registry`                        | Adapter image registry                                                                    | `docker.io`                                    |
 | `image.repository`                      | Adapter image repository                                                                  | `bitnami/wavefront-prometheus-storage-adapter` |
-| `image.tag`                             | Adapter image tag (immutabe tags are recommended)                                         | `1.0.3-debian-10-r88`                          |
+| `image.tag`                             | Adapter image tag (immutabe tags are recommended)                                         | `1.0.3-debian-10-r201`                         |
 | `image.pullPolicy`                      | Adapter image pull policy                                                                 | `IfNotPresent`                                 |
 | `image.pullSecrets`                     | Adapter image pull secrets                                                                | `[]`                                           |
 | `image.debug`                           | Enable image debug mode                                                                   | `false`                                        |
@@ -172,41 +172,17 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
-### Connecting to a Wavefront Proxy
+### Connect to a Wavefront Proxy instance
 
 The Wavefront Prometheus Storage Adapter chart needs to be connected to a Wavefront Proxy instance. This can be done in two different ways:
 
-- Deploying the Wavefront subchart, using only the Wavefront Proxy component (default behavior). This is done by setting `wavefront.enabled=true` and `wavefront.proxy.enabled=true`. We recommend disabling the rest of the Wavefront sub-chart resources as they would not be used by the Prometheus Storage Adapter. In this case, you should not set the `externalProxy.host` value. You also need to configure the Wavefront SaaS URL and token using the `wavefont.wavefront.url` and `wavefront.wavefront.token`.
+- Deploying the Wavefront subchart, using only the Wavefront Proxy component (default behavior): This is done by setting `wavefront.enabled=true` and `wavefront.proxy.enabled=true`, but leaving the `externalProxy.host` value unset. We recommend disabling the rest of the Wavefront sub-chart resources as they would not be used by the Prometheus Storage Adapter. You also need to configure the Wavefront SaaS URL and token using the `wavefont.wavefront.url` and `wavefront.wavefront.token` parameters.
 
-```yaml
-externalProxy:
-  host:
-  port:
+- Using an external Wavefront Proxy instance: This is done by setting the `externalProxy.host` and `externalProxy.port` values. In this case, you should set the `wavefront.enabled` value to `false`. You also need to configure the Wavefront SaaS URL and token using the `wavefront.wavefront.url` and `wavefront.wavefront.token` parameters.
 
-wavefront:
-  enabled: true
-  collector:
-    enabled: false
-  rbac:
-    create: false
-  serviceAccount:
-    create: false
-  proxy:
-    enabled: true
-```
+Refer to the [chart documentation for more detailed configuration examples](https://docs.bitnami.com/kubernetes/apps/wavefront-storage-adapter-for-prometheus/get-started/configure-connection/).
 
-- Using an external Wavefront Proxy instance. This is done by setting the `externalProxy.host` and `externalProxy.port` values. In this case, you should not set the `wavefront.enabled` value to `true`.
-
-```yaml
-externalProxy:
-  host: example-proxy
-  port: 2878
-
-wavefront:
-  enabled: false
-```
-
-### Configuring Prometheus
+### Configure Prometheus
 
 Once the Wavefront Prometheus Storage Adapter is deployed, you will need to configure the `prometheus.yml` file in your Prometheus installation adding the following lines (substitute the RELEASE_NAME placeholder):
 
@@ -227,4 +203,4 @@ $ helm upgrade my-release bitnami/wavefront-prometheus-storage-adapter
 
 ### To 1.0.0
 
-This major updates the wavefront subchart to it newest major, 3.0.0, which contains a new major for kube-state-metrics. For more information on this subchart's major, please refer to [wavefront upgrade notes](https://github.com/bitnami/charts/tree/master/bitnami/wavefront#to-300).
+This major updates the Wavefront subchart to its newest major release, 3.0.0, which contains a new major version for kube-state-metrics. For more information on this subchart's major version, please refer to the [Wavefront upgrade notes](https://github.com/bitnami/charts/tree/master/bitnami/wavefront#to-300).

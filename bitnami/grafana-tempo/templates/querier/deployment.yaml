@@ -64,16 +64,17 @@ spec:
         - name: grafana-tempo-querier
           image: {{ template "grafana-tempo.image" . }}
           imagePullPolicy: {{ .Values.tempo.image.pullPolicy }}
-          {{- if .Values.querier.lifecycleHooks }}
-          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.querier.lifecycleHooks "context" $) | nindent 12 }}
-          {{- end }}
           {{- if .Values.querier.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.querier.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
-          {{- if .Values.querier.command }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.querier.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.querier.command "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.querier.args }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.querier.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.querier.args "context" $) | nindent 12 }}
           {{- else }}
           args:
@@ -103,6 +104,7 @@ spec:
           {{- if .Values.querier.resources }}
           resources: {{- toYaml .Values.querier.resources | nindent 12 }}
           {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.querier.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
@@ -128,6 +130,10 @@ spec:
             failureThreshold: {{ .Values.querier.readinessProbe.failureThreshold }}
           {{- else if .Values.querier.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.querier.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.querier.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.querier.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
           {{- end }}
           volumeMounts:
             - name: tempo-config

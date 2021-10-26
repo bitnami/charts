@@ -53,6 +53,12 @@ spec:
       {{- if .Values.priorityClassName }}
       priorityClassName: {{ .Values.priorityClassName | quote }}
       {{- end }}
+      {{- if .Values.schedulerName }}
+      schedulerName: {{ .Values.schedulerName }}
+      {{- end }}
+      {{- if .Values.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
       {{- if .Values.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
@@ -137,9 +143,9 @@ spec:
             - name: GHOST_ENABLE_HTTPS
               value: {{ ternary "yes" "no" .Values.ghostEnableHttps | quote }}
             - name: GHOST_EXTERNAL_HTTP_PORT_NUMBER
-              value: {{ .Values.service.port | quote }}
+              value: {{ coalesce .Values.service.ports.http .Values.service.port| quote }}
             - name: GHOST_EXTERNAL_HTTPS_PORT_NUMBER
-              value: {{ .Values.service.httpsPort | quote }}
+              value: {{ coalesce .Values.service.ports.https .Values.service.httpsPort| quote }}
             - name: GHOST_SKIP_BOOTSTRAP
               value: {{ ternary "yes" "no" .Values.ghostSkipInstall  | quote }}
             {{- if .Values.smtpHost }}
@@ -189,11 +195,26 @@ spec:
               containerPort: {{ .Values.containerPorts.http }}
               protocol: TCP
             {{- end }}
+          {{- if .Values.startupProbe.enabled }}
+          startupProbe:
+            httpGet:
+              path: /
+              port: {{ ternary "https" "http" .Values.ghostEnableHttps | quote }}
+              scheme: {{ ternary "HTTPS" "HTTP" .Values.ghostEnableHttps | quote }}
+            initialDelaySeconds: {{ .Values.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.startupProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.startupProbe.failureThreshold }}
+            successThreshold: {{ .Values.startupProbe.successThreshold }}
+          {{- else if .Values.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
               path: /
-              port: http
+              port: {{ ternary "https" "http" .Values.ghostEnableHttps | quote }}
+              scheme: {{ ternary "HTTPS" "HTTP" .Values.ghostEnableHttps | quote }}
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
@@ -206,7 +227,8 @@ spec:
           readinessProbe:
             httpGet:
               path: /
-              port: http
+              port: {{ ternary "https" "http" .Values.ghostEnableHttps | quote }}
+              scheme: {{ ternary "HTTPS" "HTTP" .Values.ghostEnableHttps | quote }}
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}

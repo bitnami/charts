@@ -290,6 +290,9 @@ spec:
               mountPath: /opt/bitnami/redis/certs
               readOnly: true
             {{- end }}
+            {{- if .Values.metrics.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.extraVolumeMounts "context" $ ) | nindent 12 }}
+            {{- end }}
         {{- end }}
         {{- if .Values.master.sidecars }}
         {{- include "common.tplvalues.render" (dict "value" .Values.master.sidecars "context" $) | nindent 8 }}
@@ -372,9 +375,21 @@ spec:
             path: /sys
         {{- end }}
         - name: redis-tmp-conf
+          {{- if .Values.master.persistence.medium }}
+          emptyDir: {
+            medium: {{ .Values.master.persistence.medium | quote }}
+          }
+          {{- else }}
           emptyDir: {}
+          {{- end }}
         - name: tmp
+          {{- if .Values.master.persistence.medium }}
+          emptyDir: {
+            medium: {{ .Values.master.persistence.medium | quote }}
+          }
+          {{- else }}
           emptyDir: {}
+          {{- end }}
         {{- if .Values.tls.enabled }}
         - name: redis-certificates
           secret:
@@ -384,9 +399,18 @@ spec:
         {{- if .Values.master.extraVolumes }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.master.extraVolumes "context" $ ) | nindent 8 }}
         {{- end }}
+        {{- if .Values.metrics.extraVolumes }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.extraVolumes "context" $ ) | nindent 8 }}
+        {{- end }}
   {{- if not .Values.master.persistence.enabled }}
         - name: redis-data
+          {{- if .Values.master.persistence.medium }}
+          emptyDir: {
+            medium: {{ .Values.master.persistence.medium | quote }}
+          }
+          {{- else }}
           emptyDir: {}
+          {{- end }}
   {{- else if .Values.master.persistence.existingClaim }}
         - name: redis-data
           persistentVolumeClaim:

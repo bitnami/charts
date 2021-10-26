@@ -8,25 +8,25 @@
 ## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
 global:
-  imageRegistry:
+  imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass:
+  storageClass: ""
 
 ## @section Common parameters
 
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
-kubeVersion:
+kubeVersion: ""
 ## @param nameOverride String to partially override discourse.fullname template (will maintain the release name)
 ##
-nameOverride:
+nameOverride: ""
 ## @param fullnameOverride String to fully override discourse.fullname template
 ##
-fullnameOverride:
+fullnameOverride: ""
 ## @param commonLabels Labels to be added to all deployed resources
 ##
 commonLabels: {}
@@ -48,10 +48,10 @@ service:
   port: 80
   ## @param service.nodePort Node Ports to expose
   ##
-  nodePort:
+  nodePort: ""
   ## @param service.loadBalancerIP Use loadBalancerIP to request a specific static IP
   ##
-  loadBalancerIP:
+  loadBalancerIP: ""
   ## @param service.externalTrafficPolicy Enable client source IP preservation
   ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
@@ -65,14 +65,14 @@ service:
   loadBalancerSourceRanges: []
   ## @param service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
   ##
-  extraPorts:
+  extraPorts: []
   ## @param service.nodePorts.http Kubernetes http node port
   ## Example:
   ##  nodePorts:
   ##   http: <to set explicitly, choose port between 30000-32767>
   ##
   nodePorts:
-    http: ''
+    http: ""
 
 ## @section Discourse parameters
 
@@ -88,7 +88,7 @@ service:
 image:
   registry: docker.io
   repository: bitnami/discourse
-  tag: 2.7.6-debian-10-r0
+  tag: 2.7.9-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -114,7 +114,7 @@ imagePullSecrets: []
 discourse:
   ## @param discourse.host Discourse host to create application URLs (include the port if =/= 80)
   ##
-  host: ''
+  host: ""
   ## @param discourse.siteName Discourse site name
   ##
   siteName: 'My Site!'
@@ -124,12 +124,12 @@ discourse:
   ## @param discourse.password password. WARNING: Minimum length of 10 characters
   ## Defaults to a random 10-character alphanumeric string if not set
   ##
-  password:
+  password: ""
   ## @param discourse.existingSecret Name of an existing secret containing the password (ignores previous password)
   ## The secret should contain the following key:
   ## discourse-password
   ##
-  existingSecret:
+  existingSecret: ""
   ## @param discourse.email Admin user email of the application
   ##
   email: user@example.com
@@ -223,13 +223,13 @@ discourse:
   ##
   smtp:
     enabled: false
-    host: ''
-    port: ''
-    user: ''
-    password: ''
-    protocol: ''
-    auth: ''
-    existingSecret: ''
+    host: ""
+    port: ""
+    user: ""
+    password: ""
+    protocol: ""
+    auth: ""
+    existingSecret: ""
   ## @param discourse.extraEnvVars An array to add extra env vars
   ## For example:
   ## extraEnvVars:
@@ -303,7 +303,7 @@ serviceAccount:
   annotations: {}
   ## If not set and create is true, a name is generated using the fullname template
   ##
-  name:
+  name: ""
 ## @param podSecurityContext Pod security context specification
 ## Example:
 ##  fsGroup: 2000
@@ -328,10 +328,10 @@ persistence:
   ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
   ##   GKE, AWS & OpenStack)
   ##
-  storageClass:
+  storageClass: ""
   ## @param persistence.existingClaim Use a existing PVC which must be created manually before bound
   ##
-  existingClaim:
+  existingClaim: ""
   ## @param persistence.accessMode PVC Access Mode (RWO, ROX, RWX)
   ##
   accessMode: ReadWriteOnce
@@ -479,7 +479,7 @@ sidekiq:
   extraEnvVarsCM: []
   ## @param sidekiq.extraEnvVarsSecret Name of the secret that holds extra env vars
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret: ""
   ## @param sidekiq.extraVolumeMounts Additional volume mounts
   ## Example: Mount CA file
   ## extraVolumeMounts
@@ -528,26 +528,32 @@ ingress:
   ## @param ingress.enabled Enable ingress controller resource
   ##
   enabled: false
-  ## @param ingress.certManager Add annotations for cert-manager
+  ## DEPRECATED: Use ingress.annotations instead of ingress.certManager
+  ## certManager: false
   ##
-  certManager: false
+
   ## @param ingress.hostname Default host for the ingress resource
   ##
   hostname: discourse.local
   ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
   ##
-  apiVersion:
+  apiVersion: ""
   ## @param ingress.path Ingress path
   ##
   path: /
   ## @param ingress.pathType Ingress path type
   ##
   pathType: ImplementationSpecific
-  ## @param ingress.annotations Ingress annotations done as key:value pairs
+  ## @param ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
   ## For a full list of possible ingress annotations, please see
   ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+  ## Use this parameter to set the required annotations for cert-manager, see
+  ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
   ##
-  ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+  ## e.g:
+  ## annotations:
+  ##   kubernetes.io/ingress.class: nginx
+  ##   cert-manager.io/cluster-issuer: cluster-issuer-name
   ##
   annotations: {}
   ## @param ingress.tls Enable TLS configuration for the hostname defined at ingress.hostname parameter
@@ -600,7 +606,7 @@ postgresql:
   ## Defaults to a random 10-character alphanumeric string if not set
   ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#setting-the-root-password-on-first-run
   ##
-  postgresqlPassword:
+  postgresqlPassword: ""
   ## @param postgresql.postgresqlPostgresPassword PostgreSQL admin password (used when `postgresqlUsername` is not `postgres`)
   ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#creating-a-database-user-on-first-run (see note!)
   ##
@@ -610,7 +616,7 @@ postgresql:
   ## postgresql-postgres-password (for root user)
   ## postgresql-password (for the unprivileged user)
   ##
-  existingSecret:
+  existingSecret: ""
   ## @param postgresql.postgresqlDatabase Name of the database to create
   ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#creating-a-database-on-first-run
   ##
@@ -624,7 +630,7 @@ postgresql:
 externalDatabase:
   ## @param externalDatabase.host Host of the external database
   ##
-  host: ''
+  host: ""
   ## @param externalDatabase.port Database port number (when using an external db)
   ##
   port: 5432
@@ -633,30 +639,30 @@ externalDatabase:
   user: bn_discourse
   ## @param externalDatabase.password Password for the above username (when using an external db)
   ##
-  password: ''
+  password: ""
   ## @param externalDatabase.create PostgreSQL create user/database
   ## If true it will add POSTGRESQL_CLIENT_* env vars to the deployment which will create the PostgreSQL user & database using the provided admin credentials
   ##
   create: true
   ## @param externalDatabase.postgresqlPostgresUser PostgreSQL admin user, used during the installation stage (when using an external db)
   ##
-  postgresqlPostgresUser: ''
+  postgresqlPostgresUser: ""
   ## @param externalDatabase.postgresqlPostgresPassword PostgreSQL admin password used in the installation stage (when using an external db)
   ##
-  postgresqlPostgresPassword: ''
+  postgresqlPostgresPassword: ""
   ## @param externalDatabase.existingSecret Name of existing secret object
   ## The secret should contain the following keys:
   ## postgresql-postgres-password (for root user)
   ## postgresql-password (for the unprivileged user)
   ##
-  existingSecret:
+  existingSecret: ""
   ## @param externalDatabase.database Name of the existing database (when using an external db)
   ##
   database: bitnami_application
 
-## @section Redis<sup>TM</sup> parameters
+## @section Redis&trade; parameters
 
-## Redis(TM) chart configuration
+## Redis&trade; chart configuration
 ## https://github.com/bitnami/charts/blob/master/bitnami/redis/values.yaml
 ##
 redis:
@@ -665,7 +671,7 @@ redis:
   enabled: true
   ## Use password authentication
   ## @param redis.auth.enabled Use password authentication
-  ## @param redis.auth.password Redis(TM) password (both master and replica)
+  ## @param redis.auth.password Redis&trade; password (both master and replica)
   ## @param redis.auth.existingSecret Name of an existing Kubernetes secret object containing the password
   ## @param redis.auth.existingSecretPasswordKey Name of the key pointing to the password in your Kubernetes secret
   ##
@@ -675,19 +681,19 @@ redis:
     ## It should always be set using the password value or in the existingSecret to avoid issues
     ## with Discourse.
     ## The password value is ignored if existingSecret is set
-    password:
-    existingSecret:
+    password: ""
+    existingSecret: ""
     existingSecretPasswordKey: 'redis-password'
   ## @param redis.architecture Cluster settings
   ##
   architecture: standalone
-  ## Redis(TM) Master parameters
+  ## Redis&trade; Master parameters
   ## @param redis.master.persistence.enabled Enable database persistence using PVC
   ##
   master:
     persistence:
       enabled: true
-## External Redis(TM)
+## External Redis&trade;
 ## @param externalRedis.host Host of the external database
 ## @param externalRedis.port Database port number
 ## @param externalRedis.password Password for the external Redis. Ignored if existingSecret is set
@@ -695,8 +701,8 @@ redis:
 ## @param externalRedis.existingSecretPasswordKey Name of the key pointing to the password in your Kubernetes secret
 ##
 externalRedis:
-  host: ''
+  host: ""
   port: 6379
-  password: ''
-  existingSecret:
+  password: ""
+  existingSecret: ""
   existingSecretPasswordKey: 'redis-password'

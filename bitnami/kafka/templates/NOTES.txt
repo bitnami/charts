@@ -1,3 +1,27 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
+{{- if .Values.diagnosticMode.enabled }}
+The chart has been deployed in diagnostic mode. All probes have been disabled and the command has been overwritten with:
+
+  command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 4 }}
+  args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 4 }}
+
+Get the list of pods by executing:
+
+  kubectl get pods --namespace {{ .Release.Namespace }} -l app.kubernetes.io/instance={{ .Release.Name }}
+
+Access the pod you want to debug by executing
+
+  kubectl exec --namespace {{ .Release.Namespace }} -ti <NAME OF THE POD> -- bash
+
+In order to replicate the container startup scripts execute this command:
+
+    /opt/bitnami/scripts/kafka/entrypoint.sh /opt/bitnami/scripts/kafka/run.sh
+
+{{- else }}
+
 {{- $replicaCount := int .Values.replicaCount -}}
 {{- $releaseNamespace := .Release.Namespace -}}
 {{- $clusterDomain := .Values.clusterDomain -}}
@@ -67,8 +91,6 @@ Each Kafka broker can be accessed by producers via port {{ $servicePort }} on th
 {{- $brokerList = append $brokerList (printf "%s-%d.%s-headless.%s.svc.%s:%d" $fullname $i $fullname $releaseNamespace $clusterDomain $servicePort) }}
 {{- end }}
 {{ join "\n" $brokerList | nindent 4 }}
-
-
 {{- if (include "kafka.client.saslAuthentication" .) }}
 
 You need to configure your Kafka client to access using SASL authentication. To do so, you need to create the 'kafka_jaas.conf' and 'client.properties' configuration files with the content below:
@@ -224,9 +246,11 @@ To connect to your Kafka server from outside the cluster, follow the instruction
 {{- end }}
 {{- end }}
 {{- end }}
+{{- end }}
 
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- include "common.warnings.rollingTag" .Values.externalAccess.autoDiscovery.image }}
 {{- include "common.warnings.rollingTag" .Values.metrics.kafka.image }}
 {{- include "common.warnings.rollingTag" .Values.metrics.jmx.image }}
+{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
 {{- include "kafka.validateValues" . }}

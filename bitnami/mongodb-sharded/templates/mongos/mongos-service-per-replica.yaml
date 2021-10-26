@@ -1,6 +1,6 @@
 {{- if and .Values.mongos.useStatefulSet .Values.mongos.servicePerReplica.enabled }}
 {{- range $i := until (.Values.mongos.replicas | int) }}
-{{- $context := merge $ (dict "index" $i) }}
+{{- $context := deepCopy $ | merge (dict "index" $i) }}
 ---
 apiVersion: v1
 kind: Service
@@ -8,7 +8,7 @@ metadata:
   name: {{ include "mongodb-sharded.serviceName" $ }}-{{ $i }}
   labels: {{ include "common.labels.standard" $ | nindent 4 }}
     app.kubernetes.io/component: mongos
-  annotations: {{- include "common.tplvalues.render" (dict "value" $.Values.mongos.servicePerReplica.annotations "context" $context) | nindent 4 }}  
+  annotations: {{- include "common.tplvalues.render" (dict "value" $.Values.mongos.servicePerReplica.annotations "context" $context) | nindent 4 }}
 spec:
   type: {{ $.Values.mongos.servicePerReplica.type }}
   {{- if and $.Values.mongos.servicePerReplica.loadBalancerIP (eq $.Values.mongos.servicePerReplica.type "LoadBalancer") }}

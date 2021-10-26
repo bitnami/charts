@@ -64,16 +64,17 @@ spec:
         - name: grafana-tempo-query-frontend
           image: {{ template "grafana-tempo.image" . }}
           imagePullPolicy: {{ .Values.tempo.image.pullPolicy }}
-          {{- if .Values.queryFrontend.lifecycleHooks }}
-          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.lifecycleHooks "context" $) | nindent 12 }}
-          {{- end }}
           {{- if .Values.queryFrontend.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.queryFrontend.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
-          {{- if .Values.queryFrontend.command }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.queryFrontend.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.command "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.queryFrontend.args }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.queryFrontend.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.args "context" $) | nindent 12 }}
           {{- else }}
           args:
@@ -103,6 +104,7 @@ spec:
           {{- if .Values.queryFrontend.resources }}
           resources: {{- toYaml .Values.queryFrontend.resources | nindent 12 }}
           {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.queryFrontend.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
@@ -129,6 +131,10 @@ spec:
           {{- else if .Values.queryFrontend.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
+          {{- if .Values.queryFrontend.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          {{- end }}
           volumeMounts:
             - name: tempo-config
               mountPath: /bitnami/grafana-tempo/conf/tempo.yaml
@@ -142,16 +148,17 @@ spec:
         - name: grafana-tempo-query
           image: {{ template "grafana-tempo.queryImage" . }}
           imagePullPolicy: {{ .Values.queryFrontend.query.image.pullPolicy }}
-          {{- if .Values.queryFrontend.query.lifecycleHooks }}
-          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.query.lifecycleHooks "context" $) | nindent 12 }}
-          {{- end }}
           {{- if .Values.queryFrontend.query.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.queryFrontend.query.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
-          {{- if .Values.queryFrontend.query.command }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.queryFrontend.query.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.query.command "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.queryFrontend.query.args }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.queryFrontend.query.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.query.args "context" $) | nindent 12 }}
           {{- else }}
           args:
@@ -179,6 +186,7 @@ spec:
           {{- if .Values.queryFrontend.query.resources }}
           resources: {{- toYaml .Values.queryFrontend.query.resources | nindent 12 }}
           {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.queryFrontend.query.livenessProbe.enabled }}
           livenessProbe:
             tcpSocket:
@@ -202,6 +210,10 @@ spec:
             failureThreshold: {{ .Values.queryFrontend.query.readinessProbe.failureThreshold }}
           {{- else if .Values.queryFrontend.query.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.query.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.queryFrontend.query.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.query.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
           {{- end }}
           volumeMounts:
             - name: tempo-query-config

@@ -8,31 +8,46 @@
 ## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
 global:
-  imageRegistry:
+  imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass:
+  storageClass: ""
 
 ## @section Common parameters
 
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
-kubeVersion:
+kubeVersion: ""
 ## @param nameOverride String to partially override ebjca.fullname template (will maintain the release name)
 ##
-nameOverride:
+nameOverride: ""
 ## @param fullnameOverride String to fully override ebjca.fullname template
 ##
-fullnameOverride:
+fullnameOverride: ""
 ## @param commonLabels Add labels to all the deployed resources
 ##
 commonLabels: {}
 ## @param commonAnnotations Annotations to be added to all deployed resources
 ##
 commonAnnotations: {}
+
+## Enable diagnostic mode in the deployment
+##
+diagnosticMode:
+  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+  ##
+  enabled: false
+  ## @param diagnosticMode.command Command to override all containers in the deployment
+  ##
+  command:
+    - sleep
+  ## @param diagnosticMode.args Args to override all containers in the deployment
+  ##
+  args:
+    - infinity
 
 ## @section EJBCA parameters
 
@@ -43,11 +58,12 @@ commonAnnotations: {}
 ## @param image.tag EJBCA image tag
 ## @param image.pullPolicy EJBCA image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
+## @param image.debug Enable image debug mode
 ##
 image:
   registry: docker.io
   repository: bitnami/ejbca
-  tag: 6.15.2-6-debian-10-r294
+  tag: 7.4.3-2-debian-10-r24
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -61,8 +77,9 @@ image:
   ##   - myRegistryKeySecretName
   ##
   pullSecrets: []
-  ## Set to true if you would like to see extra information on logs
+  ## Enable debug mode
   ##
+  debug: false
 ## @param replicaCount Number of EJBCA replicas to deploy
 ##
 replicaCount: 1
@@ -159,12 +176,12 @@ persistence:
   ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
   ##   GKE, AWS & OpenStack)
   ##
-  storageClass:
+  storageClass: ""
   ## If you want to reuse an existing claim, you can pass the name of the PVC using the existingClaim variable
   ## e.g:
   ## existingClaim: your-claim
   ##
-  existingClaim:
+  existingClaim: ""
   accessMode: ReadWriteOnce
   size: 2Gi
 ## @param sidecars Attach additional sidecar containers to the pod
@@ -177,7 +194,7 @@ persistence:
 ##       - name: portname
 ##         containerPort: 1234
 ##
-sidecars: {}
+sidecars: []
 ## @param initContainers Additional init containers to add to the pods
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
 ## Example:
@@ -186,7 +203,7 @@ sidecars: {}
 ##    image: your-image
 ##    imagePullPolicy: Always
 ##
-initContainers: {}
+initContainers: []
 ## @param hostAliases Add deployment host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
@@ -198,15 +215,15 @@ ejbcaAdminUsername: bitnami
 ## @param ejbcaAdminPassword Password for the administrator account
 ## If the password is not specified, a random one will be generated
 ##
-ejbcaAdminPassword:
+ejbcaAdminPassword: ""
 ## @param existingSecret Alternatively, you can provide the name of an existing secret containing
 ## a key named "ejbca-admin-password"
 ## NOTE: This will override the password defined at ejbcaAdminPassword
 ##
-existingSecret:
+existingSecret: ""
 ## @param ejbcaJavaOpts Options used to launch the WildFly server
 ## E.g. ejbcaJavaOpts: "-Xms2048m -Xmx2048m"
-ejbcaJavaOpts:
+ejbcaJavaOpts: ""
 ## Details regarding the CA that EJBCA will instantiate
 ## @param ejbcaCA.name Name of the CA EJBCA will instantiate by default
 ## @param ejbcaCA.baseDN Base DomainName of the CA EJBCA will instantiate by default
@@ -215,7 +232,7 @@ ejbcaCA:
   name: "ManagementCA"
   ## e.g. baseDN: "O=Example CA,C=SE,UID=c-5ca04c9328c8208704310f7c2ed16414"
   ##
-  baseDN:
+  baseDN: ""
 ## @param ejbcaKeystoreExistingSecret Name of an existing Secret containing a Keystore object
 ## to be imported by EBJCA.
 ##
@@ -224,7 +241,7 @@ ejbcaCA:
 ## "keystore.jks" --> The actual keystore object
 ## "keystore-password" --> Password used to encrypt keystore.jks
 ##
-ejbcaKeystoreExistingSecret:
+ejbcaKeystoreExistingSecret: ""
 ## @param extraEnv Additional container environment variables
 ## extraEnv:
 ##   - name:
@@ -341,7 +358,7 @@ service:
   loadBalancerSourceRanges: []
   ## @param service.extraPorts Extra ports to expose in the service (normally used with the `sidecar` value)
   ##
-  extraPorts:
+  extraPorts: []
 
 ## @section Ingress parameters
 
@@ -353,15 +370,16 @@ ingress:
   ## @param ingress.enabled Enable ingress controller resource
   ##
   enabled: false
-  ## @param ingress.certManager Add annotations for cert-manager
+  ## DEPRECATED: Use ingress.annotations instead of ingress.certManager
+  ## certManager: false
   ##
-  certManager: false
+
   ## @param ingress.pathType Ingress Path type
   ##
   pathType: ImplementationSpecific
   ## @param ingress.apiVersion Override API Version (automatically detected if not set)
   ##
-  apiVersion:
+  apiVersion: ""
   ## @param ingress.hostname Default host for the ingress resource
   ##
   hostname: ejbca.local
@@ -369,11 +387,16 @@ ingress:
   ## with ALB ingress controllers.
   ##
   path: /
-  ## @param ingress.annotations Ingress annotations done as key:value pairs
+  ## @param ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
   ## For a full list of possible ingress annotations, please see
   ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+  ## Use this parameter to set the required annotations for cert-manager, see
+  ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
   ##
-  ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+  ## e.g:
+  ## annotations:
+  ##   kubernetes.io/ingress.class: nginx
+  ##   cert-manager.io/cluster-issuer: cluster-issuer-name
   ##
   annotations: {}
   ## @param ingress.tls Enable TLS configuration for the hostname defined at ingress.hostname parameter
@@ -467,11 +490,11 @@ mariadb:
       ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
       ##   GKE, AWS & OpenStack)
       ##
-      storageClass:
+      storageClass: ""
       accessMode: ReadWriteOnce
       size: 8Gi
-      hostPath:
-      existingClaim:
+      hostPath: ""
+      existingClaim: ""
 ## External Database Configuration
 ## All of these values are only used when mariadb.enabled is set to false
 ## @param externalDatabase.host Host of the external database

@@ -6,7 +6,7 @@
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
 ## @param global.storageClass Global StorageClass for Persistent Volume(s)
-## @param global.redis.password Redis<sup>TM</sup> password (overrides `password`)
+## @param global.redis.password Redis&trade; password (overrides `password`)
 ##
 global:
   imageRegistry: ""
@@ -19,7 +19,7 @@ global:
   redis:
     password: ""
 
-## @section Redis<sup>TM</sup> Cluster Common parameters
+## @section Redis&trade; Cluster Common parameters
 
 ## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
 ##
@@ -37,23 +37,39 @@ commonLabels: {}
 ##
 extraDeploy: []
 
-## @section Redis<sup>TM</sup> Cluster Common parameters
+## Enable diagnostic mode in the deployment
+##
+diagnosticMode:
+  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+  ##
+  enabled: false
+  ## @param diagnosticMode.command Command to override all containers in the deployment
+  ##
+  command:
+    - sleep
+  ## @param diagnosticMode.args Args to override all containers in the deployment
+  ##
+  args:
+    - infinity
 
-## Bitnami Redis(TM) image version
+## @section Redis&trade; Cluster Common parameters
+
+## Bitnami Redis&trade; image version
 ## ref: https://hub.docker.com/r/bitnami/redis/tags/
-## @param image.registry Redis<sup>TM</sup> cluster image registry
-## @param image.repository Redis<sup>TM</sup> cluster image repository
-## @param image.tag Redis<sup>TM</sup> cluster image tag (immutable tags are recommended)
-## @param image.pullPolicy Redis<sup>TM</sup> cluster image pull policy
+## @param image.registry Redis&trade; cluster image registry
+## @param image.repository Redis&trade; cluster image repository
+## @param image.tag Redis&trade; cluster image tag (immutable tags are recommended)
+## @param image.pullPolicy Redis&trade; cluster image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
+## @param image.debug Enable image debug mode
 ##
 image:
   registry: docker.io
   repository: bitnami/redis-cluster
-  ## Bitnami Redis(TM) image tag
+  ## Bitnami Redis&trade; image tag
   ## ref: https://github.com/bitnami/bitnami-docker-redis#supported-tags-and-respective-dockerfile-links
   ##
-  tag: 6.2.4-debian-10-r21
+  tag: 6.2.6-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -67,6 +83,9 @@ image:
   ##   - myRegistryKeySecretName
   ##
   pullSecrets: []
+  ## Enable debug mode
+  ##
+  debug: false
 ## Network Policy
 ## @param networkPolicy.enabled Enable NetworkPolicy
 ## @param networkPolicy.allowExternal The Policy model to apply. Don't require client label for connections
@@ -76,13 +95,14 @@ image:
 networkPolicy:
   enabled: false
   ## When set to false, only pods with the correct
-  ## client label will have network access to the port Redis(TM) is listening
-  ## on. When true, Redis(TM) will accept connections from any source
+  ## client label will have network access to the port Redis&trade; is listening
+  ## on. When true, Redis&trade; will accept connections from any source
   ## (with the correct destination port).
   ##
   allowExternal: true
   ingressNSMatchLabels: {}
   ingressNSPodMatchLabels: {}
+
 serviceAccount:
   ## @param serviceAccount.create Specifies whether a ServiceAccount should be created
   ##
@@ -91,6 +111,13 @@ serviceAccount:
   ## If not set and create is true, a name is generated using the fullname template
   ##
   name: ""
+  ## @param serviceAccount.annotations Annotations for Cassandra Service Account
+  ##
+  annotations: {}
+  ## @param serviceAccount.automountServiceAccountToken Automount API credentials for a service account.
+  ##
+  automountServiceAccountToken: false
+
 rbac:
   ## @param rbac.create Specifies whether RBAC resources should be created
   ##
@@ -108,8 +135,8 @@ rbac:
     ##      - gce.unprivileged
     ##
     rules: []
-## Redis(TM) pod Security Context
-## @param podSecurityContext.enabled Enable Redis<sup>TM</sup> pod Security Context
+## Redis&trade; pod Security Context
+## @param podSecurityContext.enabled Enable Redis&trade; pod Security Context
 ## @param podSecurityContext.fsGroup Group ID for the pods
 ## @param podSecurityContext.runAsUser User ID for the pods
 ## @param podSecurityContext.sysctls Set namespaced sysctls for the pods
@@ -138,22 +165,16 @@ maxUnavailable: ""
 ## Containers Security Context
 ## @param containerSecurityContext.enabled Enable Containers' Security Context
 ## @param containerSecurityContext.runAsUser User ID for the containers.
-## @param containerSecurityContext.sysctls Set namespaced sysctls for the containers.
+## @param containerSecurityContext.runAsNonRoot Run container as non root
 ##
 containerSecurityContext:
   enabled: true
   runAsUser: 1001
-  ## Uncomment the setting below to increase the net.core.somaxconn value
-  ## e.g:
-  ## sysctls:
-  ##   - name: net.core.somaxconn
-  ##     value: "10000"
-  ##
-  sysctls: []
+  runAsNonRoot: true
 ## @param usePassword Use password authentication
 ##
 usePassword: true
-## @param password Redis<sup>TM</sup> password (ignored if existingSecret set)
+## @param password Redis&trade; password (ignored if existingSecret set)
 ## Defaults to a random 10-character alphanumeric string if not set and usePassword is true
 ## ref: https://github.com/bitnami/bitnami-docker-redis#setting-the-server-password-on-first-run
 ##
@@ -198,12 +219,22 @@ tls:
   ## @param tls.dhParamsFilename File containing DH params (in order to support DH based ciphers)
   ##
   dhParamsFilename: ""
-## Redis(TM) Service properties for standalone mode.
+## Redis&trade; Service properties for standalone mode.
 ##
 service:
-  ## @param service.port Kubernetes Service port
+  ## @param service.ports.redis Kubernetes Redis service port
   ##
-  port: 6379
+  ports:
+    redis: 6379
+  ## Node ports to expose
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+  ## @param service.nodePorts.redis Node port for Redis
+  ##
+  nodePorts:
+    redis: ""
+  ## @param service.extraPorts Extra ports to expose in the service (normally used with the `sidecar` value)
+  ##
+  extraPorts: []
   ## @param service.annotations Provide any additional annotations which may be required.
   ## This can be used to set the LoadBalancer service type to internal only.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
@@ -217,9 +248,25 @@ service:
   ## Currently supported types are ClusterIP (default) and LoadBalancer
   ##
   type: ClusterIP
+  ## @param service.clusterIP Service Cluster IP
+  ## e.g.:
+  ## clusterIP: None
+  ##
+  clusterIP: ""
   ## @param service.loadBalancerIP Load balancer IP if `service.type` is `LoadBalancer`
   ## If service.type is LoadBalancer, request a specific static IP address if supported by the cloud provider, otherwise leave blank
   loadBalancerIP: ""
+  ## @param service.loadBalancerSourceRanges Service Load Balancer sources
+  ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+  ## e.g:
+  ## loadBalancerSourceRanges:
+  ##   - 10.10.10.0/24
+  ##
+  loadBalancerSourceRanges: []
+  ## @param service.externalTrafficPolicy Service external traffic policy
+  ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+  ##
+  externalTrafficPolicy: Cluster
 ## Enable persistence using Persistent Volume Claims
 ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
 ##
@@ -227,7 +274,7 @@ persistence:
   ## @param persistence.enabled Use a PVC to persist data.
   ##
   enabled: true
-  ## @param persistence.path Path to mount the volume at, to use other images Redis<sup>TM</sup> images.
+  ## @param persistence.path Path to mount the volume at, to use other images Redis&trade; images.
   ##
   path: /bitnami/redis/data
   ## @param persistence.subPath The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services
@@ -241,6 +288,9 @@ persistence:
   ##   GKE, AWS & OpenStack)
   ##
   storageClass: ""
+  ## @param persistence.annotations Persistent Volume Claim annotations
+  ##
+  annotations: {}
   ## @param persistence.accessModes Persistent Volume Access Modes
   ##
   accessModes:
@@ -255,17 +305,7 @@ persistence:
   ## @param persistence.matchExpressions matchExpressions Persistent Volume selectors
   ##
   matchExpressions: {}
-## Update strategy, can be set to RollingUpdate or onDelete by default.
-## https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#updating-statefulsets
-##
-statefulset:
-  ## @param statefulset.updateStrategy Update strategy for StatefulSet
-  ##
-  updateStrategy: RollingUpdate
-  ## @param statefulset.rollingUpdatePartition Partition update strategy
-  ## https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#partitions
-  ##
-  rollingUpdatePartition: ""
+
 ## Init containers parameters:
 ## volumePermissions: Change the owner of the persist volume mountpoint to RunAsUser:fsGroup
 ##
@@ -282,8 +322,8 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r120
-    pullPolicy: Always
+    tag: 10-debian-10-r212
+    pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -315,15 +355,33 @@ volumePermissions:
 podSecurityPolicy:
   create: false
 
-## @section Redis<sup>TM</sup> statefulset parameters
+## @section Redis&trade; statefulset parameters
 
 redis:
-  ## @param redis.command Redis<sup>TM</sup> entrypoint string. The command `redis-server` is executed if this is not provided
+  ## @param redis.command Redis&trade; entrypoint string. The command `redis-server` is executed if this is not provided
   ##
   command: []
   ## @param redis.args Arguments for the provided command if needed
   ##
   args: []
+  ## @param redis.updateStrategy.type Argo Workflows statefulset strategy type
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    ## StrategyType
+    ## Can be set to RollingUpdate or OnDelete
+    ##
+    type: RollingUpdate
+    ## @param redis.updateStrategy.rollingUpdate.partition Partition update strategy
+    ## https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#partitions
+    ##
+    rollingUpdate:
+      partition: 0
+
+  ## @param redis.podManagementPolicy Statefulset Pod management policy, it needs to be Parallel to be able to complete the cluster join
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
+  ##
+  podManagementPolicy: Parallel
   ## @param redis.hostAliases Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -334,9 +392,12 @@ redis:
   ## ref: https://redis.io/topics/cluster-tutorial#creating-and-using-a-redis-cluster
   ##
   useAOFPersistence: "yes"
-  ## @param redis.port Redis<sup>TM</sup> port
+  ## @param redis.containerPorts.redis Redis&trade; port
+  ## @param redis.containerPorts.bus The busPort should be obtained adding 10000 to the redisPort. By default: 10000 + 6379 = 16379
   ##
-  port: 6379
+  containerPorts:
+    redis: 6379
+    bus: 16379
   ## @param redis.lifecycleHooks LifecycleHook to set additional configuration before or after startup. Evaluated as a template
   ##
   lifecycleHooks: {}
@@ -352,20 +413,23 @@ redis:
   ## @param redis.customReadinessProbe Override default readiness probe
   ##
   customReadinessProbe: {}
+  ## @param redis.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
   ## @param redis.initContainers Extra init containers to add to the deployment
   ##
   initContainers: []
   ## @param redis.sidecars Extra sidecar containers to add to the deployment
   ##
   sidecars: []
-  ## @param redis.podLabels Additional labels for Redis<sup>TM</sup> pod
+  ## @param redis.podLabels Additional labels for Redis&trade; pod
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
   podLabels: {}
-  ## @param redis.priorityClassName Redis<sup>TM</sup> Master pod priorityClassName
+  ## @param redis.priorityClassName Redis&trade; Master pod priorityClassName
   ##
   priorityClassName: ""
-  ## @param redis.configmap Additional Redis<sup>TM</sup> configuration for the nodes
+  ## @param redis.configmap Additional Redis&trade; configuration for the nodes
   ## ref: https://redis.io/topics/config
   ##
   configmap: ""
@@ -381,11 +445,11 @@ redis:
   ## @param redis.extraEnvVarsSecret Secret with extra environment variables
   ##
   extraEnvVarsSecret: ""
-  ## @param redis.podAnnotations Redis<sup>TM</sup> additional annotations
+  ## @param redis.podAnnotations Redis&trade; additional annotations
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
   podAnnotations: {}
-  ## Redis(TM) resource requests and limits
+  ## Redis&trade; resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ## @param redis.resources.limits The resources limits for the container
   ## @param redis.resources.requests The requested resources for the container
@@ -413,7 +477,7 @@ redis:
   ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/share-process-namespace/
   ##
   shareProcessNamespace: false
-  ## Configure extra options for Redis(TM) liveness probes
+  ## Configure extra options for Redis&trade; liveness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
   ## @param redis.livenessProbe.enabled Enable livenessProbe
   ## @param redis.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
@@ -429,7 +493,7 @@ redis:
     timeoutSeconds: 5
     successThreshold: 1
     failureThreshold: 5
-  ## Configure extra options for Redis(TM) readiness probes
+  ## Configure extra options for Redis&trade; readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
   ## @param redis.readinessProbe.enabled Enable readinessProbe
   ## @param redis.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
@@ -445,54 +509,67 @@ redis:
     timeoutSeconds: 1
     successThreshold: 1
     failureThreshold: 5
-  ## @param redis.podAffinityPreset Redis<sup>TM</sup> pod affinity preset. Ignored if `redis.affinity` is set. Allowed values: `soft` or `hard`
+  ## @param redis.startupProbe.enabled Enable startupProbe
+  ## @param redis.startupProbe.path Path to check for startupProbe
+  ## @param redis.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param redis.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param redis.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param redis.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param redis.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    path: /
+    initialDelaySeconds: 300
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+  ## @param redis.podAffinityPreset Redis&trade; pod affinity preset. Ignored if `redis.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
   podAffinityPreset: ""
-  ## @param redis.podAntiAffinityPreset Redis<sup>TM</sup> pod anti-affinity preset. Ignored if `redis.affinity` is set. Allowed values: `soft` or `hard`
+  ## @param redis.podAntiAffinityPreset Redis&trade; pod anti-affinity preset. Ignored if `redis.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
   podAntiAffinityPreset: soft
-  ## Redis(TM) node affinity preset
+  ## Redis&trade; node affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
   ##
   nodeAffinityPreset:
-    ## @param redis.nodeAffinityPreset.type Redis<sup>TM</sup> node affinity preset type. Ignored if `redis.affinity` is set. Allowed values: `soft` or `hard`
+    ## @param redis.nodeAffinityPreset.type Redis&trade; node affinity preset type. Ignored if `redis.affinity` is set. Allowed values: `soft` or `hard`
     ##
     type: ""
-    ## @param redis.nodeAffinityPreset.key Redis<sup>TM</sup> node label key to match Ignored if `redis.affinity` is set.
+    ## @param redis.nodeAffinityPreset.key Redis&trade; node label key to match Ignored if `redis.affinity` is set.
     ## E.g.
     ## key: "kubernetes.io/e2e-az-name"
     ##
     key: ""
-    ## @param redis.nodeAffinityPreset.values Redis<sup>TM</sup> node label values to match. Ignored if `redis.affinity` is set.
+    ## @param redis.nodeAffinityPreset.values Redis&trade; node label values to match. Ignored if `redis.affinity` is set.
     ## E.g.
     ## values:
     ##   - e2e-az1
     ##   - e2e-az2
     ##
     values: []
-  ## @param redis.affinity Affinity settings for Redis<sup>TM</sup> pod assignment
+  ## @param redis.affinity Affinity settings for Redis&trade; pod assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## Note: redis.podAffinityPreset, redis.podAntiAffinityPreset, and redis.nodeAffinityPreset will be ignored when it's set
   ##
   affinity: {}
-  ## @param redis.nodeSelector Node labels for Redis<sup>TM</sup> pods assignment
+  ## @param redis.nodeSelector Node labels for Redis&trade; pods assignment
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
-  ## @param redis.tolerations Tolerations for Redis<sup>TM</sup> pods assignment
+  ## @param redis.tolerations Tolerations for Redis&trade; pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-  ## @param redis.topologySpreadConstraints Pod topology spread constraints for Redis<sup>TM</sup> pod
+  ## @param redis.topologySpreadConstraints Pod topology spread constraints for Redis&trade; pod
   ## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
   ## The value is evaluated as a template
   ##
   topologySpreadConstraints: []
-  ## @param redis.busPort The busPort should be obtained adding 10000 to the redisPort. By default: 10000 + 6379 = 16379
-  ##
-  busPort: 16379
 
 ## @section Cluster update job parameters
 
@@ -609,13 +686,13 @@ updateJob:
 
 ## @section Cluster management parameters
 
-## Redis(TM) Cluster settings
+## Redis&trade; Cluster settings
 ##
 cluster:
-  ## @param cluster.init Enable the initialization of the Redis<sup>TM</sup> Cluster
+  ## @param cluster.init Enable the initialization of the Redis&trade; Cluster
   ##
   init: true
-  ## Number of Redis(TM) nodes to be deployed
+  ## Number of Redis&trade; nodes to be deployed
   ##
   ## Note:
   ## This is total number of nodes including the replicas. Meaning there will be 3 master and 3 replica
@@ -630,7 +707,7 @@ cluster:
   ## 1 means that we want a replica for every master created
   ##
   replicas: 1
-  ## Configuration to access the Redis(TM) Cluster from outside the Kubernetes cluster
+  ## Configuration to access the Redis&trade; Cluster from outside the Kubernetes cluster
   ##
   externalAccess:
     ## @param cluster.externalAccess.enabled Enable access to the Redis
@@ -644,20 +721,20 @@ cluster:
       ## @param cluster.externalAccess.service.port Port for the services used to expose every Pod
       ##
       port: 6379
-      ## @param cluster.externalAccess.service.loadBalancerIP Array of load balancer IPs for each Redis<sup>TM</sup> node. Length must be the same as cluster.nodes
+      ## @param cluster.externalAccess.service.loadBalancerIP Array of load balancer IPs for each Redis&trade; node. Length must be the same as cluster.nodes
       ##
       loadBalancerIP: []
-      ## @param cluster.externalAccess.service.annotations Annotations to add to the services used to expose every Pod of the Redis<sup>TM</sup> Cluster
+      ## @param cluster.externalAccess.service.annotations Annotations to add to the services used to expose every Pod of the Redis&trade; Cluster
       ##
       annotations: {}
-  ## This section allows to update the Redis(TM) cluster nodes.
+  ## This section allows to update the Redis&trade; cluster nodes.
   ##
   update:
     ## @param cluster.update.addNodes Boolean to specify if you want to add nodes after the upgrade
-    ## Setting this to true a hook will add nodes to the Redis(TM) cluster after the upgrade. currentNumberOfNodes is required
+    ## Setting this to true a hook will add nodes to the Redis&trade; cluster after the upgrade. currentNumberOfNodes is required
     ##
     addNodes: false
-    ## @param cluster.update.currentNumberOfNodes Number of currently deployed Redis<sup>TM</sup> nodes
+    ## @param cluster.update.currentNumberOfNodes Number of currently deployed Redis&trade; nodes
     ##
     currentNumberOfNodes: 6
     ## @param cluster.update.newExternalIPs External IPs obtained from the services for the new nodes to add to the cluster
@@ -672,16 +749,16 @@ metrics:
   ## @param metrics.enabled Start a side-car prometheus exporter
   ##
   enabled: false
-  ## @param metrics.image.registry Redis<sup>TM</sup> exporter image registry
-  ## @param metrics.image.repository Redis<sup>TM</sup> exporter image name
-  ## @param metrics.image.tag Redis<sup>TM</sup> exporter image tag
-  ## @param metrics.image.pullPolicy Redis<sup>TM</sup> exporter image pull policy
+  ## @param metrics.image.registry Redis&trade; exporter image registry
+  ## @param metrics.image.repository Redis&trade; exporter image name
+  ## @param metrics.image.tag Redis&trade; exporter image tag
+  ## @param metrics.image.pullPolicy Redis&trade; exporter image pull policy
   ## @param metrics.image.pullSecrets Specify docker-registry secret names as an array
   ##
   image:
     registry: docker.io
     repository: bitnami/redis-exporter
-    tag: 1.24.0-debian-10-r17
+    tag: 1.27.1-debian-10-r12
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -719,6 +796,36 @@ metrics:
     ## @param metrics.serviceMonitor.interval How frequently to scrape metrics (use by default, falling back to Prometheus' default)
     ##
     interval: ""
+    ## @param metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ## e.g:
+    ## scrapeTimeout: 10s
+    ##
+    scrapeTimeout: ""
+    ## @param metrics.serviceMonitor.selector Prometheus instance selector labels
+    ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+    ## e.g:
+    ## selector:
+    ##   prometheus: my-prometheus
+    ##
+    selector: {}
+    ## @param metrics.serviceMonitor.labels ServiceMonitor extra labels
+    ##
+    labels: {}
+    ## @param metrics.serviceMonitor.annotations ServiceMonitor annotations
+    ##
+    annotations: {}
+    ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
+    ##
+    jobLabel: ""
+    ## @param metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+    ##
+    relabelings: []
+    ## @param metrics.serviceMonitor.metricRelabelings MetricRelabelConfigs to apply to samples before ingestion
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+    ##
+    metricRelabelings: []
   ## Custom PrometheusRule to be defined
   ## The value is evaluated as a template, so, for example, the value can depend on .Release or .Chart
   ## ref: https://github.com/coreos/prometheus-operator#customresourcedefinitions
@@ -739,8 +846,8 @@ metrics:
     ##    labels:
     ##      severity: error
     ##    annotations:
-    ##      summary: Redis(TM) instance {{ "{{ $instance }}" }} down
-    ##      description: Redis(TM) instance {{ "{{ $instance }}" }} is down.
+    ##      summary: Redis&trade; instance {{ "{{ $instance }}" }} down
+    ##      description: Redis&trade; instance {{ "{{ $instance }}" }} is down.
     ##  - alert: RedisMemoryHigh
     ##    expr: >
     ##       redis_memory_used_bytes{service="{{ template "common.names.fullname" . }}-metrics"} * 100
@@ -751,16 +858,16 @@ metrics:
     ##    labels:
     ##      severity: error
     ##    annotations:
-    ##      summary: Redis(TM) instance {{ "{{ $instance }}" }} is using too much memory
-    ##      description: Redis(TM) instance {{ "{{ $instance }}" }} is using {{ "{{ $value }}" }}% of its available memory.
+    ##      summary: Redis&trade; instance {{ "{{ $instance }}" }} is using too much memory
+    ##      description: Redis&trade; instance {{ "{{ $instance }}" }} is using {{ "{{ $value }}" }}% of its available memory.
     ##  - alert: RedisKeyEviction
     ##    expr: increase(redis_evicted_keys_total{service="{{ template "common.names.fullname" . }}-metrics"}[5m]) > 0
     ##    for: 1s
     ##    labels:
     ##      severity: error
     ##    annotations:
-    ##      summary: Redis(TM) instance {{ "{{ $instance }}" }} has evicted keys
-    ##      description: Redis(TM) instance {{ "{{ $instance }}" }} has evicted {{ "{{ $value }}" }} keys in the last 5 minutes.
+    ##      summary: Redis&trade; instance {{ "{{ $instance }}" }} has evicted keys
+    ##      description: Redis&trade; instance {{ "{{ $instance }}" }} has evicted {{ "{{ $value }}" }} keys in the last 5 minutes.
     ##
     rules: []
   ## @param metrics.priorityClassName Metrics exporter pod priorityClassName
@@ -797,8 +904,8 @@ sysctlImage:
   ##
   registry: docker.io
   repository: bitnami/bitnami-shell
-  tag: 10-debian-10-r120
-  pullPolicy: Always
+  tag: 10-debian-10-r212
+  pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/

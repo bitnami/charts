@@ -9,26 +9,26 @@
 ## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
 global:
-  imageRegistry:
+  imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass:
+  storageClass: ""
 
 ## @section Common parameters
 ##
 
 ## @param kubeVersion Override Kubernetes version
 ##
-kubeVersion:
+kubeVersion: ""
 ## @param nameOverride String to partially override common.names.fullname
 ##
-nameOverride:
+nameOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname
 ##
-fullnameOverride:
+fullnameOverride: ""
 ## @param commonLabels Labels to add to all deployed objects
 ##
 commonLabels: {}
@@ -42,6 +42,21 @@ clusterDomain: cluster.local
 ##
 extraDeploy: []
 
+## Enable diagnostic mode in the deployment
+##
+diagnosticMode:
+  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+  ##
+  enabled: false
+  ## @param diagnosticMode.command Command to override all containers in the deployment
+  ##
+  command:
+    - sleep
+  ## @param diagnosticMode.args Args to override all containers in the deployment
+  ##
+  args:
+    - infinity
+
 ## @section Common Grafana Tempo Parameters
 ##
 tempo:
@@ -53,11 +68,10 @@ tempo:
   ## @param tempo.image.pullPolicy Grafana Tempo image pull policy
   ## @param tempo.image.pullSecrets Grafana Tempo image pull secrets
   ##
-
   image:
     registry: docker.io
     repository: bitnami/grafana-tempo
-    tag: 1.0.1-debian-10-r0
+    tag: 1.1.0-debian-10-r41
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -214,18 +228,18 @@ tempo:
           service: memcache
           timeout: 500ms
 
-  ## @param tempo.existingConfigmap name of a ConfigMap with the tempo configuration
+  ## @param tempo.existingConfigmap Name of a ConfigMap with the tempo configuration
   ##
-  existingConfigmap:
+  existingConfigmap: ""
 
   ## @param tempo.overridesConfiguration [string] Tempo components overrides configuration settings
   ##
   overridesConfiguration: |
     overrides: {}
 
-  ## @param tempo.existingOverridesConfigmap name of a ConfigMap with the tempo overrides configuration
+  ## @param tempo.existingOverridesConfigmap Name of a ConfigMap with the tempo overrides configuration
   ##
-  existingOverridesConfigmap:
+  existingOverridesConfigmap: ""
 
 ## @section Compactor Deployment Parameters
 ##
@@ -376,10 +390,10 @@ compactor:
   extraEnvVars: []
   ## @param compactor.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for compactor nodes
   ##
-  extraEnvVarsCM:
+  extraEnvVarsCM: ""
   ## @param compactor.extraEnvVarsSecret Name of existing Secret containing extra env vars for compactor nodes
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret: ""
   ## @param compactor.extraVolumes Optionally specify extra list of additional volumes for the compactor pod(s)
   ##
   extraVolumes: []
@@ -396,7 +410,7 @@ compactor:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  sidecars: {}
+  sidecars: []
   ## @param compactor.initContainers Add additional init containers to the compactor pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
@@ -406,7 +420,7 @@ compactor:
   ##    imagePullPolicy: Always
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
-  initContainers: {}
+  initContainers: []
   ## @section Compactor Traffic Exposure Parameters
   ##
 
@@ -424,16 +438,16 @@ compactor:
     ## NOTE: choose port between <30000-32767>
     ##
     nodePorts:
-      http:
+      http: ""
     ## @param compactor.service.clusterIP compactor service Cluster IP
     ## e.g.:
     ## clusterIP: None
     ##
-    clusterIP:
+    clusterIP: ""
     ## @param compactor.service.loadBalancerIP compactor service Load Balancer IP
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
     ##
-    loadBalancerIP:
+    loadBalancerIP: ""
     ## @param compactor.service.loadBalancerSourceRanges compactor service Load Balancer sources
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## e.g:
@@ -595,10 +609,10 @@ distributor:
   extraEnvVars: []
   ## @param distributor.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for distributor nodes
   ##
-  extraEnvVarsCM:
+  extraEnvVarsCM: ""
   ## @param distributor.extraEnvVarsSecret Name of existing Secret containing extra env vars for distributor nodes
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret: ""
   ## @param distributor.extraVolumes Optionally specify extra list of additional volumes for the distributor pod(s)
   ##
   extraVolumes: []
@@ -615,7 +629,7 @@ distributor:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  sidecars: {}
+  sidecars: []
   ## @param distributor.initContainers Add additional init containers to the distributor pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
@@ -625,7 +639,7 @@ distributor:
   ##    imagePullPolicy: Always
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
-  initContainers: {}
+  initContainers: []
   ## @section Distributor Traffic Exposure Parameters
   ##
 
@@ -647,17 +661,17 @@ distributor:
     ## NOTE: choose port between <30000-32767>
     ##
     nodePorts:
-      http:
-      grpc:
+      http: ""
+      grpc: ""
     ## @param distributor.service.clusterIP distributor service Cluster IP
     ## e.g.:
     ## clusterIP: None
     ##
-    clusterIP:
+    clusterIP: ""
     ## @param distributor.service.loadBalancerIP distributor service Load Balancer IP
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
     ##
-    loadBalancerIP:
+    loadBalancerIP: ""
     ## @param distributor.service.loadBalancerSourceRanges distributor service Load Balancer sources
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## e.g:
@@ -819,10 +833,10 @@ ingester:
   extraEnvVars: []
   ## @param ingester.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for ingester nodes
   ##
-  extraEnvVarsCM:
+  extraEnvVarsCM: ""
   ## @param ingester.extraEnvVarsSecret Name of existing Secret containing extra env vars for ingester nodes
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret: ""
   ## @param ingester.extraVolumes Optionally specify extra list of additional volumes for the ingester pod(s)
   ##
   extraVolumes: []
@@ -839,7 +853,7 @@ ingester:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  sidecars: {}
+  sidecars: []
   ## @param ingester.initContainers Add additional init containers to the ingester pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
@@ -849,7 +863,7 @@ ingester:
   ##    imagePullPolicy: Always
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
-  initContainers: {}
+  initContainers: []
 
   ## @section Ingester Persistence Parameters
   ##
@@ -868,7 +882,7 @@ ingester:
     ## set, choosing the default provisioner.
     ## @param ingester.persistence.storageClass Persistent Volumes storage class
     ##
-    storageClass:
+    storageClass: ""
     ## The subdirectory of the volume to mount to, useful in dev environments
     ## and one PV for multiple services.
     ## @param ingester.persistence.subPath The subdirectory of the volume to mount to
@@ -894,17 +908,17 @@ ingester:
       ## See https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#labelselector-v1-meta for more details
       ## @param ingester.persistence.volumeClaimTemplates.selector Persistent Volumes selector
       ##
-      selector:
+      selector: {}
       ## Override the requests attribute
       ## Sometime cloud providers use additional requests attributes to provision custom storage instance
       ## See https://cloud.ibm.com/docs/containers?topic=containers-file_storage#file_dynamic_statefulset
       ## @param ingester.persistence.volumeClaimTemplates.requests Persistent Volumes requests
       ##
-      requests:
+      requests: {}
       ## Set volumeClaimTemplate dataSource
       ## @param ingester.persistence.volumeClaimTemplates.dataSource Persistent Volumes data source
       ##
-      dataSource:
+      dataSource: {}
 
   ## @section Ingester Traffic Exposure Parameters
   ##
@@ -927,17 +941,17 @@ ingester:
     ## NOTE: choose port between <30000-32767>
     ##
     nodePorts:
-      http:
-      grpc:
+      http: ""
+      grpc: ""
     ## @param ingester.service.clusterIP ingester service Cluster IP
     ## e.g.:
     ## clusterIP: None
     ##
-    clusterIP:
+    clusterIP: ""
     ## @param ingester.service.loadBalancerIP ingester service Load Balancer IP
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
     ##
-    loadBalancerIP:
+    loadBalancerIP: ""
     ## @param ingester.service.loadBalancerSourceRanges ingester service Load Balancer sources
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## e.g:
@@ -1099,10 +1113,10 @@ querier:
   extraEnvVars: []
   ## @param querier.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for querier nodes
   ##
-  extraEnvVarsCM:
+  extraEnvVarsCM: ""
   ## @param querier.extraEnvVarsSecret Name of existing Secret containing extra env vars for querier nodes
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret: ""
   ## @param querier.extraVolumes Optionally specify extra list of additional volumes for the querier pod(s)
   ##
   extraVolumes: []
@@ -1119,7 +1133,7 @@ querier:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  sidecars: {}
+  sidecars: []
   ## @param querier.initContainers Add additional init containers to the querier pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
@@ -1129,7 +1143,7 @@ querier:
   ##    imagePullPolicy: Always
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
-  initContainers: {}
+  initContainers: []
   ## @section Querier Traffic Exposure Parameters
   ##
 
@@ -1151,17 +1165,17 @@ querier:
     ## NOTE: choose port between <30000-32767>
     ##
     nodePorts:
-      http:
-      grpc:
+      http: ""
+      grpc: ""
     ## @param querier.service.clusterIP querier service Cluster IP
     ## e.g.:
     ## clusterIP: None
     ##
-    clusterIP:
+    clusterIP: ""
     ## @param querier.service.loadBalancerIP querier service Load Balancer IP
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
     ##
-    loadBalancerIP:
+    loadBalancerIP: ""
     ## @param querier.service.loadBalancerSourceRanges querier service Load Balancer sources
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## e.g:
@@ -1323,10 +1337,10 @@ queryFrontend:
   extraEnvVars: []
   ## @param queryFrontend.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for queryFrontend nodes
   ##
-  extraEnvVarsCM:
+  extraEnvVarsCM: ""
   ## @param queryFrontend.extraEnvVarsSecret Name of existing Secret containing extra env vars for queryFrontend nodes
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret: ""
   ## @param queryFrontend.extraVolumes Optionally specify extra list of additional volumes for the queryFrontend pod(s)
   ##
   extraVolumes: []
@@ -1343,7 +1357,7 @@ queryFrontend:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  sidecars: {}
+  sidecars: []
   ## @param queryFrontend.initContainers Add additional init containers to the queryFrontend pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
@@ -1353,7 +1367,7 @@ queryFrontend:
   ##    imagePullPolicy: Always
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
-  initContainers: {}
+  initContainers: []
 
   ## Query sidecar settings
   ##
@@ -1369,7 +1383,7 @@ queryFrontend:
     image:
       registry: docker.io
       repository: bitnami/grafana-tempo-query
-      tag: 1.0.1-debian-10-r0
+      tag: 1.1.0-debian-10-r45
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1404,7 +1418,7 @@ queryFrontend:
 
     ## @param queryFrontend.query.existingConfigmap Name of a configmap with the query configuration
     ##
-    existingConfigmap:
+    existingConfigmap: ""
     ## Configure extra options for query sidecar containers' liveness and readiness probes
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
     ## @param queryFrontend.query.livenessProbe.enabled Enable livenessProbe on query sidecar nodes
@@ -1463,10 +1477,10 @@ queryFrontend:
     extraEnvVars: []
     ## @param queryFrontend.query.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for queryFrontend nodes
     ##
-    extraEnvVarsCM:
+    extraEnvVarsCM: ""
     ## @param queryFrontend.query.extraEnvVarsSecret Name of existing Secret containing extra env vars for queryFrontend nodes
     ##
-    extraEnvVarsSecret:
+    extraEnvVarsSecret: ""
     ## @param queryFrontend.query.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the queryFrontend container(s)
     ##
     extraVolumeMounts: []
@@ -1500,17 +1514,17 @@ queryFrontend:
     ## NOTE: choose port between <30000-32767>
     ##
     nodePorts:
-      http:
-      grpc:
+      http: ""
+      grpc: ""
     ## @param queryFrontend.service.clusterIP queryFrontend service Cluster IP
     ## e.g.:
     ## clusterIP: None
     ##
-    clusterIP:
+    clusterIP: ""
     ## @param queryFrontend.service.loadBalancerIP queryFrontend service Load Balancer IP
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
     ##
-    loadBalancerIP:
+    loadBalancerIP: ""
     ## @param queryFrontend.service.loadBalancerSourceRanges queryFrontend service Load Balancer sources
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## e.g:
@@ -1541,11 +1555,10 @@ vulture:
   ## @param vulture.image.pullPolicy Grafana Vulture image pull policy
   ## @param vulture.image.pullSecrets Grafana Vulture image pull secrets
   ##
-
   image:
     registry: docker.io
     repository: bitnami/grafana-tempo-vulture
-    tag: 1.0.1-debian-10-r0
+    tag: 1.1.0-debian-10-r46
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1707,10 +1720,10 @@ vulture:
   extraEnvVars: []
   ## @param vulture.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for vulture nodes
   ##
-  extraEnvVarsCM:
+  extraEnvVarsCM: ""
   ## @param vulture.extraEnvVarsSecret Name of existing Secret containing extra env vars for vulture nodes
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret: ""
   ## @param vulture.extraVolumes Optionally specify extra list of additional volumes for the vulture pod(s)
   ##
   extraVolumes: []
@@ -1727,7 +1740,7 @@ vulture:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  sidecars: {}
+  sidecars: []
   ## @param vulture.initContainers Add additional init containers to the vulture pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
@@ -1737,7 +1750,7 @@ vulture:
   ##    imagePullPolicy: Always
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
-  initContainers: {}
+  initContainers: []
   ## @section Vulture Traffic Exposure Parameters
   ##
 
@@ -1755,16 +1768,16 @@ vulture:
     ## NOTE: choose port between <30000-32767>
     ##
     nodePorts:
-      http:
+      http: ""
     ## @param vulture.service.clusterIP vulture service Cluster IP
     ## e.g.:
     ## clusterIP: None
     ##
-    clusterIP:
+    clusterIP: ""
     ## @param vulture.service.loadBalancerIP vulture service Load Balancer IP
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
     ##
-    loadBalancerIP:
+    loadBalancerIP: ""
     ## @param vulture.service.loadBalancerSourceRanges vulture service Load Balancer sources
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## e.g:
@@ -1802,8 +1815,8 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: "10"
-    pullPolicy: Always
+    tag: 10-debian-10-r225
+    pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -1862,24 +1875,24 @@ metrics:
 
     ## @param metrics.serviceMonitor.namespace The namespace in which the ServiceMonitor will be created
     ##
-    namespace:
+    namespace: ""
 
     ## @param metrics.serviceMonitor.interval The interval at which metrics should be scraped
     ##
     interval: 30s
     ## @param metrics.serviceMonitor.scrapeTimeout The timeout after which the scrape is ended
     ##
-    scrapeTimeout:
+    scrapeTimeout: ""
     ## @param metrics.serviceMonitor.selector Scrape selector
     ##
-    selector:
+    selector: {}
 
 ## @section External Memcached Parameters
 ##
 externalMemcached:
   ## @param externalMemcached.host Host of a running external memcached instance
   ##
-  host:
+  host: ""
   ## @param externalMemcached.port Port of a running external memcached instance
   ##
   port: 11211

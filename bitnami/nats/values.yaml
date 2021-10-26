@@ -38,6 +38,21 @@ clusterDomain: cluster.local
 ##
 extraDeploy: []
 
+## Enable diagnostic mode in the deployment
+##
+diagnosticMode:
+  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+  ##
+  enabled: false
+  ## @param diagnosticMode.command Command to override all containers in the deployment
+  ##
+  command:
+    - sleep
+  ## @param diagnosticMode.args Args to override all containers in the deployment
+  ##
+  args:
+    - infinity
+
 ## @section NATS parameters
 
 ## Bitnami NATS image version
@@ -51,7 +66,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/nats
-  tag: 2.3.2-debian-10-r0
+  tag: 2.6.2-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -71,6 +86,12 @@ image:
 ## @param auth.password Client authentication password
 ## @param auth.token Client authentication token
 ## @param auth.timeout Client authentication timeout (seconds)
+## @param auth.usersCredentials Client authentication users credentials collection
+## Example:
+## auth.usersCredentials:
+##   - username: "a"
+##     password: "b"
+## @param auth.noAuthUser Client authentication username from auth.usersCredentials map to be used when no credentials provided
 ##
 auth:
   enabled: true
@@ -78,6 +99,8 @@ auth:
   password: ""
   token: ""
   timeout: 1
+  usersCredentials: []
+  noAuthUser: ""
 ## Cluster Authentication
 ## ref: https://github.com/nats-io/gnatsd#authentication
 ## @param clusterAuth.enabled Switch to enable/disable cluster authentication
@@ -423,9 +446,10 @@ ingress:
   ## @param ingress.enabled Set to true to enable ingress record generation
   ##
   enabled: false
-  ## @param ingress.certManager Set this to true in order to add the corresponding annotations for cert-manager
+  ## DEPRECATED: Use ingress.annotations instead of ingress.certManager
+  ## certManager: false
   ##
-  certManager: false
+
   ## @param ingress.pathType Ingress Path type
   ##
   pathType: ImplementationSpecific
@@ -438,11 +462,16 @@ ingress:
   ## @param ingress.path The Path to NATS. You may need to set this to '/*' in order to use this with ALB ingress controllers.
   ##
   path: /
-  ## @param ingress.annotations Ingress annotations
+  ## @param ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
   ## For a full list of possible ingress annotations, please see
   ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+  ## Use this parameter to set the required annotations for cert-manager, see
+  ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
   ##
-  ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+  ## e.g:
+  ## annotations:
+  ##   kubernetes.io/ingress.class: nginx
+  ##   cert-manager.io/cluster-issuer: cluster-issuer-name
   ##
   annotations: {}
   ## @param ingress.tls Enable TLS configuration for the hostname defined at ingress.hostname parameter
@@ -532,7 +561,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/nats-exporter
-    tag: 0.8.0-debian-10-r10
+    tag: 0.8.0-debian-10-r103
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

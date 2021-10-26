@@ -1,3 +1,7 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
 ** Please be patient while the chart is being deployed **
 
 Watch the Grafana Operator Deployment status using the command:
@@ -10,4 +14,3 @@ Watch the Grafana Operator Deployment status using the command:
 {{- if .Values.grafana.enabled }}
 {{ include "common.warnings.rollingTag" .Values.grafana.image }}
 {{- end }}
-{{ include "common.warnings.rollingTag" .Values.grafanaPluginInit.image }}

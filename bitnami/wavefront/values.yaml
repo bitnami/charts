@@ -87,7 +87,7 @@ collector:
   image:
     registry: docker.io
     repository: bitnami/wavefront-kubernetes-collector
-    tag: 1.5.0-scratch-r0
+    tag: 1.7.1-scratch-r1
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -451,7 +451,7 @@ proxy:
   image:
     registry: docker.io
     repository: bitnami/wavefront-proxy
-    tag: 9.7.0-debian-10-r73
+    tag: 10.9.0-debian-10-r13
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -729,7 +729,7 @@ proxy:
   ## Multiple properties can be specified separated by whitespace
   ## Ref: https://docs.wavefront.com/proxies_configuring.html
   ##
-  args: []
+  args: ""
   ## @param proxy.heap Wavefront proxy Java heap maximum usage (java -Xmx command line option)
   ## By default Java will consume up to 4G of heap memory
   ## e.g:

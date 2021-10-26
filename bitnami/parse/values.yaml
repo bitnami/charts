@@ -54,7 +54,7 @@ server:
   image:
     registry: docker.io
     repository: bitnami/parse
-    tag: 4.9.3-debian-10-r170
+    tag: 4.10.4-debian-10-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -237,19 +237,25 @@ ingress:
   ## @param ingress.enabled Set to true to enable ingress record generation
   ##
   enabled: false
-  ## @param ingress.certManager Set this to true in order to add the corresponding annotations for cert-manager
+  ## DEPRECATED: Use ingress.annotations instead of ingress.certManager
+  ## certManager: false
   ##
-  certManager: false
+
   ## @param ingress.tls Enable TLS configuration for the hostname defined at ingress.hostname parameter
   ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.ingress.hostname }}
   ## You can use the ingress.secrets parameter to create this TLS secret or relay on cert-manager to create it
   ##
   tls: false
-  ## @param ingress.annotations Ingress annotations
-  ## If certManager is set to true, the annotation 'kubernetes.io/tls-acme: "true"' will automatically be set
+  ## @param ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
+  ## For a full list of possible ingress annotations, please see
   ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+  ## Use this parameter to set the required annotations for cert-manager, see
+  ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
+  ##
   ## e.g:
-  ##  kubernetes.io/ingress.class: nginx
+  ## annotations:
+  ##   kubernetes.io/ingress.class: nginx
+  ##   cert-manager.io/cluster-issuer: cluster-issuer-name
   ##
   annotations: {}
   dashboard:
@@ -369,7 +375,7 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/parse-dashboard
-    tag: 2.1.0-debian-10-r397
+    tag: 2.2.0-debian-10-r35
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -522,8 +528,8 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r120
-    pullPolicy: Always
+    tag: 10-debian-10-r207
+    pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -538,7 +544,7 @@ volumePermissions:
 
 ## @section MongoDB&reg; Parameters
 
-## MongoDB(R) chart configuration
+## MongoDB&reg; chart configuration
 ## https://github.com/bitnami/charts/blob/master/bitnami/mongodb/values.yaml
 ##
 mongodb:
@@ -548,7 +554,7 @@ mongodb:
   ## are added (externalDB)
   ##
   enabled: true
-  ## MongoDB(R) Authentication parameters
+  ## MongoDB&reg; Authentication parameters
   ##
   auth:
     ## @param mongodb.auth.enabled Enable MongoDB&reg; password authentication

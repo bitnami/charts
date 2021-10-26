@@ -22,6 +22,17 @@ Return the proper Docker Image Registry Secret Names
 {{- end -}}
 
 {{/*
+Return the appropriate apiVersion for networkpolicy
+*/}}
+{{- define "networkPolicy.apiVersion" -}}
+{{- if semverCompare ">=1.4-0, <1.7-0" .Capabilities.KubeVersion.GitVersion -}}
+{{- print "extensions/v1beta1" -}}
+{{- else -}}
+{{- print "networking.k8s.io/v1" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the proper etcd peer protocol
 */}}
 {{- define "etcd.peerProtocol" -}}
@@ -96,6 +107,37 @@ Return the secret with etcd credentials
 {{- end -}}
 
 {{/*
+Get the secret password key to be retrieved from etcd secret.
+*/}}
+{{- define "etcd.secretPasswordKey" -}}
+{{- if and .Values.auth.rbac.existingSecret .Values.auth.rbac.existingSecretPasswordKey -}}
+{{- printf "%s" .Values.auth.rbac.existingSecretPasswordKey -}}
+{{- else -}}
+{{- printf "etcd-root-password" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return true if a secret object should be created for the etcd token private key
+*/}}
+{{- define "etcd.token.createSecret" -}}
+{{- if and (eq .Values.auth.token.type "jwt") (empty .Values.auth.token.privateKey.existingSecret) }}
+    {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the secret with etcd token private key
+*/}}
+{{- define "etcd.token.secretName" -}}
+    {{- if .Values.auth.token.privateKey.existingSecret -}}
+        {{- printf "%s" .Values.auth.token.privateKey.existingSecret -}}
+    {{- else -}}
+        {{- printf "%s-jwt-token" (include "common.names.fullname" .) -}}
+    {{- end -}}
+{{- end -}}
+
+{{/*
 Return the proper Disaster Recovery PVC name
 */}}
 {{- define "etcd.disasterRecovery.pvc.name" -}}
@@ -105,6 +147,17 @@ Return the proper Disaster Recovery PVC name
     {{- printf "%s" (tpl .Values.startFromSnapshot.existingClaim $) -}}
 {{- else -}}
     {{- printf "%s-snapshotter" (include "common.names.fullname" .) }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+ Create the name of the service account to use
+ */}}
+{{- define "etcd.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create -}}
+{{ default (include "common.names.fullname" .) .Values.serviceAccount.name }}
+{{- else -}}
+{{ default "default" .Values.serviceAccount.name }}
 {{- end -}}
 {{- end -}}
 
@@ -148,16 +201,5 @@ etcd: startFromSnapshot.snapshotFilename
 etcd: disasterRecovery
     Persistence must be enabled when disasterRecovery is enabled!!
     Please enable persistence (--set persistence.enabled=true)
-{{- end -}}
-{{- end -}}
-
-{{/*
- Create the name of the service account to use
- */}}
-{{- define "etcd.serviceAccountName" -}}
-{{- if .Values.serviceAccount.create -}}
-{{ default (include "common.names.fullname" .) .Values.serviceAccount.name }}
-{{- else -}}
-{{ default "default" .Values.serviceAccount.name }}
 {{- end -}}
 {{- end -}}

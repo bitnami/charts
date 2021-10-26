@@ -53,17 +53,17 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                      | Description                                     | Value |
 | ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `nil` |
+| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `nil` |
+| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
 
 ### Common parameters
 
 | Name                | Description                                       | Value |
 | ------------------- | ------------------------------------------------- | ----- |
-| `nameOverride`      | Release name override                             | `nil` |
-| `fullnameOverride`  | Release full name override                        | `nil` |
+| `nameOverride`      | Release name override                             | `""`  |
+| `fullnameOverride`  | Release full name override                        | `""`  |
 | `commonLabels`      | Labels to add to all deployed objects             | `{}`  |
 | `commonAnnotations` | Annotations to add to all deployed objects        | `{}`  |
 | `extraDeploy`       | Array of extra objects to deploy with the release | `[]`  |
@@ -75,7 +75,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ------------------------------------------------ | ---------------------- |
 | `image.registry`    | kiam image registry                              | `docker.io`            |
 | `image.repository`  | kiam image name                                  | `bitnami/kiam`         |
-| `image.tag`         | kiam image tag                                   | `3.6.0-debian-10-r228` |
+| `image.tag`         | kiam image tag                                   | `3.6.0-debian-10-r344` |
 | `image.pullPolicy`  | kiam image pull policy                           | `IfNotPresent`         |
 | `image.pullSecrets` | Specify docker-registry secret names as an array | `[]`                   |
 
@@ -93,8 +93,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.logJsonOutput`                           | Use JSON format for logs                                                                        | `true`           |
 | `server.logLevel`                                | Logging level                                                                                   | `info`           |
 | `server.sslCertHostPath`                         | Path to the host system SSL certificates (necessary for contacting the AWS metadata server)     | `/etc/ssl/certs` |
-| `server.podSecurityPolicy.create`                |                                                                                                 | `true`           |
-| `server.podSecurityPolicy.allowedHostPaths`      |                                                                                                 | `[]`             |
+| `server.podSecurityPolicy.create`                | Create a PodSecurityPolicy resource                                                             | `true`           |
+| `server.podSecurityPolicy.allowedHostPaths`      | Extra host paths to allow in the PodSecurityPolicy                                              | `[]`             |
 | `server.priorityClassName`                       | Server priorityClassName                                                                        | `""`             |
 | `server.livenessProbe.enabled`                   | Enable livenessProbe                                                                            | `true`           |
 | `server.livenessProbe.initialDelaySeconds`       | Initial delay seconds for livenessProbe                                                         | `5`              |
@@ -113,11 +113,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.args`                                    | Override kiam default args                                                                      | `[]`             |
 | `server.tlsFiles`                                | Base64-encoded PEM values for server's CA certificate(s), certificate and private key           | `{}`             |
 | `server.gatewayTimeoutCreation`                  | Timeout when creating the kiam gateway                                                          | `1s`             |
-| `server.tlsSecret`                               | Name of a secret with TLS certificates for the container                                        | `nil`            |
+| `server.tlsSecret`                               | Name of a secret with TLS certificates for the container                                        | `""`             |
 | `server.dnsPolicy`                               | Pod DNS policy                                                                                  | `Default`        |
-| `server.roleBaseArn`                             | Base ARN for IAM roles. If not set kiam will detect it automatically                            | `nil`            |
+| `server.roleBaseArn`                             | Base ARN for IAM roles. If not set kiam will detect it automatically                            | `""`             |
 | `server.cacheSyncInterval`                       | Cache synchronization interval                                                                  | `1m`             |
-| `server.assumeRoleArn`                           | IAM role for the server to assume                                                               | `nil`            |
+| `server.assumeRoleArn`                           | IAM role for the server to assume                                                               | `""`             |
 | `server.sessionDuration`                         | Session duration for STS tokens                                                                 | `15m`            |
 | `server.tlsCerts`                                | Agent TLS Certificate filenames                                                                 | `{}`             |
 | `server.resources.limits`                        | The resources limits for the kiam container                                                     | `{}`             |
@@ -125,7 +125,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.containerSecurityContext.enabled`        | Enabled kiam server containers' Security Context                                                | `true`           |
 | `server.containerSecurityContext.runAsUser`      | Set kiam server container's Security Context runAsUser                                          | `1001`           |
 | `server.containerSecurityContext.runAsNonRoot`   | Set kiam server container's Security Context runAsNonRoot                                       | `true`           |
-| `server.containerSecurityContext.seLinuxOptions` | Set kiam server container's Security Context SE Linux options                                   | `nil`            |
+| `server.containerSecurityContext.seLinuxOptions` | Set kiam server container's Security Context SE Linux options                                   | `{}`             |
 | `server.podSecurityContext.enabled`              | Enabled kiam server pods' Security Context                                                      | `true`           |
 | `server.podSecurityContext.fsGroup`              | Set kiam server pod's Security Context fsGroup                                                  | `1001`           |
 | `server.podAffinityPreset`                       | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`             | `""`             |
@@ -143,8 +143,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.customReadinessProbe`                    | Override default readiness probe                                                                | `{}`             |
 | `server.updateStrategy.type`                     | Update strategy - only really applicable for deployments with RWO PVs attached                  | `RollingUpdate`  |
 | `server.extraEnvVars`                            | Array containing extra env vars to configure kiam server                                        | `[]`             |
-| `server.extraEnvVarsCM`                          | ConfigMap containing extra env vars to configure kiam server                                    | `nil`            |
-| `server.extraEnvVarsSecret`                      | Secret containing extra env vars to configure kiam server (in case of sensitive data)           | `nil`            |
+| `server.extraEnvVarsCM`                          | ConfigMap containing extra env vars to configure kiam server                                    | `""`             |
+| `server.extraEnvVarsSecret`                      | Secret containing extra env vars to configure kiam server (in case of sensitive data)           | `""`             |
 | `server.extraVolumes`                            | Optionally specify extra list of additional volumes for kiam pods                               | `[]`             |
 | `server.extraVolumeMounts`                       | Optionally specify extra list of additional volumeMounts for kiam container(s)                  | `[]`             |
 | `server.initContainers`                          | Add additional init containers to the kiam pods                                                 | `[]`             |
@@ -159,7 +159,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.service.port`                     | Service HTTPS port                                                           | `8443`      |
 | `server.service.nodePorts`                | Specify the nodePort values for the LoadBalancer and NodePort service types. | `{}`        |
 | `server.service.clusterIP`                | kiam service clusterIP IP                                                    | `None`      |
-| `server.service.loadBalancerIP`           | loadBalancerIP if service type is `LoadBalancer`                             | `nil`       |
+| `server.service.loadBalancerIP`           | loadBalancerIP if service type is `LoadBalancer`                             | `""`        |
 | `server.service.loadBalancerSourceRanges` | Address that are allowed when service is LoadBalancer                        | `[]`        |
 | `server.service.externalTrafficPolicy`    | Enable client source IP preservation                                         | `Cluster`   |
 | `server.service.annotations`              | Annotations for kiam service                                                 | `{}`        |
@@ -170,7 +170,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                           | Description                                           | Value  |
 | ------------------------------ | ----------------------------------------------------- | ------ |
 | `server.serviceAccount.create` | Enable the creation of a ServiceAccount for kiam pods | `true` |
-| `server.serviceAccount.name`   | Name of the created ServiceAccount                    | `nil`  |
+| `server.serviceAccount.name`   | Name of the created ServiceAccount                    | `""`   |
 
 
 ### kiam server metrics parameters
@@ -182,12 +182,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.metrics.syncInterval`                     | Metrics synchronization interval statistics                                  | `5s`    |
 | `server.metrics.annotations`                      | Annotations for enabling prometheus to access the metrics endpoints          | `{}`    |
 | `server.metrics.serviceMonitor.enabled`           | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator | `false` |
-| `server.metrics.serviceMonitor.namespace`         | Namespace in which Prometheus is running                                     | `nil`   |
+| `server.metrics.serviceMonitor.namespace`         | Namespace in which Prometheus is running                                     | `""`    |
 | `server.metrics.serviceMonitor.interval`          | Interval at which metrics should be scraped                                  | `30s`   |
 | `server.metrics.serviceMonitor.metricRelabelings` | Specify Metric Relabellings to add to the scrape endpoint                    | `[]`    |
 | `server.metrics.serviceMonitor.relabelings`       | Specify Relabelings to add to the scrape endpoint                            | `[]`    |
-| `server.metrics.serviceMonitor.scrapeTimeout`     | Specify the timeout after which the scrape is ended                          | `nil`   |
-| `server.metrics.serviceMonitor.selector`          | metrics service selector                                                     | `nil`   |
+| `server.metrics.serviceMonitor.scrapeTimeout`     | Specify the timeout after which the scrape is ended                          | `""`    |
+| `server.metrics.serviceMonitor.selector`          | metrics service selector                                                     | `{}`    |
 
 
 ### kiam agent parameters
@@ -198,22 +198,22 @@ The command removes all the Kubernetes components associated with the chart and 
 | `agent.logJsonOutput`                           | Use JSON format for logs                                                                   | `true`                    |
 | `agent.logLevel`                                | Logging level                                                                              | `info`                    |
 | `agent.priorityClassName`                       | Server priorityClassName                                                                   | `""`                      |
-| `agent.allowRouteRegExp`                        | Regexp with the allowed paths for agents to redirect                                       | `nil`                     |
+| `agent.allowRouteRegExp`                        | Regexp with the allowed paths for agents to redirect                                       | `""`                      |
 | `agent.hostAliases`                             | Add deployment host aliases                                                                | `[]`                      |
 | `agent.containerPort`                           | HTTPS port to expose at container level                                                    | `8183`                    |
 | `agent.iptables`                                | Have the agent modify the host iptables rules                                              | `false`                   |
 | `agent.iptablesRemoveOnShutdown`                | Remove iptables rules when shutting down the agent node                                    | `false`                   |
 | `agent.hostInterface`                           | Interface for agents for redirecting requests                                              | `cali+`                   |
 | `agent.keepaliveParams.permitWithoutStream`     | Permit keepalive without stream                                                            | `false`                   |
-| `agent.keepaliveParams.time`                    | Keepalive time                                                                             | `nil`                     |
-| `agent.keepaliveParams.timeout`                 | Keepalive timeout                                                                          | `nil`                     |
+| `agent.keepaliveParams.time`                    | Keepalive time                                                                             | `""`                      |
+| `agent.keepaliveParams.timeout`                 | Keepalive timeout                                                                          | `""`                      |
 | `agent.enableDeepProbe`                         | Use the probes using the `/health` endpoint                                                | `false`                   |
 | `agent.dnsPolicy`                               | Pod DNS policy                                                                             | `ClusterFirstWithHostNet` |
 | `agent.sslCertHostPath`                         | Path to the host system SSL certificates (necessary for contacting the AWS metadata agent) | `/etc/ssl/certs`          |
 | `agent.tlsFiles`                                | Base64-encoded PEM values for server's CA certificate(s), certificate and private key      | `{}`                      |
-| `agent.podSecurityPolicy.create`                | Create a PodSecurityPolicy resources                                                       | `true`                    |
-| `agent.podSecurityPolicy.allowedHostPaths`      | Extra host paths to allow in the PodSecurityPolicy                                         | `nil`                     |
-| `agent.tlsSecret`                               | Name of a secret with TLS certificates for the container                                   | `nil`                     |
+| `agent.podSecurityPolicy.create`                | Create a PodSecurityPolicy resource                                                        | `true`                    |
+| `agent.podSecurityPolicy.allowedHostPaths`      | Extra host paths to allow in the PodSecurityPolicy                                         | `[]`                      |
+| `agent.tlsSecret`                               | Name of a secret with TLS certificates for the container                                   | `""`                      |
 | `agent.useHostNetwork`                          | Use host networking (ports will be directly exposed in the host)                           | `true`                    |
 | `agent.tlsCerts`                                | Agent TLS Certificate filenames                                                            | `{}`                      |
 | `agent.livenessProbe.enabled`                   | Enable livenessProbe                                                                       | `true`                    |
@@ -237,7 +237,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `agent.containerSecurityContext.enabled`        | Enabled agent containers' Security Context                                                 | `true`                    |
 | `agent.containerSecurityContext.runAsUser`      | Set agent container's Security Context runAsUser                                           | `1001`                    |
 | `agent.containerSecurityContext.runAsNonRoot`   | Set agent container's Security Context runAsNonRoot                                        | `true`                    |
-| `agent.containerSecurityContext.seLinuxOptions` | Set agent container's Security Context SE Linux options                                    | `nil`                     |
+| `agent.containerSecurityContext.seLinuxOptions` | Set agent container's Security Context SE Linux options                                    | `{}`                      |
 | `agent.podSecurityContext.enabled`              | Enabled agent pods' Security Context                                                       | `true`                    |
 | `agent.podSecurityContext.fsGroup`              | Set agent pod's Security Context fsGroup                                                   | `1001`                    |
 | `agent.podAffinityPreset`                       | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`        | `""`                      |
@@ -255,8 +255,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `agent.customReadinessProbe`                    | Override default readiness probe                                                           | `{}`                      |
 | `agent.updateStrategy.type`                     | Update strategy - only really applicable for deployments with RWO PVs attached             | `RollingUpdate`           |
 | `agent.extraEnvVars`                            | Array containing extra env vars to configure kiam agent                                    | `[]`                      |
-| `agent.extraEnvVarsCM`                          | ConfigMap containing extra env vars to configure kiam agent                                | `nil`                     |
-| `agent.extraEnvVarsSecret`                      | Secret containing extra env vars to configure kiam agent (in case of sensitive data)       | `nil`                     |
+| `agent.extraEnvVarsCM`                          | ConfigMap containing extra env vars to configure kiam agent                                | `""`                      |
+| `agent.extraEnvVarsSecret`                      | Secret containing extra env vars to configure kiam agent (in case of sensitive data)       | `""`                      |
 | `agent.extraVolumes`                            | Optionally specify extra list of additional volumes for kiam pods                          | `[]`                      |
 | `agent.extraVolumeMounts`                       | Optionally specify extra list of additional volumeMounts for kiam container(s)             | `[]`                      |
 | `agent.initContainers`                          | Add additional init containers to the kiam pods                                            | `[]`                      |
@@ -269,8 +269,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | ---------------------------------------- | ---------------------------------------------------------------------------- | ----------- |
 | `agent.service.type`                     | Kubernetes service type                                                      | `ClusterIP` |
 | `agent.service.nodePorts`                | Specify the nodePort values for the LoadBalancer and NodePort service types. | `{}`        |
-| `agent.service.clusterIP`                | kiam service clusterIP IP                                                    | `nil`       |
-| `agent.service.loadBalancerIP`           | loadBalancerIP if service type is `LoadBalancer`                             | `nil`       |
+| `agent.service.clusterIP`                | kiam service clusterIP IP                                                    | `""`        |
+| `agent.service.loadBalancerIP`           | loadBalancerIP if service type is `LoadBalancer`                             | `""`        |
 | `agent.service.loadBalancerSourceRanges` | Address that are allowed when service is LoadBalancer                        | `[]`        |
 | `agent.service.externalTrafficPolicy`    | Enable client source IP preservation                                         | `Cluster`   |
 | `agent.service.annotations`              | Annotations for kiam service                                                 | `{}`        |
@@ -281,7 +281,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                          | Description                                           | Value  |
 | ----------------------------- | ----------------------------------------------------- | ------ |
 | `agent.serviceAccount.create` | Enable the creation of a ServiceAccount for kiam pods | `true` |
-| `agent.serviceAccount.name`   | Name of the created ServiceAccount                    | `nil`  |
+| `agent.serviceAccount.name`   | Name of the created ServiceAccount                    | `""`   |
 
 
 ### kiam agent metrics parameters
@@ -293,12 +293,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `agent.metrics.syncInterval`                     | Metrics synchronization interval statistics                                  | `5s`    |
 | `agent.metrics.annotations`                      | Annotations for enabling prometheus to access the metrics endpoints          | `{}`    |
 | `agent.metrics.serviceMonitor.enabled`           | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator | `false` |
-| `agent.metrics.serviceMonitor.namespace`         | Namespace which Prometheus is running in                                     | `nil`   |
+| `agent.metrics.serviceMonitor.namespace`         | Namespace which Prometheus is running in                                     | `""`    |
 | `agent.metrics.serviceMonitor.interval`          | Interval at which metrics should be scraped                                  | `30s`   |
 | `agent.metrics.serviceMonitor.metricRelabelings` | Specify Metric Relabelings to add to the scrape endpoint                     | `[]`    |
 | `agent.metrics.serviceMonitor.relabelings`       | Specify Relabelings to add to the scrape endpoint                            | `[]`    |
-| `agent.metrics.serviceMonitor.scrapeTimeout`     | Specify the timeout after which the scrape is ended                          | `nil`   |
-| `agent.metrics.serviceMonitor.selector`          | metrics service selector                                                     | `nil`   |
+| `agent.metrics.serviceMonitor.scrapeTimeout`     | Specify the timeout after which the scrape is ended                          | `""`    |
+| `agent.metrics.serviceMonitor.selector`          | metrics service selector                                                     | `{}`    |
 
 
 ### RBAC parameters

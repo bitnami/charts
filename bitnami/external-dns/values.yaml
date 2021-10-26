@@ -7,7 +7,7 @@
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
 ##
 global:
-  imageRegistry:
+  imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
@@ -18,15 +18,15 @@ global:
 
 ## @param nameOverride String to partially override external-dns.fullname template (will maintain the release name)
 ##
-nameOverride:
+nameOverride: ""
 ## @param fullnameOverride String to fully override external-dns.fullname template
 ##
-fullnameOverride:
+fullnameOverride: ""
 ## @param clusterDomain Kubernetes Cluster Domain
 ##
 clusterDomain: cluster.local
 
-## @section etcd parameters
+## @section external-dns parameters
 
 ## Bitnami external-dns image version
 ## ref: https://hub.docker.com/r/bitnami/external-dns/tags/
@@ -34,11 +34,12 @@ clusterDomain: cluster.local
 ## @param image.repository ExternalDNS image repository
 ## @param image.tag ExternalDNS Image tag (immutable tags are recommended)
 ## @param image.pullPolicy ExternalDNS image pull policy
+## @param image.pullSecrets ExternalDNS image pull secrets
 ##
 image:
   registry: docker.io
   repository: bitnami/external-dns
-  tag: 0.8.0-debian-10-r47
+  tag: 0.10.1-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -47,9 +48,11 @@ image:
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## e.g:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
   ##
-  # pullSecrets:
-  #   - myRegistryKeySecretName
+  pullSecrets: []
 
 ## @param hostAliases Deployment pod host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
@@ -109,7 +112,7 @@ alibabacloud:
   ## @param alibabacloud.secretName Use an existing secret with key "alibaba-cloud.json" defined.
   ## This ignores alibabacloud.accessKeyId, and alibabacloud.accessKeySecret
   ##
-  secretName:
+  secretName: ""
   ## @param alibabacloud.zoneType Zone Filter. Available values are: public, private, or no value for both
   ##
   zoneType: ""
@@ -130,7 +133,7 @@ aws:
     ## @param aws.credentials.secretName Use an existing secret with key "credentials" defined.
     ## This ignores aws.credentials.secretKey, and aws.credentials.accessKey
     ##
-    secretName:
+    secretName: ""
   ## @param aws.region When using the AWS provider, `AWS_DEFAULT_REGION` to set in the environment (optional)
   ##
   region: "us-east-1"
@@ -198,7 +201,7 @@ cloudflare:
   ## @param cloudflare.secretName When using the Cloudflare provider, it's the name of the secret containing cloudflare_api_token or cloudflare_api_key.
   ## This ignores cloudflare.apiToken, and cloudflare.apiKey
   ##
-  secretName:
+  secretName: ""
   ## @param cloudflare.email When using the Cloudflare provider, `CF_API_EMAIL` to set (optional). Needed when using CF_API_KEY
   ##
   email: ""
@@ -263,16 +266,16 @@ designate:
   ##   userDomainName: "development"
   ##   projectName: "myteamname"
   ##
-  username:
-  password:
-  authUrl:
-  regionName:
-  userDomainName:
-  projectName:
+  username: ""
+  password: ""
+  authUrl: ""
+  regionName: ""
+  userDomainName: ""
+  projectName: ""
   ## @param designate.customCAHostPath When using the Designate provider, use a CA file already on the host to validate Openstack APIs.  This conflicts with `designate.customCA.enabled`
   ## This conflicts setting the above customCA to true and chart rendering will fail if you set customCA to true and specify customCAHostPath
   ##
-  customCAHostPath: /path/to/cafile
+  customCAHostPath: ""
   ## Use a custom CA (optional)
   ## @param designate.customCA.enabled When using the Designate provider, enable a custom CA (optional)
   ## @param designate.customCA.content When using the Designate provider, set the content of the custom CA
@@ -293,7 +296,7 @@ digitalocean:
   ## @param digitalocean.secretName Use an existing secret with key "digitalocean_api_token" defined.
   ## This ignores digitalocean.apiToken
   ##
-  secretName:
+  secretName: ""
 ## Google configuration to be set via arguments/env. variables
 ##
 google:
@@ -372,7 +375,7 @@ linode:
   ## @param linode.secretName Use an existing secret with key "linode_api_token" defined.
   ## This ignores linode.apiToken
   ##
-  secretName:
+  secretName: ""
 ## NS1 configuration to be set via arguments/env. variables
 ## @param ns1.minTTL When using the ns1 provider, specify minimal TTL, as an integer, for records
 ##
@@ -397,7 +400,7 @@ ovh:
   ##  - ovh_application_secret
   ## This ignores consumerKey, applicationKey & applicationSecret
   ##
-  secretName:
+  secretName: ""
 ## Scaleway configuration to be set via arguments/env. variables
 ##
 scaleway:
@@ -427,7 +430,7 @@ rfc2136:
   tsigSecret: ""
   ## @param rfc2136.secretName When using the rfc2136 provider, specify the existing secret which contains your tsig secret. Disables the usage of `rfc2136.tsigSecret` (optional)
   ##
-  secretName:
+  secretName: ""
   ## @param rfc2136.tsigSecretAlg When using the rfc2136 provider, specify the tsig secret to enable security (optional)
   ##
   tsigSecretAlg: hmac-sha256
@@ -440,6 +443,22 @@ rfc2136:
   ## @param rfc2136.minTTL When using the rfc2136 provider, specify minimal TTL (in duration format) for records[ns, us, ms, s, m, h], see more https://golang.org/pkg/time/#ParseDuration
   ##
   minTTL: "0s"
+  ## @param rfc2136.rfc3645Enabled When using the rfc2136 provider, extend using RFC3645 to support secure updates over Kerberos with GSS-TSIG
+  ##
+  rfc3645Enabled: false
+  ## @param rfc2136.kerberosConfig When using the rfc2136 provider with rfc3645Enabled, the contents of a configuration file for krb5 (optional)
+  ##
+  kerberosConfig: ""
+  ## @param rfc2136.kerberosUsername When using the rfc2136 provider with rfc3645Enabled, specify the username to authenticate with (optional)
+  ##
+  kerberosUsername: ""
+  ## @param rfc2136.kerberosPassword When using the rfc2136 provider with rfc3645Enabled, specify the password to authenticate with (optional)
+  ##
+  kerberosPassword: ""
+  ## @param rfc2136.kerberosRealm When using the rfc2136 provider with rfc3645Enabled, specify the realm to authenticate to (required when provider=rfc2136 and rfc2136.rfc3645Enabled=true)
+  ##
+  kerberosRealm: ""
+
 ## PowerDNS configuration to be set via arguments/env. variables
 ##
 pdns:
@@ -644,16 +663,16 @@ service:
   ## @param service.nodePort Port to bind to for NodePort service type (client port)
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ##
-  nodePort:
+  nodePort: ""
   ## @param service.clusterIP IP address to assign to service
   ##
-  clusterIP:
+  clusterIP: ""
   ## @param service.externalIPs Service external IP addresses
   ##
   externalIPs: []
   ## @param service.loadBalancerIP IP address to assign to load balancer (if supported)
   ##
-  loadBalancerIP:
+  loadBalancerIP: ""
   ## @param service.loadBalancerSourceRanges List of IP CIDRs allowed access to load balancer (if supported)
   ##
   loadBalancerSourceRanges: []
@@ -677,7 +696,7 @@ serviceAccount:
   create: true
   ## @param serviceAccount.name ServiceAccount to use. A name is generated using the external-dns.fullname template if it is not set
   ##
-  name:
+  name: ""
   ## @param serviceAccount.annotations Additional Service Account annotations
   ##
   annotations: {}
@@ -804,19 +823,19 @@ metrics:
     enabled: false
     ## @param metrics.serviceMonitor.namespace Namespace in which Prometheus is running
     ##
-    namespace:
+    namespace: ""
     ## @param metrics.serviceMonitor.interval Interval at which metrics should be scraped
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ##
-    interval:
+    interval: ""
     ## @param metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ##
-    scrapeTimeout:
+    scrapeTimeout: ""
     ## @param metrics.serviceMonitor.selector Additional labels for ServiceMonitor object
     ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
     ## e.g:
     ## selector:
     ##   prometheus: my-prometheus
     ##
-    selector:
+    selector: {}

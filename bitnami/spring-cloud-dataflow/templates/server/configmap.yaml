@@ -78,6 +78,8 @@ data:
           metrics.dashboard:
             url: {{ .Values.server.configuration.grafanaInfo }}
           {{- end }}
+        task:
+          closecontextEnabled: true
       {{- $hibernateDialect := include "scdf.database.hibernate.dialect" .  }}
       {{- if $hibernateDialect }}
       jpa:
@@ -96,4 +98,6 @@ data:
         {{- end }}
         testOnBorrow: true
         validationQuery: "SELECT 1"
+      flyway:
+        enabled: {{ .Values.flyway.enabled }}
 {{ end }}

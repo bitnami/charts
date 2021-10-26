@@ -4,7 +4,7 @@ kind: PrometheusRule
 metadata:
   name: {{ template "common.names.fullname" . }}
   {{- if .Values.metrics.prometheusRule.namespace }}
-  namespace: {{ .Values.metrics.prometheusRule.namespace }}
+  namespace: {{ .Values.metrics.prometheusRule.namespace | quote }}
   {{- else }}
   namespace: {{ .Release.Namespace | quote }}
   {{- end }}

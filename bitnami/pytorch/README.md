@@ -70,20 +70,20 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
 | `image.registry`                       | PyTorch image registry                                                                                                                                    | `docker.io`             |
 | `image.repository`                     | PyTorch image repository                                                                                                                                  | `bitnami/pytorch`       |
-| `image.tag`                            | PyTorch image tag (immutable tags are recommended)                                                                                                        | `1.9.0-debian-10-r3`    |
+| `image.tag`                            | PyTorch image tag (immutable tags are recommended)                                                                                                        | `1.9.1-debian-10-r0`    |
 | `image.pullPolicy`                     | Image pull policy                                                                                                                                         | `IfNotPresent`          |
 | `image.pullSecrets`                    | Specify docker-registry secret names as an array                                                                                                          | `[]`                    |
 | `image.debug`                          | Specify if debug logs should be enabled                                                                                                                   | `false`                 |
 | `git.registry`                         | Git image registry                                                                                                                                        | `docker.io`             |
 | `git.repository`                       | Git image repository                                                                                                                                      | `bitnami/git`           |
-| `git.tag`                              | Git image tag (immutable tags are recommended)                                                                                                            | `2.32.0-debian-10-r14`  |
+| `git.tag`                              | Git image tag (immutable tags are recommended)                                                                                                            | `2.33.0-debian-10-r64`  |
 | `git.pullPolicy`                       | Git image pull policy                                                                                                                                     | `IfNotPresent`          |
 | `git.pullSecrets`                      | Specify docker-registry secret names as an array                                                                                                          | `[]`                    |
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image repository                                                                                                        | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                                                                              | `10-debian-10-r115`     |
-| `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `Always`                |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                                                                              | `10-debian-10-r226`     |
+| `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                                          | `[]`                    |
 | `volumePermissions.resources.limits`   | The resources limits for the container                                                                                                                    | `{}`                    |
 | `volumePermissions.resources.requests` | The requested resources for the container                                                                                                                 | `{}`                    |
@@ -130,7 +130,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `readinessProbe.successThreshold`      | Success threshold for readinessProbe                                                                                                                      | `1`                     |
 | `persistence.enabled`                  | Use a Persistent Volume Claim to persist data                                                                                                             | `true`                  |
 | `persistence.mountPath`                | Data volume mount path                                                                                                                                    | `/bitnami/pytorch`      |
-| `persistence.accessModes`              | Persistent Volume Access Mode                                                                                                                             | `[]`                    |
+| `persistence.accessModes`              | Persistent Volume Access Mode                                                                                                                             | `["ReadWriteOnce"]`     |
 | `persistence.size`                     | Size of data volume                                                                                                                                       | `8Gi`                   |
 | `persistence.storageClass`             | Persistent Volume Storage Class                                                                                                                           | `""`                    |
 | `persistence.annotations`              | Persistent Volume Claim annotations                                                                                                                       | `{}`                    |
@@ -214,7 +214,7 @@ Find more information about how to deal with common errors related to Bitnami’
 
 ## Upgrading
 
-### 2.1.0
+### To 2.1.0
 
 This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
 

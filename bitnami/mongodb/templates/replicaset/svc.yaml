@@ -15,8 +15,8 @@ metadata:
   namespace: {{ include "mongodb.namespace" $ }}
   labels: {{- include "common.labels.standard" $ | nindent 4 }}
     app.kubernetes.io/component: mongodb
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- if $root.Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" $root.Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
   {{- if $root.Values.service.annotations }}
   annotations: {{- include "common.tplvalues.render" (dict "value" $root.Values.service.annotations "context" $) | nindent 4 }}

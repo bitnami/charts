@@ -50,7 +50,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/solr
-  tag: 8.9.0-debian-10-r15
+  tag: 8.10.1-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -326,8 +326,8 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r131
-    pullPolicy: Always
+    tag: 10-debian-10-r224
+    pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -394,6 +394,16 @@ persistence:
   ## @param persistence.mountPath Persistence mount path for Solr
   ##
   mountPath: /bitnami/solr
+
+  ## @param persistence.extraVolumeClaimTemplates Additional pod instance specific volumes
+  ##
+  ## Example
+  ## extraVolumeClaimTemplates:
+  ## - name: "extra"
+  ##   size: 8Gi
+  ##   mountPath: "/extra"
+  extraVolumeClaimTemplates: []
+
 serviceAccount:
   ## @param serviceAccount.create Specifies whether a ServiceAccount should be created
   ##
@@ -485,9 +495,10 @@ ingress:
   ## @param ingress.enabled Enable ingress controller resource
   ##
   enabled: false
-  ## @param ingress.certManager Set this to true in order to add the corresponding annotations for cert-manager
+  ## DEPRECATED: Use ingress.annotations instead of ingress.certManager
+  ## certManager: false
   ##
-  certManager: false
+
   ## @param ingress.pathType Path type for the ingress resource
   ##
   pathType: ImplementationSpecific
@@ -500,11 +511,16 @@ ingress:
   ## @param ingress.path The Path to Solr. You may need to set this to '/*' in order to use this with ALB ingress controllers.
   ##
   path: /
-  ## @param ingress.annotations Ingress annotations
+  ## @param ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
   ## For a full list of possible ingress annotations, please see
   ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+  ## Use this parameter to set the required annotations for cert-manager, see
+  ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
   ##
-  ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+  ## e.g:
+  ## annotations:
+  ##   kubernetes.io/ingress.class: nginx
+  ##   cert-manager.io/cluster-issuer: cluster-issuer-name
   ##
   annotations: {}
   ## @param ingress.tls Enable TLS configuration for the hostname defined at ingress.hostname parameter
@@ -590,29 +606,6 @@ exporter:
   ## @param exporter.enabled Start a side-car prometheus exporter
   ##
   enabled: false
-  ## @param exporter.image.registry Solr exporter image registry
-  ## @param exporter.image.repository Solr exporter image name
-  ## @param exporter.image.tag Solr exporter image tag
-  ## @param exporter.image.pullPolicy Image pull policy
-  ## @param exporter.image.pullSecrets Specify docker-registry secret names as an array
-  ##
-  image:
-    registry: docker.io
-    repository: bitnami/solr
-    tag: 8.9.0-debian-10-r14
-    ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-    ##
-    pullPolicy: IfNotPresent
-    ## Optionally specify an array of imagePullSecrets.
-    ## Secrets must be manually created in the namespace.
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-    ## e.g:
-    ## pullSecrets:
-    ##   - myRegistryKeySecretName
-    ##
-    pullSecrets: []
   ## Configure extra options for liveness probe
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param exporter.livenessProbe.enabled Enable livenessProbe

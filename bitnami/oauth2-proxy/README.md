@@ -69,33 +69,32 @@ The command removes all the Kubernetes components associated with the chart and 
 | `clusterDomain`          | Kubernetes cluster domain name                                                          | `cluster.local` |
 | `extraDeploy`            | Array of extra objects to deploy with the release                                       | `[]`            |
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
-| `diagnosticMode.command` | Command to override all containers in the deployment                                    | `[]`            |
-| `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `[]`            |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`     |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]`  |
 
 
 ### Traffic Exposure Parameters
 
-| Name                               | Description                                                                                           | Value                    |
-| ---------------------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------ |
-| `service.type`                     | OAuth2 Proxy service type                                                                             | `ClusterIP`              |
-| `service.port`                     | OAuth2 Proxy service HTTP port                                                                        | `80`                     |
-| `service.nodePorts.http`           | Node port for HTTP                                                                                    | `""`                     |
-| `service.clusterIP`                | OAuth2 Proxy service Cluster IP                                                                       | `""`                     |
-| `service.loadBalancerIP`           | OAuth2 Proxy service Load Balancer IP                                                                 | `""`                     |
-| `service.loadBalancerSourceRanges` | OAuth2 Proxy service Load Balancer sources                                                            | `[]`                     |
-| `service.externalTrafficPolicy`    | OAuth2 Proxy service external traffic policy                                                          | `Cluster`                |
-| `service.annotations`              | Additional custom annotations for OAuth2 Proxy service                                                | `{}`                     |
-| `ingress.enabled`                  | Enable ingress record generation for WordPress                                                        | `false`                  |
-| `ingress.certManager`              | Add the corresponding annotations for cert-manager integration                                        | `false`                  |
-| `ingress.pathType`                 | Ingress path type                                                                                     | `ImplementationSpecific` |
-| `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                         | `""`                     |
-| `ingress.hostname`                 | Default host for the ingress record                                                                   | `oaut2-proxy.local`      |
-| `ingress.path`                     | Default path for the ingress record                                                                   | `ImplementationSpecific` |
-| `ingress.annotations`              | Additional custom annotations for the ingress record                                                  | `{}`                     |
-| `ingress.tls`                      | Enable TLS configuration for the host defined at `ingress.hostname` parameter                         | `false`                  |
-| `ingress.extraHosts`               | An array with additional hostname(s) to be covered with the ingress record                            | `[]`                     |
-| `ingress.extraPaths`               | An array with additional arbitrary paths that may need to be added to the ingress under the main host | `[]`                     |
-| `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                   | `[]`                     |
+| Name                               | Description                                                                                                                      | Value                    |
+| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.type`                     | OAuth2 Proxy service type                                                                                                        | `ClusterIP`              |
+| `service.port`                     | OAuth2 Proxy service HTTP port                                                                                                   | `80`                     |
+| `service.nodePorts.http`           | Node port for HTTP                                                                                                               | `""`                     |
+| `service.clusterIP`                | OAuth2 Proxy service Cluster IP                                                                                                  | `""`                     |
+| `service.loadBalancerIP`           | OAuth2 Proxy service Load Balancer IP                                                                                            | `""`                     |
+| `service.loadBalancerSourceRanges` | OAuth2 Proxy service Load Balancer sources                                                                                       | `[]`                     |
+| `service.externalTrafficPolicy`    | OAuth2 Proxy service external traffic policy                                                                                     | `Cluster`                |
+| `service.annotations`              | Additional custom annotations for OAuth2 Proxy service                                                                           | `{}`                     |
+| `ingress.enabled`                  | Enable ingress record generation for WordPress                                                                                   | `false`                  |
+| `ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
+| `ingress.hostname`                 | Default host for the ingress record                                                                                              | `oaut2-proxy.local`      |
+| `ingress.path`                     | Default path for the ingress record                                                                                              | `/`                      |
+| `ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.tls`                      | Enable TLS configuration for the host defined at `ingress.hostname` parameter                                                    | `false`                  |
+| `ingress.extraHosts`               | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                     |
+| `ingress.extraPaths`               | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |
+| `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
 
 
 ### OAuth2 Proxy Image parameters
@@ -104,31 +103,32 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ------------------------------------------------------- | ---------------------- |
 | `image.registry`    | OAuth2 Proxy image registry                             | `docker.io`            |
 | `image.repository`  | OAuth2 Proxy image repository                           | `bitnami/oauth2-proxy` |
-| `image.tag`         | OAuth2 Proxy image tag (immutable tags are recommended) | `7.1.3-debian-10-r69`  |
+| `image.tag`         | OAuth2 Proxy image tag (immutable tags are recommended) | `7.2.0-debian-10-r0`   |
 | `image.pullPolicy`  | OAuth2 Proxy image pull policy                          | `IfNotPresent`         |
 | `image.pullSecrets` | OAuth2 Proxy image pull secrets                         | `[]`                   |
 
 
 ### OAuth2 Proxy configuration parameters
 
-| Name                                                   | Description                                         | Value                                                         |
-| ------------------------------------------------------ | --------------------------------------------------- | ------------------------------------------------------------- |
-| `configuration.clientID`                               | OAuth client ID                                     | `XXXXXXX`                                                     |
-| `configuration.clientSecret`                           | OAuth client secret                                 | `XXXXXXXX`                                                    |
-| `configuration.cookieSecret`                           | OAuth cookie secret                                 | `XXXXXXXXXXXXXXXX`                                            |
-| `configuration.existingSecret`                         | Secret with the client ID, secret and cookie secret | `""`                                                          |
-| `configuration.google.enabled`                         | Enable Google service account                       | `false`                                                       |
-| `configuration.google.adminEmail`                      | Google admin email                                  | `""`                                                          |
-| `configuration.google.serviceAccountJson`              | Google Service account JSON                         | `""`                                                          |
-| `configuration.google.existingSecret`                  | Existing secret containing Google Service Account   | `""`                                                          |
-| `configuration.content`                                | Default configuration                               | `email_domains = [ "*" ] upstreams = [ "file:///dev/null" ]`  |
-| `configuration.existingConfigmap`                      | Configmap with the OAuth2 Proxy configuration       | `""`                                                          |
-| `configuration.authenticatedEmailsFile.enabled`        | Enable authenticated emails file                    | `false`                                                       |
-| `configuration.authenticatedEmailsFile.content`        | Restricted access list (one email per line)         | `""`                                                          |
-| `configuration.authenticatedEmailsFile.existingSecret` | Secret with the authenticated emails file           | `""`                                                          |
-| `configuration.htpasswdFile.enabled`                   | Enable htpasswd file                                | `false`                                                       |
-| `configuration.htpasswdFile.existingSecret`            | Existing secret for htpasswd file                   | `""`                                                          |
-| `configuration.htpasswdFile.content`                   | htpasswd file entries (one row per user)            | `""`                                                          |
+| Name                                                   | Description                                         | Value              |
+| ------------------------------------------------------ | --------------------------------------------------- | ------------------ |
+| `configuration.clientID`                               | OAuth client ID                                     | `XXXXXXX`          |
+| `configuration.clientSecret`                           | OAuth client secret                                 | `XXXXXXXX`         |
+| `configuration.cookieSecret`                           | OAuth cookie secret                                 | `XXXXXXXXXXXXXXXX` |
+| `configuration.existingSecret`                         | Secret with the client ID, secret and cookie secret | `""`               |
+| `configuration.google.enabled`                         | Enable Google service account                       | `false`            |
+| `configuration.google.adminEmail`                      | Google admin email                                  | `""`               |
+| `configuration.google.serviceAccountJson`              | Google Service account JSON                         | `""`               |
+| `configuration.google.existingSecret`                  | Existing secret containing Google Service Account   | `""`               |
+| `configuration.content`                                | Default configuration                               | `""`               |
+| `configuration.existingConfigmap`                      | Configmap with the OAuth2 Proxy configuration       | `""`               |
+| `configuration.authenticatedEmailsFile.enabled`        | Enable authenticated emails file                    | `false`            |
+| `configuration.authenticatedEmailsFile.content`        | Restricted access list (one email per line)         | `""`               |
+| `configuration.authenticatedEmailsFile.existingSecret` | Secret with the authenticated emails file           | `""`               |
+| `configuration.htpasswdFile.enabled`                   | Enable htpasswd file                                | `false`            |
+| `configuration.htpasswdFile.existingSecret`            | Existing secret for htpasswd file                   | `""`               |
+| `configuration.htpasswdFile.content`                   | htpasswd file entries (one row per user)            | `""`               |
+
 
 ### OAuth2 Proxy deployment parameters
 
@@ -181,38 +181,38 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraEnvVarsSecret`                 | Name of existing Secret containing extra env vars for OAuth2 Proxy nodes                   | `""`            |
 | `extraVolumes`                       | Optionally specify extra list of additional volumes for the OAuth2 Proxy pod(s)            | `[]`            |
 | `extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for the OAuth2 Proxy container(s) | `[]`            |
-| `sidecars`                           | Add additional sidecar containers to the OAuth2 Proxy pod(s)                               | `{}`            |
-| `initContainers`                     | Add additional init containers to the OAuth2 Proxy pod(s)                                  | `{}`            |
+| `sidecars`                           | Add additional sidecar containers to the OAuth2 Proxy pod(s)                               | `[]`            |
+| `initContainers`                     | Add additional init containers to the OAuth2 Proxy pod(s)                                  | `[]`            |
 | `serviceAccount.create`              | Specifies whether a ServiceAccount should be created                                       | `true`          |
 | `serviceAccount.name`                | The name of the ServiceAccount to use                                                      | `""`            |
 
 
-### External Redis(TM) parameters
+### External Redis&trade; parameters
 
-| Name                           | Description                                               | Value  |
-| ------------------------------ | --------------------------------------------------------- | ------ |
-| `externalRedis.host`           | External Redis(TM) server host                            | `""`   |
-| `externalRedis.password`       | External Redis(TM) user password                          | `""`   |
-| `externalRedis.port`           | External Redis(TM) server port                            | `6379` |
-| `externalRedis.existingSecret` | The name of an existing secret with Redis(TM) credentials | `""`   |
+| Name                           | Description                                                  | Value  |
+| ------------------------------ | ------------------------------------------------------------ | ------ |
+| `externalRedis.host`           | External Redis&trade; server host                            | `""`   |
+| `externalRedis.password`       | External Redis&trade; user password                          | `""`   |
+| `externalRedis.port`           | External Redis&trade; server port                            | `6379` |
+| `externalRedis.existingSecret` | The name of an existing secret with Redis&trade; credentials | `""`   |
 
 
-### Redis(TM) sub-chart parameters
+### Redis&trade; sub-chart parameters
 
-| Name                                   | Description                                               | Value        |
-| -------------------------------------- | --------------------------------------------------------- | ------------ |
-| `redis.enabled`                        | Deploy Redis(TM) sub-chart                                | `true`       |
-| `redis.architecture`                   | Redis(TM) architecture                                    | `standalone` |
-| `redis.master.service.port`            | Redis(TM) (without Sentinel) service port                 | `6379`       |
-| `redis.replica.replicaCount`           | Number of Redis(TM) replicas                              | `3`          |
-| `redis.auth.enabled`                   | Enable Redis(TM) authentication                           | `true`       |
-| `redis.auth.existingSecret`            | Secret with Redis(TM) credentials                         | `""`         |
-| `redis.auth.existingSecretPasswordKey` | Key inside the existing secret with Redis(TM) credentials | `""`         |
-| `redis.auth.sentinel`                  | Enable authentication in the Sentinel nodes               | `true`       |
-| `redis.sentinel.enabled`               | Enable Redis(TM) sentinel in the deployment               | `false`      |
-| `redis.sentinel.masterSet`             | Name of the Redis(TM) Sentinel master set                 | `mymaster`   |
-| `redis.sentinel.service.port`          | Redis(TM) (with Sentinel) service port                    | `6379`       |
-| `redis.sentinel.service.sentinelPort`  | Redis(TM) (with Sentinel) sentinel service port           | `26379`      |
+| Name                                   | Description                                                  | Value        |
+| -------------------------------------- | ------------------------------------------------------------ | ------------ |
+| `redis.enabled`                        | Deploy Redis&trade; sub-chart                                | `true`       |
+| `redis.architecture`                   | Redis&trade; architecture                                    | `standalone` |
+| `redis.master.service.port`            | Redis&trade; (without Sentinel) service port                 | `6379`       |
+| `redis.replica.replicaCount`           | Number of Redis&trade; replicas                              | `3`          |
+| `redis.auth.enabled`                   | Enable Redis&trade; authentication                           | `true`       |
+| `redis.auth.existingSecret`            | Secret with Redis&trade; credentials                         | `""`         |
+| `redis.auth.existingSecretPasswordKey` | Key inside the existing secret with Redis&trade; credentials | `""`         |
+| `redis.auth.sentinel`                  | Enable authentication in the Sentinel nodes                  | `true`       |
+| `redis.sentinel.enabled`               | Enable Redis&trade; sentinel in the deployment               | `false`      |
+| `redis.sentinel.masterSet`             | Name of the Redis&trade; Sentinel master set                 | `mymaster`   |
+| `redis.sentinel.service.port`          | Redis&trade; (with Sentinel) service port                    | `6379`       |
+| `redis.sentinel.service.sentinelPort`  | Redis&trade; (with Sentinel) sentinel service port           | `26379`      |
 
 
 See https://github.com/bitnami-labs/readmenator to create the table
@@ -286,3 +286,9 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+
+## Upgrading
+
+### To 1.0.0
+
+This major update the Redis&trade; subchart to its newest major, 15.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1500) you can find more info about the specific changes.

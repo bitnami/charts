@@ -8,25 +8,25 @@
 ## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
 global:
-  imageRegistry:
+  imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass:
+  storageClass: ""
 
 ## @section Common parameters
 
 ## @param kubeVersion Override Kubernetes version
 ##
-kubeVersion:
+kubeVersion: ""
 ## @param nameOverride String to partially override common.names.fullname
 ##
-nameOverride:
+nameOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname
 ##
-fullnameOverride:
+fullnameOverride: ""
 ## @param commonLabels Labels to add to all deployed objects
 ##
 commonLabels: {}
@@ -40,37 +40,39 @@ clusterDomain: cluster.local
 ##
 extraDeploy: []
 
+## @section Argo CD image parameters
+
+## Bitnami Argo CD image
+## ref: https://hub.docker.com/r/bitnami/argo-cd/tags/
+## @param image.registry Argo CD image registry
+## @param image.repository Argo CD image repository
+## @param image.tag Argo CD image tag (immutable tags are recommended)
+## @param image.pullPolicy Argo CD image pull policy
+## @param image.pullSecrets Argo CD image pull secrets
+##
+image:
+  registry: docker.io
+  repository: bitnami/argo-cd
+  tag: 2.1.5-debian-10-r1
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## e.g:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  pullSecrets: []
+
 ## @section Argo CD application controller parameters
 
 ## Argo CD Controller
 ##
 controller:
-  ## Bitnami Argo CD controller image
-  ## ref: https://hub.docker.com/r/bitnami/argo-cd/tags/
-  ## @param controller.image.registry Argo CD controller image registry
-  ## @param controller.image.repository Argo CD controller image repository
-  ## @param controller.image.tag Argo CD controller image tag (immutable tags are recommended)
-  ## @param controller.image.pullPolicy Argo CD controller image pull policy
-  ## @param controller.image.pullSecrets Argo CD controller image pull secrets
-  ##
-  image:
-    registry: docker.io
-    repository: bitnami/argo-cd
-    tag: 2.0.4-debian-10-r19
-    ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-    ##
-    pullPolicy: IfNotPresent
-    ## Optionally specify an array of imagePullSecrets.
-    ## Secrets must be manually created in the namespace.
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-    ## e.g:
-    ## pullSecrets:
-    ##   - myRegistryKeySecretName
-    ##
-    pullSecrets: []
-
   ## @param controller.replicaCount Number of Argo CD replicas to deploy
   ##
   replicaCount: 1
@@ -188,12 +190,12 @@ controller:
     ## @param controller.service.nodePort Node port for Argo CD application controller service
     ## NOTE: choose port between <30000-32767>
     ##
-    nodePort:
+    nodePort: ""
 
     ## @param controller.service.loadBalancerIP Argo CD application controller service Load Balancer IP
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
     ##
-    loadBalancerIP:
+    loadBalancerIP: ""
     ## @param controller.service.loadBalancerSourceRanges Argo CD application controller service Load Balancer sources
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## e.g:
@@ -227,12 +229,12 @@ controller:
       ## @param controller.metrics.service.nodePort Node port for the application controller service
       ## NOTE: choose port between <30000-32767>
       ##
-      nodePort:
+      nodePort: ""
 
       ## @param controller.metrics.service.loadBalancerIP Argo CD application controller service Load Balancer IP
       ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
       ##
-      loadBalancerIP:
+      loadBalancerIP: ""
       ## @param controller.metrics.service.loadBalancerSourceRanges Argo CD application controller service Load Balancer sources
       ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
       ## e.g:
@@ -394,10 +396,10 @@ controller:
   extraEnvVars: []
   ## @param controller.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Argo CD nodes
   ##
-  extraEnvVarsCM:
+  extraEnvVarsCM: ""
   ## @param controller.extraEnvVarsSecret Name of existing Secret containing extra env vars for Argo CD nodes
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret: ""
   ## @param controller.extraVolumes Optionally specify extra list of additional volumes for the Argo CD pod(s)
   ##
   extraVolumes: []
@@ -414,7 +416,7 @@ controller:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  sidecars: {}
+  sidecars: []
   ## @param controller.initContainers Add additional init containers to the Argo CD pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
@@ -424,7 +426,7 @@ controller:
   ##    imagePullPolicy: Always
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
-  initContainers: {}
+  initContainers: []
 
 
 ## @section Argo CD server Parameters
@@ -432,32 +434,6 @@ controller:
 ## Argo CD server configuration
 ##
 server:
-  ## Bitnami Argo CD server image
-  ## ref: https://hub.docker.com/r/bitnami/argo-cd/tags/
-  ## @param server.image.registry Argo CD server image registry
-  ## @param server.image.repository Argo CD server image repository
-  ## @param server.image.tag Argo CD server image tag (immutable tags are recommended)
-  ## @param server.image.pullPolicy Argo CD server image pull policy
-  ## @param server.image.pullSecrets Argo CD server image pull secrets
-  ##
-  image:
-    registry: docker.io
-    repository: bitnami/argo-cd
-    tag: 2.0.4-debian-10-r20
-    ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-    ##
-    pullPolicy: IfNotPresent
-    ## Optionally specify an array of imagePullSecrets.
-    ## Secrets must be manually created in the namespace.
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-    ## e.g:
-    ## pullSecrets:
-    ##   - myRegistryKeySecretName
-    ##
-    pullSecrets: []
-
   ## @param server.replicaCount Number of Argo CD server replicas to deploy
   ##
   replicaCount: 1
@@ -618,11 +594,10 @@ server:
   ## Configure the ingress for the Argo CD server
   ## Ref: http://kubernetes.io/docs/user-guide/ingress/
   ## @param server.ingress.enabled Enable the creation of an ingress for the Argo CD server
-  ## @param server.ingress.certManager Set to true to add certmanager annotations for Argo CD server ingress
   ## @param server.ingress.pathType Path type for the Argo CD server ingress
   ## @param server.ingress.apiVersion Ingress API version for the Argo CD server ingress
   ## @param server.ingress.hostname Ingress hostname for the Argo CD server ingress
-  ## @param server.ingress.annotations Annotations for the Argo CD server ingress
+  ## @param server.ingress.annotations Annotations for the Argo CD server ingress. To enable certificate autogeneration, place here your cert-manager annotations.
   ## @param server.ingress.tls Enable TLS for the Argo CD server ingress
   ## @param server.ingress.extraHosts Extra hosts array for the Argo CD server ingress
   ## @param server.ingress.path Path array for the Argo CD server ingress
@@ -639,9 +614,9 @@ server:
     ##
     selfSigned: false
 
-    ## Set this to true in order to add the corresponding annotations for cert-manager
+    ## DEPRECATED: Use server.ingress.annotations instead of server.ingress.certManager
+    ## certManager: false
     ##
-    certManager: false
 
     ## Ingress Path type
     ##
@@ -649,7 +624,7 @@ server:
 
     ## Override API Version (automatically detected if not set)
     ##
-    apiVersion:
+    apiVersion: ""
 
     ## When the ingress is enabled, a host pointing to this will be created
     ##
@@ -660,11 +635,15 @@ server:
     ##
     path: /
 
-    ## Ingress annotations done as key:value pairs
     ## For a full list of possible ingress annotations, please see
     ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+    ## Use this parameter to set the required annotations for cert-manager, see
+    ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
     ##
-    ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+    ## e.g:
+    ## annotations:
+    ##   kubernetes.io/ingress.class: nginx
+    ##   cert-manager.io/cluster-issuer: cluster-issuer-name
     ##
     annotations: {}
 
@@ -676,14 +655,14 @@ server:
 
     ## The list of additional hostnames to be covered with this ingress record.
     ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
-    extraHosts:
+    extraHosts: []
     ## - name: argocd.server.local
     ##   path: /
     ##
 
     ## Any additional arbitrary paths that may need to be added to the ingress under the main host.
     ## For example: The ALB ingress controller requires a special rule for handling SSL redirection.
-    extraPaths:
+    extraPaths: []
     ## - path: /*
     ##   backend:
     ##     serviceName: ssl-redirect
@@ -692,7 +671,7 @@ server:
 
     ## The tls configuration for additional hostnames to be covered with this ingress record.
     ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
-    extraTls:
+    extraTls: []
     ## - hosts:
     ##     - argocd.server.local
     ##   secretName: argocd.server.local-tls
@@ -733,12 +712,12 @@ server:
       ## @param server.metrics.service.nodePort Node port for Argo CD server metrics service
       ## NOTE: choose port between <30000-32767>
       ##
-      nodePort:
+      nodePort: ""
 
       ## @param server.metrics.service.loadBalancerIP Argo CD server service Load Balancer IP
       ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
       ##
-      loadBalancerIP:
+      loadBalancerIP: ""
       ## @param server.metrics.service.loadBalancerSourceRanges Argo CD server service Load Balancer sources
       ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
       ## e.g:
@@ -764,11 +743,10 @@ server:
   ## Ref: http://kubernetes.io/docs/user-guide/ingress/
   ## Ref: https://argoproj.github.io/argo-cd/operator-manual/ingress/
   ## @param server.ingressGrpc.enabled Enable the creation of an ingress for the Argo CD gRPC server
-  ## @param server.ingressGrpc.certManager Set to true to add certmanager annotations for Argo CD gRPC server ingress
   ## @param server.ingressGrpc.pathType Path type for the Argo CD gRPC server ingress
   ## @param server.ingressGrpc.apiVersion Ingress API version for the Argo CD gRPC server ingress
   ## @param server.ingressGrpc.hostname Ingress hostname for the Argo CD gRPC server ingress
-  ## @param server.ingressGrpc.annotations Annotations for the Argo CD gRPC server ingress
+  ## @param server.ingressGrpc.annotations Annotations for the Argo CD gRPC server ingress. To enable certificate autogeneration, place here your cert-manager annotations
   ## @param server.ingressGrpc.tls Enable TLS for the Argo CD server ingress
   ## @param server.ingressGrpc.extraHosts Extra hosts array for the Argo CD gRPC server ingress
   ## @param server.ingressGrpc.path Path array for the Argo CD gRPC server ingress
@@ -785,9 +763,9 @@ server:
     ##
     selfSigned: false
 
-    ## Set this to true in order to add the corresponding annotations for cert-manager
+    ## DEPRECATED: Use server.ingressGrpc.annotations instead of server.ingressGrpc.certManager
+    ## certManager: false
     ##
-    certManager: false
 
     ## Ingress Path type
     ##
@@ -795,7 +773,7 @@ server:
 
     ## Override API Version (automatically detected if not set)
     ##
-    apiVersion:
+    apiVersion: ""
 
     ## When the ingress is enabled, a host pointing to this will be created
     ##
@@ -806,11 +784,15 @@ server:
     ##
     path: /
 
-    ## Ingress annotations done as key:value pairs
     ## For a full list of possible ingress annotations, please see
     ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+    ## Use this parameter to set the required annotations for cert-manager, see
+    ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
     ##
-    ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+    ## e.g:
+    ## annotations:
+    ##   kubernetes.io/ingress.class: nginx
+    ##   cert-manager.io/cluster-issuer: cluster-issuer-name
     ##
     annotations: {}
 
@@ -822,14 +804,14 @@ server:
 
     ## The list of additional hostnames to be covered with this ingress record.
     ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
-    extraHosts:
+    extraHosts: []
     ## - name: argocd.server.local
     ##   path: /
     ##
 
     ## Any additional arbitrary paths that may need to be added to the ingress under the main host.
     ## For example: The ALB ingress controller requires a special rule for handling SSL redirection.
-    extraPaths:
+    extraPaths: []
     ## - path: /*
     ##   backend:
     ##     serviceName: ssl-redirect
@@ -838,7 +820,7 @@ server:
 
     ## The tls configuration for additional hostnames to be covered with this ingress record.
     ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
-    extraTls:
+    extraTls: []
     ## - hosts:
     ##     - argocd.server.local
     ##   secretName: argocd.server.local-tls
@@ -888,13 +870,13 @@ server:
     ## NOTE: choose port between <30000-32767>
     ##
     nodePorts:
-      http:
-      https:
+      http: ""
+      https: ""
 
     ## @param server.service.loadBalancerIP Argo CD service Load Balancer IP
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
     ##
-    loadBalancerIP:
+    loadBalancerIP: ""
     ## @param server.service.loadBalancerSourceRanges Argo CD service Load Balancer sources
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## e.g:
@@ -992,10 +974,10 @@ server:
   extraEnvVars: []
   ## @param server.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Argo CD server nodes
   ##
-  extraEnvVarsCM:
+  extraEnvVarsCM: ""
   ## @param server.extraEnvVarsSecret Name of existing Secret containing extra env vars for Argo CD server nodes
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret: ""
   ## @param server.extraVolumes Optionally specify extra list of additional volumes for the Argo CD server pod(s)
   ##
   extraVolumes: []
@@ -1012,7 +994,7 @@ server:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  sidecars: {}
+  sidecars: []
   ## @param server.initContainers Add additional init containers to the Argo CD server pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
@@ -1022,7 +1004,7 @@ server:
   ##    imagePullPolicy: Always
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
-  initContainers: {}
+  initContainers: []
 
   ## ServiceAccount configuration for the Argo CD server
   ##
@@ -1042,32 +1024,6 @@ server:
 ## Argo CD repository server configuration
 ##
 repoServer:
-  ## Bitnami Argo CD repo server image
-  ## ref: https://hub.docker.com/r/bitnami/argo-cd/tags/
-  ## @param repoServer.image.registry Argo CD repo server image registry
-  ## @param repoServer.image.repository Argo CD repo server image repository
-  ## @param repoServer.image.tag Argo CD repo server image tag (immutable tags are recommended)
-  ## @param repoServer.image.pullPolicy Argo CD repo server image pull policy
-  ## @param repoServer.image.pullSecrets Argo CD repo server image pull secrets
-  ##
-  image:
-    registry: docker.io
-    repository: bitnami/argo-cd
-    tag: 2.0.4-debian-10-r19
-    ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-    ##
-    pullPolicy: IfNotPresent
-    ## Optionally specify an array of imagePullSecrets.
-    ## Secrets must be manually created in the namespace.
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-    ## e.g:
-    ## pullSecrets:
-    ##   - myRegistryKeySecretName
-    ##
-    pullSecrets: []
-
   ## @param repoServer.replicaCount Number of Argo CD repo server replicas to deploy
   ##
   replicaCount: 1
@@ -1145,12 +1101,12 @@ repoServer:
     ## @param repoServer.service.nodePort Node port for the repo server service
     ## NOTE: choose port between <30000-32767>
     ##
-    nodePort:
+    nodePort: ""
 
     ## @param repoServer.service.loadBalancerIP Repo server service Load Balancer IP
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
     ##
-    loadBalancerIP:
+    loadBalancerIP: ""
     ## @param repoServer.service.loadBalancerSourceRanges Repo server service Load Balancer sources
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## e.g:
@@ -1181,7 +1137,7 @@ repoServer:
   ##
   containerPorts:
     repoServer: 8081
-    metrics:
+    metrics: ""
 
   ## Metrics configuration for Argo CD repo server
   ##
@@ -1202,12 +1158,12 @@ repoServer:
       ## @param repoServer.metrics.service.nodePort Node port for the repo server metrics service
       ## NOTE: choose port between <30000-32767>
       ##
-      nodePort:
+      nodePort: ""
 
       ## @param repoServer.metrics.service.loadBalancerIP Argo CD repo server service Load Balancer IP
       ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
       ##
-      loadBalancerIP:
+      loadBalancerIP: ""
       ## @param repoServer.metrics.service.loadBalancerSourceRanges Argo CD repo server service Load Balancer sources
       ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
       ## e.g:
@@ -1338,10 +1294,10 @@ repoServer:
   extraEnvVars: []
   ## @param repoServer.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Argo CD repo server nodes
   ##
-  extraEnvVarsCM:
+  extraEnvVarsCM: ""
   ## @param repoServer.extraEnvVarsSecret Name of existing Secret containing extra env vars for Argo CD repo server nodes
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret: ""
   ## @param repoServer.extraVolumes Optionally specify extra list of additional volumes for the Argo CD repo server pod(s)
   ##
   extraVolumes: []
@@ -1358,7 +1314,7 @@ repoServer:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  sidecars: {}
+  sidecars: []
   ## @param repoServer.initContainers Add additional init containers to the Argo CD repo server pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
@@ -1368,7 +1324,7 @@ repoServer:
   ##    imagePullPolicy: Always
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
-  initContainers: {}
+  initContainers: []
 
 ## @section Dex Parameters
 
@@ -1386,7 +1342,7 @@ dex:
   image:
     registry: docker.io
     repository: bitnami/dex
-    tag: 2.29.0-debian-10-r18
+    tag: 2.30.0-debian-10-r77
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1488,13 +1444,13 @@ dex:
     ## NOTE: choose port between <30000-32767>
     ##
     nodePorts:
-      http:
-      grpc:
+      http: ""
+      grpc: ""
 
     ## @param dex.service.loadBalancerIP Dex service Load Balancer IP
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
     ##
-    loadBalancerIP:
+    loadBalancerIP: ""
     ## @param dex.service.loadBalancerSourceRanges Dex service Load Balancer sources
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## e.g:
@@ -1539,12 +1495,12 @@ dex:
       ## @param dex.metrics.service.nodePort Node port for the Dex service
       ## NOTE: choose port between <30000-32767>
       ##
-      nodePort:
+      nodePort: ""
 
       ## @param dex.metrics.service.loadBalancerIP Dex service Load Balancer IP
       ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
       ##
-      loadBalancerIP:
+      loadBalancerIP: ""
       ## @param dex.metrics.service.loadBalancerSourceRanges Dex service Load Balancer sources
       ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
       ## e.g:
@@ -1661,10 +1617,10 @@ dex:
   extraEnvVars: []
   ## @param dex.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Dex nodes
   ##
-  extraEnvVarsCM:
+  extraEnvVarsCM: ""
   ## @param dex.extraEnvVarsSecret Name of existing Secret containing extra env vars for Dex nodes
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret: ""
   ## @param dex.extraVolumes Optionally specify extra list of additional volumes for the Dex pod(s)
   ##
   extraVolumes: []
@@ -1681,7 +1637,7 @@ dex:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  sidecars: {}
+  sidecars: []
   ## @param dex.initContainers Add additional init containers to the Dex pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
@@ -1691,7 +1647,7 @@ dex:
   ##    imagePullPolicy: Always
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
-  initContainers: {}
+  initContainers: []
 
 ## @section Shared config for Argo CD components
 config:
@@ -1730,7 +1686,7 @@ config:
 
   ## @param config.existingStylesConfigmap Use an existing styles configmap
   ##
-  existingStylesConfigmap:
+  existingStylesConfigmap: ""
 
   ## @param config.tlsCerts TLS certificates used to verify the authenticity of the repository servers
   ## E.g:
@@ -1792,8 +1748,8 @@ config:
     ##     -----END CERTIFICATE-----
     ##
     argocdServerTlsConfig:
-      key:
-      crt:
+      key: ""
+      crt: ""
 
     ## Argo admin password
     ## @param config.secret.argocdServerAdminPassword Argo CD server admin password. Autogenerated by default.
@@ -1866,8 +1822,8 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: "10"
-    pullPolicy: Always
+    tag: 10-debian-10-r227
+    pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -1917,7 +1873,7 @@ redis:
   image:
     registry: docker.io
     repository: bitnami/redis
-    tag: 6.2.4-debian-10-r37
+    tag: 6.2.6-debian-10-r15
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1953,9 +1909,9 @@ redis:
     enabled: true
     ## Name of existing secret object containing the password
     ##
-    existingSecret:
+    existingSecret: ""
     ##
-    ## Password key to be retrieved from Redis(TM) secret
+    ## Password key to be retrieved from Redis&trade; secret
     ##
     existingSecretPasswordKey: 'redis-password'
 
@@ -1966,27 +1922,27 @@ redis:
   ## architecture: standalone
 
 ##
-## External Redis(TM)
+## External Redis&trade;
 ##
 externalRedis:
-  ## Redis(TM) host
+  ## Redis&trade; host
   ## @param externalRedis.host External Redis host
   ##
-  host: ''
-  ## Redis(TM) port
+  host: ""
+  ## Redis&trade; port
   ## @param externalRedis.port External Redis port
   ##
   port: 6379
-  ## Redis(TM) password for authentication
+  ## Redis&trade; password for authentication
   ## Ignored if existingSecret is set
   ## @param externalRedis.password External Redis password
   ##
-  password: ''
+  password: ""
   ## Name of existing secret object containing the password
   ## @param externalRedis.existingSecret Existing secret for the external redis
   ##
-  existingSecret:
-  ## Password key to be retrieved from Redis(TM) secret
+  existingSecret: ""
+  ## Password key to be retrieved from Redis&trade; secret
   ## @param externalRedis.existingSecretPasswordKey Password key for the existing secret containing the external redis password
   ##
   existingSecretPasswordKey: 'redis-password'

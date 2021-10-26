@@ -16,6 +16,7 @@ global:
   imagePullSecrets: []
   storageClass: ""
 
+## @section RabbitMQ Image parameters
 ## Bitnami RabbitMQ image version
 ## ref: https://hub.docker.com/r/bitnami/rabbitmq/tags/
 ## @param image.registry RabbitMQ image registry
@@ -28,7 +29,7 @@ global:
 image:
   registry: docker.io
   repository: bitnami/rabbitmq
-  tag: 3.8.19-debian-10-r0
+  tag: 3.9.8-debian-10-r0
 
   ## set to true if you would like to see extra information on logs
   ## It turns BASH and/or NAMI debugging in the image
@@ -48,6 +49,9 @@ image:
   ##   - myRegistryKeySecretName
   ##
   pullSecrets: []
+
+## @section Common parameters
+
 ## @param nameOverride String to partially override rabbitmq.fullname template (will maintain the release name)
 ##
 nameOverride: ""
@@ -67,6 +71,21 @@ clusterDomain: cluster.local
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
+
+## Enable diagnostic mode in the deployment
+##
+diagnosticMode:
+  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+  ##
+  enabled: false
+  ## @param diagnosticMode.command Command to override all containers in the deployment
+  ##
+  command:
+    - sleep
+  ## @param diagnosticMode.args Args to override all containers in the deployment
+  ##
+  args:
+    - infinity
 
 ## @param hostAliases Deployment pod host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
@@ -199,6 +218,11 @@ clustering:
   ##
   forceBoot: false
 
+  ## @param clustering.partitionHandling Switch Partition Handling Strategy. Either `autoheal` or `pause-minority` or `pause-if-all-down` or `ignore`
+  ## ref: https://www.rabbitmq.com/partitions.html#automatic-handling
+  ##
+  partitionHandling: autoheal
+
 ## Loading a RabbitMQ definitions file to configure RabbitMQ
 ##
 loadDefinition:
@@ -264,7 +288,7 @@ configuration: |-
   cluster_formation.k8s.host = kubernetes.default.svc.{{ .Values.clusterDomain }}
   cluster_formation.node_cleanup.interval = 10
   cluster_formation.node_cleanup.only_log_warning = true
-  cluster_partition_handling = autoheal
+  cluster_partition_handling = {{ .Values.clustering.partitionHandling }}
   {{- end }}
   # queue master locator
   queue_master_locator = min-masters
@@ -384,6 +408,8 @@ extraSecrets: {}
 ##
 extraSecretsPrependReleaseName: false
 
+## @section Statefulset parameters
+
 ## @param replicaCount Number of RabbitMQ replicas to deploy
 ##
 replicaCount: 1
@@ -480,7 +506,7 @@ tolerations: []
 ## @param topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
 ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
 ##
-topologySpreadConstraints: {}
+topologySpreadConstraints: []
 
 ## RabbitMQ pods' Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
@@ -594,6 +620,22 @@ initContainers: []
 ##
 sidecars: []
 
+## Pod Disruption Budget configuration
+## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+##
+pdb:
+  ## @param pdb.create Enable/disable a Pod Disruption Budget creation
+  ##
+  create: false
+  ## @param pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ##
+  minAvailable: 1
+  ## @param pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ##
+  maxUnavailable: ""
+
+## @section RBAC parameters
+
 ## RabbitMQ pods ServiceAccount
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 ##
@@ -605,6 +647,9 @@ serviceAccount:
   ## If not set and create is true, a name is generated using the rabbitmq.fullname template
   ##
   name: ""
+  ## @param serviceAccount.automountServiceAccountToken Auto-mount the service account token in the pod
+  ##
+  automountServiceAccountToken: true
 
 ## Role Based Access
 ## ref: https://kubernetes.io/docs/admin/authorization/rbac/
@@ -615,6 +660,8 @@ rbac:
   ## that allows RabbitMQ pods querying the K8s API
   ##
   create: true
+
+## @section Persistence parameters
 
 persistence:
   ## @param persistence.enabled Enable RabbitMQ data persistence using PVC
@@ -655,47 +702,14 @@ persistence:
   ##    emptyDir: {}
   ##
   volumes: []
+  ## @param persistence.annotations Persistence annotations. Evaluated as a template
+  ## Example:
+  ## annotations:
+  ##   example.io/disk-volume-type: SSD
+  ##
+  annotations: {}
 
-## Pod Disruption Budget configuration
-## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
-##
-pdb:
-  ## @param pdb.create Enable/disable a Pod Disruption Budget creation
-  ##
-  create: false
-  ## @param pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
-  ##
-  minAvailable: 1
-  ## @param pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
-  ##
-  maxUnavailable: ""
-
-## Network Policy configuration
-## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
-##
-networkPolicy:
-  ## @param networkPolicy.enabled Enable creation of NetworkPolicy resources
-  ##
-  enabled: false
-  ## @param networkPolicy.allowExternal Don't require client label for connections
-  ## The Policy model to apply. When set to false, only pods with the correct
-  ## client label will have network access to the ports RabbitMQ is listening
-  ## on. When true, RabbitMQ will accept connections from any source
-  ## (with the correct destination port).
-  ##
-  allowExternal: true
-  ## @param networkPolicy.additionalRules Additional NetworkPolicy Ingress "from" rules to set. Note that all rules are OR-ed.
-  ## e.g:
-  ## additionalRules:
-  ##  - matchLabels:
-  ##    - role: frontend
-  ##  - matchExpressions:
-  ##    - key: role
-  ##      operator: In
-  ##      values:
-  ##        - frontend
-  ##
-  additionalRules: []
+## @section Exposure parameters
 
 ## Kubernetes service type
 ##
@@ -703,6 +717,10 @@ service:
   ## @param service.type Kubernetes Service type
   ##
   type: ClusterIP
+
+  ## @param service.portEnabled Amqp port. Cannot be disabled when `auth.tls.enabled` is `false`. Listener can be disabled with `listeners.tcp = none`.
+  portEnabled: true
+
   ## @param service.port Amqp port
   ## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
   ##
@@ -859,11 +877,16 @@ ingress:
   ##
   hostname: rabbitmq.local
 
-  ## @param ingress.annotations Ingress annotations
+  ## @param ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
   ## For a full list of possible ingress annotations, please see
   ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+  ## Use this parameter to set the required annotations for cert-manager, see
+  ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
   ##
-  ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+  ## e.g:
+  ## annotations:
+  ##   kubernetes.io/ingress.class: nginx
+  ##   cert-manager.io/cluster-issuer: cluster-issuer-name
   ##
   annotations: {}
 
@@ -871,15 +894,14 @@ ingress:
   ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.ingress.hostname }}
   ## You can:
   ##   - Use the `ingress.secrets` parameter to create this TLS secret
-  ##   - Relay on cert-manager to create it by setting `ingress.certManager=true`
+  ##   - Relay on cert-manager to create it by setting the corresponding annotations
   ##   - Relay on Helm to create self-signed certificates by setting `ingress.selfSigned=true`
   ##
   tls: false
 
-  ## @param ingress.certManager Set this to true in order to add the corresponding annotations for cert-manager
-  ## to generate a TLS secret for the ingress record
+  ## DEPRECATED: Use ingress.annotations instead of ingress.certManager
+  ## certManager: false
   ##
-  certManager: false
 
   ## @param ingress.selfSigned Set this to true in order to create a TLS secret for this ingress record
   ## using self-signed certificates generated by Helm
@@ -931,6 +953,35 @@ ingress:
   ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
   ##
   ingressClassName: ""
+
+## Network Policy configuration
+## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+##
+networkPolicy:
+  ## @param networkPolicy.enabled Enable creation of NetworkPolicy resources
+  ##
+  enabled: false
+  ## @param networkPolicy.allowExternal Don't require client label for connections
+  ## The Policy model to apply. When set to false, only pods with the correct
+  ## client label will have network access to the ports RabbitMQ is listening
+  ## on. When true, RabbitMQ will accept connections from any source
+  ## (with the correct destination port).
+  ##
+  allowExternal: true
+  ## @param networkPolicy.additionalRules Additional NetworkPolicy Ingress "from" rules to set. Note that all rules are OR-ed.
+  ## e.g:
+  ## additionalRules:
+  ##  - matchLabels:
+  ##    - role: frontend
+  ##  - matchExpressions:
+  ##    - key: role
+  ##      operator: In
+  ##      values:
+  ##        - frontend
+  ##
+  additionalRules: []
+
+## @section Metrics Parameters
 
 ## Prometheus Metrics
 ##
@@ -1066,6 +1117,8 @@ metrics:
     ##
     rules: []
 
+## @section Init Container Parameters
+
 ## Init Container parameters
 ## Change the owner and group of the persistent volume(s) mountpoint(s) to 'runAsUser:fsGroup' on each component
 ## values from the securityContext section of the component
@@ -1083,12 +1136,12 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r125
+    tag: 10-debian-10-r226
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
-    pullPolicy: Always
+    pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
     ## Example:

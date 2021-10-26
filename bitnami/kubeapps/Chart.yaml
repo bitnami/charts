@@ -1,7 +1,7 @@
 annotations:
   category: Infrastructure
 apiVersion: v2
-appVersion: 2.3.3
+appVersion: 2.4.1
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -11,6 +11,14 @@ dependencies:
   - name: postgresql
     repository: https://charts.bitnami.com/bitnami
     version: 10.x.x
+  # Currently redis is only used for an in-progress plugin for flux support.
+  # Our upstream bitnami/kubeapps chart should not include redis as a
+  # dependency yet, and in development we can set redis.enabled if developing
+  # other plugins only.
+  - name: redis
+    repository: https://charts.bitnami.com/bitnami
+    version: 15.x.x
+    condition: redis.enabled
 description: Kubeapps is a dashboard for your Kubernetes cluster that makes it easy to deploy and manage applications in your cluster using Helm
 home: https://kubeapps.com
 icon: https://raw.githubusercontent.com/kubeapps/kubeapps/master/docs/img/logo.png
@@ -25,4 +33,4 @@ maintainers:
 name: kubeapps
 sources:
   - https://github.com/kubeapps/kubeapps
-version: 7.1.6
+version: 7.5.9

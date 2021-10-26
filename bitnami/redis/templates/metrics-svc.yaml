@@ -30,7 +30,7 @@ spec:
   loadBalancerSourceRanges: {{- toYaml .Values.metrics.service.loadBalancerSourceRanges | nindent 4 }}
   {{- end }}
   ports:
-    - name: tcp-metrics
+    - name: http-metrics
       port: {{ .Values.metrics.service.port }}
       protocol: TCP
       targetPort: metrics
