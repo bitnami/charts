@@ -94,7 +94,7 @@ spec:
             - --publish-service={{ include "nginx-ingress-controller.publishServicePath" . }}
           {{- end }}
             - --election-id={{ .Values.electionID }}
-            - --controller-class={{ .Values.controllerClass }}
+            - --controller-class={{ .Values.ingressClassResource.controllerClass }}
             - --configmap={{ default .Release.Namespace .Values.configMapNamespace }}/{{ include "common.names.fullname" . }}
           {{- if .Values.tcp }}
             - --tcp-services-configmap={{ default .Release.Namespace .Values.tcpConfigMapNamespace }}/{{ include "common.names.fullname" . }}-tcp

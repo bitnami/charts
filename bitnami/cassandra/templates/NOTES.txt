@@ -1,3 +1,7 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
 {{- $cassandraPasswordKey := ( include "common.secrets.key" (dict "existingSecret" .Values.dbUser.existingSecret "key" "cassandra-password") ) -}}
 {{- $cassandraSecretName := ( include "common.secrets.name" (dict "existingSecret" .Values.dbUser.existingSecret "context" $) ) -}}
 

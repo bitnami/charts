@@ -502,6 +502,8 @@ ingress:
   ##   certificate:
   ##
   secrets: []
+  ## @param ingress.existingSecret It is you own the certificate as secret.
+  existingSecret: ""
 
 ## @section Persistence parameters
 ##
