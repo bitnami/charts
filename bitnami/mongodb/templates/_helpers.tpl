@@ -130,6 +130,48 @@ is true or default otherwise.
 {{- end -}}
 
 {{/*
+Return the list of custom users to create during the initialization (string format)
+*/}}
+{{- define "mongodb.customUsers" -}}
+    {{- $customUsers := list -}}
+    {{- if .Values.auth.username -}}
+        {{- $customUsers = append $customUsers .Values.auth.username }}
+    {{- end }}
+    {{- range .Values.auth.usernames }}
+        {{- $customUsers = append $customUsers . }}
+    {{- end }}
+    {{- printf "%s" (default "" (join "," $customUsers)) -}}
+{{- end -}}
+
+{{/*
+Return the list of passwords for the custom users (string format)
+*/}}
+{{- define "mongodb.customPasswords" -}}
+    {{- $customPasswords := list -}}
+    {{- if .Values.auth.password -}}
+        {{- $customPasswords = append $customPasswords .Values.auth.password }}
+    {{- end }}
+    {{- range .Values.auth.passwords }}
+        {{- $customPasswords = append $customPasswords . }}
+    {{- end }}
+    {{- printf "%s" (default "" (join "," $customPasswords)) -}}
+{{- end -}}
+
+{{/*
+Return the list of custom databases to create during the initialization (string format)
+*/}}
+{{- define "mongodb.customDatabases" -}}
+    {{- $customDatabases := list -}}
+    {{- if .Values.auth.database -}}
+        {{- $customDatabases = append $customDatabases .Values.auth.database }}
+    {{- end }}
+    {{- range .Values.auth.databases }}
+        {{- $customDatabases = append $customDatabases . }}
+    {{- end }}
+    {{- printf "%s" (default "" (join "," $customDatabases)) -}}
+{{- end -}}
+
+{{/*
 Return the configmap with the MongoDB&reg; configuration
 */}}
 {{- define "mongodb.configmapName" -}}
@@ -249,7 +291,8 @@ Compile all warnings into a single message, and call fail.
 {{- $messages := list -}}
 {{- $messages := append $messages (include "mongodb.validateValues.pspAndRBAC" .) -}}
 {{- $messages := append $messages (include "mongodb.validateValues.architecture" .) -}}
-{{- $messages := append $messages (include "mongodb.validateValues.customDatabase" .) -}}
+{{- $messages := append $messages (include "mongodb.validateValues.customUsersDBs" .) -}}
+{{- $messages := append $messages (include "mongodb.validateValues.customUsersDBsLength" .) -}}
 {{- $messages := append $messages (include "mongodb.validateValues.externalAccessServiceType" .) -}}
 {{- $messages := append $messages (include "mongodb.validateValues.loadBalancerIPsListLength" .) -}}
 {{- $messages := append $messages (include "mongodb.validateValues.nodePortListLength" .) -}}
@@ -281,18 +324,30 @@ mongodb: architecture
 {{- end -}}
 
 {{/*
-Validate values of MongoDB&reg; - both auth.username and auth.database are necessary
+Validate values of MongoDB&reg; - both auth.usernames and auth.databases are necessary
 to create a custom user and database during 1st initialization
 */}}
-{{- define "mongodb.validateValues.customDatabase" -}}
-{{- if or (and .Values.auth.username (not .Values.auth.database)) (and (not .Values.auth.username) .Values.auth.database) }}
-mongodb: auth.username, auth.database
-    Both auth.username and auth.database must be provided to create
-    a custom user and database during 1st initialization.
-    Please set both of them (--set auth.username="xxxx",auth.database="yyyy")
+{{- define "mongodb.validateValues.customUsersDBs" -}}
+{{- $customUsers := include "mongodb.customUsers" . -}}
+{{- $customDatabases := include "mongodb.customDatabases" . -}}
+{{- if or (and (empty $customUsers) (not (empty $customDatabases))) (and (not (empty $customUsers)) (empty $customDatabases)) }}
+mongodb: auth.usernames, auth.databases
+    Both auth.usernames and auth.databases must be provided to create
+    custom users and databases during 1st initialization.
+    Please set both of them (--set auth.usernames[0]="xxxx",auth.databases[0]="yyyy")
 {{- end -}}
 {{- end -}}
 
+{{/*
+Validate values of MongoDB&reg; - both auth.usernames and auth.databases arrays should have the same length
+to create a custom user and database during 1st initialization
+*/}}
+{{- define "mongodb.validateValues.customUsersDBsLength" -}}
+{{- if ne (len .Values.auth.usernames) (len .Values.auth.databases) }}
+mongodb: auth.usernames, auth.databases
+    Both auth.usernames and auth.databases arrays should have the same length
+{{- end -}}
+{{- end -}}
 
 {{/*
 Validate values of MongoDB&reg; - service type for external access
