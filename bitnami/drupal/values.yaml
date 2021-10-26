@@ -746,4 +746,3 @@ networkPolicy:
     ##           matchLabels:
     ##             label: example
     customRules: {}
-
