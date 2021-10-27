@@ -191,6 +191,21 @@ spec:
             - name: mysql
               containerPort: 3306
           {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.primary.startupProbe.enabled }}
+          startupProbe: {{- omit .Values.primary.startupProbe "enabled" | toYaml | nindent 12 }}
+            exec:
+              command:
+                - /bin/bash
+                - -ec
+                - |
+                  password_aux="${MARIADB_ROOT_PASSWORD:-}"
+                  if [[ -f "${MARIADB_ROOT_PASSWORD_FILE:-}" ]]; then
+                      password_aux=$(cat "$MARIADB_ROOT_PASSWORD_FILE")
+                  fi
+                  mysqladmin status -uroot -p"${password_aux}"
+          {{- else if .Values.primary.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.primary.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
           {{- if .Values.primary.livenessProbe.enabled }}
           livenessProbe: {{- omit .Values.primary.livenessProbe "enabled" | toYaml | nindent 12 }}
             exec:

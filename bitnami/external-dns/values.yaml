@@ -39,7 +39,7 @@ clusterDomain: cluster.local
 image:
   registry: docker.io
   repository: bitnami/external-dns
-  tag: 0.10.1-debian-10-r0
+  tag: 0.10.1-debian-10-r5
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -393,7 +393,7 @@ ovh:
   ## @param ovh.applicationSecret When using the OVH provider with an existing application, specify the application secret. (required when provider=ovh and `ovh.secretName` is not provided.)
   ##
   applicationSecret: ""
-  ## @param ovh.secretName When using the OVH provider, it's the name of the secret containing `ovh_consumer_key`, `ovh_application_key` and `ovh_application_secret`. Disables usage of other `ovh.
+  ## @param ovh.secretName When using the OVH provider, it's the name of the secret containing `ovh_consumer_key`, `ovh_application_key` and `ovh_application_secret`. Disables usage of other `ovh`.
   ## with following keys:
   ##  - ovh_consumer_key
   ##  - ovh_application_key
