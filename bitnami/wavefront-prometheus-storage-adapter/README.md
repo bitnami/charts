@@ -67,7 +67,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | ----------------------------------------------------------------------------------------- | ---------------------------------------------- |
 | `image.registry`                        | Adapter image registry                                                                    | `docker.io`                                    |
 | `image.repository`                      | Adapter image repository                                                                  | `bitnami/wavefront-prometheus-storage-adapter` |
-| `image.tag`                             | Adapter image tag (immutabe tags are recommended)                                         | `1.0.3-debian-10-r201`                         |
+| `image.tag`                             | Adapter image tag (immutabe tags are recommended)                                         | `1.0.3-debian-10-r207`                         |
 | `image.pullPolicy`                      | Adapter image pull policy                                                                 | `IfNotPresent`                                 |
 | `image.pullSecrets`                     | Adapter image pull secrets                                                                | `[]`                                           |
 | `image.debug`                           | Enable image debug mode                                                                   | `false`                                        |

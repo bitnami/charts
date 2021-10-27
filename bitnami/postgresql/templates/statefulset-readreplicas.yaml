@@ -6,9 +6,9 @@ metadata:
   name: "{{ template "common.names.fullname" . }}-read"
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: read
-{{- with .Values.readReplicas.labels }}
-{{ toYaml . | indent 4 }}
-{{- end }}
+  {{- if .Values.readReplicas.labels }}
+  {{- include "common.tplvalues.render" ( dict "value" .Values.readReplicas.labels "context" $ ) | nindent 4 }}
+  {{- end }}
   annotations:
   {{- if .Values.commonAnnotations }}
   {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
@@ -31,9 +31,9 @@ spec:
       {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: read
         role: read
-{{- with .Values.readReplicas.podLabels }}
-{{ toYaml . | indent 8 }}
-{{- end }}
+      {{- if .Values.readReplicas.podLabels }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.readReplicas.podLabels  "context" $) | nindent 8 }}
+      {{- end }}
 {{- with .Values.readReplicas.podAnnotations }}
       annotations:
 {{ toYaml . | indent 8 }}

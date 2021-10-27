@@ -75,7 +75,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------------- | -------------------------------------------------------------------- | ----------------------- |
 | `image.registry`              | Tomcat image registry                                                | `docker.io`             |
 | `image.repository`            | Tomcat image repository                                              | `bitnami/tomcat`        |
-| `image.tag`                   | Tomcat image tag (immutable tags are recommended)                    | `10.0.12-debian-10-r14` |
+| `image.tag`                   | Tomcat image tag (immutable tags are recommended)                    | `10.0.12-debian-10-r21` |
 | `image.pullPolicy`            | Tomcat image pull policy                                             | `IfNotPresent`          |
 | `image.pullSecrets`           | Specify docker-registry secret names as an array                     | `[]`                    |
 | `image.debug`                 | Specify if debug logs should be enabled                              | `false`                 |
@@ -179,7 +179,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                            | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image repository                          | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                 | `10-debian-10-r225`     |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                 | `10-debian-10-r232`     |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                         | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                            | `[]`                    |
 | `volumePermissions.resources.limits`   | Init container volume-permissions resource  limits                          | `{}`                    |
@@ -194,7 +194,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.jmx.catalinaOpts`            | custom option used to enabled JMX on tomcat jvm evaluated as template              | `-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=5555 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.local.only=true` |
 | `metrics.jmx.image.registry`          | JMX exporter image registry                                                        | `docker.io`                                                                                                                                                                                                         |
 | `metrics.jmx.image.repository`        | JMX exporter image repository                                                      | `bitnami/jmx-exporter`                                                                                                                                                                                              |
-| `metrics.jmx.image.tag`               | JMX exporter image tag (immutable tags are recommended)                            | `0.16.1-debian-10-r73`                                                                                                                                                                                              |
+| `metrics.jmx.image.tag`               | JMX exporter image tag (immutable tags are recommended)                            | `0.16.1-debian-10-r101`                                                                                                                                                                                             |
 | `metrics.jmx.image.pullPolicy`        | JMX exporter image pull policy                                                     | `IfNotPresent`                                                                                                                                                                                                      |
 | `metrics.jmx.image.pullSecrets`       | Specify docker-registry secret names as an array                                   | `[]`                                                                                                                                                                                                                |
 | `metrics.jmx.config`                  | Configuration file for JMX exporter                                                | `""`                                                                                                                                                                                                                |
