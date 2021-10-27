@@ -28,7 +28,8 @@ spec:
         {{- if .Values.forwarder.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.forwarder.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
-        {{- if .Values.forwarder.rbac.pspEnabled }}
+        {{- $pspAvailable := (semverCompare "<1.25-0" (include "common.capabilities.kubeVersion" .)) -}}
+        {{- if and $pspAvailable .Values.forwarder.rbac.pspEnabled }}
         checksum/psp: {{ include (print $.Template.BasePath "/forwarder-psp.yaml") . | sha256sum }}
         {{- end }}
     spec:
