@@ -1,5 +1,6 @@
-{{- if and .Values.rbac.create .Values.rbac.pspEnabled }}
-apiVersion: {{ template "podSecurityPolicy.apiVersion" . }}
+{{- $pspAvailable := (semverCompare "<1.25-0" (include "common.capabilities.kubeVersion" .)) -}}
+{{- if and $pspAvailable .Values.rbac.create .Values.rbac.pspEnabled }}
+apiVersion: policy/v1beta1
 kind: PodSecurityPolicy
 metadata:
   name: {{ template "common.names.fullname" . }}
