@@ -946,6 +946,13 @@ prometheus:
     ##    secretKey: thanos.yaml
     ##
     objectStorageConfig: {}
+    ## ref: https://github.com/thanos-io/thanos/blob/main/docs/components/sidecar.md
+    ## @param prometheus.thanos.volumeMounts Additional volumeMounts from `prometheus.volumes` for thanos sidecar container
+    ## volumeMounts:
+    ## - name: my-secret-volume
+    ##   mountPath: /etc/thanos/secrets/my-secret
+    ##
+    volumeMounts: []
     ## Thanos sidecar container resource requests and limits.
     ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
     ## We usually recommend not to specify default resources and to leave this as a conscious
