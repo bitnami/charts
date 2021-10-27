@@ -1250,7 +1250,7 @@ curator:
     ## If not set and create is true, a name is generated using the fullname template
     ##
     name: ""
-  ## @param curator.psp.create Create pod security policy resources
+  ## @param curator.psp.create Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later
   ##
   psp:
     create: false
