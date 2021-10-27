@@ -1,3 +1,7 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
 {{- if .Values.diagnosticMode.enabled }}
 The chart has been deployed in diagnostic mode. All probes have been disabled and the command has been overwritten with:
 
@@ -31,10 +35,10 @@ In order to replicate the container startup scripts execute this command:
 
 {{- if and (eq .Values.architecture "replicaset") .Values.externalAccess.enabled (not .Values.externalAccess.autoDiscovery.enabled) (not (eq $replicaCount $loadBalancerIPListLength )) (eq .Values.externalAccess.service.type "LoadBalancer") }}
 
-###############################################################################
+####################################################################################
 ### ERROR: You enabled external access to MongoDB&reg; nodes without specifying  ###
 ###   the array of load balancer IPs for MongoDB&reg; nodes.                     ###
-###############################################################################
+####################################################################################
 
 This deployment will be incomplete until you configure the array of load balancer
 IPs for MongoDB&reg; nodes. To complete your deployment follow the steps below:
@@ -90,14 +94,14 @@ MongoDB&reg; can be accessed on the following DNS name(s) and ports from within 
 
 To get the root password run:
 
-    export MONGODB_ROOT_PASSWORD=$(kubectl get secret --namespace {{ template "mongodb.namespace" . }} {{ template "mongodb.fullname" . }} -o jsonpath="{.data.mongodb-root-password}" | base64 --decode)
+    export MONGODB_ROOT_PASSWORD=$(kubectl get secret --namespace {{ template "mongodb.namespace" . }} {{ template "mongodb.secretName" . }} -o jsonpath="{.data.mongodb-root-password}" | base64 --decode)
 
 {{- end }}
 {{- if and .Values.auth.username .Values.auth.database .Values.auth.password }}
 
 To get the password for "{{ .Values.auth.username }}" run:
 
-    export MONGODB_PASSWORD=$(kubectl get secret --namespace {{ template "mongodb.namespace" . }} {{ template "mongodb.fullname" . }} -o jsonpath="{.data.mongodb-password}" | base64 --decode)
+    export MONGODB_PASSWORD=$(kubectl get secret --namespace {{ template "mongodb.namespace" . }} {{ template "mongodb.secretName" . }} -o jsonpath="{.data.mongodb-password}" | base64 --decode)
 
 {{- end }}
 
@@ -188,6 +192,7 @@ Then, open the obtained URL in a browser.
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- include "common.warnings.rollingTag" .Values.metrics.image }}
 {{- include "common.warnings.rollingTag" .Values.externalAccess.autoDiscovery.image }}
+{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
 {{- include "mongodb.validateValues" . }}
 {{- $secretName := include "mongodb.fullname" . -}}
 {{- $passwordValidationErrors := include "common.validations.values.mongodb.passwords" (dict "secret" $secretName "context" $) -}}

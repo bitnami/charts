@@ -1,4 +1,4 @@
-# https://raw.githubusercontent.com/integr8ly/grafana-operator/v3.9.0/deploy/crds/Grafana.yaml
+# https://raw.githubusercontent.com/grafana-operator/grafana-operator/v3.10.3/deploy/crds/Grafana.yaml
 
 ---
 apiVersion: apiextensions.k8s.io/v1beta1
@@ -14,7 +14,7 @@ spec:
     singular: grafana
   scope: Namespaced
   subresources:
-    status: {}
+    status: { }
   version: v1alpha1
   validation:
     openAPIV3Schema:
@@ -67,9 +67,15 @@ spec:
                 enabled:
                   type: boolean
                   description: Create an ingress / route
+                ingressClassName:
+                  type: string
+                  description: Ingress class name
                 path:
                   type: string
                   description: Ingress path
+                pathType:
+                  type: string
+                  description: pathType specifies how ingress paths should be matched
                 hostname:
                   type: string
                   description: The hostname of the ingress / route
@@ -130,6 +136,18 @@ spec:
                 priorityClassName:
                   type: string
                   description: Pod priority class name
+                extraVolumeMounts:
+                  type: array
+                  description: Extra volumes mounts to be mounted to the grafana deployment
+                  items:
+                    type: object
+                    description: additional volumeMount 
+                extraVolumes:
+                  type: array
+                  description: Extra volumes to be attached to the grafana deployment
+                  items:
+                    type: object
+                    description: additional volume
             serviceAccount:
               type: object
               properties:

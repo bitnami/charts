@@ -70,8 +70,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `commonLabels`           | Labels to add to all deployed objects                                                                 | `{}`            |
 | `extraDeploy`            | Array of extra objects to deploy with the release                                                     | `[]`            |
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)               | `false`         |
-| `diagnosticMode.command` | Command to override all containers in the deployment                                                  | `[]`            |
-| `diagnosticMode.args`    | Args to override all containers in the deployment                                                     | `[]`            |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                                  | `["sleep"]`     |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                                     | `["infinity"]`  |
 
 
 ### InfluxDB&trade; parameters
@@ -80,7 +80,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`                              | InfluxDB&trade; image registry                                                                                                                                                                                                                                       | `docker.io`           |
 | `image.repository`                            | InfluxDB&trade; image repository                                                                                                                                                                                                                                     | `bitnami/influxdb`    |
-| `image.tag`                                   | InfluxDB&trade; image tag (immutable tags are recommended)                                                                                                                                                                                                           | `2.0.7-debian-10-r34` |
+| `image.tag`                                   | InfluxDB&trade; image tag (immutable tags are recommended)                                                                                                                                                                                                           | `2.0.9-debian-10-r25` |
 | `image.pullPolicy`                            | InfluxDB&trade; image pull policy                                                                                                                                                                                                                                    | `IfNotPresent`        |
 | `image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                                                                                                                                                                     | `[]`                  |
 | `image.debug`                                 | Specify if debug logs should be enabled                                                                                                                                                                                                                              | `false`               |
@@ -155,54 +155,54 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### InfluxDB Relay&trade; parameters
 
-| Name                                       | Description                                                                                                            | Value                     |
-| ------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------- | ------------------------- |
-| `relay.image.registry`                     | InfluxDB Relay&trade; image registry                                                                                   | `docker.io`               |
-| `relay.image.repository`                   | InfluxDB Relay&trade; image repository                                                                                 | `bitnami/influxdb-relay`  |
-| `relay.image.tag`                          | InfluxDB Relay&trade; image tag (immutable tags are recommended)                                                       | `0.20200717.0-scratch-r7` |
-| `relay.image.pullPolicy`                   | InfluxDB Relay&trade; image pull policy                                                                                | `IfNotPresent`            |
-| `relay.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                       | `[]`                      |
-| `relay.configuration`                      | InfluxDB Relay&trade; Configuration. Specify content for relay.toml                                                    | `""`                      |
-| `relay.existingConfiguration`              | Name of existing ConfigMap object with the InfluxDB Relay&trade; configuration (`relay.configuration` will be ignored) | `""`                      |
-| `relay.replicaCount`                       | The number of InfluxDB Relay&trade; replicas to deploy                                                                 | `1`                       |
-| `relay.updateStrategy`                     | Update strategy, can be set to RollingUpdate or OnDelete by default.                                                   | `RollingUpdate`           |
-| `relay.podAffinityPreset`                  | InfluxDB Relay&trade; Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`              | `""`                      |
-| `relay.podAntiAffinityPreset`              | InfluxDB Relay&trade; Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`         | `soft`                    |
-| `relay.nodeAffinityPreset.type`            | InfluxDB Relay&trade; Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`        | `""`                      |
-| `relay.nodeAffinityPreset.key`             | InfluxDB Relay&trade; Node label key to match Ignored if `affinity` is set.                                            | `""`                      |
-| `relay.nodeAffinityPreset.values`          | InfluxDB Relay&trade; Node label values to match. Ignored if `affinity` is set.                                        | `[]`                      |
-| `relay.affinity`                           | InfluxDB Relay&trade; Affinity for pod assignment                                                                      | `{}`                      |
-| `relay.nodeSelector`                       | InfluxDB Relay&trade; Node labels for pod assignment                                                                   | `{}`                      |
-| `relay.tolerations`                        | InfluxDB Relay&trade; Tolerations for pod assignment                                                                   | `[]`                      |
-| `relay.extraVolumes`                       | Array of extra volumes to be added to the deployment (evaluated as template). Requires setting extraVolumeMounts       | `[]`                      |
-| `relay.extraVolumeMounts`                  | Array of extra volume mounts to be added to the container (evaluated as template). Normally used with extraVolumes.    | `[]`                      |
-| `relay.securityContext.enabled`            | Enable security context for InfluxDB Relay&trade;                                                                      | `true`                    |
-| `relay.securityContext.fsGroup`            | Group ID for the InfluxDB Relay&trade; filesystem                                                                      | `1001`                    |
-| `relay.securityContext.runAsUser`          | User ID for the InfluxDB Relay&trade; container                                                                        | `1001`                    |
-| `relay.resources.limits`                   | The resources limits for the container                                                                                 | `{}`                      |
-| `relay.resources.requests`                 | The requested resources for the container                                                                              | `{}`                      |
-| `relay.livenessProbe.enabled`              | Enable livenessProbe                                                                                                   | `true`                    |
-| `relay.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                                | `30`                      |
-| `relay.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                                       | `10`                      |
-| `relay.livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                                                      | `5`                       |
-| `relay.livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                                                    | `6`                       |
-| `relay.livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                                                    | `1`                       |
-| `relay.readinessProbe.enabled`             | Enable readinessProbe                                                                                                  | `true`                    |
-| `relay.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                                               | `5`                       |
-| `relay.readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                                                      | `10`                      |
-| `relay.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                                     | `5`                       |
-| `relay.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                                                   | `6`                       |
-| `relay.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                                   | `1`                       |
-| `relay.customLivenessProbe`                | Override default liveness probe                                                                                        | `{}`                      |
-| `relay.customReadinessProbe`               | Override default readiness probe                                                                                       | `{}`                      |
-| `relay.containerPorts`                     | Container ports                                                                                                        | `{}`                      |
-| `relay.service.type`                       | Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`)                                                    | `ClusterIP`               |
-| `relay.service.port`                       | InfluxDB Relay&trade; HTTP port                                                                                        | `9096`                    |
-| `relay.service.nodePort`                   | Kubernetes HTTP node port                                                                                              | `""`                      |
-| `relay.service.loadBalancerIP`             | loadBalancerIP if service type is `LoadBalancer`                                                                       | `""`                      |
-| `relay.service.loadBalancerSourceRanges`   | Address that are allowed when service is LoadBalancer                                                                  | `[]`                      |
-| `relay.service.clusterIP`                  | Static clusterIP or None for headless services                                                                         | `""`                      |
-| `relay.service.annotations`                | Annotations for InfluxDB Relay&trade; service                                                                          | `{}`                      |
+| Name                                       | Description                                                                                                            | Value                      |
+| ------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| `relay.image.registry`                     | InfluxDB Relay&trade; image registry                                                                                   | `docker.io`                |
+| `relay.image.repository`                   | InfluxDB Relay&trade; image repository                                                                                 | `bitnami/influxdb-relay`   |
+| `relay.image.tag`                          | InfluxDB Relay&trade; image tag (immutable tags are recommended)                                                       | `0.20200717.0-scratch-r12` |
+| `relay.image.pullPolicy`                   | InfluxDB Relay&trade; image pull policy                                                                                | `IfNotPresent`             |
+| `relay.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                       | `[]`                       |
+| `relay.configuration`                      | InfluxDB Relay&trade; Configuration. Specify content for relay.toml                                                    | `""`                       |
+| `relay.existingConfiguration`              | Name of existing ConfigMap object with the InfluxDB Relay&trade; configuration (`relay.configuration` will be ignored) | `""`                       |
+| `relay.replicaCount`                       | The number of InfluxDB Relay&trade; replicas to deploy                                                                 | `1`                        |
+| `relay.updateStrategy`                     | Update strategy, can be set to RollingUpdate or OnDelete by default.                                                   | `RollingUpdate`            |
+| `relay.podAffinityPreset`                  | InfluxDB Relay&trade; Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`              | `""`                       |
+| `relay.podAntiAffinityPreset`              | InfluxDB Relay&trade; Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`         | `soft`                     |
+| `relay.nodeAffinityPreset.type`            | InfluxDB Relay&trade; Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`        | `""`                       |
+| `relay.nodeAffinityPreset.key`             | InfluxDB Relay&trade; Node label key to match Ignored if `affinity` is set.                                            | `""`                       |
+| `relay.nodeAffinityPreset.values`          | InfluxDB Relay&trade; Node label values to match. Ignored if `affinity` is set.                                        | `[]`                       |
+| `relay.affinity`                           | InfluxDB Relay&trade; Affinity for pod assignment                                                                      | `{}`                       |
+| `relay.nodeSelector`                       | InfluxDB Relay&trade; Node labels for pod assignment                                                                   | `{}`                       |
+| `relay.tolerations`                        | InfluxDB Relay&trade; Tolerations for pod assignment                                                                   | `[]`                       |
+| `relay.extraVolumes`                       | Array of extra volumes to be added to the deployment (evaluated as template). Requires setting extraVolumeMounts       | `[]`                       |
+| `relay.extraVolumeMounts`                  | Array of extra volume mounts to be added to the container (evaluated as template). Normally used with extraVolumes.    | `[]`                       |
+| `relay.securityContext.enabled`            | Enable security context for InfluxDB Relay&trade;                                                                      | `true`                     |
+| `relay.securityContext.fsGroup`            | Group ID for the InfluxDB Relay&trade; filesystem                                                                      | `1001`                     |
+| `relay.securityContext.runAsUser`          | User ID for the InfluxDB Relay&trade; container                                                                        | `1001`                     |
+| `relay.resources.limits`                   | The resources limits for the container                                                                                 | `{}`                       |
+| `relay.resources.requests`                 | The requested resources for the container                                                                              | `{}`                       |
+| `relay.livenessProbe.enabled`              | Enable livenessProbe                                                                                                   | `true`                     |
+| `relay.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                                | `30`                       |
+| `relay.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                                       | `10`                       |
+| `relay.livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                                                      | `5`                        |
+| `relay.livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                                                    | `6`                        |
+| `relay.livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                                                    | `1`                        |
+| `relay.readinessProbe.enabled`             | Enable readinessProbe                                                                                                  | `true`                     |
+| `relay.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                                               | `5`                        |
+| `relay.readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                                                      | `10`                       |
+| `relay.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                                     | `5`                        |
+| `relay.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                                                   | `6`                        |
+| `relay.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                                   | `1`                        |
+| `relay.customLivenessProbe`                | Override default liveness probe                                                                                        | `{}`                       |
+| `relay.customReadinessProbe`               | Override default readiness probe                                                                                       | `{}`                       |
+| `relay.containerPorts`                     | Container ports                                                                                                        | `{}`                       |
+| `relay.service.type`                       | Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`)                                                    | `ClusterIP`                |
+| `relay.service.port`                       | InfluxDB Relay&trade; HTTP port                                                                                        | `9096`                     |
+| `relay.service.nodePort`                   | Kubernetes HTTP node port                                                                                              | `""`                       |
+| `relay.service.loadBalancerIP`             | loadBalancerIP if service type is `LoadBalancer`                                                                       | `""`                       |
+| `relay.service.loadBalancerSourceRanges`   | Address that are allowed when service is LoadBalancer                                                                  | `[]`                       |
+| `relay.service.clusterIP`                  | Static clusterIP or None for headless services                                                                         | `""`                       |
+| `relay.service.annotations`                | Annotations for InfluxDB Relay&trade; service                                                                          | `{}`                       |
 
 
 ### InfluxDB Collectd&trade; parameters
@@ -221,46 +221,45 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Exposing parameters
 
-| Name                  | Description                                                                                   | Value                    |
-| --------------------- | --------------------------------------------------------------------------------------------- | ------------------------ |
-| `ingress.enabled`     | Enable ingress controller resource                                                            | `false`                  |
-| `ingress.tls`         | Create TLS Secret                                                                             | `false`                  |
-| `ingress.certManager` | Add annotations for cert-manager                                                              | `false`                  |
-| `ingress.pathType`    | Ingress path type                                                                             | `ImplementationSpecific` |
-| `ingress.apiVersion`  | Force Ingress API version (automatically detected if not set)                                 | `""`                     |
-| `ingress.hostname`    | Default host for the ingress resource                                                         | `influxdb.local`         |
-| `ingress.path`        | Ingress path*' in order to use this                                                           | `ImplementationSpecific` |
-| `ingress.annotations` | Ingress annotations                                                                           | `{}`                     |
-| `ingress.extraHosts`  | The list of additional hostnames to be covered with this ingress record.                      | `[]`                     |
-| `ingress.extraPaths`  | Additional arbitrary path/backend objects                                                     | `[]`                     |
-| `ingress.extraTls`    | The tls configuration for additional hostnames to be covered with this ingress record.        | `[]`                     |
-| `ingress.secrets`     | If you're providing your own certificates, please use this to add the certificates as secrets | `[]`                     |
+| Name                  | Description                                                                                                                      | Value                    |
+| --------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `ingress.enabled`     | Enable ingress controller resource                                                                                               | `false`                  |
+| `ingress.tls`         | Create TLS Secret                                                                                                                | `false`                  |
+| `ingress.pathType`    | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.apiVersion`  | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
+| `ingress.hostname`    | Default host for the ingress resource                                                                                            | `influxdb.local`         |
+| `ingress.path`        | Ingress path*' in order to use this                                                                                              | `/`                      |
+| `ingress.annotations` | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.extraHosts`  | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
+| `ingress.extraPaths`  | Additional arbitrary path/backend objects                                                                                        | `[]`                     |
+| `ingress.extraTls`    | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
+| `ingress.secrets`     | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
 
 
 ### Metrics parameters
 
-| Name                                       | Description                                                                                            | Value       |
-| ------------------------------------------ | ------------------------------------------------------------------------------------------------------ | ----------- |
-| `metrics.enabled`                          | Enable the export of Prometheus metrics                                                                | `false`     |
-| `metrics.service.type`                     | Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`)                                    | `ClusterIP` |
-| `metrics.service.port`                     | InfluxDB&trade; Prometheus port                                                                        | `9122`      |
-| `metrics.service.nodePort`                 | Kubernetes HTTP node port                                                                              | `""`        |
-| `metrics.service.loadBalancerIP`           | loadBalancerIP if service type is `LoadBalancer`                                                       | `""`        |
-| `metrics.service.loadBalancerSourceRanges` | Address that are allowed when service is LoadBalancer                                                  | `[]`        |
-| `metrics.service.clusterIP`                | Static clusterIP or None for headless services                                                         | `""`        |
-| `metrics.service.annotations`              | Annotations for the Prometheus metrics service                                                         | `{}`        |
-| `metrics.serviceMonitor.enabled`           | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`) | `false`     |
-| `metrics.serviceMonitor.namespace`         | Namespace in which Prometheus is running                                                               | `""`        |
-| `metrics.serviceMonitor.interval`          | Interval at which metrics should be scraped.                                                           | `""`        |
-| `metrics.serviceMonitor.scrapeTimeout`     | Timeout after which the scrape is ended                                                                | `""`        |
-| `metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                                                    | `{}`        |
-| `networkPolicy.enabled`                    | Enable NetworkPolicy                                                                                   | `false`     |
-| `networkPolicy.allowExternal`              | Don't require client label for connections                                                             | `true`      |
-| `persistence.enabled`                      | Enable data persistence                                                                                | `true`      |
-| `persistence.existingClaim`                | Use a existing PVC which must be created manually before bound                                         | `""`        |
-| `persistence.storageClass`                 | Specify the `storageClass` used to provision the volume                                                | `""`        |
-| `persistence.accessModes`                  | Access mode of data volume                                                                             | `[]`        |
-| `persistence.size`                         | Size of data volume                                                                                    | `8Gi`       |
+| Name                                       | Description                                                                                            | Value               |
+| ------------------------------------------ | ------------------------------------------------------------------------------------------------------ | ------------------- |
+| `metrics.enabled`                          | Enable the export of Prometheus metrics                                                                | `false`             |
+| `metrics.service.type`                     | Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`)                                    | `ClusterIP`         |
+| `metrics.service.port`                     | InfluxDB&trade; Prometheus port                                                                        | `9122`              |
+| `metrics.service.nodePort`                 | Kubernetes HTTP node port                                                                              | `""`                |
+| `metrics.service.loadBalancerIP`           | loadBalancerIP if service type is `LoadBalancer`                                                       | `""`                |
+| `metrics.service.loadBalancerSourceRanges` | Address that are allowed when service is LoadBalancer                                                  | `[]`                |
+| `metrics.service.clusterIP`                | Static clusterIP or None for headless services                                                         | `""`                |
+| `metrics.service.annotations`              | Annotations for the Prometheus metrics service                                                         | `{}`                |
+| `metrics.serviceMonitor.enabled`           | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`) | `false`             |
+| `metrics.serviceMonitor.namespace`         | Namespace in which Prometheus is running                                                               | `""`                |
+| `metrics.serviceMonitor.interval`          | Interval at which metrics should be scraped.                                                           | `""`                |
+| `metrics.serviceMonitor.scrapeTimeout`     | Timeout after which the scrape is ended                                                                | `""`                |
+| `metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                                                    | `{}`                |
+| `networkPolicy.enabled`                    | Enable NetworkPolicy                                                                                   | `false`             |
+| `networkPolicy.allowExternal`              | Don't require client label for connections                                                             | `true`              |
+| `persistence.enabled`                      | Enable data persistence                                                                                | `true`              |
+| `persistence.existingClaim`                | Use a existing PVC which must be created manually before bound                                         | `""`                |
+| `persistence.storageClass`                 | Specify the `storageClass` used to provision the volume                                                | `""`                |
+| `persistence.accessModes`                  | Access mode of data volume                                                                             | `["ReadWriteOnce"]` |
+| `persistence.size`                         | Size of data volume                                                                                    | `8Gi`               |
 
 
 ### Volume permissions parameters
@@ -270,8 +269,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                   | Enable init container that changes the owner and group of the persistent volume mountpoint to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`            | Init container volume-permissions image registry                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`          | Init container volume-permissions image name                                                                      | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Init container volume-permissions image tag                                                                       | `10-debian-10-r140`     |
-| `volumePermissions.image.pullPolicy`          | Init container volume-permissions image pull policy                                                               | `Always`                |
+| `volumePermissions.image.tag`                 | Init container volume-permissions image tag                                                                       | `10-debian-10-r233`     |
+| `volumePermissions.image.pullPolicy`          | Init container volume-permissions image pull policy                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                                                  | `[]`                    |
 | `volumePermissions.securityContext.runAsUser` | User ID for the init container (when facing issues in OpenShift or uid unknown, try value "auto")                 | `0`                     |
 
@@ -304,7 +303,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `backup.uploadProviders.google.bucketName`        | google storage bucket name name                                                                         | `gs://bucket/influxdb`     |
 | `backup.uploadProviders.google.image.registry`    | Google Cloud SDK image registry                                                                         | `docker.io`                |
 | `backup.uploadProviders.google.image.repository`  | Google Cloud SDK image name                                                                             | `bitnami/google-cloud-sdk` |
-| `backup.uploadProviders.google.image.tag`         | Google Cloud SDK image tag                                                                              | `0.349.0-debian-10-r1`     |
+| `backup.uploadProviders.google.image.tag`         | Google Cloud SDK image tag                                                                              | `0.361.0-debian-10-r7`     |
 | `backup.uploadProviders.google.image.pullPolicy`  | Google Cloud SDK image pull policy                                                                      | `IfNotPresent`             |
 | `backup.uploadProviders.google.image.pullSecrets` | Specify docker-registry secret names as an array                                                        | `[]`                       |
 | `backup.uploadProviders.azure.enabled`            | Enable upload to azure storage container                                                                | `false`                    |
@@ -314,7 +313,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `backup.uploadProviders.azure.containerName`      | Destination container                                                                                   | `influxdb-container`       |
 | `backup.uploadProviders.azure.image.registry`     | Azure CLI image registry                                                                                | `docker.io`                |
 | `backup.uploadProviders.azure.image.repository`   | Azure CLI image repository                                                                              | `bitnami/azure-cli`        |
-| `backup.uploadProviders.azure.image.tag`          | Azure CLI image tag (immutable tags are recommended)                                                    | `2.26.1-debian-10-r6`      |
+| `backup.uploadProviders.azure.image.tag`          | Azure CLI image tag (immutable tags are recommended)                                                    | `2.29.1-debian-10-r5`      |
 | `backup.uploadProviders.azure.image.pullPolicy`   | Azure CLI image pull policy                                                                             | `IfNotPresent`             |
 | `backup.uploadProviders.azure.image.pullSecrets`  | Specify docker-registry secret names as an array                                                        | `[]`                       |
 

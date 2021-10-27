@@ -24,6 +24,9 @@ spec:
     - host: {{ .Values.ingress.hostname }}
       http:
         paths:
+          {{- if .Values.ingress.extraPaths }}
+          {{- include "common.tplvalues.render" (dict "value"  .Values.ingress.extraPaths "context" $) | nindent 10 }}
+          {{- end }}
           - path: {{ .Values.ingress.path }}
             {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
             pathType: {{ .Values.ingress.pathType }}
@@ -40,12 +43,16 @@ spec:
             {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (printf "%s-ui" (include "common.names.fullname" $)) "servicePort" "http" "context" $) | nindent 14 }}
     {{- end }}
-  {{- if or .Values.ingress.tls .Values.ingress.extraTls }}
+  {{- if or (and .Values.ingress.tls (or (include "consul.ingress.certManagerRequest" .Values.ingress.annotations) .Values.ingress.selfSigned)) .Values.ingress.extraTls }}
   tls:
-    {{- if .Values.ingress.tls }}
+    {{- if and .Values.ingress.tls (or .Values.ingress.existingSecret (include "consul.ingress.certManagerRequest" .Values.ingress.annotations) .Values.ingress.selfSigned) }}
     - hosts:
-        - {{ .Values.ingress.hostname }}
+        - {{ .Values.ingress.hostname | quote }}
+      {{- if .Values.ingress.existingSecret }}
+      secretName: {{ .Values.ingress.existingSecret }}
+      {{- else }}
       secretName: {{ printf "%s-tls" .Values.ingress.hostname }}
+      {{- end }}
     {{- end }}
     {{- if .Values.ingress.extraTls }}
     {{- toYaml .Values.ingress.extraTls | nindent 4 }}

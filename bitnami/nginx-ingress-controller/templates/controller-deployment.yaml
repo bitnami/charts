@@ -94,7 +94,7 @@ spec:
             - --publish-service={{ include "nginx-ingress-controller.publishServicePath" . }}
           {{- end }}
             - --election-id={{ .Values.electionID }}
-            - --ingress-class={{ .Values.ingressClass }}
+            - --controller-class={{ .Values.ingressClassResource.controllerClass }}
             - --configmap={{ default .Release.Namespace .Values.configMapNamespace }}/{{ include "common.names.fullname" . }}
           {{- if .Values.tcp }}
             - --tcp-services-configmap={{ default .Release.Namespace .Values.tcpConfigMapNamespace }}/{{ include "common.names.fullname" . }}-tcp
@@ -110,6 +110,9 @@ spec:
           {{- end }}
           {{- if and (.Values.reportNodeInternalIp) (.Values.hostNetwork) }}
             - --report-node-internal-ip-address={{ .Values.reportNodeInternalIp }}
+          {{- end }}
+          {{- if .Values.watchIngressWithoutClass }}
+            - --watch-ingress-without-class=true
           {{- end }}
           {{- range $key, $value := .Values.extraArgs }}
             {{- if $value }}

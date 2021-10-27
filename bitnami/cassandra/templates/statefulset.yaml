@@ -16,14 +16,7 @@ spec:
   serviceName: {{ include "common.names.fullname" . }}-headless
   podManagementPolicy: {{ .Values.podManagementPolicy }}
   replicas: {{ .Values.replicaCount }}
-  updateStrategy:
-    type: {{ .Values.updateStrategy }}
-    {{- if (eq "Recreate" .Values.updateStrategy) }}
-    rollingUpdate: null
-    {{- else if .Values.rollingUpdatePartition }}
-    rollingUpdate:
-      partition: {{ .Values.rollingUpdatePartition }}
-    {{- end }}
+  updateStrategy: {{- include "common.tplvalues.render" (dict "value" .Values.updateStrategy "context" $ ) | nindent 4 }}
   template:
     metadata:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
@@ -58,6 +51,9 @@ spec:
       {{- end }}
       {{- if .Values.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.schedulerName }}
+      schedulerName: {{ .Values.schedulerName | quote }}
       {{- end }}
       {{- if .Values.priorityClassName }}
       priorityClassName: {{ .Values.priorityClassName | quote }}
@@ -307,8 +303,6 @@ spec:
             - name: JVM_EXTRA_OPTS
               value: {{ .Values.jvm.extraOpts | quote }}
             {{- end }}
-            - name: CASSANDRA_ENABLE_RPC
-              value: {{ .Values.cluster.enableRPC | quote }}
             {{- if .Values.cluster.enableUDF }}
             - name: CASSANDRA_ENABLE_USER_DEFINED_FUNCTIONS
               value: {{ .Values.cluster.enableUDF | quote }}
@@ -374,7 +368,23 @@ spec:
           {{- else if .Values.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if not .Values.persistence.enabled }}
+          {{- if .Values.startupProbe.enabled }}
+          startupProbe:
+            exec:
+              command:
+                - /bin/bash
+                - -ec
+                - |
+                  nodetool status | grep -E "^UN\\s+${POD_IP}"
+            initialDelaySeconds: {{ .Values.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.startupProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.startupProbe.successThreshold }}
+            failureThreshold: {{ .Values.startupProbe.failureThreshold }}
+          {{- else if .Values.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if and (not .Values.lifecycleHooks) (not .Values.persistence.enabled) }}
           lifecycle:
             preStop:
               exec:
@@ -382,6 +392,8 @@ spec:
                   - bash
                   - -ec
                   - nodetool decommission
+          {{- else if .Values.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           ports:
@@ -405,13 +417,6 @@ spec:
               {{- if .Values.hostNetwork }}
               hostPort: {{ .Values.containerPorts.cql }}
               {{- end }}
-            {{- if .Values.cluster.enableRPC }}
-            - name: thrift
-              containerPort: {{ .Values.containerPorts.thrift | default "9160" }}
-              {{- if .Values.hostNetwork }}
-              hostPort: {{ .Values.containerPorts.thrift }}
-              {{- end }}
-            {{- end }}
           {{- if .Values.resources }}
           resources: {{ toYaml .Values.resources | nindent 12 }}
           {{- end }}

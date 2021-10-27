@@ -3,6 +3,7 @@ apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
   name: {{ include "external-dns.fullname" . }}
+  namespace: {{ .Release.Namespace }}
   labels: {{ include "external-dns.labels" . | nindent 4 }}
 spec:
   selector:

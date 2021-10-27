@@ -58,7 +58,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/keycloak
-  tag: 14.0.0-debian-10-r24
+  tag: 15.0.2-debian-10-r66
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -126,7 +126,7 @@ auth:
   ##   tlsTruststorePassword:
   ##     name: keycloak-test2.credentials
   ##
-  existingSecretPerPassword: ""
+  existingSecretPerPassword: {}
   ## TLS encryption parameters
   ## ref: https://github.com/bitnami/bitnami-docker-keycloak#tls-encryption
   ##
@@ -146,6 +146,14 @@ auth:
     ##       kubectl create secret generic SECRET_NAME --from-file=./keycloak.truststore.jks --from-file=./keycloak-0.keystore.jks --from-file=./keycloak-1.keystore.jks ...
     ##
     existingSecret: ""
+    ## @param auth.tls.truststoreFilename Truststore specific filename inside the existing secret
+    ## Note: Setting up this value, you will use the same trustore file in all the replicas
+    ##
+    truststoreFilename: ""
+    ## @param auth.tls.keystoreFilename Keystore specific filename inside the existing secret
+    ## Note: Setting up this value, you will use the same trustore file in all the replicas
+    ##
+    keystoreFilename: ""
     ## @param auth.tls.jksSecret DEPRECATED. Use `auth.tls.existingSecret` instead
     ##
     jksSecret: ""
@@ -282,7 +290,7 @@ keycloakConfigCli:
   image:
     registry: docker.io
     repository: bitnami/keycloak-config-cli
-    tag: 4.0.1-debian-10-r25
+    tag: 4.3.0-debian-10-r29
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -450,6 +458,28 @@ resources:
   ##    cpu: 200m
   ##    memory: 10Mi
   requests: {}
+## Configure extra options for startup probe
+## When enabling this, make sure to set initialDelaySeconds to 0 for livenessProbe and readinessProbe
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+## @param startupProbe.enabled Enable startupProbe
+## @param startupProbe.httpGet.path Request path for startupProbe
+## @param startupProbe.httpGet.port Port for startupProbe
+## @param startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+## @param startupProbe.periodSeconds Period seconds for startupProbe
+## @param startupProbe.timeoutSeconds Timeout seconds for startupProbe
+## @param startupProbe.failureThreshold Failure threshold for startupProbe
+## @param startupProbe.successThreshold Success threshold for startupProbe
+##
+startupProbe:
+  enabled: false
+  httpGet:
+    path: /auth/
+    port: http
+  initialDelaySeconds: 30
+  periodSeconds: 5
+  timeoutSeconds: 1
+  failureThreshold: 60
+  successThreshold: 1
 ## Configure extra options for liveness probe
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param livenessProbe.enabled Enable livenessProbe
@@ -492,6 +522,9 @@ readinessProbe:
   timeoutSeconds: 1
   failureThreshold: 3
   successThreshold: 1
+## @param customStartupProbe Custom Startup probes for Keycloak
+##
+customStartupProbe: {}
 ## @param customLivenessProbe Custom Liveness probes for Keycloak
 ##
 customLivenessProbe: {}
@@ -637,9 +670,10 @@ ingress:
   ## @param ingress.enabled Enable ingress controller resource
   ##
   enabled: false
-  ## @param ingress.certManager Add annotations for cert-manager
+  ## DEPRECATED: Use ingress.annotations instead of ingress.certManager
+  ## certManager: false
   ##
-  certManager: false
+
   ## @param ingress.hostname Default host for the ingress resource
   ##
   hostname: keycloak.local
@@ -657,11 +691,16 @@ ingress:
   ## @param ingress.pathType Ingress path type
   ##
   pathType: ImplementationSpecific
-  ## @param ingress.annotations Ingress annotations
+  ## @param ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
   ## For a full list of possible ingress annotations, please see
   ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+  ## Use this parameter to set the required annotations for cert-manager, see
+  ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
   ##
-  ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+  ## e.g:
+  ## annotations:
+  ##   kubernetes.io/ingress.class: nginx
+  ##   cert-manager.io/cluster-issuer: cluster-issuer-name
   ##
   annotations: {}
   ## @param ingress.tls Enable TLS configuration for the hostname defined at `ingress.hostname` parameter
@@ -862,7 +901,7 @@ postgresql:
   ## Defaults to a random 10-character alphanumeric string if not set
   ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#setting-the-root-password-on-first-run
   ##
-  postgresqlPassword: some-password
+  postgresqlPassword: ""
   ## @param postgresql.postgresqlDatabase Name of the database to create
   ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#creating-a-database-on-first-run
   ##
@@ -870,10 +909,12 @@ postgresql:
   ## @param postgresql.existingSecret Use an existing secret file with the PostgreSQL password
   ##
   existingSecret: ""
-  ## PostgreSQL data Persistent Volume Storage Class
-  ## @param postgresql.persistence.enabled Enable database persistence using PVC
+  ## Enable persistence using Persistent Volume Claims
+  ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes
   ##
   persistence:
+    ## @param postgresql.persistence.enabled Enable PostgreSQL persistence using PVC
+    ##
     enabled: true
 ## External database configuration
 ##

@@ -89,17 +89,22 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Airflow common parameters
 
-| Name                     | Description                                                                                                                                     | Value            |
-| ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
-| `auth.existingSecret`    | Name of an existing secret containing password and fernet key ('airflow-password and 'airflow-fernetKey' keys)                                  | `""`             |
-| `auth.fernetKey`         | Fernet key to secure connections                                                                                                                | `""`             |
-| `auth.forcePassword`     | Force users to specify a password                                                                                                               | `false`          |
-| `auth.password`          | Password to access web UI                                                                                                                       | `""`             |
-| `auth.username`          | Username to access web UI                                                                                                                       | `user`           |
-| `configurationConfigMap` | Name of an existing config map containing the Airflow config file                                                                               | `""`             |
-| `executor`               | Airflow executor, it should be one of 'SequentialExecutor', 'LocalExecutor', 'CeleryExecutor', 'KubernetesExecutor', 'CeleryKubernetesExecutor' | `CeleryExecutor` |
-| `dagsConfigMap`          | Name of an existing config map containing all the DAGs files you want to load in Airflow                                                        | `""`             |
-| `loadExamples`           | Switch to load some Airflow examples                                                                                                            | `false`          |
+| Name                     | Description                                                                                                                                      | Value                   |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------- |
+| `auth.existingSecret`    | Name of an existing secret containing password, fernet key and secret key ('airflow-password', 'airflow-fernetKey' and 'airflow-secretKey' keys) | `""`                    |
+| `auth.fernetKey`         | Fernet key to secure connections                                                                                                                 | `""`                    |
+| `auth.forcePassword`     | Force users to specify a password                                                                                                                | `false`                 |
+| `auth.password`          | Password to access web UI                                                                                                                        | `""`                    |
+| `auth.username`          | Username to access web UI                                                                                                                        | `user`                  |
+| `auth.secretKey`         | Secret key to run your flask app                                                                                                                 | `""`                    |
+| `configurationConfigMap` | Name of an existing config map containing the Airflow config file                                                                                | `""`                    |
+| `executor`               | Airflow executor, it should be one of 'SequentialExecutor', 'LocalExecutor', 'CeleryExecutor', 'KubernetesExecutor', 'CeleryKubernetesExecutor'  | `CeleryExecutor`        |
+| `dags.configMap`         | Name of an existing config map containing all the DAGs files you want to load in Airflow                                                         | `""`                    |
+| `dags.image.registry`    | Container sidecar registry                                                                                                                       | `docker.io`             |
+| `dags.image.repository`  | Container sidecar image                                                                                                                          | `bitnami/bitnami-shell` |
+| `dags.image.tag`         | Container sidecar image tag                                                                                                                      | `10-debian-10-r232`     |
+| `dags.image.pullPolicy`  | Container sidecar image pull policy                                                                                                              | `IfNotPresent`          |
+| `loadExamples`           | Switch to load some Airflow examples                                                                                                             | `false`                 |
 
 
 ### Airflow web parameters
@@ -108,7 +113,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ---------------------------------------- | --------------------------------------------------------------------------- | -------------------- |
 | `web.image.registry`                     | Airflow image registry                                                      | `docker.io`          |
 | `web.image.repository`                   | Airflow image repository                                                    | `bitnami/airflow`    |
-| `web.image.tag`                          | Airflow image tag (immutable tags are recommended)                          | `2.1.2-debian-10-r0` |
+| `web.image.tag`                          | Airflow image tag (immutable tags are recommended)                          | `2.2.0-debian-10-r8` |
 | `web.image.pullPolicy`                   | Airflow image pull policy                                                   | `IfNotPresent`       |
 | `web.image.pullSecrets`                  | Airflow image pull secrets                                                  | `[]`                 |
 | `web.image.debug`                        | Enable image debug mode                                                     | `false`              |
@@ -162,7 +167,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------------- | ----------------------------------------------------------------------- | --------------------------- |
 | `scheduler.image.registry`                   | Airflow Scheduler image registry                                        | `docker.io`                 |
 | `scheduler.image.repository`                 | Airflow Scheduler image repository                                      | `bitnami/airflow-scheduler` |
-| `scheduler.image.tag`                        | Airflow Scheduler image tag (immutable tags are recommended)            | `2.1.1-debian-10-r10`       |
+| `scheduler.image.tag`                        | Airflow Scheduler image tag (immutable tags are recommended)            | `2.2.0-debian-10-r7`        |
 | `scheduler.image.pullPolicy`                 | Airflow Scheduler image pull policy                                     | `IfNotPresent`              |
 | `scheduler.image.pullSecrets`                | Airflow Scheduler image pull secrets                                    | `[]`                        |
 | `scheduler.image.debug`                      | Enable image debug mode                                                 | `false`                     |
@@ -195,7 +200,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ------------------------ |
 | `worker.image.registry`                     | Airflow Worker image registry                                                                                        | `docker.io`              |
 | `worker.image.repository`                   | Airflow Worker image repository                                                                                      | `bitnami/airflow-worker` |
-| `worker.image.tag`                          | Airflow Worker image tag (immutable tags are recommended)                                                            | `2.1.1-debian-10-r9`     |
+| `worker.image.tag`                          | Airflow Worker image tag (immutable tags are recommended)                                                            | `2.2.0-debian-10-r7`     |
 | `worker.image.pullPolicy`                   | Airflow Worker image pull policy                                                                                     | `IfNotPresent`           |
 | `worker.image.pullSecrets`                  | Airflow Worker image pull secrets                                                                                    | `[]`                     |
 | `worker.image.debug`                        | Enable image debug mode                                                                                              | `false`                  |
@@ -253,7 +258,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------ | -------------------------------------------------------------------------------------- | ---------------------- |
 | `git.image.registry`           | Git image registry                                                                     | `docker.io`            |
 | `git.image.repository`         | Git image repository                                                                   | `bitnami/git`          |
-| `git.image.tag`                | Git image tag (immutable tags are recommended)                                         | `2.32.0-debian-10-r33` |
+| `git.image.tag`                | Git image tag (immutable tags are recommended)                                         | `2.33.0-debian-10-r69` |
 | `git.image.pullPolicy`         | Git image pull policy                                                                  | `IfNotPresent`         |
 | `git.image.pullSecrets`        | Git image pull secrets                                                                 | `[]`                   |
 | `git.dags.enabled`             | Enable in order to download DAG files from git repositories.                           | `false`                |
@@ -279,31 +284,34 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Airflow ldap parameters
 
-| Name                             | Description                                                                                      | Value                      |
-| -------------------------------- | ------------------------------------------------------------------------------------------------ | -------------------------- |
-| `ldap.enabled`                   | Enable LDAP authentication                                                                       | `false`                    |
-| `ldap.uri`                       | Server URI, eg. ldap://ldap_server:389                                                           | `ldap://ldap_server:389`   |
-| `ldap.base`                      | Base of the search, eg. ou=example,o=org                                                         | `ou=example,o=org`         |
-| `ldap.binddn`                    | Bind DN                                                                                          | `cn=user,ou=example,o=org` |
-| `ldap.bindpw`                    | Bind Password                                                                                    | `""`                       |
-| `ldap.uidField`                  | Field used for uid                                                                               | `uid`                      |
-| `ldap.tls.enabled`               | Enabled TLS/SSL for LDAP, you must include the CA file.                                          | `false`                    |
-| `ldap.tls.allowSelfSigned`       | Allow to use self signed certificates                                                            | `true`                     |
-| `ldap.tls.CAcertificateSecret`   | Name of the existing secret containing the certificate CA file that will be used by ldap client. | `""`                       |
-| `ldap.tls.CAcertificateFilename` | LDAP CA cert filename                                                                            | `""`                       |
+| Name                             | Description                                                                                                                        | Value                                                                                                     |
+| -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| `ldap.enabled`                   | Enable LDAP authentication                                                                                                         | `false`                                                                                                   |
+| `ldap.uri`                       | Server URI, eg. ldap://ldap_server:389                                                                                             | `ldap://ldap_server:389`                                                                                  |
+| `ldap.base`                      | Base of the search, eg. ou=example,o=org                                                                                           | `dc=example,dc=org`                                                                                       |
+| `ldap.uidField`                  | if doing an indirect bind to ldap, this is the field that matches the username when searching for the account to bind to           | `cn`                                                                                                      |
+| `ldap.binddn`                    | Bind DN                                                                                                                            | `cn=admin,dc=example,dc=org`                                                                              |
+| `ldap.bindpw`                    | Bind Password                                                                                                                      | `""`                                                                                                      |
+| `ldap.userRegistration`          | Set to True to enable user self registration                                                                                       | `True`                                                                                                    |
+| `ldap.userRegistrationRole`      | Set role name to be assign when a user registers himself. This role must already exist. Mandatory when using ldap.userRegistration | `Public`                                                                                                  |
+| `ldap.rolesMapping`              | mapping from LDAP DN to a list of roles                                                                                            | `{ "cn=All,ou=Groups,dc=example,dc=org": ["User"], "cn=Admins,ou=Groups,dc=example,dc=org": ["Admin"], }` |
+| `ldap.rolesSyncAtLogin`          | replace ALL the user's roles each login, or only on registration                                                                   | `True`                                                                                                    |
+| `ldap.tls.enabled`               | Enabled TLS/SSL for LDAP, you must include the CA file.                                                                            | `false`                                                                                                   |
+| `ldap.tls.allowSelfSigned`       | Allow to use self signed certificates                                                                                              | `true`                                                                                                    |
+| `ldap.tls.CAcertificateSecret`   | Name of the existing secret containing the certificate CA file that will be used by ldap client.                                   | `""`                                                                                                      |
+| `ldap.tls.CAcertificateFilename` | LDAP CA cert filename                                                                                                              | `""`                                                                                                      |
 
 
 ### Airflow exposing parameters
 
-| Name                  | Description                                                                            | Value                    |
-| --------------------- | -------------------------------------------------------------------------------------- | ------------------------ |
-| `ingress.enabled`     | Set to true to enable ingress record generation                                        | `false`                  |
-| `ingress.apiVersion`  | Override API Version (automatically detected if not set)                               | `""`                     |
-| `ingress.pathType`    | Ingress Path type                                                                      | `ImplementationSpecific` |
-| `ingress.certManager` | Set this to true in order to add the corresponding annotations for cert-manager        | `false`                  |
-| `ingress.annotations` | Ingress annotations done as key:value pairs                                            | `{}`                     |
-| `ingress.hosts`       | The list of hostnames to be covered with this ingress record.                          | `[]`                     |
-| `ingress.secrets`     | If you're providing your own certificates, use this to add the certificates as secrets | `[]`                     |
+| Name                  | Description                                                                                                                      | Value                    |
+| --------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `ingress.enabled`     | Set to true to enable ingress record generation                                                                                  | `false`                  |
+| `ingress.apiVersion`  | Override API Version (automatically detected if not set)                                                                         | `""`                     |
+| `ingress.pathType`    | Ingress Path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.annotations` | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.hosts`       | The list of hostnames to be covered with this ingress record.                                                                    | `[]`                     |
+| `ingress.secrets`     | If you're providing your own certificates, use this to add the certificates as secrets                                           | `[]`                     |
 
 
 ### Airflow database parameters
@@ -336,24 +344,27 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Airflow metrics parameters
 
-| Name                                   | Description                                                 | Value                         |
-| -------------------------------------- | ----------------------------------------------------------- | ----------------------------- |
-| `metrics.enabled`                      | Start a side-car prometheus exporter                        | `false`                       |
-| `metrics.image.registry`               | Airflow Exporter image registry                             | `docker.io`                   |
-| `metrics.image.repository`             | Airflow Exporter image repository                           | `bitnami/airflow-exporter`    |
-| `metrics.image.tag`                    | Airflow Exporter image tag (immutable tags are recommended) | `0.20210126.0-debian-10-r153` |
-| `metrics.image.pullPolicy`             | Airflow Exporter image pull policy                          | `IfNotPresent`                |
-| `metrics.image.pullSecrets`            | Airflow Exporter image pull secrets                         | `[]`                          |
-| `metrics.hostAliases`                  | Deployment pod host aliases                                 | `[]`                          |
-| `metrics.serviceMonitor.enabled`       | Create ServiceMonitor resource                              | `false`                       |
-| `metrics.serviceMonitor.namespace`     | The namespace in which the ServiceMonitor will be created   | `""`                          |
-| `metrics.serviceMonitor.interval`      | Interval in which prometheus scrapes                        | `60s`                         |
-| `metrics.serviceMonitor.scrapeTimeout` | Scrape Timeout duration for prometheus                      | `10s`                         |
-| `metrics.serviceMonitor.labels`        | Additional labels to attach                                 | `{}`                          |
-| `metrics.resources`                    | Metrics exporter resource requests and limits               | `{}`                          |
-| `metrics.tolerations`                  | Metrics exporter labels and tolerations for pod assignment  | `[]`                          |
-| `metrics.podLabels`                    | Metrics exporter pod Annotation and Labels                  | `{}`                          |
-| `metrics.nodeSelector`                 | Node labels for pod assignment                              | `{}`                          |
+| Name                                   | Description                                                               | Value                         |
+| -------------------------------------- | ------------------------------------------------------------------------- | ----------------------------- |
+| `metrics.enabled`                      | Start a side-car prometheus exporter                                      | `false`                       |
+| `metrics.image.registry`               | Airflow Exporter image registry                                           | `docker.io`                   |
+| `metrics.image.repository`             | Airflow Exporter image repository                                         | `bitnami/airflow-exporter`    |
+| `metrics.image.tag`                    | Airflow Exporter image tag (immutable tags are recommended)               | `0.20210126.0-debian-10-r257` |
+| `metrics.image.pullPolicy`             | Airflow Exporter image pull policy                                        | `IfNotPresent`                |
+| `metrics.image.pullSecrets`            | Airflow Exporter image pull secrets                                       | `[]`                          |
+| `metrics.hostAliases`                  | Deployment pod host aliases                                               | `[]`                          |
+| `metrics.serviceMonitor.enabled`       | Create ServiceMonitor resource                                            | `false`                       |
+| `metrics.serviceMonitor.namespace`     | The namespace in which the ServiceMonitor will be created                 | `""`                          |
+| `metrics.serviceMonitor.interval`      | Interval in which prometheus scrapes                                      | `60s`                         |
+| `metrics.serviceMonitor.scrapeTimeout` | Scrape Timeout duration for prometheus                                    | `10s`                         |
+| `metrics.serviceMonitor.labels`        | Additional labels to attach                                               | `{}`                          |
+| `metrics.extraEnvVars`                 | Array containing extra environment variables                              | `[]`                          |
+| `metrics.extraEnvVarsCM`               | ConfigMap containing extra environment variables                          | `""`                          |
+| `metrics.extraEnvVarsSecret`           | Secret containing extra environment variables (in case of sensitive data) | `""`                          |
+| `metrics.resources`                    | Metrics exporter resource requests and limits                             | `{}`                          |
+| `metrics.tolerations`                  | Metrics exporter labels and tolerations for pod assignment                | `[]`                          |
+| `metrics.podLabels`                    | Metrics exporter pod Annotation and Labels                                | `{}`                          |
+| `metrics.nodeSelector`                 | Node labels for pod assignment                                            | `{}`                          |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
@@ -363,6 +374,7 @@ $ helm install my-release \
                --set auth.username=my-user \
                --set auth.password=my-passsword \
                --set auth.fernetKey=my-fernet-key \
+               --set auth.secretKey=my-secret-key \
                bitnami/airflow
 ```
 
@@ -390,7 +402,11 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 A Fernet key is required in order to encrypt password within connections. The Fernet key must be a base64-encoded 32-byte key.
 
-Learn how to generate one [here](https://bcb.github.io/airflow/fernet-key)
+Learn how to generate one [here](https://airflow.apache.org/docs/apache-airflow/stable/security/secrets/fernet.html#generating-fernet-key)
+
+### Generate a Secret key
+
+Secret key used to run your flask app. It should be as random as possible. However, when running more than 1 instances of webserver, make sure all of them use the same secret_key otherwise one of them will error with “CSRF session token is missing”.
 
 ### Load DAG files
 
@@ -457,6 +473,7 @@ type: Opaque
 data:
   airflow-password: "Smo1QTJLdGxXMg=="
   airflow-fernetKey: "YVRZeVJVWnlXbU4wY1dOalVrdE1SV3cxWWtKeFIzWkVRVTVrVjNaTFR6WT0="
+  airflow-secretKey: "a25mQ1FHTUh3MnFRSk5KMEIyVVU2YmN0VGRyYTVXY08="
   postgresql-password: "cG9zdGdyZXMK"
   redis-password: "cmVkaXMK"
 ```
@@ -598,7 +615,8 @@ $ helm install airflow bitnami/airflow \
 
 ```console
 $ export AIRFLOW_PASSWORD=$(kubectl get secret --namespace default airflow -o jsonpath="{.data.airflow-password}" | base64 --decode)
-$ export AIRFLOW_FERNETKEY=$(kubectl get secret --namespace default airflow -o jsonpath="{.data.airflow-fernetKey}" | base64 --decode)
+$ export AIRFLOW_FERNET_KEY=$(kubectl get secret --namespace default airflow -o jsonpath="{.data.airflow-fernetKey}" | base64 --decode)
+$ export AIRFLOW_SECRET_KEY=$(kubectl get secret --namespace default airflow -o jsonpath="{.data.airflow-secretKey}" | base64 --decode)
 $ export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default airflow-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
 $ export REDIS_PASSWORD=$(kubectl get secret --namespace default airflow-redis -o jsonpath="{.data.redis-password}" | base64 --decode)
 $ export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=airflow,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
@@ -624,7 +642,8 @@ $ helm upgrade airflow bitnami/airflow \
     --set loadExamples=true \
     --set web.baseUrl=http://127.0.0.1:8080 \
     --set auth.password=$AIRFLOW_PASSWORD \
-    --set auth.fernetKey=$AIRFLOW_FERNETKEY \
+    --set auth.fernetKey=$AIRFLOW_FERNET_KEY \
+    --set auth.secretKey=$AIRFLOW_SECRET_KEY \
     --set postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD \
     --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC \
     --set redis.password=$REDIS_PASSWORD \
@@ -642,6 +661,10 @@ $ kubectl delete pod airflow-postgresql-0
 - https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
 - https://helm.sh/docs/topics/v2_v3_migration/
 - https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
+
+### To 11.0.0
+
+This major update the Redis&trade; subchart to its newest major, 15.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1500) you can find more info about the specific changes.
 
 ### To 6.5.0
 

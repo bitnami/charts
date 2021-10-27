@@ -76,7 +76,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------- | ---------------------------------------------------------------------- | ----------------------- |
 | `image.registry`        | JasperReports image registry                                           | `docker.io`             |
 | `image.repository`      | JasperReports image repository                                         | `bitnami/jasperreports` |
-| `image.tag`             | JasperReports image tag (immutable tags are recommended)               | `7.8.0-debian-10-r281`  |
+| `image.tag`             | JasperReports image tag (immutable tags are recommended)               | `7.8.0-debian-10-r367`  |
 | `image.pullPolicy`      | JasperReports image pull policy                                        | `IfNotPresent`          |
 | `image.pullSecrets`     | Specify docker-registry secret names as an array                       | `[]`                    |
 | `jasperreportsUsername` | JasperReports user                                                     | `jasperadmin`           |
@@ -142,33 +142,32 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sidecars`                           | Add additional sidecar containers to the Jasperreports pods                               | `[]`                       |
 | `persistence.enabled`                | Enable persistence using PVC                                                              | `true`                     |
 | `persistence.storageClass`           | PVC Storage Class for Jasperreports volume                                                | `""`                       |
-| `persistence.accessModes`            | Persistent Volume Access Mode                                                             | `[]`                       |
+| `persistence.accessModes`            | Persistent Volume Access Mode                                                             | `["ReadWriteOnce"]`        |
 | `persistence.size`                   | PVC Storage Request for Jasperreports volume                                              | `8Gi`                      |
 | `persistence.existingClaim`          | An Existing PVC name for Jasperreports volume                                             | `""`                       |
 
 
 ### Exposure parameters
 
-| Name                            | Description                                                                                   | Value                    |
-| ------------------------------- | --------------------------------------------------------------------------------------------- | ------------------------ |
-| `service.type`                  | Kubernetes Service type                                                                       | `LoadBalancer`           |
-| `service.port`                  | Service HTTP port                                                                             | `80`                     |
-| `service.nodePort`              | Kubernetes http node port                                                                     | `""`                     |
-| `service.loadBalancerIP`        | Kubernetes LoadBalancerIP to request                                                          | `""`                     |
-| `service.externalTrafficPolicy` | Enable client source IP preservation                                                          | `Cluster`                |
-| `service.annotations`           | Annotations for Jasperreports service                                                         | `{}`                     |
-| `ingress.enabled`               | Enable ingress controller resource                                                            | `false`                  |
-| `ingress.certManager`           | Add annotations for cert-manager                                                              | `false`                  |
-| `ingress.pathType`              | Ingress path type                                                                             | `ImplementationSpecific` |
-| `ingress.apiVersion`            | Force Ingress API version (automatically detected if not set)                                 | `""`                     |
-| `ingress.hostname`              | Default host for the ingress resource                                                         | `jasperreports.local`    |
-| `ingress.path`                  | Ingress path                                                                                  | `ImplementationSpecific` |
-| `ingress.annotations`           | Ingress annotations                                                                           | `{}`                     |
-| `ingress.tls`                   | Enable TLS configuration for the hostname defined at ingress.hostname parameter               | `false`                  |
-| `ingress.extraHosts`            | The list of additional hostnames to be covered with this ingress record.                      | `[]`                     |
-| `ingress.extraPaths`            | Any additional arbitrary paths that may need to be added to the ingress under the main host.  | `[]`                     |
-| `ingress.extraTls`              | The tls configuration for additional hostnames to be covered with this ingress record.        | `[]`                     |
-| `ingress.secrets`               | If you're providing your own certificates, please use this to add the certificates as secrets | `[]`                     |
+| Name                            | Description                                                                                                                      | Value                    |
+| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.type`                  | Kubernetes Service type                                                                                                          | `LoadBalancer`           |
+| `service.port`                  | Service HTTP port                                                                                                                | `80`                     |
+| `service.nodePort`              | Kubernetes http node port                                                                                                        | `""`                     |
+| `service.loadBalancerIP`        | Kubernetes LoadBalancerIP to request                                                                                             | `""`                     |
+| `service.externalTrafficPolicy` | Enable client source IP preservation                                                                                             | `Cluster`                |
+| `service.annotations`           | Annotations for Jasperreports service                                                                                            | `{}`                     |
+| `ingress.enabled`               | Enable ingress controller resource                                                                                               | `false`                  |
+| `ingress.pathType`              | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.apiVersion`            | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
+| `ingress.hostname`              | Default host for the ingress resource                                                                                            | `jasperreports.local`    |
+| `ingress.path`                  | Ingress path                                                                                                                     | `/`                      |
+| `ingress.annotations`           | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.tls`                   | Enable TLS configuration for the hostname defined at ingress.hostname parameter                                                  | `false`                  |
+| `ingress.extraHosts`            | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
+| `ingress.extraPaths`            | Any additional arbitrary paths that may need to be added to the ingress under the main host.                                     | `[]`                     |
+| `ingress.extraTls`              | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
+| `ingress.secrets`               | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
 
 
 ### Database parameters
@@ -183,7 +182,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `mariadb.auth.password`                     | Password for the database                            | `""`                    |
 | `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                | `true`                  |
 | `mariadb.primary.persistence.storageClass`  | PVC Storage Class                                    | `""`                    |
-| `mariadb.primary.persistence.accessModes`   | Access mode of persistent volume                     | `[]`                    |
+| `mariadb.primary.persistence.accessModes`   | Access mode of persistent volume                     | `["ReadWriteOnce"]`     |
 | `mariadb.primary.persistence.size`          | Database Persistent Volume Size                      | `8Gi`                   |
 | `mariadb.primary.persistence.hostPath`      | Host mount path for MariaDB volume                   | `""`                    |
 | `mariadb.primary.persistence.existingClaim` | Enable persistence using an existing PVC             | `""`                    |

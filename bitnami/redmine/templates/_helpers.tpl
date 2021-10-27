@@ -106,6 +106,19 @@ Return the database host for Redmine
 {{- end -}}
 
 {{/*
+Return the database port for Redmine
+*/}}
+{{- define "redmine.database.port" -}}
+{{- if and (eq .Values.databaseType "mariadb") (.Values.mariadb.enabled) -}}
+    {{- printf "3306" -}}
+{{- else if and (eq .Values.databaseType "postgresql") (.Values.postgresql.enabled) -}}
+    {{- printf "5432" -}}
+{{- else }}
+    {{- .Values.externalDatabase.port }}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the database name for Redmine
 */}}
 {{- define "redmine.database.name" -}}
@@ -153,5 +166,15 @@ Return the name of the database secret with its credentials
     {{- else -}}
         {{- printf "%s-%s" (include "common.names.fullname" .) "externaldb" -}}
     {{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return true if cert-manager required annotations for TLS signed certificates are set in the Ingress annotations
+Ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
+*/}}
+{{- define "redmine.ingress.certManagerRequest" -}}
+{{ if or (hasKey . "cert-manager.io/cluster-issuer") (hasKey . "cert-manager.io/issuer") }}
+    {{- true -}}
 {{- end -}}
 {{- end -}}

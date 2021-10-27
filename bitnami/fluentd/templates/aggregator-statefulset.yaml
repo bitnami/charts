@@ -62,6 +62,9 @@ spec:
         - name: fluentd
           image: {{ include "fluentd.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.aggregator.lifecycle }}
+          lifecycle: {{- include "common.tplvalues.render" ( dict "value" .Values.aggregator.lifecycle "context" $ ) | nindent 12 }}
+          {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
@@ -161,8 +164,9 @@ spec:
           emptyDir: {}
         {{- end }}
 
-  {{- if .Values.aggregator.persistence.enabled }}
+  {{- if or .Values.aggregator.persistence.enabled .Values.aggregator.extraVolumeClaimTemplates }}
   volumeClaimTemplates:
+    {{- if or .Values.aggregator.persistence.enabled }}
     - metadata:
         name: {{ include "common.names.fullname" . }}-buffer
       spec:
@@ -171,5 +175,9 @@ spec:
           requests:
             storage: {{ .Values.aggregator.persistence.size }}
         {{- include "common.storage.class" (dict "persistence" .Values.aggregator.persistence "global" .Values.global) | nindent 8 }}
+    {{- end }}
+    {{- if .Values.aggregator.extraVolumeClaimTemplates }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.aggregator.extraVolumeClaimTemplates "context" $) | nindent 4 }}
+    {{- end }}
   {{- end }}
 {{- end -}}

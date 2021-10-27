@@ -12,11 +12,11 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
   {{- if .Values.deployment.updateStrategy }}
   strategy: {{- toYaml .Values.deployment.updateStrategy | nindent 4 }}
   {{- end }}
-  selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
   template:
     metadata:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
@@ -51,6 +51,12 @@ spec:
       {{- end }}
       {{- if .Values.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.topologySpreadConstraints "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.priorityClassName }}
+      priorityClassName: {{ .Values.priorityClassName | quote }}
       {{- end }}
       {{- if .Values.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
@@ -100,26 +106,26 @@ spec:
             - name: MINIO_SCHEME
               value: {{ ternary "https" "http" .Values.tls.enabled | quote }}
             - name: MINIO_FORCE_NEW_KEYS
-              value: {{ ternary "yes" "no" .Values.forceNewKeys | quote }}
-            {{- if .Values.useCredentialsFile }}
-            - name: MINIO_ACCESS_KEY_FILE
-              value: "/opt/bitnami/minio/secrets/access-key"
+              value: {{ ternary "yes" "no" .Values.auth.forceNewKeys | quote }}
+            {{- if .Values.auth.useCredentialsFiles }}
+            - name: MINIO_ROOT_USER_FILE
+              value: "/opt/bitnami/minio/secrets/root-user"
             {{- else }}
-            - name: MINIO_ACCESS_KEY
+            - name: MINIO_ROOT_USER
               valueFrom:
                 secretKeyRef:
                   name: {{ include "minio.secretName" . }}
-                  key: access-key
+                  key: root-user
             {{- end }}
-            {{- if .Values.useCredentialsFile }}
-            - name: MINIO_SECRET_KEY_FILE
-              value: "/opt/bitnami/minio/secrets/secret-key"
+            {{- if .Values.auth.useCredentialsFiles }}
+            - name: MINIO_ROOT_PASSWORD_FILE
+              value: "/opt/bitnami/minio/secrets/root-password"
             {{- else }}
-            - name: MINIO_SECRET_KEY
+            - name: MINIO_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "minio.secretName" . }}
-                  key: secret-key
+                  key: root-password
             {{- end }}
             {{- if .Values.defaultBuckets }}
             - name: MINIO_DEFAULT_BUCKETS
@@ -129,12 +135,14 @@ spec:
               value: {{ ternary "off" "on" .Values.disableWebUI | quote }}
             - name: MINIO_PROMETHEUS_AUTH_TYPE
               value: {{ .Values.metrics.prometheusAuthType | quote }}
+            - name: MINIO_CONSOLE_PORT_NUMBER
+              value: {{ .Values.containerPorts.console | quote }}
             {{- if .Values.tls.mountPath }}
             - name: MINIO_CERTSDIR
               value: {{ .Values.tls.mountPath | quote }}
             {{- end }}
-            {{- if .Values.extraEnv }}
-            {{- include "common.tplvalues.render" (dict "value" .Values.extraEnv "context" $) | nindent 12 }}
+            {{- if .Values.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
           envFrom:
             {{- if .Values.extraEnvVarsCM }}
@@ -146,14 +154,17 @@ spec:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.extraEnvVarsSecret "context" $) }}
             {{- end }}
           ports:
-            - name: minio
-              containerPort: {{ .Values.containerPort }}
+            - name: minio-api
+              containerPort: {{ .Values.containerPorts.api }}
+              protocol: TCP
+            - name: minio-console
+              containerPort: {{ .Values.containerPorts.console }}
               protocol: TCP
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
               path: /minio/health/live
-              port: minio
+              port: minio-api
               scheme: {{ ternary "HTTPS" "HTTP" .Values.tls.enabled | quote }}
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
@@ -166,7 +177,7 @@ spec:
           {{- if .Values.readinessProbe.enabled }}
           readinessProbe:
             tcpSocket:
-              port: minio
+              port: minio-api
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
@@ -178,7 +189,7 @@ spec:
           {{- if .Values.startupProbe.enabled }}
           startupProbe:
             tcpSocket:
-              port: minio
+              port: minio-console
             initialDelaySeconds: {{ .Values.startupProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.startupProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.startupProbe.timeoutSeconds }}
@@ -190,8 +201,11 @@ spec:
           {{- if .Values.resources }}
           resources: {{- toYaml .Values.resources | nindent 12 }}
           {{- end }}
+          {{- if .Values.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
           volumeMounts:
-            {{- if .Values.useCredentialsFile }}
+            {{- if .Values.auth.useCredentialsFiles }}
             - name: minio-credentials
               mountPath: /opt/bitnami/minio/secrets/
             {{- end }}
@@ -208,7 +222,7 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
-        {{- if .Values.useCredentialsFile }}
+        {{- if .Values.auth.useCredentialsFiles }}
         - name: minio-credentials
           secret:
             secretName: {{ include "minio.secretName" . }}

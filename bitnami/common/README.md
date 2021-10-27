@@ -50,17 +50,18 @@ The following table lists the helpers available in the library which are scoped 
 
 ### Capabilities
 
-| Helper identifier                            | Description                                                                                    | Expected Input    |
-|----------------------------------------------|------------------------------------------------------------------------------------------------|-------------------|
-| `common.capabilities.kubeVersion`            | Return the target Kubernetes version (using client default if .Values.kubeVersion is not set). | `.` Chart context |
-| `common.capabilities.cronjob.apiVersion`     | Return the appropriate apiVersion for cronjob.                                                 | `.` Chart context |
-| `common.capabilities.deployment.apiVersion`  | Return the appropriate apiVersion for deployment.                                              | `.` Chart context |
-| `common.capabilities.statefulset.apiVersion` | Return the appropriate apiVersion for statefulset.                                             | `.` Chart context |
-| `common.capabilities.ingress.apiVersion`     | Return the appropriate apiVersion for ingress.                                                 | `.` Chart context |
-| `common.capabilities.rbac.apiVersion`        | Return the appropriate apiVersion for RBAC resources.                                          | `.` Chart context |
-| `common.capabilities.crd.apiVersion`         | Return the appropriate apiVersion for CRDs.                                                    | `.` Chart context |
-| `common.capabilities.policy.apiVersion`      | Return the appropriate apiVersion for policy                                                   | `.` Chart context |
-| `common.capabilities.supportsHelmVersion`    | Returns true if the used Helm version is 3.3+                                                  | `.` Chart context |
+| Helper identifier                              | Description                                                                                    | Expected Input    |
+|------------------------------------------------|------------------------------------------------------------------------------------------------|-------------------|
+| `common.capabilities.kubeVersion`              | Return the target Kubernetes version (using client default if .Values.kubeVersion is not set). | `.` Chart context |
+| `common.capabilities.cronjob.apiVersion`       | Return the appropriate apiVersion for cronjob.                                                 | `.` Chart context |
+| `common.capabilities.deployment.apiVersion`    | Return the appropriate apiVersion for deployment.                                              | `.` Chart context |
+| `common.capabilities.statefulset.apiVersion`   | Return the appropriate apiVersion for statefulset.                                             | `.` Chart context |
+| `common.capabilities.ingress.apiVersion`       | Return the appropriate apiVersion for ingress.                                                 | `.` Chart context |
+| `common.capabilities.rbac.apiVersion`          | Return the appropriate apiVersion for RBAC resources.                                          | `.` Chart context |
+| `common.capabilities.crd.apiVersion`           | Return the appropriate apiVersion for CRDs.                                                    | `.` Chart context |
+| `common.capabilities.policy.apiVersion`        | Return the appropriate apiVersion for podsecuritypolicy.                                       | `.` Chart context |
+| `common.capabilities.networkPolicy.apiVersion` | Return the appropriate apiVersion for networkpolicy.                                           | `.` Chart context |
+| `common.capabilities.supportsHelmVersion`      | Returns true if the used Helm version is 3.3+                                                  | `.` Chart context |
 
 ### Errors
 
@@ -93,7 +94,7 @@ The following table lists the helpers available in the library which are scoped 
 
 ### Names
 
-| Helper identifier       | Description                                                | Expected Inpput   |
+| Helper identifier       | Description                                                | Expected Input   |
 |-------------------------|------------------------------------------------------------|-------------------|
 | `common.names.name`     | Expand the name of the chart or use `.Values.nameOverride` | `.` Chart context |
 | `common.names.fullname` | Create a default fully qualified app name.                 | `.` Chart context |
@@ -112,7 +113,7 @@ The following table lists the helpers available in the library which are scoped 
 
 | Helper identifier             | Description                           | Expected Input                                                                                                      |
 |-------------------------------|---------------------------------------|---------------------------------------------------------------------------------------------------------------------|
-| `common.affinities.node.soft` | Return a soft nodeAffinity definition | `dict "persistence" .Values.path.to.the.persistence "global" $`, see [Persistence](#persistence) for the structure. |
+| `common.storage.class` | Return  the proper Storage Class | `dict "persistence" .Values.path.to.the.persistence "global" $`, see [Persistence](#persistence) for the structure. |
 
 ### TplValues
 

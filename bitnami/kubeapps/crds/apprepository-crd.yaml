@@ -28,7 +28,7 @@ spec:
               properties:
                 type:
                   type: string
-                  enum: [ "helm", "oci" ]
+                  enum: ["helm", "oci"]
                 url:
                   type: string
                 description:

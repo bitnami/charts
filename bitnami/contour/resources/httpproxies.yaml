@@ -2,7 +2,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.5.0
+    controller-gen.kubebuilder.io/version: v0.6.0
   creationTimestamp: null
   name: httpproxies.projectcontour.io
 spec:
@@ -218,6 +218,64 @@ spec:
                           prefix:
                             description: Prefix defines a prefix match for a request.
                             type: string
+                        type: object
+                      type: array
+                    cookieRewritePolicies:
+                      description: The policies for rewriting Set-Cookie header attributes.
+                        Note that rewritten cookie names must be unique in this list.
+                        Order rewrite policies are specified in does not matter.
+                      items:
+                        properties:
+                          domainRewrite:
+                            description: DomainRewrite enables rewriting the Set-Cookie
+                              Domain element. If not set, Domain will not be rewritten.
+                            properties:
+                              value:
+                                description: Value is the value to rewrite the Domain
+                                  attribute to. For now this is required.
+                                maxLength: 4096
+                                minLength: 1
+                                pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
+                                type: string
+                            required:
+                            - value
+                            type: object
+                          name:
+                            description: Name is the name of the cookie for which
+                              attributes will be rewritten.
+                            maxLength: 4096
+                            minLength: 1
+                            pattern: ^[^()<>@,;:\\"\/[\]?={} \t\x7f\x00\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1a\x1b\x1c\x1d\x1e\x1f]+$
+                            type: string
+                          pathRewrite:
+                            description: PathRewrite enables rewriting the Set-Cookie
+                              Path element. If not set, Path will not be rewritten.
+                            properties:
+                              value:
+                                description: Value is the value to rewrite the Path
+                                  attribute to. For now this is required.
+                                maxLength: 4096
+                                minLength: 1
+                                pattern: ^[^;\x7f\x00\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1a\x1b\x1c\x1d\x1e\x1f]+$
+                                type: string
+                            required:
+                            - value
+                            type: object
+                          sameSite:
+                            description: SameSite enables rewriting the Set-Cookie
+                              SameSite element. If not set, SameSite attribute will
+                              not be rewritten.
+                            enum:
+                            - Strict
+                            - Lax
+                            - None
+                            type: string
+                          secure:
+                            description: Secure enables rewriting the Set-Cookie Secure
+                              element. If not set, Secure attribute will not be rewritten.
+                            type: boolean
+                        required:
+                        - name
                         type: object
                       type: array
                     enableWebsockets:
@@ -693,6 +751,65 @@ spec:
                         description: Service defines an Kubernetes Service to proxy
                           traffic.
                         properties:
+                          cookieRewritePolicies:
+                            description: The policies for rewriting Set-Cookie header
+                              attributes.
+                            items:
+                              properties:
+                                domainRewrite:
+                                  description: DomainRewrite enables rewriting the
+                                    Set-Cookie Domain element. If not set, Domain
+                                    will not be rewritten.
+                                  properties:
+                                    value:
+                                      description: Value is the value to rewrite the
+                                        Domain attribute to. For now this is required.
+                                      maxLength: 4096
+                                      minLength: 1
+                                      pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
+                                      type: string
+                                  required:
+                                  - value
+                                  type: object
+                                name:
+                                  description: Name is the name of the cookie for
+                                    which attributes will be rewritten.
+                                  maxLength: 4096
+                                  minLength: 1
+                                  pattern: ^[^()<>@,;:\\"\/[\]?={} \t\x7f\x00\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1a\x1b\x1c\x1d\x1e\x1f]+$
+                                  type: string
+                                pathRewrite:
+                                  description: PathRewrite enables rewriting the Set-Cookie
+                                    Path element. If not set, Path will not be rewritten.
+                                  properties:
+                                    value:
+                                      description: Value is the value to rewrite the
+                                        Path attribute to. For now this is required.
+                                      maxLength: 4096
+                                      minLength: 1
+                                      pattern: ^[^;\x7f\x00\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1a\x1b\x1c\x1d\x1e\x1f]+$
+                                      type: string
+                                  required:
+                                  - value
+                                  type: object
+                                sameSite:
+                                  description: SameSite enables rewriting the Set-Cookie
+                                    SameSite element. If not set, SameSite attribute
+                                    will not be rewritten.
+                                  enum:
+                                  - Strict
+                                  - Lax
+                                  - None
+                                  type: string
+                                secure:
+                                  description: Secure enables rewriting the Set-Cookie
+                                    Secure element. If not set, Secure attribute will
+                                    not be rewritten.
+                                  type: boolean
+                              required:
+                              - name
+                              type: object
+                            type: array
                           mirror:
                             description: If Mirror is true the Service will receive
                               a read only mirror of the traffic for this route.
@@ -822,11 +939,12 @@ spec:
                       description: The timeout policy for this route.
                       properties:
                         idle:
-                          description: Timeout after which, if there are no active
-                            requests for this route, the connection between Envoy
-                            and the backend or Envoy and the external client will
-                            be closed. If not specified, there is no per-route idle
-                            timeout, though a connection manager-wide stream_idle_timeout
+                          description: Timeout for how long the proxy should wait
+                            while there is no activity during single request/response
+                            (for HTTP/1.1) or stream (for HTTP/2). Timeout will not
+                            trigger while HTTP/1.1 connection is idle between two
+                            consecutive requests. If not specified, there is no per-route
+                            idle timeout, though a connection manager-wide stream_idle_timeout
                             default of 5m still applies.
                           pattern: ^(((\d*(\.\d*)?h)|(\d*(\.\d*)?m)|(\d*(\.\d*)?s)|(\d*(\.\d*)?ms)|(\d*(\.\d*)?us)|(\d*(\.\d*)?µs)|(\d*(\.\d*)?ns))+|infinity|infinite)$
                           type: string
@@ -952,6 +1070,64 @@ spec:
                       description: Service defines an Kubernetes Service to proxy
                         traffic.
                       properties:
+                        cookieRewritePolicies:
+                          description: The policies for rewriting Set-Cookie header
+                            attributes.
+                          items:
+                            properties:
+                              domainRewrite:
+                                description: DomainRewrite enables rewriting the Set-Cookie
+                                  Domain element. If not set, Domain will not be rewritten.
+                                properties:
+                                  value:
+                                    description: Value is the value to rewrite the
+                                      Domain attribute to. For now this is required.
+                                    maxLength: 4096
+                                    minLength: 1
+                                    pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
+                                    type: string
+                                required:
+                                - value
+                                type: object
+                              name:
+                                description: Name is the name of the cookie for which
+                                  attributes will be rewritten.
+                                maxLength: 4096
+                                minLength: 1
+                                pattern: ^[^()<>@,;:\\"\/[\]?={} \t\x7f\x00\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1a\x1b\x1c\x1d\x1e\x1f]+$
+                                type: string
+                              pathRewrite:
+                                description: PathRewrite enables rewriting the Set-Cookie
+                                  Path element. If not set, Path will not be rewritten.
+                                properties:
+                                  value:
+                                    description: Value is the value to rewrite the
+                                      Path attribute to. For now this is required.
+                                    maxLength: 4096
+                                    minLength: 1
+                                    pattern: ^[^;\x7f\x00\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1a\x1b\x1c\x1d\x1e\x1f]+$
+                                    type: string
+                                required:
+                                - value
+                                type: object
+                              sameSite:
+                                description: SameSite enables rewriting the Set-Cookie
+                                  SameSite element. If not set, SameSite attribute
+                                  will not be rewritten.
+                                enum:
+                                - Strict
+                                - Lax
+                                - None
+                                type: string
+                              secure:
+                                description: Secure enables rewriting the Set-Cookie
+                                  Secure element. If not set, Secure attribute will
+                                  not be rewritten.
+                                type: boolean
+                            required:
+                            - name
+                            type: object
+                          type: array
                         mirror:
                           description: If Mirror is true the Service will receive
                             a read only mirror of the traffic for this route.
@@ -1203,6 +1379,7 @@ spec:
                     description: The fully qualified domain name of the root of the
                       ingress tree all leaves of the DAG rooted at this object relate
                       to the fqdn.
+                    pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
                     type: string
                   rateLimitPolicy:
                     description: The policy for rate limiting on the virtual host.

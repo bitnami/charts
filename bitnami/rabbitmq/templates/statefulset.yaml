@@ -212,8 +212,10 @@ spec:
             {{- end }}
           {{- end }}
           ports:
+            {{- if or (.Values.service.portEnabled) (not .Values.auth.tls.enabled) }}
             - name: amqp
               containerPort: 5672
+            {{- end }}
             {{- if .Values.auth.tls.enabled }}
             - name: amqp-ssl
               containerPort: {{ .Values.service.tlsPort }}
@@ -363,6 +365,10 @@ spec:
     - metadata:
         name: data
         labels: {{- include "common.labels.matchLabels" . | nindent 10 }}
+        {{- if .Values.persistence.annotations }}
+        annotations:
+          {{- include "common.tplvalues.render" ( dict "value" .Values.persistence.annotations "context" $) | nindent 10 }}
+        {{- end }}
       spec:
         accessModes:
           - {{ .Values.persistence.accessMode | quote }}

@@ -46,7 +46,7 @@ operator:
   ## @param operator.replicaCount Number of grafana-operator Pod replicas
   ##
   replicaCount: 1
-  ## @param operator.updateStrategy.type Set up update strategy for Grafana installation.
+  ## @param operator.updateStrategy.type Set up update strategy for Grafana Operator installation.
   ## Set to Recreate if you use persistent volume that cannot be mounted by more than one pods to make sure the pods is destroyed first.
   ## Ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
   ## Example:
@@ -67,7 +67,7 @@ operator:
   image:
     registry: docker.io
     repository: bitnami/grafana-operator
-    tag: 3.10.3-debian-10-r9
+    tag: 3.10.4-debian-10-r6
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## Ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -261,7 +261,7 @@ grafana:
   image:
     registry: docker.io
     repository: bitnami/grafana
-    tag: 7.5.10-debian-10-r16
+    tag: 8.2.2-debian-10-r5
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -393,6 +393,9 @@ grafana:
   client:
     timeout: 5
     preferService: true
+  ## @param grafana.labels Add additional labels to the grafana deployment, service and ingress resources
+  ##
+  labels: {}
   ## Configure the ingress resource that allows you to access the
   ## Grafana web. Set up the URL
   ## Ref: http://kubernetes.io/docs/user-guide/ingress/
@@ -402,6 +405,11 @@ grafana:
     ## @param grafana.ingress.enabled If an ingress or OpenShift Route should be created
     ##
     enabled: false
+    ## @param grafana.ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+    ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster.
+    ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+    ##
+    ingressClassName: ""
     ## @param grafana.ingress.hostname The hostname under which the grafana instance should be reachable
     ##
     hostname: grafana.local
@@ -432,6 +440,9 @@ grafana:
   ##
   persistence:
     ## @param grafana.persistence.enabled Enable persistent storage for the grafana deployment
+    ## NOTE: In order to avoid deployment failure due to multi-attach of the same volume,
+    ## you might also want to set `grafana.updateStrategy` to Recreate.
+    ## More information can be found here: https://github.com/grafana-operator/grafana-operator/issues/453
     ##
     enabled: false
     ## @param grafana.persistence.storageClass Define the storageClass for the persistent storage if not defined default is used
@@ -512,14 +523,14 @@ grafana:
   ##
   jsonnetLibrarySelector:
     matchLabels:
-      app.kubernetes.io/instance: '{{ .Release.Name }}'
+      app.kubernetes.io/instance: "{{ .Release.Name }}"
   ## @param grafana.dashboardLabelSelectors [object] This selects dashboards on the label.
   ## A cachall is not possible so you need to define at least one label selector here.
   ## Ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/deploy_grafana.md#deploying-grafana
   ##
   dashboardLabelSelectors:
     - matchLabels:
-        app.kubernetes.io/instance: '{{ .Release.Name }}'
+        app.kubernetes.io/instance: "{{ .Release.Name }}"
   ## Grafana containers' liveness probe
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ## @param grafana.livenessProbe.enabled Enable livenessProbe
@@ -552,6 +563,17 @@ grafana:
     timeoutSeconds: 5
     failureThreshold: 6
     successThreshold: 1
+  ## @param grafana.updateStrategy Set up update strategy for Grafana installation.
+  ## Set to Recreate if you use persistent volume that cannot be mounted by more than one pods to make sure the pods is destroyed first.
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+  ## Example:
+  ## updateStrategy:
+  ##  type: RollingUpdate
+  ##  rollingUpdate:
+  ##    maxSurge: 25%
+  ##    maxUnavailable: 25%
+  ##
+  updateStrategy: {}
   ## @param grafana.extraVolumes Optionally specify extra list of additional volumes for the grafana pod(s)
   ##
   extraVolumes: []

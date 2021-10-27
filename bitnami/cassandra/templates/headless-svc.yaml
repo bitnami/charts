@@ -30,11 +30,6 @@ spec:
       port: 7199
       targetPort: jmx
     - name: cql
-      port: {{ .Values.service.port }}
+      port: {{ .Values.service.ports.cql }}
       targetPort: cql
-    {{- if .Values.cluster.enableRPC }}
-    - name: thrift
-      port: {{ .Values.service.thriftPort }}
-      targetPort: thrift
-    {{- end }}
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}

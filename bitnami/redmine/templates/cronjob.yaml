@@ -84,6 +84,8 @@ spec:
                 {{- end }}
               resources: {{- toYaml .Values.mailReceiver.resources | nindent 16 }}
               env:
+                - name: REDMINE_DATABASE_TYPE
+                  value: {{ .Values.databaseType | quote }}
                 {{- if eq .Values.databaseType "mariadb" }}
                 - name: REDMINE_MAIL_RECEIVER_DB_MYSQL
                 {{- else }}

@@ -2,6 +2,7 @@
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
 ## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
@@ -44,6 +45,7 @@ global:
     existingSecret: ""
 
 ## @section General parameters
+##
 
 ## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
 ##
@@ -65,6 +67,7 @@ commonLabels: {}
 extraDeploy: []
 ## Pod Service Account
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+##
 serviceAccount:
   ## @param serviceAccount.enabled Enable service account (Note: Service Account will only be automatically created if `serviceAccount.name` is not set)
   ##
@@ -72,6 +75,22 @@ serviceAccount:
   ## @param serviceAccount.name Name of an already existing service account. Setting this value disables the automatic service account creation
   ##
   name: ""
+## Pod Security Policy
+## ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/
+## @param psp.create Create Pod Security Policy
+##
+psp:
+  create: false
+## Creates role for ServiceAccount
+## Required for PSP
+## @param rbac.create Create Role and RoleBinding (required for PSP to work)
+##
+rbac:
+  create: false
+## @param topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
+## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+##
+topologySpreadConstraints: {}
 
 ## Diagnostic mode in the deployment
 ##
@@ -89,6 +108,7 @@ diagnosticMode:
     - infinity
 
 ## @section PostgreSQL with Repmgr parameters
+##
 
 ## Bitnami PostgreSQL image
 ## ref: https://hub.docker.com/r/bitnami/postgresql/tags/
@@ -102,7 +122,7 @@ diagnosticMode:
 postgresqlImage:
   registry: docker.io
   repository: bitnami/postgresql-repmgr
-  tag: 11.12.0-debian-10-r70
+  tag: 11.13.0-debian-10-r57
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -258,11 +278,13 @@ postgresql:
     ## limits:
     ##    cpu: 250m
     ##    memory: 256Mi
+    ##
     limits: {}
     ## Examples:
     ## requests:
     ##    cpu: 250m
     ##    memory: 256Mi
+    ##
     requests: {}
   ## PostgreSQL container's liveness probe
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
@@ -537,6 +559,7 @@ postgresql:
     certCAFilename: ""
 
 ## @section Pgpool parameters
+##
 
 ## Bitnami Pgpool image
 ## ref: https://hub.docker.com/r/bitnami/pgpool/tags/
@@ -550,7 +573,7 @@ postgresql:
 pgpoolImage:
   registry: docker.io
   repository: bitnami/pgpool
-  tag: 4.2.4-debian-10-r0
+  tag: 4.2.5-debian-10-r26
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -727,11 +750,13 @@ pgpool:
     ## limits:
     ##    cpu: 250m
     ##    memory: 256Mi
+    ##
     limits: {}
     ## Examples:
     ## requests:
     ##    cpu: 250m
     ##    memory: 256Mi
+    ##
     requests: {}
   ## Pgpool container's liveness probe
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
@@ -855,6 +880,10 @@ pgpool:
   ## @param pgpool.useLoadBalancing Use Pgpool Load-Balancing
   ##
   useLoadBalancing: true
+  ## @param pgpool.loadBalancingOnWrite LoadBalancer on write actions behavior
+  ## one of: [off, transaction, trans_transaction, always]
+  ##
+  loadBalancingOnWrite: transaction
   ## @param pgpool.configuration Pgpool configuration
   ## You can use this parameter to specify the content for pgpool.conf
   ## Otherwise, a repmgr.conf will be generated based on the environment variables
@@ -920,6 +949,7 @@ pgpool:
     certCAFilename: ""
 
 ## @section LDAP parameters
+##
 
 ## LDAP parameters
 ## @param ldap.enabled Enable LDAP support
@@ -946,6 +976,7 @@ ldap:
   nssInitgroupsIgnoreusers: root,nslcd
 
 ## @section Metrics parameters
+##
 
 ## Bitnami PostgreSQL Prometheus exporter image
 ## ref: https://hub.docker.com/r/bitnami/pgpool/tags/
@@ -959,7 +990,7 @@ ldap:
 metricsImage:
   registry: docker.io
   repository: bitnami/postgres-exporter
-  tag: 0.10.0-debian-10-r19
+  tag: 0.10.0-debian-10-r85
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -1003,11 +1034,13 @@ metrics:
     ## limits:
     ##    cpu: 250m
     ##    memory: 256Mi
+    ##
     limits: {}
     ## Examples:
     ## requests:
     ##    cpu: 250m
     ##    memory: 256Mi
+    ##
     requests: {}
   ## Prometheus exporter container's liveness probe
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
@@ -1057,6 +1090,39 @@ metrics:
     timeoutSeconds: 5
     successThreshold: 1
     failureThreshold: 10
+  ## Metrics service parameters
+  ##
+  service:
+    ## @param metrics.service.type PostgreSQL Prometheus exporter metrics service type
+    ##
+    type: ClusterIP
+    ## @param metrics.service.port PostgreSQL Prometheus exporter metrics service port
+    ##
+    port: 9187
+    ## @param metrics.service.nodePort PostgreSQL Prometheus exporter Node Port
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+    ##
+    nodePort: ""
+    ## @param metrics.service.clusterIP PostgreSQL Prometheus exporter metrics service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param metrics.service.loadBalancerIP PostgreSQL Prometheus exporter service Load Balancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerIP: ""
+    ## @param metrics.service.loadBalancerSourceRanges PostgreSQL Prometheus exporter service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param metrics.service.externalTrafficPolicy PostgreSQL Prometheus exporter service external traffic policy
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
   ## @param metrics.annotations [object] Annotations for PostgreSQL Prometheus exporter service
   ##
   annotations:
@@ -1120,6 +1186,7 @@ metrics:
     metricRelabelings: []
 
 ## @section Volume permissions parameters
+##
 
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume mountpoint
@@ -1132,11 +1199,11 @@ metrics:
 volumePermissionsImage:
   registry: docker.io
   repository: bitnami/bitnami-shell
-  tag: 10-debian-10-r151
+  tag: 10-debian-10-r218
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
-  pullPolicy: Always
+  pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -1171,14 +1238,17 @@ volumePermissions:
     ## limits:
     ##    cpu: 100m
     ##    memory: 128Mi
+    ##
     limits: {}
     ## Examples:
     ## requests:
     ##    cpu: 100m
     ##    memory: 128Mi
+    ##
     requests: {}
 
 ## @section Persistence parameters
+##
 
 persistence:
   ## @param persistence.enabled Enable data persistence
@@ -1218,6 +1288,7 @@ persistence:
   selector: {}
 
 ## @section Traffic Exposure parameters
+##
 
 ## PgPool service parameters
 ##

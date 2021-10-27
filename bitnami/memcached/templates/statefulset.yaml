@@ -133,13 +133,13 @@ spec:
               containerPort: 11211
           livenessProbe:
             tcpSocket:
-              port: memcache
+              port: {{ .Values.portName }}
             initialDelaySeconds: 30
             timeoutSeconds: 5
             failureThreshold: 6
           readinessProbe:
             tcpSocket:
-              port: memcache
+              port: {{ .Values.portName }}
             initialDelaySeconds: 5
             timeoutSeconds: 3
             periodSeconds: 5
@@ -164,18 +164,28 @@ spec:
           ports:
             - name: {{ .Values.metrics.portName }}
               containerPort: 9150
+          {{- if .Values.metrics.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
               path: /metrics
-              port: metrics
-            initialDelaySeconds: 15
-            timeoutSeconds: 5
+              port: {{ .Values.metrics.portName }}
+            initialDelaySeconds: {{ .Values.metrics.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.metrics.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.metrics.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.metrics.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.metrics.livenessProbe.failureThreshold }}
+          {{- end }}
+          {{- if .Values.metrics.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
               path: /metrics
-              port: metrics
-            initialDelaySeconds: 5
-            timeoutSeconds: 1
+              port: {{ .Values.metrics.portName }}
+            initialDelaySeconds: {{ .Values.metrics.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.metrics.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.metrics.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.metrics.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.metrics.readinessProbe.failureThreshold }}
+          {{- end }}
           {{- if .Values.metrics.resources }}
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
           {{- end }}

@@ -134,7 +134,7 @@ Return true if a secret object should be created
     {{- true -}}
 {{- else if and (eq .Values.provider "linode") .Values.linode.apiToken (not .Values.linode.secretName) -}}
     {{- true -}}
-{{- else if and (eq .Values.provider "rfc2136") .Values.rfc2136.tsigSecret (not .Values.rfc2136.secretName) -}}
+{{- else if and (eq .Values.provider "rfc2136") (or .Values.rfc2136.tsigSecret (and .Values.rfc2136.kerberosUsername .Values.rfc2136.kerberosPassword)) (not .Values.rfc2136.secretName) -}}
     {{- true -}}
 {{- else if and (eq .Values.provider "pdns") .Values.pdns.apiKey (not .Values.pdns.secretName) -}}
     {{- true -}}
@@ -149,6 +149,19 @@ Return true if a secret object should be created
 {{- else -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Return true if a configmap object should be created
+*/}}
+{{- define "external-dns.createConfigMap" -}}
+{{- if and (eq .Values.provider "designate") .Values.designate.customCA.enabled }}
+    {{- true -}}
+{{- else if and (eq .Values.provider "rfc2136") .Values.rfc2136.rfc3645Enabled }}
+    {{- true -}}
+{{- else -}}
+{{- end -}}
+{{- end -}}
+
 
 {{/*
 Return the name of the Secret used to store the passwords
@@ -269,6 +282,8 @@ Compile all warnings into a single message, and call fail.
 {{- $messages := append $messages (include "external-dns.validateValues.ovh.consumerKey" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.ovh.applicationKey" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.ovh.applicationSecret" .) -}}
+{{- $messages := append $messages (include "external-dns.validateValues.rfc2136.kerberosRealm" .) -}}
+{{- $messages := append $messages (include "external-dns.validateValues.rfc2136.kerberosConfig" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.scaleway.scwAccessKey" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.scaleway.scwSecretKey" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.scaleway.scwDefaultOrganizationId" .) -}}
@@ -341,17 +356,6 @@ external-dns: infoblox.wapiPassword
     You must provide a WAPI password when provider="infoblox".
     Please set the wapiPassword parameter (--set infoblox.wapiPassword="xxxx")
     or you can provide an existing secret name via infoblox.secretName
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return the appropriate apiVersion for PodSecurityPolicy.
-*/}}
-{{- define "podSecurityPolicy.apiVersion" -}}
-{{- if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
-{{- print "policy/v1beta1" -}}
-{{- else -}}
-{{- print "extensions/v1beta1" -}}
 {{- end -}}
 {{- end -}}
 
@@ -698,6 +702,30 @@ Validate values of External DNS:
 external-dns: ovh.applicationSecret
     You must provide the OVH appliciation secret key when provider="ovh".
     Please set the applicationSecret parameter (--set ovh.applicationSecret="xxxx")
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of RFC2136 DNS:
+- Must provide the kerberos realm when provider is rfc2136 and rfc3645Enabled is true
+*/}}
+{{- define "external-dns.validateValues.rfc2136.kerberosRealm" -}}
+{{- if and (eq .Values.provider "rfc2136") .Values.rfc2136.rfc3645Enabled (not .Values.rfc2136.kerberosRealm) -}}
+external-dns: rfc2136.kerberosRealm
+    You must provide the kerberos realm when provider is rfc2136 and rfc3645Enabled is true
+    Please set the kerberosRealm parameter (--set rfc2136.kerberosRealm="xxxx")
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of RFC2136 DNS:
+- Must provide the kerberos config when provider is rfc2136 and rfc3645Enabled is true
+*/}}
+{{- define "external-dns.validateValues.rfc2136.kerberosConfig" -}}
+{{- if and (eq .Values.provider "rfc2136") .Values.rfc2136.rfc3645Enabled (not .Values.rfc2136.kerberosConfig) -}}
+external-dns: rfc2136.kerberosConfig
+    You must provide the kerberos config when provider is rfc2136 and rfc3645Enabled is true
+    Please set the kerberosConfig parameter (--set-file rfc2136.kerberosConfig="path/to/krb5.conf")
 {{- end -}}
 {{- end -}}
 

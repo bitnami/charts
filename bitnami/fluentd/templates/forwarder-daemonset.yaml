@@ -28,9 +28,6 @@ spec:
         {{- if .Values.forwarder.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.forwarder.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
-        {{- if .Values.forwarder.rbac.pspEnabled }}
-        checksum/psp: {{ include (print $.Template.BasePath "/forwarder-psp.yaml") . | sha256sum }}
-        {{- end }}
     spec:
       {{- include "fluentd.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.forwarder.hostAliases }}
@@ -63,6 +60,9 @@ spec:
         - name: fluentd
           image: {{ include "fluentd.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.forwarder.lifecycle }}
+          lifecycle: {{- include "common.tplvalues.render" ( dict "value" .Values.forwarder.lifecycle "context" $ ) | nindent 12 }}
+          {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}

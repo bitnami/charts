@@ -13,7 +13,9 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
+  {{- if not .Values.replica.autoscaling.enabled }}
   replicas: {{ .Values.replica.replicaCount }}
+  {{- end }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: replica
@@ -117,7 +119,7 @@ spec:
             - name: REDIS_MASTER_HOST
               value: {{ template "common.names.fullname" . }}-master-0.{{ template "common.names.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
             - name: REDIS_MASTER_PORT_NUMBER
-              value: {{ .Values.master.service.port | quote }}
+              value: {{ .Values.master.containerPort | quote }}
             - name: ALLOW_EMPTY_PASSWORD
               value: {{ ternary "no" "yes" .Values.auth.enabled | quote }}
             {{- if .Values.auth.enabled }}
@@ -385,7 +387,13 @@ spec:
             path: /sys
         {{- end }}
         - name: redis-tmp-conf
+          {{- if .Values.replica.persistence.medium }}
+          emptyDir: {
+            medium: {{ .Values.replica.persistence.medium | quote }}
+          }
+          {{- else }}
           emptyDir: {}
+          {{- end }}
         {{- if .Values.tls.enabled }}
         - name: redis-certificates
           secret:
@@ -400,7 +408,13 @@ spec:
         {{- end }}
   {{- if not .Values.replica.persistence.enabled }}
         - name: redis-data
+          {{- if .Values.replica.persistence.medium }}
+          emptyDir: {
+            medium: {{ .Values.replica.persistence.medium | quote }}
+          }
+          {{- else }}
           emptyDir: {}
+          {{- end }}
   {{- else }}
   volumeClaimTemplates:
     - metadata:

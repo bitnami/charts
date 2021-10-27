@@ -63,7 +63,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/fluentd
-  tag: 1.13.3-debian-10-r0
+  tag: 1.14.1-debian-10-r26
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -167,6 +167,8 @@ forwarder:
         read_from_head true
         <parse>
           @type json
+          time_key time
+          time_format %Y-%m-%dT%H:%M:%S.%NZ
         </parse>
       </source>
       # enrich with kubernetes metadata
@@ -455,7 +457,7 @@ forwarder:
   ## Role Based Access
   ## ref: https://kubernetes.io/docs/admin/authorization/rbac/
   ## @param forwarder.rbac.create Specify whether RBAC resources should be created and used, allowing the get, watch and list of pods/namespaces
-  ## @param forwarder.rbac.pspEnabled Specify whether the bundled Pod Security Policy should be created and bound with RBAC
+  ## @param forwarder.rbac.pspEnabled Whether to create a PodSecurityPolicy and bound it with RBAC. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later
   ##
   rbac:
     create: true
@@ -476,6 +478,16 @@ forwarder:
     ##
     hostPath:
       path: /opt/bitnami/fluentd/logs/buffers
+  ## @param forwarder.lifecycle Additional lifecycles to add to the pods
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/attach-handler-lifecycle-event/
+  ## e.g:
+  ## postStart:
+  ##   exec:
+  ##     command: ["/bin/sh", "-c", "echo Hello from the postStart handler > /usr/share/message"]
+  ## preStop:
+  ##   exec:
+  ##     command: ["/bin/sh","-c","nginx -s quit; while killall -0 nginx; do sleep 1; done"]
+  lifecycle: {}
   ## @param forwarder.initContainers Additional init containers to add to the pods
   ## For example:
   ## initContainers:
@@ -700,9 +712,10 @@ aggregator:
     ## @param aggregator.ingress.enabled Set to true to enable ingress record generation
     ##
     enabled: false
-    ## @param aggregator.ingress.certManager Set this to true in order to add the corresponding annotations for cert-manager
+    ## DEPRECATED: Use ingress.annotations instead of ingress.certManager
+    ## certManager: false
     ##
-    certManager: false
+
     ## @param aggregator.ingress.pathType Ingress Path type. How the path matching is interpreted
     ##
     pathType: ImplementationSpecific
@@ -716,11 +729,16 @@ aggregator:
     ## You may need to set this to '/*' in order to use this with ALB ingress controllers.
     ##
     path: /
-    ## @param aggregator.ingress.annotations Ingress annotations
+    ## @param aggregator.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
     ## For a full list of possible ingress annotations, please see
     ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+    ## Use this parameter to set the required annotations for cert-manager, see
+    ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
     ##
-    ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+    ## e.g:
+    ## annotations:
+    ##   kubernetes.io/ingress.class: nginx
+    ##   cert-manager.io/cluster-issuer: cluster-issuer-name
     ##
     annotations: {}
     ## @param aggregator.ingress.tls Enable TLS configuration for the hostname defined at ingress.hostname parameter
@@ -939,6 +957,16 @@ aggregator:
     storageClass: ""
     accessMode: ReadWriteOnce
     size: 10Gi
+  ## @param aggregator.lifecycle Additional lifecycles to add to the pods
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/attach-handler-lifecycle-event/
+  ## e.g:
+  ## postStart:
+  ##   exec:
+  ##     command: ["/bin/sh", "-c", "echo Hello from the postStart handler > /usr/share/message"]
+  ## preStop:
+  ##   exec:
+  ##     command: ["/bin/sh","-c","nginx -s quit; while killall -0 nginx; do sleep 1; done"]
+  lifecycle: {}
   ## @param aggregator.initContainers Add init containers to aggregator pods
   ## Example
   ##
@@ -971,6 +999,9 @@ aggregator:
   ##     mountPath: /tmp
   ##
   extraVolumeMounts: []
+  ## @param aggregator.extraVolumeClaimTemplates Optionally specify extra list of additional volume claim templates for the Fluentd Aggregator pods in StatefulSet
+  ##
+  extraVolumeClaimTemplates: []
 ## @param serviceAccount Pods Service Account. This top-level global entry is DEPRECATED. Please use "forwarder.serviceAccount" instead.
 ## Only the forwarder was affected by the historical usage here.
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/

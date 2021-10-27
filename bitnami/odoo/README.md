@@ -59,20 +59,20 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common parameters
 
-| Name                | Description                                        | Value                        |
-| ------------------- | -------------------------------------------------- | ---------------------------- |
-| `kubeVersion`       | Override Kubernetes version                        | `""`                         |
-| `nameOverride`      | String to partially override common.names.fullname | `""`                         |
-| `fullnameOverride`  | String to fully override common.names.fullname     | `""`                         |
-| `commonLabels`      | Labels to add to all deployed objects              | `{}`                         |
-| `commonAnnotations` | Annotations to add to all deployed objects         | `{}`                         |
-| `extraDeploy`       | Array of extra objects to deploy with the release  | `[]`                         |
-| `image.registry`    | Odoo image registry                                | `docker.io`                  |
-| `image.repository`  | Odoo image repository                              | `bitnami/odoo`               |
-| `image.tag`         | Odoo image tag (immutable tags are recommended)    | `14.0.20210710-debian-10-r0` |
-| `image.pullPolicy`  | Odoo image pull policy                             | `IfNotPresent`               |
-| `image.pullSecrets` | Odoo image pull secrets                            | `[]`                         |
-| `image.debug`       | Enable image debug mode                            | `false`                      |
+| Name                | Description                                        | Value                         |
+| ------------------- | -------------------------------------------------- | ----------------------------- |
+| `kubeVersion`       | Override Kubernetes version                        | `""`                          |
+| `nameOverride`      | String to partially override common.names.fullname | `""`                          |
+| `fullnameOverride`  | String to fully override common.names.fullname     | `""`                          |
+| `commonLabels`      | Labels to add to all deployed objects              | `{}`                          |
+| `commonAnnotations` | Annotations to add to all deployed objects         | `{}`                          |
+| `extraDeploy`       | Array of extra objects to deploy with the release  | `[]`                          |
+| `image.registry`    | Odoo image registry                                | `docker.io`                   |
+| `image.repository`  | Odoo image repository                              | `bitnami/odoo`                |
+| `image.tag`         | Odoo image tag (immutable tags are recommended)    | `14.0.20211010-debian-10-r16` |
+| `image.pullPolicy`  | Odoo image pull policy                             | `IfNotPresent`                |
+| `image.pullSecrets` | Odoo image pull secrets                            | `[]`                          |
+| `image.debug`       | Enable image debug mode                            | `false`                       |
 
 
 ### Odoo Configuration parameters
@@ -158,47 +158,46 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Traffic Exposure Parameters
 
-| Name                               | Description                                                                                           | Value                    |
-| ---------------------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------ |
-| `service.type`                     | Odoo service type                                                                                     | `LoadBalancer`           |
-| `service.port`                     | Odoo service HTTP port                                                                                | `80`                     |
-| `service.nodePort`                 | Node port for HTTP                                                                                    | `""`                     |
-| `service.clusterIP`                | Odoo service Cluster IP                                                                               | `""`                     |
-| `service.loadBalancerIP`           | Odoo service Load Balancer IP                                                                         | `""`                     |
-| `service.loadBalancerSourceRanges` | Odoo service Load Balancer sources                                                                    | `[]`                     |
-| `service.externalTrafficPolicy`    | Odoo service external traffic policy                                                                  | `Cluster`                |
-| `service.annotations`              | Additional custom annotations for Odoo service                                                        | `{}`                     |
-| `service.extraPorts`               | Extra port to expose on Odoo service                                                                  | `[]`                     |
-| `ingress.enabled`                  | Enable ingress record generation for Odoo                                                             | `false`                  |
-| `ingress.certManager`              | Add the corresponding annotations for cert-manager integration                                        | `false`                  |
-| `ingress.selfSigned`               | Create a TLS secret for this ingress record using self-signed certificates generated by Helm          | `false`                  |
-| `ingress.pathType`                 | Ingress path type                                                                                     | `ImplementationSpecific` |
-| `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                         | `""`                     |
-| `ingress.hostname`                 | Default host for the ingress record                                                                   | `odoo.local`             |
-| `ingress.path`                     | Default path for the ingress record                                                                   | `ImplementationSpecific` |
-| `ingress.annotations`              | Additional custom annotations for the ingress record                                                  | `{}`                     |
-| `ingress.tls`                      | Enable TLS configuration for the host defined at `ingress.hostname` parameter                         | `false`                  |
-| `ingress.extraHosts`               | An array with additional hostname(s) to be covered with the ingress record                            | `[]`                     |
-| `ingress.extraPaths`               | An array with additional arbitrary paths that may need to be added to the ingress under the main host | `[]`                     |
-| `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                   | `[]`                     |
-| `ingress.secrets`                  | Custom TLS certificates as secrets                                                                    | `[]`                     |
+| Name                               | Description                                                                                                                      | Value                    |
+| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.type`                     | Odoo service type                                                                                                                | `LoadBalancer`           |
+| `service.port`                     | Odoo service HTTP port                                                                                                           | `80`                     |
+| `service.nodePort`                 | Node port for HTTP                                                                                                               | `""`                     |
+| `service.clusterIP`                | Odoo service Cluster IP                                                                                                          | `""`                     |
+| `service.loadBalancerIP`           | Odoo service Load Balancer IP                                                                                                    | `""`                     |
+| `service.loadBalancerSourceRanges` | Odoo service Load Balancer sources                                                                                               | `[]`                     |
+| `service.externalTrafficPolicy`    | Odoo service external traffic policy                                                                                             | `Cluster`                |
+| `service.annotations`              | Additional custom annotations for Odoo service                                                                                   | `{}`                     |
+| `service.extraPorts`               | Extra port to expose on Odoo service                                                                                             | `[]`                     |
+| `ingress.enabled`                  | Enable ingress record generation for Odoo                                                                                        | `false`                  |
+| `ingress.selfSigned`               | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
+| `ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
+| `ingress.hostname`                 | Default host for the ingress record                                                                                              | `odoo.local`             |
+| `ingress.path`                     | Default path for the ingress record                                                                                              | `/`                      |
+| `ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.tls`                      | Enable TLS configuration for the host defined at `ingress.hostname` parameter                                                    | `false`                  |
+| `ingress.extraHosts`               | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                     |
+| `ingress.extraPaths`               | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |
+| `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
+| `ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
 
 
 ### Persistence Parameters
 
-| Name                                          | Description                                                                                     | Value   |
-| --------------------------------------------- | ----------------------------------------------------------------------------------------------- | ------- |
-| `persistence.enabled`                         | Enable persistence using Persistent Volume Claims                                               | `true`  |
-| `persistence.storageClass`                    | Persistent Volume storage class                                                                 | `""`    |
-| `persistence.accessModes`                     | Persistent Volume access modes                                                                  | `[]`    |
-| `persistence.accessMode`                      | Persistent Volume access mode (DEPRECATED: use `persistence.accessModes` instead)               | `[]`    |
-| `persistence.size`                            | Persistent Volume size                                                                          | `10Gi`  |
-| `persistence.dataSource`                      | Custom PVC data source                                                                          | `{}`    |
-| `persistence.existingClaim`                   | The name of an existing PVC to use for persistence                                              | `""`    |
-| `volumePermissions.enabled`                   | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false` |
-| `volumePermissions.resources.limits`          | The resources limits for the init container                                                     | `{}`    |
-| `volumePermissions.resources.requests`        | The requested resources for the init container                                                  | `{}`    |
-| `volumePermissions.securityContext.runAsUser` | Set init container's Security Context runAsUser                                                 | `0`     |
+| Name                                          | Description                                                                                     | Value           |
+| --------------------------------------------- | ----------------------------------------------------------------------------------------------- | --------------- |
+| `persistence.enabled`                         | Enable persistence using Persistent Volume Claims                                               | `true`          |
+| `persistence.storageClass`                    | Persistent Volume storage class                                                                 | `""`            |
+| `persistence.accessModes`                     | Persistent Volume access modes                                                                  | `[]`            |
+| `persistence.accessMode`                      | Persistent Volume access mode (DEPRECATED: use `persistence.accessModes` instead)               | `ReadWriteOnce` |
+| `persistence.size`                            | Persistent Volume size                                                                          | `10Gi`          |
+| `persistence.dataSource`                      | Custom PVC data source                                                                          | `{}`            |
+| `persistence.existingClaim`                   | The name of an existing PVC to use for persistence                                              | `""`            |
+| `volumePermissions.enabled`                   | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`         |
+| `volumePermissions.resources.limits`          | The resources limits for the init container                                                     | `{}`            |
+| `volumePermissions.resources.requests`        | The requested resources for the init container                                                  | `{}`            |
+| `volumePermissions.securityContext.runAsUser` | Set init container's Security Context runAsUser                                                 | `0`             |
 
 
 ### Other Parameters
@@ -270,9 +269,9 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
-### Change Odoo version
+### Use a different Odoo version
 
-To modify the Odoo version used in this chart you can specify a [valid image tag](https://hub.docker.com/r/bitnami/odoo/tags/) using the `image.tag` parameter. For example, `image.tag=X.Y.Z`. This approach is also applicable to other images like exporters.
+To modify the application version used in this chart, specify a different version of the image using the `image.tag` parameter and/or a different repository using the `image.repository` parameter. Refer to the [chart documentation for more information on these parameters and how to use them with images from a private registry](https://docs.bitnami.com/kubernetes/apps/odoo/configuration/change-image-version/).
 
 ### Using an external database
 

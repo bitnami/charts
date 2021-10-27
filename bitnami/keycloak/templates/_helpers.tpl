@@ -63,7 +63,16 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 {{- define "keycloak.postgresql.fullname" -}}
-{{- printf "%s-%s" .Release.Name "postgresql" | trunc 63 | trimSuffix "-" -}}
+{{- if .Values.postgresql.fullnameOverride -}}
+{{- .Values.postgresql.fullnameOverride | trunc 63 | trimSuffix "-" -}}
+{{- else -}}
+{{- $name := default "postgresql" .Values.postgresql.nameOverride -}}
+{{- if contains $name .Release.Name -}}
+{{- .Release.Name | trunc 63 | trimSuffix "-" -}}
+{{- else -}}
+{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+{{- end -}}
 {{- end -}}
 
 {{/*
@@ -144,11 +153,19 @@ Return the Database user
 {{/*
 Return the Database encrypted password
 */}}
-{{- define "keycloak.databaseEncryptedPassword" -}}
+{{- define "keycloak.databaseSecretName" -}}
 {{- if .Values.postgresql.enabled }}
-    {{- .Values.postgresql.postgresqlPassword | b64enc | quote -}}
+    {{- if .Values.postgresql.existingSecret -}}
+        {{- printf "%s" .Values.postgresql.existingSecret -}}
+    {{- else }}
+        {{- printf "%s" (include "keycloak.postgresql.fullname" .) -}}
+    {{- end -}}
 {{- else -}}
-    {{- .Values.externalDatabase.password | b64enc | quote -}}
+    {{- if .Values.externalDatabase.existingSecret -}}
+        {{- printf "%s" (include "common.secrets.name" (dict "existingSecret" .Values.externalDatabase.existingSecret "context" $)) -}}
+    {{- else -}}
+        {{- printf "%s" (include "common.secrets.name" (dict "existingSecret" .Values.auth.existingSecret "context" $)) -}}
+    {{- end }}
 {{- end -}}
 {{- end -}}
 

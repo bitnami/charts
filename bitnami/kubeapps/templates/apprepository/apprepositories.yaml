@@ -45,7 +45,7 @@ spec:
       nodeSelector: {{- toYaml .nodeSelector | nindent 8 }}
       {{- end }}
   {{- end }}
-  {{- if or .caCert .authorizationHeader }}
+  {{- if or .caCert .authorizationHeader .basicAuth }}
   auth:
     {{- if .caCert }}
     customCA:
@@ -53,12 +53,16 @@ spec:
         key: ca.crt
         name: {{ printf "apprepo-%s-secrets" .name }}
     {{- end }}
-    {{- if .authorizationHeader }}
+    {{- if or .authorizationHeader .basicAuth }}
     header:
       secretKeyRef:
         key: authorizationHeader
         name: {{ printf "apprepo-%s-secrets" .name }}
     {{- end }}
+  {{- end }}
+  {{- if .filterRule }}
+  filterRule:
+    {{- toYaml .filterRule | nindent 4 }}
   {{- end }}
 ---
 {{ end -}}

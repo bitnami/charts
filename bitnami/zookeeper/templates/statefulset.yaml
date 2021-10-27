@@ -74,6 +74,9 @@ spec:
       {{- if .Values.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
       {{- if .Values.priorityClassName }}
       priorityClassName: {{ .Values.priorityClassName }}
       {{- end }}
@@ -276,13 +279,17 @@ spec:
             - name: ZOO_DATA_LOG_DIR
               value: {{ .Values.dataLogDir | quote }}
             - name: ZOO_PORT_NUMBER
-              value: {{ .Values.service.port | quote }}
+              value: {{ .Values.containerPort | quote }}
             - name: ZOO_TICK_TIME
               value: {{ .Values.tickTime | quote }}
             - name: ZOO_INIT_LIMIT
               value: {{ .Values.initLimit | quote }}
             - name: ZOO_SYNC_LIMIT
               value: {{ .Values.syncLimit | quote }}
+            - name: ZOO_PRE_ALLOC_SIZE
+              value: {{ .Values.preAllocSize | quote }}
+            - name: ZOO_SNAPCOUNT
+              value: {{ .Values.snapCount | quote }}
             - name: ZOO_MAX_CLIENT_CNXNS
               value: {{ .Values.maxClientCnxns | quote }}
             - name: ZOO_4LW_COMMANDS_WHITELIST
@@ -298,8 +305,8 @@ spec:
             - name: ZOO_SERVERS
               {{- $replicaCount := int .Values.replicaCount }}
               {{- $minServerId := int .Values.minServerId }}
-              {{- $followerPort := int .Values.service.followerPort }}
-              {{- $electionPort := int .Values.service.electionPort }}
+              {{- $followerPort := int .Values.followerContainerPort }}
+              {{- $electionPort := int .Values.electionContainerPort }}
               {{- $releaseNamespace := include "zookeeper.namespace" . }}
               {{- $zookeeperFullname := include "common.names.fullname" . }}
               {{- $zookeeperHeadlessServiceName := printf "%s-%s" $zookeeperFullname "headless" | trunc 63  }}
@@ -325,6 +332,10 @@ spec:
             {{- end }}
             - name: ZOO_HEAP_SIZE
               value: {{ .Values.heapSize | quote }}
+            {{- if .Values.log4jProp }}
+            - name: ZOO_LOG4J_PROP
+              value: {{ .Values.log4jProp | quote }}  
+            {{- end }}                  
             - name: ZOO_LOG_LEVEL
               value: {{ .Values.logLevel | quote }}
             - name: ALLOW_ANONYMOUS_LOGIN
@@ -394,16 +405,16 @@ spec:
           ports:
             {{- if not .Values.service.disableBaseClientPort }}
             - name: client
-              containerPort: {{ .Values.service.port }}
+              containerPort: {{ .Values.containerPort }}
             {{- end }}
             {{- if .Values.tls.client.enabled }}
             - name: client-tls
-              containerPort: {{ .Values.service.tlsClientPort }}
+              containerPort: {{ .Values.tlsContainerPort }}
             {{- end }}
             - name: follower
-              containerPort: {{ .Values.service.followerPort }}
+              containerPort: {{ .Values.followerContainerPort }}
             - name: election
-              containerPort: {{ .Values.service.electionPort }}
+              containerPort: {{ .Values.electionContainerPort }}
             {{- if .Values.metrics.enabled }}
             - name: metrics
               containerPort: {{ .Values.metrics.containerPort }}
@@ -413,12 +424,12 @@ spec:
           livenessProbe:
             exec:
               {{- if not .Values.service.disableBaseClientPort }}
-              command: ['/bin/bash', '-c', 'echo "ruok" | timeout {{ .Values.livenessProbe.probeCommandTimeout }} nc -w {{ .Values.livenessProbe.probeCommandTimeout }} localhost {{ .Values.service.port }} | grep imok']
+              command: ['/bin/bash', '-c', 'echo "ruok" | timeout {{ .Values.livenessProbe.probeCommandTimeout }} nc -w {{ .Values.livenessProbe.probeCommandTimeout }} localhost {{ .Values.containerPort }} | grep imok']
               {{- else }}
               {{- if not .Values.tls.client.enabled }}
-              command: ['/bin/bash', '-c', 'echo "ruok" | timeout {{ .Values.livenessProbe.probeCommandTimeout }} openssl s_client -quiet -crlf -connect localhost:{{ .Values.service.tlsClientPort }} | grep imok']
+              command: ['/bin/bash', '-c', 'echo "ruok" | timeout {{ .Values.livenessProbe.probeCommandTimeout }} openssl s_client -quiet -crlf -connect localhost:{{ .Values.tlsContainerPort }} | grep imok']
               {{- else }}
-              command: ['/bin/bash', '-c', 'echo "ruok" | timeout {{ .Values.livenessProbe.probeCommandTimeout }} openssl s_client -quiet -crlf -connect localhost:{{ .Values.service.tlsClientPort }} -cert {{ .Values.service.tls.client_cert_pem_path }} -key {{ .Values.service.tls.client_key_pem_path }} | grep imok']
+              command: ['/bin/bash', '-c', 'echo "ruok" | timeout {{ .Values.livenessProbe.probeCommandTimeout }} openssl s_client -quiet -crlf -connect localhost:{{ .Values.tlsContainerPort }} -cert {{ .Values.service.tls.client_cert_pem_path }} -key {{ .Values.service.tls.client_key_pem_path }} | grep imok']
               {{- end }}
               {{- end }}
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
@@ -433,12 +444,12 @@ spec:
           readinessProbe:
             exec:
               {{- if not .Values.service.disableBaseClientPort }}
-              command: ['/bin/bash', '-c', 'echo "ruok" | timeout {{ .Values.readinessProbe.probeCommandTimeout }} nc -w {{ .Values.readinessProbe.probeCommandTimeout }} localhost {{ .Values.service.port }} | grep imok']
+              command: ['/bin/bash', '-c', 'echo "ruok" | timeout {{ .Values.readinessProbe.probeCommandTimeout }} nc -w {{ .Values.readinessProbe.probeCommandTimeout }} localhost {{ .Values.containerPort }} | grep imok']
               {{- else }}
               {{- if not .Values.tls.client.enabled }}
-              command: ['/bin/bash', '-c', 'echo "ruok" | timeout {{ .Values.readinessProbe.probeCommandTimeout }} openssl s_client -quiet -crlf -connect localhost:{{ .Values.service.tlsClientPort }} | grep imok']
+              command: ['/bin/bash', '-c', 'echo "ruok" | timeout {{ .Values.readinessProbe.probeCommandTimeout }} openssl s_client -quiet -crlf -connect localhost:{{ .Values.tlsContainerPort }} | grep imok']
               {{- else }}
-              command: ['/bin/bash', '-c', 'echo "ruok" | timeout {{ .Values.readinessProbe.probeCommandTimeout }} openssl s_client -quiet -crlf -connect localhost:{{ .Values.service.tlsClientPort }} -cert {{ .Values.service.tls.client_cert_pem_path }} -key {{ .Values.service.tls.client_key_pem_path }} | grep imok']
+              command: ['/bin/bash', '-c', 'echo "ruok" | timeout {{ .Values.readinessProbe.probeCommandTimeout }} openssl s_client -quiet -crlf -connect localhost:{{ .Values.tlsContainerPort }} -cert {{ .Values.service.tls.client_cert_pem_path }} -key {{ .Values.service.tls.client_key_pem_path }} | grep imok']
               {{- end }}
               {{- end }}
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
@@ -475,6 +486,9 @@ spec:
             {{- if .Values.extraVolumeMounts }}
             {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
             {{- end }}
+        {{- if .Values.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.sidecars "context" $ ) | nindent 8 }}
+        {{- end }}              
       volumes:
         {{- if .Values.config }}
         - name: config
@@ -514,7 +528,7 @@ spec:
           emptyDir: {}
         {{- end }}
         {{- if .Values.extraVolumes }}
-        {{- toYaml .Values.extraVolumes | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
   {{- if and .Values.persistence.enabled (not (and .Values.persistence.existingClaim .Values.persistence.dataLogDir.existingClaim) )}}
   volumeClaimTemplates:

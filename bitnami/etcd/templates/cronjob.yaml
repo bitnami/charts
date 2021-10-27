@@ -30,6 +30,25 @@ spec:
           {{- if .Values.podSecurityContext.enabled }}
           securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
+          {{- if and .Values.volumePermissions.enabled (or .Values.podSecurityContext.enabled .Values.containerSecurityContext.enabled) }}
+          initContainers:
+            - name: volume-permissions
+              image: {{ include "etcd.volumePermissions.image" . }}
+              imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
+              command:
+                - /bin/bash
+                - -ec
+                - |
+                  chown -R {{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }} /snapshots
+              securityContext:
+                runAsUser: 0
+              {{- if .Values.volumePermissions.resources }}
+              resources: {{- include "common.tplvalues.render" (dict "value" .Values.volumePermissions.resources "context" $) | nindent 16 }}
+              {{- end }}
+              volumeMounts:
+                - name: snapshot-volume
+                  mountPath: /snapshots
+          {{- end }}
           containers:
             - name: etcd-snapshotter
               image: {{ include "etcd.image" . }}
@@ -96,7 +115,7 @@ spec:
             {{- if .Values.auth.client.secureTransport }}
             - name: certs
               secret:
-                secretName: {{ required "A secret containinig the client certificates is required" .Values.auth.client.existingSecret }}
+                secretName: {{ required "A secret containinig the client certificates is required" (tpl .Values.auth.client.existingSecret .) }}
                 defaultMode: 256
             {{- end }}
             - name: snapshot-volume

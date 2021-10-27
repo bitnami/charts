@@ -26,7 +26,7 @@ fullnameOverride: ""
 ##
 clusterDomain: cluster.local
 
-## @section etcd parameters
+## @section external-dns parameters
 
 ## Bitnami external-dns image version
 ## ref: https://hub.docker.com/r/bitnami/external-dns/tags/
@@ -39,7 +39,7 @@ clusterDomain: cluster.local
 image:
   registry: docker.io
   repository: bitnami/external-dns
-  tag: 0.9.0-debian-10-r0
+  tag: 0.10.1-debian-10-r5
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -275,7 +275,7 @@ designate:
   ## @param designate.customCAHostPath When using the Designate provider, use a CA file already on the host to validate Openstack APIs.  This conflicts with `designate.customCA.enabled`
   ## This conflicts setting the above customCA to true and chart rendering will fail if you set customCA to true and specify customCAHostPath
   ##
-  customCAHostPath: /path/to/cafile
+  customCAHostPath: ""
   ## Use a custom CA (optional)
   ## @param designate.customCA.enabled When using the Designate provider, enable a custom CA (optional)
   ## @param designate.customCA.content When using the Designate provider, set the content of the custom CA
@@ -393,7 +393,7 @@ ovh:
   ## @param ovh.applicationSecret When using the OVH provider with an existing application, specify the application secret. (required when provider=ovh and `ovh.secretName` is not provided.)
   ##
   applicationSecret: ""
-  ## @param ovh.secretName When using the OVH provider, it's the name of the secret containing `ovh_consumer_key`, `ovh_application_key` and `ovh_application_secret`. Disables usage of other `ovh.
+  ## @param ovh.secretName When using the OVH provider, it's the name of the secret containing `ovh_consumer_key`, `ovh_application_key` and `ovh_application_secret`. Disables usage of other `ovh`.
   ## with following keys:
   ##  - ovh_consumer_key
   ##  - ovh_application_key
@@ -443,6 +443,22 @@ rfc2136:
   ## @param rfc2136.minTTL When using the rfc2136 provider, specify minimal TTL (in duration format) for records[ns, us, ms, s, m, h], see more https://golang.org/pkg/time/#ParseDuration
   ##
   minTTL: "0s"
+  ## @param rfc2136.rfc3645Enabled When using the rfc2136 provider, extend using RFC3645 to support secure updates over Kerberos with GSS-TSIG
+  ##
+  rfc3645Enabled: false
+  ## @param rfc2136.kerberosConfig When using the rfc2136 provider with rfc3645Enabled, the contents of a configuration file for krb5 (optional)
+  ##
+  kerberosConfig: ""
+  ## @param rfc2136.kerberosUsername When using the rfc2136 provider with rfc3645Enabled, specify the username to authenticate with (optional)
+  ##
+  kerberosUsername: ""
+  ## @param rfc2136.kerberosPassword When using the rfc2136 provider with rfc3645Enabled, specify the password to authenticate with (optional)
+  ##
+  kerberosPassword: ""
+  ## @param rfc2136.kerberosRealm When using the rfc2136 provider with rfc3645Enabled, specify the realm to authenticate to (required when provider=rfc2136 and rfc2136.rfc3645Enabled=true)
+  ##
+  kerberosRealm: ""
+
 ## PowerDNS configuration to be set via arguments/env. variables
 ##
 pdns:
@@ -700,7 +716,7 @@ rbac:
   ## @param rbac.apiVersion Version of the RBAC API
   ##
   apiVersion: v1
-  ## @param rbac.pspEnabled PodSecurityPolicy
+  ## @param rbac.pspEnabled Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later
   ##
   pspEnabled: false
 ## @param securityContext Security context for the container

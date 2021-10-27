@@ -4,7 +4,7 @@
 ## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
 
 ## @param global.imageRegistry Global Docker image registry
-## @param global.imagePullSecrets Global Docker registry secret names as an array
+## @param global.imagePullSecrets [array] Global Docker registry secret names as an array
 ## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
 global:
@@ -27,16 +27,16 @@ nameOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname
 ##
 fullnameOverride: ""
-## @param commonLabels Labels to add to all deployed objects
+## @param commonLabels [object] Labels to add to all deployed objects
 ##
 commonLabels: {}
-## @param commonAnnotations Annotations to add to all deployed objects
+## @param commonAnnotations [object] Annotations to add to all deployed objects
 ##
 commonAnnotations: {}
 ## @param clusterDomain Kubernetes cluster domain name
 ##
 clusterDomain: cluster.local
-## @param extraDeploy Array of extra objects to deploy with the release
+## @param extraDeploy [array] Array of extra objects to deploy with the release
 ##
 extraDeploy: []
 
@@ -48,13 +48,13 @@ extraDeploy: []
 ## @param image.repository WildFly image repository
 ## @param image.tag WildFly image tag (immutable tags are recommended)
 ## @param image.pullPolicy WildFly image pull policy
-## @param image.pullSecrets WildFly image pull secrets
+## @param image.pullSecrets [array] WildFly image pull secrets
 ## @param image.debug Enable image debug mode
 ##
 image:
   registry: docker.io
   repository: bitnami/wildfly
-  tag: 24.0.1-debian-10-r2
+  tag: 24.0.1-debian-10-r90
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -83,13 +83,16 @@ wildflyUsername: user
 ## Defaults to a random 10-character alphanumeric string if not set
 ##
 wildflyPassword: ""
-## @param command Override default container command (useful when using custom images)
+## @param exposeManagementConsole Allows exposing the WildFly Management console outside the cluster
+##
+exposeManagementConsole: false
+## @param command [array] Override default container command (useful when using custom images)
 ##
 command: []
-## @param args Override default container args (useful when using custom images)
+## @param args [array] Override default container args (useful when using custom images)
 ##
 args: []
-## @param extraEnvVars Array with extra environment variables to add to the WildFly container
+## @param extraEnvVars [array] Array with extra environment variables to add to the WildFly container
 ## e.g:
 ## extraEnvVars:
 ##   - name: FOO
@@ -124,13 +127,13 @@ updateStrategy:
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
 hostAliases: []
-## @param extraVolumes Optionally specify extra list of additional volumes for WildFly pods
+## @param extraVolumes [array] Optionally specify extra list of additional volumes for WildFly pods
 ##
 extraVolumes: []
-## @param extraVolumeMounts Optionally specify extra list of additional volumeMounts for WildFly container(s)
+## @param extraVolumeMounts [array] Optionally specify extra list of additional volumeMounts for WildFly container(s)
 ##
 extraVolumeMounts: []
-## @param sidecars Add additional sidecar containers to the WildFly pod
+## @param sidecars [array] Add additional sidecar containers to the WildFly pod
 ## e.g:
 ## sidecars:
 ##   - name: your-image-name
@@ -141,7 +144,7 @@ extraVolumeMounts: []
 ##         containerPort: 1234
 ##
 sidecars: []
-## @param initContainers Add additional init containers to the WildFly pods
+## @param initContainers [array] Add additional init containers to the WildFly pods
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
 ## e.g:
 ## initContainers:
@@ -153,11 +156,11 @@ sidecars: []
 ##        containerPort: 1234
 ##
 initContainers: []
-## @param podLabels Extra labels for WildFly pods
+## @param podLabels [object] Extra labels for WildFly pods
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
 podLabels: {}
-## @param podAnnotations Annotations for WildFly pods
+## @param podAnnotations [object] Annotations for WildFly pods
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
 podAnnotations: {}
@@ -179,29 +182,29 @@ nodeAffinityPreset:
   ## @param nodeAffinityPreset.key Node label key to match. Ignored if `affinity` is set
   ##
   key: ""
-  ## @param nodeAffinityPreset.values Node label values to match. Ignored if `affinity` is set
+  ## @param nodeAffinityPreset.values [array] Node label values to match. Ignored if `affinity` is set
   ## E.g.
   ## values:
   ##   - e2e-az1
   ##   - e2e-az2
   ##
   values: []
-## @param affinity Affinity for pod assignment
+## @param affinity [object] Affinity for pod assignment
 ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 ## NOTE: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
 ##
 affinity: {}
-## @param nodeSelector Node labels for pod assignment
+## @param nodeSelector [object] Node labels for pod assignment
 ## ref: https://kubernetes.io/docs/user-guide/node-selection/
 ##
 nodeSelector: {}
-## @param tolerations Tolerations for pod assignment
+## @param tolerations [object] Tolerations for pod assignment
 ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: {}
 ## WildFly containers' resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-## @param resources.limits The resources limits for the WildFly container
+## @param resources.limits [object] The resources limits for the WildFly container
 ## @param resources.requests [object] The requested resources for the WildFly container
 ##
 resources:
@@ -272,10 +275,10 @@ readinessProbe:
   timeoutSeconds: 3
   failureThreshold: 3
   successThreshold: 1
-## @param customLivenessProbe Custom livenessProbe that overrides the default one
+## @param customLivenessProbe [object] Custom livenessProbe that overrides the default one
 ##
 customLivenessProbe: {}
-## @param customReadinessProbe Custom readinessProbe that overrides the default one
+## @param customReadinessProbe [object] Custom readinessProbe that overrides the default one
 ##
 customReadinessProbe: {}
 
@@ -292,7 +295,7 @@ service:
   port: 80
   ## @param service.mgmtPort WildFly service management console port
   ##
-  mgmtPort: 443
+  mgmtPort: 9990
   ## Node ports to expose
   ## @param service.nodePorts.http Node port for HTTP
   ## @param service.nodePorts.mgmt Node port for Management console
@@ -310,7 +313,7 @@ service:
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
   ##
   loadBalancerIP: ""
-  ## @param service.loadBalancerSourceRanges WildFly service Load Balancer sources
+  ## @param service.loadBalancerSourceRanges [array] WildFly service Load Balancer sources
   ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
   ## e.g:
   ## loadBalancerSourceRanges:
@@ -321,10 +324,10 @@ service:
   ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
   externalTrafficPolicy: Cluster
-  ## @param service.annotations Additional custom annotations for WildFly service
+  ## @param service.annotations [object] Additional custom annotations for WildFly service
   ##
   annotations: {}
-  ## @param service.extraPorts Extra port to expose on WildFly service
+  ## @param service.extraPorts [array] Extra ports to expose on WildFly service
   ##
   extraPorts: []
 ## Configure the ingress resource that allows you to access the WildFly installation
@@ -334,9 +337,10 @@ ingress:
   ## @param ingress.enabled Enable ingress record generation for WildFly
   ##
   enabled: false
-  ## @param ingress.certManager Add the corresponding annotations for cert-manager integration
+  ## DEPRECATED: Use ingress.annotations instead of ingress.certManager
+  ## certManager: false
   ##
-  certManager: false
+
   ## @param ingress.pathType Ingress path type
   ##
   pathType: ImplementationSpecific
@@ -350,26 +354,34 @@ ingress:
   ## NOTE: You may need to set this to '/*' in order to use this with ALB ingress controllers
   ##
   path: /
-  ## @param ingress.annotations Additional custom annotations for the ingress record
-  ## NOTE: If `ingress.certManager=true`, annotation `kubernetes.io/tls-acme: "true"` will automatically be added
+  ## @param ingress.annotations [object] Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
+  ## For a full list of possible ingress annotations, please see
+  ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+  ## Use this parameter to set the required annotations for cert-manager, see
+  ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
+  ##
+  ## e.g:
+  ## annotations:
+  ##   kubernetes.io/ingress.class: nginx
+  ##   cert-manager.io/cluster-issuer: cluster-issuer-name
   ##
   annotations: {}
   ## @param ingress.tls Enable TLS configuration for the host defined at `ingress.hostname` parameter
   ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.ingress.hostname }}`
   ## You can:
   ##   - Use the `ingress.secrets` parameter to create this TLS secret
-  ##   - Relay on cert-manager to create it by setting `ingress.certManager=true`
+  ##   - Relay on cert-manager to create it by setting the corresponding annotations
   ##   - Relay on Helm to create self-signed certificates by setting `ingress.tls=true` and `ingress.certManager=false`
   ##
   tls: false
-  ## @param ingress.extraHosts An array with additional hostname(s) to be covered with the ingress record
+  ## @param ingress.extraHosts [array] An array with additional hostname(s) to be covered with the ingress record
   ## e.g:
   ## extraHosts:
   ##   - name: wildfly.local
   ##     path: /
   ##
   extraHosts: []
-  ## @param ingress.extraPaths An array with additional arbitrary paths that may need to be added to the ingress under the main host
+  ## @param ingress.extraPaths [array] An array with additional arbitrary paths that may need to be added to the ingress under the main host
   ## e.g:
   ## extraPaths:
   ## - path: /*
@@ -378,7 +390,7 @@ ingress:
   ##     servicePort: use-annotation
   ##
   extraPaths: []
-  ## @param ingress.extraTls TLS configuration for additional hostname(s) to be covered with this ingress record
+  ## @param ingress.extraTls [array] TLS configuration for additional hostname(s) to be covered with this ingress record
   ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
   ## e.g:
   ## extraTls:
@@ -387,7 +399,7 @@ ingress:
   ##   secretName: wildfly.local-tls
   ##
   extraTls: []
-  ## @param ingress.secrets Custom TLS certificates as secrets
+  ## @param ingress.secrets [array] Custom TLS certificates as secrets
   ## NOTE: 'key' and 'certificate' are expected in PEM format
   ## NOTE: 'name' should line up with a 'secretName' set further up
   ## If it is not set and you're using cert-manager, this is unneeded, as it will create a secret for you with valid certificates
@@ -405,6 +417,82 @@ ingress:
   ##       -----BEGIN CERTIFICATE-----
   ##       ...
   ##       -----END CERTIFICATE-----
+  ##
+  secrets: []
+## Management Console Ingress parameters
+##
+mgmtIngress:
+  ## @param mgmtIngress.enabled Set to true to enable ingress record generation for the Management console
+  ##
+  enabled: false
+  ## DEPRECATED: Use mgmtIngress.annotations instead of mgmtIngress.certManager
+  ## certManager: false
+  ##
+
+  ## @param mgmtIngress.pathType Ingress path type
+  ##
+  pathType: ImplementationSpecific
+  ## @param mgmtIngress.hostname When the Management ingress is enabled, a host pointing to this will be created
+  ##
+  hostname: management.local
+  ## @param mgmtIngress.annotations Additional annotations for the Management Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
+  ## For a full list of possible ingress annotations, please see
+  ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+  ## Use this parameter to set the required annotations for cert-manager, see
+  ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
+  ##
+  ## e.g:
+  ## annotations:
+  ##   kubernetes.io/ingress.class: nginx
+  ##   cert-manager.io/cluster-issuer: cluster-issuer-name
+  ##
+  annotations: {}
+  ## @param mgmtIngress.tls Enable TLS configuration for the hostname defined at `mgmtIngress.hostname` parameter
+  ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.mgmtIngress.hostname }}
+  ## You can use the mgmtIngress.secrets parameter to create this TLS secret, relay on cert-manager to create it, or
+  ## let the chart create self-signed certificates for you
+  ##
+  tls: false
+  ## @param mgmtIngress.extraHosts The list of additional hostnames to be covered with this Management ingress record
+  ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
+  ## E.g.
+  ## extraHosts:
+  ##   - name: management.local
+  ##     path: /
+  ##
+  extraHosts: []
+  ## @param mgmtIngress.extraPaths [array] An array with additional arbitrary paths that may need to be added to the ingress under the main host
+  ## e.g:
+  ## extraPaths:
+  ## - path: /*
+  ##   backend:
+  ##     serviceName: ssl-redirect
+  ##     servicePort: use-annotation
+  ##
+  extraPaths: []
+  ## @param mgmtIngress.extraTls TLS configuration for additional hostnames to be covered
+  ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+  ## E.g.
+  ## extraTls:
+  ##   - hosts:
+  ##       - management.local
+  ##     secretName: management.local-tls
+  ##
+  extraTls: []
+  ## @param mgmtIngress.secrets TLS Secret configuration
+  ## If you're providing your own certificates, please use this to add the certificates as secrets
+  ## key and certificate should start with -----BEGIN CERTIFICATE----- or -----BEGIN RSA PRIVATE KEY-----
+  ## name should line up with a secretName set further up
+  ## If it is not set and you're using cert-manager, this is unneeded, as it will create the secret for you
+  ## If it is not set and you're NOT using cert-manager either, self-signed certificates will be created
+  ## It is also possible to create and manage the certificates outside of this helm chart
+  ## Please see README.md for more information
+  ##
+  ## E.g.
+  ## secrets:
+  ##   - name: management.local-tls
+  ##     key:
+  ##     certificate:
   ##
   secrets: []
 
@@ -444,13 +532,13 @@ volumePermissions:
   ## @param volumePermissions.image.repository Bitnami Shell image repository
   ## @param volumePermissions.image.tag Bitnami Shell image tag (immutable tags are recommended)
   ## @param volumePermissions.image.pullPolicy Bitnami Shell image pull policy
-  ## @param volumePermissions.image.pullSecrets Bitnami Shell image pull secrets
+  ## @param volumePermissions.image.pullSecrets [array] Bitnami Shell image pull secrets
   ##
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r146
-    pullPolicy: Always
+    tag: 10-debian-10-r233
+    pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -461,8 +549,8 @@ volumePermissions:
     pullSecrets: []
   ## Init container's resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ## @param volumePermissions.resources.limits The resources limits for the init container
-  ## @param volumePermissions.resources.requests The requested resources for the init container
+  ## @param volumePermissions.resources.limits [object] The resources limits for the init container
+  ## @param volumePermissions.resources.requests [object] The requested resources for the init container
   ##
   resources:
     limits: {}

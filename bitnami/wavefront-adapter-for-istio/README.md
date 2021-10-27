@@ -81,7 +81,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------- |
 | `image.registry`                        | Adapter image registry                                                                    | `docker.io`                           |
 | `image.repository`                      | Adapter image repository                                                                  | `bitnami/wavefront-adapter-for-istio` |
-| `image.tag`                             | Adapter image tag (immutabe tags are recommended)                                         | `0.1.5-debian-10-r106`                |
+| `image.tag`                             | Adapter image tag (immutabe tags are recommended)                                         | `0.1.5-debian-10-r195`                |
 | `image.pullPolicy`                      | Adapter image pull policy                                                                 | `IfNotPresent`                        |
 | `image.pullSecrets`                     | Adapter image pull secrets                                                                | `[]`                                  |
 | `image.debug`                           | Enable image debug mode                                                                   | `false`                               |
@@ -186,53 +186,23 @@ $ helm install my-release -f values.yaml bitnami/wavefront-adapter-for-istio
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling vs Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
-### Connecting to Wavefront
+### Connect to Wavefront
 
 The Wavefront Adapter for Istio chart needs to be connected to a Wavefront instance. This can be done in three different ways:
 
-- Deploying the Wavefront subchart, using only the Wavefront Proxy component (default behavior). This is done by setting `wavefront.enabled=true` and `wavefront.proxy.enabled=true`. We recommend disabling the rest of the Wavefront sub-chart resources as they would not be used by the Prometheus Storage Adapter. In this case, you should not set the `externalProxy.host` value. You also need to configure the Wavefront SaaS URL and token using the `wavefont.wavefront.url` and `wavefront.wavefront.token`.
+- Deploying the Wavefront subchart, using only the Wavefront Proxy component (default behavior): This is done by setting `wavefront.enabled=true` and `wavefront.proxy.enabled=true`, but leaving the `externalProxy.host` value unset. We recommend disabling the rest of the Wavefront sub-chart resources as they would not be used by the Prometheus Storage Adapter. You also need to configure the Wavefront SaaS URL and token using the `wavefont.wavefront.url` and `wavefront.wavefront.token` parameters.
 
-```yaml
-externalProxy:
-  host:
-  port:
-
-wavefront:
-  enabled: true
-  collector:
-    enabled: false
-  rbac:
-    create: false
-  serviceAccount:
-    create: false
-  proxy:
-    enabled: true
-  wavefront:
-    url: http://WAVEFRONT_URL
-    token: WAVEFRONT_TOKEN
-```
-
-- Using an external Wavefront Proxy instance. This is done by setting the `externalProxy.host` and `externalProxy.port` values. In this case, you should not set the `wavefront.enabled` value to `true`. You also need to configure the Wavefront SaaS URL and token using the `wavefont.wavefront.url` and `wavefront.wavefront.token`.
-
-```yaml
-externalProxy:
-  host:
-  port:
-
-wavefront:
-  enabled: false
-  wavefront:
-    url: http://WAVEFRONT_URL
-    token: WAVEFRONT_TOKEN
-```
+- Using an external Wavefront Proxy instance: This is done by setting the `externalProxy.host` and `externalProxy.port` values. In this case, you should set the `wavefront.enabled` value to `false`. You also need to configure the Wavefront SaaS URL and token using the `wavefront.wavefront.url` and `wavefront.wavefront.token` parameters.
 
 - Use direct ingestion without a Wavefront Proxy instance. This is done by not setting the `externalProxy` values and setting the `wavefront.enabled` value to false.
+
+Refer to the [chart documentation for more detailed configuration examples](https://docs.bitnami.com/kubernetes/apps/wavefront-adapter-for-istio/get-started/configure-connection/).
 
 ## Troubleshooting
 

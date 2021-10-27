@@ -49,7 +49,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/apache
-  tag: 2.4.48-debian-10-r52
+  tag: 2.4.51-debian-10-r18
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -77,7 +77,7 @@ image:
 git:
   registry: docker.io
   repository: bitnami/git
-  tag: 2.32.0-debian-10-r51
+  tag: 2.33.0-debian-10-r69
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
@@ -128,6 +128,13 @@ nodeSelector: {}
 ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
+## @param topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
+## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+##
+topologySpreadConstraints: []
+## @param extraPodSpec Optionally specify extra PodSpec
+##
+extraPodSpec: {}
 ## Get the server static content from a git repository
 ## @param cloneHtdocsFromGit.enabled Get the server static content from a git repository
 ## @param cloneHtdocsFromGit.repository Repository to clone static content from
@@ -315,17 +322,28 @@ ingress:
   ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
   ##
   apiVersion: ""
+  ## @param ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+  ## IngressClassName is used to reference the IngressClass that should be used to implement this Ingress.
+  ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+  ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+  ##
+  ingressClassName: ""
   ## @param ingress.hostname Default host for the ingress record
   ##
   hostname: example.local
   ## @param ingress.path Default path for the ingress record
   ##
   path: /
-  ## @param ingress.annotations Additional custom annotations for the ingress record
+  ## @param ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
   ## For a full list of possible ingress annotations, please see
   ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
-  ## NOTE: If `ingress.certManager=true`, annotation `ingress.kubernetes.io/secure-backends: "true"` will automatically be added
-  ## NOTE: If `ingress.certManager=true`, annotation `kubernetes.io/tls-acme: "true"` will automatically be added
+  ## Use this parameter to set the required annotations for cert-manager, see
+  ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
+  ##
+  ## e.g:
+  ## annotations:
+  ##   kubernetes.io/ingress.class: nginx
+  ##   cert-manager.io/cluster-issuer: cluster-issuer-name
   ##
   annotations: {}
   ## @param ingress.tls [array] Enable TLS configuration for the hosts defined
@@ -335,9 +353,10 @@ ingress:
     - hosts:
         - example.local
       secretName: example.local-tls
-  ## @param ingress.certManager Add the corresponding annotations for cert-manager integration
+  ## DEPRECATED: Use ingress.annotations instead of ingress.certManager
+  ## certManager: false
   ##
-  certManager: false
+
   ## @param ingress.hosts An array with additional hostname(s) to be covered with the ingress record
   ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
   ## e.g:
@@ -383,7 +402,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.10.0-debian-10-r5
+    tag: 0.10.1-debian-10-r35
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

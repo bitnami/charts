@@ -87,6 +87,9 @@ data:
             - secretRef:
                 name: {{ .Values.worker.extraEnvVarsSecret }}
             {{- end }}
+          {{- if .Values.worker.resources }}
+          resources: {{- toYaml .Values.worker.resources | nindent 12 }}
+          {{- end }}
           volumeMounts:
             - name: k8s-executor-config
               mountPath: /opt/bitnami/airflow/k8s-executor-config
@@ -149,7 +152,7 @@ data:
             - name: local-dag-files
               mountPath: /opt/bitnami/airflow/dags/local
           {{- end }}
-          {{- if .Values.dagsConfigMap }}
+          {{- if .Values.dags.configMap }}
             - name: external-dag-files
               mountPath: /opt/bitnami/airflow/dags/external
           {{- end }}
@@ -207,10 +210,10 @@ data:
       volumes:
         - name: k8s-executor-config
           emptyDir: {}
-      {{- if .Values.dagsConfigMap }}
+      {{- if .Values.dags.configMap }}
         - name: external-dag-files
           configMap:
-            name: {{ .Values.dagsConfigMap }}
+            name: {{ .Values.dags.configMap }}
       {{- end }}
       {{- if include "airflow.shouldUseConfigFromConfigMap" . }}
         - name: custom-configuration-file
