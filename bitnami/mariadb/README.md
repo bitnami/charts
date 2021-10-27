@@ -79,7 +79,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
 | `image.registry`           | MariaDB image registry                                                                                                                                                                                                                                                        | `docker.io`             |
 | `image.repository`         | MariaDB image repository                                                                                                                                                                                                                                                      | `bitnami/mariadb`       |
-| `image.tag`                | MariaDB image tag (immutable tags are recommended)                                                                                                                                                                                                                            | `10.5.12-debian-10-r32` |
+| `image.tag`                | MariaDB image tag (immutable tags are recommended)                                                                                                                                                                                                                            | `10.5.12-debian-10-r68` |
 | `image.pullPolicy`         | MariaDB image pull policy                                                                                                                                                                                                                                                     | `IfNotPresent`          |
 | `image.pullSecrets`        | Specify docker-registry secret names as an array                                                                                                                                                                                                                              | `[]`                    |
 | `image.debug`              | Specify if debug logs should be enabled                                                                                                                                                                                                                                       | `false`                 |
@@ -272,7 +272,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `secondary.pdb.maxUnavailable`                    | Maximum number/percentage of MariaDB secondary pods that may be made unavailable                                      | `""`                |
 | `secondary.revisionHistoryLimit`                  | Maximum number of revisions that will be maintained in the StatefulSet                                                | `10`                |
 
-
 ### RBAC parameters
 
 | Name                                          | Description                                                    | Value   |
@@ -291,8 +290,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                     | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image repository                                                                   | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                                         | `10-debian-10-r185`     |
-| `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                  | `Always`                |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                                         | `10-debian-10-r232`     |
+| `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                  | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                     | `[]`                    |
 | `volumePermissions.resources.limits`   | Init container volume-permissions resource limits                                                                    | `{}`                    |
 | `volumePermissions.resources.requests` | Init container volume-permissions resource requests                                                                  | `{}`                    |
@@ -305,7 +304,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                            | Start a side-car prometheus exporter                                                | `false`                   |
 | `metrics.image.registry`                     | Exporter image registry                                                             | `docker.io`               |
 | `metrics.image.repository`                   | Exporter image repository                                                           | `bitnami/mysqld-exporter` |
-| `metrics.image.tag`                          | Exporter image tag (immutable tags are recommended)                                 | `0.13.0-debian-10-r88`    |
+| `metrics.image.tag`                          | Exporter image tag (immutable tags are recommended)                                 | `0.13.0-debian-10-r135`   |
 | `metrics.image.pullPolicy`                   | Exporter image pull policy                                                          | `IfNotPresent`            |
 | `metrics.image.pullSecrets`                  | Specify docker-registry secret names as an array                                    | `[]`                      |
 | `metrics.annotations`                        | Annotations for the Exporter pod                                                    | `{}`                      |

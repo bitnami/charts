@@ -75,7 +75,7 @@ To uninstall/delete the `my-release` deployment:
 | --------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`                        | kong image registry                                                                                                                                                              | `docker.io`           |
 | `image.repository`                      | kong image repository                                                                                                                                                            | `bitnami/kong`        |
-| `image.tag`                             | kong image tag (immutable tags are recommended)                                                                                                                                  | `2.6.0-debian-10-r0`  |
+| `image.tag`                             | kong image tag (immutable tags are recommended)                                                                                                                                  | `2.6.0-debian-10-r26` |
 | `image.pullPolicy`                      | kong image pull policy                                                                                                                                                           | `IfNotPresent`        |
 | `image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                                                                                 | `[]`                  |
 | `image.debug`                           | Enable image debug mode                                                                                                                                                          | `false`               |
@@ -112,36 +112,35 @@ To uninstall/delete the `my-release` deployment:
 
 ### Traffic Exposure Parameters
 
-| Name                            | Description                                                                                   | Value                    |
-| ------------------------------- | --------------------------------------------------------------------------------------------- | ------------------------ |
-| `service.type`                  | Kubernetes Service type                                                                       | `ClusterIP`              |
-| `service.clusterIP`             | Cluster internal IP of the service                                                            | `""`                     |
-| `service.externalTrafficPolicy` | external traffic policy managing client source IP preservation                                | `""`                     |
-| `service.proxyHttpPort`         | kong proxy HTTP service port port                                                             | `80`                     |
-| `service.proxyHttpsPort`        | kong proxy HTTPS service port port                                                            | `443`                    |
-| `service.exposeAdmin`           | Add the Kong Admin ports to the service                                                       | `false`                  |
-| `service.adminHttpPort`         | kong admin HTTPS service port (only if service.exposeAdmin=true)                              | `8001`                   |
-| `service.adminHttpsPort`        | kong admin HTTPS service port (only if service.exposeAdmin=true)                              | `8444`                   |
-| `service.disableHttpPort`       | Disable Kong proxy HTTP and Kong admin HTTP ports                                             | `false`                  |
-| `service.proxyHttpNodePort`     | Port to bind to for NodePort service type (proxy HTTP)                                        | `""`                     |
-| `service.proxyHttpsNodePort`    | Port to bind to for NodePort service type (proxy HTTPS)                                       | `""`                     |
-| `service.adminHttpNodePort`     | Port to bind to for NodePort service type (admin HTTP)                                        | `""`                     |
-| `service.adminHttpsNodePort`    | Port to bind to for NodePort service type (admin HTTPS)                                       | `""`                     |
-| `service.loadBalancerIP`        | loadBalancerIP if kong service type is `LoadBalancer`                                         | `""`                     |
-| `service.annotations`           | Annotations for kong service                                                                  | `{}`                     |
-| `service.extraPorts`            | Extra ports to expose (normally used with the `sidecar` value)                                | `[]`                     |
-| `ingress.enabled`               | Enable ingress controller resource                                                            | `false`                  |
-| `ingress.certManager`           | Add annotations for cert-manager                                                              | `false`                  |
-| `ingress.pathType`              | Ingress path type                                                                             | `ImplementationSpecific` |
-| `ingress.apiVersion`            | Force Ingress API version (automatically detected if not set)                                 | `""`                     |
-| `ingress.hostname`              | Default host for the ingress resource                                                         | `kong.local`             |
-| `ingress.path`                  | Ingress path                                                                                  | `/`                      |
-| `ingress.annotations`           | Ingress annotations                                                                           | `{}`                     |
-| `ingress.tls`                   | Create TLS Secret                                                                             | `false`                  |
-| `ingress.extraHosts`            | The list of additional hostnames to be covered with this ingress record.                      | `[]`                     |
-| `ingress.extraPaths`            | Additional arbitrary path/backend objects                                                     | `[]`                     |
-| `ingress.extraTls`              | The tls configuration for additional hostnames to be covered with this ingress record.        | `[]`                     |
-| `ingress.secrets`               | If you're providing your own certificates, please use this to add the certificates as secrets | `[]`                     |
+| Name                            | Description                                                                                                                      | Value                    |
+| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.type`                  | Kubernetes Service type                                                                                                          | `ClusterIP`              |
+| `service.clusterIP`             | Cluster internal IP of the service                                                                                               | `""`                     |
+| `service.externalTrafficPolicy` | external traffic policy managing client source IP preservation                                                                   | `""`                     |
+| `service.proxyHttpPort`         | kong proxy HTTP service port port                                                                                                | `80`                     |
+| `service.proxyHttpsPort`        | kong proxy HTTPS service port port                                                                                               | `443`                    |
+| `service.exposeAdmin`           | Add the Kong Admin ports to the service                                                                                          | `false`                  |
+| `service.adminHttpPort`         | kong admin HTTPS service port (only if service.exposeAdmin=true)                                                                 | `8001`                   |
+| `service.adminHttpsPort`        | kong admin HTTPS service port (only if service.exposeAdmin=true)                                                                 | `8444`                   |
+| `service.disableHttpPort`       | Disable Kong proxy HTTP and Kong admin HTTP ports                                                                                | `false`                  |
+| `service.proxyHttpNodePort`     | Port to bind to for NodePort service type (proxy HTTP)                                                                           | `""`                     |
+| `service.proxyHttpsNodePort`    | Port to bind to for NodePort service type (proxy HTTPS)                                                                          | `""`                     |
+| `service.adminHttpNodePort`     | Port to bind to for NodePort service type (admin HTTP)                                                                           | `""`                     |
+| `service.adminHttpsNodePort`    | Port to bind to for NodePort service type (admin HTTPS)                                                                          | `""`                     |
+| `service.loadBalancerIP`        | loadBalancerIP if kong service type is `LoadBalancer`                                                                            | `""`                     |
+| `service.annotations`           | Annotations for kong service                                                                                                     | `{}`                     |
+| `service.extraPorts`            | Extra ports to expose (normally used with the `sidecar` value)                                                                   | `[]`                     |
+| `ingress.enabled`               | Enable ingress controller resource                                                                                               | `false`                  |
+| `ingress.pathType`              | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.apiVersion`            | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
+| `ingress.hostname`              | Default host for the ingress resource                                                                                            | `kong.local`             |
+| `ingress.path`                  | Ingress path                                                                                                                     | `/`                      |
+| `ingress.annotations`           | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.tls`                   | Create TLS Secret                                                                                                                | `false`                  |
+| `ingress.extraHosts`            | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
+| `ingress.extraPaths`            | Additional arbitrary path/backend objects                                                                                        | `[]`                     |
+| `ingress.extraTls`              | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
+| `ingress.secrets`               | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
 
 
 ### Kong Container Parameters
@@ -199,7 +198,7 @@ To uninstall/delete the `my-release` deployment:
 | `ingressController.customResourceDeletePolicy`         | Add custom CRD resource delete policy (for Helm 2 support)                                                                                    | `{}`                              |
 | `ingressController.image.registry`                     | Kong Ingress Controller image registry                                                                                                        | `docker.io`                       |
 | `ingressController.image.repository`                   | Kong Ingress Controller image name                                                                                                            | `bitnami/kong-ingress-controller` |
-| `ingressController.image.tag`                          | Kong Ingress Controller image tag                                                                                                             | `1.3.1-debian-10-r103`            |
+| `ingressController.image.tag`                          | Kong Ingress Controller image tag                                                                                                             | `1.3.1-debian-10-r132`            |
 | `ingressController.image.pullPolicy`                   | kong ingress controller image pull policy                                                                                                     | `IfNotPresent`                    |
 | `ingressController.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                                              | `[]`                              |
 | `ingressController.proxyReadyTimeout`                  | Maximum time (in seconds) to wait for the Kong container to be ready                                                                          | `300`                             |

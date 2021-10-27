@@ -1,3 +1,9 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
+** Please be patient while the chart is being deployed **
+
 {{- $ghostPasswordKey := ( include "common.secrets.key" (dict "existingSecret" .Values.existingSecret "key" "ghost-password") ) -}}
 {{- $ghostSecretName := (include "common.names.fullname" .) -}}
 {{- $databaseSecretName := include "ghost.databaseSecretName" . -}}
@@ -63,9 +69,9 @@ host. To configure Ghost with the URL of your service:
 
 {{- if eq .Values.service.type "ClusterIP" }}
 
-  echo Blog URL  : http://127.0.0.1:{{ default "80" .Values.service.port }}{{ .Values.ghostPath }}
-  echo Admin URL : http://127.0.0.1:{{ default "80" .Values.service.port }}{{ default "/" .Values.ghostPath }}ghost
-  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "common.names.fullname" . }} {{ default "80" .Values.service.port }}:{{ default "80" .Values.service.port }}
+  echo Blog URL  : http://127.0.0.1:{{ default "80" (coalesce .Values.service.ports.http .Values.service.port) }}{{ .Values.ghostPath }}
+  echo Admin URL : http://127.0.0.1:{{ default "80" (coalesce .Values.service.ports.http .Values.service.port) }}{{ default "/" .Values.ghostPath }}ghost
+  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "common.names.fullname" . }} {{ default "80" (coalesce .Values.service.ports.http .Values.service.port) }}:{{ default "80" (coalesce .Values.service.ports.http .Values.service.port) }}
 
 {{- else if eq .Values.service.type "NodePort" }}
 

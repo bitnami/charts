@@ -189,9 +189,9 @@ spec:
                 - /bin/bash
                 - -ec
                 - |
-                  password_aux="${MARIADB_MASTER_ROOT_PASSWORD:-}"
-                  if [[ -f "${MARIADB_MASTER_ROOT_PASSWORD_FILE:-}" ]]; then
-                      password_aux=$(cat "$MARIADB_MASTER_ROOT_PASSWORD_FILE")
+                  password_aux="${MARIADB_ROOT_PASSWORD:-}"
+                  if [[ -f "${MARIADB_ROOT_PASSWORD_FILE:-}" ]]; then
+                      password_aux=$(cat "$MARIADB_ROOT_PASSWORD_FILE")
                   fi
                   mysqladmin status -uroot -p"${password_aux}"
           {{- else if .Values.secondary.customStartupProbe }}
@@ -335,6 +335,9 @@ spec:
         name: data
         labels: {{ include "common.labels.matchLabels" . | nindent 10 }}
           app.kubernetes.io/component: secondary
+        {{- if .Values.secondary.persistence.annotations }}
+        annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.secondary.persistence.annotations "context" $ ) | nindent 10 }}
+        {{- end }}
       spec:
         accessModes:
           {{- range .Values.secondary.persistence.accessModes }}

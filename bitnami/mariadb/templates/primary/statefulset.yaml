@@ -365,6 +365,9 @@ spec:
         name: data
         labels: {{ include "common.labels.matchLabels" . | nindent 10 }}
           app.kubernetes.io/component: primary
+        {{- if .Values.primary.persistence.annotations }}
+        annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.primary.persistence.annotations "context" $ ) | nindent 10 }}
+        {{- end }}
       spec:
         accessModes:
           {{- range .Values.primary.persistence.accessModes }}

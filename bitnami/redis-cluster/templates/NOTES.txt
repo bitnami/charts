@@ -1,3 +1,7 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
 {{- $secretName := include "redis-cluster.secretName" . -}}
 {{- $secretPasswordKey := include "redis-cluster.secretPasswordKey" . -}}
 
@@ -51,7 +55,7 @@ To connect to your Redis&trade; server from outside the cluster check the follow
     To connect to your database from outside the cluster execute the following commands:
 
     export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
-    redis-cli -c -h $SERVICE_IP -p {{ .Values.service.port }} {{- if .Values.usePassword }} -a $REDIS_PASSWORD{{ end }}{{ if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
+    redis-cli -c -h $SERVICE_IP -p {{ .Values.service.ports.redis }} {{- if .Values.usePassword }} -a $REDIS_PASSWORD{{ end }}{{ if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
     {{- end }}
 
 {{- else }}
@@ -100,6 +104,8 @@ will be able to connect to redis.
 
 {{- include "redis-cluster.validateValues" . }}
 {{- include "redis-cluster.checkRollingTags" . }}
+{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
+{{- include "common.warnings.rollingTag" .Values.sysctlImage }}
 
 {{- if and .Values.usePassword (not .Values.existingSecret) -}}
 

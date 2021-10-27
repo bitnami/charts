@@ -74,7 +74,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/postgresql
-  tag: 11.13.0-debian-10-r40
+  tag: 11.13.0-debian-10-r73
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -108,12 +108,12 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r200
+    tag: 10-debian-10-r233
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
-    pullPolicy: Always
+    pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -381,7 +381,7 @@ postgresqlPghbaRemoveFilters: ""
 terminationGracePeriodSeconds: ""
 ## LDAP configuration
 ## @param ldap.enabled Enable LDAP support
-## @param ldap.url LDAP URL beginning in the form `ldap[s]://host[:port]/basedn[
+## @param ldap.url LDAP URL beginning in the form `ldap[s]://host[:port]/basedn`
 ## @param ldap.server IP address or name of the LDAP server.
 ## @param ldap.port Port number on the LDAP server to connect to
 ## @param ldap.prefix String to prepend to the user name when forming the DN to bind
@@ -554,6 +554,9 @@ primary:
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
+  ## @param primary.extraPodSpec Optionally specify extra PodSpec
+  ##
+  extraPodSpec: {}
   ## @param primary.labels Map of labels to add to the statefulset (postgresql primary)
   ##
   labels: {}
@@ -647,10 +650,13 @@ readReplicas:
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-  ## @param topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
+  ## @param readReplicas.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
   topologySpreadConstraints: []
+  ## @param readReplicas.extraPodSpec Optionally specify extra PodSpec
+  ##
+  extraPodSpec: {}
   ## @param readReplicas.labels Map of labels to add to the statefulsets (postgresql readReplicas)
   ##
   labels: {}
@@ -900,7 +906,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/postgres-exporter
-    tag: 0.10.0-debian-10-r68
+    tag: 0.10.0-debian-10-r101
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
