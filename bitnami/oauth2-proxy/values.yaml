@@ -99,11 +99,11 @@ service:
   ##
   annotations: {}
 
-## Configure the ingress resource that allows you to access the WordPress installation
+## Configure the ingress resource that allows you to access the OAuth2 Proxy installation
 ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
 ##
 ingress:
-  ## @param ingress.enabled Enable ingress record generation for WordPress
+  ## @param ingress.enabled Enable ingress record generation for OAuth2 Proxy
   ##
   enabled: false
   ## DEPRECATED: Use ingress.annotations instead of ingress.certManager
