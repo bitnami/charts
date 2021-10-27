@@ -76,6 +76,7 @@ $ kubectl delete pvc -l release=my-release
 | `nameOverride`           | String to partially override common.names.fullname template (will maintain the release name) | `""`           |
 | `fullnameOverride`       | String to fully override common.names.fullname template                                      | `""`           |
 | `extraDeploy`            | Array of extra objects to deploy with the release (evaluated as a template)                  | `[]`           |
+| `commonLabels`           | Labels to add to all deployed objects (sub-charts are not considered)                        | `{}`           |
 | `commonAnnotations`      | Add annotations to all the deployed resources                                                | `{}`           |
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)      | `false`        |
 | `diagnosticMode.command` | Command to override all containers in the deployment                                         | `["sleep"]`    |
