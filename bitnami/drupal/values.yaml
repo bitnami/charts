@@ -33,6 +33,7 @@ commonAnnotations: {}
 ## @param commonLabels Common labels to add to all Drupal resources (sub-charts are not considered). Evaluated as a template
 ##
 commonLabels: {}
+
 ## @param extraDeploy Array of extra objects to deploy with the release (evaluated as a template).
 ##
 extraDeploy: []
@@ -602,7 +603,7 @@ metrics:
 
 ## @section Certificate injection parameters
 
-## Add custom certificates and certificate authorities to redmine container
+## Add custom certificates and certificate authorities to drupal container
 ##
 certificates:
   ## @param certificates.customCertificate.certificateSecret Secret containing the certificate and key to add
@@ -658,3 +659,90 @@ certificates:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
+
+## @section NetworkPolicy parameters
+
+## Add networkpolcies
+##
+networkPolicy:
+  ## @param networkPolicy.enabled Enable network policies
+  ##
+  enabled: false
+  ## @param networkPolicy.metrics.enabled Enable network policy for metrics (prometheus)
+  ## @param networkPolicy.metrics.namespaceSelector [object] Monitoring namespace selector labels. These labels will be used to identify the prometheus' namespace.
+  ## @param networkPolicy.metrics.podSelector [object] Monitoring pod selector labels. These labels will be used to identify the Prometheus pods.
+  ##
+  metrics:
+    enabled: true
+    ## e.g:
+    ## podSelector:
+    ##   label: monitoring
+    ##
+    podSelector: {}
+    ## e.g:
+    ## namespaceSelector:
+    ##   label: monitoring
+    ##
+    namespaceSelector: {}
+  ## @param networkPolicy.ingress.enabled Enable network policy for Ingress Proxys
+  ## @param networkPolicy.ingress.namespaceSelector [object] Ingress Proxy namespace selector labels. These labels will be used to identify the Ingress Proxy's namespace.
+  ## @param networkPolicy.ingress.podSelector [object] Ingress Proxy pods selector labels. These labels will be used to identify the Ingress Proxy pods.
+  ##
+  ingress:
+    enabled: true
+    ## e.g:
+    ## podSelector:
+    ##   label: ingress
+    ##
+    podSelector: {}
+    ## e.g:
+    ## namespaceSelector:
+    ##   label: ingress
+    ##
+    namespaceSelector: {}
+  ## @param networkPolicy.ingressRules.backendOnlyAccessibleByFrontend Enable ingress rule that makes the backend (mariadb) only accesible by drupal's pods.
+  ## @param networkPolicy.ingressRules.customBackendSelector [object] Backend selector labels. These labels will be used to identify the backend pods.
+  ## @param networkPolicy.ingressRules.accessOnlyFrom.enabled Enable ingress rule that makes drupal only accessible from a particular origin
+  ## @param networkPolicy.ingressRules.accessOnlyFrom.namespaceSelector [object] Namespace selector label that is allowed to access drupal. This label will be used to identified the allowed namespace(s).
+  ## @param networkPolicy.ingressRules.accessOnlyFrom.podSelector [object] Pods selector label that is allowed to access drupal. This label will be used to identified the allowed pod(s).
+  ## @param networkPolicy.ingressRules.customRules [object] Custom network policy ingress rule
+  ##
+  ingressRules:
+    ## Mysql backend only could be accessed from drupal
+    backendOnlyAccessibleByFrontend: false
+    customBackendSelector: {}
+    ## Allow only from the indicated:
+    accessOnlyFrom:
+      enabled: false
+      ## e.g:
+      ## namespaceSelector:
+      ##   label: ingress
+      ##
+      namespaceSelector: {}
+      ## e.g:
+      ## podSelector:
+      ##   label: access
+      ##
+      podSelector: {}
+    ## custom ingress rules
+    ## e.g:
+    ## customRules:
+    ##   - from:
+    ##       - namespaceSelector:
+    ##           matchLabels:
+    ##             label: example
+    customRules: {}
+  ## @param networkPolicy.egressRules.denyConnectionsToExternal Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).
+  ## @param networkPolicy.egressRules.customRules [object] Custom network policy rule
+  ##
+  egressRules:
+    # Deny connections to external. This is not compatible with an external database.
+    denyConnectionsToExternal: false
+    ## Additional custom egress rules
+    ## e.g:
+    ## customRules:
+    ##   - to:
+    ##       - namespaceSelector:
+    ##           matchLabels:
+    ##             label: example
+    customRules: {}

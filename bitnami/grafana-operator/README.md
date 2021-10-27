@@ -86,7 +86,7 @@ For more information, refer to the [documentation on the differences between the
 | `operator.updateStrategy.type`                               | Set up update strategy for Grafana Operator installation.                                                              | `Recreate`                 |
 | `operator.image.registry`                                    | Grafana Operator image registry                                                                                        | `docker.io`                |
 | `operator.image.repository`                                  | Grafana Operator image name                                                                                            | `bitnami/grafana-operator` |
-| `operator.image.tag`                                         | Grafana Operator image tag                                                                                             | `3.10.4-debian-10-r2`      |
+| `operator.image.tag`                                         | Grafana Operator image tag                                                                                             | `3.10.4-debian-10-r6`      |
 | `operator.image.pullPolicy`                                  | Grafana Operator image pull policy                                                                                     | `IfNotPresent`             |
 | `operator.image.pullSecrets`                                 | Grafana Operator image pull secrets                                                                                    | `[]`                       |
 | `operator.args.scanAllNamespaces`                            | Specify if all namespace should be scanned for dashboards and datasources. (Creates ClusterRole)                       | `false`                    |
@@ -143,7 +143,7 @@ For more information, refer to the [documentation on the differences between the
 | `grafana.enabled`                                           | Enabled the deployment of the Grafana CRD object into the cluster                             | `true`               |
 | `grafana.image.registry`                                    | Grafana image registry                                                                        | `docker.io`          |
 | `grafana.image.repository`                                  | Grafana image name                                                                            | `bitnami/grafana`    |
-| `grafana.image.tag`                                         | Grafana image tag                                                                             | `8.2.2-debian-10-r1` |
+| `grafana.image.tag`                                         | Grafana image tag                                                                             | `8.2.2-debian-10-r5` |
 | `grafana.image.pullSecrets`                                 | Grafana image pull secrets                                                                    | `[]`                 |
 | `grafana.serviceAccount`                                    | Additional service account configuration                                                      | `{}`                 |
 | `grafana.podSecurityContext.enabled`                        | Enable pods security context                                                                  | `true`               |
