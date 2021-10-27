@@ -424,7 +424,7 @@ customTemplate:
 ##         app.kubernetes.io/instance: ingress-nginx-internal
 ##
 topologySpreadConstraints: []
-## @param podSecurityPolicy.enabled If true, create & use Pod Security Policy resources
+## @param podSecurityPolicy.enabled Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later
 ## https://kubernetes.io/docs/concepts/policy/pod-security-policy/
 ##
 podSecurityPolicy:
