@@ -217,7 +217,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `worker.containerSecurityContext.enabled`    | Enabled worker containers' Security Context                                                                                                 | `true`          |
 | `worker.containerSecurityContext.privileged` | Set worker containers' Security Context with privileged or not                                                                              | `true`          |
 | `worker.containerSecurityContext.runAsUser`  | Set worker containers' Security Context user                                                                                                | `0`             |
-| `worker.psp.create`                          | Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later | `true`          |
+| `worker.psp.create`                          | Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later | `false`         |
 | `worker.podLabels`                           | Custom labels for worker pods                                                                                                               | `{}`            |
 | `worker.podAnnotations`                      | Annotations for worker pods                                                                                                                 | `{}`            |
 | `worker.podAffinityPreset`                   | Pod affinity preset. Ignored if `worker.affinity` is set. Allowed values: `soft` or `hard`                                                  | `""`            |
