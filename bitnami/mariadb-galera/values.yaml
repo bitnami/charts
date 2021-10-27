@@ -257,7 +257,7 @@ galera:
     forcePassword: false
 ## LDAP configuration
 ## @param ldap.enabled Enable LDAP support
-## @param ldap.uri LDAP URL beginning in the form `ldap
+## @param ldap.uri LDAP URL beginning in the form `ldap`
 ## @param ldap.base LDAP base DN
 ## @param ldap.binddn LDAP bind DN
 ## @param ldap.bindpw LDAP bind password
