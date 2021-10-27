@@ -125,6 +125,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `primary.containerSecurityContext.runAsUser` | User ID for the MariaDB primary container                                                                         | `1001`              |
 | `primary.resources.limits`                   | The resources limits for MariaDB primary containers                                                               | `{}`                |
 | `primary.resources.requests`                 | The requested resources for MariaDB primary containers                                                            | `{}`                |
+| `primary.startupProbe.enabled`               | Enable startupProbe                                                                                               | `true`              |
+| `primary.startupProbe.initialDelaySeconds`   | Initial delay seconds for startupProbe                                                                            | `120`               |
+| `primary.startupProbe.periodSeconds`         | Period seconds for startupProbe                                                                                   | `15`                |
+| `primary.startupProbe.timeoutSeconds`        | Timeout seconds for startupProbe                                                                                  | `5`                 |
+| `primary.startupProbe.failureThreshold`      | Failure threshold for startupProbe                                                                                | `10`                |
+| `primary.startupProbe.successThreshold`      | Success threshold for startupProbe                                                                                | `1`                 |
 | `primary.livenessProbe.enabled`              | Enable livenessProbe                                                                                              | `true`              |
 | `primary.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                           | `120`               |
 | `primary.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                                  | `10`                |
@@ -137,6 +143,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `primary.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                                | `1`                 |
 | `primary.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                                              | `3`                 |
 | `primary.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                              | `1`                 |
+| `primary.customStartupProbe`                 | Override default startup probe for MariaDB primary containers                                                     | `{}`                |
 | `primary.customLivenessProbe`                | Override default liveness probe for MariaDB primary containers                                                    | `{}`                |
 | `primary.customReadinessProbe`               | Override default readiness probe for MariaDB primary containers                                                   | `{}`                |
 | `primary.startupWaitOptions`                 | Override default builtin startup wait check options for MariaDB primary containers                                | `{}`                |
@@ -199,6 +206,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `secondary.containerSecurityContext.runAsUser` | User ID for the MariaDB secondary container                                                                           | `1001`              |
 | `secondary.resources.limits`                   | The resources limits for MariaDB secondary containers                                                                 | `{}`                |
 | `secondary.resources.requests`                 | The requested resources for MariaDB secondary containers                                                              | `{}`                |
+| `secondary.startupProbe.enabled`               | Enable livenessProbe                                                                                                  | `true`              |
+| `secondary.startupProbe.initialDelaySeconds`   | Initial delay seconds for livenessProbe                                                                               | `120`               |
+| `secondary.startupProbe.periodSeconds`         | Period seconds for livenessProbe                                                                                      | `15`                |
+| `secondary.startupProbe.timeoutSeconds`        | Timeout seconds for livenessProbe                                                                                     | `5`                 |
+| `secondary.startupProbe.failureThreshold`      | Failure threshold for livenessProbe                                                                                   | `10`                |
+| `secondary.startupProbe.successThreshold`      | Success threshold for livenessProbe                                                                                   | `1`                 |
 | `secondary.livenessProbe.enabled`              | Enable livenessProbe                                                                                                  | `true`              |
 | `secondary.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                               | `120`               |
 | `secondary.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                                      | `10`                |
@@ -211,6 +224,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `secondary.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                                    | `1`                 |
 | `secondary.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                                                  | `3`                 |
 | `secondary.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                                  | `1`                 |
+| `secondary.customStartupProbe`                 | Override default startup probe for MariaDB secondary containers                                                       | `{}`                |
 | `secondary.customLivenessProbe`                | Override default liveness probe for MariaDB secondary containers                                                      | `{}`                |
 | `secondary.customReadinessProbe`               | Override default readiness probe for MariaDB secondary containers                                                     | `{}`                |
 | `secondary.startupWaitOptions`                 | Override default builtin startup wait check options for MariaDB secondary containers                                  | `{}`                |
