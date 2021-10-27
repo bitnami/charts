@@ -6,7 +6,6 @@
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
 ## @param global.storageClass Global StorageClass for Persistent Volume(s)
-## @param global.minio Global MinIO&reg; credentials
 ##
 global:
   imageRegistry: ""
@@ -16,13 +15,6 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
-  ## e.g:
-  ## minio:
-  ##   existingSecret: ""
-  ##   accessKey: ""
-  ##   secretKey: ""
-  ##
-  minio: {}
 
 ## @section Common parameters
 
@@ -62,7 +54,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/minio
-  tag: 2021.10.6-debian-10-r0
+  tag: 2021.10.23-debian-10-r3
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -88,40 +80,32 @@ image:
 clientImage:
   registry: docker.io
   repository: bitnami/minio-client
-  tag: 2021.9.23-debian-10-r13
+  tag: 2021.10.7-debian-10-r19
 ## @param mode MinIO&reg; server mode (`standalone` or `distributed`)
 ## ref: https://docs.minio.io/docs/distributed-minio-quickstart-guide
 ##
 mode: standalone
-## MinIO&reg; credentials
+## MinIO&reg; authentication parameters
 ##
-accessKey:
-  ## @param accessKey.password MinIO&reg; Access Key. Ignored if existing secret is provided.
-  ## ref: https://github.com/bitnami/bitnami-docker-minio/#setting-up-minio-in-distributed-mode
+auth:
+  ## @param auth.rootUser MinIO&reg; root username
   ##
-  password: ""
-  ## @param accessKey.forcePassword Option to force users to specify a password. That is required for 'helm upgrade' to work properly.
-  ## If it is not force, a random password will be generated.
+  rootUser: admin
+  ## @param auth.rootPassword Password for MinIO&reg; root user
   ##
-  forcePassword: false
-secretKey:
-  ## @param secretKey.password MinIO&reg; Secret Key. Ignored if existing secret is provided.
-  ## ref: https://github.com/bitnami/bitnami-docker-minio/#setting-up-minio-in-distributed-mode
+  rootPassword: ""
+  ## @param auth.existingSecret Use existing secret for credentials details (`auth.rootUser` and `auth.rootPassword` will be ignored and picked up from this secret). The secret has to contain the keys `root-user` and `mariadb-root-password)
   ##
-  password: ""
-  ## @param secretKey.forcePassword Option to force users to specify a password. That is required for 'helm upgrade' to work properly.
-  ## If it is not force, a random password will be generated.
+  existingSecret: ""
+  ## @param auth.forcePassword Force users to specify required passwords
   ##
   forcePassword: false
-## @param existingSecret Use existing secret (ignores accessKey, and secretKey passwords)
-##
-existingSecret: ""
-## @param useCredentialsFile Mount MinIO&reg; secret as a file instead of passing environment variable
-##
-useCredentialsFile: false
-## @param forceNewKeys Force admin credentials (access and secret key) to be reconfigured every time they change in the secrets
-##
-forceNewKeys: false
+  ## @param auth.useCredentialsFiles Mount credentials as a files instead of using an environment variable
+  ##
+  useCredentialsFiles: false
+  ## @param auth.forceNewKeys Force root credentials (user and password) to be reconfigured every time they change in the secrets
+  ##
+  forceNewKeys: false
 ## @param defaultBuckets Comma, semi-colon or space separated list of buckets to create at initialization (only in standalone mode)
 ## e.g:
 ## defaultBuckets: "my-bucket, my-second-bucket"
@@ -140,20 +124,16 @@ tls:
   ## @param tls.existingSecret Name of an existing secret holding the certificate information
   ##
   existingSecret: ""
-  ## @param tls.secretName DEPRECATED. Use `tls.existingSecret` instead.
-  ## Name of an existing secret holding the certificate information
-  ##
-  secretName: ""
   ## @param tls.mountPath The mount path where the secret will be located
   ## Custom mount path where the certificates will be located, if empty will default to /certs
   mountPath: ""
-## @param extraEnv Extra environment variables to be set on MinIO&reg; container
+## @param extraEnvVars Extra environment variables to be set on MinIO&reg; container
 ## e.g:
-## extraEnv:
+## extraEnvVars:
 ##   - name: FOO
 ##     value: "bar"
 ##
-extraEnv: {}
+extraEnvVars: {}
 ## @param extraEnvVarsCM ConfigMap with extra environment variables
 ##
 extraEnvVarsCM: ""
@@ -177,8 +157,8 @@ schedulerName: ""
 ## Only when 'mode' is 'standalone' or 'gateway.enabled' is 'true'
 ##
 deployment:
-  ## @param deployment.updateStrategy.type Set to Recreate if you use persistent volume that cannot be mounted by more than one pods to make sure the pods is destroyed first.
-  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+  ## @param deployment.updateStrategy.type Deployment strategy type
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ## e.g:
   ## updateStrategy:
   ##  type: RollingUpdate
@@ -192,10 +172,17 @@ deployment:
 ## Only when mode is 'distributed'
 ##
 statefulset:
-  ## @param statefulset.updateStrategy Update strategy, can be set to `RollingUpdate` or `OnDelete`
-  ## ref: https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#updating-statefulsets
+  ## @param statefulset.updateStrategy.type StatefulSet strategy type
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ## e.g:
+  ## updateStrategy:
+  ##  type: RollingUpdate
+  ##  rollingUpdate:
+  ##    maxSurge: 25%
+  ##    maxUnavailable: 25%
   ##
-  updateStrategy: RollingUpdate
+  updateStrategy:
+    type: RollingUpdate
   ## @param statefulset.podManagementPolicy StatefulSet controller supports relax its ordering guarantees while preserving its uniqueness and identity guarantees. There are two valid pod management policies: OrderedReady and Parallel
   ## ref: https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#pod-management-policy
   ##
@@ -285,6 +272,13 @@ nodeSelector: {}
 ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
+## @param topologySpreadConstraints Topology Spread Constraints for MinIO&reg; pods assignment spread across your cluster among failure-domains
+## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+##
+topologySpreadConstraints: []
+## @param priorityClassName MinIO&reg; pods' priorityClassName
+##
+priorityClassName: ""
 ## MinIO&reg; containers' resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -362,6 +356,9 @@ customReadinessProbe: {}
 ## @param customStartupProbe Override default startup probe
 ##
 customStartupProbe: {}
+## @param lifecycleHooks for the MinIO&reg container(s) to automate configuration before or after startup
+##
+lifecycleHooks: {}
 ## @param extraVolumes Optionally specify extra list of additional volumes for MinIO&reg; pods
 ##
 extraVolumes: []
@@ -412,6 +409,11 @@ service:
   nodePorts:
     api: ""
     console: ""
+  ## @param service.clusterIP Service Cluster IP
+  ## e.g.:
+  ## clusterIP: None
+  ##
+  clusterIP: ""
   ## @param service.loadBalancerIP loadBalancerIP if service type is `LoadBalancer` (optional, cloud specific)
   ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
   ##
@@ -427,6 +429,9 @@ service:
   ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
   externalTrafficPolicy: Cluster
+  ## @param service.extraPorts Extra ports to expose in the service (normally used with the `sidecar` value)
+  ##
+  extraPorts: []
   ## @param service.annotations Annotations for MinIO&reg; service
   ## This can be used to set the LoadBalancer service type to internal only.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
@@ -440,13 +445,14 @@ ingress:
   ## @param ingress.enabled Enable ingress controller resource
   ##
   enabled: false
-  ## DEPRECATED: Use ingress.annotations instead of ingress.certManager
-  ## certManager: false
-  ##
-
   ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
   ##
   apiVersion: ""
+  ## @param ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+  ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster.
+  ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+  ##
+  ingressClassName: ""
   ## @param ingress.hostname Default host for the ingress resource
   ##
   hostname: minio.local
@@ -473,10 +479,16 @@ ingress:
   ##
   annotations: {}
   ## @param ingress.tls Enable TLS configuration for the hostname defined at `ingress.hostname` parameter
-  ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.ingress.hostname }}
-  ## You can use the ingress.secrets parameter to create this TLS secret or relay on cert-manager to create it
+  ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.ingress.hostname }}`
+  ## You can:
+  ##   - Use the `ingress.secrets` parameter to create this TLS secret
+  ##   - Relay on cert-manager to create it by setting the corresponding annotations
+  ##   - Relay on Helm to create self-signed certificates by setting `ingress.selfSigned=true`
   ##
   tls: false
+  ## @param ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
+  ##
+  selfSigned: false
   ## @param ingress.extraHosts The list of additional hostnames to be covered with this ingress record.
   ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
   ## e.g:
@@ -528,13 +540,14 @@ apiIngress:
   ## @param apiIngress.enabled Enable ingress controller resource
   ##
   enabled: false
-  ## DEPRECATED: Use apiIngress.annotations instead of apiIngress.certManager
-  ## certManager: false
-  ##
-
   ## @param apiIngress.apiVersion Force Ingress API version (automatically detected if not set)
   ##
   apiVersion: ""
+  ## @param apiIngress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+  ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster.
+  ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+  ##
+  ingressClassName: ""
   ## @param apiIngress.hostname Default host for the ingress resource
   ##
   hostname: minio.local
@@ -561,10 +574,16 @@ apiIngress:
   ##
   annotations: {}
   ## @param apiIngress.tls Enable TLS configuration for the hostname defined at `apiIngress.hostname` parameter
-  ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.apiIngress.hostname }}
-  ## You can use the apiIngress.secrets parameter to create this TLS secret or relay on cert-manager to create it
+  ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.apiIngress.hostname }}`
+  ## You can:
+  ##   - Use the `ingress.secrets` parameter to create this TLS secret
+  ##   - Relay on cert-manager to create it by setting the corresponding annotations
+  ##   - Relay on Helm to create self-signed certificates by setting `ingress.selfSigned=true`
   ##
   tls: false
+  ## @param apiIngress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
+  ##
+  selfSigned: false
   ## @param apiIngress.extraHosts The list of additional hostnames to be covered with this ingress record.
   ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
   ## e.g:
@@ -672,8 +691,8 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r214
-    pullPolicy: Always
+    tag: 10-debian-10-r233
+    pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -718,6 +737,12 @@ serviceAccount:
   ## If not set and create is true, a name is generated using the common.names.fullname template
   ##
   name: ""
+  ## @param serviceAccount.automountServiceAccountToken Enable/disable auto mounting of the service account token
+  ##
+  automountServiceAccountToken: true
+  ## @param serviceAccount.annotations Custom annotations for MinIO&reg; ServiceAccount
+  ##
+  annotations: {}
 
 ## @section Other parameters
 
@@ -752,6 +777,12 @@ metrics:
     ## @param metrics.serviceMonitor.namespace Namespace which Prometheus is running in
     ##
     namespace: ""
+    ## @param metrics.serviceMonitor.labels Extra labels for the ServiceMonitor
+    ##
+    labels: {}
+    ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in Prometheus
+    ##
+    jobLabel: ""
     ## @param metrics.serviceMonitor.path HTTP path to scrape for metrics
     ##
     path: /minio/v2/metrics/cluster
@@ -762,16 +793,19 @@ metrics:
     ## e.g:
     ## scrapeTimeout: 30s
     scrapeTimeout: ""
-    ## @param metrics.serviceMonitor.relabellings Specify Metric Relabellings to add to the scrape endpoint
+    ## @param metrics.serviceMonitor.metricRelabelings MetricRelabelConfigs to apply to samples before ingestion
     ##
-    relabellings: []
+    metricRelabelings: []
+    ## @param metrics.serviceMonitor.relabelings Metrics relabelings to add to the scrape endpoint, applied before scraping
+    ##
+    relabelings: []
     ## @param metrics.serviceMonitor.honorLabels Specify honorLabels parameter to add the scrape endpoint
     ##
     honorLabels: false
-    ## @param metrics.serviceMonitor.additionalLabels Used to pass Labels that are required by the installed Prometheus Operator
-    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
+    ## @param metrics.serviceMonitor.selector Prometheus instance selector labels
+    ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
     ##
-    additionalLabels: {}
+    selector: {}
 
 ## @section Gateway parameters
 
@@ -811,8 +845,8 @@ gateway:
   ##
   auth:
     ## Authentication configuration for Azure. Ignored unless type=azure
-    ## @param gateway.auth.azure.accessKey Access Key to access MinIO using Azure Gateway
-    ## @param gateway.auth.azure.secretKey Secret Key to access MinIO using Azure Gateway
+    ## @param gateway.auth.azure.accessKey Access key to access MinIO&reg; using Azure Gateway
+    ## @param gateway.auth.azure.secretKey Secret key to access MinIO&reg; using Azure Gateway
     ## @param gateway.auth.azure.storageAccountName Azure Storage Account Name to use to access Azure Blob Storage
     ## @param gateway.auth.azure.storageAccountKey Azure Storage Account Key to use to access Azure Blob Storage
     ## @param gateway.auth.azure.storageAccountNameExistingSecret Existing Secret name to extract Azure Storage Account Name from to access Azure Blob Storage
@@ -830,8 +864,8 @@ gateway:
       storageAccountKeyExistingSecret: ""
       storageAccountKeyExistingSecretKey: ""
     ## Authentication configuration for GCS. Ignored unless type=gcs
-    ## @param gateway.auth.gcs.accessKey Access Key to access MinIO using GCS Gateway
-    ## @param gateway.auth.gcs.secretKey Secret Key to access MinIO using GCS Gateway
+    ## @param gateway.auth.gcs.accessKey Access key to access MinIO&reg; using GCS Gateway
+    ## @param gateway.auth.gcs.secretKey Secret key to access MinIO&reg; using GCS Gateway
     ## @param gateway.auth.gcs.keyJSON Service Account key to access GCS
     ## @param gateway.auth.gcs.projectID GCP Project ID to use
     ##
@@ -841,15 +875,15 @@ gateway:
       keyJSON: ""
       projectID: ""
     ## Authentication configuration for NAS. Ignored unless type=nas
-    ## @param gateway.auth.nas.accessKey Access Key to access MinIO using NAS Gateway
-    ## @param gateway.auth.nas.secretKey Secret Key to access MinIO using NAS Gateway
+    ## @param gateway.auth.nas.accessKey Access key to access MinIO&reg; using NAS Gateway
+    ## @param gateway.auth.nas.secretKey Secret key to access MinIO&reg; using NAS Gateway
     ##
     nas:
       accessKey: ""
       secretKey: ""
     ## Authentication configuration for S3. Ignored unless type=s3
-    ## @param gateway.auth.s3.accessKey Access Key to use to access AWS S3
-    ## @param gateway.auth.s3.secretKey Secret Key to use to access AWS S3
+    ## @param gateway.auth.s3.accessKey Access key to use to access AWS S3
+    ## @param gateway.auth.s3.secretKey Secret key to use to access AWS S3
     ## @param gateway.auth.s3.serviceEndpoint AWS S3 endpoint
     ##
     s3:

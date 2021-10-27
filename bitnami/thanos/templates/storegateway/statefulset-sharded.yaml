@@ -17,21 +17,23 @@ apiVersion: {{ include "common.capabilities.statefulset.apiVersion" $ }}
 kind: StatefulSet
 metadata:
   name: {{ printf "%s-storegateway-%s" (include "common.names.fullname" $) (toString $index) | trunc 63 | trimSuffix "-" }}
+  namespace: {{ $.Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" $ | nindent 4 }}
     app.kubernetes.io/component: storegateway
     {{- if $.Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" $.Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
+  {{- if $.Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $.Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   replicas: {{ $.Values.storegateway.replicaCount }}
   podManagementPolicy: {{ $.Values.storegateway.podManagementPolicy }}
   {{- $svcNamePrefix := printf "%s-storegateway" (include "common.names.fullname" $) | trunc 61 | trimSuffix "-" }}
   serviceName: {{ printf "%s-%s" $svcNamePrefix (toString $index)}}
-  updateStrategy:
-    type: {{ $.Values.storegateway.updateStrategyType }}
-    {{- if (eq "OnDelete" $.Values.storegateway.updateStrategyType) }}
-    rollingUpdate: null
-    {{- end }}
+  {{- if $.Values.storegateway.updateStrategy }}
+  updateStrategy: {{- toYaml $.Values.storegateway.updateStrategy | nindent 4 }}
+  {{- end }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" $ | nindent 6 }}
       app.kubernetes.io/component: storegateway
@@ -99,6 +101,9 @@ spec:
               mountPath: /data
       {{- end }}
       containers:
+        {{- if $.Values.storegateway.sidecars }}
+        {{- include "common.tplvalues.render" (dict "value" $.Values.storegateway.sidecars "context" $) | nindent 8 }}
+        {{- end }}
         - name: storegateway
           image: {{ include "thanos.image" $ }}
           imagePullPolicy: {{ $.Values.image.pullPolicy | quote }}
@@ -156,9 +161,9 @@ spec:
             - --min-time={{ $partion.min }}
           {{- end}}
           {{- end }}
-          {{- if $.Values.storegateway.extraEnv }}
+          {{- if $.Values.storegateway.extraEnvVars }}
           env:
-            {{- toYaml $.Values.storegateway.extraEnv | nindent 12 }}
+            {{- toYaml $.Values.storegateway.extraEnvVars | nindent 12 }}
           {{- end }}
           ports:
             - name: http

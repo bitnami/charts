@@ -77,7 +77,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------- | ----------------------------------------------------------------------------------------- | --------------------- |
 | `hub.image.registry`                        | Hub image registry                                                                        | `docker.io`           |
 | `hub.image.repository`                      | Hub image repository                                                                      | `bitnami/jupyterhub`  |
-| `hub.image.tag`                             | Hub image tag (immutabe tags are recommended)                                             | `1.4.2-debian-10-r76` |
+| `hub.image.tag`                             | Hub image tag (immutabe tags are recommended)                                             | `1.4.2-debian-10-r78` |
 | `hub.image.pullPolicy`                      | Hub image pull policy                                                                     | `IfNotPresent`        |
 | `hub.image.pullSecrets`                     | Hub image pull secrets                                                                    | `[]`                  |
 | `hub.startupProbe.enabled`                  | Enable startupProbe                                                                       | `true`                |
@@ -189,7 +189,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------- | ----------------------------------------------------------------------------------------- | --------------------------------- |
 | `proxy.image.registry`                        | Proxy image registry                                                                      | `docker.io`                       |
 | `proxy.image.repository`                      | Proxy image repository                                                                    | `bitnami/configurable-http-proxy` |
-| `proxy.image.tag`                             | Proxy image tag (immutable tags are recommended)                                          | `4.5.0-debian-10-r85`             |
+| `proxy.image.tag`                             | Proxy image tag (immutable tags are recommended)                                          | `4.5.0-debian-10-r87`             |
 | `proxy.image.pullPolicy`                      | Proxy image pull policy                                                                   | `IfNotPresent`                    |
 | `proxy.image.pullSecrets`                     | Proxy image pull secrets                                                                  | `[]`                              |
 | `proxy.image.debug`                           | Activate verbose output                                                                   | `false`                           |
@@ -351,7 +351,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------------------------------- | --------------------------------------------------------------------------------------------------- | ------------------------------------ |
 | `singleuser.image.registry`                     | Single User image registry                                                                          | `docker.io`                          |
 | `singleuser.image.repository`                   | Single User image repository                                                                        | `bitnami/jupyter-base-notebook`      |
-| `singleuser.image.tag`                          | Single User image tag (immutabe tags are recommended)                                               | `1.4.2-debian-10-r52`                |
+| `singleuser.image.tag`                          | Single User image tag (immutabe tags are recommended)                                               | `1.4.2-debian-10-r54`                |
 | `singleuser.image.pullPolicy`                   | Single User image pull policy                                                                       | `IfNotPresent`                       |
 | `singleuser.image.pullSecrets`                  | Single User image pull secrets                                                                      | `[]`                                 |
 | `singleuser.command`                            | Override Single User default command                                                                | `[]`                                 |
@@ -411,8 +411,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | ---------------------------- | --------------------------------------------------- | ----------------------- |
 | `auxiliaryImage.registry`    | Auxiliary image registry                            | `docker.io`             |
 | `auxiliaryImage.repository`  | Auxiliary image repository                          | `bitnami/bitnami-shell` |
-| `auxiliaryImage.tag`         | Auxiliary image tag (immutabe tags are recommended) | `10-debian-10-r221`     |
-| `auxiliaryImage.pullPolicy`  | Auxiliary image pull policy                         | `Always`                |
+| `auxiliaryImage.tag`         | Auxiliary image tag (immutabe tags are recommended) | `10-debian-10-r223`     |
+| `auxiliaryImage.pullPolicy`  | Auxiliary image pull policy                         | `IfNotPresent`          |
 | `auxiliaryImage.pullSecrets` | Auxiliary image pull secrets                        | `[]`                    |
 
 

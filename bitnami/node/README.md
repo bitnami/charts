@@ -96,55 +96,55 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Node deployment parameters
 
-| Name                                    | Description                                                                               | Value                  |
-| --------------------------------------- | ----------------------------------------------------------------------------------------- | ---------------------- |
-| `image.registry`                        | NodeJS image registry                                                                     | `docker.io`            |
-| `image.repository`                      | NodeJS image repository                                                                   | `bitnami/node`         |
-| `image.tag`                             | NodeJS image tag (immutable tags are recommended)                                         | `14.18.1-debian-10-r0` |
-| `image.pullPolicy`                      | NodeJS image pull policy                                                                  | `IfNotPresent`         |
-| `image.pullSecrets`                     | Specify docker-registry secret names as an array                                          | `[]`                   |
-| `replicaCount`                          | Specify the number of replicas for the application                                        | `1`                    |
-| `applicationPort`                       | Specify the port where your application will be running                                   | `3000`                 |
-| `podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                   |
-| `podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`                 |
-| `nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                   |
-| `nodeAffinityPreset.key`                | Node label key to match Ignored if `affinity` is set.                                     | `""`                   |
-| `nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set.                                 | `[]`                   |
-| `affinity`                              | Affinity for pod assignment. Evaluated as a template.                                     | `{}`                   |
-| `nodeSelector`                          | Node labels for pod assignment. Evaluated as a template.                                  | `{}`                   |
-| `tolerations`                           | Tolerations for pod assignment. Evaluated as a template.                                  | `{}`                   |
-| `podAnnotations`                        | Additional pod annotations                                                                | `{}`                   |
-| `podLabels`                             | Additional labels for Node pods                                                           | `{}`                   |
-| `extraDeploy`                           | Array of extra objects to deploy with the release (evaluated as a template)               | `[]`                   |
-| `livenessProbe.enabled`                 | Enable livenessProbe                                                                      | `true`                 |
-| `livenessProbe.path`                    | Request path for livenessProbe                                                            | `/`                    |
-| `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                   | `60`                   |
-| `livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                          | `10`                   |
-| `livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                         | `5`                    |
-| `livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                       | `6`                    |
-| `livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                       | `1`                    |
-| `readinessProbe.enabled`                | Enable readinessProbe                                                                     | `true`                 |
-| `readinessProbe.path`                   | Request path for readinessProbe                                                           | `/`                    |
-| `readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                  | `10`                   |
-| `readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                         | `5`                    |
-| `readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                        | `3`                    |
-| `readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                      | `3`                    |
-| `readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                      | `1`                    |
-| `customLivenessProbe`                   | Override default liveness probe                                                           | `{}`                   |
-| `customReadinessProbe`                  | Override default readiness probe                                                          | `{}`                   |
-| `priorityClassName`                     | Node priorityClassName                                                                    | `""`                   |
-| `lifecycleHooks`                        | lifecycleHooks for the Node container to automate configuration before or after startup.  | `{}`                   |
-| `sidecars`                              | Add sidecars to the Node pods                                                             | `[]`                   |
-| `initContainers`                        | Add init containers to the Node pods                                                      | `[]`                   |
-| `extraVolumes`                          | Extra volumes to add to the deployment                                                    | `[]`                   |
-| `extraVolumeMounts`                     | Extra volume mounts to add to the container                                               | `[]`                   |
-| `containerSecurityContext.enabled`      | Node Container securityContext                                                            | `true`                 |
-| `containerSecurityContext.runAsUser`    | User ID for the Node container                                                            | `1001`                 |
-| `containerSecurityContext.runAsNonRoot` | Set container's Security Context runAsNonRoot                                             | `true`                 |
-| `podSecurityContext.enabled`            | Enable security context for Node pods                                                     | `true`                 |
-| `podSecurityContext.fsGroup`            | Group ID for the volumes of the pod                                                       | `1001`                 |
-| `resources.limits`                      | The resources limits for the Node container                                               | `{}`                   |
-| `resources.requests`                    | The requested resources for the Node container                                            | `{}`                   |
+| Name                                    | Description                                                                               | Value                   |
+| --------------------------------------- | ----------------------------------------------------------------------------------------- | ----------------------- |
+| `image.registry`                        | NodeJS image registry                                                                     | `docker.io`             |
+| `image.repository`                      | NodeJS image repository                                                                   | `bitnami/node`          |
+| `image.tag`                             | NodeJS image tag (immutable tags are recommended)                                         | `14.18.1-debian-10-r12` |
+| `image.pullPolicy`                      | NodeJS image pull policy                                                                  | `IfNotPresent`          |
+| `image.pullSecrets`                     | Specify docker-registry secret names as an array                                          | `[]`                    |
+| `replicaCount`                          | Specify the number of replicas for the application                                        | `1`                     |
+| `applicationPort`                       | Specify the port where your application will be running                                   | `3000`                  |
+| `podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                    |
+| `podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`                  |
+| `nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                    |
+| `nodeAffinityPreset.key`                | Node label key to match Ignored if `affinity` is set.                                     | `""`                    |
+| `nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set.                                 | `[]`                    |
+| `affinity`                              | Affinity for pod assignment. Evaluated as a template.                                     | `{}`                    |
+| `nodeSelector`                          | Node labels for pod assignment. Evaluated as a template.                                  | `{}`                    |
+| `tolerations`                           | Tolerations for pod assignment. Evaluated as a template.                                  | `{}`                    |
+| `podAnnotations`                        | Additional pod annotations                                                                | `{}`                    |
+| `podLabels`                             | Additional labels for Node pods                                                           | `{}`                    |
+| `extraDeploy`                           | Array of extra objects to deploy with the release (evaluated as a template)               | `[]`                    |
+| `livenessProbe.enabled`                 | Enable livenessProbe                                                                      | `true`                  |
+| `livenessProbe.path`                    | Request path for livenessProbe                                                            | `/`                     |
+| `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                   | `60`                    |
+| `livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                          | `10`                    |
+| `livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                         | `5`                     |
+| `livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                       | `6`                     |
+| `livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                       | `1`                     |
+| `readinessProbe.enabled`                | Enable readinessProbe                                                                     | `true`                  |
+| `readinessProbe.path`                   | Request path for readinessProbe                                                           | `/`                     |
+| `readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                  | `10`                    |
+| `readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                         | `5`                     |
+| `readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                        | `3`                     |
+| `readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                      | `3`                     |
+| `readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                      | `1`                     |
+| `customLivenessProbe`                   | Override default liveness probe                                                           | `{}`                    |
+| `customReadinessProbe`                  | Override default readiness probe                                                          | `{}`                    |
+| `priorityClassName`                     | Node priorityClassName                                                                    | `""`                    |
+| `lifecycleHooks`                        | lifecycleHooks for the Node container to automate configuration before or after startup.  | `{}`                    |
+| `sidecars`                              | Add sidecars to the Node pods                                                             | `[]`                    |
+| `initContainers`                        | Add init containers to the Node pods                                                      | `[]`                    |
+| `extraVolumes`                          | Extra volumes to add to the deployment                                                    | `[]`                    |
+| `extraVolumeMounts`                     | Extra volume mounts to add to the container                                               | `[]`                    |
+| `containerSecurityContext.enabled`      | Node Container securityContext                                                            | `true`                  |
+| `containerSecurityContext.runAsUser`    | User ID for the Node container                                                            | `1001`                  |
+| `containerSecurityContext.runAsNonRoot` | Set container's Security Context runAsNonRoot                                             | `true`                  |
+| `podSecurityContext.enabled`            | Enable security context for Node pods                                                     | `true`                  |
+| `podSecurityContext.fsGroup`            | Group ID for the volumes of the pod                                                       | `1001`                  |
+| `resources.limits`                      | The resources limits for the Node container                                               | `{}`                    |
+| `resources.requests`                    | The requested resources for the Node container                                            | `{}`                    |
 
 
 ### Node application parameters
@@ -153,7 +153,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------ | --------------------------------------------------- | -------------------------------------------- |
 | `git.image.registry`           | Git image registry                                  | `docker.io`                                  |
 | `git.image.repository`         | Git image repository                                | `bitnami/git`                                |
-| `git.image.tag`                | Git image tag (immutable tags are recommended)      | `2.33.0-debian-10-r58`                       |
+| `git.image.tag`                | Git image tag (immutable tags are recommended)      | `2.33.0-debian-10-r69`                       |
 | `git.image.pullPolicy`         | Git image pull policy                               | `IfNotPresent`                               |
 | `git.image.pullSecrets`        | Specify docker-registry secret names as an array    | `[]`                                         |
 | `git.extraVolumeMounts`        | Add extra volume mounts for the Git container       | `[]`                                         |
@@ -169,8 +169,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory  | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                             | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image repository                           | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended) | `10-debian-10-r219`     |
-| `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                          | `Always`                |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended) | `10-debian-10-r232`     |
+| `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                          | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                             | `[]`                    |
 | `volumePermissions.resources.limits`   | The resources limits for the container                                       | `{}`                    |
 | `volumePermissions.resources.requests` | The requested resources for the container                                    | `{}`                    |

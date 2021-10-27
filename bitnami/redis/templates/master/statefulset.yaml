@@ -375,9 +375,21 @@ spec:
             path: /sys
         {{- end }}
         - name: redis-tmp-conf
+          {{- if .Values.master.persistence.medium }}
+          emptyDir: {
+            medium: {{ .Values.master.persistence.medium | quote }}
+          }
+          {{- else }}
           emptyDir: {}
+          {{- end }}
         - name: tmp
+          {{- if .Values.master.persistence.medium }}
+          emptyDir: {
+            medium: {{ .Values.master.persistence.medium | quote }}
+          }
+          {{- else }}
           emptyDir: {}
+          {{- end }}
         {{- if .Values.tls.enabled }}
         - name: redis-certificates
           secret:
@@ -392,7 +404,13 @@ spec:
         {{- end }}
   {{- if not .Values.master.persistence.enabled }}
         - name: redis-data
+          {{- if .Values.master.persistence.medium }}
+          emptyDir: {
+            medium: {{ .Values.master.persistence.medium | quote }}
+          }
+          {{- else }}
           emptyDir: {}
+          {{- end }}
   {{- else if .Values.master.persistence.existingClaim }}
         - name: redis-data
           persistentVolumeClaim:

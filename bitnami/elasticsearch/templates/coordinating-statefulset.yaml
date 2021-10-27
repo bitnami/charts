@@ -16,7 +16,9 @@ spec:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: coordinating-only
   podManagementPolicy: Parallel
+  {{- if not .Values.coordinating.autoscaling.enabled }}
   replicas: {{ .Values.coordinating.replicas }}
+  {{- end }}
   serviceName: {{ template "elasticsearch.coordinating.fullname" . }}
   template:
     metadata:
@@ -111,13 +113,13 @@ spec:
             - name: ELASTICSEARCH_CLUSTER_HOSTS
               value: {{ include "elasticsearch.hosts" . | quote }}
             - name: ELASTICSEARCH_TOTAL_NODES
-              value: {{ add .Values.master.replicas .Values.data.replicas | quote }}
+              value: {{ add (ternary .Values.master.autoscaling.minReplicas .Values.master.replicas .Values.master.autoscaling.enabled) (ternary .Values.data.autoscaling.minReplicas .Values.data.replicas .Values.data.autoscaling.enabled) | quote }}
             - name: ELASTICSEARCH_CLUSTER_MASTER_HOSTS
               {{- $elasticsearchMasterFullname := include "elasticsearch.master.fullname" . }}
-              {{- $replicas := int .Values.master.replicas }}
+              {{- $replicas := int (ternary .Values.master.autoscaling.minReplicas .Values.master.replicas .Values.master.autoscaling.enabled) }}
               value: {{range $i, $e := until $replicas }}{{ $elasticsearchMasterFullname }}-{{ $e }} {{ end }}
             - name: ELASTICSEARCH_MINIMUM_MASTER_NODES
-              value: {{ add (div .Values.master.replicas 2) 1 | quote }}
+              value: {{ add (div (ternary .Values.master.autoscaling.minReplicas .Values.master.replicas .Values.master.autoscaling.enabled) 2) 1 | quote }}
             - name: ELASTICSEARCH_ADVERTISED_HOSTNAME
               value: "$(MY_POD_NAME).{{ include "elasticsearch.coordinating.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
             {{- if .Values.plugins }}
