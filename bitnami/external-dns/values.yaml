@@ -716,7 +716,7 @@ rbac:
   ## @param rbac.apiVersion Version of the RBAC API
   ##
   apiVersion: v1
-  ## @param rbac.pspEnabled PodSecurityPolicy
+  ## @param rbac.pspEnabled Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later
   ##
   pspEnabled: false
 ## @param securityContext Security context for the container
