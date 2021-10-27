@@ -91,172 +91,172 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Concourse Web parameters
 
-| Name                                     | Description                                                                                       | Value           |
-| ---------------------------------------- | ------------------------------------------------------------------------------------------------- | --------------- |
-| `web.enabled`                            | Enable web                                                                                        | `true`          |
-| `web.replicaCount`                       | Number of web replicas to deploy                                                                  | `1`             |
-| `web.args`                               | Override default args of the startup command for the web component.                               | `[]`            |
-| `web.baseUrl`                            | url                                                                                               | `/`             |
-| `web.logLevel`                           | Minimum level of logs to see. Possible options: debug, info, error.                               | `debug`         |
-| `web.clusterName`                        | A name for this Concourse cluster, to be displayed on the dashboard page.                         | `""`            |
-| `web.bindIp`                             | IP address on which to listen for HTTP traffic (web UI and API).                                  | `0.0.0.0`       |
-| `web.containerPort`                      | Port on which to listen for HTTP traffic (web UI and API).                                        | `8080`          |
-| `web.peerAddress`                        | Network address of this web node, reachable by other web nodes.                                   | `""`            |
-| `web.externalUrl`                        | URL used to reach any ATC from the outside world.                                                 | `""`            |
-| `web.enableAcrossStep`                   | Enable the experimental across step to be used in jobs. The API is subject to change.             | `false`         |
-| `web.enablePipelineInstances`            | Enable the creation of instanced pipelines.                                                       | `false`         |
-| `web.enableCacheStreamedVolumes`         | Enable caching streamed resource volumes on the destination worker.                               | `false`         |
-| `web.livenessProbe.enabled`              | Enable livenessProbe on web nodes                                                                 | `true`          |
-| `web.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                           | `10`            |
-| `web.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                  | `15`            |
-| `web.livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                                 | `3`             |
-| `web.livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                               | `1`             |
-| `web.livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                               | `1`             |
-| `web.readinessProbe.enabled`             | Enable readinessProbe                                                                             | `true`          |
-| `web.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                          | `10`            |
-| `web.readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                                 | `15`            |
-| `web.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                | `3`             |
-| `web.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                              | `1`             |
-| `web.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                              | `1`             |
-| `web.customLivenessProbe`                | Custom livenessProbe that overrides the default one                                               | `{}`            |
-| `web.customReadinessProbe`               | Custom readinessProbe that overrides the default one                                              | `{}`            |
-| `web.resources.limits`                   | The resources limits for the web containers                                                       | `{}`            |
-| `web.resources.requests`                 | The requested for the web containers                                                              | `{}`            |
-| `web.rbac.create`                        | Specifies whether RBAC resources should be created                                                | `true`          |
-| `web.serviceAccount.create`              | Specifies whether a ServiceAccount should be created                                              | `true`          |
-| `web.serviceAccount.name`                | Override Web service account name                                                                 | `""`            |
-| `web.tls.enabled`                        | enable serving HTTPS traffic directly through the web component.                                  | `false`         |
-| `web.tls.containerPort`                  | on which to listen for HTTPS traffic.                                                             | `443`           |
-| `web.existingConfigmap`                  | The name of an existing ConfigMap with your custom configuration for web                          | `""`            |
-| `web.command`                            | Override default container command (useful when using custom images)                              | `[]`            |
-| `web.hostAliases`                        | Deployment pod host aliases                                                                       | `[]`            |
-| `web.podLabels`                          | Extra labels for web pods                                                                         | `{}`            |
-| `web.podSecurityContext.enabled`         | Enabled web pods' Security Context                                                                | `true`          |
-| `web.podSecurityContext.fsGroup`         | Set web pod's Security Context fsGroup                                                            | `1001`          |
-| `web.containerSecurityContext.enabled`   | Enabled web containers' Security Context                                                          | `true`          |
-| `web.containerSecurityContext.runAsUser` | Set web containers' Security Context runAsUser                                                    | `1001`          |
-| `web.psp.create`                         | Specifies whether a PodSecurityPolicy should be created (set `psp.create` to `true` to enable it) | `false`         |
-| `web.tsa.logLevel`                       | Minimum level of logs to see. Possible values: debug, info, error.                                | `debug`         |
-| `web.tsa.bindIp`                         | IP address on which to listen for SSH.                                                            | `0.0.0.0`       |
-| `web.tsa.containerPort`                  | Port on which to listen for SSH.                                                                  | `2222`          |
-| `web.tsa.debugbindIp`                    | IP address on which to listen for the pprof debugger endpoints (default: 127.0.0.1)               | `127.0.0.1`     |
-| `web.tsa.debugContainerPort`             | Port on which to listen for TSA pprof server.                                                     | `2221`          |
-| `web.tsa.heartbeatInterval`              | Interval on which to heartbeat workers to the ATC.                                                | `30s`           |
-| `web.tsa.gardenRequestTimeout`           | How long to wait for requests to Garden to complete. 0 means no timeout.                          | `""`            |
-| `web.configRBAC`                         | set RBAC configuration                                                                            | `""`            |
-| `web.auth.cookieSecure`                  | use cookie secure true or flase                                                                   | `false`         |
-| `web.auth.duration`                      | Length of time for which tokens are valid. Afterwards, users will have to log back in.            | `24h`           |
-| `web.auth.passwordConnector`             | The connector to use for password authentication for `fly login -u ... -p ...`.                   | `""`            |
-| `web.auth.mainTeam.config`               | Configuration file for specifying the main teams params.                                          | `""`            |
-| `web.auth.mainTeam.localUser`            | Comma-separated list of local Concourse users to be included as members of the `main` team.       | `user`          |
-| `web.podAnnotations`                     | Annotations for web pods                                                                          | `{}`            |
-| `web.podAffinityPreset`                  | Pod affinity preset. Ignored if `web.affinity` is set. Allowed values: `soft` or `hard`           | `""`            |
-| `web.podAntiAffinityPreset`              | Pod anti-affinity preset. Ignored if `web.affinity` is set. Allowed values: `soft` or `hard`      | `soft`          |
-| `web.nodeAffinityPreset.type`            | Node affinity preset type. Ignored if `web.affinity` is set. Allowed values: `soft` or `hard`     | `""`            |
-| `web.nodeAffinityPreset.key`             | Node label key to match. Ignored if `web.affinity` is set                                         | `""`            |
-| `web.nodeAffinityPreset.values`          | Node label values to match. Ignored if `web.affinity` is set                                      | `[]`            |
-| `web.affinity`                           | Affinity for web pods assignment                                                                  | `{}`            |
-| `web.nodeSelector`                       | Node labels for web pods assignment                                                               | `{}`            |
-| `web.tolerations`                        | Tolerations for web pods assignment                                                               | `[]`            |
-| `web.updateStrategy.type`                | web statefulset strategy type                                                                     | `RollingUpdate` |
-| `web.priorityClassName`                  | web pods' priorityClassName                                                                       | `""`            |
-| `web.lifecycleHooks`                     | for the web container(s) to automate configuration before or after startup                        | `{}`            |
-| `web.extraEnvVars`                       | Array with extra environment variables to add to web nodes                                        | `[]`            |
-| `web.baseResourceTypeDefaults`           | Configuration file for specifying defaults for base resource types                                | `""`            |
-| `web.extraEnvVarsCM`                     | Name of existing ConfigMap containing extra env vars for web nodes                                | `""`            |
-| `web.extraEnvVarsSecret`                 | Name of existing Secret containing extra env vars for web nodes                                   | `""`            |
-| `web.extraVolumes`                       | Optionally specify extra list of additional volumes for the web pod(s)                            | `[]`            |
-| `web.extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for the web container(s)                 | `[]`            |
-| `web.sidecars`                           | Add additional sidecar containers to the web pod(s)                                               | `[]`            |
-| `web.initContainers`                     | Add additional init containers to the web pod(s)                                                  | `[]`            |
-| `web.existingSecret`                     | Use an existing secret for the Web service credentials                                            | `""`            |
+| Name                                     | Description                                                                                                                                 | Value           |
+| ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
+| `web.enabled`                            | Enable web                                                                                                                                  | `true`          |
+| `web.replicaCount`                       | Number of web replicas to deploy                                                                                                            | `1`             |
+| `web.args`                               | Override default args of the startup command for the web component.                                                                         | `[]`            |
+| `web.baseUrl`                            | url                                                                                                                                         | `/`             |
+| `web.logLevel`                           | Minimum level of logs to see. Possible options: debug, info, error.                                                                         | `debug`         |
+| `web.clusterName`                        | A name for this Concourse cluster, to be displayed on the dashboard page.                                                                   | `""`            |
+| `web.bindIp`                             | IP address on which to listen for HTTP traffic (web UI and API).                                                                            | `0.0.0.0`       |
+| `web.containerPort`                      | Port on which to listen for HTTP traffic (web UI and API).                                                                                  | `8080`          |
+| `web.peerAddress`                        | Network address of this web node, reachable by other web nodes.                                                                             | `""`            |
+| `web.externalUrl`                        | URL used to reach any ATC from the outside world.                                                                                           | `""`            |
+| `web.enableAcrossStep`                   | Enable the experimental across step to be used in jobs. The API is subject to change.                                                       | `false`         |
+| `web.enablePipelineInstances`            | Enable the creation of instanced pipelines.                                                                                                 | `false`         |
+| `web.enableCacheStreamedVolumes`         | Enable caching streamed resource volumes on the destination worker.                                                                         | `false`         |
+| `web.livenessProbe.enabled`              | Enable livenessProbe on web nodes                                                                                                           | `true`          |
+| `web.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                                                     | `10`            |
+| `web.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                                                            | `15`            |
+| `web.livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                                                                           | `3`             |
+| `web.livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                                                                         | `1`             |
+| `web.livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                                                                         | `1`             |
+| `web.readinessProbe.enabled`             | Enable readinessProbe                                                                                                                       | `true`          |
+| `web.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                                                                    | `10`            |
+| `web.readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                                                                           | `15`            |
+| `web.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                                                          | `3`             |
+| `web.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                                                                        | `1`             |
+| `web.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                                                        | `1`             |
+| `web.customLivenessProbe`                | Custom livenessProbe that overrides the default one                                                                                         | `{}`            |
+| `web.customReadinessProbe`               | Custom readinessProbe that overrides the default one                                                                                        | `{}`            |
+| `web.resources.limits`                   | The resources limits for the web containers                                                                                                 | `{}`            |
+| `web.resources.requests`                 | The requested for the web containers                                                                                                        | `{}`            |
+| `web.rbac.create`                        | Specifies whether RBAC resources should be created                                                                                          | `true`          |
+| `web.serviceAccount.create`              | Specifies whether a ServiceAccount should be created                                                                                        | `true`          |
+| `web.serviceAccount.name`                | Override Web service account name                                                                                                           | `""`            |
+| `web.tls.enabled`                        | enable serving HTTPS traffic directly through the web component.                                                                            | `false`         |
+| `web.tls.containerPort`                  | on which to listen for HTTPS traffic.                                                                                                       | `443`           |
+| `web.existingConfigmap`                  | The name of an existing ConfigMap with your custom configuration for web                                                                    | `""`            |
+| `web.command`                            | Override default container command (useful when using custom images)                                                                        | `[]`            |
+| `web.hostAliases`                        | Deployment pod host aliases                                                                                                                 | `[]`            |
+| `web.podLabels`                          | Extra labels for web pods                                                                                                                   | `{}`            |
+| `web.podSecurityContext.enabled`         | Enabled web pods' Security Context                                                                                                          | `true`          |
+| `web.podSecurityContext.fsGroup`         | Set web pod's Security Context fsGroup                                                                                                      | `1001`          |
+| `web.containerSecurityContext.enabled`   | Enabled web containers' Security Context                                                                                                    | `true`          |
+| `web.containerSecurityContext.runAsUser` | Set web containers' Security Context runAsUser                                                                                              | `1001`          |
+| `web.psp.create`                         | Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later | `false`         |
+| `web.tsa.logLevel`                       | Minimum level of logs to see. Possible values: debug, info, error.                                                                          | `debug`         |
+| `web.tsa.bindIp`                         | IP address on which to listen for SSH.                                                                                                      | `0.0.0.0`       |
+| `web.tsa.containerPort`                  | Port on which to listen for SSH.                                                                                                            | `2222`          |
+| `web.tsa.debugbindIp`                    | IP address on which to listen for the pprof debugger endpoints (default: 127.0.0.1)                                                         | `127.0.0.1`     |
+| `web.tsa.debugContainerPort`             | Port on which to listen for TSA pprof server.                                                                                               | `2221`          |
+| `web.tsa.heartbeatInterval`              | Interval on which to heartbeat workers to the ATC.                                                                                          | `30s`           |
+| `web.tsa.gardenRequestTimeout`           | How long to wait for requests to Garden to complete. 0 means no timeout.                                                                    | `""`            |
+| `web.configRBAC`                         | set RBAC configuration                                                                                                                      | `""`            |
+| `web.auth.cookieSecure`                  | use cookie secure true or flase                                                                                                             | `false`         |
+| `web.auth.duration`                      | Length of time for which tokens are valid. Afterwards, users will have to log back in.                                                      | `24h`           |
+| `web.auth.passwordConnector`             | The connector to use for password authentication for `fly login -u ... -p ...`.                                                             | `""`            |
+| `web.auth.mainTeam.config`               | Configuration file for specifying the main teams params.                                                                                    | `""`            |
+| `web.auth.mainTeam.localUser`            | Comma-separated list of local Concourse users to be included as members of the `main` team.                                                 | `user`          |
+| `web.podAnnotations`                     | Annotations for web pods                                                                                                                    | `{}`            |
+| `web.podAffinityPreset`                  | Pod affinity preset. Ignored if `web.affinity` is set. Allowed values: `soft` or `hard`                                                     | `""`            |
+| `web.podAntiAffinityPreset`              | Pod anti-affinity preset. Ignored if `web.affinity` is set. Allowed values: `soft` or `hard`                                                | `soft`          |
+| `web.nodeAffinityPreset.type`            | Node affinity preset type. Ignored if `web.affinity` is set. Allowed values: `soft` or `hard`                                               | `""`            |
+| `web.nodeAffinityPreset.key`             | Node label key to match. Ignored if `web.affinity` is set                                                                                   | `""`            |
+| `web.nodeAffinityPreset.values`          | Node label values to match. Ignored if `web.affinity` is set                                                                                | `[]`            |
+| `web.affinity`                           | Affinity for web pods assignment                                                                                                            | `{}`            |
+| `web.nodeSelector`                       | Node labels for web pods assignment                                                                                                         | `{}`            |
+| `web.tolerations`                        | Tolerations for web pods assignment                                                                                                         | `[]`            |
+| `web.updateStrategy.type`                | web statefulset strategy type                                                                                                               | `RollingUpdate` |
+| `web.priorityClassName`                  | web pods' priorityClassName                                                                                                                 | `""`            |
+| `web.lifecycleHooks`                     | for the web container(s) to automate configuration before or after startup                                                                  | `{}`            |
+| `web.extraEnvVars`                       | Array with extra environment variables to add to web nodes                                                                                  | `[]`            |
+| `web.baseResourceTypeDefaults`           | Configuration file for specifying defaults for base resource types                                                                          | `""`            |
+| `web.extraEnvVarsCM`                     | Name of existing ConfigMap containing extra env vars for web nodes                                                                          | `""`            |
+| `web.extraEnvVarsSecret`                 | Name of existing Secret containing extra env vars for web nodes                                                                             | `""`            |
+| `web.extraVolumes`                       | Optionally specify extra list of additional volumes for the web pod(s)                                                                      | `[]`            |
+| `web.extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for the web container(s)                                                           | `[]`            |
+| `web.sidecars`                           | Add additional sidecar containers to the web pod(s)                                                                                         | `[]`            |
+| `web.initContainers`                     | Add additional init containers to the web pod(s)                                                                                            | `[]`            |
+| `web.existingSecret`                     | Use an existing secret for the Web service credentials                                                                                      | `""`            |
 
 
 ### Concourse Worker parameters
 
-| Name                                         | Description                                                                                       | Value           |
-| -------------------------------------------- | ------------------------------------------------------------------------------------------------- | --------------- |
-| `worker.enabled`                             | Enable worker nodes                                                                               | `true`          |
-| `worker.replicaCount`                        | Number of worker replicas                                                                         | `2`             |
-| `worker.mode`                                | Selects kind of Deployment. Valid Options are: statefulSet | deployment                           | `deployment`    |
-| `worker.logLevel`                            | Minimum level of logs to see. Possible options: debug, info, error                                | `debug`         |
-| `worker.command`                             | Override default container command (useful when using custom images)                              | `[]`            |
-| `worker.args`                                | Override worker default args                                                                      | `[]`            |
-| `worker.bindIp`                              | IP address on which to listen for the Garden server.                                              | `127.0.0.1`     |
-| `worker.containerPort`                       | Port on which to listen for the Garden server.                                                    | `7777`          |
-| `worker.healthCheckContainerPort`            | Port on which to listen for the healh checks.                                                     | `8888`          |
-| `worker.tsa.hosts`                           | TSA host(s) to forward the worker through.                                                        | `[]`            |
-| `worker.rbac.create`                         | Specifies whether RBAC resources should be created                                                | `true`          |
-| `worker.serviceAccount.create`               | Specifies whether a ServiceAccount should be created                                              | `true`          |
-| `worker.serviceAccount.name`                 | Override Worker service account name                                                              | `""`            |
-| `worker.autoscaling.enabled`                 | Enable autoscaling for the worker nodes                                                           | `false`         |
-| `worker.autoscaling.maxReplicas`             | Set maximum number of replicas to the worker nodes                                                | `""`            |
-| `worker.autoscaling.minReplicas`             | Set minimum number of replicas to the worker nodes                                                | `""`            |
-| `worker.autoscaling.builtInMetrics`          | Array with built-in metrics                                                                       | `[]`            |
-| `worker.autoscaling.customMetrics`           | Array with custom metrics                                                                         | `[]`            |
-| `worker.pdb.create`                          | Create Pod disruption budget object for worker nodes                                              | `true`          |
-| `worker.pdb.minAvailable`                    | Minimum number of workers available after an eviction                                             | `2`             |
-| `worker.livenessProbe.enabled`               | Enable livenessProbe on worker nodes                                                              | `true`          |
-| `worker.livenessProbe.initialDelaySeconds`   | Initial delay seconds for livenessProbe                                                           | `10`            |
-| `worker.livenessProbe.periodSeconds`         | Period seconds for livenessProbe                                                                  | `15`            |
-| `worker.livenessProbe.timeoutSeconds`        | Timeout seconds for livenessProbe                                                                 | `3`             |
-| `worker.livenessProbe.failureThreshold`      | Failure threshold for livenessProbe                                                               | `5`             |
-| `worker.livenessProbe.successThreshold`      | Failure threshold for livenessProbe                                                               | `1`             |
-| `worker.readinessProbe.enabled`              | Enable readiness probe on worker nodes                                                            | `true`          |
-| `worker.readinessProbe.initialDelaySeconds`  | Initial delay seconds for readinessProbe                                                          | `10`            |
-| `worker.readinessProbe.periodSeconds`        | Period seconds for readinessProbe                                                                 | `15`            |
-| `worker.readinessProbe.timeoutSeconds`       | Timeout seconds for readinessProbe                                                                | `3`             |
-| `worker.readinessProbe.failureThreshold`     | Failure threshold for readinessProbe                                                              | `5`             |
-| `worker.readinessProbe.successThreshold`     | Success threshold for readinessProbe                                                              | `1`             |
-| `worker.customLivenessProbe`                 | Custom livenessProbe that overrides the default one                                               | `{}`            |
-| `worker.customReadinessProbe`                | Custom readinessProbe that overrides the default one                                              | `{}`            |
-| `worker.resources.limits`                    | Configure resource limits.                                                                        | `{}`            |
-| `worker.resources.requests`                  | Configure resource request                                                                        | `{}`            |
-| `worker.podSecurityContext.enabled`          | Enabled worker pods' Security Context                                                             | `true`          |
-| `worker.podSecurityContext.fsGroup`          | Set worker pod's Security Context fsGroup                                                         | `1001`          |
-| `worker.containerSecurityContext.enabled`    | Enabled worker containers' Security Context                                                       | `true`          |
-| `worker.containerSecurityContext.privileged` | Set worker containers' Security Context with privileged or not                                    | `true`          |
-| `worker.containerSecurityContext.runAsUser`  | Set worker containers' Security Context user                                                      | `0`             |
-| `worker.psp.create`                          | Specifies whether a PodSecurityPolicy should be created (set `psp.create` to `true` to enable it) | `false`         |
-| `worker.podLabels`                           | Custom labels for worker pods                                                                     | `{}`            |
-| `worker.podAnnotations`                      | Annotations for worker pods                                                                       | `{}`            |
-| `worker.podAffinityPreset`                   | Pod affinity preset. Ignored if `worker.affinity` is set. Allowed values: `soft` or `hard`        | `""`            |
-| `worker.podAntiAffinityPreset`               | Pod anti-affinity preset                                                                          | `soft`          |
-| `worker.hostAliases`                         | Deployment pod host aliases                                                                       | `[]`            |
-| `worker.nodeAffinityPreset.type`             | Node affinity type                                                                                | `""`            |
-| `worker.nodeAffinityPreset.key`              | Node label key to match                                                                           | `""`            |
-| `worker.nodeAffinityPreset.values`           | Node label values to match                                                                        | `[]`            |
-| `worker.affinity`                            | Affinity for pod assignment                                                                       | `{}`            |
-| `worker.nodeSelector`                        | Node labels for pod assignment                                                                    | `{}`            |
-| `worker.tolerations`                         | Tolerations for worker pod assignment                                                             | `[]`            |
-| `worker.updateStrategy.type`                 | worker statefulset strategy type                                                                  | `RollingUpdate` |
-| `worker.priorityClassName`                   | worker pods' priorityClassName                                                                    | `""`            |
-| `worker.lifecycleHooks`                      | for the worker container(s) to automate configuration before or after startup                     | `{}`            |
-| `worker.extraEnvVars`                        | Array with extra environment variables to add to worker nodes                                     | `[]`            |
-| `worker.extraEnvVarsCM`                      | Name of existing ConfigMap containing extra env vars for worker nodes                             | `""`            |
-| `worker.extraEnvVarsSecret`                  | Name of existing Secret containing extra env vars for worker nodes                                | `""`            |
-| `worker.extraVolumes`                        | Optionally specify extra list of additional volumes for the worker pod(s)                         | `[]`            |
-| `worker.extraVolumeMounts`                   | Optionally specify extra list of additional volumeMounts for the worker container(s)              | `[]`            |
-| `worker.sidecars`                            | Add additional sidecar containers to the worker pod(s)                                            | `[]`            |
-| `worker.initContainers`                      | Add additional init containers to the worker pod(s)                                               | `[]`            |
-| `worker.existingSecret`                      | name of an existing secret resource containing the keys and the pub                               | `""`            |
-| `worker.baggageclaim.logLevel`               | Minimum level of logs to see. Possible values: debug, info, error                                 | `info`          |
-| `worker.baggageclaim.bindIp`                 | IP address on which to listen for API traffic.                                                    | `127.0.0.1`     |
-| `worker.baggageclaim.containerPort`          | Port on which to listen for API traffic.                                                          | `7788`          |
-| `worker.baggageclaim.debugbindIp`            | IP address on which to listen for the pprof debugger endpoints.                                   | `127.0.0.1`     |
-| `worker.baggageclaim.debugContainerPort`     | Port on which to listen for baggageclaim pprof server.                                            | `7787`          |
-| `worker.baggageclaim.disableUserNamespaces`  | Disable remapping of user/group IDs in unprivileged volumes.                                      | `""`            |
-| `worker.baggageclaim.volumes`                | Directory in which to place volume data.                                                          | `""`            |
-| `worker.baggageclaim.driver`                 | Driver to use for managing volumes.                                                               | `""`            |
-| `worker.baggageclaim.btrfsBin`               | Path to btrfs binary                                                                              | `btrfs`         |
-| `worker.baggageclaim.mkfsBin`                | Path to mkfs.btrfs binary                                                                         | `mkfs.btrfs`    |
-| `worker.baggageclaim.overlaysDir`            | Path to directory in which to store overlay data                                                  | `""`            |
-| `worker.persistence.enabled`                 | Enable persistence using Persistent Volume Claims                                                 | `true`          |
-| `worker.persistence.storageClass`            | Persistent Volume storage class                                                                   | `""`            |
-| `worker.persistence.annotations`             | Persistent Volume Claim annotations                                                               | `{}`            |
-| `worker.persistence.accessModes`             | Persistent Volume access modes                                                                    | `[]`            |
-| `worker.persistence.size`                    | Persistent Volume size                                                                            | `8Gi`           |
-| `worker.persistence.selector`                | Additional labels to match for the PVC                                                            | `{}`            |
+| Name                                         | Description                                                                                                                                 | Value           |
+| -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
+| `worker.enabled`                             | Enable worker nodes                                                                                                                         | `true`          |
+| `worker.replicaCount`                        | Number of worker replicas                                                                                                                   | `2`             |
+| `worker.mode`                                | Selects kind of Deployment. Valid Options are: statefulSet | deployment                                                                     | `deployment`    |
+| `worker.logLevel`                            | Minimum level of logs to see. Possible options: debug, info, error                                                                          | `debug`         |
+| `worker.command`                             | Override default container command (useful when using custom images)                                                                        | `[]`            |
+| `worker.args`                                | Override worker default args                                                                                                                | `[]`            |
+| `worker.bindIp`                              | IP address on which to listen for the Garden server.                                                                                        | `127.0.0.1`     |
+| `worker.containerPort`                       | Port on which to listen for the Garden server.                                                                                              | `7777`          |
+| `worker.healthCheckContainerPort`            | Port on which to listen for the healh checks.                                                                                               | `8888`          |
+| `worker.tsa.hosts`                           | TSA host(s) to forward the worker through.                                                                                                  | `[]`            |
+| `worker.rbac.create`                         | Specifies whether RBAC resources should be created                                                                                          | `true`          |
+| `worker.serviceAccount.create`               | Specifies whether a ServiceAccount should be created                                                                                        | `true`          |
+| `worker.serviceAccount.name`                 | Override Worker service account name                                                                                                        | `""`            |
+| `worker.autoscaling.enabled`                 | Enable autoscaling for the worker nodes                                                                                                     | `false`         |
+| `worker.autoscaling.maxReplicas`             | Set maximum number of replicas to the worker nodes                                                                                          | `""`            |
+| `worker.autoscaling.minReplicas`             | Set minimum number of replicas to the worker nodes                                                                                          | `""`            |
+| `worker.autoscaling.builtInMetrics`          | Array with built-in metrics                                                                                                                 | `[]`            |
+| `worker.autoscaling.customMetrics`           | Array with custom metrics                                                                                                                   | `[]`            |
+| `worker.pdb.create`                          | Create Pod disruption budget object for worker nodes                                                                                        | `true`          |
+| `worker.pdb.minAvailable`                    | Minimum number of workers available after an eviction                                                                                       | `2`             |
+| `worker.livenessProbe.enabled`               | Enable livenessProbe on worker nodes                                                                                                        | `true`          |
+| `worker.livenessProbe.initialDelaySeconds`   | Initial delay seconds for livenessProbe                                                                                                     | `10`            |
+| `worker.livenessProbe.periodSeconds`         | Period seconds for livenessProbe                                                                                                            | `15`            |
+| `worker.livenessProbe.timeoutSeconds`        | Timeout seconds for livenessProbe                                                                                                           | `3`             |
+| `worker.livenessProbe.failureThreshold`      | Failure threshold for livenessProbe                                                                                                         | `5`             |
+| `worker.livenessProbe.successThreshold`      | Failure threshold for livenessProbe                                                                                                         | `1`             |
+| `worker.readinessProbe.enabled`              | Enable readiness probe on worker nodes                                                                                                      | `true`          |
+| `worker.readinessProbe.initialDelaySeconds`  | Initial delay seconds for readinessProbe                                                                                                    | `10`            |
+| `worker.readinessProbe.periodSeconds`        | Period seconds for readinessProbe                                                                                                           | `15`            |
+| `worker.readinessProbe.timeoutSeconds`       | Timeout seconds for readinessProbe                                                                                                          | `3`             |
+| `worker.readinessProbe.failureThreshold`     | Failure threshold for readinessProbe                                                                                                        | `5`             |
+| `worker.readinessProbe.successThreshold`     | Success threshold for readinessProbe                                                                                                        | `1`             |
+| `worker.customLivenessProbe`                 | Custom livenessProbe that overrides the default one                                                                                         | `{}`            |
+| `worker.customReadinessProbe`                | Custom readinessProbe that overrides the default one                                                                                        | `{}`            |
+| `worker.resources.limits`                    | Configure resource limits.                                                                                                                  | `{}`            |
+| `worker.resources.requests`                  | Configure resource request                                                                                                                  | `{}`            |
+| `worker.podSecurityContext.enabled`          | Enabled worker pods' Security Context                                                                                                       | `true`          |
+| `worker.podSecurityContext.fsGroup`          | Set worker pod's Security Context fsGroup                                                                                                   | `1001`          |
+| `worker.containerSecurityContext.enabled`    | Enabled worker containers' Security Context                                                                                                 | `true`          |
+| `worker.containerSecurityContext.privileged` | Set worker containers' Security Context with privileged or not                                                                              | `true`          |
+| `worker.containerSecurityContext.runAsUser`  | Set worker containers' Security Context user                                                                                                | `0`             |
+| `worker.psp.create`                          | Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later | `true`          |
+| `worker.podLabels`                           | Custom labels for worker pods                                                                                                               | `{}`            |
+| `worker.podAnnotations`                      | Annotations for worker pods                                                                                                                 | `{}`            |
+| `worker.podAffinityPreset`                   | Pod affinity preset. Ignored if `worker.affinity` is set. Allowed values: `soft` or `hard`                                                  | `""`            |
+| `worker.podAntiAffinityPreset`               | Pod anti-affinity preset                                                                                                                    | `soft`          |
+| `worker.hostAliases`                         | Deployment pod host aliases                                                                                                                 | `[]`            |
+| `worker.nodeAffinityPreset.type`             | Node affinity type                                                                                                                          | `""`            |
+| `worker.nodeAffinityPreset.key`              | Node label key to match                                                                                                                     | `""`            |
+| `worker.nodeAffinityPreset.values`           | Node label values to match                                                                                                                  | `[]`            |
+| `worker.affinity`                            | Affinity for pod assignment                                                                                                                 | `{}`            |
+| `worker.nodeSelector`                        | Node labels for pod assignment                                                                                                              | `{}`            |
+| `worker.tolerations`                         | Tolerations for worker pod assignment                                                                                                       | `[]`            |
+| `worker.updateStrategy.type`                 | worker statefulset strategy type                                                                                                            | `RollingUpdate` |
+| `worker.priorityClassName`                   | worker pods' priorityClassName                                                                                                              | `""`            |
+| `worker.lifecycleHooks`                      | for the worker container(s) to automate configuration before or after startup                                                               | `{}`            |
+| `worker.extraEnvVars`                        | Array with extra environment variables to add to worker nodes                                                                               | `[]`            |
+| `worker.extraEnvVarsCM`                      | Name of existing ConfigMap containing extra env vars for worker nodes                                                                       | `""`            |
+| `worker.extraEnvVarsSecret`                  | Name of existing Secret containing extra env vars for worker nodes                                                                          | `""`            |
+| `worker.extraVolumes`                        | Optionally specify extra list of additional volumes for the worker pod(s)                                                                   | `[]`            |
+| `worker.extraVolumeMounts`                   | Optionally specify extra list of additional volumeMounts for the worker container(s)                                                        | `[]`            |
+| `worker.sidecars`                            | Add additional sidecar containers to the worker pod(s)                                                                                      | `[]`            |
+| `worker.initContainers`                      | Add additional init containers to the worker pod(s)                                                                                         | `[]`            |
+| `worker.existingSecret`                      | name of an existing secret resource containing the keys and the pub                                                                         | `""`            |
+| `worker.baggageclaim.logLevel`               | Minimum level of logs to see. Possible values: debug, info, error                                                                           | `info`          |
+| `worker.baggageclaim.bindIp`                 | IP address on which to listen for API traffic.                                                                                              | `127.0.0.1`     |
+| `worker.baggageclaim.containerPort`          | Port on which to listen for API traffic.                                                                                                    | `7788`          |
+| `worker.baggageclaim.debugbindIp`            | IP address on which to listen for the pprof debugger endpoints.                                                                             | `127.0.0.1`     |
+| `worker.baggageclaim.debugContainerPort`     | Port on which to listen for baggageclaim pprof server.                                                                                      | `7787`          |
+| `worker.baggageclaim.disableUserNamespaces`  | Disable remapping of user/group IDs in unprivileged volumes.                                                                                | `""`            |
+| `worker.baggageclaim.volumes`                | Directory in which to place volume data.                                                                                                    | `""`            |
+| `worker.baggageclaim.driver`                 | Driver to use for managing volumes.                                                                                                         | `""`            |
+| `worker.baggageclaim.btrfsBin`               | Path to btrfs binary                                                                                                                        | `btrfs`         |
+| `worker.baggageclaim.mkfsBin`                | Path to mkfs.btrfs binary                                                                                                                   | `mkfs.btrfs`    |
+| `worker.baggageclaim.overlaysDir`            | Path to directory in which to store overlay data                                                                                            | `""`            |
+| `worker.persistence.enabled`                 | Enable persistence using Persistent Volume Claims                                                                                           | `true`          |
+| `worker.persistence.storageClass`            | Persistent Volume storage class                                                                                                             | `""`            |
+| `worker.persistence.annotations`             | Persistent Volume Claim annotations                                                                                                         | `{}`            |
+| `worker.persistence.accessModes`             | Persistent Volume access modes                                                                                                              | `[]`            |
+| `worker.persistence.size`                    | Persistent Volume size                                                                                                                      | `8Gi`           |
+| `worker.persistence.selector`                | Additional labels to match for the PVC                                                                                                      | `{}`            |
 
 
 ### Traffic exposure parameters
