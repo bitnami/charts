@@ -249,8 +249,8 @@ spec:
           {{- if not (.Values.prometheus.storageSpec.disableMountSubPath | default (not .Values.prometheus.persistence.enabled)) }}
           subPath: prometheus-db
           {{- end }}
-        {{- if .Values.prometheus.thanos.volumeMounts }}
-        {{ toYaml .Values.prometheus.thanos.volumeMounts | indent 8  | trim }}
+        {{- if .Values.prometheus.thanos.extraVolumeMounts }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.thanos.extraVolumeMounts "context" $) | nindent 8 }}
         {{- end }}
       {{- if .Values.prometheus.thanos.containerSecurityContext.enabled }}
       # yamllint disable rule:indentation
