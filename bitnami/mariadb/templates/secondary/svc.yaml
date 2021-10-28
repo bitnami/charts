@@ -24,15 +24,14 @@ spec:
   {{- if and .Values.secondary.service.clusterIP (eq .Values.secondary.service.type "ClusterIP") }}
   clusterIP: {{ .Values.secondary.service.clusterIP }}
   {{- end }}
-  {{- if (or (eq .Values.secondary.service.type "LoadBalancer") (eq .Values.secondary.service.type "NodePort")) }}
+  {{- if and .Values.secondary.service.externalTrafficPolicy (or (eq .Values.secondary.service.type "LoadBalancer") (eq .Values.secondary.service.type "NodePort")) }}
   externalTrafficPolicy: {{ .Values.secondary.service.externalTrafficPolicy | quote }}
   {{- end }}
   {{- if and (eq .Values.secondary.service.type "LoadBalancer") .Values.secondary.service.loadBalancerSourceRanges }}
   loadBalancerSourceRanges: {{ .Values.secondary.service.loadBalancerSourceRanges }}
   {{ end }}
-  {{- if (and (eq .Values.secondary.service.type "LoadBalancer") (not (empty .Values.secondary.service.loadBalancerIP))) }}
+  {{- if and (eq .Values.secondary.service.type "LoadBalancer") (not (empty .Values.secondary.service.loadBalancerIP)) }}
   loadBalancerIP: {{ .Values.secondary.service.loadBalancerIP }}
-  externalTrafficPolicy: {{ .Values.secondary.service.externalTrafficPolicy | quote }}
   {{- end }}
   {{- if .Values.secondary.service.sessionAffinity }}
   sessionAffinity: {{ .Values.secondary.service.sessionAffinity }}
