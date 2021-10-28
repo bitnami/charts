@@ -56,7 +56,7 @@ rbac:
 ## PSP creation for controller and speaker
 ##
 psp:
-  ## @param psp.create create specifies whether to install Pod Security Policies.
+  ## @param psp.create Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later
   ##
   create: false
 ## Prometheus Operator alertmanager alerts
@@ -124,7 +124,7 @@ controller:
   ## Defines if the controller psp should be created.
   ##
   psp:
-    ## @param controller.psp.create create specifies whether to install Pod Security Policies.
+    ## @param controller.psp.create Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later
     ##
     create: true
   ## @param controller.priorityClassName Set pod priorityClassName
@@ -335,7 +335,7 @@ speaker:
   ## Defines if the speaker psp should be created.
   ##
   psp:
-    ## @param speaker.psp.create create specifies whether to install Pod Security Policies.
+    ## @param speaker.psp.create Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later
     ##
     create: true
   ## @param speaker.priorityClassName Set pod priorityClassName.

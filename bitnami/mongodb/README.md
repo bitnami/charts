@@ -253,17 +253,17 @@ Refer to the [chart documentation for more information on each of these architec
 
 ### RBAC parameters
 
-| Name                                         | Description                                                                          | Value   |
-| -------------------------------------------- | ------------------------------------------------------------------------------------ | ------- |
-| `serviceAccount.create`                      | Enable creation of ServiceAccount for MongoDB&reg; pods                              | `true`  |
-| `serviceAccount.name`                        | Name of the created serviceAccount                                                   | `""`    |
-| `serviceAccount.annotations`                 | Additional Service Account annotations                                               | `{}`    |
-| `rbac.create`                                | Whether to create & use RBAC resources or not                                        | `false` |
-| `rbac.role.rules`                            | Custom rules to create following the role specification                              | `[]`    |
-| `podSecurityPolicy.create`                   | Whether to create & use PSP resource or not (Note: `rbac.create` needs to be `true`) | `false` |
-| `podSecurityPolicy.allowPrivilegeEscalation` | Enable privilege escalation                                                          | `false` |
-| `podSecurityPolicy.privileged`               | Allow privileged                                                                     | `false` |
-| `podSecurityPolicy.spec`                     | Specify the full spec to use for Pod Security Policy                                 | `{}`    |
+| Name                                         | Description                                                                                                                                 | Value   |
+| -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `serviceAccount.create`                      | Enable creation of ServiceAccount for MongoDB&reg; pods                                                                                     | `true`  |
+| `serviceAccount.name`                        | Name of the created serviceAccount                                                                                                          | `""`    |
+| `serviceAccount.annotations`                 | Additional Service Account annotations                                                                                                      | `{}`    |
+| `rbac.create`                                | Whether to create & use RBAC resources or not                                                                                               | `false` |
+| `rbac.role.rules`                            | Custom rules to create following the role specification                                                                                     | `[]`    |
+| `podSecurityPolicy.create`                   | Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later | `false` |
+| `podSecurityPolicy.allowPrivilegeEscalation` | Enable privilege escalation                                                                                                                 | `false` |
+| `podSecurityPolicy.privileged`               | Allow privileged                                                                                                                            | `false` |
+| `podSecurityPolicy.spec`                     | Specify the full spec to use for Pod Security Policy                                                                                        | `{}`    |
 
 
 ### Volume Permissions parameters
