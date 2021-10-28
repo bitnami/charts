@@ -49,8 +49,8 @@ spec:
       targetPort: http
       protocol: TCP
       name: http
-      {{- if ne "false" (include "thanos.validateValues.storegateway.sharded.length" (dict "property" $.Values.storegateway.sharded.service.nodePorts.http "context" $) ) }}
-      nodePort: {{ index $.Values.storegateway.sharded.service.nodePorts.http $index }}
+      {{- if ne "false" (include "thanos.validateValues.storegateway.sharded.length" (dict "property" $.Values.storegateway.sharded.service.http.nodePorts "context" $) ) }}
+      nodePort: {{ index $.Values.storegateway.sharded.service.http.nodePorts $index }}
       {{- else if eq $.Values.storegateway.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
@@ -58,8 +58,8 @@ spec:
       targetPort: grpc
       protocol: TCP
       name: grpc
-      {{- if ne "false" (include "thanos.validateValues.storegateway.sharded.length" (dict "property" $.Values.storegateway.sharded.service.nodePorts.grpc "context" $) ) }}
-      nodePort: {{ index $.Values.storegateway.sharded.service.nodePorts.grpc $index }}
+      {{- if ne "false" (include "thanos.validateValues.storegateway.sharded.length" (dict "property" $.Values.storegateway.sharded.service.grpc.nodePorts "context" $) ) }}
+      nodePort: {{ index $.Values.storegateway.sharded.service.grpc.nodePorts $index }}
       {{- else if eq $.Values.storegateway.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
