@@ -47,81 +47,15 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ## Differences between the Bitnami RabbitMQ chart and the Bitnami RabbitMQ Operator chart
 
-In the Bitnami catalog we offer both the *bitnami/rabbitmq* and *bitnami/rabbitmq-operator* charts. Each solution covers different needs and use cases.
+The Bitnami catalog offers both the `bitnami/rabbitmq` and `bitnami/rabbitmq-cluster-operator` charts. Each solution covers different needs and use cases.
 
-The *bitnami/rabbitmq* chart deploys a single RabbitMQ installation using a Kubernetes StatefulSet object (together with Services, PVCs, ConfigMaps, etc.). The figure below shows the deployed objects in the cluster after executing *helm install*:
+* The `bitnami/rabbitmq` chart deploys a single RabbitMQ installation using a Kubernetes Deployment object (together with Services, PVCs, ConfigMaps, etc.). Its lifecycle is managed using Helm and, at the RabbitMQ container level, the following operations are automated: persistence management, configuration based on environment variables and plugin initialization. The chart also allows deploying dashboards and data sources using ConfigMaps. The Deployments do not require any ServiceAccounts with special RBAC privileges so this solution would fit better in more restricted Kubernetes installations.
 
-```
-                    +--------------+             +-----+
-                    |              |             |     |
- Service            |   RabbitMQ   +<------------+ PVC |
-<-------------------+              |             |     |
-                    |  StatefulSet |             +-----+
-                    |              |
-                    +-----------+--+
-                                ^                +------------+
-                                |                |            |
-                                +----------------+ Configmaps |
-                                                 | Secrets    |
-                                                 +------------+
+* The `bitnami/rabbitmq-cluster-operator` chart deploys a RabbitMQ Operator installation using a Kubernetes Deployment. The operator will extend the Kubernetes API with the following object: `RabbitmqCluster`. From that moment, the user will be able to deploy objects of these kinds and the previously deployed Operator will take care of deploying all the required Deployments, ConfigMaps and Services for running a Grafana instance. Its lifecycle is managed using *kubectl* on the RabbitmqCluster objects.
 
-```
+> Note: As the operator automatically deploys RabbitMQ installations, the RabbitMQ Operator pods will require a ServiceAccount with privileges to create and destroy multiple Kubernetes objects. This may be problematic for Kubernetes clusters with strict role-based access policies.
 
-Its lifecycle is managed using Helm and, at the RabbitMQ container level, the following operations are automated: persistence management, configuration based on environment variables and plugin initialization. The StatefulSet do not require any ServiceAccounts with special RBAC privileges so this solution would fit better in more restricted Kubernetes installations.
-
-The *bitnami/rabbitmq-operator* chart deploys a RabbitMQ Operator installation using a Kubernetes Deployment.  The figure below shows the RabbitMQ operator deployment after executing *helm install*:
-
-```
-+--------------------+
-|                    |      +---------------+
-|  RabbitMQ Operator |      |               |
-|                    |      |     RBAC      |
-|     Deployment     |      | Privileges    |
-+-------+------------+      +-------+-------+
-        ^                           |
-        |   +-----------------+     |
-        +---+ Service Account +<----+
-            +-----------------+
-```
-
-The operator will extend the Kubernetes API with the following object: *RabbitmqCluster*. From that moment, the user will be able to deploy objects of these kinds and the previously deployed Operator will take care of deploying all the required StatefulSets, ConfigMaps and Services for running a RabbitMQ instance. Its lifecycle is managed using *kubectl* on the RabbitmqCluster objects. The following figure shows the deployed objects after deploying a *RabbitmqCluster* object using *kubectl*:
-
-```
-  +--------------------+
-  |                    |      +---------------+
-  |  RabbitMQ Operator |      |               |
-  |                    |      |     RBAC      |
-  |     Deployment     |      | Privileges    |
-  +-------+------------+      +-------+-------+
-    │     ^                           |
-    │     |   +-----------------+     |
-    │     +---+ Service Account +<----+
-    │         +-----------------+
-    │
-    │
-    │
-    │
-    │    ┌───────────────────────────────────────────────────────────────────────┐
-    │    │                                                                       │
-    │    │                        +--------------+             +-----+           │
-    │    │                        |              |             |     |           │
-    └────►     Service            |   RabbitMQ   +<------------+ PVC |           │
-         │    <-------------------+              |             |     |           │
-         │                        |  StatefulSet |             +-----+           │
-         │                        |              |                               │
-         │                        +-----------+--+                               │
-         │                                    ^                +------------+    │
-         │                                    |                |            |    │
-         │                                    +----------------+ Configmaps |    │
-         │                                                     | Secrets    |    │
-         │                                                     +------------+    │
-         │                                                                       │
-         │                                                                       │
-         └───────────────────────────────────────────────────────────────────────┘
-
-```
-
-This solution allows to easily deploy multiple RabbitMQ instances compared to the *bitnami/rabbitmq* chart. As the operator automatically deploys RabbitMQ installations, the RabbitMQ Operator pods will require a ServiceAccount with privileges to create and destroy multiple Kubernetes objects. This may be problematic for Kubernetes clusters with strict role-based access policies.
+For more information, refer to the [documentation on the differences between these charts](https://docs.bitnami.com/kubernetes/infrastructure/rabbitmq-cluster-operator/get-started/compare-solutions/), including more information on the differences in the deployment objects.
 
 ## Parameters
 
@@ -267,15 +201,15 @@ helm install my-release -f values.yaml bitnami/rabbitmq-cluster-operator
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling vs Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
-### Additional environment variables
+### Configure extra environment variables
 
-In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property.
+To add extra environment variables (useful for advanced operations like custom init scripts), use the `extraEnvVars` property.
 
 ```yaml
 rabbitmq-cluster-operator:
@@ -284,35 +218,25 @@ rabbitmq-cluster-operator:
       value: error
 ```
 
-Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values.
+Alternatively, use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values.
 
-### Sidecars
+### Configure Sidecars and Init Containers
 
-If additional containers are needed in the same pod as rabbitmq-cluster-operator (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter. If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/infrastructure/rabbitmq-cluster-operator/administration/configure-use-sidecars/).
+If additional containers are needed in the same pod as rabbitmq-cluster-operator (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter. If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter.
 
-### Pod affinity
+[Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/infrastructure/rabbitmq-cluster-operator/administration/configure-use-sidecars/).
 
-This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+### Set Pod affinity
+
+This chart allows you to set custom Pod affinity using the `affinity` parameter. Find more information about Pod affinity in the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
 As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
-### Deploying extra resources
 
-There are cases where you may want to deploy extra objects, such your custom *RabbitmqCluster* objects. For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter.
+### Deploy extra resources or objects
 
-For instance, to deploy your custom *RabbitmqCluster* definition, you can install the RabbitMQ Cluster Operator using the values below:
+There are cases where you may want to deploy extra objects, such as custom *RabbitmqCluster* objects. For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter.
 
-```yaml
-extraDeploy:
-  - apiVersion: rabbitmq.com/v1beta1
-    kind: RabbitmqCluster
-    metadata:
-      name: rabbitmq-custom-configuration
-    spec:
-      replicas: 1
-      rabbitmq:
-        additionalConfig: |
-          log.console.level = debug
-```
+Refer to the documentation on deploying extra RabbitMQ resources for an [example of deploying a custom RabbitMQ definition](https://docs.bitnami.com/kubernetes/infrastructure/rabbitmq-cluster-operator/configuration/deploy-extra-resources/).
 
 ## Troubleshooting
 
