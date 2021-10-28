@@ -3,7 +3,7 @@ apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
   name: {{ include "mariadb.secondary.fullname" . }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: secondary
     {{- if .Values.commonLabels }}
@@ -42,8 +42,8 @@ spec:
         {{- end }}
     spec:
       {{- include "mariadb.imagePullSecrets" . | nindent 6 }}
-      {{- if .Values.schedulerName }}
-      schedulerName: {{ .Values.schedulerName | quote }}
+      {{- if or .Values.secondary.schedulerName .Values.schedulerName }}
+      schedulerName: {{ (coalesce .Values.secondary.schedulerName .Values.schedulerName) | quote }}
       {{- end }}
       serviceAccountName: {{ template "mariadb.serviceAccountName" . }}
       {{- if .Values.secondary.hostAliases }}

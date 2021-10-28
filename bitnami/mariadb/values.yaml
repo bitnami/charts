@@ -264,6 +264,10 @@ primary:
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
   schedulerName: ""
+  ## @param primary.podManagementPolicy podManagementPolicy to manage scaling operation of MariaDB primary pods
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
+  ##
+  podManagementPolicy: ""
   ## @param primary.topologySpreadConstraints Topology Spread Constraints for MariaDB primary pods assignment
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
   ## E.g.
@@ -1103,9 +1107,6 @@ metrics:
     ## @param metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
     ##
     honorLabels: false
-    ## @param metrics.serviceMonitor.release Used to pass Labels release that sometimes should be custom for Prometheus Operator
-    ##
-    release: ""
     ## @param metrics.serviceMonitor.selector ServiceMonitor selector labels
     ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
     ##
@@ -1113,3 +1114,6 @@ metrics:
     ##   prometheus: my-prometheus
     ##
     selector: {}
+    ## @param metrics.serviceMonitor.labels Extra labels for the ServiceMonitor
+    ##
+    labels: {}

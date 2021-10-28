@@ -43,8 +43,8 @@ spec:
       {{- if .Values.primary.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.primary.hostAliases "context" $) | nindent 8 }}
       {{- end }}
-      {{- if .Values.schedulerName }}
-      schedulerName: {{ .Values.schedulerName | quote }}
+      {{- if or .Values.primary.schedulerName .Values.schedulerName }}
+      schedulerName: {{ (coalesce .Values.primary.schedulerName .Values.schedulerName) | quote }}
       {{- end }}
       serviceAccountName: {{ template "mariadb.serviceAccountName" . }}
       {{- if .Values.primary.affinity }}
