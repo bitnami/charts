@@ -504,11 +504,11 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### RBAC parameters
 
-| Name              | Description                                     | Value     |
-| ----------------- | ----------------------------------------------- | --------- |
-| `rbac.create`     | Whether to create and use RBAC resources or not | `true`    |
-| `rbac.apiVersion` | Version of the RBAC API                         | `v1beta1` |
-| `rbac.pspEnabled` | PodSecurityPolicy                               | `true`    |
+| Name              | Description                                                                                                                                                        | Value     |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------- |
+| `rbac.create`     | Whether to create and use RBAC resources or not                                                                                                                    | `true`    |
+| `rbac.apiVersion` | Version of the RBAC API                                                                                                                                            | `v1beta1` |
+| `rbac.pspEnabled` | Whether to create a PodSecurityPolicy and bound it with RBAC. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later | `true`    |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
