@@ -455,6 +455,18 @@ Find more information about how to deal with common errors related to Bitnami’
 
 ## Upgrading
 
+### To 9.6.0
+
+This major release renames several values in this chart and adds missing features, in order to be inline with the rest of assets in the Bitnami charts repository.
+
+Affected values:
+
+- `service.port` was deprecated. We recommend using `service.ports.http` instead.
+- `service.httpsPort` was deprecated. We recommend using `service.ports.https` instead.
+- `serviceAccount.autoMount` renamed as `serviceAccount.automountServiceAccountToken`.
+
+Additionally updates the MariaDB subchart to it newest major, 10.0.0, which contains similar changes.
+
 ### To 8.0.0
 
 [On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
