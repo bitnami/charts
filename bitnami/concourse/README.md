@@ -401,7 +401,7 @@ Alternatively, use a ConfigMap or a Secret with the environment variables. To do
 
 ### Configure Sidecars and Init Containers
 
-If additional containers are needed in the same pod as Jenkins (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter. Similarly, you can add extra init containers using the `initContainers` parameter.
+If additional containers are needed in the same pod as Concourse (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter. Similarly, you can add extra init containers using the `initContainers` parameter.
 
 [Learn more about configuring and using sidecar and init containers](https://docs.bitnami.com/kubernetes/infrastructure/concourse/configuration/configure-sidecar-init-containers/).
 
