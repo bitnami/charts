@@ -1804,7 +1804,7 @@ kubeProxy:
 ## ref: https://kubernetes.io/docs/admin/authorization/rbac/
 ## @param rbac.create Whether to create and use RBAC resources or not
 ## @param rbac.apiVersion Version of the RBAC API
-## @param rbac.pspEnabled PodSecurityPolicy
+## @param rbac.pspEnabled Whether to create a PodSecurityPolicy and bound it with RBAC. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later
 ##
 rbac:
   create: true

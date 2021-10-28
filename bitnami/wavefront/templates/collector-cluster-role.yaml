@@ -41,7 +41,8 @@ rules:
       - create
       - list
       - watch
-{{- if .Values.podSecurityPolicy.create }}
+{{- $pspAvailable := (semverCompare "<1.25-0" (include "common.capabilities.kubeVersion" .)) -}}
+{{- if and $pspAvailable .Values.podSecurityPolicy.create }}
   - apiGroups:
       - policy
     resourceNames:

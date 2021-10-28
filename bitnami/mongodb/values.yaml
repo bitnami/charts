@@ -858,7 +858,7 @@ rbac:
 ## ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/
 ##
 podSecurityPolicy:
-  ## @param podSecurityPolicy.create Whether to create & use PSP resource or not (Note: `rbac.create` needs to be `true`)
+  ## @param podSecurityPolicy.create Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later
   ##
   create: false
   ## @param podSecurityPolicy.allowPrivilegeEscalation Enable privilege escalation
