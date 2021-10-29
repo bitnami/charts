@@ -76,6 +76,7 @@ $ kubectl delete pvc -l release=my-release
 | `nameOverride`           | String to partially override common.names.fullname template (will maintain the release name) | `""`           |
 | `fullnameOverride`       | String to fully override common.names.fullname template                                      | `""`           |
 | `extraDeploy`            | Array of extra objects to deploy with the release (evaluated as a template)                  | `[]`           |
+| `commonLabels`           | Labels to add to all deployed objects (sub-charts are not considered)                        | `{}`           |
 | `commonAnnotations`      | Add annotations to all the deployed resources                                                | `{}`           |
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)      | `false`        |
 | `diagnosticMode.command` | Command to override all containers in the deployment                                         | `["sleep"]`    |
@@ -108,7 +109,7 @@ $ kubectl delete pvc -l release=my-release
 | `serviceAccount.enabled`                      | Enable service account (Note: Service Account will only be automatically created if `serviceAccount.name` is not set)                                     | `false`                     |
 | `serviceAccount.name`                         | Name of an already existing service account. Setting this value disables the automatic service account creation                                           | `""`                        |
 | `serviceAccount.autoMount`                    | Auto-mount the service account token in the pod                                                                                                           | `false`                     |
-| `psp.create`                                  | Create Pod Security Policy                                                                                                                                | `false`                     |
+| `psp.create`                                  | Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later               | `false`                     |
 | `rbac.create`                                 | Create Role and RoleBinding (required for PSP to work)                                                                                                    | `false`                     |
 | `replication.enabled`                         | Enable replication                                                                                                                                        | `false`                     |
 | `replication.user`                            | Replication user                                                                                                                                          | `repl_user`                 |

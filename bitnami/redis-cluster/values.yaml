@@ -350,7 +350,7 @@ volumePermissions:
     requests: {}
 ## PodSecurityPolicy configuration
 ## ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/
-## @param podSecurityPolicy.create Specifies whether a PodSecurityPolicy should be created
+## @param podSecurityPolicy.create Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later
 ##
 podSecurityPolicy:
   create: false
