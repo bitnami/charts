@@ -17,7 +17,7 @@ spec:
   podManagementPolicy: {{ .Values.receive.podManagementPolicy }}
   serviceName: {{ include "common.names.fullname" . }}-receive-headless
   {{- if .Values.receive.updateStrategy }}
-  strategy: {{- toYaml .Values.receive.updateStrategy | nindent 4 }}
+  updateStrategy: {{- toYaml .Values.receive.updateStrategy | nindent 4 }}
   {{- end }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
