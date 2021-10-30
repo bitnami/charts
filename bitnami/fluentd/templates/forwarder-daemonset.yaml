@@ -58,7 +58,7 @@ spec:
       terminationGracePeriodSeconds: {{ .Values.forwarder.terminationGracePeriodSeconds }}
       containers:
         - name: fluentd
-          image: {{ include "fluentd.image" . }}
+          image: {{ include "fluentd.forwarder.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           {{- if .Values.forwarder.lifecycle }}
           lifecycle: {{- include "common.tplvalues.render" ( dict "value" .Values.forwarder.lifecycle "context" $ ) | nindent 12 }}
