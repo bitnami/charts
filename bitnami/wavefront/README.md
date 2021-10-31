@@ -76,18 +76,18 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Wavefront Common parameters
 
-| Name                       | Description                                                                                                                          | Value                                |
-| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------ |
-| `clusterName`              | This is a unique name for the cluster (required)                                                                                     | `KUBERNETES_CLUSTER_NAME`            |
-| `wavefront.url`            | Wavefront URL for your cluster (required)                                                                                            | `https://YOUR_CLUSTER.wavefront.com` |
-| `wavefront.token`          | Wavefront API Token (required)                                                                                                       | `YOUR_API_TOKEN`                     |
-| `wavefront.existingSecret` | Name of an existing secret containing the token                                                                                      | `""`                                 |
-| `podSecurityPolicy.create` | Specifies whether PodSecurityPolicy resources should be created                                                                      | `false`                              |
-| `rbac.create`              | Specifies whether RBAC resources should be created                                                                                   | `true`                               |
-| `serviceAccount.create`    | Create Wavefront service account                                                                                                     | `true`                               |
-| `serviceAccount.name`      | Name of Wavefront service account                                                                                                    | `""`                                 |
-| `projectPacific.enabled`   | Enable and create role binding for Tanzu Kubernetes cluster                                                                          | `false`                              |
-| `tkgi.enabled`             | Properties for TKGI environments. If enabled, a role binding to handle pod security policy will be installed within the TKGI cluster | `false`                              |
+| Name                       | Description                                                                                                                                 | Value                                |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ |
+| `clusterName`              | This is a unique name for the cluster (required)                                                                                            | `KUBERNETES_CLUSTER_NAME`            |
+| `wavefront.url`            | Wavefront URL for your cluster (required)                                                                                                   | `https://YOUR_CLUSTER.wavefront.com` |
+| `wavefront.token`          | Wavefront API Token (required)                                                                                                              | `YOUR_API_TOKEN`                     |
+| `wavefront.existingSecret` | Name of an existing secret containing the token                                                                                             | `""`                                 |
+| `podSecurityPolicy.create` | Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later | `false`                              |
+| `rbac.create`              | Specifies whether RBAC resources should be created                                                                                          | `true`                               |
+| `serviceAccount.create`    | Create Wavefront service account                                                                                                            | `true`                               |
+| `serviceAccount.name`      | Name of Wavefront service account                                                                                                           | `""`                                 |
+| `projectPacific.enabled`   | Enable and create role binding for Tanzu Kubernetes cluster                                                                                 | `false`                              |
+| `tkgi.enabled`             | Properties for TKGI environments. If enabled, a role binding to handle pod security policy will be installed within the TKGI cluster        | `false`                              |
 
 
 ### Collector parameters

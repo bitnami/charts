@@ -85,7 +85,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `operator.enabled`                                                                    | Deploy Prometheus Operator to the cluster                                                                              | `true`                        |
 | `operator.image.registry`                                                             | Prometheus Operator image registry                                                                                     | `docker.io`                   |
 | `operator.image.repository`                                                           | Prometheus Operator image repository                                                                                   | `bitnami/prometheus-operator` |
-| `operator.image.tag`                                                                  | Prometheus Operator Image tag (immutable tags are recommended)                                                         | `0.51.2-debian-10-r1`         |
+| `operator.image.tag`                                                                  | Prometheus Operator Image tag (immutable tags are recommended)                                                         | `0.51.2-debian-10-r20`        |
 | `operator.image.pullPolicy`                                                           | Prometheus Operator image pull policy                                                                                  | `IfNotPresent`                |
 | `operator.image.pullSecrets`                                                          | Specify docker-registry secret names as an array                                                                       | `[]`                          |
 | `operator.hostAliases`                                                                | Add deployment host aliases                                                                                            | `[]`                          |
@@ -169,7 +169,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `prometheus.enabled`                                                  | Deploy Prometheus to the cluster                                                                                                 | `true`                   |
 | `prometheus.image.registry`                                           | Prometheus image registry                                                                                                        | `docker.io`              |
 | `prometheus.image.repository`                                         | Prometheus image repository                                                                                                      | `bitnami/prometheus`     |
-| `prometheus.image.tag`                                                | Prometheus Image tag (immutable tags are recommended)                                                                            | `2.30.2-debian-10-r3`    |
+| `prometheus.image.tag`                                                | Prometheus Image tag (immutable tags are recommended)                                                                            | `2.30.3-debian-10-r19`   |
 | `prometheus.image.pullSecrets`                                        | Specify docker-registry secret names as an array                                                                                 | `[]`                     |
 | `prometheus.serviceAccount.create`                                    | Specify whether to create a ServiceAccount for Prometheus                                                                        | `true`                   |
 | `prometheus.serviceAccount.name`                                      | The name of the ServiceAccount to create                                                                                         | `""`                     |
@@ -238,6 +238,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `prometheus.readinessProbe.failureThreshold`                          | Minimum consecutive failures for the probe                                                                                       | `10`                     |
 | `prometheus.readinessProbe.successThreshold`                          | Minimum consecutive successes for the probe                                                                                      | `1`                      |
 | `prometheus.enableAdminAPI`                                           | Enable Prometheus adminitrative API                                                                                              | `false`                  |
+| `prometheus.enableFeatures`                                           | Enable access to Prometheus disabled features.                                                                                   | `[]`                     |
 | `prometheus.alertingEndpoints`                                        | Alertmanagers to which alerts will be sent                                                                                       | `[]`                     |
 | `prometheus.externalLabels`                                           | External labels to add to any time series or alerts when communicating with external systems                                     | `{}`                     |
 | `prometheus.replicaExternalLabelName`                                 | Name of the external label used to denote replica name                                                                           | `""`                     |
@@ -292,7 +293,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `prometheus.thanos.create`                                            | Create a Thanos sidecar container                                                                                                | `false`                  |
 | `prometheus.thanos.image.registry`                                    | Thanos image registry                                                                                                            | `docker.io`              |
 | `prometheus.thanos.image.repository`                                  | Thanos image name                                                                                                                | `bitnami/thanos`         |
-| `prometheus.thanos.image.tag`                                         | Thanos image tag                                                                                                                 | `0.23.1-scratch-r0`      |
+| `prometheus.thanos.image.tag`                                         | Thanos image tag                                                                                                                 | `0.23.1-scratch-r1`      |
 | `prometheus.thanos.image.pullPolicy`                                  | Thanos image pull policy                                                                                                         | `IfNotPresent`           |
 | `prometheus.thanos.image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                                 | `[]`                     |
 | `prometheus.thanos.containerSecurityContext.enabled`                  | Enable container security context                                                                                                | `true`                   |
@@ -302,6 +303,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `prometheus.thanos.containerSecurityContext.capabilities.drop`        | Linux Kernel capabilities which should be dropped                                                                                | `[]`                     |
 | `prometheus.thanos.prometheusUrl`                                     | Override default prometheus url "http://localhost:9090"                                                                          | `""`                     |
 | `prometheus.thanos.extraArgs`                                         | Additional arguments passed to the thanos sidecar container                                                                      | `[]`                     |
+| `prometheus.thanos.extraVolumeMounts`                                 | Additional volumeMounts from `prometheus.volumes` for thanos sidecar container                                                   | `[]`                     |
 | `prometheus.thanos.objectStorageConfig`                               | Support mounting a Secret for the objectStorageConfig of the sideCar container.                                                  | `{}`                     |
 | `prometheus.thanos.resources.limits`                                  | The resources limits for the Thanos sidecar container                                                                            | `{}`                     |
 | `prometheus.thanos.resources.requests`                                | The resources requests for the Thanos sidecar container                                                                          | `{}`                     |
@@ -341,7 +343,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `alertmanager.enabled`                                           | Deploy Alertmanager to the cluster                                                                                               | `true`                   |
 | `alertmanager.image.registry`                                    | Prometheus image registry                                                                                                        | `docker.io`              |
 | `alertmanager.image.repository`                                  | Prometheus Image repository                                                                                                      | `bitnami/alertmanager`   |
-| `alertmanager.image.tag`                                         | Prometheus Image tag (immutable tags are recommended)                                                                            | `0.23.0-debian-10-r41`   |
+| `alertmanager.image.tag`                                         | Prometheus Image tag (immutable tags are recommended)                                                                            | `0.23.0-debian-10-r61`   |
 | `alertmanager.image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                                 | `[]`                     |
 | `alertmanager.serviceAccount.create`                             | Specify whether to create a ServiceAccount for Alertmanager                                                                      | `true`                   |
 | `alertmanager.serviceAccount.name`                               | The name of the ServiceAccount to create                                                                                         | `""`                     |
@@ -503,11 +505,11 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### RBAC parameters
 
-| Name              | Description                                     | Value     |
-| ----------------- | ----------------------------------------------- | --------- |
-| `rbac.create`     | Whether to create and use RBAC resources or not | `true`    |
-| `rbac.apiVersion` | Version of the RBAC API                         | `v1beta1` |
-| `rbac.pspEnabled` | PodSecurityPolicy                               | `true`    |
+| Name              | Description                                                                                                                                                        | Value     |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------- |
+| `rbac.create`     | Whether to create and use RBAC resources or not                                                                                                                    | `true`    |
+| `rbac.apiVersion` | Version of the RBAC API                                                                                                                                            | `v1beta1` |
+| `rbac.pspEnabled` | Whether to create a PodSecurityPolicy and bound it with RBAC. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later | `true`    |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,

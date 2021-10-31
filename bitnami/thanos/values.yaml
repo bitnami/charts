@@ -275,7 +275,7 @@ query:
   ##
   rbac:
     create: false
-  ## @param query.pspEnabled Create PodSecurity Policy
+  ## @param query.pspEnabled Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later
   ##
   pspEnabled: false
   ## Thanos Query containers' resource requests and limits
@@ -791,7 +791,7 @@ queryFrontend:
   ##
   rbac:
     create: false
-  ## @param queryFrontend.pspEnabled Create PodSecurity Policy
+  ## @param queryFrontend.pspEnabled Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later
   pspEnabled: false
   ## Thanos Query Frontend containers' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -2814,9 +2814,6 @@ receive:
   ##
   rbac:
     create: false
-  ## @param receive.pspEnabled Create PodSecurity Policy
-  ##
-  pspEnabled: false
   ## Thanos Receive containers' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
