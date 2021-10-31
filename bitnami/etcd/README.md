@@ -262,6 +262,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `disasterRecovery.cronjob.podAnnotations`       | Pod annotations for cronjob pods                                        | `{}`           |
 | `disasterRecovery.cronjob.resources.limits`     | Cronjob container resource limits                                       | `{}`           |
 | `disasterRecovery.cronjob.resources.requests`   | Cronjob container resource requests                                     | `{}`           |
+| `disasterRecovery.cronjob.nodeSelector`         | Node labels for cronjob pods assignment                                 | `{}`           |
+| `disasterRecovery.cronjob.tolerations`          | Tolerations for cronjob pods assignment                                 | `[]`           |
 | `disasterRecovery.pvc.existingClaim`            | A manually managed Persistent Volume and Claim                          | `""`           |
 | `disasterRecovery.pvc.size`                     | PVC Storage Request                                                     | `2Gi`          |
 | `disasterRecovery.pvc.storageClassName`         | Storage Class for snapshots volume                                      | `nfs`          |
