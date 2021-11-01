@@ -81,6 +81,27 @@ image:
 ##
 hostNetwork: false
 
+## @section RBAC parameters
+##
+
+## Spark pods ServiceAccount
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+##
+serviceAccount:
+  ## @param serviceAccount.create Enable the creation of a ServiceAccount for Spark pods
+  ##
+  create: true
+  ## @param serviceAccount.name The name of the ServiceAccount to use.
+  ## If not set and create is true, a name is generated using the spark.fullname template
+  ##
+  name: ""
+  ## @param serviceAccount.annotations Annotations for Spark Service Account
+  ##
+  annotations: {}
+  ## @param serviceAccount.automountServiceAccountToken Automount API credentials for a service account.
+  ##
+  automountServiceAccountToken: true
+
 ## @section Spark master parameters
 
 ## Spark master specific configuration
