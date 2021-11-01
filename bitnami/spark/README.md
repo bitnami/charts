@@ -199,9 +199,9 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                                          | Description                                                | Value  |
 | --------------------------------------------- | ---------------------------------------------------------- | ------ |
-| `serviceAccount.create`                       | Enable the creation of a ServiceAccount for Cassandra pods | `true` |
+| `serviceAccount.create`                       | Enable the creation of a ServiceAccount for Spark pods     | `true` |
 | `serviceAccount.name`                         | The name of the ServiceAccount to use.                     | `""`   |
-| `serviceAccount.annotations`                  | Annotations for Cassandra Service Account                  | `{}`   |
+| `serviceAccount.annotations`                  | Annotations for Spark Service Account                      | `{}`   |
 | `serviceAccount.automountServiceAccountToken` | Automount API credentials for a service account.           | `true` |
 
 ### Traffic Exposure parameters
