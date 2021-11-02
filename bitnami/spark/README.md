@@ -79,6 +79,16 @@ The command removes all the Kubernetes components associated with the chart and 
 | `hostNetwork`       | Enable HOST Network                              | `false`              |
 
 
+### RBAC parameters
+
+| Name                                          | Description                                            | Value  |
+| --------------------------------------------- | ------------------------------------------------------ | ------ |
+| `serviceAccount.create`                       | Enable the creation of a ServiceAccount for Spark pods | `true` |
+| `serviceAccount.name`                         | The name of the ServiceAccount to use.                 | `""`   |
+| `serviceAccount.annotations`                  | Annotations for Spark Service Account                  | `{}`   |
+| `serviceAccount.automountServiceAccountToken` | Automount API credentials for a service account.       | `true` |
+
+
 ### Spark master parameters
 
 | Name                                        | Description                                                                                                   | Value  |
@@ -194,15 +204,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `security.ssl.resources.limits`      | The resources limits for the container                                        | `{}`      |
 | `security.ssl.resources.requests`    | The requested resources for the container                                     | `{}`      |
 
-
-### RBAC parameters
-
-| Name                                          | Description                                                | Value  |
-| --------------------------------------------- | ---------------------------------------------------------- | ------ |
-| `serviceAccount.create`                       | Enable the creation of a ServiceAccount for Spark pods     | `true` |
-| `serviceAccount.name`                         | The name of the ServiceAccount to use.                     | `""`   |
-| `serviceAccount.annotations`                  | Annotations for Spark Service Account                      | `{}`   |
-| `serviceAccount.automountServiceAccountToken` | Automount API credentials for a service account.           | `true` |
 
 ### Traffic Exposure parameters
 

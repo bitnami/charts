@@ -74,7 +74,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------- | -------------------------------------------------------------------- | ---------------------- |
 | `image.registry`     | NGINX image registry                                                 | `docker.io`            |
 | `image.repository`   | NGINX image repository                                               | `bitnami/nginx`        |
-| `image.tag`          | NGINX image tag (immutable tags are recommended)                     | `1.21.3-debian-10-r48` |
+| `image.tag`          | NGINX image tag (immutable tags are recommended)                     | `1.21.3-debian-10-r50` |
 | `image.pullPolicy`   | NGINX image pull policy                                              | `IfNotPresent`         |
 | `image.pullSecrets`  | Specify docker-registry secret names as an array                     | `[]`                   |
 | `image.debug`        | Set to true if you would like to see extra information on logs       | `false`                |
@@ -152,7 +152,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cloneStaticSiteFromGit.enabled`           | Get the server static content from a Git repository                                               | `false`                |
 | `cloneStaticSiteFromGit.image.registry`    | Git image registry                                                                                | `docker.io`            |
 | `cloneStaticSiteFromGit.image.repository`  | Git image repository                                                                              | `bitnami/git`          |
-| `cloneStaticSiteFromGit.image.tag`         | Git image tag (immutable tags are recommended)                                                    | `2.33.0-debian-10-r69` |
+| `cloneStaticSiteFromGit.image.tag`         | Git image tag (immutable tags are recommended)                                                    | `2.33.0-debian-10-r70` |
 | `cloneStaticSiteFromGit.image.pullPolicy`  | Git image pull policy                                                                             | `IfNotPresent`         |
 | `cloneStaticSiteFromGit.image.pullSecrets` | Specify docker-registry secret names as an array                                                  | `[]`                   |
 | `cloneStaticSiteFromGit.repository`        | Git Repository to clone static content from                                                       | `""`                   |
@@ -177,7 +177,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ldapDaemon.enabled`                            | Enable LDAP Auth Daemon proxy                                                            | `false`                          |
 | `ldapDaemon.image.registry`                     | LDAP AUth Daemon Image registry                                                          | `docker.io`                      |
 | `ldapDaemon.image.repository`                   | LDAP Auth Daemon Image repository                                                        | `bitnami/nginx-ldap-auth-daemon` |
-| `ldapDaemon.image.tag`                          | LDAP Auth Daemon Image tag (immutable tags are recommended)                              | `0.20200116.0-debian-10-r494`    |
+| `ldapDaemon.image.tag`                          | LDAP Auth Daemon Image tag (immutable tags are recommended)                              | `0.20200116.0-debian-10-r495`    |
 | `ldapDaemon.image.pullPolicy`                   | LDAP Auth Daemon Image pull policy                                                       | `IfNotPresent`                   |
 | `ldapDaemon.port`                               | LDAP Auth Daemon port                                                                    | `8888`                           |
 | `ldapDaemon.ldapConfig.uri`                     | LDAP Server URI, `ldap[s]:/<hostname>:<port>`                                            | `""`                             |
@@ -246,7 +246,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.port`                         | NGINX Container Status Port scraped by Prometheus Exporter                                  | `""`                     |
 | `metrics.image.registry`               | NGINX Prometheus exporter image registry                                                    | `docker.io`              |
 | `metrics.image.repository`             | NGINX Prometheus exporter image repository                                                  | `bitnami/nginx-exporter` |
-| `metrics.image.tag`                    | NGINX Prometheus exporter image tag (immutable tags are recommended)                        | `0.9.0-debian-10-r200`   |
+| `metrics.image.tag`                    | NGINX Prometheus exporter image tag (immutable tags are recommended)                        | `0.9.0-debian-10-r202`   |
 | `metrics.image.pullPolicy`             | NGINX Prometheus exporter image pull policy                                                 | `IfNotPresent`           |
 | `metrics.image.pullSecrets`            | Specify docker-registry secret names as an array                                            | `[]`                     |
 | `metrics.podAnnotations`               | Additional annotations for NGINX Prometheus exporter pod(s)                                 | `{}`                     |
