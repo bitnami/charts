@@ -399,7 +399,6 @@ pdb:
 ## Apache Autoscaling parameters
 ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
 ## @param autoscaling.enabled Enable autoscaling for Apache deployment
-## @param autoscaling.apiVersion API Version of the HPA object (for compatibility with Openshift)
 ## @param autoscaling.minReplicas Minimum number of replicas to scale back
 ## @param autoscaling.maxReplicas Maximum number of replicas to scale out
 ## @param autoscaling.targetCPU Target CPU utilization percentage
@@ -407,7 +406,6 @@ pdb:
 ##
 autoscaling:
   enabled: false
-  apiVersion: autoscaling/v2beta1
   minReplicas: 1
   maxReplicas: 11
   targetCPU: 50

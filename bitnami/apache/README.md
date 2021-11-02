@@ -141,7 +141,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `pdb.minAvailable`         | Minimum number/percentage of pods that should remain scheduled   | `1`                   |
 | `pdb.maxUnavailable`       | Maximum number/percentage of pods that may be made unavailable   | `""`                  |
 | `autoscaling.enabled`      | Enable Horizontal POD autoscaling for Apache                     | `false`               |
-| `autoscaling.apiVersion`   | API Version of the HPA object (for compatibility with Openshift) | `autoscaling/v2beta1` |
 | `autoscaling.minReplicas`  | Minimum number of Apache replicas                                | `1`                   |
 | `autoscaling.maxReplicas`  | Maximum number of Apache replicas                                | `11`                  |
 | `autoscaling.targetCPU`    | Target CPU utilization percentage                                | `50`                  |
