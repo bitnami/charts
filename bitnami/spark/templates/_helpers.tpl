@@ -22,6 +22,17 @@ the service name.
 {{ include "common.names.fullname" . }}-master-svc
 {{- end -}}
 
+{{/*
+Create the name of the service account to use
+*/}}
+{{- define "spark.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create -}}
+    {{ default (include "common.names.fullname" .) .Values.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
 {{/* Get the secret for passwords */}}
 {{- define "spark.passwordsSecretName" -}}
 {{- if .Values.security.passwordsSecretName -}}
