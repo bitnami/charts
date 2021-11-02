@@ -76,7 +76,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------ | ----------------------------------------------------------------------------------------- | ----------------------- |
 | `image.registry`                     | EJBCA image registry                                                                      | `docker.io`             |
 | `image.repository`                   | EJBCA image name                                                                          | `bitnami/ejbca`         |
-| `image.tag`                          | EJBCA image tag                                                                           | `7.4.3-2-debian-10-r24` |
+| `image.tag`                          | EJBCA image tag                                                                           | `7.4.3-2-debian-10-r28` |
 | `image.pullPolicy`                   | EJBCA image pull policy                                                                   | `IfNotPresent`          |
 | `image.pullSecrets`                  | Specify docker-registry secret names as an array                                          | `[]`                    |
 | `image.debug`                        | Enable image debug mode                                                                   | `false`                 |
