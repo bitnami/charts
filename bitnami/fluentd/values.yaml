@@ -85,6 +85,13 @@ forwarder:
   ## @param forwarder.enabled Enable forwarder daemonset
   ##
   enabled: true
+  ## @param forwarder.image.registry Fluentd image registry
+  ## @param forwarder.image.repository Fluentd image repository
+  ## @param forwarder.image.tag Fluentd image tag (immutable tags are recommended)
+  image:
+    registry: ""
+    repository: ""
+    tag: ""
   ## @param forwarder.daemonUser Forwarder daemon user and group (set to root by default because it reads from host paths)
   ##
   daemonUser: root
@@ -526,6 +533,13 @@ aggregator:
   ## @param aggregator.enabled Enable Fluentd aggregator statefulset
   ##
   enabled: true
+  ## @param aggregator.image.registry Fluentd image registry
+  ## @param aggregator.image.repository Fluentd image repository
+  ## @param aggregator.image.tag Fluentd image tag (immutable tags are recommended)
+  image:
+    registry: ""
+    repository: ""
+    tag: ""
   ## @param aggregator.replicaCount Number of aggregator pods to deploy in the Stateful Set
   ##
   replicaCount: 1
