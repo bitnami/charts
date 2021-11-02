@@ -99,9 +99,12 @@ Refer to the [chart documentation for more information on each of these architec
 | `auth.enabled`           | Enable authentication                                                                                                         | `true`                 |
 | `auth.rootUser`          | MongoDB&reg; root user                                                                                                        | `root`                 |
 | `auth.rootPassword`      | MongoDB&reg; root password                                                                                                    | `""`                   |
-| `auth.username`          | MongoDB&reg; custom user (mandatory if `auth.database` is set)                                                                | `""`                   |
-| `auth.password`          | MongoDB&reg; custom user password                                                                                             | `""`                   |
-| `auth.database`          | MongoDB&reg; custom database                                                                                                  | `""`                   |
+| `auth.usernames`         | List of custom users to be created during the initialization                                                                  | `[]`                   |
+| `auth.passwords`         | List of passwords for the custom users set at `auth.usernames`                                                                | `[]`                   |
+| `auth.databases`         | List of custom databases to be created during the initialization                                                              | `[]`                   |
+| `auth.username`          | DEPRECATED: use `auth.usernames` instead                                                                                      | `""`                   |
+| `auth.password`          | DEPRECATED: use `auth.passwords` instead                                                                                      | `""`                   |
+| `auth.database`          | DEPRECATED: use `auth.databases` instead                                                                                      | `""`                   |
 | `auth.replicaSetKey`     | Key used for authentication in the replicaset (only when `architecture=replicaset`)                                           | `""`                   |
 | `auth.existingSecret`    | Existing secret with MongoDB&reg; credentials (keys: `mongodb-password`, `mongodb-root-password`, ` mongodb-replica-set-key`) | `""`                   |
 | `tls.enabled`            | Enable MongoDB&reg; TLS support between nodes in the cluster as well as between mongo clients and nodes                       | `false`                |
