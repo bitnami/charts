@@ -188,6 +188,10 @@ spec:
         - name: external-dag-files
           emptyDir: {}
       {{- end }}
+      {{- if .Files.Glob "files/dags/*.py" }}
+        - name: local-dag-files
+          emptyDir: {}
+      {{- end }}
       {{- if include "airflow.shouldUseConfigFromConfigMap" . }}
         - name: custom-configuration-file
           configMap:
