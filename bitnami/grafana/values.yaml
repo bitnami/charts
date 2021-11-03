@@ -186,6 +186,13 @@ dashboardsConfigMaps: []
 datasources:
   secretName: ""
 
+## Create notifiers from a configMap
+## The notifiersName must contain the files
+## @param notifiers.notifiersName Notifiers name containing custom configMap files
+##
+notifiers:
+  notifiersName: ""
+
 ## @section Grafana Deployment parameters
 
 grafana:
