@@ -298,6 +298,10 @@ master:
   ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
   ##
   affinity: {}
+  ## @param master.priorityClassName Master pods Priority Class Name
+  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+  ##
+  priorityClassName: ""
   ## @param master.nodeSelector Master-eligible Node labels for pod assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
@@ -550,6 +554,10 @@ coordinating:
   ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
   ##
   affinity: {}
+  ## @param coordinating.priorityClassName Coordinating pods Priority Class Name
+  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+  ##
+  priorityClassName: ""
   ## @param coordinating.nodeSelector Coordinating Node labels for pod assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
@@ -770,6 +778,10 @@ data:
   ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
   ##
   affinity: {}
+  ## @param data.priorityClassName Data pods Priority Class Name
+  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+  ##
+  priorityClassName: ""
   ## @param data.nodeSelector Data Node labels for pod assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
@@ -1008,6 +1020,10 @@ ingest:
   ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
   ##
   affinity: {}
+  ## @param ingest.priorityClassName Ingest pods Priority Class Name
+  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+  ##
+  priorityClassName: ""
   ## @param ingest.nodeSelector Ingest Node labels for pod assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
@@ -1338,7 +1354,7 @@ curator:
     ##    cpu: 100m
     ##    memory: 128Mi
     requests: {}
-  ## @param curator.priorityClassName Priority Class Name
+  ## @param curator.priorityClassName Curator Pods Priority Class Name
   ##
   priorityClassName: ""
   ## @param curator.extraVolumes Extra volumes
