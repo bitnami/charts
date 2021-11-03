@@ -186,6 +186,7 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `dashboardsProvider.configMapName` | Name of a ConfigMap containing a custom dashboard provider                        | `""`                 |
 | `dashboardsConfigMaps`             | Array with the names of a series of ConfigMaps containing dashboards files        | `[]`                 |
 | `datasources.secretName`           | Secret name containing custom datasource files                                    | `""`                 |
+| `notifiers.notifiersName`          | Notifiers name containing custom configMap files                                  | `""`                 |
 
 
 ### Grafana Deployment parameters
