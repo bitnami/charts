@@ -17,8 +17,8 @@ metadata:
     {{- end }}
     app.kubernetes.io/component: grafana
 spec:
-  {{- if .Values.serviceMonitor.jobLabel }}
-  jobLabel: {{ .Values.serviceMonitor.jobLabel }}
+  {{- if .Values.metrics.serviceMonitor.jobLabel }}
+  jobLabel: {{ .Values.metrics.serviceMonitor.jobLabel }}
   {{- end }}
   selector:
     matchLabels: {{ include "common.labels.matchLabels" . | nindent 6 }}
