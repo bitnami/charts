@@ -170,7 +170,7 @@ spec:
             - name: datasources
               mountPath: /opt/bitnami/grafana/conf/provisioning/datasources
             {{- end }}
-            {{- if .Values.notifiers.notifiersName }}
+            {{- if .Values.notifiers.configMapName }}
             - name: notifiers
               mountPath: /opt/bitnami/grafana/conf/provisioning/notifiers
             {{- end }}
@@ -281,10 +281,10 @@ spec:
           secret:
             secretName: {{ .Values.datasources.secretName }}
         {{- end }}
-        {{- if .Values.notifiers.notifiersName }}
+        {{- if .Values.notifiers.configMapName }}
         - name: notifiers
           configMap:
-            name: {{ .Values.notifiers.notifiersName }}
+            name: {{ .Values.notifiers.configMapName }}
         {{- end }}
         {{- if .Values.config.useGrafanaIniFile }}
         - name: grafana-ini
