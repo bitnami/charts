@@ -75,7 +75,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/redis
-  tag: 6.2.6-debian-10-r0
+  tag: 6.2.6-debian-10-r21
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -785,7 +785,7 @@ sentinel:
   image:
     registry: docker.io
     repository: bitnami/redis-sentinel
-    tag: 6.2.6-debian-10-r0
+    tag: 6.2.6-debian-10-r20
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1018,10 +1018,10 @@ networkPolicy:
 ## ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/
 ##
 podSecurityPolicy:
-  ## @param podSecurityPolicy.create Specifies whether a PodSecurityPolicy should be created (set `podSecurityPolicy.enabled` to `true` to enable it)
+  ## @param podSecurityPolicy.create Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later
   ##
   create: false
-  ## @param podSecurityPolicy.enabled Enable PodSecurityPolicy
+  ## @param podSecurityPolicy.enabled Enable PodSecurityPolicy's RBAC rules
   ##
   enabled: false
 ## RBAC configuration
@@ -1121,7 +1121,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/redis-exporter
-    tag: 1.27.1-debian-10-r12
+    tag: 1.29.0-debian-10-r6
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1301,7 +1301,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r212
+    tag: 10-debian-10-r232
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1347,7 +1347,7 @@ sysctl:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r212
+    tag: 10-debian-10-r232
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

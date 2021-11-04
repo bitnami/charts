@@ -69,7 +69,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraDeploy`       | Array of extra objects to deploy with the release  | `[]`                         |
 | `image.registry`    | Odoo image registry                                | `docker.io`                  |
 | `image.repository`  | Odoo image repository                              | `bitnami/odoo`               |
-| `image.tag`         | Odoo image tag (immutable tags are recommended)    | `14.0.20211010-debian-10-r0` |
+| `image.tag`         | Odoo image tag (immutable tags are recommended)    | `15.0.20211010-debian-10-r0` |
 | `image.pullPolicy`  | Odoo image pull policy                             | `IfNotPresent`               |
 | `image.pullSecrets` | Odoo image pull secrets                            | `[]`                         |
 | `image.debug`       | Enable image debug mode                            | `false`                      |

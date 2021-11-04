@@ -16,11 +16,9 @@ spec:
   replicas: {{ .Values.receive.replicaCount }}
   podManagementPolicy: {{ .Values.receive.podManagementPolicy }}
   serviceName: {{ include "common.names.fullname" . }}-receive-headless
-  updateStrategy:
-    type: {{ .Values.receive.updateStrategyType }}
-    {{- if (eq "OnDelete" .Values.receive.updateStrategyType) }}
-    rollingUpdate: null
-    {{- end }}
+  {{- if .Values.receive.updateStrategy }}
+  updateStrategy: {{- toYaml .Values.receive.updateStrategy | nindent 4 }}
+  {{- end }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: receive

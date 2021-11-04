@@ -68,15 +68,25 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Spark parameters
 
-| Name                | Description                                      | Value                  |
-| ------------------- | ------------------------------------------------ | ---------------------- |
-| `image.registry`    | Spark image registry                             | `docker.io`            |
-| `image.repository`  | Spark image repository                           | `bitnami/spark`        |
-| `image.tag`         | Spark image tag (immutable tags are recommended) | `3.1.2-debian-10-r129` |
-| `image.pullPolicy`  | Spark image pull policy                          | `IfNotPresent`         |
-| `image.pullSecrets` | Specify docker-registry secret names as an array | `[]`                   |
-| `image.debug`       | Enable image debug mode                          | `false`                |
-| `hostNetwork`       | Enable HOST Network                              | `false`                |
+| Name                | Description                                      | Value                |
+| ------------------- | ------------------------------------------------ | -------------------- |
+| `image.registry`    | Spark image registry                             | `docker.io`          |
+| `image.repository`  | Spark image repository                           | `bitnami/spark`      |
+| `image.tag`         | Spark image tag (immutable tags are recommended) | `3.2.0-debian-10-r2` |
+| `image.pullPolicy`  | Spark image pull policy                          | `IfNotPresent`       |
+| `image.pullSecrets` | Specify docker-registry secret names as an array | `[]`                 |
+| `image.debug`       | Enable image debug mode                          | `false`              |
+| `hostNetwork`       | Enable HOST Network                              | `false`              |
+
+
+### RBAC parameters
+
+| Name                                          | Description                                            | Value  |
+| --------------------------------------------- | ------------------------------------------------------ | ------ |
+| `serviceAccount.create`                       | Enable the creation of a ServiceAccount for Spark pods | `true` |
+| `serviceAccount.name`                         | The name of the ServiceAccount to use.                 | `""`   |
+| `serviceAccount.annotations`                  | Annotations for Spark Service Account                  | `{}`   |
+| `serviceAccount.automountServiceAccountToken` | Automount API credentials for a service account.       | `true` |
 
 
 ### Spark master parameters

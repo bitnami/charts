@@ -40,6 +40,9 @@ spec:
     spec:
       {{- include "harbor.imagePullSecrets" . | nindent 6 }}
       automountServiceAccountToken: {{ .Values.clair.automountServiceAccountToken }}
+      {{- if .Values.clair.priorityClassName }}
+      priorityClassName: {{ .Values.clair.priorityClassName | quote }}
+      {{- end }}
       {{- if .Values.clair.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.clair.affinity "context" $) | nindent 8 }}
       {{- else }}
