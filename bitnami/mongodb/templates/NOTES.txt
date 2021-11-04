@@ -97,12 +97,17 @@ To get the root password run:
     export MONGODB_ROOT_PASSWORD=$(kubectl get secret --namespace {{ template "mongodb.namespace" . }} {{ template "mongodb.secretName" . }} -o jsonpath="{.data.mongodb-root-password}" | base64 --decode)
 
 {{- end }}
-{{- if and .Values.auth.username .Values.auth.database .Values.auth.password }}
+{{- $customUsers := include "mongodb.customUsers" . -}}
+{{- $customDatabases := include "mongodb.customDatabases" . -}}
+{{- if and (not (empty $customUsers)) (not (empty $customDatabases)) }}
+{{- $customUsersList := splitList "," $customUsers }}
+{{- range $index, $user := $customUsersList }}
 
-To get the password for "{{ .Values.auth.username }}" run:
+To get the password for "{{ $user }}" run:
 
-    export MONGODB_PASSWORD=$(kubectl get secret --namespace {{ template "mongodb.namespace" . }} {{ template "mongodb.secretName" . }} -o jsonpath="{.data.mongodb-password}" | base64 --decode)
+    export MONGODB_PASSWORD=$(kubectl get secret --namespace {{ include "mongodb.namespace" $ }} {{ include "mongodb.secretName" $ }} -o jsonpath="{.data.mongodb-passwords}" | base64 --decode | awk -F',' '{print ${{ add 1 $index }}}')
 
+{{- end }}
 {{- end }}
 
 To connect to your database, create a MongoDB&reg; client container:

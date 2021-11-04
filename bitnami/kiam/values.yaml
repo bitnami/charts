@@ -93,7 +93,7 @@ server:
   ## @param server.sslCertHostPath Path to the host system SSL certificates (necessary for contacting the AWS metadata server)
   ##
   sslCertHostPath: /etc/ssl/certs
-  ## @param server.podSecurityPolicy.create Create a PodSecurityPolicy resource
+  ## @param server.podSecurityPolicy.create Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later
   ## @param server.podSecurityPolicy.allowedHostPaths Extra host paths to allow in the PodSecurityPolicy
   ##
   podSecurityPolicy:
@@ -484,7 +484,7 @@ agent:
     ca:
     cert:
     key:
-  ## @param agent.podSecurityPolicy.create Create a PodSecurityPolicy resource
+  ## @param agent.podSecurityPolicy.create Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later
   ## @param agent.podSecurityPolicy.allowedHostPaths Extra host paths to allow in the PodSecurityPolicy
   ##
   podSecurityPolicy:

@@ -304,6 +304,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `prometheus.thanos.prometheusUrl`                                     | Override default prometheus url "http://localhost:9090"                                                                          | `""`                     |
 | `prometheus.thanos.extraArgs`                                         | Additional arguments passed to the thanos sidecar container                                                                      | `[]`                     |
 | `prometheus.thanos.objectStorageConfig`                               | Support mounting a Secret for the objectStorageConfig of the sideCar container.                                                  | `{}`                     |
+| `prometheus.thanos.extraVolumeMounts`                                 | Additional volumeMounts from `prometheus.volumes` for thanos sidecar container                                                   | `[]`                     |
 | `prometheus.thanos.resources.limits`                                  | The resources limits for the Thanos sidecar container                                                                            | `{}`                     |
 | `prometheus.thanos.resources.requests`                                | The resources requests for the Thanos sidecar container                                                                          | `{}`                     |
 | `prometheus.thanos.livenessProbe.enabled`                             | Turn on and off liveness probe                                                                                                   | `true`                   |
@@ -504,11 +505,11 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### RBAC parameters
 
-| Name              | Description                                     | Value     |
-| ----------------- | ----------------------------------------------- | --------- |
-| `rbac.create`     | Whether to create and use RBAC resources or not | `true`    |
-| `rbac.apiVersion` | Version of the RBAC API                         | `v1beta1` |
-| `rbac.pspEnabled` | PodSecurityPolicy                               | `true`    |
+| Name              | Description                                                                                                                                                        | Value     |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------- |
+| `rbac.create`     | Whether to create and use RBAC resources or not                                                                                                                    | `true`    |
+| `rbac.apiVersion` | Version of the RBAC API                                                                                                                                            | `v1beta1` |
+| `rbac.pspEnabled` | Whether to create a PodSecurityPolicy and bound it with RBAC. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later | `true`    |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,

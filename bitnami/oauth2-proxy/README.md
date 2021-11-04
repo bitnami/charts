@@ -85,7 +85,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.loadBalancerSourceRanges` | OAuth2 Proxy service Load Balancer sources                                                                                       | `[]`                     |
 | `service.externalTrafficPolicy`    | OAuth2 Proxy service external traffic policy                                                                                     | `Cluster`                |
 | `service.annotations`              | Additional custom annotations for OAuth2 Proxy service                                                                           | `{}`                     |
-| `ingress.enabled`                  | Enable ingress record generation for WordPress                                                                                   | `false`                  |
+| `ingress.enabled`                  | Enable ingress record generation for OAuth2 Proxy                                                                                | `false`                  |
 | `ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
 | `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
 | `ingress.hostname`                 | Default host for the ingress record                                                                                              | `oaut2-proxy.local`      |
@@ -118,6 +118,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `configuration.existingSecret`                         | Secret with the client ID, secret and cookie secret | `""`               |
 | `configuration.google.enabled`                         | Enable Google service account                       | `false`            |
 | `configuration.google.adminEmail`                      | Google admin email                                  | `""`               |
+| `configuration.google.googleGroup`                     | Restrict logins to members of this google group     | `""`               |
 | `configuration.google.serviceAccountJson`              | Google Service account JSON                         | `""`               |
 | `configuration.google.existingSecret`                  | Existing secret containing Google Service Account   | `""`               |
 | `configuration.content`                                | Default configuration                               | `""`               |
