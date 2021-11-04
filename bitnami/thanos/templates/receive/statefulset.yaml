@@ -42,7 +42,7 @@ spec:
         {{- end }}
     spec:
       {{- include "thanos.imagePullSecrets" . | nindent 6 }}
-      serviceAccount: {{ include "thanos.serviceaccount.name" (dict "component" "receive" "context" $) }}
+      serviceAccount: {{ include "thanos.serviceAccount.name" (dict "component" "receive" "context" $) }}
       {{- if .Values.receive.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.receive.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -63,8 +63,17 @@ spec:
       {{- if .Values.receive.priorityClassName }}
       priorityClassName: {{ .Values.receive.priorityClassName | quote }}
       {{- end }}
+      {{- if .Values.receive.schedulerName }}
+      schedulerName: {{ .Values.receive.schedulerName }}
+      {{- end }}
       {{- if .Values.receive.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.receive.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      {{- if .Values.receive.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.receive.topologySpreadConstraints "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.receive.initContainers }}
+      initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.receive.initContainers "context" $) | nindent 8 }}
       {{- end }}
       containers:
         {{- if .Values.receive.sidecars }}
@@ -76,7 +85,13 @@ spec:
           {{- if .Values.receive.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.receive.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
+          {{- if .Values.receive.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.receive.command "context" $) | nindent 12 }}
+          {{- end }}
           args:
+            {{- if .Values.receive.args }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.receive.args "context" $) | nindent 12 }}
+            {{- else }}
             - receive
             - --log.level={{ .Values.receive.logLevel }}
             - --log.format={{ .Values.receive.logFormat }}
@@ -97,8 +112,14 @@ spec:
             {{- if eq .Values.receive.mode "standalone" }}
             - --receive.hashrings-file=/var/lib/thanos-receive/hashrings.json
             {{- end }}
+            {{- if .Values.receive.grpc.server.tls.enabled }}
+            - --grpc-server-tls-cert=/certs/{{ include "common.secrets.key" (dict "existingSecret" .Values.receive.grpc.server.tls.existingSecret "key" "tls-cert") }}
+            - --grpc-server-tls-key=/certs/{{ include "common.secrets.key" (dict "existingSecret" .Values.receive.grpc.server.tls.existingSecret "key" "tls-key") }}
+            - --grpc-server-tls-client-ca=/certs/{{ include "common.secrets.key" (dict "existingSecret" .Values.receive.grpc.server.tls.existingSecret "key" "ca-cert") }}
+            {{- end }}
             {{- if .Values.receive.extraFlags }}
             {{- .Values.receive.extraFlags | toYaml | nindent 12 }}
+            {{- end }}
             {{- end }}
           env:
             - name: NAME
@@ -115,8 +136,19 @@ spec:
                   key: objstore.yml
                   name: {{ include "thanos.objstoreSecretName" . }}
             {{- if .Values.receive.extraEnvVars }}
-            {{- toYaml .Values.receive.extraEnvVars | nindent 12 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.receive.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
+          {{- if or .Values.receive.extraEnvVarsCM .Values.receive.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.receive.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.receive.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.receive.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.receive.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- end }}
           ports:
             - containerPort: 10901
               name: grpc
@@ -128,26 +160,31 @@ spec:
               name: remote-write
               protocol: TCP
           {{- if .Values.receive.livenessProbe.enabled }}
-          livenessProbe:
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.receive.livenessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /-/healthy
               port: http
-            initialDelaySeconds: {{ .Values.receive.livenessProbe.initialDelaySeconds }}
-            timeoutSeconds: {{ .Values.receive.livenessProbe.timeoutSeconds }}
-            periodSeconds: {{ .Values.receive.livenessProbe.periodSeconds }}
-            successThreshold: {{ .Values.receive.livenessProbe.successThreshold }}
-            failureThreshold: {{ .Values.receive.livenessProbe.failureThreshold }}
+          {{- else if .Values.receive.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.receive.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.receive.readinessProbe.enabled }}
-          readinessProbe:
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.receive.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /-/ready
               port: http
-            initialDelaySeconds: {{ .Values.receive.readinessProbe.initialDelaySeconds }}
-            timeoutSeconds: {{ .Values.receive.readinessProbe.timeoutSeconds }}
-            periodSeconds: {{ .Values.receive.readinessProbe.periodSeconds }}
-            successThreshold: {{ .Values.receive.readinessProbe.successThreshold }}
-            failureThreshold: {{ .Values.receive.readinessProbe.failureThreshold }}
+          {{- else if .Values.receive.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.receive.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.receive.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.receive.startupProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /-/ready
+              port: http
+          {{- else if .Values.receive.customReadinessProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.receive.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.receive.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.receive.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.receive.resources }}
           resources: {{- toYaml .Values.receive.resources | nindent 12 }}
@@ -157,6 +194,10 @@ spec:
               mountPath: /var/lib/thanos-receive
             - name: data
               mountPath: /var/thanos/receive
+            {{- if .Values.receive.grpc.server.tls.enabled }}
+            - name: grpc-server-tls
+              mountPath: /certs
+            {{- end }}
             {{- if .Values.receive.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.receive.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
@@ -164,6 +205,11 @@ spec:
         - name: hashring-config
           configMap:
             name: {{ include "common.names.fullname" . }}-receive
+        {{- if .Values.receive.grpc.server.tls.enabled }}
+        - name: grpc-server-tls
+          secret:
+            secretName: {{ include "common.secrets.name" (dict "existingSecret" .Values.receive.grpc.server.tls.existingSecret "defaultNameSuffix" "receive-grpc-server" "context" $) }}
+        {{- end }}
         {{- if .Values.receive.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.receive.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
