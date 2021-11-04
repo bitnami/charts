@@ -133,7 +133,6 @@ This solution allows to easily deploy multiple RabbitMQ instances compared to th
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                | Description                                        | Value           |
@@ -146,7 +145,6 @@ This solution allows to easily deploy multiple RabbitMQ instances compared to th
 | `clusterDomain`     | Kubernetes cluster domain name                     | `cluster.local` |
 | `extraDeploy`       | Array of extra objects to deploy with the release  | `[]`            |
 
-
 ### RabbitMQ Cluster Operator Parameters
 
 | Name                                                          | Description                                                                                             | Value                               |
@@ -155,10 +153,10 @@ This solution allows to easily deploy multiple RabbitMQ instances compared to th
 | `rabbitmqImage.repository`                                    | RabbitMQ Image repository                                                                               | `bitnami/rabbitmq`                  |
 | `rabbitmqImage.tag`                                           | RabbitMQ Image tag (immutable tags are recommended)                                                     | `3.8.23-debian-10-r18`              |
 | `rabbitmqImage.pullSecrets`                                   | RabbitMQ Image pull secrets                                                                             | `[]`                                |
-| `defaultCredentialUpdaterImage.registry`                      | RabbitMQ Default User Credential Updater Image registry                                                 | `docker.io`                         |
-| `defaultCredentialUpdaterImage.repository`                    | RabbitMQ Default User Credential Updater Image repository                                               | `bitnami/rabbitmq`                  |
-| `defaultCredentialUpdaterImage.tag`                           | RabbitMQ Default User Credential Updater Image tag (immutable tags are recommended)                     | `3.8.23-debian-10-r18`              |
-| `defaultCredentialUpdaterImage.pullSecrets`                   | RabbitMQ Default User Credential Updater Image pull secrets                                             | `[]`                                |
+| `credentialUpdaterImage.registry`                      | RabbitMQ Default User Credential Updater Image registry                                                 | `docker.io`                         |
+| `credentialUpdaterImage.repository`                    | RabbitMQ Default User Credential Updater Image repository                                               | `bitnami/rabbitmq`                  |
+| `credentialUpdaterImage.tag`                           | RabbitMQ Default User Credential Updater Image tag (immutable tags are recommended)                     | `3.8.23-debian-10-r18`              |
+| `credentialUpdaterImage.pullSecrets`                   | RabbitMQ Default User Credential Updater Image pull secrets                                             | `[]`                                |
 | `clusterOperator.image.registry`                              | RabbitMQ Cluster Operator image registry                                                                | `docker.io`                         |
 | `clusterOperator.image.repository`                            | RabbitMQ Cluster Operator image repository                                                              | `bitnami/rabbitmq-cluster-operator` |
 | `clusterOperator.image.tag`                                   | RabbitMQ Cluster Operator image tag (immutable tags are recommended)                                    | `1.10.0-scratch-r1`                 |
@@ -225,7 +223,6 @@ This solution allows to easily deploy multiple RabbitMQ instances compared to th
 | `clusterOperator.serviceAccount.annotations`                  | Add annotations                                                                                         | `{}`                                |
 | `clusterOperator.serviceAccount.automountServiceAccountToken` | Automount API credentials for a service account.                                                        | `true`                              |
 
-
 ### RabbitMQ Cluster Operator Metrics parameters
 
 | Name                                                       | Description                                                                 | Value                    |
@@ -249,7 +246,6 @@ This solution allows to easily deploy multiple RabbitMQ instances compared to th
 | `clusterOperator.metrics.serviceMonitor.additionalLabels`  | Used to pass Labels that are required by the installed Prometheus Operator  | `{}`                     |
 | `clusterOperator.metrics.serviceMonitor.metricRelabelings` | Specify additional relabeling of metrics                                    | `[]`                     |
 | `clusterOperator.metrics.serviceMonitor.relabelings`       | Specify general relabeling                                                  | `[]`                     |
-
 
 ### RabbitMQ Messaging Topology Operator Parameters
 
@@ -332,7 +328,6 @@ This solution allows to easily deploy multiple RabbitMQ instances compared to th
 | `msgTopologyOperator.serviceAccount.annotations`                  | Add annotations                                                                                                    | `{}`                                      |
 | `msgTopologyOperator.serviceAccount.automountServiceAccountToken` | Automount API credentials for a service account.                                                                   | `true`                                    |
 
-
 ### RabbitMQ Messaging Topology Operator parameters
 
 | Name                                                           | Description                                                                 | Value                    |
@@ -357,13 +352,11 @@ This solution allows to easily deploy multiple RabbitMQ instances compared to th
 | `msgTopologyOperator.metrics.serviceMonitor.metricRelabelings` | Specify additional relabeling of metrics                                    | `[]`                     |
 | `msgTopologyOperator.metrics.serviceMonitor.relabelings`       | Specify general relabeling                                                  | `[]`                     |
 
-
 ### cert-manager parameters
 
 | Name             | Description                                                       | Value   |
 | ---------------- | ----------------------------------------------------------------- | ------- |
 | `useCertManager` | Deploy cert-manager objects (Issuer and Certificate) for webhooks | `false` |
-
 
 See [readme-generator-for-helm](https://github.com/bitnami-labs/readme-generator-for-helm) to create the table.
 

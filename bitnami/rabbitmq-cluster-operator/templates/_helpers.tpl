@@ -38,7 +38,7 @@ Return the proper RabbitMQ Messaging Topology Operator fullname
 Return the proper RabbitMQ Default User Credential updater image name
 */}}
 {{- define "rmqco.defaultCredentialUpdater.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.defaultCredentialUpdaterImage "global" .Values.global) }}
+{{ include "common.images.image" (dict "imageRoot" .Values.credentialUpdaterImage "global" .Values.global) }}
 {{- end -}}
 
 {{/*

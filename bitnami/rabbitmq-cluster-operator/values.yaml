@@ -67,18 +67,18 @@ rabbitmqImage:
 
 ## Bitnami RabbitMQ Default User Credential Updater Image
 ## ref: https://hub.docker.com/r/bitnami/rmq-default-credential-updater/tags/
-## @param defaultCredentialUpdaterImage.registry RabbitMQ Default User Credential Updater Image registry
-## @param defaultCredentialUpdaterImage.repository RabbitMQ Default User Credential Updater Image repository
-## @param defaultCredentialUpdaterImage.tag RabbitMQ Default User Credential Updater Image tag (immutable tags are recommended)
-## @param defaultCredentialUpdaterImage.pullSecrets RabbitMQ Default User Credential Updater Image pull secrets
+## @param credentialUpdaterImage.registry RabbitMQ Default User Credential Updater Image registry
+## @param credentialUpdaterImage.repository RabbitMQ Default User Credential Updater Image repository
+## @param credentialUpdaterImage.tag RabbitMQ Default User Credential Updater Image tag (immutable tags are recommended)
+## @param credentialUpdaterImage.pullSecrets RabbitMQ Default User Credential Updater Image pull secrets
 ##
-defaultCredentialUpdaterImage:
+credentialUpdaterImage:
   registry: docker.io
   repository: bitnami/rabbitmq
   tag: 3.8.23-debian-10-r18
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-defaultCredentialUpdaterImage-private-registry/
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-credentialUpdaterImage-private-registry/
   ## e.g:
   ## pullSecrets:
   ##   - myRegistryKeySecretName
