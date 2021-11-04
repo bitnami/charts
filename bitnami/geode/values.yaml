@@ -65,7 +65,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/geode
-  tag: 1.14.0-debian-10-r7
+  tag: 1.14.0-debian-10-r26
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -359,6 +359,12 @@ locator:
   ## @param locator.lifecycleHooks for the Locator container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
+  ## @param locator.extraFlags Additional command line flags to start Locator nodes
+  ## e.g.
+  ## extraFlags:
+  ##   - "--J=-Dfoo.bar=true"
+  ##
+  extraFlags: []
   ## @param locator.extraEnvVars Array with extra environment variables to add to Locator nodes
   ## e.g:
   ## extraEnvVars:
@@ -695,6 +701,12 @@ server:
   ## @param server.lifecycleHooks for the Cache server container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
+  ## @param server.extraFlags Additional command line flags to start Cache server nodes
+  ## e.g.
+  ## extraFlags:
+  ##   - "--J=-Dfoo.bar=true"
+  ##
+  extraFlags: []
   ## @param server.extraEnvVars Array with extra environment variables to add to Cache server nodes
   ## e.g:
   ## extraEnvVars:
@@ -887,8 +899,8 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r212
-    pullPolicy: Always
+    tag: 10-debian-10-r233
+    pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -932,7 +944,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/haproxy
-    tag: 2.4.6-debian-10-r0
+    tag: 2.4.7-debian-10-r19
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

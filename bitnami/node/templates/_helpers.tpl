@@ -44,6 +44,7 @@ Return the proper Docker Image Registry Secret Names
 {{- define "node.checkRollingTags" -}}
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- include "common.warnings.rollingTag" .Values.git.image }}
+{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
 {{- end -}}
 
 {{/*

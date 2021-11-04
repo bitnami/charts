@@ -1,3 +1,7 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
 ** Please be patient while the chart is being deployed **
 
 {{- if .Values.diagnosticMode.enabled }}
@@ -109,8 +113,6 @@ To access the Monitoring svc from outside the cluster, follow the steps below:
 {{- end }}
 
 2. Open a browser and access the NATS monitoring browsing to the Monitoring URL
-
-
 {{- if .Values.metrics.enabled }}
 
 3. Get the NATS Prometheus Metrics URL by running:

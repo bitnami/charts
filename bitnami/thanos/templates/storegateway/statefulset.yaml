@@ -3,20 +3,22 @@ apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
   name: {{ include "common.names.fullname" . }}-storegateway
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: storegateway
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   replicas: {{ .Values.storegateway.replicaCount }}
   podManagementPolicy: {{ .Values.storegateway.podManagementPolicy }}
   serviceName: {{ include "common.names.fullname" . }}-storegateway-headless
-  updateStrategy:
-    type: {{ .Values.storegateway.updateStrategyType }}
-    {{- if (eq "OnDelete" .Values.storegateway.updateStrategyType) }}
-    rollingUpdate: null
-    {{- end }}
+  {{- if .Values.storegateway.updateStrategy }}
+  updateStrategy: {{- toYaml .Values.storegateway.updateStrategy | nindent 4 }}
+  {{- end }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: storegateway
@@ -82,6 +84,9 @@ spec:
               mountPath: /data
       {{- end }}
       containers:
+        {{- if .Values.storegateway.sidecars }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.sidecars "context" $) | nindent 8 }}
+        {{- end }}
         - name: storegateway
           image: {{ include "thanos.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
@@ -119,9 +124,9 @@ spec:
             {{- if .Values.storegateway.extraFlags }}
             {{- .Values.storegateway.extraFlags | toYaml | nindent 12 }}
             {{- end }}
-          {{- if .Values.storegateway.extraEnv }}
+          {{- if .Values.storegateway.extraEnvVars }}
           env:
-            {{- toYaml .Values.storegateway.extraEnv | nindent 12 }}
+            {{- toYaml .Values.storegateway.extraEnvVars | nindent 12 }}
           {{- end }}
           ports:
             - name: http
@@ -206,6 +211,9 @@ spec:
   volumeClaimTemplates:
     - metadata:
         name: data
+        {{- if .Values.storegateway.persistence.annotations }}
+        annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.storegateway.persistence.annotations "context" $) | nindent 10 }}
+        {{- end }}
       spec:
         accessModes:
         {{- range .Values.storegateway.persistence.accessModes }}

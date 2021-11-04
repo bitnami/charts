@@ -76,7 +76,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------- | --------------------------------------------------------------------------------------------- | ---------------------- |
 | `image.registry`                  | Keycloak image registry                                                                       | `docker.io`            |
 | `image.repository`                | Keycloak image repository                                                                     | `bitnami/keycloak`     |
-| `image.tag`                       | Keycloak image tag (immutable tags are recommended)                                           | `15.0.2-debian-10-r45` |
+| `image.tag`                       | Keycloak image tag (immutable tags are recommended)                                           | `15.0.2-debian-10-r66` |
 | `image.pullPolicy`                | Keycloak image pull policy                                                                    | `IfNotPresent`         |
 | `image.pullSecrets`               | Specify docker-registry secret names as an array                                              | `[]`                   |
 | `image.debug`                     | Specify if debug logs should be enabled                                                       | `false`                |
@@ -123,7 +123,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `keycloakConfigCli.enabled`                               | Whether to enable keycloak-config-cli                                                           | `false`                       |
 | `keycloakConfigCli.image.registry`                        | keycloak-config-cli container image registry                                                    | `docker.io`                   |
 | `keycloakConfigCli.image.repository`                      | keycloak-config-cli container image repository                                                  | `bitnami/keycloak-config-cli` |
-| `keycloakConfigCli.image.tag`                             | keycloak-config-cli container image tag                                                         | `4.3.0-debian-10-r5`          |
+| `keycloakConfigCli.image.tag`                             | keycloak-config-cli container image tag                                                         | `4.3.0-debian-10-r29`         |
 | `keycloakConfigCli.image.pullPolicy`                      | keycloak-config-cli container image pull policy                                                 | `IfNotPresent`                |
 | `keycloakConfigCli.image.pullSecrets`                     | keycloak-config-cli container image pull secrets                                                | `[]`                          |
 | `keycloakConfigCli.annotations`                           | Annotations for keycloak-config-cli job                                                         | `undefined`                   |
@@ -376,6 +376,16 @@ To enable Ingress integration, set `ingress.enabled` to `true`. The `ingress.hos
 ### Configure TLS Secrets for use with Ingress
 
 The chart also facilitates the creation of TLS secrets for use with the Ingress controller, with different options for certificate management. [Learn more about TLS secrets](https://docs.bitnami.com/kubernetes/apps/keycloak/administration/enable-tls-ingress/).
+
+### Use with ingress offloading SSL
+
+If your ingress controller has the SSL Termination, you can add the following env vars in `extraEnvVars` 
+```yaml
+- name: KEYCLOAK_PROXY_ADDRESS_FORWARDING
+  value: "true"
+- name: KEYCLOAK_FRONTEND_URL
+  value: "https://keycloak.xxx"
+```
 
 ### Manage secrets and passwords
 

@@ -69,7 +69,7 @@ image:
   ## Bitnami Redis&trade; image tag
   ## ref: https://github.com/bitnami/bitnami-docker-redis#supported-tags-and-respective-dockerfile-links
   ##
-  tag: 6.2.6-debian-10-r0
+  tag: 6.2.6-debian-10-r21
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -322,8 +322,8 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r212
-    pullPolicy: Always
+    tag: 10-debian-10-r233
+    pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -350,7 +350,7 @@ volumePermissions:
     requests: {}
 ## PodSecurityPolicy configuration
 ## ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/
-## @param podSecurityPolicy.create Specifies whether a PodSecurityPolicy should be created
+## @param podSecurityPolicy.create Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later
 ##
 podSecurityPolicy:
   create: false
@@ -758,7 +758,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/redis-exporter
-    tag: 1.27.1-debian-10-r12
+    tag: 1.29.0-debian-10-r6
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -904,8 +904,8 @@ sysctlImage:
   ##
   registry: docker.io
   repository: bitnami/bitnami-shell
-  tag: 10-debian-10-r212
-  pullPolicy: Always
+  tag: 10-debian-10-r233
+  pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/

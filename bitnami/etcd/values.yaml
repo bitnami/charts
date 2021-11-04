@@ -69,7 +69,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/etcd
-  tag: 3.5.0-debian-10-r94
+  tag: 3.5.1-debian-10-r10
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -546,8 +546,8 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r202
-    pullPolicy: Always
+    tag: 10-debian-10-r233
+    pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -728,6 +728,16 @@ disasterRecovery:
       ##    memory: 1Gi
       limits: {}
       requests: {}
+
+    ## @param disasterRecovery.cronjob.nodeSelector Node labels for cronjob pods assignment
+    ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+    ##
+    nodeSelector: {}
+    ## @param disasterRecovery.cronjob.tolerations Tolerations for cronjob pods assignment
+    ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+    ##
+    tolerations: []
+
   pvc:
     ## @param disasterRecovery.pvc.existingClaim A manually managed Persistent Volume and Claim
     ## If defined, PVC must be created manually before volume will be bound

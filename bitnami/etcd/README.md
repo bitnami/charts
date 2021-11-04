@@ -77,7 +77,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------- | ----------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`                       | etcd image registry                                                                             | `docker.io`           |
 | `image.repository`                     | etcd image name                                                                                 | `bitnami/etcd`        |
-| `image.tag`                            | etcd image tag                                                                                  | `3.5.0-debian-10-r94` |
+| `image.tag`                            | etcd image tag                                                                                  | `3.5.1-debian-10-r10` |
 | `image.pullPolicy`                     | etcd image pull policy                                                                          | `IfNotPresent`        |
 | `image.pullSecrets`                    | etcd image pull secrets                                                                         | `[]`                  |
 | `image.debug`                          | Enable image debug mode                                                                         | `false`               |
@@ -213,8 +213,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                     | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                         | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                          | `10-debian-10-r202`     |
-| `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                  | `Always`                |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                          | `10-debian-10-r233`     |
+| `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                  | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                     | `[]`                    |
 | `volumePermissions.resources.limits`   | Init container volume-permissions resource  limits                                                                   | `{}`                    |
 | `volumePermissions.resources.requests` | Init container volume-permissions resource  requests                                                                 | `{}`                    |
@@ -262,6 +262,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `disasterRecovery.cronjob.podAnnotations`       | Pod annotations for cronjob pods                                        | `{}`           |
 | `disasterRecovery.cronjob.resources.limits`     | Cronjob container resource limits                                       | `{}`           |
 | `disasterRecovery.cronjob.resources.requests`   | Cronjob container resource requests                                     | `{}`           |
+| `disasterRecovery.cronjob.nodeSelector`         | Node labels for cronjob pods assignment                                 | `{}`           |
+| `disasterRecovery.cronjob.tolerations`          | Tolerations for cronjob pods assignment                                 | `[]`           |
 | `disasterRecovery.pvc.existingClaim`            | A manually managed Persistent Volume and Claim                          | `""`           |
 | `disasterRecovery.pvc.size`                     | PVC Storage Request                                                     | `2Gi`          |
 | `disasterRecovery.pvc.storageClassName`         | Storage Class for snapshots volume                                      | `nfs`          |
