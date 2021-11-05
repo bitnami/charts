@@ -191,7 +191,7 @@ This solution allows to easily deploy multiple RabbitMQ instances compared to th
 | `clusterOperator.podSecurityContext.enabled`                  | Enabled RabbitMQ Cluster Operator pods' Security Context                                                | `true`                              |
 | `clusterOperator.podSecurityContext.fsGroup`                  | Set RabbitMQ Cluster Operator pod's Security Context fsGroup                                            | `1001`                              |
 | `clusterOperator.containerSecurityContext.allowPrivilegeEscalation` | Set RabbitMQ Cluster Operator containers' Security Context allowPrivilegeEscalation      | `false`                             |
-| `clusterOperator.containerSecurityContext.capabilities` | Set RabbitMQ Cluster Operator containers' Security Context capabilities                              | `{drop: ["ALL"]}`                   |
+| `clusterOperator.containerSecurityContext.capabilities.drop` | Set RabbitMQ Cluster Operator containers' Security Context capabilities                              | `["ALL"]`                   |
 | `clusterOperator.containerSecurityContext.enabled`   | Enabled RabbitMQ Cluster Operator containers' Security Context                                          | `true`                              |
 | `clusterOperator.containerSecurityContext.readOnlyRootFilesystem  ` | Set RabbitMQ Cluster Operator containers' Security Context readOnlyRootFilesystem        | `true`                              |
 | `clusterOperator.containerSecurityContext.runAsUser` | Set RabbitMQ Cluster Operator containers' Security Context runAsUser                                    | `1001`
