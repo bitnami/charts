@@ -190,8 +190,11 @@ This solution allows to easily deploy multiple RabbitMQ instances compared to th
 | `clusterOperator.resources.requests`                          | The requested resources for the RabbitMQ Cluster Operator containers                                    | `{}`                                |
 | `clusterOperator.podSecurityContext.enabled`                  | Enabled RabbitMQ Cluster Operator pods' Security Context                                                | `true`                              |
 | `clusterOperator.podSecurityContext.fsGroup`                  | Set RabbitMQ Cluster Operator pod's Security Context fsGroup                                            | `1001`                              |
-| `clusterOperator.containerSecurityContext.enabled`            | Enabled RabbitMQ Cluster Operator containers' Security Context                                          | `true`                              |
-| `clusterOperator.containerSecurityContext.runAsUser`          | Set RabbitMQ Cluster Operator containers' Security Context runAsUser                                    | `1001`                              |
+| `clusterOperator.containerSecurityContext.allowPrivilegeEscalation` | Set RabbitMQ Cluster Operator containers' Security Context allowPrivilegeEscalation      | `false`                             |
+| `clusterOperator.containerSecurityContext.capabilities` | Set RabbitMQ Cluster Operator containers' Security Context capabilities                              | `{drop: ["ALL"]}`                   |
+| `clusterOperator.containerSecurityContext.enabled`   | Enabled RabbitMQ Cluster Operator containers' Security Context                                          | `true`                              |
+| `clusterOperator.containerSecurityContext.readOnlyRootFilesystem  ` | Set RabbitMQ Cluster Operator containers' Security Context readOnlyRootFilesystem        | `true`                              |
+| `clusterOperator.containerSecurityContext.runAsUser` | Set RabbitMQ Cluster Operator containers' Security Context runAsUser                                    | `1001`
 | `clusterOperator.containerSecurityContext.runAsNonRoot`       | Force running the container as non root                                                                 | `true`                              |
 | `clusterOperator.command`                                     | Override default container command (useful when using custom images)                                    | `[]`                                |
 | `clusterOperator.args`                                        | Override default container args (useful when using custom images)                                       | `[]`                                |

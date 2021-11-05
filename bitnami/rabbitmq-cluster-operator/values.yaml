@@ -205,6 +205,10 @@ clusterOperator:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    readOnlyRootFilesystem: true
 
   ## @param clusterOperator.command Override default container command (useful when using custom images)
   ##
