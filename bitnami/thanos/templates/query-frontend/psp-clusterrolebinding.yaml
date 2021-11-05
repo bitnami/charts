@@ -18,6 +18,6 @@ roleRef:
   apiGroup: rbac.authorization.k8s.io
 subjects:
   - kind: ServiceAccount
-    name: {{ include "thanos.serviceaccount.name" (dict "component" "query-frontend" "context" $) }}
+    name: {{ include "thanos.serviceAccount.name" (dict "component" "query-frontend" "context" $) }}
     namespace: {{ .Release.Namespace }}
 {{- end }}
