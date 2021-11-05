@@ -1,15 +1,15 @@
-{{- if and .Values.query.enabled .Values.metrics.enabled .Values.metrics.serviceMonitor.enabled }}
+{{- if and .Values.receiveDistributor.enabled .Values.metrics.enabled .Values.metrics.serviceMonitor.enabled }}
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: {{ include "common.names.fullname" . }}-query
+  name: {{ include "common.names.fullname" . }}-receive-distributor
   {{- if .Values.metrics.serviceMonitor.namespace }}
   namespace: {{ .Values.metrics.serviceMonitor.namespace | quote }}
   {{- else }}
   namespace: {{ .Release.Namespace | quote }}
   {{- end }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
-    app.kubernetes.io/component: query
+    app.kubernetes.io/component: receive-distributor
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
@@ -42,7 +42,7 @@ spec:
       - {{ .Release.Namespace }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
-      app.kubernetes.io/component: query
+      app.kubernetes.io/component: receive-distributor
       {{- if .Values.metrics.serviceMonitor.selector }}
       {{- include "common.tplvalues.render" (dict "value" .Values.metrics.serviceMonitor.selector "context" $) | nindent 6 }}
       {{- end }}
