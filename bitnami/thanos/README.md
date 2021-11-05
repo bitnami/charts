@@ -212,6 +212,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `query.service.annotations`                               | Annotations for Thanos Query service                                                                                                    | `{}`                     |
 | `query.service.extraPorts`                                | Extra ports to expose in the Thanos Query service                                                                                       | `[]`                     |
 | `query.service.labelSelectorsOverride`                    | Selector for Thanos Query service                                                                                                       | `{}`                     |
+| `query.service.additionalHeadless`                        | Additional Headless service                                                                                                             | `false`                  |
 | `query.serviceAccount.annotations`                        | Annotations for Thanos Query Service Account                                                                                            | `{}`                     |
 | `query.serviceAccount.existingServiceAccount`             | Name for an existing Thanos Query Service Account                                                                                       | `""`                     |
 | `query.serviceAccount.automountServiceAccountToken`       | Enable/disable auto mounting of the service account token                                                                               | `true`                   |
@@ -252,7 +253,6 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `query.ingress.grpc.pathType`                             | Ingress Path type                                                                                                                       | `ImplementationSpecific` |
 
 
-
 ### Thanos Query Frontend parameters
 
 | Name                                                              | Description                                                                                                                      | Value                    |
@@ -260,8 +260,8 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `queryFrontend.enabled`                                           | Enable/disable Thanos Query Frontend component                                                                                   | `true`                   |
 | `queryFrontend.logLevel`                                          | Thanos Query Frontend log level                                                                                                  | `info`                   |
 | `queryFrontend.logFormat`                                         | Thanos Query Frontend log format                                                                                                 | `logfmt`                 |
-| `queryFrontend.config`                                            | Thanos Query Frontend cache configuration                                                                                        | `""`                     |
-| `queryFrontend.existingConfigmap`                                 | Name of existing ConfigMap with Thanos Query Frontend cache configuration                                                        | `""`                     |
+| `queryFrontend.config`                                            | Thanos Query Frontend configuration                                                                                              | `""`                     |
+| `queryFrontend.existingConfigmap`                                 | Name of existing ConfigMap with Thanos Query Frontend configuration                                                              | `""`                     |
 | `queryFrontend.extraEnvVars`                                      | Extra environment variables for Thanos Query Frontend container                                                                  | `[]`                     |
 | `queryFrontend.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars for Thanos Query Frontend nodes                                             | `""`                     |
 | `queryFrontend.extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars for Thanos Query Frontend nodes                                                | `""`                     |
@@ -565,8 +565,8 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `storegateway.enabled`                                           | Enable/disable Thanos Store Gateway component                                                                                            | `false`                     |
 | `storegateway.logLevel`                                          | Thanos Store Gateway log level                                                                                                           | `info`                      |
 | `storegateway.logFormat`                                         | Thanos Store Gateway log format                                                                                                          | `logfmt`                    |
-| `storegateway.config`                                            | Thanos Store Gateway cache configuration                                                                                                 | `""`                        |
-| `storegateway.existingConfigmap`                                 | Name of existing ConfigMap with Thanos Store Gateway cache configuration                                                                 | `""`                        |
+| `storegateway.config`                                            | Thanos Store Gateway configuration                                                                                                       | `""`                        |
+| `storegateway.existingConfigmap`                                 | Name of existing ConfigMap with Thanos Store Gateway configuration                                                                       | `""`                        |
 | `storegateway.grpc.server.tls.enabled`                           | Enable TLS encryption in the GRPC server                                                                                                 | `false`                     |
 | `storegateway.grpc.server.tls.autoGenerated`                     | Create self-signed TLS certificates. Currently only supports PEM certificates                                                            | `false`                     |
 | `storegateway.grpc.server.tls.cert`                              | TLS Certificate for GRPC server - ignored if existingSecret is provided                                                                  | `""`                        |
@@ -808,6 +808,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `receive.tsdbRetention`                                     | Thanos Receive TSDB retention period                                                                                             | `15d`                    |
 | `receive.replicationFactor`                                 | Thanos Receive replication-factor                                                                                                | `1`                      |
 | `receive.config`                                            | Receive Hashring configuration                                                                                                   | `[]`                     |
+| `receive.existingConfigmap`                                 | Name of existing ConfigMap with Thanos Receive Hashring configuration                                                            | `""`                     |
 | `receive.replicaLabel`                                      | Label to treat as a replica indicator along which data is de-duplicated                                                          | `replica`                |
 | `receive.grpc.server.tls.enabled`                           | Enable TLS encryption in the GRPC server                                                                                         | `false`                  |
 | `receive.grpc.server.tls.autoGenerated`                     | Create self-signed TLS certificates. Currently only supports PEM certificates                                                    | `false`                  |
