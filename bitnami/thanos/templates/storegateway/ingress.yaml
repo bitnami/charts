@@ -2,17 +2,22 @@
 apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
-  name: thanos-storegateway
+  name: {{ include "common.names.fullname" . }}-storegateway
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
-  annotations:
-    {{- if .Values.storegateway.ingress.certManager }}
-    kubernetes.io/tls-acme: "true"
+    app.kubernetes.io/component: storegateway
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
-    {{- range $key, $value := .Values.storegateway.ingress.annotations }}
-    {{ $key }}: {{ $value | quote }}
+  annotations:
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.storegateway.ingress.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.storegateway.ingress.annotations "context" $ ) | nindent 4 }}
     {{- end }}
 spec:
-  {{- if and .Values.storegateway.ingress.ingressClassName }}
+  {{- if and .Values.storegateway.ingress.ingressClassName (include "common.ingress.supportsIngressClassname" .) }}
   ingressClassName: {{ .Values.storegateway.ingress.ingressClassName | quote }}
   {{- end }}
   rules:
@@ -36,9 +41,9 @@ spec:
             {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (printf "%s-%s"  (include "common.names.fullname" .) "storegateway") "servicePort" "http" "context" $)  | nindent 14 }}
     {{- end }}
-  {{- if or .Values.storegateway.ingress.tls .Values.storegateway.ingress.extraTls .Values.storegateway.ingress.hosts }}
+  {{- if or (and .Values.storegateway.ingress.tls (or (include "thanos.ingress.certManagerRequest" .Values.storegateway.ingress.annotations) .Values.storegateway.ingress.selfSigned)) .Values.storegateway.ingress.extraTls }}
   tls:
-    {{- if or .Values.storegateway.ingress.secrets .Values.storegateway.ingress.tls }}
+    {{- if and .Values.storegateway.ingress.tls (or (include "thanos.ingress.certManagerRequest" .Values.storegateway.ingress.annotations) .Values.storegateway.ingress.selfSigned) }}
     - hosts:
         - {{ .Values.storegateway.ingress.hostname }}
       secretName: {{ printf "%s-tls" .Values.storegateway.ingress.hostname }}

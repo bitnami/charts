@@ -67,8 +67,10 @@ data:
   ping_sentinel.sh: |-
     #!/bin/bash
 
+{{- if .Values.auth.sentinel }}
     [[ -f $REDIS_PASSWORD_FILE ]] && export REDIS_PASSWORD="$(< "${REDIS_PASSWORD_FILE}")"
     [[ -n "$REDIS_PASSWORD" ]] && export REDISCLI_AUTH="$REDIS_PASSWORD"
+{{- end }}
     response=$(
       timeout -s 3 $1 \
       redis-cli \

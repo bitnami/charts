@@ -68,15 +68,25 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Spark parameters
 
-| Name                | Description                                      | Value                 |
-| ------------------- | ------------------------------------------------ | --------------------- |
-| `image.registry`    | Spark image registry                             | `docker.io`           |
-| `image.repository`  | Spark image repository                           | `bitnami/spark`       |
-| `image.tag`         | Spark image tag (immutable tags are recommended) | `3.1.2-debian-10-r99` |
-| `image.pullPolicy`  | Spark image pull policy                          | `IfNotPresent`        |
-| `image.pullSecrets` | Specify docker-registry secret names as an array | `[]`                  |
-| `image.debug`       | Enable image debug mode                          | `false`               |
-| `hostNetwork`       | Enable HOST Network                              | `false`               |
+| Name                | Description                                      | Value                |
+| ------------------- | ------------------------------------------------ | -------------------- |
+| `image.registry`    | Spark image registry                             | `docker.io`          |
+| `image.repository`  | Spark image repository                           | `bitnami/spark`      |
+| `image.tag`         | Spark image tag (immutable tags are recommended) | `3.2.0-debian-10-r2` |
+| `image.pullPolicy`  | Spark image pull policy                          | `IfNotPresent`       |
+| `image.pullSecrets` | Specify docker-registry secret names as an array | `[]`                 |
+| `image.debug`       | Enable image debug mode                          | `false`              |
+| `hostNetwork`       | Enable HOST Network                              | `false`              |
+
+
+### RBAC parameters
+
+| Name                                          | Description                                            | Value  |
+| --------------------------------------------- | ------------------------------------------------------ | ------ |
+| `serviceAccount.create`                       | Enable the creation of a ServiceAccount for Spark pods | `true` |
+| `serviceAccount.name`                         | The name of the ServiceAccount to use.                 | `""`   |
+| `serviceAccount.annotations`                  | Annotations for Spark Service Account                  | `{}`   |
+| `serviceAccount.automountServiceAccountToken` | Automount API credentials for a service account.       | `true` |
 
 
 ### Spark master parameters
@@ -197,27 +207,26 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Traffic Exposure parameters
 
-| Name                        | Description                                                                                            | Value                    |
-| --------------------------- | ------------------------------------------------------------------------------------------------------ | ------------------------ |
-| `service.type`              | Kubernetes Service type                                                                                | `ClusterIP`              |
-| `service.clusterPort`       | Spark cluster port                                                                                     | `7077`                   |
-| `service.webPort`           | Spark client port                                                                                      | `80`                     |
-| `service.nodePorts.cluster` | Kubernetes cluster node port                                                                           | `""`                     |
-| `service.nodePorts.web`     | Kubernetes web node port                                                                               | `""`                     |
-| `service.loadBalancerIP`    | Load balancer IP if spark service type is `LoadBalancer`                                               | `""`                     |
-| `service.annotations`       | Annotations for spark service                                                                          | `{}`                     |
-| `ingress.enabled`           | Enable ingress controller resource                                                                     | `false`                  |
-| `ingress.certManager`       | Set this to true in order to add the corresponding annotations for cert-manager                        | `false`                  |
-| `ingress.pathType`          | Ingress path type                                                                                      | `ImplementationSpecific` |
-| `ingress.apiVersion`        | Force Ingress API version (automatically detected if not set)                                          | `""`                     |
-| `ingress.hostname`          | Default host for the ingress resource                                                                  | `spark.local`            |
-| `ingress.path`              | The Path to Spark. You may need to set this to '/*' in order to use this with ALB ingress controllers. | `/`                      |
-| `ingress.annotations`       | Ingress annotations                                                                                    | `{}`                     |
-| `ingress.tls`               | Enable TLS configuration for the hostname defined at ingress.hostname parameter                        | `false`                  |
-| `ingress.extraHosts`        | The list of additional hostnames to be covered with this ingress record.                               | `[]`                     |
-| `ingress.extraPaths`        | Any additional arbitrary paths that may need to be added to the ingress under the main host.           | `[]`                     |
-| `ingress.extraTls`          | The tls configuration for additional hostnames to be covered with this ingress record.                 | `[]`                     |
-| `ingress.secrets`           | If you're providing your own certificates, please use this to add the certificates as secrets          | `[]`                     |
+| Name                        | Description                                                                                                                      | Value                    |
+| --------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.type`              | Kubernetes Service type                                                                                                          | `ClusterIP`              |
+| `service.clusterPort`       | Spark cluster port                                                                                                               | `7077`                   |
+| `service.webPort`           | Spark client port                                                                                                                | `80`                     |
+| `service.nodePorts.cluster` | Kubernetes cluster node port                                                                                                     | `""`                     |
+| `service.nodePorts.web`     | Kubernetes web node port                                                                                                         | `""`                     |
+| `service.loadBalancerIP`    | Load balancer IP if spark service type is `LoadBalancer`                                                                         | `""`                     |
+| `service.annotations`       | Annotations for spark service                                                                                                    | `{}`                     |
+| `ingress.enabled`           | Enable ingress controller resource                                                                                               | `false`                  |
+| `ingress.pathType`          | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.apiVersion`        | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
+| `ingress.hostname`          | Default host for the ingress resource                                                                                            | `spark.local`            |
+| `ingress.path`              | The Path to Spark. You may need to set this to '/*' in order to use this with ALB ingress controllers.                           | `/`                      |
+| `ingress.annotations`       | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.tls`               | Enable TLS configuration for the hostname defined at ingress.hostname parameter                                                  | `false`                  |
+| `ingress.extraHosts`        | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
+| `ingress.extraPaths`        | Any additional arbitrary paths that may need to be added to the ingress under the main host.                                     | `[]`                     |
+| `ingress.extraTls`          | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
+| `ingress.secrets`           | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
 
 
 ### Metrics parameters

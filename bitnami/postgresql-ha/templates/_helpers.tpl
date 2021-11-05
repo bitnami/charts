@@ -564,6 +564,7 @@ Return the appropriate apiVersion for networkPolicy
 {{- include "common.warnings.rollingTag" .Values.postgresqlImage -}}
 {{- include "common.warnings.rollingTag" .Values.pgpoolImage -}}
 {{- include "common.warnings.rollingTag" .Values.metricsImage -}}
+{{- include "common.warnings.rollingTag" .Values.volumePermissionsImage -}}
 {{- end -}}
 
 {{/*
@@ -771,3 +772,4 @@ Return the path to the CA cert file.
 {{- define "postgresql-ha.postgresql.tlsCACert" -}}
 {{- printf "/opt/bitnami/postgresql/certs/%s" .Values.postgresql.tls.certCAFilename -}}
 {{- end -}}
+

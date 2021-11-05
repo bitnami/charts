@@ -95,6 +95,7 @@ spec:
       # Auxiliary vars to populate environment variables
       {{- $postgresqlReplicaCount := int .Values.postgresql.replicaCount }}
       {{- $postgresqlFullname := include "postgresql-ha.postgresql" . }}
+      {{- $postgresalServicePort := int .Values.service.port }}
       {{- $postgresqlHeadlessServiceName := printf "%s-headless" (include "postgresql-ha.postgresql" .) }}
       containers:
         - name: pgpool
@@ -134,7 +135,7 @@ spec:
                   key: passwords
             {{- end }}
             - name: PGPOOL_BACKEND_NODES
-              value: {{range $e, $i := until $postgresqlReplicaCount }}{{ $i }}:{{ $postgresqlFullname }}-{{ $i }}.{{ $postgresqlHeadlessServiceName }}:5432,{{ end }}
+              value: {{range $e, $i := until $postgresqlReplicaCount }}{{ $i }}:{{ $postgresqlFullname }}-{{ $i }}.{{ $postgresqlHeadlessServiceName }}:{{ $postgresalServicePort }},{{ end }}
             - name: PGPOOL_SR_CHECK_USER
               value: {{ (include "postgresql-ha.postgresqlRepmgrUsername" .) | quote }}
             {{- if .Values.postgresql.usePasswordFile }}
@@ -275,7 +276,7 @@ spec:
             {{- end }}
           ports:
             - name: postgresql
-              containerPort: 5432
+              containerPort: {{ .Values.service.port }}
               protocol: TCP
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.pgpool.livenessProbe.enabled }}

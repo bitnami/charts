@@ -67,7 +67,7 @@ operator:
   image:
     registry: docker.io
     repository: bitnami/grafana-operator
-    tag: 3.10.3-debian-10-r61
+    tag: 3.10.4-debian-10-r6
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## Ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -261,7 +261,7 @@ grafana:
   image:
     registry: docker.io
     repository: bitnami/grafana
-    tag: 8.1.5-debian-10-r2
+    tag: 8.2.2-debian-10-r5
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -393,6 +393,9 @@ grafana:
   client:
     timeout: 5
     preferService: true
+  ## @param grafana.labels Add additional labels to the grafana deployment, service and ingress resources
+  ##
+  labels: {}
   ## Configure the ingress resource that allows you to access the
   ## Grafana web. Set up the URL
   ## Ref: http://kubernetes.io/docs/user-guide/ingress/
@@ -402,6 +405,11 @@ grafana:
     ## @param grafana.ingress.enabled If an ingress or OpenShift Route should be created
     ##
     enabled: false
+    ## @param grafana.ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+    ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster.
+    ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+    ##
+    ingressClassName: ""
     ## @param grafana.ingress.hostname The hostname under which the grafana instance should be reachable
     ##
     hostname: grafana.local
