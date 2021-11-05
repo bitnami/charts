@@ -1,0 +1,42 @@
+{{- $query := (include "thanos.query.values" . | fromYaml) -}}
+{{- if and ($query.enabled) ($query.service.additionalHeadless) -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "common.names.fullname" . }}-query-headless
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: query
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  annotations:
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if $query.service.annotations }}
+    {{- include "common.tplvalues.render" (dict "value" $query.service.annotations "context" $) | nindent 4 }}
+    {{- end }}
+spec:
+  type: ClusterIP
+  clusterIP: None
+  ports:
+    - port: {{ if $query.service.http }}{{ coalesce $query.service.ports.http $query.service.http.port }}{{ else }}{{ $query.service.ports.http }}{{ end }}
+      targetPort: http
+      protocol: TCP
+      name: http
+    - port: {{ if $query.service.grpc }}{{ coalesce $query.service.ports.grpc $query.service.grpc.port }}{{ else }}{{ $query.service.ports.grpc }}{{ end }}
+      targetPort: grpc
+      protocol: TCP
+      name: grpc
+    {{- if $query.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" $query.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  selector:
+    {{- if $query.service.labelSelectorsOverride }}
+    {{- include "common.tplvalues.render" (dict "value" $query.service.labelSelectorsOverride "context" $) | nindent 4 }}
+    {{- else }}
+    {{- include "common.labels.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/component: query
+    {{- end }}
+{{- end }}

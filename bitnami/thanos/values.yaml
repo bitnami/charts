@@ -441,6 +441,9 @@ query:
     ## @param query.service.labelSelectorsOverride Selector for Thanos query service
     ##
     labelSelectorsOverride: {}
+    ## @param query.service.additionalHeadless Additional Headless service
+    ##
+    additionalHeadless: false
   ## Autoscaling parameters
   ## @param query.autoscaling.enabled Enable autoscaling for Thanos Query
   ## @param query.autoscaling.minReplicas Minimum number of Thanos Query replicas

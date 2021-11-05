@@ -117,7 +117,6 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 
 
 ### Thanos Query parameters
-
 | Name                                                      | Description                                                                                                                                 | Value                    |
 | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
 | `query.enabled`                                           | Set to true to enable Thanos Query component                                                                                                | `true`                   |
@@ -199,6 +198,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `query.service.externalTrafficPolicy`                     | Thanos Query service externalTrafficPolicy                                                                                                  | `Cluster`                |
 | `query.service.annotations`                               | Annotations for Thanos Query service                                                                                                        | `{}`                     |
 | `query.service.extraPorts`                                | Extra ports to expose in the Thanos Query service                                                                                           | `[]`                     |
+| `query.service.additionalHeadless`                        | Additional Headless service                                                                                                                 | `false`                  |
 | `query.service.labelSelectorsOverride`                    | Selector for Thanos query service                                                                                                           | `{}`                     |
 | `query.autoscaling.enabled`                               | Enable autoscaling for Thanos Query                                                                                                         | `false`                  |
 | `query.autoscaling.minReplicas`                           | Minimum number of Thanos Query replicas                                                                                                     | `""`                     |
@@ -232,6 +232,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `query.ingress.grpc.apiVersion`                           | Override API Version (automatically detected if not set)                                                                                    | `""`                     |
 | `query.ingress.grpc.path`                                 | Ingress Path                                                                                                                                | `/`                      |
 | `query.ingress.grpc.pathType`                             | Ingress Path type                                                                                                                           | `ImplementationSpecific` |
+
 
 
 ### Thanos Query Frontend parameters
