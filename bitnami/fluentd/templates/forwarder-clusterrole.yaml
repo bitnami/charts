@@ -1,9 +1,9 @@
 {{- if and .Values.forwarder.enabled .Values.forwarder.rbac.create }}
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
 metadata:
-  name: {{ include "fluentd.fullname" . }}
-  labels: {{- include "fluentd.labels" . | nindent 4 }}
+  name: {{ include "common.names.fullname" . }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
 rules:
   - apiGroups:
       - ""
@@ -14,13 +14,14 @@ rules:
       - "get"
       - "watch"
       - "list"
-  {{- if .Values.forwarder.rbac.pspEnabled }}
+  {{- $pspAvailable := (semverCompare "<1.25-0" (include "common.capabilities.kubeVersion" .)) -}}
+  {{- if and $pspAvailable .Values.forwarder.rbac.pspEnabled }}
   - apiGroups:
       - "policy"
     resources:
       - "podsecuritypolicies"
     resourceNames:
-      - {{ include "fluentd.fullname" . }}-forwarder
+      - {{ include "common.names.fullname" . }}-forwarder
     verbs:
       - "use"
   {{- end }}

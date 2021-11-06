@@ -20,7 +20,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 3.0-beta3+
+- Helm 3.1.0
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -48,189 +48,216 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ## Parameters
 
-The following table lists the configurable parameters of the ownCloud chart and their default values per section/component:
-
 ### Global parameters
 
-| Parameter                 | Description                                     | Default                                                 |
-|---------------------------|-------------------------------------------------|---------------------------------------------------------|
-| `global.imageRegistry`    | Global Docker image registry                    | `nil`                                                   |
-| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]` (does not add image pull secrets to deployed pods) |
-| `global.storageClass`     | Global storage class for dynamic provisioning   | `nil`                                                   |
+| Name                      | Description                                     | Value |
+| ------------------------- | ----------------------------------------------- | ----- |
+| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
+| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
+| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
+
 
 ### Common parameters
 
-| Parameter           | Description                                                                  | Default                                                 |
-|---------------------|------------------------------------------------------------------------------|---------------------------------------------------------|
-| `image.registry`    | ownCloud image registry                                                      | `docker.io`                                             |
-| `image.repository`  | ownCloud Image name                                                          | `bitnami/owncloud`                                      |
-| `image.tag`         | ownCloud Image tag                                                           | `{TAG_NAME}`                                            |
-| `image.pullPolicy`  | ownCloud image pull policy                                                   | `IfNotPresent`                                          |
-| `image.pullSecrets` | Specify docker-registry secret names as an array                             | `[]` (does not add image pull secrets to deployed pods) |
-| `image.debug`       | Specify if debug logs should be enabled                                      | `false`                                                 |
-| `nameOverride`      | String to partially override owncloud.fullname template                      | `nil`                                                   |
-| `fullnameOverride`  | String to fully override owncloud.fullname template                          | `nil`                                                   |
-| `commonLabels`      | Labels to add to all deployed objects                                        | `nil`                                                   |
-| `commonAnnotations` | Annotations to add to all deployed objects                                   | `[]`                                                    |
-| `extraDeploy`       | Array of extra objects to deploy with the release (evaluated as a template). | `nil`                                                   |
+| Name               | Description                                                                              | Value |
+| ------------------ | ---------------------------------------------------------------------------------------- | ----- |
+| `kubeVersion`      | Force target Kubernetes version (using Helm capabilities if not set)                     | `""`  |
+| `nameOverride`     | String to partially override owncloud.fullname template (will maintain the release name) | `""`  |
+| `fullnameOverride` | String to fully override owncloud.fullname template                                      | `""`  |
+| `extraDeploy`      | Array of extra objects to deploy with the release (evaluated as a template)              | `[]`  |
+
 
 ### ownCloud parameters
 
-| Parameter                            | Description                                                                                                           | Default                                        |
-|--------------------------------------|-----------------------------------------------------------------------------------------------------------------------|------------------------------------------------|
-| `affinity`                           | Map of node/pod affinities                                                                                            | `{}`                                           |
-| `allowEmptyPassword`                 | Allow DB blank passwords                                                                                              | `yes`                                          |
-| `args`                               | Override default container args (useful when using custom images)                                                     | `nil`                                          |
-| `command`                            | Override default container command (useful when using custom images)                                                  | `nil`                                          |
-| `containerPorts.http`                | Sets http port inside NGINX container                                                                                 | `8080`                                         |
-| `containerPorts.https`               | Sets https port inside NGINX container                                                                                | `8443`                                         |
-| `containerSecurityContext.enabled`   | Enable ownCloud containers' Security Context                                                                          | `true`                                         |
-| `containerSecurityContext.runAsUser` | ownCloud containers' Security Context                                                                                 | `1001`                                         |
-| `customLivenessProbe`                | Override default liveness probe                                                                                       | `nil`                                          |
-| `customReadinessProbe`               | Override default readiness probe                                                                                      | `nil`                                          |
-| `customStartupProbe`                 | Override default startup probe                                                                                        | `nil`                                          |
-| `existingSecret`                     | Name of a secret with the application password                                                                        | `nil`                                          |
-| `extraEnvVarsCM`                     | ConfigMap containing extra env vars                                                                                   | `nil`                                          |
-| `extraEnvVarsSecret`                 | Secret containing extra env vars (in case of sensitive data)                                                          | `nil`                                          |
-| `extraEnvVars`                       | Extra environment variables                                                                                           | `nil`                                          |
-| `extraVolumeMounts`                  | Array of extra volume mounts to be added to the container (evaluated as template). Normally used with `extraVolumes`. | `nil`                                          |
-| `extraVolumes`                       | Array of extra volumes to be added to the deployment (evaluated as template). Requires setting `extraVolumeMounts`    | `nil`                                          |
-| `initContainers`                     | Add additional init containers to the pod (evaluated as a template)                                                   | `nil`                                          |
-| `lifecycleHooks`                     | LifecycleHook to set additional configuration at startup Evaluated as a template                                      | ``                                             |
-| `livenessProbe`                      | Liveness probe configuration                                                                                          | `Check values.yaml file`                       |
-| `nodeAffinityPreset.type`            | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                             | `""`                                           |
-| `nodeAffinityPreset.key`             | Node label key to match Ignored if `affinity` is set.                                                                 | `""`                                           |
-| `nodeAffinityPreset.values`          | Node label values to match. Ignored if `affinity` is set.                                                             | `[]`                                           |
-| `nodeSelector`                       | Node labels for pod assignment                                                                                        | `{}` (The value is evaluated as a template)    |
-| `owncloudHost`                       | ownCloud host to create application URLs (when ingress, it will be ignored)                                           | `nil`                                          |
-| `owncloudUsername`                   | User of the application                                                                                               | `user`                                         |
-| `owncloudPassword`                   | Application password                                                                                                  | _random 10 character alphanumeric string_      |
-| `owncloudEmail`                      | Admin email                                                                                                           | `user@example.com`                             |
-| `owncloudSkipInstall`                | Skip ownCloud installation wizard (`no` / `yes`)                                                                      | `false`                                        |
-| `podAffinityPreset`                  | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                   | `""`                                           |
-| `podAntiAffinityPreset`              | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                              | `soft`                                         |
-| `podAnnotations`                     | Pod annotations                                                                                                       | `{}`                                           |
-| `podLabels`                          | Add additional labels to the pod (evaluated as a template)                                                            | `nil`                                          |
-| `podSecurityContext.enabled`         | Enable ownCloud pods' Security Context                                                                                | `true`                                         |
-| `podSecurityContext.fsGroup`         | ownCloud pods' group ID                                                                                               | `1001`                                         |
-| `readinessProbe`                     | Readiness probe configuration                                                                                         | `Check values.yaml file`                       |
-| `replicaCount`                       | Number of ownCloud Pods to run                                                                                        | `1`                                            |
-| `resources`                          | CPU/Memory resource requests/limits                                                                                   | Memory: `512Mi`, CPU: `300m`                   |
-| `sidecars`                           | Attach additional containers to the pod (evaluated as a template)                                                     | `nil`                                          |
-| `smtpHost`                           | SMTP host                                                                                                             | `nil`                                          |
-| `smtpPort`                           | SMTP port                                                                                                             | `nil` (but owncloud internal default is 25)  |
-| `smtpProtocol`                       | SMTP Protocol (options: ssl,tls, nil)                                                                                 | `nil`                                          |
-| `smtpUser`                           | SMTP user                                                                                                             | `nil`                                          |
-| `smtpPassword`                       | SMTP password                                                                                                         | `nil`                                          |
-| `startupProbe`                       | Startup probe configuration                                                                                           | `Check values.yaml file`                       |
-| `tolerations`                        | Tolerations for pod assignment                                                                                        | `[]` (The value is evaluated as a template)    |
-| `updateStrategy`                     | Deployment update strategy                                                                                            | `nil`                                          |
+| Name                                 | Description                                                                                                  | Value                  |
+| ------------------------------------ | ------------------------------------------------------------------------------------------------------------ | ---------------------- |
+| `image.registry`                     | ownCloud image registry                                                                                      | `docker.io`            |
+| `image.repository`                   | ownCloud image repository                                                                                    | `bitnami/owncloud`     |
+| `image.tag`                          | ownCloud Image tag (immutable tags are recommended)                                                          | `10.8.0-debian-10-r79` |
+| `image.pullPolicy`                   | ownCloud image pull policy                                                                                   | `IfNotPresent`         |
+| `image.pullSecrets`                  | Specify docker-registry secret names as an array                                                             | `[]`                   |
+| `image.debug`                        | Specify if debug logs should be enabled                                                                      | `false`                |
+| `hostAliases`                        | Deployment pod host aliases                                                                                  | `[]`                   |
+| `replicaCount`                       | Number of replicas (requires ReadWriteMany PVC support)                                                      | `1`                    |
+| `owncloudSkipInstall`                | Skip ownCloud installation wizard. Useful for migrations and restoring from SQL dump                         | `false`                |
+| `owncloudHost`                       | ownCloud host to create application URLs (when ingress, it will be ignored)                                  | `""`                   |
+| `owncloudUsername`                   | User of the application                                                                                      | `user`                 |
+| `owncloudPassword`                   | Application password                                                                                         | `""`                   |
+| `owncloudEmail`                      | Admin email                                                                                                  | `user@example.com`     |
+| `allowEmptyPassword`                 | Allow DB blank passwords                                                                                     | `false`                |
+| `command`                            | Override default container command (useful when using custom images)                                         | `[]`                   |
+| `args`                               | Override default container args (useful when using custom images)                                            | `[]`                   |
+| `commonAnnotations`                  | Common annotations to add to all ownCloud resources (sub-charts are not considered). Evaluated as a template | `{}`                   |
+| `commonLabels`                       | Common labels to add to all ownCloud resources (sub-charts are not considered). Evaluated as a template      | `{}`                   |
+| `updateStrategy.type`                | Update strategy - only really applicable for deployments with RWO PVs attached                               | `RollingUpdate`        |
+| `extraEnvVars`                       | An array to add extra env vars                                                                               | `[]`                   |
+| `extraEnvVarsCM`                     | ConfigMap with extra environment variables                                                                   | `""`                   |
+| `extraEnvVarsSecret`                 | Secret with extra environment variables                                                                      | `""`                   |
+| `extraVolumes`                       | Extra volumes to add to the deployment. Requires setting `extraVolumeMounts`                                 | `[]`                   |
+| `extraVolumeMounts`                  | Extra volume mounts to add to the container. Normally used with `extraVolumes`                               | `[]`                   |
+| `initContainers`                     | Extra init containers to add to the deployment                                                               | `[]`                   |
+| `sidecars`                           | Extra sidecar containers to add to the deployment                                                            | `[]`                   |
+| `tolerations`                        | Tolerations for pod assignment                                                                               | `[]`                   |
+| `existingSecret`                     | Name of a secret with the application password                                                               | `""`                   |
+| `smtpHost`                           | SMTP host                                                                                                    | `""`                   |
+| `smtpPort`                           | SMTP port                                                                                                    | `""`                   |
+| `smtpUser`                           | SMTP user                                                                                                    | `""`                   |
+| `smtpPassword`                       | SMTP password                                                                                                | `""`                   |
+| `smtpProtocol`                       | SMTP Protocol (options: ssl,tls, nil)                                                                        | `""`                   |
+| `containerPorts.http`                | Sets HTTP port inside NGINX container                                                                        | `8080`                 |
+| `containerPorts.https`               | Sets HTTPS port inside NGINX container                                                                       | `8443`                 |
+| `sessionAffinity`                    | Control where client requests go, to the same pod or round-robin                                             | `None`                 |
+| `podAffinityPreset`                  | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                          | `""`                   |
+| `podAntiAffinityPreset`              | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                     | `soft`                 |
+| `nodeAffinityPreset.type`            | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                    | `""`                   |
+| `nodeAffinityPreset.key`             | Node label key to match Ignored if `affinity` is set.                                                        | `""`                   |
+| `nodeAffinityPreset.values`          | Node label values to match. Ignored if `affinity` is set.                                                    | `[]`                   |
+| `affinity`                           | Affinity for pod assignment                                                                                  | `{}`                   |
+| `nodeSelector`                       | Node labels for pod assignment. Evaluated as a template.                                                     | `{}`                   |
+| `resources`                          | Metrics exporter resource requests and limits                                                                | `{}`                   |
+| `podSecurityContext.enabled`         | Enable ownCloud pods' Security Context                                                                       | `true`                 |
+| `podSecurityContext.fsGroup`         | ownCloud pods' group ID                                                                                      | `1001`                 |
+| `containerSecurityContext.enabled`   | Enable ownCloud containers' Security Context                                                                 | `true`                 |
+| `containerSecurityContext.runAsUser` | ownCloud containers' Security Context                                                                        | `1001`                 |
+| `livenessProbe.enabled`              | Enable livenessProbe                                                                                         | `true`                 |
+| `livenessProbe.path`                 | Request path for livenessProbe                                                                               | `/status.php`          |
+| `livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                      | `120`                  |
+| `livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                             | `10`                   |
+| `livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                                            | `5`                    |
+| `livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                                          | `6`                    |
+| `livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                                          | `1`                    |
+| `readinessProbe.enabled`             | Enable readinessProbe                                                                                        | `true`                 |
+| `readinessProbe.path`                | Request path for readinessProbe                                                                              | `/status.php`          |
+| `readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                                     | `30`                   |
+| `readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                                            | `5`                    |
+| `readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                           | `3`                    |
+| `readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                                         | `6`                    |
+| `readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                         | `1`                    |
+| `startupProbe.enabled`               | Enable startupProbe                                                                                          | `false`                |
+| `startupProbe.path`                  | Request path for startupProbe                                                                                | `/status.php`          |
+| `startupProbe.initialDelaySeconds`   | Initial delay seconds for startupProbe                                                                       | `0`                    |
+| `startupProbe.periodSeconds`         | Period seconds for startupProbe                                                                              | `10`                   |
+| `startupProbe.timeoutSeconds`        | Timeout seconds for startupProbe                                                                             | `3`                    |
+| `startupProbe.failureThreshold`      | Failure threshold for startupProbe                                                                           | `60`                   |
+| `startupProbe.successThreshold`      | Success threshold for startupProbe                                                                           | `1`                    |
+| `customLivenessProbe`                | Override default liveness probe                                                                              | `{}`                   |
+| `customReadinessProbe`               | Override default readiness probe                                                                             | `{}`                   |
+| `customStartupProbe`                 | Override default startup probe                                                                               | `{}`                   |
+| `lifecycleHooks`                     | LifecycleHook to set additional configuration before or after startup                                        | `{}`                   |
+| `podAnnotations`                     | Pod annotations                                                                                              | `{}`                   |
+| `podLabels`                          | Pod extra labels                                                                                             | `{}`                   |
+
 
 ### Database parameters
 
-| Parameter                                   | Description                                                                              | Default                                        |
-|---------------------------------------------|------------------------------------------------------------------------------------------|------------------------------------------------|
-| `mariadb.enabled`                           | Whether to use the MariaDB chart                                                         | `true`                                         |
-| `mariadb.architecture`                      | MariaDB architecture (`standalone` or `replication`)                                     | `standalone`                                   |
-| `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                                                     | _random 10 character alphanumeric string_      |
-| `mariadb.auth.database`                     | Database name to create                                                                  | `bitnami_owncloud`                             |
-| `mariadb.auth.username`                     | Database user to create                                                                  | `bn_owncloud`                                  |
-| `mariadb.auth.password`                     | Password for the database                                                                | _random 10 character long alphanumeric string_ |
-| `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                                                    | `true`                                         |
-| `mariadb.primary.persistence.existingClaim` | Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas                 | `nil`                                          |
-| `mariadb.primary.persistence.accessModes`   | Database Persistent Volume Access Modes                                                  | `[ReadWriteOnce]`                              |
-| `mariadb.primary.persistence.size`          | Database Persistent Volume Size                                                          | `8Gi`                                          |
-| `mariadb.primary.persistence.hostPath`      | Set path in case you want to use local host path volumes (not recommended in production) | `nil`                                          |
-| `mariadb.primary.persistence.storageClass`  | MariaDB primary persistent volume storage Class                                          | `nil`                                          |
-| `externalDatabase.user`                     | Existing username in the external db                                                     | `bn_owncloud`                                  |
-| `externalDatabase.password`                 | Password for the above username                                                          | `""`                                           |
-| `externalDatabase.database`                 | Name of the existing database                                                            | `bitnami_owncloud`                             |
-| `externalDatabase.host`                     | Host of the existing database                                                            | `nil`                                          |
-| `externalDatabase.port`                     | Port of the existing database                                                            | `3306`                                         |
+| Name                                        | Description                                                                              | Value               |
+| ------------------------------------------- | ---------------------------------------------------------------------------------------- | ------------------- |
+| `mariadb.enabled`                           | Whether to deploy a mariadb server to satisfy the applications database requirements     | `true`              |
+| `mariadb.architecture`                      | MariaDB architecture. Allowed values: `standalone` or `replication`                      | `standalone`        |
+| `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                                                     | `""`                |
+| `mariadb.auth.database`                     | Database name to create                                                                  | `bitnami_owncloud`  |
+| `mariadb.auth.username`                     | Database user to create                                                                  | `bn_owncloud`       |
+| `mariadb.auth.password`                     | Password for the database                                                                | `""`                |
+| `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                                                    | `true`              |
+| `mariadb.primary.persistence.storageClass`  | MariaDB primary persistent volume storage Class                                          | `""`                |
+| `mariadb.primary.persistence.accessModes`   | Database Persistent Volume Access Modes                                                  | `["ReadWriteOnce"]` |
+| `mariadb.primary.persistence.size`          | Database Persistent Volume Size                                                          | `8Gi`               |
+| `mariadb.primary.persistence.hostPath`      | Set path in case you want to use local host path volumes (not recommended in production) | `""`                |
+| `mariadb.primary.persistence.existingClaim` | Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas                 | `""`                |
+| `externalDatabase.host`                     | Host of the existing database                                                            | `""`                |
+| `externalDatabase.port`                     | Port of the existing database                                                            | `3306`              |
+| `externalDatabase.user`                     | Existing username in the external db                                                     | `bn_owncloud`       |
+| `externalDatabase.password`                 | Password for the above username                                                          | `""`                |
+| `externalDatabase.database`                 | Name of the existing database                                                            | `bitnami_owncloud`  |
+
 
 ### Persistence parameters
 
-| Parameter                                   | Description                                                                                           | Default                                                        |
-|---------------------------------------------|-------------------------------------------------------------------------------------------------------|----------------------------------------------------------------|
-| `persistence.enabled`                       | Enable persistence using PVC                                                                          | `true`                                                         |
-| `persistence.storageClass`                  | PVC Storage Class for ownCloud volume                                                                 | `nil` (uses alpha storage class annotation)                    |
-| `persistence.existingClaim`                 | An Existing PVC name for ownCloud volume                                                              | `nil` (uses alpha storage class annotation)                    |
-| `persistence.hostPath`                      | Host mount path for ownCloud volume                                                                   | `nil` (will not mount to a host path)                          |
-| `persistence.accessMode`                    | PVC Access Mode for ownCloud volume                                                                   | `ReadWriteOnce`                                                |
-| `persistence.size`                          | PVC Storage Request for ownCloud volume                                                               | `8Gi`                                                          |
+| Name                        | Description                                                                | Value           |
+| --------------------------- | -------------------------------------------------------------------------- | --------------- |
+| `persistence.enabled`       | Enable persistence using PVC                                               | `true`          |
+| `persistence.storageClass`  | PVC Storage Class for ownCloud volume                                      | `""`            |
+| `persistence.accessMode`    | PVC Access Mode for ownCloud volume                                        | `ReadWriteOnce` |
+| `persistence.size`          | PVC Storage Request for ownCloud volume                                    | `8Gi`           |
+| `persistence.existingClaim` | An Existing PVC name for ownCloud volume                                   | `""`            |
+| `persistence.hostPath`      | If defined, the owncloud-data volume will mount to the specified hostPath. | `""`            |
+
 
 ### Volume Permissions parameters
 
-| Parameter                                            | Description                                                                                                                                               | Default                                                      |
-|------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `volumePermissions.enabled`                          | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                                                      |
-| `volumePermissions.image.registry`                   | Init container volume-permissions image registry                                                                                                          | `docker.io`                                                  |
-| `volumePermissions.image.repository`                 | Init container volume-permissions image name                                                                                                              | `bitnami/minideb`                                            |
-| `volumePermissions.image.tag`                        | Init container volume-permissions image tag                                                                                                               | `buster`                                                     |
-| `volumePermissions.image.pullSecrets`                | Specify docker-registry secret names as an array                                                                                                          | `[]` (does not add image pull secrets to deployed pods)      |
-| `volumePermissions.image.pullPolicy`                 | Init container volume-permissions image pull policy                                                                                                       | `Always`                                                     |
-| `volumePermissions.resources`                        | Init container resource requests/limit                                                                                                                    | `nil`                                                        |
+| Name                                   | Description                                                                                                                                               | Value                   |
+| -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
+| `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
+| `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `docker.io`             |
+| `volumePermissions.image.repository`   | Init container volume-permissions image repository                                                                                                        | `bitnami/bitnami-shell` |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                                                                              | `10-debian-10-r233`     |
+| `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`          |
+| `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                                          | `[]`                    |
+| `volumePermissions.resources.limits`   | The resources limits for the container                                                                                                                    | `{}`                    |
+| `volumePermissions.resources.requests` | The requested resources for the container                                                                                                                 | `{}`                    |
+
 
 ### Traffic Exposure Parameters
 
-| Parameter                        | Description                                 | Default            |
-|----------------------------------|---------------------------------------------|--------------------|
-| `service.type`                   | Kubernetes Service type                     | `LoadBalancer`     |
-| `service.loadBalancerIP`         | Kubernetes LoadBalancerIP to request        | `LoadBalancer`     |
-| `service.port`                   | Service HTTP port                           | `80`               |
-| `service.httpsPort`              | Service HTTPS port                          | `443`              |
-| `service.externalTrafficPolicy`  | Enable client source IP preservation        | `Cluster`          |
-| `service.nodePorts.http`         | Kubernetes http node port                   | `""`               |
-| `service.nodePorts.https`        | Kubernetes https node port                  | `""`               |
-| `ingress.enabled`                | Enable ingress controller resource          | `false`            |
-| `ingress.certManager`            | Add annotations for cert-manager            | `false`            |
-| `ingress.hostname`               | Default host for the ingress resource       | `owncloud.local`   |
-| `ingress.tls`                    | Enable TLS for `ingress.hostname` parameter | `false`            |
-| `ingress.annotations`            | Ingress annotations                         | `{}`               |
-| `ingress.extraHosts[0].name`     | Hostname to your ownCloud installation      | `nil`              |
-| `ingress.extraHosts[0].path`     | Path within the url structure               | `nil`              |
-| `ingress.extraTls[0].hosts[0]`   | TLS configuration for additional hosts      | `nil`              |
-| `ingress.extraTls[0].secretName` | TLS Secret (certificates)                   | `nil`              |
-| `ingress.secrets[0].name`        | TLS Secret Name                             | `nil`              |
-| `ingress.secrets[0].certificate` | TLS Secret Certificate                      | `nil`              |
-| `ingress.secrets[0].key`         | TLS Secret Key                              | `nil`              |
+| Name                               | Description                                                                                                                      | Value                    |
+| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.type`                     | Kubernetes Service type                                                                                                          | `LoadBalancer`           |
+| `service.port`                     | Service HTTP port                                                                                                                | `8080`                   |
+| `service.httpsPort`                | Service HTTPS port                                                                                                               | `8443`                   |
+| `service.clusterIP`                | Service cluster IP                                                                                                               | `""`                     |
+| `service.loadBalancerSourceRanges` | Control hosts connecting to "LoadBalancer" only                                                                                  | `[]`                     |
+| `service.loadBalancerIP`           | Load balancer IP for the ownCloud Service (optional, cloud specific)                                                             | `""`                     |
+| `service.nodePorts.http`           | Kubernetes HTTP node port                                                                                                        | `""`                     |
+| `service.nodePorts.https`          | Kubernetes HTTPS node port                                                                                                       | `""`                     |
+| `service.externalTrafficPolicy`    | Enable client source IP preservation                                                                                             | `Cluster`                |
+| `ingress.enabled`                  | Set to true to enable ingress record generation                                                                                  | `false`                  |
+| `ingress.hostname`                 | Default host for the ingress resource                                                                                            | `owncloud.local`         |
+| `ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.tls`                      | Enable TLS configuration for the hostname defined at ingress.hostname parameter                                                  | `false`                  |
+| `ingress.extraHosts`               | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
+| `ingress.extraTls`                 | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
+| `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
+
 
 ### Metrics parameters
 
-| Parameter                     | Description                                      | Default                                                      |
-|-------------------------------|--------------------------------------------------|--------------------------------------------------------------|
-| `metrics.enabled`             | Start a side-car prometheus exporter             | `false`                                                      |
-| `metrics.image.registry`      | Apache exporter image registry                   | `docker.io`                                                  |
-| `metrics.image.repository`    | Apache exporter image name                       | `bitnami/apache-exporter`                                    |
-| `metrics.image.tag`           | Apache exporter image tag                        | `{TAG_NAME}`                                                 |
-| `metrics.image.pullPolicy`    | Image pull policy                                | `IfNotPresent`                                               |
-| `metrics.image.pullSecrets`   | Specify docker-registry secret names as an array | `[]` (does not add image pull secrets to deployed pods)      |
-| `metrics.service.type`        | Prometheus metrics service type                  | `LoadBalancer`                                               |
-| `metrics.service.port`        | Service Metrics port                             | `9117`                                                       |
-| `metrics.service.annotations` | Annotations for enabling prometheus scraping     | `{prometheus.io/scrape: "true", prometheus.io/port: "9117"}` |
-| `metrics.resources`           | Exporter resource requests/limit                 | `{}`                                                         |
+| Name                          | Description                                                | Value                     |
+| ----------------------------- | ---------------------------------------------------------- | ------------------------- |
+| `metrics.enabled`             | Start a side-car prometheus exporter                       | `false`                   |
+| `metrics.image.registry`      | Apache exporter image registry                             | `docker.io`               |
+| `metrics.image.repository`    | Apache exporter image repository                           | `bitnami/apache-exporter` |
+| `metrics.image.tag`           | Apache exporter image tag (immutable tags are recommended) | `0.10.1-debian-10-r35`    |
+| `metrics.image.pullPolicy`    | Image pull policy                                          | `IfNotPresent`            |
+| `metrics.image.pullSecrets`   | Specify docker-registry secret names as an array           | `[]`                      |
+| `metrics.resources`           | Metrics exporter resource requests and limits              | `{}`                      |
+| `metrics.service.type`        |                                                            | `ClusterIP`               |
+| `metrics.service.port`        | Service Metrics port                                       | `9117`                    |
+| `metrics.service.annotations` | Annotations for the Prometheus exporter service            | `{}`                      |
+
 
 ### Certificate injection parameters
 
-| Parameter                                            | Description                                                                                                                                               | Default                                                      |
-|------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `certificates.customCertificate.certificateSecret`   | Secret containing the certificate and key to add                                                                                                          | `""`                                                         |
-| `certificates.customCertificate.chainSecret.name`    | Name of the secret containing the certificate chain                                                                                                       | `""`                                                         |
-| `certificates.customCertificate.chainSecret.key`     | Key of the certificate chain file inside the secret                                                                                                       | `""`                                                         |
-| `certificates.customCertificate.certificateLocation` | Location in the container to store the certificate                                                                                                        | `/etc/ssl/certs/ssl-cert-snakeoil.pem`                       |
-| `certificates.customCertificate.keyLocation`         | Location in the container to store the private key                                                                                                        | `/etc/ssl/private/ssl-cert-snakeoil.key`                     |
-| `certificates.customCertificate.chainLocation`       | Location in the container to store the certificate chain                                                                                                  | `/etc/ssl/certs/chain.pem`                                   |
-| `certificates.customCAs`                             | Defines a list of secrets to import into the container trust store                                                                                        | `[]`                                                         |
-| `certificates.image.registry`                        | Container sidecar registry                                                                                                                                | `docker.io`                                                  |
-| `certificates.image.repository`                      | Container sidecar image                                                                                                                                   | `bitnami/minideb`                                            |
-| `certificates.image.tag`                             | Container sidecar image tag                                                                                                                               | `buster`                                                     |
-| `certificates.image.pullPolicy`                      | Container sidecar image pull policy                                                                                                                       | `IfNotPresent`                                               |
-| `certificates.image.pullSecrets`                     | Container sidecar image pull secrets                                                                                                                      | `image.pullSecrets`                                          |
-| `certificates.args`                                  | Override default container args (useful when using custom images)                                                                                         | `nil`                                                        |
-| `certificates.command`                               | Override default container command (useful when using custom images)                                                                                      | `nil`                                                        |
-| `certificates.extraEnvVars`                          | Container sidecar extra environment variables (eg proxy)                                                                                                  | `[]`                                                         |
-| `certificates.extraEnvVarsCM`                        | ConfigMap containing extra env vars                                                                                                                       | `nil`                                                        |
-| `certificates.extraEnvVarsSecret`                    | Secret containing extra env vars (in case of sensitive data)                                                                                              | `nil`                                                        |
+| Name                                                 | Description                                                          | Value                                    |
+| ---------------------------------------------------- | -------------------------------------------------------------------- | ---------------------------------------- |
+| `certificates.customCertificate.certificateSecret`   | Secret containing the certificate and key to add                     | `""`                                     |
+| `certificates.customCertificate.chainSecret.name`    | Name of the secret containing the certificate chain                  | `""`                                     |
+| `certificates.customCertificate.chainSecret.key`     | Key of the certificate chain file inside the secret                  | `""`                                     |
+| `certificates.customCertificate.certificateLocation` | Location in the container to store the certificate                   | `/etc/ssl/certs/ssl-cert-snakeoil.pem`   |
+| `certificates.customCertificate.keyLocation`         | Location in the container to store the private key                   | `/etc/ssl/private/ssl-cert-snakeoil.key` |
+| `certificates.customCertificate.chainLocation`       | Location in the container to store the certificate chain             | `/etc/ssl/certs/mychain.pem`             |
+| `certificates.customCAs`                             | Defines a list of secrets to import into the container trust store   | `[]`                                     |
+| `certificates.command`                               | Override default container command (useful when using custom images) | `[]`                                     |
+| `certificates.args`                                  | Override default container args (useful when using custom images)    | `[]`                                     |
+| `certificates.extraEnvVars`                          | Container sidecar extra environment variables                        | `[]`                                     |
+| `certificates.extraEnvVarsCM`                        | ConfigMap with extra environment variables                           | `""`                                     |
+| `certificates.extraEnvVarsSecret`                    | Secret with extra environment variables                              | `""`                                     |
+| `certificates.image.registry`                        | Container sidecar registry                                           | `docker.io`                              |
+| `certificates.image.repository`                      | Container sidecar image repository                                   | `bitnami/bitnami-shell`                  |
+| `certificates.image.tag`                             | Container sidecar image tag (immutable tags are recommended)         | `10-debian-10-r233`                      |
+| `certificates.image.pullPolicy`                      | Container sidecar image pull policy                                  | `IfNotPresent`                           |
+| `certificates.image.pullSecrets`                     | Container sidecar image pull secrets                                 | `[]`                                     |
+
 
 The above parameters map to the env variables defined in [bitnami/owncloud](http://github.com/bitnami/bitnami-docker-owncloud). For more information please refer to the [bitnami/owncloud](http://github.com/bitnami/bitnami-docker-owncloud) image documentation.
 
@@ -257,6 +284,8 @@ $ helm install my-release \
 ```
 
 The above command sets the ownCloud administrator account username and password to `admin` and `password` respectively. Additionally, it sets the MariaDB `root` user password to `secretpassword`.
+
+> NOTE: Once this chart is deployed, it is not possible to change the application's access credentials, such as usernames or passwords, using Helm. To change these application credentials after deployment, delete any persistent volumes (PVs) used by the chart and re-deploy it, or use the application's built-in administrative tools if available.
 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
@@ -462,7 +491,7 @@ mariadb 12:13:25.01 INFO  ==> Running mysql_upgrade
 ...
 ```
 
-### 7.0.0
+### To 7.0.0
 
 Helm performs a lookup for the object based on its group (apps), version (v1), and kind (Deployment). Also known as its GroupVersionKind, or GVK. Changing the GVK is considered a compatibility breaker from Kubernetes' point of view, so you cannot "upgrade" those objects to the new GVK in-place. Earlier versions of Helm 3 did not perform the lookup correctly which has since been fixed to match the spec.
 

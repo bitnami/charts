@@ -6,9 +6,12 @@ metadata:
   name: "{{ template "common.names.fullname" . }}-read"
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: read
-{{- with .Values.readReplicas.labels }}
-{{ toYaml . | indent 4 }}
-{{- end }}
+  {{- if .Values.commonLabels }}
+  {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.readReplicas.labels }}
+  {{- include "common.tplvalues.render" ( dict "value" .Values.readReplicas.labels "context" $ ) | nindent 4 }}
+  {{- end }}
   annotations:
   {{- if .Values.commonAnnotations }}
   {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
@@ -16,6 +19,7 @@ metadata:
   {{- with .Values.readReplicas.annotations }}
   {{- toYaml . | nindent 4 }}
   {{- end }}
+  namespace: {{ .Release.Namespace }}
 spec:
   serviceName: {{ template "common.names.fullname" . }}-headless
   replicas: {{ .Values.replication.readReplicas }}
@@ -30,9 +34,12 @@ spec:
       {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: read
         role: read
-{{- with .Values.readReplicas.podLabels }}
-{{ toYaml . | indent 8 }}
-{{- end }}
+      {{- if .Values.commonLabels }}
+      {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.readReplicas.podLabels }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.readReplicas.podLabels  "context" $) | nindent 8 }}
+      {{- end }}
 {{- with .Values.readReplicas.podAnnotations }}
       annotations:
 {{ toYaml . | indent 8 }}
@@ -56,12 +63,16 @@ spec:
       {{- if .Values.readReplicas.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.readReplicas.tolerations "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.readReplicas.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.readReplicas.topologySpreadConstraints "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
       {{- end }}
       {{- if .Values.securityContext.enabled }}
       securityContext: {{- omit .Values.securityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
+      automountServiceAccountToken: {{ .Values.serviceAccount.autoMount }}
       {{- if .Values.serviceAccount.enabled }}
       serviceAccountName: {{ default (include "common.names.fullname" . ) .Values.serviceAccount.name}}
       {{- end }}
@@ -144,9 +155,13 @@ spec:
           {{- if .Values.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- end }}
           env:
             - name: BITNAMI_DEBUG
-              value: {{ ternary "true" "false" .Values.image.debug | quote }}
+              value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
             - name: POSTGRESQL_VOLUME_DIR
               value: "{{ .Values.persistence.mountPath }}"
             - name: POSTGRESQL_PORT_NUMBER
@@ -175,7 +190,7 @@ spec:
               value: {{ template "common.names.fullname" . }}
             - name: POSTGRES_MASTER_PORT_NUMBER
               value: {{ include "postgresql.port" . | quote }}
-            {{- if and (not (eq .Values.postgresqlUsername "postgres")) (or .Values.postgresqlPostgresPassword (include "postgresql.useExistingSecret" .)) }}
+            {{- if not (eq (include "postgresql.username" .) "postgres")  }}
             {{- if .Values.usePasswordFile }}
             - name: POSTGRES_POSTGRES_PASSWORD_FILE
               value: "/opt/bitnami/postgresql/secrets/postgresql-postgres-password"
@@ -263,9 +278,9 @@ spec:
             - name: POSTGRESQL_STATEMENT_TIMEOUT
               value: {{ .Values.postgresqlStatementTimeout | quote }}
             {{- end }}
-            {{- if .Values.postgresqlTcpKeealivesCount }}
+            {{- if .Values.postgresqlTcpKeepalivesCount }}
             - name: POSTGRESQL_TCP_KEEPALIVES_COUNT
-              value: {{ .Values.postgresqlTcpKeealivesCount | quote }}
+              value: {{ .Values.postgresqlTcpKeepalivesCount | quote }}
             {{- end }}
             {{- if .Values.postgresqlPghbaRemoveFilters }}
             - name: POSTGRESQL_PGHBA_REMOVE_FILTERS
@@ -274,6 +289,7 @@ spec:
           ports:
             - name: tcp-postgresql
               containerPort: {{ template "postgresql.port" . }}
+          {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
             exec:
@@ -308,6 +324,7 @@ spec:
             failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
           {{- else if .Values.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
           {{- end }}
           volumeMounts:
             {{- if .Values.usePasswordFile }}
@@ -361,7 +378,7 @@ spec:
         {{- if  .Values.tls.enabled }}
         - name: raw-certificates
           secret:
-            secretName: {{ required "A secret containing TLS certificates is required when TLS is enabled" .Values.tls.certificatesSecret }}
+            secretName: {{ template "postgresql.tlsSecretName" . }}
         - name: postgresql-certificates
           emptyDir: {}
         {{- end }}
@@ -376,8 +393,11 @@ spec:
           emptyDir: {}
         {{- end }}
         {{- if .Values.readReplicas.extraVolumes }}
-        {{- toYaml .Values.readReplicas.extraVolumes | nindent 8 }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.readReplicas.extraVolumes "context" $ ) | nindent 8 }}
         {{- end }}
+      {{- if .Values.readReplicas.extraPodSpec }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.readReplicas.extraPodSpec "context" $) | nindent 6 }}
+      {{- end }}
   updateStrategy:
     type: {{ .Values.updateStrategy.type }}
     {{- if (eq "Recreate" .Values.updateStrategy.type) }}

@@ -37,7 +37,10 @@ spec:
         {{- end }}
     spec:
       {{- include "harbor.imagePullSecrets" . | nindent 6 }}
-      automountServiceAccountToken: false
+      automountServiceAccountToken: {{ .Values.notary.server.automountServiceAccountToken }}
+      {{- if .Values.notary.server.priorityClassName }}
+      priorityClassName: {{ .Values.notary.server.priorityClassName | quote }}
+      {{- end }}
       {{- if .Values.notary.server.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.notary.server.affinity "context" $) | nindent 8 }}
       {{- else }}
@@ -163,6 +166,6 @@ spec:
             secretName: {{ .Values.notary.secretName }}
         {{- end }}
       {{- if .Values.notary.server.extraVolumes }}
-      {{- include "common.tplvalues.render" (dict "value" .Values.notary.server.extraVolumes "context" $) | nindent 6 }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.notary.server.extraVolumes "context" $) | nindent 8 }}
       {{- end }}
 {{- end }}

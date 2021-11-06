@@ -1,0 +1,22 @@
+{{- if and .Values.repoServer.metrics.enabled .Values.repoServer.metrics.serviceMonitor.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "argocd.repo-server" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: repo-server
+spec:
+  endpoints:
+    - port: http-metrics
+      interval: {{ .Values.repoServer.metrics.serviceMonitor.interval }}
+      path: /metrics
+  namespaceSelector:
+    matchNames:
+      - {{ .Release.Namespace }}
+  selector:
+    matchLabels:
+      {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: repo-server
+{{- end }}
+

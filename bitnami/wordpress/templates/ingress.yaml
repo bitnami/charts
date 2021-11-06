@@ -3,6 +3,7 @@ apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
   name: {{ include "common.names.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -18,9 +19,12 @@ metadata:
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
     {{- end }}
 spec:
+  {{- if and .Values.ingress.ingressClassName (eq "true" (include "common.ingress.supportsIngressClassname" .)) }}
+  ingressClassName: {{ .Values.ingress.ingressClassName | quote }}
+  {{- end }}
   rules:
     {{- if .Values.ingress.hostname }}
-    - host: {{ .Values.ingress.hostname }}
+    - host: {{ .Values.ingress.hostname | quote }}
       http:
         paths:
           {{- if .Values.ingress.extraPaths }}
@@ -46,9 +50,9 @@ spec:
   tls:
     {{- if .Values.ingress.tls }}
     - hosts:
-        - {{ .Values.ingress.hostname }}
+        - {{ .Values.ingress.hostname | quote }}
         {{- range .Values.ingress.extraHosts }}
-        - {{ .name }}
+        - {{ .name | quote }}
         {{- end }}
       secretName: {{ printf "%s-tls" .Values.ingress.hostname }}
     {{- end }}

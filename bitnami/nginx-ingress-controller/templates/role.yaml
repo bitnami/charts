@@ -1,9 +1,9 @@
 {{- if .Values.rbac.create -}}
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: Role
 metadata:
   name: {{ template "common.names.fullname" . }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
@@ -40,7 +40,7 @@ rules:
       - watch
   - apiGroups:
       - extensions
-      - "networking.k8s.io"
+      - networking.k8s.io
     resources:
       - ingresses
     verbs:
@@ -49,7 +49,7 @@ rules:
       - watch
   - apiGroups:
       - extensions
-      - "networking.k8s.io"
+      - networking.k8s.io
     resources:
       - ingresses/status
     verbs:
@@ -59,7 +59,7 @@ rules:
     resources:
       - configmaps
     resourceNames:
-      - {{ .Values.electionID }}-{{ .Values.ingressClass }}
+      - {{ .Values.electionID }}
     verbs:
       - get
       - update
@@ -84,14 +84,11 @@ rules:
     verbs:
       - create
       - patch
-  {{- if .Values.podSecurityPolicy.enabled }}
-  - apiGroups:
-      - 'extensions'
-    resources:
-      - 'podsecuritypolicies'
-    verbs:
-      - 'use'
-    resourceNames:
-      - {{ template "common.names.fullname" . }}
+  {{- $pspAvailable := (semverCompare "<1.25-0" (include "common.capabilities.kubeVersion" .)) -}}
+  {{- if and $pspAvailable .Values.podSecurityPolicy.enabled }}
+  - apiGroups: [{{ template "nginx-ingress-controller.podSecurityPolicy.apiGroup" . }}]
+    resources: ['podsecuritypolicies']
+    verbs: ['use']
+    resourceNames: [{{ template "common.names.fullname" . }}]
   {{- end }}
 {{- end -}}

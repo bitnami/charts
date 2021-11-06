@@ -27,6 +27,9 @@ spec:
       {{- if .Values.podSecurityContext }}
       securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.migration.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.migration.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       containers:
         - name: kong-migrate
           image: {{ template "kong.migration.image" . }}

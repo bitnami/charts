@@ -1,0 +1,4 @@
+initdbScripts:
+  test.sh: |
+    #!/bin/sh
+    true

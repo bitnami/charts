@@ -1,0 +1,96 @@
+{{- if or .Release.IsUpgrade (ne .Values.sentinel.service.type "NodePort") .Values.sentinel.service.nodePorts.redis -}}
+
+---
+{{- if and (eq .Values.architecture "replication") .Values.sentinel.enabled }}
+{{ $portsmap := (lookup "v1" "ConfigMap" $.Release.Namespace (printf "%s-%s" ( include "common.names.fullname" . ) "ports-configmap")).data}}
+
+{{ $sentinelport := 0}}
+{{ $redisport := 0}}
+{{- if $portsmap }}
+{{ $sentinelport = index $portsmap (printf "%s-%s" (include "common.names.fullname" $) "sentinel")}}
+{{ $redisport = index $portsmap (printf "%s-%s" (include "common.names.fullname" $) "redis")}}
+{{- else }}
+{{- end}}
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "common.names.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: node
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if or .Values.sentinel.service.annotations .Values.commonAnnotations }}
+  annotations:
+    {{- if .Values.sentinel.service.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.sentinel.service.annotations "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+spec:
+  type: {{ .Values.sentinel.service.type }}
+  {{- if eq .Values.sentinel.service.type "LoadBalancer" }}
+  externalTrafficPolicy: {{ .Values.sentinel.service.externalTrafficPolicy }}
+  {{- end }}
+  {{- if and (eq .Values.sentinel.service.type "LoadBalancer") .Values.sentinel.service.loadBalancerIP }}
+  loadBalancerIP: {{ .Values.sentinel.service.loadBalancerIP }}
+  {{- end }}
+  {{- if and (eq .Values.sentinel.service.type "LoadBalancer") .Values.sentinel.service.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges: {{- toYaml .Values.sentinel.service.loadBalancerSourceRanges | nindent 4 }}
+  {{- end }}
+  {{- if and (eq .Values.sentinel.service.type "ClusterIP") .Values.sentinel.service.clusterIP }}
+  clusterIP: {{ .Values.sentinel.service.clusterIP }}
+  {{- end }}
+  ports:
+    - name: tcp-redis
+      {{- if and (or (eq .Values.sentinel.service.type "NodePort") (eq .Values.sentinel.service.type "LoadBalancer")) .Values.sentinel.service.nodePorts.redis }}
+      port: {{ .Values.sentinel.service.nodePorts.redis }}
+      {{- else if eq .Values.sentinel.service.type "NodePort" }}
+      port: {{ $redisport }}
+      {{- else}}
+      port: {{ .Values.sentinel.service.port }}
+      {{- end }}
+      targetPort: {{ .Values.replica.containerPort }}
+      {{- if and (or (eq .Values.sentinel.service.type "NodePort") (eq .Values.sentinel.service.type "LoadBalancer")) .Values.sentinel.service.nodePorts.redis }}
+      nodePort: {{ .Values.sentinel.service.nodePorts.redis }}
+      {{- else if eq .Values.sentinel.service.type "ClusterIP" }}
+      nodePort: null
+      {{- else if eq .Values.sentinel.service.type "NodePort" }}
+      nodePort:  {{ $redisport }}
+      {{- end }}
+    - name: tcp-sentinel
+      {{- if and (or (eq .Values.sentinel.service.type "NodePort") (eq .Values.sentinel.service.type "LoadBalancer")) .Values.sentinel.service.nodePorts.sentinel }}
+      port: {{ .Values.sentinel.service.nodePorts.sentinel }}
+      {{- else if eq .Values.sentinel.service.type "NodePort" }}
+      port:  {{ $sentinelport }}
+      {{- else}}
+      port: {{ .Values.sentinel.service.sentinelPort }}
+      {{- end }}
+      targetPort: {{ .Values.sentinel.containerPort }}
+      {{- if and (or (eq .Values.sentinel.service.type "NodePort") (eq .Values.sentinel.service.type "LoadBalancer")) .Values.sentinel.service.nodePorts.sentinel }}
+      nodePort: {{ .Values.sentinel.service.nodePorts.sentinel }}
+      {{- else if eq .Values.sentinel.service.type "ClusterIP" }}
+      nodePort: null
+      {{- else if eq .Values.sentinel.service.type "NodePort" }}
+      nodePort:  {{ $sentinelport }}
+      {{- end }}
+    {{- if eq .Values.sentinel.service.type "NodePort" }}
+    - name: sentinel-internal
+      nodePort: null
+      port: {{ .Values.sentinel.containerPort }}
+      protocol: TCP
+      targetPort: {{ .Values.sentinel.containerPort }}
+    - name: redis-internal
+      nodePort: null
+      port: {{ .Values.replica.containerPort }}
+      protocol: TCP
+      targetPort: {{ .Values.replica.containerPort }}
+    {{- end }}
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/component: node
+{{- end }}
+{{- end }}

@@ -2,9 +2,9 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "elasticsearch.coordinating.fullname" . }}
-  labels: {{- include "elasticsearch.labels" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: coordinating-only
-  annotations: {{ include "elasticsearch.tplValue" ( dict "value" .Values.coordinating.service.annotations "context" $) | nindent 4 }}
+  annotations: {{ include "common.tplvalues.render" ( dict "value" .Values.coordinating.service.annotations "context" $) | nindent 4 }}
 spec:
   type: {{ .Values.coordinating.service.type | quote }}
   {{- if and (eq .Values.coordinating.service.type "LoadBalancer") (not (empty .Values.coordinating.service.loadBalancerIP)) }}
@@ -22,5 +22,5 @@ spec:
       {{- end }}
     - name: tcp-transport
       port: 9300
-  selector: {{- include "elasticsearch.matchLabels" . | nindent 4 }}
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: coordinating-only

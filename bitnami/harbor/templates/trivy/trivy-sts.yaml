@@ -40,6 +40,9 @@ spec:
         {{- end }}
     spec:
       {{- include "harbor.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.trivy.priorityClassName }}
+      priorityClassName: {{ .Values.trivy.priorityClassName | quote }}
+      {{- end }}
       {{- if .Values.trivy.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.trivy.affinity "context" $) | nindent 8 }}
       {{- else }}
@@ -77,9 +80,8 @@ spec:
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name: job-logs
-              mountPath: /var/log/jobs
-              subPath: {{ .Values.persistence.persistentVolumeClaim.jobservice.subPath }}
+            - name: data
+              mountPath: {{ .Values.trivy.cacheDir }}
       {{- end }}
       {{- if .Values.trivy.initContainers }}
       {{- include "common.tplvalues.render" (dict "value" .Values.trivy.initContainers "context" $) | nindent 8 }}

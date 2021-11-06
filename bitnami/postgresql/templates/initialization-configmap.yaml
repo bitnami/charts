@@ -5,9 +5,13 @@ metadata:
   name: {{ template "common.names.fullname" . }}-init-scripts
   labels:
   {{- include "common.labels.standard" . | nindent 4 }}
+  {{- if .Values.commonLabels }}
+  {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
+  namespace: {{ .Release.Namespace }}
 {{- with .Files.Glob "files/docker-entrypoint-initdb.d/*.sql.gz" }}
 binaryData:
 {{- range $path, $bytes := . }}

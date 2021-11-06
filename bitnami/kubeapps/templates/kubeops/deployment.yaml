@@ -1,0 +1,142 @@
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: {{ template "kubeapps.kubeops.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels:
+    app.kubernetes.io/component: kubeops
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" . ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.kubeops.replicaCount }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: kubeops
+  template:
+    metadata:
+      {{- if .Values.kubeops.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.kubeops.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        app.kubernetes.io/component: kubeops
+        {{- if .Values.kubeops.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.kubeops.podLabels "context" $) | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- include "kubeapps.imagePullSecrets" . | indent 6 }}
+      serviceAccountName: {{ template "kubeapps.kubeops.fullname" . }}
+      {{- if .Values.kubeops.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.kubeops.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      # Increase termination timeout to let remaining operations to finish before killing the pods
+      # This is because new releases/upgrades/deletions are synchronous operations
+      {{- if .Values.kubeops.affinity }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.kubeops.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.kubeops.podAffinityPreset "component" "kubeops" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.kubeops.podAntiAffinityPreset "component" "kubeops" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.kubeops.nodeAffinityPreset.type "key" .Values.kubeops.nodeAffinityPreset.key "values" .Values.kubeops.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.kubeops.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.kubeops.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.kubeops.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.kubeops.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.kubeops.priorityClassName }}
+      priorityClassName: {{ .Values.kubeops.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.kubeops.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.kubeops.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      terminationGracePeriodSeconds: {{ .Values.kubeops.terminationGracePeriodSeconds }}
+      containers:
+        - name: kubeops
+          image: {{ include "common.images.image" (dict "imageRoot" .Values.kubeops.image "global" .Values.global) }}
+          imagePullPolicy: {{ .Values.kubeops.image.pullPolicy | quote }}
+          {{- if .Values.kubeops.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.kubeops.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.kubeops.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.kubeops.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          command:
+            - /kubeops
+          args:
+            - --user-agent-comment=kubeapps/{{ .Chart.AppVersion }}
+            - --assetsvc-url=http://{{ template "kubeapps.assetsvc.fullname" . }}:{{ .Values.assetsvc.service.port }}
+            {{- if .Values.clusters }}
+            - --clusters-config-path=/config/clusters.conf
+            {{- end }}
+            {{- if .Values.pinnipedProxy.enabled }}
+            - --pinniped-proxy-url=http://{{ template "kubeapps.pinniped-proxy.fullname" . }}.{{ .Release.Namespace }}:{{ .Values.pinnipedProxy.containerPort }}
+            {{- end }}
+            {{- if .Values.kubeops.burst }}
+            - --burst={{ .Values.kubeops.burst }}
+            {{- end }}
+            {{- if .Values.kubeops.QPS }}
+            - --qps={{ .Values.kubeops.QPS }}
+            {{- end }}
+            {{- if .Values.kubeops.namespaceHeaderName }}
+            - --namespace-header-name={{ .Values.kubeops.namespaceHeaderName }}
+            {{- end }}
+            {{- if .Values.kubeops.namespaceHeaderPattern }}
+            - --namespace-header-pattern={{ .Values.kubeops.namespaceHeaderPattern }}
+            {{- end }}
+          env:
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: PORT
+              value: {{ .Values.kubeops.containerPort | quote }}
+            {{- if .Values.kubeops.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.kubeops.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if or .Values.kubeops.extraEnvVarsCM .Values.kubeops.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.kubeops.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.kubeops.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.kubeops.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.kubeops.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.kubeops.containerPort }}
+          {{- if .Values.kubeops.livenessProbe.enabled }}
+          livenessProbe: {{- omit .Values.kubeops.livenessProbe "enabled" | toYaml | nindent 12 }}
+          {{- else if .Values.kubeops.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.kubeops.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.kubeops.readinessProbe.enabled }}
+          readinessProbe: {{- omit .Values.kubeops.readinessProbe "enabled" | toYaml | nindent 12 }}
+          {{- else if .Values.kubeops.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.kubeops.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.kubeops.resources }}
+          resources: {{- toYaml .Values.kubeops.resources | nindent 12 }}
+          {{- end }}
+          {{- if .Values.clusters }}
+          volumeMounts:
+            - name: clusters-config
+              mountPath: /config
+            - name: ca-certs
+              mountPath: /etc/additional-clusters-cafiles
+          {{- end }}
+      {{- if .Values.clusters }}
+      volumes:
+        - name: clusters-config
+          configMap:
+            name: {{ template "kubeapps.clusters-config.fullname" . }}
+        - name: ca-certs
+          emptyDir: {}
+      {{- end }}

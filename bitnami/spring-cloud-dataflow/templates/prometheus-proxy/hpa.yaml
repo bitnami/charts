@@ -1,0 +1,35 @@
+{{- if .Values.metrics.autoscaling.enabled }}
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "scdf.fullname" . }}-prometheus-proxy
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: prometheus-proxy
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  namespace: {{ .Release.Namespace }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  scaleTargetRef:
+    apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+    kind: Deployment
+    name: {{ include "scdf.fullname" . }}-prometheus-proxy
+  minReplicas: {{ .Values.metrics.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.metrics.autoscaling.maxReplicas }}
+  metrics:
+    {{- if .Values.metrics.autoscaling.targetCPU }}
+    - type: Resource
+      resource:
+        name: cpu
+        targetAverageUtilization: {{ .Values.metrics.autoscaling.targetCPU }}
+    {{- end }}
+    {{- if .Values.metrics.autoscaling.targetMemory }}
+    - type: Resource
+      resource:
+        name: memory
+        targetAverageUtilization: {{ .Values.metrics.autoscaling.targetMemory  }}
+    {{- end }}
+{{- end }}

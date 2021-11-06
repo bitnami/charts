@@ -24,7 +24,7 @@ spec:
   ports:
     - port: {{ .Values.client.service.port }}
       targetPort: client
-      name: client
+      name: tcp-client
       {{- if and (eq .Values.client.service.type "NodePort") (not (empty .Values.client.service.nodePort)) }}
       nodePort: {{ .Values.client.service.nodePort  }}
       {{- end }}

@@ -94,7 +94,7 @@ run_yaml_lint_chart() {
     fi
     find "$chart_path"/templates -type f -regex ".*\.yaml" > "$template_yaml_file_list"
 
-    for yaml_file in "$chart_path"/values.yaml "$chart_path"/values-production.yaml "$chart_path"/requirements.yaml "$chart_path"/Chart.yaml $(< "$ci_values_file_list"); do
+    for yaml_file in "$chart_path"/values.yaml "$chart_path"/requirements.yaml "$chart_path"/Chart.yaml $(< "$ci_values_file_list"); do
         if [[ -f "$yaml_file" ]] && ! yaml_lint_file "$yaml_file"; then
             test_failed=1
         fi

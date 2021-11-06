@@ -12,5 +12,5 @@ metadata:
   {{- end }}
 data:
   log4j.properties: |-
-    {{- include "kafka.tplValue" ( dict "value" .Values.log4j "context" $ ) | nindent 4 }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.log4j "context" $ ) | nindent 4 }}
 {{- end -}}

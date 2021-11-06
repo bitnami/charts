@@ -1,9 +1,10 @@
-{{- if and .Values.forwarder.enabled .Values.forwarder.rbac.create .Values.forwarder.rbac.pspEnabled }}
+{{- $pspAvailable := (semverCompare "<1.25-0" (include "common.capabilities.kubeVersion" .)) -}}
+{{- if and $pspAvailable .Values.forwarder.enabled .Values.forwarder.rbac.create .Values.forwarder.rbac.pspEnabled }}
 apiVersion: policy/v1beta1
 kind: PodSecurityPolicy
 metadata:
-  name: {{ include "fluentd.fullname" . }}-forwarder
-  labels: {{- include "fluentd.labels" . | nindent 4 }}
+  name: {{ include "common.names.fullname" . }}-forwarder
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: forwarder
 spec:
   privileged: false
@@ -59,5 +60,5 @@ spec:
       - min: {{ .Values.forwarder.securityContext.fsGroup }}
         max: {{ .Values.forwarder.securityContext.fsGroup }}
     {{- end }}
-  readOnlyRootFilesystem: {{ .Values.forwarder.containerSecurityContext.readOnlyRootFilesystem | default false }}
+  readOnlyRootFilesystem: {{ .Values.forwarder.containerSecurityContext.readOnlyRootFilesystem }}
   {{- end }}

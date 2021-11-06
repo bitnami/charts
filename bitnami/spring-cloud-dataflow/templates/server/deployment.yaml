@@ -12,6 +12,7 @@ metadata:
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
+  namespace: {{ .Release.Namespace }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -39,9 +40,11 @@ spec:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: server
     spec:
-      {{- include "scdf.imagePullSecrets" . | indent 6 }}
+      {{- include "scdf.imagePullSecrets" . | nindent 6 }}
       serviceAccountName: {{ include "scdf.serviceAccountName" . }}
-
+      {{- if .Values.server.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.server.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.server.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.server.affinity "context" $) | nindent 8 }}
       {{- else }}
@@ -56,7 +59,6 @@ spec:
       {{- if .Values.server.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.server.tolerations "context" $) | nindent 8 }}
       {{- end }}
-
       {{- if .Values.server.priorityClassName }}
       priorityClassName: {{ .Values.server.priorityClassName | quote }}
       {{- end }}
@@ -128,7 +130,15 @@ spec:
               {{- end }}
             {{- end }}
             - name: SPRING_APPLICATION_JSON
+              {{- if .Values.server.proxy }}
+              {{- if .Values.server.proxy.user }}
+              value: "{ \"maven\": { \"local-repository\": null, \"remote-repositories\": { \"repo1\": { \"url\": \"https://repo.spring.io/libs-snapshot\"} }, \"proxy\": { \"host\": \"{{ .Values.server.proxy.host }}\", \"port\":{{ .Values.server.proxy.port }}, \"auth\": { \"username\": \"{{ .Values.server.proxy.user }}\", \"password\": \"{{ .Values.server.proxy.password }}\"} } } }"
+              {{- else }}
+              value: "{ \"maven\": { \"local-repository\": null, \"remote-repositories\": { \"repo1\": { \"url\": \"https://repo.spring.io/libs-snapshot\"} }, \"proxy\": { \"host\": \"{{ .Values.server.proxy.host }}\", \"port\":{{ .Values.server.proxy.port }} } } }"
+              {{- end }}
+              {{- else }}
               value: "{ \"maven\": { \"local-repository\": null, \"remote-repositories\": { \"repo1\": { \"url\": \"https://repo.spring.io/libs-snapshot\"} } } }"
+              {{- end }}
             - name: KUBERNETES_NAMESPACE
               valueFrom:
                 fieldRef:
@@ -158,7 +168,7 @@ spec:
           {{- end }}
           ports:
             - name: http
-              containerPort: 8080
+              containerPort: {{ .Values.server.containerPort }}
               protocol: TCP
             {{- if .Values.server.jdwp.enabled }}
             - name: jdwp

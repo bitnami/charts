@@ -24,7 +24,7 @@ spec:
   ports:
     - port: {{ .Values.cluster.service.port }}
       targetPort: cluster
-      name: cluster
+      name: tcp-cluster
       {{- if and (eq .Values.cluster.service.type "NodePort") (not (empty .Values.cluster.service.nodePort)) }}
       nodePort: {{ .Values.cluster.service.nodePort  }}
       {{- end }}

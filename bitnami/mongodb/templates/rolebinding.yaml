@@ -1,10 +1,13 @@
 {{- if and .Values.serviceAccount.create .Values.rbac.create }}
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: RoleBinding
 metadata:
   name: {{ include "mongodb.fullname" . }}
   namespace: {{ include "mongodb.namespace" . }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
+  {{- if .Values.commonLabels }}
+  {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- end }}
 roleRef:
   kind: Role
   name: {{ include "mongodb.fullname" . }}

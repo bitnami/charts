@@ -1,7 +1,7 @@
 annotations:
   category: Infrastructure
 apiVersion: v2
-appVersion: 2.7.0
+appVersion: 2.8.1
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -11,11 +11,11 @@ dependencies:
   - condition: zookeeper.enabled
     name: zookeeper
     repository: https://charts.bitnami.com/bitnami
-    version: 6.x.x
+    version: 7.x.x
 description: Apache Kafka is a distributed streaming platform.
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/kafka
-icon: https://bitnami.com/assets/stacks/kafka/img/kafka-stack-110x117.png
+icon: https://bitnami.com/assets/stacks/kafka/img/kafka-stack-220x234.png
 keywords:
   - kafka
   - zookeeper
@@ -29,4 +29,4 @@ name: kafka
 sources:
   - https://github.com/bitnami/bitnami-docker-kafka
   - https://kafka.apache.org/
-version: 12.5.0
+version: 14.2.5

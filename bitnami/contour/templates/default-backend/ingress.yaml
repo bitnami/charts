@@ -10,16 +10,20 @@ metadata:
     {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
     {{- end }}
   annotations:
-    {{- if .Values.ingressClass }}
-    kubernetes.io/ingress.class: {{ .Values.ingressClass }}
-    {{- else }}
-    kubernetes.io/ingress.class: contour
-    {{- end }}
+    kubernetes.io/ingress.class: {{ include "contour.ingressClassName" . }}
     {{- if .Values.commonAnnotations }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
     {{- end }}
 spec:
+  {{- if semverCompare "<1.19-0" (include "common.capabilities.kubeVersion" .) -}}
   backend:
     serviceName: {{ include "common.names.fullname" . }}-default-backend
     servicePort: http
+  {{- else }}
+  defaultBackend:
+    service:
+      name: {{ include "common.names.fullname" . }}-default-backend
+      port:
+        name: http
+  {{- end }}
 {{- end }}

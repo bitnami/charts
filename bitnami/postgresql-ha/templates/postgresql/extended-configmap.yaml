@@ -1,4 +1,4 @@
-{{- if and (or (.Files.Glob "files/conf.d/*.conf") .Values.postgresql.extendedConf) (not .Values.postgresql.extendedConfCM) }}
+{{- if and .Values.postgresql.extendedConf (not .Values.postgresql.extendedConfCM) }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -12,13 +12,6 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 data:
-  {{- with .Files.Glob "files/conf.d/*.conf" }}
-  {{- .AsConfig | nindent 2 }}
-  {{- end }}
-  {{- with .Values.postgresql.extendedConf }}
-  override.conf: |
-  {{- range $key, $value := . }}
-    {{ $key | snakecase }}={{ $value }}
-  {{- end }}
-  {{- end }}
+  override.conf: |-
+    {{- include "common.tplvalues.render" ( dict "value" .Values.postgresql.extendedConf "context" $ ) | nindent 4 }}
 {{- end }}

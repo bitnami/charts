@@ -1,0 +1,155 @@
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: {{ include "certmanager.webhook.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: webhook
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: webhook
+  {{- if .Values.webhook.updateStrategy }}
+  strategy: {{- toYaml .Values.webhook.updateStrategy | nindent 4 }}
+  {{- end }}
+  replicas: {{ .Values.webhook.replicaCount }}
+  template:
+    metadata:
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        app.kubernetes.io/component: webhook
+        {{- if .Values.commonLabels }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.webhook.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.webhook.podLabels "context" $) | nindent 8 }}
+        {{- end }}
+      annotations:
+        {{- if .Values.webhook.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.webhook.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- include "certmanager.webhook.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.webhook.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.webhook.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      {{- if .Values.webhook.priorityClassName }}
+      priorityClassName: {{ .Values.webhook.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.webhook.affinity }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.webhook.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.webhook.podAffinityPreset "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.webhook.podAntiAffinityPreset "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.webhook.nodeAffinityPreset.type "key" .Values.webhook.nodeAffinityPreset.key "values" .Values.webhook.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.webhook.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.webhook.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.webhook.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.webhook.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.webhook.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.webhook.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      initContainers:
+        {{- if .Values.webhook.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.webhook.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+      serviceAccountName: {{ template "certmanager.webhook.serviceAccountName" . }}
+      containers:
+        - name: cert-manager-webhook
+          image: {{ template "certmanager.webhook.image" . }}
+          imagePullPolicy: {{ .Values.webhook.image.pullPolicy | quote }}
+          {{- if .Values.webhook.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.webhook.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.webhook.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.webhook.args "context" $) | nindent 12 }}
+          {{- else }}
+          args:
+            - --v={{ .Values.logLevel }}
+            - --secure-port={{ .Values.webhook.containerPort }}
+            - --dynamic-serving-ca-secret-namespace=$(POD_NAMESPACE)
+            - --dynamic-serving-ca-secret-name={{ template "certmanager.webhook.fullname" . }}-ca
+            - --dynamic-serving-dns-names={{ template "certmanager.webhook.fullname" . }},{{ template "certmanager.webhook.fullname" . }}.{{ .Release.Namespace }},{{ template "certmanager.webhook.fullname" . }}.{{ .Release.Namespace }}.svc
+          {{- end }}
+          {{- if .Values.webhook.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.webhook.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          env:
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" .Values.webhook.image.debug | quote }}
+            {{- if .Values.webhook.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.webhook.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+          envFrom:
+            {{- if .Values.webhook.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.webhook.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.webhook.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.webhook.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- if .Values.webhook.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.webhook.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          ports:
+            - name: https
+              containerPort: {{ .Values.webhook.containerPort }}
+          {{- if .Values.webhook.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.webhook.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.webhook.livenessProbe.enabled }}
+          livenessProbe:
+             httpGet:
+               path: {{ .Values.webhook.livenessProbe.path }}
+               scheme: HTTP
+               port: 6080
+             initialDelaySeconds: {{ .Values.webhook.livenessProbe.initialDelaySeconds }}
+             periodSeconds: {{ .Values.webhook.livenessProbe.periodSeconds }}
+             timeoutSeconds: {{ .Values.webhook.livenessProbe.timeoutSeconds }}
+             successThreshold: {{ .Values.webhook.livenessProbe.successThreshold }}
+             failureThreshold: {{ .Values.webhook.livenessProbe.failureThreshold }}
+          {{- else if .Values.webhook.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.webhook.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.webhook.readinessProbe.enabled }}
+          readinessProbe:
+             httpGet:
+               path: {{ .Values.webhook.readinessProbe.path }}
+               port: 6080
+               scheme: HTTP
+             initialDelaySeconds: {{ .Values.webhook.readinessProbe.initialDelaySeconds }}
+             periodSeconds: {{ .Values.webhook.readinessProbe.periodSeconds }}
+             timeoutSeconds: {{ .Values.webhook.readinessProbe.timeoutSeconds }}
+             successThreshold: {{ .Values.webhook.readinessProbe.successThreshold }}
+             failureThreshold: {{ .Values.webhook.readinessProbe.failureThreshold }}
+          {{- else if .Values.webhook.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.webhook.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.webhook.resources }}
+          resources: {{- toYaml .Values.webhook.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            {{- if .Values.webhook.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.webhook.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
+        {{- if .Values.webhook.sidecars }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.webhook.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        {{- if .Values.webhook.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.webhook.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}

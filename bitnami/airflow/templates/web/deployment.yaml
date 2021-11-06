@@ -29,6 +29,9 @@ spec:
       {{- end }}
     spec:
       {{- include "airflow.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.web.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.web.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       priorityClassName: {{ .Values.web.priorityClassName | quote }}
       {{- if .Values.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
@@ -42,13 +45,20 @@ spec:
         podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "component" "web" "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
+      {{- if or .Values.nodeSelector .Values.web.nodeSelector }}
       {{- if .Values.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
+      {{- else }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.web.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
       {{- end }}
       {{- if .Values.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
       {{- end }}
       initContainers: {{- include "airflow.git.containers.clone" . | trim | nindent 8 }}
+      {{- if .Values.dags.configMap }}
+        {{- include "airflow.loadDAGsInitContainer" . | trim | nindent 8 }}
+      {{- end }}
       {{- if .Values.web.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.web.initContainers "context" $) | trim | nindent 8 }}
       {{- end }}
@@ -73,6 +83,8 @@ spec:
             {{- include "airflow.configure.database" . | nindent 12 }}
             {{- include "airflow.configure.redis" . | nindent 12 }}
             {{- include "airflow.configure.airflow.kubernetesExecutor" . | nindent 12 }}
+            - name: AIRFLOW_EXECUTOR
+              value: {{ .Values.executor }}
             - name: AIRFLOW_WEBSERVER_HOST
               value: '0.0.0.0'
             - name: AIRFLOW_WEBSERVER_PORT_NUMBER
@@ -96,21 +108,28 @@ spec:
               value: {{ .Values.ldap.uri }}
             - name: AIRFLOW_LDAP_SEARCH
               value: {{ .Values.ldap.base }}
+            - name: AIRFLOW_LDAP_UID_FIELD
+              value: {{ .Values.ldap.uidField }}
             - name: AIRFLOW_LDAP_BIND_USER
               value: {{ .Values.ldap.binddn }}
             - name: AIRFLOW_LDAP_BIND_PASSWORD
-              value: {{ .Values.ldap.bindpw }}
               valueFrom:
                 secretKeyRef:
                   name: {{ include "airflow.ldapSecretName" . }}
                   key: bind-password
-            - name: AIRFLOW_LDAP_UID_FIELD
-              value: {{ .Values.ldap.uidField }}
+            - name: AIRFLOW_LDAP_USER_REGISTRATION
+              value: {{ .Values.ldap.userRegistration | quote }}
+            - name: AIRFLOW_LDAP_USER_REGISTRATION_ROLE
+              value: {{ .Values.ldap.userRegistrationRole }}
+            - name: AIRFLOW_LDAP_ROLES_MAPPING
+              value: {{ .Values.ldap.rolesMapping | quote }}
+            - name: AIRFLOW_LDAP_ROLES_SYNC_AT_LOGIN
+              value: {{ .Values.ldap.rolesSyncAtLogin | quote }}
             - name: AIRFLOW_LDAP_USE_TLS
-              value: {{ ternary "yes" "no" .Values.ldap.tls.enabled | quote }}
+              value: {{ ternary "True" "False" .Values.ldap.tls.enabled | quote }}
             {{- if .Values.ldap.tls.enabled }}
             - name: AIRFLOW_LDAP_ALLOW_SELF_SIGNED
-              value: {{ .Values.ldap.tls.allowSelfSigned }}
+              value: {{ .Values.ldap.tls.allowSelfSigned | quote }}
             - name: AIRFLOW_LDAP_TLS_CA_CERTIFICATE
               value: {{ include "airflow.ldapCAFilename" . | quote }}
             {{- end }}
@@ -167,16 +186,16 @@ spec:
               port: http
           {{- end }}
             {{ omit .Values.web.readinessProbe "enabled" | toYaml | nindent 12 }}
-        {{- else if .Values.web.customRedinessProbe }}
+        {{- else if .Values.web.customReadinessProbe }}
           readinessProbe:
-            {{- include "common.tplvalues.render" (dict "value" .Values.web.customRedinessProbe "context" $) | trim | nindent 12 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.web.customReadinessProbe "context" $) | trim | nindent 12 }}
         {{- end }}
           volumeMounts:
           {{- if .Files.Glob "files/dags/*.py" }}
             - name: local-dag-files
               mountPath: /opt/bitnami/airflow/dags/local
           {{- end }}
-          {{- if .Values.dagsConfigMap }}
+          {{- if .Values.dags.configMap }}
             - name: external-dag-files
               mountPath: /opt/bitnami/airflow/dags/external
           {{- end }}
@@ -209,10 +228,12 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | trim | nindent 8 }}
       {{- end }}
       volumes:
-      {{- if .Values.dagsConfigMap }}
-        - name: external-dag-files
+      {{- if .Values.dags.configMap }}
+        - name: load-external-dag-files
           configMap:
-            name: {{ .Values.dagsConfigMap }}
+            name: {{ .Values.dags.configMap }}
+        - name: external-dag-files
+          emptyDir: {}
       {{- end }}
       {{- if include "airflow.shouldUseConfigFromConfigMap" . }}
         - name: custom-configuration-file

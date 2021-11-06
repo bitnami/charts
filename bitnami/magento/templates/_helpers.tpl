@@ -47,31 +47,65 @@ Note, returns 127.0.0.1 if using ClusterIP.
 {{/*
 Gets the host to be used for this application.
 If not using ClusterIP, or if a host or LoadBalancerIP is not defined, the value will be empty.
+When using Ingress, it will be set to the Ingress hostname.
 */}}
 {{- define "magento.host" -}}
+{{- if .Values.ingress.enabled }}
+{{- $host := .Values.ingress.hostname | default "" -}}
+{{- default (include "magento.serviceIP" .) $host -}}
+{{- else -}}
 {{- $host := index .Values (printf "%sHost" .Chart.Name) | default "" -}}
 {{- default (include "magento.serviceIP" .) $host -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the proper certificate image name
+*/}}
+{{- define "certificates.image" -}}
+{{- include "common.images.image" ( dict "imageRoot" .Values.certificates.image "global" .Values.global ) -}}
 {{- end -}}
 
 {{/*
 Return the proper Magento image name
 */}}
 {{- define "magento.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.image "global" .Values.global) }}
+{{- include "common.images.image" (dict "imageRoot" .Values.image "global" .Values.global) -}}
 {{- end -}}
 
 {{/*
 Return the proper image name (for the metrics image)
 */}}
 {{- define "magento.metrics.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.metrics.image "global" .Values.global) }}
+{{- include "common.images.image" (dict "imageRoot" .Values.metrics.image "global" .Values.global) -}}
+{{- end -}}
+
+{{/*
+Return the proper image name (for the init container volume-permissions image)
+*/}}
+{{- define "magento.volumePermissions.image" -}}
+{{- include "common.images.image" ( dict "imageRoot" .Values.volumePermissions.image "global" .Values.global ) -}}
 {{- end -}}
 
 {{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "magento.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.metrics.image) "global" .Values.global) -}}
+{{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.metrics.image .Values.volumePermissions.image .Values.certificates.image) "global" .Values.global) -}}
+{{- end -}}
+
+{{/*
+Return  the proper Storage Class
+*/}}
+{{- define "magento.storageClass" -}}
+{{- include "common.storage.class" (dict "persistence" .Values.persistence "global" .Values.global) -}}
+{{- end -}}
+
+{{/*
+Magento credential secret name
+*/}}
+{{- define "magento.secretName" -}}
+{{- coalesce .Values.existingSecret (include "common.names.fullname" .) -}}
 {{- end -}}
 
 {{/*
@@ -133,12 +167,4 @@ Return the MariaDB Secret Name
 {{- else -}}
     {{- printf "%s-%s" (include "common.names.fullname" .) "externaldb" -}}
 {{- end -}}
-{{- end -}}
-
-{{/*
-Check if there are rolling tags in the images
-*/}}
-{{- define "magento.checkRollingTags" -}}
-{{- include "common.warnings.rollingTag" .Values.image }}
-{{- include "common.warnings.rollingTag" .Values.metrics.image }}
 {{- end -}}

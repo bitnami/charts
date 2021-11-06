@@ -1,0 +1,35 @@
+{{- if and (eq .Values.architecture "replicaset") .Values.externalAccess.enabled (eq .Values.externalAccess.service.type "ClusterIP") }}
+
+{{- $fullName := include "mongodb.fullname" . }}
+{{- $replicaCount := .Values.replicaCount | int }}
+{{- $root := . }}
+
+{{- range $i, $e := until $replicaCount }}
+{{- $targetPod := printf "%s-%d" (printf "%s" $fullName) $i }}
+{{- $_ := set $ "targetPod" $targetPod }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $fullName }}-{{ $i }}
+  namespace: {{ include "mongodb.namespace" $ }}
+  labels: {{- include "common.labels.standard" $ | nindent 4 }}
+    app.kubernetes.io/component: mongodb
+    {{- if $root.Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" $root.Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if $root.Values.service.annotations }}
+  annotations: {{- include "common.tplvalues.render" (dict "value" $root.Values.service.annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  type: ClusterIP
+  ports:
+    - name: {{ $root.Values.service.portName }}
+      port: {{ $root.Values.service.port }}
+      targetPort: mongodb
+  selector: {{- include "common.labels.matchLabels" $ | nindent 4 }}
+    app.kubernetes.io/component: mongodb
+    statefulset.kubernetes.io/pod-name: {{ $targetPod }}
+---
+{{- end }}
+{{- end }}

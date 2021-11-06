@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ template "external-dns.fullname" . }}
+  namespace: {{ .Release.Namespace }}
   labels: {{ include "external-dns.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicas }}
@@ -21,7 +22,7 @@ spec:
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
         {{- end }}
     spec:
-{{- include "external-dns.imagePullSecrets" . | indent 6 }}
+      {{- include "external-dns.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.podSecurityContext }}
       securityContext: {{ toYaml .Values.podSecurityContext | nindent 8 }}
       {{- end }}
@@ -61,8 +62,8 @@ spec:
             {{- if .Values.triggerLoopOnEvent }}
             - --events
             {{- end }}
-            {{- if .Values.namespace }}
-            - --namespace={{ .Values.namespace }}
+            {{- if (include "external-dns.namespace" .) }}
+            - --namespace={{ template "external-dns.namespace" . }}
             {{- end }}
             {{- if .Values.fqdnTemplates }}
             - --fqdn-template={{ join "," .Values.fqdnTemplates }}{{/* Explicitly wants comma separated list */}}
@@ -88,6 +89,15 @@ spec:
             {{- range .Values.excludeDomains }}
             - --exclude-domains={{ . }}
             {{- end }}
+            {{- if .Values.regexDomainFilter }}
+            - --regex-domain-filter={{ .Values.regexDomainFilter }}
+            {{- end }}
+            {{- if .Values.regexDomainExclusion }}
+            - --regex-domain-exclusion={{ .Values.regexDomainExclusion }}
+            {{- end }}
+            {{- range .Values.zoneNameFilters }}
+            - --zone-name-filter={{ . }}
+            {{- end }}
             {{- range .Values.zoneIdFilters }}
             - --zone-id-filter={{ . }}
             {{- end }}
@@ -95,12 +105,17 @@ spec:
             - --provider={{ .Values.provider }}
             - --registry={{ .Values.registry }}
             - --interval={{ .Values.interval }}
-            {{- if eq .Values.registry "txt" }}
+            {{- if or (ne .Values.registry "aws-sd") .Values.forceTxtOwnerId }}
             {{- if .Values.txtOwnerId }}
             - --txt-owner-id={{ .Values.txtOwnerId }}
             {{- end }}
+            {{- end }}
+            {{- if eq .Values.registry "txt" }}
             {{- if .Values.txtPrefix }}
             - --txt-prefix={{ .Values.txtPrefix }}
+            {{- end }}
+            {{- if .Values.txtSuffix }}
+            - --txt-suffix={{ .Values.txtSuffix }}
             {{- end }}
             {{- end }}
             {{- if .Values.annotationFilter }}
@@ -119,6 +134,8 @@ spec:
             # Alibaba Cloud arguments
             {{- if or (and .Values.alibabacloud.accessKeyId .Values.alibabacloud.accessKeySecret) .Values.alibabacloud.secretName }}
             - --alibaba-cloud-config-file=/etc/kubernetes/alibaba-cloud.json
+            {{- else }}
+            - --alibaba-cloud-config-file=
             {{- end }}
             {{- if .Values.alibabacloud.zoneType }}
             - --alibaba-cloud-zone-type={{ .Values.alibabacloud.zoneType }}
@@ -129,9 +146,7 @@ spec:
             {{- if .Values.aws.apiRetries }}
             - --aws-api-retries={{ .Values.aws.apiRetries }}
             {{- end }}
-            {{- if .Values.aws.zoneType }}
             - --aws-zone-type={{ .Values.aws.zoneType }}
-            {{- end }}
             {{- if .Values.aws.assumeRoleArn }}
             - --aws-assume-role={{ .Values.aws.assumeRoleArn }}
             {{- end }}
@@ -189,6 +204,13 @@ spec:
               {{- else }}
             - --infoblox-ssl-verify
               {{- end }}
+              {{- if .Values.infoblox.maxResults }}
+            - --infoblox-max-results={{ .Values.infoblox.maxResults }}
+              {{- end }}
+            {{- end }}
+            {{- if eq .Values.provider "ns1" }}
+            # ns1 arguments
+            - --ns1-min-ttl={{ .Values.ns1.minTTL }}
             {{- end }}
             {{- if eq .Values.provider "rfc2136" }}
             # RFC 2136 arguments
@@ -196,14 +218,19 @@ spec:
             - --rfc2136-port={{ .Values.rfc2136.port }}
             - --rfc2136-zone={{ required "rfc2136.zone must be supplied for provider 'rfc2136'" .Values.rfc2136.zone }}
             - --rfc2136-min-ttl={{ .Values.rfc2136.minTTL }}
-              {{- if .Values.rfc2136.tsigKeyname }}
+              {{- if .Values.rfc2136.tsigAxfr }}
+            - --rfc2136-tsig-axfr
+              {{- end }}
+              {{- if .Values.rfc2136.rfc3645Enabled }}
+            - --rfc2136-gss-tsig
+            - --rfc2136-kerberos-realm={{ .Values.rfc2136.kerberosRealm }}
+              {{- else }}
+                {{- if .Values.rfc2136.tsigKeyname }}
             - --rfc2136-tsig-secret-alg={{ .Values.rfc2136.tsigSecretAlg }}
             - --rfc2136-tsig-keyname={{ .Values.rfc2136.tsigKeyname }}
-                {{- if .Values.rfc2136.tsigAxfr }}
-            - --rfc2136-tsig-axfr
-                {{- end }}
-              {{- else }}
+                {{- else }}
             - --rfc2136-insecure
+                {{- end }}
               {{- end }}
             {{- end }}
             {{- if eq .Values.provider "pdns" }}
@@ -240,27 +267,6 @@ spec:
               value: {{ .Values.aws.credentials.mountPath }}/credentials
             {{- end }}
             {{- end }}
-            {{- if eq .Values.provider "azure-private-dns" }}
-            # Azure Private DNS variables
-            {{- if .Values.azure.tenantId }}
-            - name: AZURE_TENANT_ID
-              value: {{ .Values.azure.tenantId }}
-            {{- end }}
-            {{- if not .Values.azure.useManagedIdentityExtension }}
-            {{- if or .Values.azure.aadClientId .Values.azure.aadClientSecret .Values.azure.secretName }}
-            - name: AZURE_CLIENT_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: {{ template "external-dns.secretName" . }}
-                  key: azure_aad_client_secret
-            - name: AZURE_CLIENT_ID
-              valueFrom:
-                secretKeyRef:
-                  name: {{ template "external-dns.secretName" . }}
-                  key: azure_aad_client_id
-            {{- end }}
-            {{- end }}
-            {{- end }}
             {{- if eq .Values.provider "cloudflare" }}
             # Cloudflare environment variables
             - name: CF_API_TOKEN
@@ -284,11 +290,11 @@ spec:
               value: {{ .Values.coredns.etcdEndpoints | quote }}
             {{- if .Values.coredns.etcdTLS.enabled }}
             - name: ETCD_CERT_FILE
-              value: {{ .Values.coredns.etcdTLS.mountPath }}/{{ .Values.coredns.etcdTLS.certFilename }}
+              value: {{ .Values.coredns.etcdTLS.mountPath }}/{{ include "external-dns.tlsCert" . }}
             - name: ETCD_KEY_FILE
-              value: {{ .Values.coredns.etcdTLS.mountPath }}/{{ .Values.coredns.etcdTLS.keyFilename }}
+              value: {{ .Values.coredns.etcdTLS.mountPath }}/{{ include "external-dns.tlsCertKey" . }}
             - name: ETCD_CA_FILE
-              value: {{ .Values.coredns.etcdTLS.mountPath }}/{{ .Values.coredns.etcdTLS.caFilename }}
+              value: {{ .Values.coredns.etcdTLS.mountPath }}/{{ include "external-dns.tlsCACert" . }}
             {{- end }}
             {{- end }}
             {{- if eq .Values.provider "designate" }}
@@ -374,21 +380,21 @@ spec:
             {{- end }}
             {{- if eq .Values.provider "ovh" }}
             # OVH environment variables
-            {{- if .Values.ovh.consumerKey }}
+            {{- if or (.Values.ovh.consumerKey) (.Values.ovh.secretName) }}
             - name: OVH_CONSUMER_KEY
               valueFrom:
                 secretKeyRef:
                   name: {{ template "external-dns.secretName" . }}
                   key: ovh_consumer_key
             {{- end }}
-            {{- if .Values.ovh.applicationKey }}
+            {{- if or (.Values.ovh.applicationKey) (.Values.ovh.secretName) }}
             - name: OVH_APPLICATION_KEY
               valueFrom:
                 secretKeyRef:
                   name: {{ template "external-dns.secretName" . }}
                   key: ovh_application_key
             {{- end }}
-            {{- if .Values.ovh.applicationSecret }}
+            {{- if or (.Values.ovh.applicationSecret) (.Values.ovh.secretName) }}
             - name: OVH_APPLICATION_SECRET
               valueFrom:
                 secretKeyRef:
@@ -443,13 +449,26 @@ spec:
                   key: infoblox_wapi_password
             {{- end }}
             {{- end }}
-            {{- if and .Values.rfc2136.tsigSecret }}
+            {{- if .Values.rfc2136.tsigSecret | or (and .Values.rfc2136.kerberosUsername .Values.rfc2136.kerberosPassword) | or .Values.rfc2136.secretName }}
             # RFC 2136 environment variables
+            {{- if .Values.rfc2136.rfc3645Enabled }}
+            - name: EXTERNAL_DNS_RFC2136_KERBEROS_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "external-dns.secretName" . }}
+                  key: rfc2136_kerberos_username
+            - name: EXTERNAL_DNS_RFC2136_KERBEROS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "external-dns.secretName" . }}
+                  key: rfc2136_kerberos_password
+            {{- else }}
             - name: EXTERNAL_DNS_RFC2136_TSIG_SECRET
               valueFrom:
                 secretKeyRef:
                   name: {{ template "external-dns.secretName" . }}
                   key: rfc2136_tsig_secret
+            {{- end }}
             {{- end }}
             {{- if eq .Values.provider "pdns" }}
             # PowerDNS environment variables
@@ -487,8 +506,12 @@ spec:
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}
-          readinessProbe: {{ toYaml .Values.readinessProbe | nindent 12 }}
-          livenessProbe: {{ toYaml .Values.livenessProbe | nindent 12 }}
+          {{- if .Values.readinessProbe.enabled }}
+          readinessProbe: {{- omit .Values.readinessProbe "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.livenessProbe.enabled }}
+          livenessProbe: {{- omit .Values.livenessProbe "enabled" | toYaml | nindent 12 }}
+          {{- end }}
           {{- if .Values.securityContext }}
           securityContext: {{ toYaml .Values.securityContext | nindent 12 }}
           {{- end }}
@@ -520,7 +543,7 @@ spec:
             {{- end }}
             {{- if and (eq .Values.provider "coredns") (.Values.coredns.etcdTLS.enabled) }}
             # CoreDNS mountPath(s)
-            - name: {{ .Values.coredns.etcdTLS.secretName }}
+            - name: {{ include "external-dns.tlsSecretName" . }}
               mountPath: {{ .Values.coredns.etcdTLS.mountPath }}
               readOnly: true
             {{- end }}
@@ -543,6 +566,11 @@ spec:
               readOnly: true
             {{- end }}
             {{- end }}
+            {{- if and (eq .Values.provider "rfc2136") .Values.rfc2136.rfc3645Enabled }}
+            - name: krb5config
+              mountPath: /etc/krb5.conf
+              subPath: krb5.conf
+            {{- end}}
             {{- if (eq .Values.provider "transip") }}
             # TransIP mountPath(s)
             - name: transip-api-key
@@ -567,7 +595,7 @@ spec:
             secretName: {{ template "external-dns.secretName" . }}
         {{- end }}
         {{- if or (eq .Values.provider "azure") (eq .Values.provider "azure-private-dns") }}
-        # Azure volume(s)
+        # Azure and Azure Private DNS volume(s)
         - name: azure-config-file
           {{- if or .Values.azure.secretName (and .Values.azure.resourceGroup .Values.azure.tenantId .Values.azure.subscriptionId) }}
           secret:
@@ -580,9 +608,9 @@ spec:
         {{- end }}
         {{- if and (eq .Values.provider "coredns") (.Values.coredns.etcdTLS.enabled) }}
         # CoreDNS volume(s)
-        - name: {{ .Values.coredns.etcdTLS.secretName }}
+        - name: {{ include "external-dns.tlsSecretName" . }}
           secret:
-            secretName: {{ .Values.coredns.etcdTLS.secretName }}
+            secretName: {{ include "external-dns.tlsSecretName" . }}
             defaultMode: 400
         {{- end }}
         {{- if and (eq .Values.provider "google") (or .Values.google.serviceAccountKey .Values.google.serviceAccountSecret) }}
@@ -611,11 +639,20 @@ spec:
             path: {{ .Values.designate.customCAHostPath }}
         {{- end }}
         {{- end }}
+        {{- if and (eq .Values.provider "rfc2136") .Values.rfc2136.rfc3645Enabled }}
+        # Kerberos config volume
+        - name: krb5config
+          configMap:
+            name: {{ template "external-dns.fullname" . }}
+            items:
+            - key: "krb5.conf"
+              path: "krb5.conf"
+        {{- end }}
         {{- if (eq .Values.provider "transip") }}
         # TransIP volume(s)
         - name: transip-api-key
           secret:
-            name: {{ template "external-dns.fullname" . }}
+            secretName: {{ template "external-dns.fullname" . }}
         {{- end }}
         {{- if .Values.extraVolumes }}
         # Extra volume(s)

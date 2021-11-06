@@ -13,6 +13,7 @@ metadata:
   {{- end }}
 spec:
   replicas: 1
+  revisionHistoryLimit: {{ .Values.primary.revisionHistoryLimit }}
   selector:
     matchLabels: {{ include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: primary
@@ -41,6 +42,9 @@ spec:
         {{- end }}
     spec:
       {{- include "mariadb.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.primary.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.primary.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.schedulerName }}
       schedulerName: {{ .Values.schedulerName | quote }}
       {{- end }}
@@ -58,6 +62,9 @@ spec:
       {{- end }}
       {{- if .Values.primary.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.primary.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.primary.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.primary.topologySpreadConstraints "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.primary.priorityClassName }}
       priorityClassName: {{ .Values.primary.priorityClassName | quote }}
@@ -89,6 +96,9 @@ spec:
           volumeMounts:
             - name: data
               mountPath: /bitnami/mariadb
+              {{- if .Values.primary.persistence.subPath }}
+              subPath: {{ .Values.primary.persistence.subPath }}
+              {{- end }}
         {{- end }}
       {{- end }}
       containers:
@@ -98,15 +108,19 @@ spec:
           {{- if .Values.primary.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.primary.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
-          {{- if .Values.primary.command }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.primary.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.primary.command "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.primary.args }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.primary.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.primary.args "context" $) | nindent 12 }}
           {{- end }}
           env:
             - name: BITNAMI_DEBUG
-              value: {{ ternary "true" "false" .Values.image.debug | quote }}
+              value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
             {{- if .Values.auth.usePasswordFiles }}
             - name: MARIADB_ROOT_PASSWORD_FILE
               value: {{ default "/opt/bitnami/mariadb/secrets/mariadb-root-password" .Values.auth.customPasswordFiles.root }}
@@ -153,6 +167,12 @@ spec:
             - name: MARIADB_EXTRA_FLAGS
               value: "{{ .Values.primary.extraFlags }}"
             {{- end }}
+            {{- if .Values.primary.startupWaitOptions }}
+            - name: MARIADB_STARTUP_WAIT_RETRIES
+              value: "{{ .Values.primary.startupWaitOptions.retries | default 300 }}"
+            - name: MARIADB_STARTUP_WAIT_SLEEP_TIME
+              value: "{{ .Values.primary.startupWaitOptions.sleepTime | default 2 }}"
+            {{- end }}
             {{- if .Values.primary.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.primary.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -170,6 +190,22 @@ spec:
           ports:
             - name: mysql
               containerPort: 3306
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.primary.startupProbe.enabled }}
+          startupProbe: {{- omit .Values.primary.startupProbe "enabled" | toYaml | nindent 12 }}
+            exec:
+              command:
+                - /bin/bash
+                - -ec
+                - |
+                  password_aux="${MARIADB_ROOT_PASSWORD:-}"
+                  if [[ -f "${MARIADB_ROOT_PASSWORD_FILE:-}" ]]; then
+                      password_aux=$(cat "$MARIADB_ROOT_PASSWORD_FILE")
+                  fi
+                  mysqladmin status -uroot -p"${password_aux}"
+          {{- else if .Values.primary.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.primary.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
           {{- if .Values.primary.livenessProbe.enabled }}
           livenessProbe: {{- omit .Values.primary.livenessProbe "enabled" | toYaml | nindent 12 }}
             exec:
@@ -200,12 +236,16 @@ spec:
           {{- else if .Values.primary.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.primary.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
+          {{- end }}
           {{- if .Values.primary.resources }}
           resources: {{ toYaml .Values.primary.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: data
               mountPath: /bitnami/mariadb
+              {{- if .Values.primary.persistence.subPath }}
+              subPath: {{ .Values.primary.persistence.subPath }}
+              {{- end }}
             {{- if or .Values.initdbScriptsConfigMap .Values.initdbScripts }}
             - name: custom-init-scripts
               mountPath: /docker-entrypoint-initdb.d
@@ -237,6 +277,10 @@ spec:
                   name: {{ template "mariadb.secretName" . }}
                   key: mariadb-root-password
             {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else }}
           command:
             - /bin/bash
             - -ec
@@ -246,9 +290,11 @@ spec:
                   password_aux=$(cat "$MARIADB_ROOT_PASSWORD_FILE")
               fi
               DATA_SOURCE_NAME="root:${password_aux}@(localhost:3306)/" /bin/mysqld_exporter {{- range .Values.metrics.extraArgs.primary }} {{ . }} {{- end }}
+          {{- end }}
           ports:
             - name: metrics
               containerPort: 9104
+          {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.metrics.livenessProbe.enabled }}
           livenessProbe: {{- omit .Values.metrics.livenessProbe "enabled" | toYaml | nindent 12 }}
             httpGet:
@@ -260,6 +306,7 @@ spec:
             httpGet:
               path: /metrics
               port: metrics
+          {{- end }}
           {{- end }}
           {{- if .Values.metrics.resources }}
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
@@ -314,6 +361,9 @@ spec:
         name: data
         labels: {{ include "common.labels.matchLabels" . | nindent 10 }}
           app.kubernetes.io/component: primary
+        {{- if .Values.primary.persistence.annotations }}
+        annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.primary.persistence.annotations "context" $ ) | nindent 10 }}
+        {{- end }}
       spec:
         accessModes:
           {{- range .Values.primary.persistence.accessModes }}

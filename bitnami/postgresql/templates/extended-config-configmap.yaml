@@ -5,9 +5,13 @@ metadata:
   name: {{ template "common.names.fullname" . }}-extended-configuration
   labels:
   {{- include "common.labels.standard" . | nindent 4 }}
+  {{- if .Values.commonLabels }}
+  {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
+  namespace: {{ .Release.Namespace }}
 data:
 {{- with .Files.Glob "files/conf.d/*.conf" }}
 {{ .AsConfig | indent 2 }}
@@ -15,7 +19,11 @@ data:
 {{ with .Values.postgresqlExtendedConf }}
   override.conf: |
 {{- range $key, $value := . }}
-    {{ $key | snakecase }}={{ $value }}
+    {{- if kindIs "string" $value }}
+    {{ $key | snakecase }} = '{{ $value }}'
+    {{- else }}
+    {{ $key | snakecase }} = {{ $value }}
+    {{- end }}
 {{- end }}
 {{- end }}
 {{- end }}

@@ -47,13 +47,19 @@ spec:
         podAntiAffinity: {{- include "common.affinities.pods" (dict "type" $.Values.shardsvr.dataNode.podAntiAffinityPreset "component" "shardsvr" "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" $.Values.shardsvr.dataNode.nodeAffinityPreset.type "key" $.Values.shardsvr.dataNode.nodeAffinityPreset.key "values" $.Values.shardsvr.dataNode.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
+      {{- if $.Values.shardsvr.dataNode.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.dataNode.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       {{- if $.Values.shardsvr.dataNode.nodeSelector }}
-      nodeSelector: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.dataNode.nodeSelector "context" $) | nindent 8 }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.dataNode.nodeSelector "context" (set $ "dataNodeLoopId" $i)) | nindent 8 }}
       {{- end }}
       {{- if $.Values.shardsvr.dataNode.tolerations }}
-      tolerations: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.dataNode.tolerations "context" $) | nindent 8 }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.dataNode.tolerations "context" (set $ "dataNodeLoopId" $i)) | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ include "mongodb-sharded.serviceAccountName" (dict "value" $.Values.shardsvr.dataNode.serviceAccount "context" $) }}
+      {{- if $.Values.shardsvr.dataNode.priorityClassName }}
+      priorityClassName: {{ $.Values.shardsvr.dataNode.priorityClassName | quote }}
+      {{- end }}
       {{- if $.Values.securityContext.enabled }}
       securityContext:
         fsGroup: {{ $.Values.securityContext.fsGroup }}
@@ -91,10 +97,10 @@ spec:
             - containerPort: {{ $.Values.service.port }}
               name: mongodb
           env:
-            {{- if $.Values.image.debug }}
+            - name: MONGODB_ENABLE_NUMACTL
+              value: {{ ternary "yes" "no" $.Values.common.mongodbEnableNumactl | quote}}
             - name: BITNAMI_DEBUG
-              value: "true"
-            {{- end }}
+              value: {{ ternary "true" "false" (or $.Values.image.debug $.Values.diagnosticMode.enabled) | quote }}
             - name: MONGODB_SYSTEM_LOG_VERBOSITY
               value: {{ $.Values.common.mongodbSystemLogVerbosity | quote }}
             - name: MONGODB_MAX_TIMEOUT
@@ -112,7 +118,7 @@ spec:
                 fieldRef:
                   fieldPath: metadata.name
             - name: MONGODB_MONGOS_HOST
-              value: {{ include "common.names.fullname" $ }}
+              value: {{ include "mongodb-sharded.serviceName" $ }}
             - name: MONGODB_INITIAL_PRIMARY_HOST
               value: {{ printf "%s-shard%d-data-0.%s-headless.%s.svc.%s" (include "common.names.fullname" $ ) $i (include "common.names.fullname" $ ) $.Release.Namespace $.Values.clusterDomain }}
             - name: MONGODB_REPLICA_SET_NAME
@@ -179,9 +185,15 @@ spec:
                 name: {{ include "mongodb-sharded.tplValue" ( dict "value" $.Values.shardsvr.dataNode.extraEnvVarsSecret "context" $ ) }}
             {{- end }}
           {{- end }}
+          {{- if $.Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" $.Values.diagnosticMode.command "context" $) | nindent 12 }}
+          args: {{- include "common.tplvalues.render" (dict "value" $.Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else }}
           command:
             - /bin/bash
             - /entrypoint/replicaset-entrypoint.sh
+          {{- end }}
+          {{- if not $.Values.diagnosticMode.enabled }}
           {{- if $.Values.livenessProbe.enabled }}
           livenessProbe:
             exec:
@@ -207,6 +219,7 @@ spec:
             timeoutSeconds: {{ $.Values.readinessProbe.timeoutSeconds }}
             successThreshold: {{ $.Values.readinessProbe.successThreshold }}
             failureThreshold: {{ $.Values.readinessProbe.failureThreshold }}
+          {{- end }}
           {{- end }}
           volumeMounts:
             - name: replicaset-entrypoint-configmap
@@ -256,6 +269,10 @@ spec:
                   name: {{ include "mongodb-sharded.secret" $ }}
                   key: mongodb-root-password
           {{- end }}
+          {{- if $.Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" $.Values.diagnosticMode.command "context" $) | nindent 12 }}
+          args: {{- include "common.tplvalues.render" (dict "value" $.Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else }}
           command:
             - sh
             - -ec
@@ -264,7 +281,8 @@ spec:
               {{- if $.Values.usePasswordFile }}
               export MONGODB_ROOT_PASSWORD="$(cat "${MONGODB_ROOT_PASSWORD_FILE}")"
               {{- end }}
-              /bin/mongodb_exporter --mongodb.uri mongodb://root:`echo $MONGODB_ROOT_PASSWORD | sed -r "s/@/%40/g;s/:/%3A/g"`@localhost:{{ $.Values.service.port }}/admin {{ $.Values.metrics.extraArgs }}
+              /bin/mongodb_exporter --web.listen-address ":{{ $.Values.metrics.containerPort }}" --mongodb.uri mongodb://root:`echo $MONGODB_ROOT_PASSWORD | sed -r "s/@/%40/g;s/:/%3A/g"`@localhost:{{ $.Values.service.port }}/admin {{ $.Values.metrics.extraArgs }}
+          {{- end }}
           {{- if $.Values.usePasswordFile }}
           volumeMounts:
             - name: secrets
@@ -272,7 +290,8 @@ spec:
           {{- end }}
           ports:
             - name: metrics
-              containerPort: 9216
+              containerPort: {{ $.Values.metrics.containerPort }}
+          {{- if not $.Values.diagnosticMode.enabled }}
           {{- if $.Values.metrics.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
@@ -294,6 +313,7 @@ spec:
             timeoutSeconds: {{ $.Values.metrics.readinessProbe.timeoutSeconds }}
             failureThreshold: {{ $.Values.metrics.readinessProbe.failureThreshold }}
             successThreshold: {{ $.Values.metrics.readinessProbe.successThreshold }}
+          {{- end }}
           {{- end }}
           resources: {{ toYaml $.Values.metrics.resources | nindent 12 }}
         {{- end }}

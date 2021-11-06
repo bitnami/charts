@@ -29,6 +29,9 @@ spec:
         podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.dashboard.podAntiAffinityPreset "component" "dashboard" "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.dashboard.nodeAffinityPreset.type "key" .Values.dashboard.nodeAffinityPreset.key "values" .Values.dashboard.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
+      {{- if .Values.dashboard.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.dashboard.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.dashboard.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.dashboard.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
@@ -40,7 +43,7 @@ spec:
         fsGroup: {{ .Values.dashboard.securityContext.fsGroup }}
         runAsUser: {{ .Values.dashboard.securityContext.runAsUser }}
       {{- end }}
-{{- include "parse.imagePullSecrets" . | indent 6 }}
+      {{- include "parse.imagePullSecrets" . | nindent 6 }}
       containers:
         - name: parse-dashboard
           image: {{ include "parse.dashboard.image" . }}

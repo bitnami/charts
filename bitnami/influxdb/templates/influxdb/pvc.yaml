@@ -2,9 +2,15 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: {{ include "influxdb.fullname" . }}
+  name: {{ include "common.names.fullname" . }}
   labels:
-    {{- include "influxdb.labels" . | nindent 4 }}
+    {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   accessModes:
   {{- range .Values.persistence.accessModes }}
@@ -13,5 +19,5 @@ spec:
   resources:
     requests:
       storage: {{ .Values.persistence.size | quote }}
-{{- include "influxdb.storageClass" . | nindent 2 }}
+  {{- include "common.storage.class" ( dict "persistence" .Values.persistence "global" $) | nindent 2 }}
 {{- end }}

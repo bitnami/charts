@@ -1,0 +1,32 @@
+{{- if and .Values.prometheus.enabled .Values.prometheus.thanos.create .Values.prometheus.thanos.ingress.enabled }}
+apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
+kind: Ingress
+metadata:
+  name: {{ template "kube-prometheus.thanos.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels: {{- include "kube-prometheus.prometheus.labels" . | nindent 4 }}
+    app.kubernetes.io/subcomponent: thanos
+  annotations:
+    {{- if .Values.prometheus.thanos.ingress.certManager }}
+    kubernetes.io/tls-acme: "true"
+    {{- end }}
+    {{- range $key, $value := .Values.prometheus.thanos.ingress.annotations }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+spec:
+  rules:
+    {{- range .Values.prometheus.thanos.ingress.hosts }}
+    - host: {{ .name }}
+      http:
+        paths:
+        - path: {{ default "/" .path }}
+          {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
+          pathType: {{ default "ImplementationSpecific" .pathType }}
+          {{- end }}
+          backend: {{- include "common.ingress.backend" (dict "serviceName" (include "kube-prometheus.thanos.fullname" $) "servicePort" "grpc" "context" $) | nindent 14 }}
+    {{- end }}
+  {{- if .Values.prometheus.thanos.ingress.tls }}
+  tls:
+{{ toYaml .Values.prometheus.thanos.ingress.tls | indent 4 }}
+  {{- end }}
+{{- end -}}

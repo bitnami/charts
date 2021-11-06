@@ -1,4 +1,4 @@
-{{- $kube := eq .Values.executor "KubernetesExecutor" -}}
+{{- $kube := or (eq .Values.executor "KubernetesExecutor") (eq .Values.executor "CeleryKubernetesExecutor") -}}
 {{- if or .Values.config $kube }}
 apiVersion: v1
 kind: ConfigMap
@@ -14,7 +14,7 @@ metadata:
 data:
 {{- if .Values.config }}
   airflow.cfg: |-
-    {{ .Values.config | indent 4 }}
+    {{ .Values.config | nindent 4 }}
 {{- end }}
 {{- if $kube }}
   pod_template.yaml: |-
@@ -47,9 +47,10 @@ data:
             - "/bin/bash"
             - "-ce"
             - |
-                . /opt/bitnami/base/helpers
+                . /opt/bitnami/scripts/airflow-worker-env.sh
+                . /opt/bitnami/scripts/libairflowworker.sh
 
-                nami_initialize airflow-worker
+                airflow_generate_config # Generate the config file
                 cp /opt/bitnami/airflow/airflow.cfg /opt/bitnami/airflow/k8s-executor-config/airflow.cfg
 
           env:
@@ -57,6 +58,12 @@ data:
             {{- include "airflow.configure.database" . | nindent 12 }}
             {{- include "airflow.configure.redis" . | nindent 12 }}
             {{- include "airflow.configure.airflow.kubernetesExecutor" . | nindent 12 }}
+            - name: AIRFLOW_EXECUTOR
+              value: {{ .Values.executor }}
+            - name: AIRFLOW_WEBSERVER_HOST
+              value: {{ include "common.names.fullname" . }}
+            - name: AIRFLOW_WEBSERVER_PORT_NUMBER
+              value: {{ .Values.service.port | quote }}
             {{- if .Values.extraEnvVars }}
               {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -80,6 +87,9 @@ data:
             - secretRef:
                 name: {{ .Values.worker.extraEnvVarsSecret }}
             {{- end }}
+          {{- if .Values.worker.resources }}
+          resources: {{- toYaml .Values.worker.resources | nindent 12 }}
+          {{- end }}
           volumeMounts:
             - name: k8s-executor-config
               mountPath: /opt/bitnami/airflow/k8s-executor-config
@@ -96,12 +106,17 @@ data:
         {{- if .Values.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
         {{- end }}
+        {{- if .Values.worker.resources }}
+          resources: {{- toYaml .Values.worker.resources | nindent 12 }}
+        {{- end }}
           env:
             - name: AIRFLOW__CORE__EXECUTOR
               value: LocalExecutor
             {{- include "airflow.configure.airflow.common"  . | nindent 12 }}
             {{- include "airflow.configure.database" . | nindent 12 }}
             {{- include "airflow.configure.redis" . | nindent 12 }}
+            - name: AIRFLOW_EXECUTOR
+              value: {{ .Values.executor }}
             - name: AIRFLOW_WEBSERVER_HOST
               value: {{ include "common.names.fullname" . }}
             - name: AIRFLOW_WEBSERVER_PORT_NUMBER
@@ -137,7 +152,7 @@ data:
             - name: local-dag-files
               mountPath: /opt/bitnami/airflow/dags/local
           {{- end }}
-          {{- if .Values.dagsConfigMap }}
+          {{- if .Values.dags.configMap }}
             - name: external-dag-files
               mountPath: /opt/bitnami/airflow/dags/external
           {{- end }}
@@ -165,17 +180,40 @@ data:
       {{- if .Values.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
-      {{- if .Values.affinity }}
+      {{- if or .Values.affinity .Values.worker.affinity }}
+      {{- if .Values.worker.affinity }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.worker.affinity "context" $) | nindent 8 }}
+      {{- else }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" $) | nindent 8 }}
+      {{- end }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAffinityPreset "component" "worker" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "component" "worker" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if or .Values.nodeSelector .Values.worker.nodeSelector }}
+      {{- if .Values.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
+      {{- else }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.worker.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- end }}
+      {{- if or .Values.tolerations .Values.worker.tolerations }}
+      {{- if .Values.worker.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.worker.tolerations "context" $) | nindent 8 }}
+      {{- else }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
+      {{- end }}
       {{- end }}
       serviceAccountName: {{ include "airflow.serviceAccountName" . }}
       volumes:
         - name: k8s-executor-config
           emptyDir: {}
-      {{- if .Values.dagsConfigMap }}
+      {{- if .Values.dags.configMap }}
         - name: external-dag-files
           configMap:
-            name: {{ .Values.dagsConfigMap }}
+            name: {{ .Values.dags.configMap }}
       {{- end }}
       {{- if include "airflow.shouldUseConfigFromConfigMap" . }}
         - name: custom-configuration-file

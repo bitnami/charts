@@ -24,7 +24,7 @@ spec:
   loadBalancerIP: {{ .Values.metrics.service.loadBalancerIP }}
   {{- end }}
   ports:
-    - name: metrics
+    - name: tcp-metrics
       port: {{ .Values.metrics.service.port }}
       targetPort: metrics
   selector: {{ include "common.labels.matchLabels" . | nindent 4 }}

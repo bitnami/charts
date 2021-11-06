@@ -1,6 +1,6 @@
 {{- if and .Values.rbac.create .Values.contour.enabled (include "contour.contour-certgen.enabled" .) }}
 ---
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: Role
 metadata:
   name: {{ include "common.names.fullname" .}}-contour-certgen
@@ -19,7 +19,7 @@ rules:
       - create
       - update
 ---
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: RoleBinding
 metadata:
   name: {{ include "common.names.fullname" .}}-contour-certgen

@@ -35,6 +35,7 @@ Compile all warnings into a single message, and call fail.
 {{- $messages := list -}}
 {{- $messages := append $messages (include "pytorch.validateValues.mode" .) -}}
 {{- $messages := append $messages (include "pytorch.validateValues.worldSize" .) -}}
+{{- $messages := append $messages (include "pytorch.validateValues.extraVolumes" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
@@ -62,8 +63,18 @@ pytorch: worldSize
 {{- end -}}
 {{- end -}}
 
+{{/* Validate values of PyTorch - Incorrect extra volume settings */}}
+{{- define "pytorch.validateValues.extraVolumes" -}}
+{{- if and (.Values.extraVolumes) (not (or .Values.extraVolumeMounts .Values.cloneFilesFromGit.extraVolumeMounts)) -}}
+pytorch: missing-extra-volume-mounts
+    You specified extra volumes but not mount points for them. Please set
+    the extraVolumeMounts value
+{{- end -}}
+{{- end -}}
+
 {{/* Check if there are rolling tags in the images */}}
 {{- define "pytorch.checkRollingTags" -}}
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- include "common.warnings.rollingTag" .Values.git }}
+{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
 {{- end -}}
