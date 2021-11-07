@@ -270,6 +270,9 @@ provisioning:
             date: "2021-11-11T00:00:00Z"
             nonconcurrentDays: 3
           disabled: true
+      quota:
+        type: hard
+        size: 256GiB
 
 ## @param hostAliases MinIO&reg; pod host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/

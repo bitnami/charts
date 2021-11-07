@@ -163,6 +163,11 @@ spec:
                 ]
               }
               EOF;
+
+              {{ with $bucket.quota }}
+              mc admin bucket quota {{ $minioTarget }}/{{ $bucket.name }} --{{ .type }} {{ .size }};
+              {{ end }}
+
               {{ end }}
 
               echo "End Minio provisioning";
