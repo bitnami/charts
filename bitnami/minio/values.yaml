@@ -274,6 +274,11 @@ provisioning:
         type: hard
         size: 256GiB
 
+  config:
+    - name: region
+      options:
+        name: us-east-1
+
 ## @param hostAliases MinIO&reg; pod host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
