@@ -39,18 +39,21 @@ spec:
       serviceAccountName: {{ template "minio.serviceAccountName" . }}
       initContainers:
         - name: wait-for-available-minio
-          image: {{ include "minio.image" . }}
+          # TODO: Add wait-for-port for minio image
+          # {{ include "minio.image" . }}
+          image: docker.io/bitnami/kafka:2.8.1-debian-10-r31
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           command:
             - /bin/bash
             - -c
             - >-
               set -e;
+              echo "Waiting for Minio";
               wait-for-port \
                 --host={{ include "common.names.fullname" . }} \
                 --state=inuse \
                 --timeout=120 \
-                {{ .Values.service.port | int64 }};
+                {{ .Values.service.ports.api | int64 }};
               echo "Minio is available";
       containers:
         - name: minio
@@ -61,10 +64,13 @@ spec:
             - -c
             # TODO: credentials files?
             - >-
-              set -x;
+              set -ex;
+              echo "Start Minio provisioning";
 
               mc alias set provisioning $MINIO_SCHEME://{{ include "common.names.fullname" . }}:{{ .Values.service.ports.api }} $MINIO_ROOT_USER $MINIO_ROOT_PASSWORD
               mc alias list
+
+              echo "End Minio provisioning";
           env:
             - name: MINIO_SCHEME
               value: {{ ternary "https" "http" .Values.tls.enabled | quote }}
