@@ -232,12 +232,16 @@ provisioning:
   users:
     - username: test-username
       password: test-password
+      policies:
+        - readwrite
       disabled: true
 
   groups:
     - name: test-group
       members:
         - test-username
+      policies:
+        - readwrite
       disabled: true
 
   buckets:
