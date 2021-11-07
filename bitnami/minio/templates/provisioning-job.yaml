@@ -1,8 +1,6 @@
 {{- if .Values.provisioning.enabled }}
 {{- $fullname := printf "%s-provisioning" (include "common.names.fullname" .) }}
 {{- $releaseNamespace := .Release.Namespace }}
-{{- $replicaCount := int .Values.statefulset.replicaCount }}
-{{- $zoneCount := int .Values.statefulset.zones }}
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -63,7 +61,10 @@ spec:
             - -c
             # TODO: credentials files?
             - >-
+              set -x;
+
               mc alias set provisioning $MINIO_SCHEME://{{ include "common.names.fullname" . }}:{{ .Values.service.ports.api }} $MINIO_ROOT_USER $MINIO_ROOT_PASSWORD
+              mc alias list
           env:
             - name: MINIO_SCHEME
               value: {{ ternary "https" "http" .Values.tls.enabled | quote }}
