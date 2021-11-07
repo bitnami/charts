@@ -169,11 +169,8 @@ spec:
               {{ end }}
               {{ end }}
 
-              {{ if .Values.provisioning.config }}
               {{ range $config := .Values.provisioning.config }}
               mc admin config set {{ $minioTarget }} {{ $config.name }} {{ range $name, $value := $config.options }} {{ $name }}={{ $value }} {{ end }};
-              {{ end }}
-              mc admin service restart {{ $minioTarget }};
               {{ end }}
 
               echo "End Minio provisioning";
