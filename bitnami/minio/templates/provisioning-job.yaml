@@ -76,11 +76,8 @@ spec:
               {{- range $policy := $user.policies }}
               mc admin policy set {{ $minioTarget }} {{ $policy }} user={{ $user.username }};
               {{- end }}
-              {{- if $user.disabled }}
-              mc admin user disable {{ $minioTarget }} {{ $user.username }};
-              {{- else }}
-              mc admin user enable {{ $minioTarget }} {{ $user.username }};
-              {{- end }}
+              {{- $userStatus := ternary ("disable") ("enable") ($user.disabled) }}
+              mc admin user {{ $userStatus }} {{ $minioTarget }} {{ $user.username }};
               {{- end }}
 
               # Groups
@@ -89,11 +86,8 @@ spec:
               {{- range $policy := $group.policies }}
               mc admin policy set {{ $minioTarget }} {{ $policy }} group={{ $group.name }};
               {{- end }}
-              {{- if $group.disabled }}
-              mc admin group disable {{ $minioTarget }} {{ $group.name }};
-              {{- else }}
-              mc admin group enable {{ $minioTarget }} {{ $group.name }};
-              {{- end }}
+              {{- $groupStatus := ternary ("disable") ("enable") ($group.disabled)}}
+              mc admin group {{ $groupStatus }} {{ $minioTarget }} {{ $group.name }};
               {{- end }}
 
               # Buckets
