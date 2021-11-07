@@ -69,7 +69,6 @@ spec:
               echo "Start Minio provisioning $MINIO_SCHEME $MINIO_ROOT_USER $MINIO_ROOT_PASSWORD";
 
               mc alias set {{ $minioTarget }} $MINIO_SCHEME://{{ include "common.names.fullname" . }}:{{ .Values.service.ports.api }} $MINIO_ROOT_USER $MINIO_ROOT_PASSWORD;
-              mc alias list;
 
               {{ range $group := .Values.provisioning.groups }}
               mc admin group add {{ $minioTarget }} {{ $group.name }};
@@ -125,6 +124,7 @@ spec:
               {{ end }}
               {{ end }}
 
+              {{ if $bucket.lifecycle }}
               mc ilm import {{ $minioTarget }}/{{ $bucket.name }} <<EOF
               {
                 "Rules": [
@@ -163,6 +163,7 @@ spec:
                 ]
               }
               EOF;
+              {{ end }}
 
               echo "End Minio provisioning";
           env:

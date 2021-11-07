@@ -259,13 +259,13 @@ provisioning:
           expiry:
             days: 7
             # Days !OR! date
-            date: "2021-11-11T00:00:00Z"
+            # date: "2021-11-11T00:00:00Z"
             nonconcurrentDays: 3
           disabled: true
         - id: test-id
           prefix: test-prefix
           expiry:
-            days: 7
+            # days: 7
             # Days !OR! date
             date: "2021-11-11T00:00:00Z"
             nonconcurrentDays: 3
