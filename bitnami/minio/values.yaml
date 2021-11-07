@@ -229,15 +229,15 @@ provisioning:
     ##    memory: 128Mi
     requests: {}
 
-  groups:
-    - name: test-group
-      disabled: true
-
   users:
     - username: test-username
       password: test-password
-      groups:
-        - test-group
+      disabled: true
+
+  groups:
+    - name: test-group
+      members:
+        - test-username
       disabled: true
 
   buckets:

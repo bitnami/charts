@@ -70,15 +70,6 @@ spec:
 
               mc alias set {{ $minioTarget }} $MINIO_SCHEME://{{ include "common.names.fullname" . }}:{{ .Values.service.ports.api }} $MINIO_ROOT_USER $MINIO_ROOT_PASSWORD;
 
-              {{ range $group := .Values.provisioning.groups }}
-              mc admin group add {{ $minioTarget }} {{ $group.name }};
-              {{ if $group.disabled }}
-              mc admin group disable {{ $minioTarget }} {{ $group.name }};
-              {{ else }}
-              mc admin group enable {{ $minioTarget }} {{ $group.name }};
-              {{ end }}
-              {{ end }}
-
               {{ range $user := .Values.provisioning.users }}
               mc admin user add {{ $minioTarget }} {{ $user.username }} {{ $user.password }};
               {{ if $user.disabled }}
@@ -86,8 +77,14 @@ spec:
               {{ else }}
               mc admin user enable {{ $minioTarget }} {{ $user.username }};
               {{ end }}
-              {{ range $group := $user.groups }}
-              mc admin group add {{ $minioTarget }} {{ $group }} {{ $user.username }};
+              {{ end }}
+
+              {{ range $group := .Values.provisioning.groups }}
+              mc admin group add {{ $minioTarget }} {{ $group.name }} {{ join " " $group.members }};
+              {{ if $group.disabled }}
+              mc admin group disable {{ $minioTarget }} {{ $group.name }};
+              {{ else }}
+              mc admin group enable {{ $minioTarget }} {{ $group.name }};
               {{ end }}
               {{ end }}
 
