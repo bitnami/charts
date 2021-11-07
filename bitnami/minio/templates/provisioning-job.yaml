@@ -1,6 +1,7 @@
 {{- if .Values.provisioning.enabled }}
 {{- $fullname := printf "%s-provisioning" (include "common.names.fullname" .) }}
 {{- $releaseNamespace := .Release.Namespace }}
+{{- $minioTarget := "provisioning" }}
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -67,8 +68,66 @@ spec:
               set -ex;
               echo "Start Minio provisioning $MINIO_SCHEME $MINIO_ROOT_USER $MINIO_ROOT_PASSWORD";
 
-              mc alias set provisioning $MINIO_SCHEME://{{ include "common.names.fullname" . }}:{{ .Values.service.ports.api }} $MINIO_ROOT_USER $MINIO_ROOT_PASSWORD;
+              mc alias set {{ $minioTarget }} $MINIO_SCHEME://{{ include "common.names.fullname" . }}:{{ .Values.service.ports.api }} $MINIO_ROOT_USER $MINIO_ROOT_PASSWORD;
               mc alias list;
+
+              {{ range $group := .Values.provisioning.groups }}
+              mc admin group add {{ $minioTarget }} {{ $group.name }};
+              {{ if $group.disabled }}
+              mc admin group disable {{ $minioTarget }} {{ $group.name }};
+              {{ else }}
+              mc admin group enable {{ $minioTarget }} {{ $group.name }};
+              {{ end }}
+              {{ end }}
+
+              {{ range $user := .Values.provisioning.users }}
+              mc admin user add {{ $minioTarget }} {{ $user.username }} {{ $user.password }};
+              {{ if $user.disabled }}
+              mc admin user disable {{ $minioTarget }} {{ $user.username }};
+              {{ else }}
+              mc admin user enable {{ $minioTarget }} {{ $user.username }};
+              {{ end }}
+              {{ range $group := $user.groups }}
+              mc admin group add {{ $minioTarget }} {{ $group }} {{ $user.username }};
+              {{ end }}
+              {{ end }}
+
+              {{ range $bucket := .Values.provisioning.buckets }}
+              mc mb {{ $minioTarget }}/{{ $bucket.name }}
+              --ignore-existing
+              {{ with $bucket.region }}
+              --region={{ . }}
+              {{ end }}
+              {{ if and $bucket.lock $bucket.lock.enabled }}
+              --with-lock
+              {{ end }}
+              ;
+              {{ if and $bucket.lock $bucket.lock.enabled }}
+              {{ range $retention := $bucket.lock.retentions }}
+              mc retention set
+              {{ $retention.type }}
+              {{ $retention.period }}
+              {{ if $retention.prefix }}
+              {{ printf "%s/%s/%s" ($minioTarget) ($bucket.name) ($retention.prefix) }}
+              {{ else }}
+              {{ printf "%s/%s" ($minioTarget) ($bucket.name) }}
+              {{ end }}
+              {{ with $retention.versionId }}
+              --version-id {{ . | quote }}
+              {{ end }}
+              {{ if $retention.recursive }}
+              --recursive
+              {{ end }}
+              {{ if $retention.versions }}
+              --versions
+              {{ end }}
+              {{ if $retention.default }}
+              --default
+              {{ end }}
+              ;
+              {{ end }}
+              {{ end }}
+              {{ end }}
 
               echo "End Minio provisioning";
           env:

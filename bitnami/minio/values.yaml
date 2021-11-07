@@ -229,6 +229,31 @@ provisioning:
     ##    memory: 128Mi
     requests: {}
 
+  groups:
+    - name: test-group
+      disabled: true
+
+  users:
+    - username: test-username
+      password: test-password
+      groups:
+        - test-group
+      disabled: true
+
+  buckets:
+    - name: test-bucket
+      region: us-east-1
+      lock:
+        enabled: true
+        retentions:
+          - prefix: test-prefix
+            type: compliance
+            period: 30d
+            versionId: "123"
+            recursive: true
+            versions: true
+            default: true
+
 ## @param hostAliases MinIO&reg; pod host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
