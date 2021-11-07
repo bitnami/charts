@@ -7,7 +7,7 @@
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: {{ template "kafka.fullname" . }}-exporter
+  name: {{ template "kafka.metrics.kafka.name" . }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: metrics
     {{- if .Values.commonLabels }}
@@ -30,7 +30,7 @@ spec:
       {{- if .Values.metrics.kafka.schedulerName }}
       schedulerName: {{ .Values.metrics.kafka.schedulerName | quote }}
       {{- end }}
-      serviceAccountName: {{ template "kafka.serviceAccountName" . }}
+      serviceAccountName: {{ template "kafka.metrics.kafka.serviceAccountName" . }}
       {{- if .Values.metrics.kafka.initContainers }}
       initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.kafka.initContainers "context" $) | nindent 8 }}
       {{- end }}

@@ -61,6 +61,24 @@ Return the proper image name (for the init container volume-permissions image)
 {{- end -}}
 
 {{/*
+Return the proper service name for Kafka exporter
+*/}}
+{{- define "kafka.metrics.kafka.name" -}}
+  {{- printf "%s-exporter" (include "kafka.fullname" .) | trunc 63 | trimSuffix "-" }}
+{{- end -}}
+
+{{/*
+ Create the name of the service account to use for Kafka exporer pods
+ */}}
+{{- define "kafka.metrics.kafka.serviceAccountName" -}}
+{{- if .Values.metrics.kafka.serviceAccount.create -}}
+    {{ default (include "kafka.metrics.kafka.name" .) .Values.metrics.kafka.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.metrics.kafka.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the proper Kafka exporter image name
 */}}
 {{- define "kafka.metrics.kafka.image" -}}
