@@ -70,111 +70,121 @@ spec:
 
               mc alias set {{ $minioTarget }} $MINIO_SCHEME://{{ include "common.names.fullname" . }}:{{ .Values.service.ports.api }} $MINIO_ROOT_USER $MINIO_ROOT_PASSWORD;
 
-              {{ range $user := .Values.provisioning.users }}
+              # Users
+              {{- range $user := .Values.provisioning.users }}
               mc admin user add {{ $minioTarget }} {{ $user.username }} {{ $user.password }};
-              {{ range $policy := $user.policies }}
+              {{- range $policy := $user.policies }}
               mc admin policy set {{ $minioTarget }} {{ $policy }} user={{ $user.username }};
-              {{ end }}
-              {{ if $user.disabled }}
+              {{- end }}
+              {{- if $user.disabled }}
               mc admin user disable {{ $minioTarget }} {{ $user.username }};
-              {{ else }}
+              {{- else }}
               mc admin user enable {{ $minioTarget }} {{ $user.username }};
-              {{ end }}
-              {{ end }}
+              {{- end }}
+              {{- end }}
 
-              {{ range $group := .Values.provisioning.groups }}
+              # Groups
+              {{- range $group := .Values.provisioning.groups }}
               mc admin group add {{ $minioTarget }} {{ $group.name }} {{ join " " $group.members }};
-              {{ range $policy := $group.policies }}
+              {{- range $policy := $group.policies }}
               mc admin policy set {{ $minioTarget }} {{ $policy }} group={{ $group.name }};
-              {{ end }}
-              {{ if $group.disabled }}
+              {{- end }}
+              {{- if $group.disabled }}
               mc admin group disable {{ $minioTarget }} {{ $group.name }};
-              {{ else }}
+              {{- else }}
               mc admin group enable {{ $minioTarget }} {{ $group.name }};
-              {{ end }}
-              {{ end }}
+              {{- end }}
+              {{- end }}
 
-              {{ range $bucket := .Values.provisioning.buckets }}
-              mc mb {{ $minioTarget }}/{{ $bucket.name }}
-              --ignore-existing
-              {{ with $bucket.region }}
-              --region={{ . }}
-              {{ end }}
-              {{ if and $bucket.lock $bucket.lock.enabled }}
-              --with-lock
-              {{ end }}
-              ;
+              # Buckets
+              {{- range $bucket := .Values.provisioning.buckets }}
+              {{- $target := printf "%s/%s" $minioTarget $bucket.name }}
+              {{- $region := ternary (printf "--region=%s" $bucket.region) ("") (not (empty $bucket.region)) }}
+              {{- $withLock := ternary ("--with-lock") ("") (and $bucket.lock $bucket.lock.enabled) }}
+              mc mb {{ $target }} --ignore-existing {{ $region }} {{ $withLock }};
 
-              {{ if and $bucket.lock $bucket.lock.enabled }}
-              {{ range $retention := $bucket.lock.retentions }}
-              mc retention set
-              {{ $retention.type }}
-              {{ $retention.period }}
-              {{ ternary (printf "%s/%s/%s" $minioTarget $bucket.name $retention.prefix) (printf "%s/%s" $minioTarget $bucket.name) (not (empty $retention.prefix)) }}
-              {{ with $retention.versionId }}
-              --version-id {{ . | quote }}
-              {{ end }}
-              {{ if $retention.recursive }}
-              --recursive
-              {{ end }}
-              {{ if $retention.versions }}
-              --versions
-              {{ end }}
-              {{ if $retention.default }}
-              --default
-              {{ end }}
-              ;
-              {{ end }}
-              {{ end }}
+              # Retentions
+              {{- if and $bucket.lock $bucket.lock.enabled }}
+              {{- range $retention := $bucket.lock.retentions }}
+              {{- $target := ternary (printf "%s/%s/%s" $minioTarget $bucket.name $retention.prefix) (printf "%s/%s" $minioTarget $bucket.name) (not (empty $retention.prefix)) }}
+              {{- $versionId := ternary (printf "--version-id %s" ($retention.versionId | quote)) ("") (not (empty $retention.versionId)) }}
+              {{- $recursive := ternary (print "--recursive") ("") ($retention.recursive) }}
+              {{- $versions := ternary ("--versions") ("") ($retention.versions) }}
+              {{- $default := ternary ("--default") ("") ($retention.default) }}
+              mc retention set {{ $retention.type }} {{ $retention.period }} {{ $target }} {{ $versionId }} {{ $recursive }} {{ $versions }} {{ $default }};
+              {{- end }}
+              {{- end }}
 
-              {{ if $bucket.lifecycle }}
+              # Lifecycle
+              {{- if $bucket.lifecycle }}
               mc ilm import {{ $minioTarget }}/{{ $bucket.name }} <<EOF
               {
                 "Rules": [
-                  {{ range $idx, $lifecycle := $bucket.lifecycle }}
-                  {{ if not (eq $idx 0) }}
+                  {{- range $idx, $lifecycle := $bucket.lifecycle }}
+                  {{- if not (eq $idx 0) }}
                   ,
-                  {{ end }}
+                  {{- end }}
                   {
                     "ID": "{{ $lifecycle.id }}",
                     "Status": "{{ ternary "Disabled" "Enabled" $lifecycle.disabled }}",
-                    {{ if $lifecycle.expiry }}
+                    {{- if $lifecycle.expiry }}
                     "Expiration": {
-                      {{ with $lifecycle.expiry.date }}
+                      {{- with $lifecycle.expiry.date }}
                       "Date": "{{ . }}"
-                      {{ end }}
-                      {{ with $lifecycle.expiry.days }}
+                      {{- end }}
+                      {{- with $lifecycle.expiry.days }}
                       "Days": {{ . }}
-                      {{ end }}
+                      {{- end }}
                     }
-                    {{ with $lifecycle.expiry.nonconcurrentDays }}
+                    {{- with $lifecycle.expiry.nonconcurrentDays }}
                     ,
                     "NoncurrentVersionExpiration": {
                       "NoncurrentDays": {{ . }}
                     }
-                    {{ end }}
-                    {{ with $lifecycle.prefix }}
+                    {{- end }}
+                    {{- with $lifecycle.prefix }}
                     ,
                     "Filter": {
                       "Prefix": "{{ . }}"
                     }
-                    {{ end }}
+                    {{- end }}
                   }
-                  {{ end }}
-                  {{ end }}
-                  {{ end }}
+                  {{- end }}
+                  {{- end }}
+                  {{- end }}
                 ]
               }
               EOF;
 
-              {{ with $bucket.quota }}
+              # Quotas
+              {{- with $bucket.quota }}
               mc admin bucket quota {{ $minioTarget }}/{{ $bucket.name }} --{{ .type }} {{ .size }};
-              {{ end }}
-              {{ end }}
+              {{- end }}
 
-              {{ range $config := .Values.provisioning.config }}
-              mc admin config set {{ $minioTarget }} {{ $config.name }} {{ range $name, $value := $config.options }} {{ $name }}={{ $value }} {{ end }};
-              {{ end }}
+              # Tags
+              {{- range $tag := $bucket.tags }}
+              {{- $rewind := ternary (printf "--rewind %s" $tag.rewind) ("") (not (empty $tag.rewind)) }}
+              {{- $versionId := ternary (printf "--version-id %s" ($tag.versionId | quote)) ("") (not (empty $tag.versionId)) }}
+              {{- $versions := ternary ("--versions") ("") (not (empty $tag.versions)) }}
+              {{- $target := ternary (printf "%s/%s/%s" $minioTarget $bucket.name $tag.prefix) (printf "%s/%s" $minioTarget $bucket.name) (not (empty $tag.prefix)) }}
+              {{- $tags := list }}
+              {{- range $name, $value := $tag.tags }}
+              {{- $tags = (printf "%s=%s" $name $value) | append $tags }}
+              {{- end }}
+              {{- $tags := join "&" $tags | quote }}
+              mc tag set {{ $rewind }} {{ $versionId }} {{ $versions }} {{ $target }} {{ $tags }};
+              {{- end }}
+              {{- end }}
+
+              # Config
+              {{- range $config := .Values.provisioning.config }}
+              {{- $options := list }}
+              {{- range $name, $value := $config.options }}
+              {{- $options = (printf "%s=%s" $name $value) | append $options }}
+              {{- end }}
+              {{- $options := join " " $options }}
+              mc admin config set {{ $minioTarget }} {{ $config.name }} {{ $options }};
+              {{- end }}
 
               echo "End Minio provisioning";
           env:

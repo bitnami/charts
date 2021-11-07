@@ -277,6 +277,14 @@ provisioning:
       quota:
         type: hard
         size: 256GiB
+      tags:
+        - prefix: test-prefix
+          rewind: 7d
+          versionId: "123"
+          versions: true
+          tags:
+            key1: value1
+
 
   config:
     - name: region
