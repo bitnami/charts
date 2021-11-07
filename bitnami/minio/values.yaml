@@ -203,7 +203,7 @@ provisioning:
   ## @param provisioning.enabled Enable Minio provisioning Job
   ##
   enabled: true
-  ## @param provisioning.schedulerName Name of the k8s scheduler (other than default) for kafka provisioning
+  ## @param provisioning.schedulerName Name of the k8s scheduler (other than default) for minio provisioning
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
   schedulerName: ""
@@ -220,13 +220,13 @@ provisioning:
   resources:
     ## Example:
     ## limits:
-    ##    cpu: 250m
-    ##    memory: 1Gi
+    ##    cpu: 100m
+    ##    memory: 64Mi
     limits: {}
     ## Examples:
     ## requests:
-    ##    cpu: 250m
-    ##    memory: 256Mi
+    ##    cpu: 200m
+    ##    memory: 128Mi
     requests: {}
 
 ## @param hostAliases MinIO&reg; pod host aliases
