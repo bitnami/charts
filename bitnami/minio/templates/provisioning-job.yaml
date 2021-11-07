@@ -102,16 +102,13 @@ spec:
               --with-lock
               {{ end }}
               ;
+
               {{ if and $bucket.lock $bucket.lock.enabled }}
               {{ range $retention := $bucket.lock.retentions }}
               mc retention set
               {{ $retention.type }}
               {{ $retention.period }}
-              {{ if $retention.prefix }}
-              {{ printf "%s/%s/%s" ($minioTarget) ($bucket.name) ($retention.prefix) }}
-              {{ else }}
-              {{ printf "%s/%s" ($minioTarget) ($bucket.name) }}
-              {{ end }}
+              {{ ternary (printf "%s/%s/%s" $minioTarget $bucket.name $retention.prefix) (printf "%s/%s" $minioTarget $bucket.name) (not (empty $retention.prefix)) }}
               {{ with $retention.versionId }}
               --version-id {{ . | quote }}
               {{ end }}
@@ -127,7 +124,45 @@ spec:
               ;
               {{ end }}
               {{ end }}
-              {{ end }}
+
+              mc ilm import {{ $minioTarget }}/{{ $bucket.name }} <<EOF
+              {
+                "Rules": [
+                  {{ range $idx, $lifecycle := $bucket.lifecycle }}
+                  {{ if not (eq $idx 0) }}
+                  ,
+                  {{ end }}
+                  {
+                    "ID": "{{ $lifecycle.id }}",
+                    "Status": "{{ ternary "Disabled" "Enabled" $lifecycle.disabled }}",
+                    {{ if $lifecycle.expiry }}
+                    "Expiration": {
+                      {{ with $lifecycle.expiry.date }}
+                      "Date": "{{ . }}"
+                      {{ end }}
+                      {{ with $lifecycle.expiry.days }}
+                      "Days": {{ . }}
+                      {{ end }}
+                    }
+                    {{ with $lifecycle.expiry.nonconcurrentDays }}
+                    ,
+                    "NoncurrentVersionExpiration": {
+                      "NoncurrentDays": {{ . }}
+                    }
+                    {{ end }}
+                    {{ with $lifecycle.prefix }}
+                    ,
+                    "Filter": {
+                      "Prefix": "{{ . }}"
+                    }
+                    {{ end }}
+                  }
+                  {{ end }}
+                  {{ end }}
+                  {{ end }}
+                ]
+              }
+              EOF;
 
               echo "End Minio provisioning";
           env:
