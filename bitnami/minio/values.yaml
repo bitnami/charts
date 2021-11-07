@@ -738,7 +738,7 @@ persistence:
   ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
   ##   GKE, AWS & OpenStack)
   ##
-  storageClass: local-path
+  storageClass: ""
   ## @param persistence.mountPath Data volume mount path
   ##
   mountPath: /data
@@ -748,7 +748,7 @@ persistence:
     - ReadWriteOnce
   ## @param persistence.size PVC Storage Request for MinIO&reg; data volume
   ##
-  size: 2Gi
+  size: 8Gi
   ## @param persistence.annotations Annotations for the PVC
   ##
   annotations: {}
@@ -764,7 +764,7 @@ persistence:
 volumePermissions:
   ## @param volumePermissions.enabled Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup`
   ##
-  enabled: true
+  enabled: false
   ## @param volumePermissions.image.registry Init container volume-permissions image registry
   ## @param volumePermissions.image.repository Init container volume-permissions image repository
   ## @param volumePermissions.image.tag Init container volume-permissions image tag (immutable tags are recommended)
