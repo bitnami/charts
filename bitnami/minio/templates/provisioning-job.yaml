@@ -70,7 +70,6 @@ spec:
 
               mc alias set {{ $minioTarget }} $MINIO_SCHEME://{{ include "common.names.fullname" . }}:{{ .Values.service.ports.api }} $MINIO_ROOT_USER $MINIO_ROOT_PASSWORD;
 
-              # Users
               {{- range $user := .Values.provisioning.users }}
               mc admin user add {{ $minioTarget }} {{ $user.username }} {{ $user.password }};
               {{- range $policy := $user.policies }}
@@ -80,7 +79,6 @@ spec:
               mc admin user {{ $userStatus }} {{ $minioTarget }} {{ $user.username }};
               {{- end }}
 
-              # Groups
               {{- range $group := .Values.provisioning.groups }}
               mc admin group add {{ $minioTarget }} {{ $group.name }} {{ join " " $group.members }};
               {{- range $policy := $group.policies }}
@@ -90,14 +88,12 @@ spec:
               mc admin group {{ $groupStatus }} {{ $minioTarget }} {{ $group.name }};
               {{- end }}
 
-              # Buckets
               {{- range $bucket := .Values.provisioning.buckets }}
               {{- $target := printf "%s/%s" $minioTarget $bucket.name }}
               {{- $region := ternary (printf "--region=%s" $bucket.region) ("") (not (empty $bucket.region)) }}
               {{- $withLock := ternary ("--with-lock") ("") (and $bucket.lock $bucket.lock.enabled) }}
               mc mb {{ $target }} --ignore-existing {{ $region }} {{ $withLock }};
 
-              # Retentions
               {{- if and $bucket.lock $bucket.lock.enabled }}
               {{- range $retention := $bucket.lock.retentions }}
               {{- $target := ternary (printf "%s/%s/%s" $minioTarget $bucket.name $retention.prefix) (printf "%s/%s" $minioTarget $bucket.name) (not (empty $retention.prefix)) }}
@@ -109,7 +105,6 @@ spec:
               {{- end }}
               {{- end }}
 
-              # Lifecycle
               {{- if $bucket.lifecycle }}
               mc ilm import {{ $minioTarget }}/{{ $bucket.name }} <<EOF
               {
@@ -150,12 +145,10 @@ spec:
               }
               EOF;
 
-              # Quotas
               {{- with $bucket.quota }}
               mc admin bucket quota {{ $minioTarget }}/{{ $bucket.name }} --{{ .type }} {{ .size }};
               {{- end }}
 
-              # Tags
               {{- range $tag := $bucket.tags }}
               {{- $rewind := ternary (printf "--rewind %s" $tag.rewind) ("") (not (empty $tag.rewind)) }}
               {{- $versionId := ternary (printf "--version-id %s" ($tag.versionId | quote)) ("") (not (empty $tag.versionId)) }}
@@ -170,7 +163,6 @@ spec:
               {{- end }}
               {{- end }}
 
-              # Config
               {{- range $config := .Values.provisioning.config }}
               {{- $options := list }}
               {{- range $name, $value := $config.options }}
