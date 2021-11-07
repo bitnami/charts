@@ -65,10 +65,10 @@ spec:
             # TODO: credentials files?
             - >-
               set -ex;
-              echo "Start Minio provisioning";
+              echo "Start Minio provisioning $MINIO_SCHEME $MINIO_ROOT_USER $MINIO_ROOT_PASSWORD";
 
-              mc alias set provisioning $MINIO_SCHEME://{{ include "common.names.fullname" . }}:{{ .Values.service.ports.api }} $MINIO_ROOT_USER $MINIO_ROOT_PASSWORD
-              mc alias list
+              mc alias set provisioning $MINIO_SCHEME://{{ include "common.names.fullname" . }}:{{ .Values.service.ports.api }} $MINIO_ROOT_USER $MINIO_ROOT_PASSWORD;
+              mc alias list;
 
               echo "End Minio provisioning";
           env:
