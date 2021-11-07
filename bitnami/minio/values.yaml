@@ -248,7 +248,7 @@ provisioning:
     - name: test-bucket
       region: us-east-1
       lock:
-        enabled: true
+        enabled: false
         retentions:
           - prefix: test-prefix
             type: compliance
