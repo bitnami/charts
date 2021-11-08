@@ -260,6 +260,7 @@ In this version the CRDs get updated from v1beta to v1 stable API.
 It also updates the operator image to the new major `v4.x.y` release.
 
 The `values.yaml` does not need changes when updating to this major version of the chart
+- CRDs were updated to the latest Grafana Operator 4.0.x release artifacts:
   - The apiVersion of CRDs was updated from `apiextensions.k8s.io/v1beta1` to `apiextensions.k8s.io/v1`.
   - Kubernetes 1.16 or higher is now required.
 ### To 1.0.0

@@ -9,7 +9,6 @@ dependencies:
       - bitnami-common
     version: 1.x.x
 description: Kubernetes Operator based on the Operator SDK for creating and managing Grafana instances and dashboards.
-engine: gotpl
 home: https://github.com/grafana-operator/grafana-operator
 icon: https://bitnami.com/assets/stacks/grafana/img/grafana-stack-220x234.png
 keywords:
