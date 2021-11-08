@@ -25,6 +25,12 @@ spec:
           annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.disasterRecovery.cronjob.podAnnotations "context" $) | nindent 12 }}
           {{- end }}
         spec:
+          {{- if .Values.disasterRecovery.cronjob.nodeSelector }}
+          nodeSelector: {{-  toYaml .Values.disasterRecovery.cronjob.nodeSelector | nindent 12  }}
+          {{- end }}
+          {{- if .Values.disasterRecovery.cronjob.tolerations }}
+          tolerations: {{- toYaml .Values.disasterRecovery.cronjob.tolerations | nindent 12 }}
+          {{- end }}
           {{- include "etcd.imagePullSecrets" . | nindent 10 }}
           restartPolicy: OnFailure
           {{- if .Values.podSecurityContext.enabled }}

@@ -37,7 +37,7 @@ spec:
         {{- end }}
     spec:
       {{- include "thanos.imagePullSecrets" . | nindent 6 }}
-      serviceAccount: {{ include "thanos.serviceaccount.name" (dict "component" "compactor" "context" $) }}
+      serviceAccount: {{ include "thanos.serviceAccount.name" (dict "component" "compactor" "context" $) }}
       {{- if .Values.compactor.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.compactor.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -58,11 +58,18 @@ spec:
       {{- if .Values.compactor.priorityClassName }}
       priorityClassName: {{ .Values.compactor.priorityClassName | quote }}
       {{- end }}
+      {{- if .Values.compactor.schedulerName }}
+      schedulerName: {{ .Values.compactor.schedulerName }}
+      {{- end }}
       {{- if .Values.compactor.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.compactor.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
-      {{- if and .Values.volumePermissions.enabled .Values.compactor.persistence.enabled }}
+      {{- if .Values.compactor.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.compactor.topologySpreadConstraints "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if or .Values.compactor.initContainers (and .Values.volumePermissions.enabled .Values.compactor.persistence.enabled) }}
       initContainers:
+        {{- if and .Values.volumePermissions.enabled .Values.compactor.persistence.enabled }}
         - name: init-chmod-data
           image: {{ include "thanos.volumePermissions.image" . }}
           imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
@@ -71,12 +78,16 @@ spec:
             - -c
             - |
               mkdir -p /data
-              chown -R "{{ .Values.compactor.podSecurityContext.runAsUser }}:{{ .Values.compactor.podSecurityContext.fsGroup }}" /data
+              chown -R "{{ .Values.compactor.containerSecurityContext.runAsUser }}:{{ .Values.compactor.podSecurityContext.fsGroup }}" /data
           securityContext:
             runAsUser: 0
           volumeMounts:
             - name: data
               mountPath: /data
+        {{- end }}
+        {{- if .Values.compactor.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.compactor.initContainers "context" $) | nindent 8 }}
+        {{- end }}
       {{- end }}
       containers:
         {{- if .Values.compactor.sidecars }}
@@ -88,7 +99,13 @@ spec:
           {{- if .Values.compactor.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.compactor.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
+          {{- if .Values.compactor.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.compactor.command "context" $) | nindent 12 }}
+          {{- end }}
           args:
+            {{- if .Values.compactor.args }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.compactor.args "context" $) | nindent 12 }}
+            {{- else }}
             - compact
             - --log.level={{ .Values.compactor.logLevel }}
             - --log.format={{ .Values.compactor.logFormat }}
@@ -103,35 +120,51 @@ spec:
             {{- .Values.compactor.extraFlags | toYaml | nindent 12 }}
             {{- end }}
             - --wait
+            {{- end }}
           {{- if .Values.compactor.extraEnvVars }}
-          env:
-            {{- toYaml .Values.compactor.extraEnvVars | nindent 12 }}
+          env: {{- include "common.tplvalues.render" (dict "value" .Values.compactor.extraEnvVars "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if or .Values.compactor.extraEnvVarsCM .Values.compactor.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.compactor.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.compactor.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.compactor.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.compactor.extraEnvVarsSecret "context" $) }}
+            {{- end }}
           {{- end }}
           ports:
             - name: http
               containerPort: 10902
               protocol: TCP
           {{- if .Values.compactor.livenessProbe.enabled }}
-          livenessProbe:
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.compactor.livenessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /-/healthy
               port: http
-            initialDelaySeconds: {{ .Values.compactor.livenessProbe.initialDelaySeconds }}
-            timeoutSeconds: {{ .Values.compactor.livenessProbe.timeoutSeconds }}
-            periodSeconds: {{ .Values.compactor.livenessProbe.periodSeconds }}
-            successThreshold: {{ .Values.compactor.livenessProbe.successThreshold }}
-            failureThreshold: {{ .Values.compactor.livenessProbe.failureThreshold }}
+          {{- else if .Values.compactor.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.compactor.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.compactor.readinessProbe.enabled }}
-          readinessProbe:
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.compactor.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /-/ready
               port: http
-            initialDelaySeconds: {{ .Values.compactor.readinessProbe.initialDelaySeconds }}
-            timeoutSeconds: {{ .Values.compactor.readinessProbe.timeoutSeconds }}
-            periodSeconds: {{ .Values.compactor.readinessProbe.periodSeconds }}
-            successThreshold: {{ .Values.compactor.readinessProbe.successThreshold }}
-            failureThreshold: {{ .Values.compactor.readinessProbe.failureThreshold }}
+          {{- else if .Values.compactor.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.compactor.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.compactor.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.compactor.startupProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /-/ready
+              port: http
+          {{- else if .Values.compactor.customReadinessProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.compactor.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.compactor.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.compactor.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.compactor.resources }}
           resources: {{- toYaml .Values.compactor.resources | nindent 12 }}

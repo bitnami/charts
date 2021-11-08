@@ -23,4 +23,4 @@ name: redis-cluster
 sources:
   - https://github.com/bitnami/bitnami-docker-redis
   - http://redis.io/
-version: 7.0.9
+version: 7.0.10

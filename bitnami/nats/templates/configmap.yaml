@@ -25,7 +25,7 @@ data:
       password: {{ $authPwd | quote }}
       {{- else if .Values.auth.token }}
       token: {{ .Values.auth.token | quote }}
-      {{- else if .Values.auth.users }}
+      {{- else if .Values.auth.usersCredentials }}
       users: [
         {{- range $user := .Values.auth.usersCredentials }}
           { user: {{ $user.username | quote }}, password: {{ $user.password | quote }} },

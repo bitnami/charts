@@ -35,6 +35,7 @@ spec:
       {{- end }}
     spec:
       {{- include "spark.imagePullSecrets" . | nindent 6 }}
+      serviceAccountName: {{ template "spark.serviceAccountName" . }}
       {{- if .Values.worker.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.worker.affinity "context" $) | nindent 8 }}
       {{- else }}

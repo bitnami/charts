@@ -60,7 +60,7 @@ spec:
       terminationGracePeriodSeconds: {{ .Values.aggregator.terminationGracePeriodSeconds }}
       containers:
         - name: fluentd
-          image: {{ include "fluentd.image" . }}
+          image: {{ include "fluentd.aggregator.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.aggregator.lifecycle }}
           lifecycle: {{- include "common.tplvalues.render" ( dict "value" .Values.aggregator.lifecycle "context" $ ) | nindent 12 }}
