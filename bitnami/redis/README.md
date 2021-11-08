@@ -94,7 +94,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ------------------------------------------------------- | --------------------- |
 | `image.registry`    | Redis&trade; image registry                             | `docker.io`           |
 | `image.repository`  | Redis&trade; image repository                           | `bitnami/redis`       |
-| `image.tag`         | Redis&trade; image tag (immutable tags are recommended) | `6.2.5-debian-10-r63` |
+| `image.tag`         | Redis&trade; image tag (immutable tags are recommended) | `6.2.6-debian-10-r21` |
 | `image.pullPolicy`  | Redis&trade; image pull policy                          | `IfNotPresent`        |
 | `image.pullSecrets` | Redis&trade; image pull secrets                         | `[]`                  |
 | `image.debug`       | Enable image debug mode                                 | `false`               |
@@ -171,6 +171,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `master.sidecars`                           | Add additional sidecar containers to the Redis&trade; master pod(s)                               | `[]`            |
 | `master.initContainers`                     | Add additional init containers to the Redis&trade; master pod(s)                                  | `[]`            |
 | `master.persistence.enabled`                | Enable persistence on Redis&trade; master nodes using Persistent Volume Claims                    | `true`          |
+| `master.persistence.medium`                 | Provide a medium for `emptyDir` volumes.                                                          | `""`            |
 | `master.persistence.path`                   | The path the volume will be mounted at on Redis&trade; master containers                          | `/data`         |
 | `master.persistence.subPath`                | The subdirectory of the volume to mount on Redis&trade; master containers                         | `""`            |
 | `master.persistence.storageClass`           | Persistent Volume storage class                                                                   | `""`            |
@@ -247,6 +248,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `replica.sidecars`                           | Add additional sidecar containers to the Redis&trade; replicas pod(s)                               | `[]`            |
 | `replica.initContainers`                     | Add additional init containers to the Redis&trade; replicas pod(s)                                  | `[]`            |
 | `replica.persistence.enabled`                | Enable persistence on Redis&trade; replicas nodes using Persistent Volume Claims                    | `true`          |
+| `replica.persistence.medium`                 | Provide a medium for `emptyDir` volumes.                                                            | `""`            |
 | `replica.persistence.path`                   | The path the volume will be mounted at on Redis&trade; replicas containers                          | `/data`         |
 | `replica.persistence.subPath`                | The subdirectory of the volume to mount on Redis&trade; replicas containers                         | `""`            |
 | `replica.persistence.storageClass`           | Persistent Volume storage class                                                                     | `""`            |
@@ -277,7 +279,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sentinel.enabled`                            | Use Redis&trade; Sentinel on Redis&trade; pods.                                                                                             | `false`                  |
 | `sentinel.image.registry`                     | Redis&trade; Sentinel image registry                                                                                                        | `docker.io`              |
 | `sentinel.image.repository`                   | Redis&trade; Sentinel image repository                                                                                                      | `bitnami/redis-sentinel` |
-| `sentinel.image.tag`                          | Redis&trade; Sentinel image tag (immutable tags are recommended)                                                                            | `6.2.5-debian-10-r63`    |
+| `sentinel.image.tag`                          | Redis&trade; Sentinel image tag (immutable tags are recommended)                                                                            | `6.2.6-debian-10-r20`    |
 | `sentinel.image.pullPolicy`                   | Redis&trade; Sentinel image pull policy                                                                                                     | `IfNotPresent`           |
 | `sentinel.image.pullSecrets`                  | Redis&trade; Sentinel image pull secrets                                                                                                    | `[]`                     |
 | `sentinel.image.debug`                        | Enable image debug mode                                                                                                                     | `false`                  |
@@ -331,34 +333,34 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Other Parameters
 
-| Name                                          | Description                                                                                                      | Value   |
-| --------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | ------- |
-| `networkPolicy.enabled`                       | Enable creation of NetworkPolicy resources                                                                       | `false` |
-| `networkPolicy.allowExternal`                 | Don't require client label for connections                                                                       | `true`  |
-| `networkPolicy.extraIngress`                  | Add extra ingress rules to the NetworkPolicy                                                                     | `[]`    |
-| `networkPolicy.extraEgress`                   | Add extra ingress rules to the NetworkPolicy                                                                     | `[]`    |
-| `networkPolicy.ingressNSMatchLabels`          | Labels to match to allow traffic from other namespaces                                                           | `{}`    |
-| `networkPolicy.ingressNSPodMatchLabels`       | Pod labels to match to allow traffic from other namespaces                                                       | `{}`    |
-| `podSecurityPolicy.create`                    | Specifies whether a PodSecurityPolicy should be created (set `podSecurityPolicy.enabled` to `true` to enable it) | `false` |
-| `podSecurityPolicy.enabled`                   | Enable PodSecurityPolicy                                                                                         | `false` |
-| `rbac.create`                                 | Specifies whether RBAC resources should be created                                                               | `false` |
-| `rbac.rules`                                  | Custom RBAC rules to set                                                                                         | `[]`    |
-| `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                             | `true`  |
-| `serviceAccount.name`                         | The name of the ServiceAccount to use.                                                                           | `""`    |
-| `serviceAccount.automountServiceAccountToken` | Whether to auto mount the service account token                                                                  | `true`  |
-| `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                                                             | `{}`    |
-| `pdb.create`                                  | Specifies whether a PodDisruptionBudget should be created                                                        | `false` |
-| `pdb.minAvailable`                            | Min number of pods that must still be available after the eviction                                               | `1`     |
-| `pdb.maxUnavailable`                          | Max number of pods that can be unavailable after the eviction                                                    | `""`    |
-| `tls.enabled`                                 | Enable TLS traffic                                                                                               | `false` |
-| `tls.authClients`                             | Require clients to authenticate                                                                                  | `true`  |
-| `tls.autoGenerated`                           | Enable autogenerated certificates                                                                                | `false` |
-| `tls.existingSecret`                          | The name of the existing secret that contains the TLS certificates                                               | `""`    |
-| `tls.certificatesSecret`                      | DEPRECATED. Use existingSecret instead.                                                                          | `""`    |
-| `tls.certFilename`                            | Certificate filename                                                                                             | `""`    |
-| `tls.certKeyFilename`                         | Certificate Key filename                                                                                         | `""`    |
-| `tls.certCAFilename`                          | CA Certificate filename                                                                                          | `""`    |
-| `tls.dhParamsFilename`                        | File containing DH params (in order to support DH based ciphers)                                                 | `""`    |
+| Name                                          | Description                                                                                                                                 | Value   |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `networkPolicy.enabled`                       | Enable creation of NetworkPolicy resources                                                                                                  | `false` |
+| `networkPolicy.allowExternal`                 | Don't require client label for connections                                                                                                  | `true`  |
+| `networkPolicy.extraIngress`                  | Add extra ingress rules to the NetworkPolicy                                                                                                | `[]`    |
+| `networkPolicy.extraEgress`                   | Add extra ingress rules to the NetworkPolicy                                                                                                | `[]`    |
+| `networkPolicy.ingressNSMatchLabels`          | Labels to match to allow traffic from other namespaces                                                                                      | `{}`    |
+| `networkPolicy.ingressNSPodMatchLabels`       | Pod labels to match to allow traffic from other namespaces                                                                                  | `{}`    |
+| `podSecurityPolicy.create`                    | Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later | `false` |
+| `podSecurityPolicy.enabled`                   | Enable PodSecurityPolicy's RBAC rules                                                                                                       | `false` |
+| `rbac.create`                                 | Specifies whether RBAC resources should be created                                                                                          | `false` |
+| `rbac.rules`                                  | Custom RBAC rules to set                                                                                                                    | `[]`    |
+| `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                                        | `true`  |
+| `serviceAccount.name`                         | The name of the ServiceAccount to use.                                                                                                      | `""`    |
+| `serviceAccount.automountServiceAccountToken` | Whether to auto mount the service account token                                                                                             | `true`  |
+| `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                                                                                        | `{}`    |
+| `pdb.create`                                  | Specifies whether a PodDisruptionBudget should be created                                                                                   | `false` |
+| `pdb.minAvailable`                            | Min number of pods that must still be available after the eviction                                                                          | `1`     |
+| `pdb.maxUnavailable`                          | Max number of pods that can be unavailable after the eviction                                                                               | `""`    |
+| `tls.enabled`                                 | Enable TLS traffic                                                                                                                          | `false` |
+| `tls.authClients`                             | Require clients to authenticate                                                                                                             | `true`  |
+| `tls.autoGenerated`                           | Enable autogenerated certificates                                                                                                           | `false` |
+| `tls.existingSecret`                          | The name of the existing secret that contains the TLS certificates                                                                          | `""`    |
+| `tls.certificatesSecret`                      | DEPRECATED. Use existingSecret instead.                                                                                                     | `""`    |
+| `tls.certFilename`                            | Certificate filename                                                                                                                        | `""`    |
+| `tls.certKeyFilename`                         | Certificate Key filename                                                                                                                    | `""`    |
+| `tls.certCAFilename`                          | CA Certificate filename                                                                                                                     | `""`    |
+| `tls.dhParamsFilename`                        | File containing DH params (in order to support DH based ciphers)                                                                            | `""`    |
 
 
 ### Metrics Parameters
@@ -368,7 +370,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                            | Start a sidecar prometheus exporter to expose Redis&trade; metrics                               | `false`                  |
 | `metrics.image.registry`                     | Redis&trade; Exporter image registry                                                             | `docker.io`              |
 | `metrics.image.repository`                   | Redis&trade; Exporter image repository                                                           | `bitnami/redis-exporter` |
-| `metrics.image.tag`                          | Redis&trade; Redis&trade; Exporter image tag (immutable tags are recommended)                    | `1.27.1-debian-10-r4`    |
+| `metrics.image.tag`                          | Redis&trade; Redis&trade; Exporter image tag (immutable tags are recommended)                    | `1.29.0-debian-10-r6`    |
 | `metrics.image.pullPolicy`                   | Redis&trade; Exporter image pull policy                                                          | `IfNotPresent`           |
 | `metrics.image.pullSecrets`                  | Redis&trade; Exporter image pull secrets                                                         | `[]`                     |
 | `metrics.redisTargetHost`                    | A way to specify an alternative Redis&trade; hostname                                            | `localhost`              |
@@ -408,8 +410,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r203`     |
-| `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `Always`                |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r232`     |
+| `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                    |
 | `volumePermissions.resources.requests`                 | The requested resources for the init container                                                  | `{}`                    |
@@ -417,8 +419,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sysctl.enabled`                                       | Enable init container to modify Kernel settings                                                 | `false`                 |
 | `sysctl.image.registry`                                | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `sysctl.image.repository`                              | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `sysctl.image.tag`                                     | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r203`     |
-| `sysctl.image.pullPolicy`                              | Bitnami Shell image pull policy                                                                 | `Always`                |
+| `sysctl.image.tag`                                     | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r232`     |
+| `sysctl.image.pullPolicy`                              | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `sysctl.image.pullSecrets`                             | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `sysctl.command`                                       | Override default init-sysctl container command (useful when using custom images)                | `[]`                    |
 | `sysctl.mountHostSys`                                  | Mount the host `/sys` folder to `/host-sys`                                                     | `false`                 |

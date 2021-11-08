@@ -51,7 +51,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/moodle
-  tag: 3.11.3-debian-10-r0
+  tag: 3.11.3-debian-10-r44
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -170,6 +170,20 @@ persistence:
   ## @param persistence.enabled Enable persistence using PVC
   ##
   enabled: true
+  ## @param persistence.customStorageClass Create a custom storage class
+  ## Requires persistence.enabled: true
+  ## Requires persistence.storageClass: name
+  ## ref: https://kubernetes.io/docs/concepts/storage/storage-classes/
+  ## E.g.
+  ## provisioner: efs.csi.aws.com
+  ##   parameters:
+  ##     provisioningMode: efs-ap
+  ##     fileSystemId: fs-12345678
+  ##     directoryPerms: "700"
+  ##     gidRangeStart: "1000" # optional
+  ##     gidRangeEnd: "2000" # optional
+  ##
+  customStorageClass: {}
   ## @param persistence.storageClass PVC Storage Class for Moodle
   ## If defined, storageClassName: <storageClass>
   ## If set to "-", storageClassName: "", which disables dynamic provisioning
@@ -180,7 +194,8 @@ persistence:
   storageClass: ""
   ## @param persistence.accessMode PVC Access Mode for Moodle
   ## Requires persistence.enabled: true
-  ## If defined, PVC must be created manually before volume will be bound
+  ## If defined, and no customStorageClass is defined, then
+  ## PVC must be created manually before volume will be bound
   ##
   accessMode: ReadWriteOnce
   ## @param persistence.size PVC Storage Request for Moodle
@@ -368,9 +383,10 @@ ingress:
   ## @param ingress.enabled Set to true to enable ingress record generation
   ##
   enabled: false
-  ## @param ingress.certManager Set this to true in order to add the corresponding annotations for cert-manager
+  ## DEPRECATED: Use ingress.annotations instead of ingress.certManager
+  ## certManager: false
   ##
-  certManager: false
+
   ## @param ingress.pathType Ingress Path type
   ##
   pathType: ImplementationSpecific
@@ -383,11 +399,16 @@ ingress:
   ## @param ingress.path The Path to Moodle&trade;. You may need to set this to '/*' in order to use this with ALB ingress controllers.
   ##
   path: /
-  ## @param ingress.annotations Map of Ingress annotations
+  ## @param ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
   ## For a full list of possible ingress annotations, please see
   ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+  ## Use this parameter to set the required annotations for cert-manager, see
+  ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
   ##
-  ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+  ## e.g:
+  ## annotations:
+  ##   kubernetes.io/ingress.class: nginx
+  ##   cert-manager.io/cluster-issuer: cluster-issuer-name
   ##
   annotations: {}
   ## @param ingress.tls Enable TLS configuration for the hostname defined at ingress.hostname parameter
@@ -532,8 +553,8 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r190
-    pullPolicy: Always
+    tag: 10-debian-10-r233
+    pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -576,7 +597,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.10.0-debian-10-r44
+    tag: 0.10.1-debian-10-r36
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -663,7 +684,7 @@ certificates:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r190
+    tag: 10-debian-10-r233
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images

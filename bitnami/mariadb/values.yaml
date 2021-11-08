@@ -70,7 +70,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mariadb
-  tag: 10.5.12-debian-10-r32
+  tag: 10.5.12-debian-10-r78
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -295,6 +295,22 @@ primary:
     ##    cpu: 100m
     ##    memory: 256Mi
     requests: {}
+  ## Configure extra options for startup probe
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
+  ## @param primary.startupProbe.enabled Enable startupProbe
+  ## @param primary.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param primary.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param primary.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param primary.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param primary.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 120
+    periodSeconds: 15
+    timeoutSeconds: 5
+    failureThreshold: 10
+    successThreshold: 1
   ## Configure extra options for liveness probe
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param primary.livenessProbe.enabled Enable livenessProbe
@@ -327,6 +343,9 @@ primary:
     timeoutSeconds: 1
     failureThreshold: 3
     successThreshold: 1
+  ## @param primary.customStartupProbe Override default startup probe for MariaDB primary containers
+  ##
+  customStartupProbe: {}
   ## @param primary.customLivenessProbe Override default liveness probe for MariaDB primary containers
   ##
   customLivenessProbe: {}
@@ -614,6 +633,22 @@ secondary:
     ##    cpu: 100m
     ##    memory: 256Mi
     requests: {}
+  ## Configure extra options for startup probe
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
+  ## @param secondary.startupProbe.enabled Enable startupProbe
+  ## @param secondary.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param secondary.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param secondary.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param secondary.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param secondary.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 120
+    periodSeconds: 15
+    timeoutSeconds: 5
+    failureThreshold: 10
+    successThreshold: 1
   ## Configure extra options for liveness probe
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param secondary.livenessProbe.enabled Enable livenessProbe
@@ -646,6 +681,9 @@ secondary:
     timeoutSeconds: 1
     failureThreshold: 3
     successThreshold: 1
+  ## @param secondary.customStartupProbe Override default startup probe for MariaDB primary containers
+  ##
+  customStartupProbe: {}
   ## @param secondary.customLivenessProbe Override default liveness probe for MariaDB secondary containers
   ##
   customLivenessProbe: {}
@@ -823,8 +861,8 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r185
-    pullPolicy: Always
+    tag: 10-debian-10-r242
+    pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
     ## Example:
@@ -856,7 +894,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mysqld-exporter
-    tag: 0.13.0-debian-10-r88
+    tag: 0.13.0-debian-10-r145
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/

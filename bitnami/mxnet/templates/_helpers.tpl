@@ -123,4 +123,5 @@ mxnet: missing-extra-volume-mounts
 {{- define "mxnet.checkRollingTags" -}}
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- include "common.warnings.rollingTag" .Values.git }}
+{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
 {{- end -}}

@@ -74,7 +74,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------ | ------------------------------------------------------------- | --------------------- |
 | `image.registry`               | Solr image registry                                           | `docker.io`           |
 | `image.repository`             | Solr image repository                                         | `bitnami/solr`        |
-| `image.tag`                    | Solr image tag (immutable tags are recommended)               | `8.9.0-debian-10-r88` |
+| `image.tag`                    | Solr image tag (immutable tags are recommended)               | `8.10.1-debian-10-r8` |
 | `image.pullPolicy`             | image pull policy                                             | `IfNotPresent`        |
 | `image.pullSecrets`            | Specify docker-registry secret names as an array              | `[]`                  |
 | `coreName`                     | Solr core name to be created                                  | `my-core`             |
@@ -147,8 +147,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                               | Enable init container that changes volume permissions in the registry (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
 | `volumePermissions.image.registry`                        | Init container volume-permissions image registry                                                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`                      | Init container volume-permissions image name                                                                                                        | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                             | Init container volume-permissions image tag                                                                                                         | `10-debian-10-r202`     |
-| `volumePermissions.image.pullPolicy`                      | Init container volume-permissions image pull policy                                                                                                 | `Always`                |
+| `volumePermissions.image.tag`                             | Init container volume-permissions image tag                                                                                                         | `10-debian-10-r233`     |
+| `volumePermissions.image.pullPolicy`                      | Init container volume-permissions image pull policy                                                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                                                    | `[]`                    |
 | `volumePermissions.resources.limits`                      | The resources limits for the container                                                                                                              | `{}`                    |
 | `volumePermissions.resources.requests`                    | The requested resources for the container                                                                                                           | `{}`                    |
@@ -162,6 +162,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.size`                                        | Size of data volume                                                                                                                                 | `8Gi`                   |
 | `persistence.annotations`                                 | Persistence annotations for Solr                                                                                                                    | `{}`                    |
 | `persistence.mountPath`                                   | Persistence mount path for Solr                                                                                                                     | `/bitnami/solr`         |
+| `persistence.extraVolumeClaimTemplates`                   | Additional pod instance specific volumes                                                                                                            | `[]`                    |
 | `serviceAccount.create`                                   | Specifies whether a ServiceAccount should be created                                                                                                | `false`                 |
 | `serviceAccount.name`                                     | The name of the ServiceAccount to create                                                                                                            | `""`                    |
 
@@ -182,28 +183,27 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Solr Traffic Exposure Parameters
 
-| Name                      | Description                                                                                           | Value                    |
-| ------------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------ |
-| `service.type`            | Service type for default solr service                                                                 | `ClusterIP`              |
-| `service.port`            | HTTP Port                                                                                             | `8983`                   |
-| `service.annotations`     | Annotations for solr service                                                                          | `{}`                     |
-| `service.labels`          | Additional labels for solr service                                                                    | `{}`                     |
-| `service.loadBalancerIP`  | Load balancer IP for the Solr Service (optional, cloud specific)                                      | `""`                     |
-| `service.nodePorts.http`  | Node ports for the HTTP service                                                                       | `""`                     |
-| `service.nodePorts.https` | Node ports for the HTTPS service                                                                      | `""`                     |
-| `ingress.enabled`         | Enable ingress controller resource                                                                    | `false`                  |
-| `ingress.certManager`     | Set this to true in order to add the corresponding annotations for cert-manager                       | `false`                  |
-| `ingress.pathType`        | Path type for the ingress resource                                                                    | `ImplementationSpecific` |
-| `ingress.apiVersion`      | Override API Version (automatically detected if not set)                                              | `""`                     |
-| `ingress.hostname`        | Default host for the ingress resource                                                                 | `solr.local`             |
-| `ingress.path`            | The Path to Solr. You may need to set this to '/*' in order to use this with ALB ingress controllers. | `/`                      |
-| `ingress.annotations`     | Ingress annotations                                                                                   | `{}`                     |
-| `ingress.tls`             | Enable TLS configuration for the hostname defined at ingress.hostname parameter                       | `false`                  |
-| `ingress.existingSecret`  | The name of an existing Secret in the same namespase to use on the generated Ingress resource         | `""`                     |
-| `ingress.extraHosts`      | The list of additional hostnames to be covered with this ingress record.                              | `[]`                     |
-| `ingress.extraPaths`      | Any additional arbitrary paths that may need to be added to the ingress under the main host.          | `[]`                     |
-| `ingress.extraTls`        | The tls configuration for additional hostnames to be covered with this ingress record.                | `[]`                     |
-| `ingress.secrets`         | If you're providing your own certificates, please use this to add the certificates as secrets         | `[]`                     |
+| Name                      | Description                                                                                                                      | Value                    |
+| ------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.type`            | Service type for default solr service                                                                                            | `ClusterIP`              |
+| `service.port`            | HTTP Port                                                                                                                        | `8983`                   |
+| `service.annotations`     | Annotations for solr service                                                                                                     | `{}`                     |
+| `service.labels`          | Additional labels for solr service                                                                                               | `{}`                     |
+| `service.loadBalancerIP`  | Load balancer IP for the Solr Service (optional, cloud specific)                                                                 | `""`                     |
+| `service.nodePorts.http`  | Node ports for the HTTP service                                                                                                  | `""`                     |
+| `service.nodePorts.https` | Node ports for the HTTPS service                                                                                                 | `""`                     |
+| `ingress.enabled`         | Enable ingress controller resource                                                                                               | `false`                  |
+| `ingress.pathType`        | Path type for the ingress resource                                                                                               | `ImplementationSpecific` |
+| `ingress.apiVersion`      | Override API Version (automatically detected if not set)                                                                         | `""`                     |
+| `ingress.hostname`        | Default host for the ingress resource                                                                                            | `solr.local`             |
+| `ingress.path`            | The Path to Solr. You may need to set this to '/*' in order to use this with ALB ingress controllers.                            | `/`                      |
+| `ingress.annotations`     | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.tls`             | Enable TLS configuration for the hostname defined at ingress.hostname parameter                                                  | `false`                  |
+| `ingress.existingSecret`  | The name of an existing Secret in the same namespase to use on the generated Ingress resource                                    | `""`                     |
+| `ingress.extraHosts`      | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
+| `ingress.extraPaths`      | Any additional arbitrary paths that may need to be added to the ingress under the main host.                                     | `[]`                     |
+| `ingress.extraTls`        | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
+| `ingress.secrets`         | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
 
 
 ### Zookeeper parameters

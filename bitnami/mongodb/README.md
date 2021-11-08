@@ -139,6 +139,7 @@ Refer to the [chart documentation for more information on each of these architec
 | `extraEnvVarsCM`                                 | Name of existing ConfigMap containing extra env vars                                                                          | `""`                   |
 | `extraEnvVarsSecret`                             | Name of existing Secret containing extra env vars (in case of sensitive data)                                                 | `""`                   |
 
+
 ### MongoDB&reg; statefulset parameters
 
 | Name                                    | Description                                                                                            | Value           |
@@ -216,7 +217,7 @@ Refer to the [chart documentation for more information on each of these architec
 | `externalAccess.autoDiscovery.enabled`                   | Enable using an init container to auto-detect external IPs by querying the K8s API                                                            | `false`                |
 | `externalAccess.autoDiscovery.image.registry`            | Init container auto-discovery image registry                                                                                                  | `docker.io`            |
 | `externalAccess.autoDiscovery.image.repository`          | Init container auto-discovery image repository                                                                                                | `bitnami/kubectl`      |
-| `externalAccess.autoDiscovery.image.tag`                 | Init container auto-discovery image tag (immutable tags are recommended)                                                                      | `1.19.15-debian-10-r2` |
+| `externalAccess.autoDiscovery.image.tag`                 | Init container auto-discovery image tag (immutable tags are recommended)                                                                      | `1.19.16-debian-10-r4` |
 | `externalAccess.autoDiscovery.image.pullPolicy`          | Init container auto-discovery image pull policy                                                                                               | `IfNotPresent`         |
 | `externalAccess.autoDiscovery.image.pullSecrets`         | Init container auto-discovery image pull secrets                                                                                              | `[]`                   |
 | `externalAccess.autoDiscovery.resources.limits`          | Init container auto-discovery resource limits                                                                                                 | `{}`                   |
@@ -257,17 +258,17 @@ Refer to the [chart documentation for more information on each of these architec
 
 ### RBAC parameters
 
-| Name                                         | Description                                                                          | Value   |
-| -------------------------------------------- | ------------------------------------------------------------------------------------ | ------- |
-| `serviceAccount.create`                      | Enable creation of ServiceAccount for MongoDB&reg; pods                              | `true`  |
-| `serviceAccount.name`                        | Name of the created serviceAccount                                                   | `""`    |
-| `serviceAccount.annotations`                 | Additional Service Account annotations                                               | `{}`    |
-| `rbac.create`                                | Whether to create & use RBAC resources or not                                        | `false` |
-| `rbac.role.rules`                            | Custom rules to create following the role specification                              | `[]`    |
-| `podSecurityPolicy.create`                   | Whether to create & use PSP resource or not (Note: `rbac.create` needs to be `true`) | `false` |
-| `podSecurityPolicy.allowPrivilegeEscalation` | Enable privilege escalation                                                          | `false` |
-| `podSecurityPolicy.privileged`               | Allow privileged                                                                     | `false` |
-| `podSecurityPolicy.spec`                     | Specify the full spec to use for Pod Security Policy                                 | `{}`    |
+| Name                                         | Description                                                                                                                                 | Value   |
+| -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `serviceAccount.create`                      | Enable creation of ServiceAccount for MongoDB&reg; pods                                                                                     | `true`  |
+| `serviceAccount.name`                        | Name of the created serviceAccount                                                                                                          | `""`    |
+| `serviceAccount.annotations`                 | Additional Service Account annotations                                                                                                      | `{}`    |
+| `rbac.create`                                | Whether to create & use RBAC resources or not                                                                                               | `false` |
+| `rbac.role.rules`                            | Custom rules to create following the role specification                                                                                     | `[]`    |
+| `podSecurityPolicy.create`                   | Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later | `false` |
+| `podSecurityPolicy.allowPrivilegeEscalation` | Enable privilege escalation                                                                                                                 | `false` |
+| `podSecurityPolicy.privileged`               | Allow privileged                                                                                                                            | `false` |
+| `podSecurityPolicy.spec`                     | Specify the full spec to use for Pod Security Policy                                                                                        | `{}`    |
 
 
 ### Volume Permissions parameters
@@ -277,8 +278,8 @@ Refer to the [chart documentation for more information on each of these architec
 | `volumePermissions.enabled`                   | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`            | Init container volume-permissions image registry                                                                     | `docker.io`             |
 | `volumePermissions.image.repository`          | Init container volume-permissions image repository                                                                   | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Init container volume-permissions image tag (immutable tags are recommended)                                         | `10-debian-10-r197`     |
-| `volumePermissions.image.pullPolicy`          | Init container volume-permissions image pull policy                                                                  | `Always`                |
+| `volumePermissions.image.tag`                 | Init container volume-permissions image tag (immutable tags are recommended)                                         | `10-debian-10-r239`     |
+| `volumePermissions.image.pullPolicy`          | Init container volume-permissions image pull policy                                                                  | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                                                     | `[]`                    |
 | `volumePermissions.resources.limits`          | Init container volume-permissions resource limits                                                                    | `{}`                    |
 | `volumePermissions.resources.requests`        | Init container volume-permissions resource requests                                                                  | `{}`                    |
@@ -415,7 +416,7 @@ Refer to the [chart documentation for more information on each of these architec
 | `metrics.enabled`                            | Enable using a sidecar Prometheus exporter                                                                            | `false`                    |
 | `metrics.image.registry`                     | MongoDB&reg; Prometheus exporter image registry                                                                       | `docker.io`                |
 | `metrics.image.repository`                   | MongoDB&reg; Prometheus exporter image repository                                                                     | `bitnami/mongodb-exporter` |
-| `metrics.image.tag`                          | MongoDB&reg; Prometheus exporter image tag (immutable tags are recommended)                                           | `0.11.2-debian-10-r284`    |
+| `metrics.image.tag`                          | MongoDB&reg; Prometheus exporter image tag (immutable tags are recommended)                                           | `0.11.2-debian-10-r327`    |
 | `metrics.image.pullPolicy`                   | MongoDB&reg; Prometheus exporter image pull policy                                                                    | `IfNotPresent`             |
 | `metrics.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                      | `[]`                       |
 | `metrics.username`                           | String with username for the metrics exporter                                                                         | `""`                       |

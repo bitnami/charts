@@ -76,7 +76,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ------------------------------------------------ | --------------------- |
 | `image.registry`    | Ghost image registry                             | `docker.io`           |
 | `image.repository`  | Ghost image repository                           | `bitnami/ghost`       |
-| `image.tag`         | Ghost image tag (immutable tags are recommended) | `4.16.0-debian-10-r0` |
+| `image.tag`         | Ghost image tag (immutable tags are recommended) | `4.21.0-debian-10-r0` |
 | `image.pullPolicy`  | Ghost image pull policy                          | `IfNotPresent`        |
 | `image.pullSecrets` | Ghost image pull secrets                         | `[]`                  |
 | `image.debug`       | Enable image debug mode                          | `false`               |
@@ -116,6 +116,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `replicaCount`                          | Number of Ghost replicas to deploy                                                        | `1`             |
 | `updateStrategy.type`                   | Ghost deployment strategy type                                                            | `RollingUpdate` |
 | `priorityClassName`                     | Ghost pod priority class name                                                             | `""`            |
+| `schedulerName`                         | Name of the k8s scheduler (other than default)                                            | `""`            |
+| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment                                            | `[]`            |
 | `hostAliases`                           | Ghost pod host aliases                                                                    | `[]`            |
 | `extraVolumes`                          | Optionally specify extra list of additional volumes for Ghost pods                        | `[]`            |
 | `extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for Ghost container(s)           | `[]`            |
@@ -141,6 +143,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `containerSecurityContext.enabled`      | Enabled Ghost containers' Security Context                                                | `true`          |
 | `containerSecurityContext.runAsUser`    | Set Ghost container's Security Context runAsUser                                          | `1001`          |
 | `containerSecurityContext.runAsNonRoot` | Set Ghost container's Security Context runAsNonRoot                                       | `true`          |
+| `startupProbe.enabled`                  | Enable startupProbe                                                                       | `false`         |
+| `startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                    | `120`           |
+| `startupProbe.periodSeconds`            | Period seconds for startupProbe                                                           | `10`            |
+| `startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                          | `5`             |
+| `startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                        | `6`             |
+| `startupProbe.successThreshold`         | Success threshold for startupProbe                                                        | `1`             |
 | `livenessProbe.enabled`                 | Enable livenessProbe                                                                      | `true`          |
 | `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                   | `120`           |
 | `livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                          | `10`            |
@@ -159,32 +167,34 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Traffic Exposure Parameters
 
-| Name                               | Description                                                                                           | Value                    |
-| ---------------------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------ |
-| `service.type`                     | Ghost service type                                                                                    | `LoadBalancer`           |
-| `service.port`                     | Ghost service HTTP port                                                                               | `80`                     |
-| `service.httpsPort`                | Ghost service HTTPS port                                                                              | `443`                    |
-| `service.nodePorts.http`           | Node port for HTTP                                                                                    | `""`                     |
-| `service.nodePorts.https`          | Node port for HTTPS                                                                                   | `""`                     |
-| `service.clusterIP`                | Ghost service Cluster IP                                                                              | `""`                     |
-| `service.loadBalancerIP`           | Ghost service Load Balancer IP                                                                        | `""`                     |
-| `service.loadBalancerSourceRanges` | Ghost service Load Balancer sources                                                                   | `[]`                     |
-| `service.externalTrafficPolicy`    | Ghost service external traffic policy                                                                 | `Cluster`                |
-| `service.annotations`              | Additional custom annotations for Ghost service                                                       | `{}`                     |
-| `service.extraPorts`               | Extra port to expose on Ghost service                                                                 | `[]`                     |
-| `ingress.enabled`                  | Enable ingress record generation for Ghost                                                            | `false`                  |
-| `ingress.pathType`                 | Ingress path type                                                                                     | `ImplementationSpecific` |
-| `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                         | `""`                     |
-| `ingress.hostname`                 | Default host for the ingress record                                                                   | `ghost.local`            |
-| `ingress.path`                     | Default path for the ingress record                                                                   | `/`                      |
-| `ingress.annotations`              | Additional custom annotations for the ingress record                                                  | `{}`                     |
-| `ingress.tls`                      | Enable TLS configuration for the host defined at `ingress.hostname` parameter                         | `false`                  |
-| `ingress.certManager`              | Add the corresponding annotations for cert-manager integration                                        | `false`                  |
-| `ingress.selfSigned`               | Create a TLS secret for this ingress record using self-signed certificates generated by Helm          | `false`                  |
-| `ingress.extraHosts`               | An array with additional hostname(s) to be covered with the ingress record                            | `[]`                     |
-| `ingress.extraPaths`               | An array with additional arbitrary paths that may need to be added to the ingress under the main host | `[]`                     |
-| `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                   | `[]`                     |
-| `ingress.secrets`                  | Custom TLS certificates as secrets                                                                    | `[]`                     |
+| Name                               | Description                                                                                                                      | Value                    |
+| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.type`                     | Ghost service type                                                                                                               | `LoadBalancer`           |
+| `service.ports.http`               | Ghost service HTTP port                                                                                                          | `80`                     |
+| `service.ports.https`              | Ghost service HTTPS port                                                                                                         | `443`                    |
+| `service.nodePorts.http`           | Node port for HTTP                                                                                                               | `""`                     |
+| `service.nodePorts.https`          | Node port for HTTPS                                                                                                              | `""`                     |
+| `service.clusterIP`                | Ghost service Cluster IP                                                                                                         | `""`                     |
+| `service.loadBalancerIP`           | Ghost service Load Balancer IP                                                                                                   | `""`                     |
+| `service.loadBalancerSourceRanges` | Ghost service Load Balancer sources                                                                                              | `[]`                     |
+| `service.externalTrafficPolicy`    | Ghost service external traffic policy                                                                                            | `Cluster`                |
+| `service.annotations`              | Additional custom annotations for Ghost service                                                                                  | `{}`                     |
+| `service.extraPorts`               | Extra port to expose on Ghost service                                                                                            | `[]`                     |
+| `service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                             | `None`                   |
+| `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
+| `ingress.enabled`                  | Enable ingress record generation for Ghost                                                                                       | `false`                  |
+| `ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
+| `ingress.hostname`                 | Default host for the ingress record                                                                                              | `ghost.local`            |
+| `ingress.path`                     | Default path for the ingress record                                                                                              | `/`                      |
+| `ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.tls`                      | Enable TLS configuration for the host defined at `ingress.hostname` parameter                                                    | `false`                  |
+| `ingress.selfSigned`               | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
+| `ingress.extraHosts`               | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                     |
+| `ingress.extraPaths`               | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |
+| `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
+| `ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
+| `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
 
 
 ### Persistence Parameters
@@ -200,7 +210,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                   | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`            | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`          | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r202`     |
+| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r240`     |
 | `volumePermissions.image.pullPolicy`          | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`         | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`          | The resources limits for the init container                                                     | `{}`                    |
@@ -340,6 +350,17 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 15.0.0
+
+This major release renames several values in this chart and adds missing features, in order to be inline with the rest of assets in the Bitnami charts repository.
+
+Affected values:
+
+- `service.port` was deprecated, we recommend using `service.ports.http` instead.
+- `service.httpsPort` was deprecated, we recommend using `service.ports.https` instead.
+
+Additionally, updates the MariaDB subchart to it newest major, 10.0.0, which contains similar changes.
 
 ### To 14.0.0
 

@@ -1,3 +1,9 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
+** Please be patient while the chart is being deployed **
+
 {{- if or (not .Values.elasticsearch.hosts) (not .Values.elasticsearch.port) -}}
 ######################################################################################################
 ### ERROR: You did not provide the Elasticsearch external host or port in your 'helm install' call ###

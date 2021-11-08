@@ -23,6 +23,14 @@ spec:
     {{- if .Values.hub.networkPolicy.extraIngress }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.hub.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
     {{- end }}
+    {{- if .Values.hub.metrics.serviceMonitor.enabled }}
+    # Prometheus pods with label "app.kubernetes.io/component: prometheus" --> Hub
+    - from:
+      - namespaceSelector: {}
+        podSelector:
+          matchLabels:
+            app.kubernetes.io/component: prometheus
+    {{- end }}
     # Pods with label "hub.jupyter.org/network-access-hub" --> Hub
     - ports:
         - port: {{ .Values.hub.containerPort }}
