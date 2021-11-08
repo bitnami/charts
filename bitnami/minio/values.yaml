@@ -228,14 +228,12 @@ provisioning:
     ##    cpu: 200m
     ##    memory: 128Mi
     requests: {}
-
   users:
     - username: test-username
       password: test-password
       policies:
         - readwrite
       disabled: true
-
   groups:
     - name: test-group
       members:
@@ -243,20 +241,10 @@ provisioning:
       policies:
         - readwrite
       disabled: true
-
   buckets:
     - name: test-bucket
       region: us-east-1
-      lock:
-        enabled: false
-        retentions:
-          - prefix: test-prefix
-            type: compliance
-            period: 30d
-            versionId: "123"
-            recursive: true
-            versions: true
-            default: true
+      withLock: false
       lifecycle:
         - id: test-id
           prefix: test-prefix
@@ -264,14 +252,6 @@ provisioning:
             days: 7
             # Days !OR! date
             # date: "2021-11-11T00:00:00Z"
-            nonconcurrentDays: 3
-          disabled: true
-        - id: test-id
-          prefix: test-prefix
-          expiry:
-            # days: 7
-            # Days !OR! date
-            date: "2021-11-11T00:00:00Z"
             nonconcurrentDays: 3
           disabled: true
       quota:
@@ -284,8 +264,6 @@ provisioning:
           versions: true
           tags:
             key1: value1
-
-
   config:
     - name: region
       options:

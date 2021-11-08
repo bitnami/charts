@@ -91,18 +91,8 @@ spec:
               {{- range $bucket := .Values.provisioning.buckets }}
               {{- $target := printf "%s/%s" $minioTarget $bucket.name }}
               {{- $region := ternary (printf "--region=%s" $bucket.region) ("") (not (empty $bucket.region)) }}
-              {{- $withLock := ternary ("--with-lock") ("") (and $bucket.lock $bucket.lock.enabled) }}
+              {{- $withLock := ternary ("--with-lock") ("") ($bucket.withLock) }}
               mc mb {{ $target }} --ignore-existing {{ $region }} {{ $withLock }};
-
-              {{- if and $bucket.lock $bucket.lock.enabled }}
-              {{- range $retention := $bucket.lock.retentions }}
-              {{- $target := ternary (printf "%s/%s/%s" $minioTarget $bucket.name $retention.prefix) (printf "%s/%s" $minioTarget $bucket.name) (not (empty $retention.prefix)) }}
-              {{- $versionId := ternary (printf "--version-id %s" ($retention.versionId | quote)) ("") (not (empty $retention.versionId)) }}
-              {{- $recursive := ternary (print "--recursive") ("") ($retention.recursive) }}
-              {{- $versions := ternary ("--versions") ("") ($retention.versions) }}
-              {{- $default := ternary ("--default") ("") ($retention.default) }}
-              mc retention set {{ $retention.type }} {{ $retention.period }} {{ $target }} {{ $versionId }} {{ $recursive }} {{ $versions }} {{ $default }};
-              {{- end }}
               {{- end }}
 
               {{- if $bucket.lifecycle }}

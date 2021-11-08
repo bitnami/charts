@@ -1,0 +1,337 @@
+---
+# Source: minio/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: test-release-minio
+  namespace: "test-namespace"
+  labels:
+    app.kubernetes.io/name: minio
+    helm.sh/chart: minio-9.1.0
+    app.kubernetes.io/instance: test-release
+    app.kubernetes.io/managed-by: Helm
+automountServiceAccountToken: true
+secrets:
+  - name: test-release-minio
+---
+# Source: minio/templates/secrets.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: test-release-minio
+  namespace: test-namespace
+  labels:
+    app.kubernetes.io/name: minio
+    helm.sh/chart: minio-9.1.0
+    app.kubernetes.io/instance: test-release
+    app.kubernetes.io/managed-by: Helm
+type: Opaque
+data:
+  root-user: "bWluaW9hZG1pbg=="
+  root-password: "bWluaW9hZG1pbg=="
+  key.json: ""
+---
+# Source: minio/templates/pvc.yaml
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: test-release-minio
+  namespace: test-namespace
+  labels:
+    app.kubernetes.io/name: minio
+    helm.sh/chart: minio-9.1.0
+    app.kubernetes.io/instance: test-release
+    app.kubernetes.io/managed-by: Helm
+spec:
+  accessModes:
+    - "ReadWriteOnce"
+  resources:
+    requests:
+      storage: "8Gi"
+---
+# Source: minio/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: test-release-minio
+  namespace: test-namespace
+  labels:
+    app.kubernetes.io/name: minio
+    helm.sh/chart: minio-9.1.0
+    app.kubernetes.io/instance: test-release
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  ports:
+    - name: minio-api
+      port: 9000
+      targetPort: minio-api
+      nodePort: null
+    - name: minio-console
+      port: 9001
+      targetPort: minio-console
+      nodePort: null
+  selector:
+    app.kubernetes.io/name: minio
+    app.kubernetes.io/instance: test-release
+---
+# Source: minio/templates/standalone/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test-release-minio
+  namespace: test-namespace
+  labels:
+    app.kubernetes.io/name: minio
+    helm.sh/chart: minio-9.1.0
+    app.kubernetes.io/instance: test-release
+    app.kubernetes.io/managed-by: Helm
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: minio
+      app.kubernetes.io/instance: test-release
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: minio
+        helm.sh/chart: minio-9.1.0
+        app.kubernetes.io/instance: test-release
+        app.kubernetes.io/managed-by: Helm
+      annotations:
+        checksum/credentials-secret: 8e143944388b5fa587cbde9414806e3dc424cb76c03bb64586b8d491ab5f4d5e
+    spec:
+      
+      serviceAccountName: test-release-minio
+      affinity:
+        podAffinity:
+          
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: minio
+                    app.kubernetes.io/instance: test-release
+                namespaces:
+                  - "test-namespace"
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+        nodeAffinity:
+          
+      securityContext:
+        fsGroup: 1001
+      containers:
+        - name: minio
+          image: docker.io/bitnami/minio:2021.10.27-debian-10-r0
+          imagePullPolicy: "IfNotPresent"
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1001
+          env:
+            - name: BITNAMI_DEBUG
+              value: "false"
+            - name: MINIO_SCHEME
+              value: "http"
+            - name: MINIO_FORCE_NEW_KEYS
+              value: "no"
+            - name: MINIO_ROOT_USER
+              valueFrom:
+                secretKeyRef:
+                  name: test-release-minio
+                  key: root-user
+            - name: MINIO_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: test-release-minio
+                  key: root-password
+            - name: MINIO_BROWSER
+              value: "on"
+            - name: MINIO_PROMETHEUS_AUTH_TYPE
+              value: "public"
+            - name: MINIO_CONSOLE_PORT_NUMBER
+              value: "9001"
+          envFrom:
+          ports:
+            - name: minio-api
+              containerPort: 9000
+              protocol: TCP
+            - name: minio-console
+              containerPort: 9001
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /minio/health/live
+              port: minio-api
+              scheme: "HTTP"
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 5
+          readinessProbe:
+            tcpSocket:
+              port: minio-api
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 1
+            successThreshold: 1
+            failureThreshold: 5
+          resources:
+            limits: {}
+            requests: {}
+          volumeMounts:
+            - name: data
+              mountPath: /data
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: test-release-minio
+---
+# Source: minio/templates/provisioning-job.yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: test-release-minio-provisioning
+  namespace: test-namespace
+  labels:
+    app.kubernetes.io/name: minio
+    helm.sh/chart: minio-9.1.0
+    app.kubernetes.io/instance: test-release
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: minio-provisioning
+  annotations: 
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-delete-policy: before-hook-creation
+spec:
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: minio
+        helm.sh/chart: minio-9.1.0
+        app.kubernetes.io/instance: test-release
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/component: minio-provisioning
+    spec:
+      
+      restartPolicy: OnFailure
+      terminationGracePeriodSeconds: 0
+      serviceAccountName: test-release-minio
+      initContainers:
+        - name: wait-for-available-minio
+          # TODO: Add wait-for-port for minio image
+          # docker.io/bitnami/minio:2021.10.27-debian-10-r0
+          image: docker.io/bitnami/kafka:2.8.1-debian-10-r31
+          imagePullPolicy: "IfNotPresent"
+          command:
+            - /bin/bash
+            - -c
+            - >-
+              set -e;
+              echo "Waiting for Minio";
+              wait-for-port \
+                --host=test-release-minio \
+                --state=inuse \
+                --timeout=120 \
+                9000;
+              echo "Minio is available";
+      containers:
+        - name: minio
+          image: docker.io/bitnami/minio:2021.10.27-debian-10-r0
+          imagePullPolicy: "IfNotPresent"
+          command:
+            - /bin/bash
+            - -c
+            # TODO: credentials files?
+            - >-
+              set -ex;
+              echo "Start Minio provisioning $MINIO_SCHEME $MINIO_ROOT_USER $MINIO_ROOT_PASSWORD";
+
+              mc alias set provisioning $MINIO_SCHEME://test-release-minio:9000 $MINIO_ROOT_USER $MINIO_ROOT_PASSWORD;
+
+              # Users
+              mc admin user add provisioning test-username test-password;
+              mc admin policy set provisioning readwrite user=test-username;
+              mc admin user disable provisioning test-username;
+
+              # Groups
+              mc admin group add provisioning test-group test-username;
+              mc admin policy set provisioning readwrite group=test-group;
+              mc admin group disable provisioning test-group;
+
+              # Buckets
+              mc mb provisioning/test-bucket --ignore-existing --region=us-east-1 --with-lock;
+
+              # Retentions
+              mc retention set compliance 30d provisioning/test-bucket/test-prefix --version-id "123" --recursive --versions --default;
+
+              # Lifecycle
+              mc ilm import provisioning/test-bucket <<EOF
+              {
+                "Rules": [
+                  {
+                    "ID": "test-id",
+                    "Status": "Disabled",
+                    "Expiration": {
+                      "Days": 7
+                    }
+                    ,
+                    "NoncurrentVersionExpiration": {
+                      "NoncurrentDays": 3
+                    }
+                    ,
+                    "Filter": {
+                      "Prefix": "test-prefix"
+                    }
+                  }
+                  ,
+                  {
+                    "ID": "test-id",
+                    "Status": "Disabled",
+                    "Expiration": {
+                      "Date": "2021-11-11T00:00:00Z"
+                    }
+                    ,
+                    "NoncurrentVersionExpiration": {
+                      "NoncurrentDays": 3
+                    }
+                    ,
+                    "Filter": {
+                      "Prefix": "test-prefix"
+                    }
+                  }
+                ]
+              }
+              EOF
+
+              # Quotas
+              mc admin bucket quota provisioning/test-bucket --hard 256GiB;
+
+              # Tags
+              mc tag set --rewind 7d --version-id "123" --versions provisioning/test-bucket/test-prefix "key1=value1";
+
+              # Config
+              mc admin config set provisioning region name=us-east-1;
+
+              echo "End Minio provisioning";
+          env:
+            - name: MINIO_SCHEME
+              value: "http"
+            - name: MINIO_ROOT_USER
+              valueFrom:
+                secretKeyRef:
+                  name: test-release-minio
+                  key: root-user
+            - name: MINIO_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: test-release-minio
+                  key: root-password
+          envFrom:
+          resources:
+            limits: {}
+            requests: {}
+          volumeMounts:
+      volumes:
