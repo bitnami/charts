@@ -20,8 +20,6 @@ metadata:
     {{- end }}
 spec:
   parallelism: 1
-  # TODO: Wait for minio cluster ready
-  backoffLimit: 16
   template:
     metadata:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
@@ -68,7 +66,7 @@ spec:
             - -c
             # TODO: credentials files?
             - >-
-              set -ex;
+              set -e;
               echo "Start Minio provisioning $MINIO_SCHEME $MINIO_ROOT_USER $MINIO_ROOT_PASSWORD";
 
               mc alias set {{ $minioTarget }} $MINIO_SCHEME://{{ include "common.names.fullname" . }}:{{ .Values.service.ports.api }} $MINIO_ROOT_USER $MINIO_ROOT_PASSWORD;
