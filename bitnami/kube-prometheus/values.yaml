@@ -44,7 +44,7 @@ operator:
   image:
     registry: docker.io
     repository: bitnami/prometheus-operator
-    tag: 0.51.2-debian-10-r20
+    tag: 0.52.0-debian-10-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -348,7 +348,7 @@ prometheus:
   image:
     registry: docker.io
     repository: bitnami/prometheus
-    tag: 2.30.3-debian-10-r19
+    tag: 2.31.0-debian-10-r2
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -952,6 +952,13 @@ prometheus:
     ##    secretKey: thanos.yaml
     ##
     objectStorageConfig: {}
+    ## ref: https://github.com/thanos-io/thanos/blob/main/docs/components/sidecar.md
+    ## @param prometheus.thanos.extraVolumeMounts Additional volumeMounts from `prometheus.volumes` for thanos sidecar container
+    ## extraVolumeMounts:
+    ## - name: my-secret-volume
+    ##   mountPath: /etc/thanos/secrets/my-secret
+    ##
+    extraVolumeMounts: []
     ## Thanos sidecar container resource requests and limits.
     ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
     ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -1110,7 +1117,7 @@ alertmanager:
   image:
     registry: docker.io
     repository: bitnami/alertmanager
-    tag: 0.23.0-debian-10-r61
+    tag: 0.23.0-debian-10-r69
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -1804,7 +1811,7 @@ kubeProxy:
 ## ref: https://kubernetes.io/docs/admin/authorization/rbac/
 ## @param rbac.create Whether to create and use RBAC resources or not
 ## @param rbac.apiVersion Version of the RBAC API
-## @param rbac.pspEnabled PodSecurityPolicy
+## @param rbac.pspEnabled Whether to create a PodSecurityPolicy and bound it with RBAC. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later
 ##
 rbac:
   create: true

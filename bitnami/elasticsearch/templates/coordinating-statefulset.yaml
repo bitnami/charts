@@ -44,6 +44,9 @@ spec:
       {{- if .Values.coordinating.schedulerName }}
       schedulerName: {{ .Values.coordinating.schedulerName }}
       {{- end }}
+      {{- if .Values.coordinating.priorityClassName }}
+      priorityClassName: {{ .Values.coordinating.priorityClassName | quote }}
+      {{- end }}
       {{- if .Values.coordinating.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.coordinating.affinity "context" $) | nindent 8 }}
       {{- else }}

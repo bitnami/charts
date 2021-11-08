@@ -728,6 +728,16 @@ disasterRecovery:
       ##    memory: 1Gi
       limits: {}
       requests: {}
+
+    ## @param disasterRecovery.cronjob.nodeSelector Node labels for cronjob pods assignment
+    ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+    ##
+    nodeSelector: {}
+    ## @param disasterRecovery.cronjob.tolerations Tolerations for cronjob pods assignment
+    ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+    ##
+    tolerations: []
+
   pvc:
     ## @param disasterRecovery.pvc.existingClaim A manually managed Persistent Volume and Claim
     ## If defined, PVC must be created manually before volume will be bound

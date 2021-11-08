@@ -59,6 +59,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                     | Description                                                                                  | Value           |
 | ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
+| `kubeVersion`            | Override Kubernetes version                                                                  | `""`            |
 | `nameOverride`           | String to partially override common.names.fullname template (will maintain the release name) | `""`            |
 | `fullnameOverride`       | String to fully override common.names.fullname template                                      | `""`            |
 | `clusterDomain`          | Kubernetes Cluster Domain                                                                    | `cluster.local` |
@@ -321,9 +322,9 @@ You can also set the log4j logging level and what log appenders are turned on, b
 ```console
 zookeeper.root.logger=INFO, CONSOLE
 ```
-the available appender is 
+the available appender is
 
-- CONSOLE 
+- CONSOLE
 - ROLLINGFILE
 - RFAAUDIT
 - TRACEFILE
