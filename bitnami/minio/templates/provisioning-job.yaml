@@ -105,10 +105,10 @@ spec:
               mc admin bucket quota {{ $minioAlias }}/{{ $bucket.name }} --{{ .type }} {{ .size }};
               {{- end }}
 
-              {{- range $tag := $bucket.tags }}
-              {{- $target := ternary (printf "%s/%s/%s" $minioAlias $bucket.name $tag.prefix) (printf "%s/%s" $minioAlias $bucket.name) (not (empty $tag.prefix)) }}
+              {{- if $bucket.tags }}
+              {{- $target := printf "%s/%s" $minioAlias $bucket.name }}
               {{- $tags := list }}
-              {{- range $name, $value := $tag.tags }}
+              {{- range $name, $value := $bucket.tags }}
               {{- $tags = (printf "%s=%s" $name $value) | append $tags }}
               {{- end }}
               {{- $tags := join "&" $tags | quote }}
