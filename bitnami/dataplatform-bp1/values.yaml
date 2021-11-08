@@ -63,9 +63,9 @@ dataplatform:
     ## @param dataplatform.exporter.image.pullSecrets Specify docker-registry secret names as an array
     ##
     image:
-      registry: docker.io
-      repository: bitnami/dataplatform-exporter
-      tag: 0.0.11-scratch-r4
+      registry: harbor-repo.vmware.com
+      repository: octo_data_platforms/dataplatform-exporter
+      tag: 1.0.0
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -78,6 +78,88 @@ dataplatform:
       ##   - myRegistryKeySecretName
       ##
       pullSecrets: []
+    ## Configuration file passed to the exporter.
+    ## This exporter metrics configuration is used to emit only the health and state metrics configured below.
+    ## In the below config metrics key,name and guage should not be changed.
+    ## @param dataplatform.exporter.config [string] Data Platform Metrics Configuration emitted in Prometheus format
+    ##
+    config: |
+      {
+        "blueprintName": "bp1",
+        "metrics": [
+          {
+            "name": "zookeeper_desired_nodes",
+            "type": "gauge",
+            "helpMessage": "Desired number of zookeeper nodes in the data platform",
+            "key": "zookeeper",
+            "dataComponent": "DesiredNodes"
+          },
+          {
+            "name": "zookeeper_available_nodes",
+            "type": "gauge",
+            "helpMessage": "Available number of zookeeper nodes in the data platform",
+            "key": "zookeeper",
+            "dataComponent": "AvailableNodes"
+          },
+          {
+            "name": "kafka_desired_nodes",
+            "type": "gauge",
+            "helpMessage": "Desired number of kafka nodes in the data platform",
+            "key": "kafka",
+            "dataComponent": "DesiredNodes"
+          },
+          {
+            "name": "kafka_available_nodes",
+            "type": "gauge",
+            "helpMessage": "Available number of kafka nodes in the data platform",
+            "key": "kafka",
+            "dataComponent": "AvailableNodes"
+          },
+          {
+            "name": "solr_desired_nodes",
+            "type": "gauge",
+            "helpMessage": "Desired number of solr nodes in the data platform",
+            "key": "solr",
+            "dataComponent": "DesiredNodes"
+          },
+          {
+            "name": "solr_available_nodes",
+            "type": "gauge",
+            "helpMessage": "Available number of solr nodes in the data platform",
+            "key": "solr",
+            "dataComponent": "AvailableNodes"
+          },
+          {
+            "name": "spark_master_desired_nodes",
+            "type": "gauge",
+            "helpMessage": "Desired number of spark master nodes in the data platform",
+            "key": "spark-master",
+            "dataComponent": "DesiredNodes"
+          },
+          {
+            "name": "spark_master_available_nodes",
+            "type": "gauge",
+            "helpMessage": "Available number of spark master nodes in the data platform",
+            "key": "spark-master",
+            "dataComponent": "AvailableNodes"
+          },
+          {
+            "name": "spark_worker_desired_nodes",
+            "type": "gauge",
+            "helpMessage": "Desired number of spark worker nodes in the data platform",
+            "key": "spark-worker",
+            "dataComponent": "DesiredNodes"
+          },
+          {
+            "name": "spark_worker_available_nodes",
+            "type": "gauge",
+            "helpMessage": "Available number of spark worker nodes in the data platform",
+            "key": "spark-worker",
+            "dataComponent": "AvailableNodes"
+          }
+        ]
+      }
+
     ## Configure extra options for liveness probe
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
     ## @param dataplatform.exporter.livenessProbe.enabled Enable livenessProbe
@@ -340,9 +422,9 @@ dataplatform:
     ## @param dataplatform.emitter.image.pullSecrets Specify docker-registry secret names as an array
     ##
     image:
-      registry: docker.io
-      repository: bitnami/dataplatform-emitter
-      tag: 0.0.10-scratch-r3
+      registry: harbor-repo.vmware.com
+      repository: octo_data_platforms/dataplatform-emitter
+      tag: 2.1.1
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -750,6 +832,16 @@ kafka:
         ## @param kafka.metrics.jmx.service.port JMX Exporter Prometheus port
         ##
         port: 5556
+        ## Provide any additional annotations which may be required. This can be used to
+        ## set the LoadBalancer service type to internal only.
+        ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+        ## @param kafka.metrics.jmx.service.annotations [object] Exporter service annotation
+        annotations:
+          prometheus.io/scrape: "true"
+          prometheus.io/port: "5556"
+          prometheus.io/path: "/metrics"
+          prometheus.io/prefix: "kafkajmx."
+
   ## @param kafka.zookeeper.enabled Switch to enable or disable the Zookeeper helm chart
   ##
   zookeeper:
@@ -846,6 +938,16 @@ solr:
       requests:
         cpu: 100m
         memory: 128Mi
+    service:
+      ## Provide any additional annotations which may be required. This can be used to
+      ## set the LoadBalancer service type to internal only.
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+      ## @param solr.exporter.service.annotations [object] Exporter service annotations
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: "/metrics"
+        prometheus.io/port: "9983"
+
   ## @param solr.zookeeper.enabled Enable Zookeeper deployment. Needed for Solr cloud.
   ##
   zookeeper:
@@ -950,12 +1052,14 @@ spark:
       prometheus.io/scrape: "true"
       prometheus.io/path: "/metrics/"
       prometheus.io/port: "8080"
+      prometheus.io/prefix: "spark."
     ## @param spark.metrics.workerAnnotations [object] Annotations for enabling prometheus to access the metrics endpoint of the worker nodes
     ##
     workerAnnotations:
       prometheus.io/scrape: "true"
       prometheus.io/path: "/metrics/"
       prometheus.io/port: "8081"
+      prometheus.io/prefix: "spark."
 
 ## @section Tanzu Observability (Wavefront) chart parameters
 ##
@@ -1002,61 +1106,61 @@ wavefront:
       enableRuntimeConfigs: true
       ## @param wavefront.collector.discovery.config [array] Configuration for rules based auto-discovery
       ##
-      config:
+      #config:
         ## auto-discover kafka-exporter
         ##
-        - name: kafka-discovery
-          type: prometheus
-          selectors:
-            images:
-              - "*bitnami/kafka-exporter*"
-          port: 9308
-          path: /metrics
-          scheme: http
-          prefix: kafka.
+       # - name: kafka-discovery
+       #   type: prometheus
+       #   selectors:
+       #     images:
+       #       - "*bitnami/kafka-exporter*"
+       #   port: 9308
+       #   path: /metrics
+       #   scheme: http
+       #   prefix: kafka.
         ## auto-discover jmx exporter
         ##
-        - name: kafka-jmx-discovery
-          type: prometheus
-          selectors:
-            images:
-              - "*bitnami/jmx-exporter*"
-          port: 5556
-          path: /metrics
-          scheme: http
-          prefix: kafkajmx.
+       # - name: kafka-jmx-discovery
+       #   type: prometheus
+       #   selectors:
+       #     images:
+       #       - "*bitnami/jmx-exporter*"
+       #   port: 5556
+       #   path: /metrics
+       #   scheme: http
+       #   prefix: kafkajmx.
         ## auto-discover solr
         ##
-        - name: solr-discovery
-          type: prometheus
-          selectors:
-            images:
-              - "*bitnami/solr*"
-          port: 9983
-          path: /metrics
-          scheme: http
+       # - name: solr-discovery
+       #   type: prometheus
+       #   selectors:
+       #     images:
+       #       - "*bitnami/solr*"
+       #   port: 9983
+       #   path: /metrics
+       #   scheme: http
         ## auto-discover spark
         ##
-        - name: spark-worker-discovery
-          type: prometheus
-          selectors:
-            images:
-              - "*bitnami/spark*"
-          port: 8081
-          path: /metrics/
-          scheme: http
-          prefix: spark.
+       # - name: spark-worker-discovery
+       #   type: prometheus
+       #   selectors:
+       #     images:
+       #       - "*bitnami/spark*"
+       #   port: 8081
+       #   path: /metrics/
+       #   scheme: http
+       #   prefix: spark.
         ## auto-discover spark
         ##
-        - name: spark-master-discovery
-          type: prometheus
-          selectors:
-            images:
-              - "*bitnami/spark*"
-          port: 8080
-          path: /metrics/
-          scheme: http
-          prefix: spark.
+       # - name: spark-master-discovery
+       #   type: prometheus
+       #   selectors:
+       #     images:
+       #       - "*bitnami/spark*"
+       #   port: 8080
+       #   path: /metrics/
+       #   scheme: http
+       #   prefix: spark.
   proxy:
     ## Wavefront Proxy resource requests and limits
     ## ref: http://kubernetes.io/docs/user-guide/compute-resources/

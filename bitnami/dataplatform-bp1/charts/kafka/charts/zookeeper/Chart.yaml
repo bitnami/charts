@@ -1,0 +1,25 @@
+annotations:
+  category: Infrastructure
+apiVersion: v2
+appVersion: 3.7.0
+dependencies:
+- name: common
+  repository: https://charts.bitnami.com/bitnami
+  tags:
+  - bitnami-common
+  version: 1.x.x
+description: A centralized service for maintaining configuration information, naming,
+  providing distributed synchronization, and providing group services for distributed
+  applications.
+home: https://github.com/bitnami/charts/tree/master/bitnami/zookeeper
+icon: https://bitnami.com/assets/stacks/zookeeper/img/zookeeper-stack-220x234.png
+keywords:
+- zookeeper
+maintainers:
+- email: containers@bitnami.com
+  name: Bitnami
+name: zookeeper
+sources:
+- https://github.com/bitnami/bitnami-docker-zookeeper
+- https://zookeeper.apache.org/
+version: 7.4.3

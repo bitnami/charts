@@ -1,0 +1,26 @@
+{{- if .Values.worker.autoscaling.enabled }}
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "common.names.fullname" . }}-autoscaler
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: worker-autoscaler
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: statefulset
+    name: {{ include "common.names.fullname" . }}-worker
+  minReplicas: {{ .Values.worker.replicaCount }}
+  maxReplicas: {{ .Values.worker.autoscaling.replicasMax }}
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        targetAverageUtilization: {{ .Values.worker.autoscaling.CpuTargetPercentage }}
+{{- end }}
