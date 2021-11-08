@@ -253,6 +253,12 @@ Find more information about how to deal with common errors related to Bitnami’
 $ helm upgrade my-release bitnami/grafana-operator
 ```
 
+### To 2.0.0
+
+In this version the CRDs get updated from v1beta to v1 stable API.
+It also updates the operator image to the new major `v4.x.y` release.
+
+The `values.yaml` does not need changes when updating to this major version of the chart
 ### To 1.0.0
 
 In this version, the `image` block is defined once and is used in the different templates, while in the previous version, the `image` block was duplicated for the grafana container and the grafana plugin init one
