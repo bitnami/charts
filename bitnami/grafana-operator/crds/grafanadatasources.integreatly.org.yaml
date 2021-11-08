@@ -170,6 +170,19 @@ spec:
                           type: string
                         postgresVersion:
                           type: integer
+                        sigV4AssumeRoleArn:
+                          type: string
+                        sigV4Auth:
+                          description: Fields for AWS Prometheus data sources
+                          type: boolean
+                        sigV4AuthType:
+                          type: string
+                        sigV4ExternalId:
+                          type: string
+                        sigV4Profile:
+                          type: string
+                        sigV4Region:
+                          type: string
                         sslmode:
                           type: string
                         subscriptionId:
@@ -269,6 +282,11 @@ spec:
                           description: Fields for Stackdriver data sources
                           type: string
                         secretKey:
+                          type: string
+                        sigV4AccessKey:
+                          description: Fields for AWS data sources
+                          type: string
+                        sigV4SecretKey:
                           type: string
                         tlsCACert:
                           type: string

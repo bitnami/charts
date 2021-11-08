@@ -377,6 +377,8 @@ spec:
                     type: object
                   dashboards:
                     properties:
+                      default_home_dashboard_path:
+                        type: string
                       versions_to_keep:
                         nullable: true
                         type: integer
@@ -697,20 +699,6 @@ spec:
                       snapshot_remove_expired:
                         nullable: true
                         type: boolean
-                    type: object
-                  unified_alerting:
-                    properties:
-                      enabled:
-                        nullable: true
-                        type: boolean
-                      evaluation_timeout:
-                        type: string
-                      execute_alerts:
-                        type: boolean
-                      max_attempts:
-                        type: integer
-                      min_interval:
-                        type: string
                     type: object
                   users:
                     properties:
