@@ -363,6 +363,17 @@ In this version you can indicate the key to download the GeoLite2 databases usin
 
 ## Upgrading
 
+### To 9.0.0
+
+- Configuration for routing `Ingress` resources with custom `kubernetes.io/ingress.class` annotation is changed in favor of `IngressClass` resource required in NGINX Ingress Controller 1.x
+  - `ingressClass` parameter is removed and replaced with `ingressClassResource.*` parameters
+  - `ingressClassResource.*` parameters configure `IngressClass` resource only
+  - To configure routing for `Ingress` using custom `kubernetes.io/ingress.class` annotation define `extraArgs.ingress-class` parameter with the annotation value
+
+Consequences:
+
+- Backwards compatibility is not guaranteed. Uninstall & install the chart again to obtain the latest version.
+
 ### To 7.0.0
 
 - Chart labels were adapted to follow the [Helm charts standard labels](https://helm.sh/docs/chart_best_practices/labels/#standard-labels).
