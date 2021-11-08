@@ -19,6 +19,9 @@ metadata:
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
     {{- end }}
 spec:
+  parallelism: 1
+  # TODO: Wait for minio cluster ready
+  backoffLimit: 16
   template:
     metadata:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
@@ -73,83 +76,43 @@ spec:
               {{- range $user := .Values.provisioning.users }}
               mc admin user add {{ $minioTarget }} {{ $user.username }} {{ $user.password }};
               {{- range $policy := $user.policies }}
-              mc admin policy set {{ $minioTarget }} {{ $policy }} user={{ $user.username }};
+              mc admin policy update {{ $minioTarget }} {{ $policy }} user={{ $user.username }};
               {{- end }}
-              {{- $userStatus := ternary ("disable") ("enable") ($user.disabled) }}
+              {{- $userStatus := ternary ("disable") ("enable") (and (not (empty $user.disabled)) $user.disabled) }}
               mc admin user {{ $userStatus }} {{ $minioTarget }} {{ $user.username }};
               {{- end }}
 
               {{- range $group := .Values.provisioning.groups }}
               mc admin group add {{ $minioTarget }} {{ $group.name }} {{ join " " $group.members }};
               {{- range $policy := $group.policies }}
-              mc admin policy set {{ $minioTarget }} {{ $policy }} group={{ $group.name }};
+              mc admin policy update {{ $minioTarget }} {{ $policy }} group={{ $group.name }};
               {{- end }}
-              {{- $groupStatus := ternary ("disable") ("enable") ($group.disabled)}}
+              {{- $groupStatus := ternary ("disable") ("enable") (and (not (empty $group.disabled)) $group.disabled)}}
               mc admin group {{ $groupStatus }} {{ $minioTarget }} {{ $group.name }};
               {{- end }}
 
               {{- range $bucket := .Values.provisioning.buckets }}
               {{- $target := printf "%s/%s" $minioTarget $bucket.name }}
               {{- $region := ternary (printf "--region=%s" $bucket.region) ("") (not (empty $bucket.region)) }}
-              {{- $withLock := ternary ("--with-lock") ("") ($bucket.withLock) }}
+              {{- $withLock := ternary ("--with-lock") ("") (and (not (empty $bucket.withLock)) $bucket.withLock) }}
               mc mb {{ $target }} --ignore-existing {{ $region }} {{ $withLock }};
-              {{- end }}
 
               {{- if $bucket.lifecycle }}
-              mc ilm import {{ $minioTarget }}/{{ $bucket.name }} <<EOF
-              {
-                "Rules": [
-                  {{- range $idx, $lifecycle := $bucket.lifecycle }}
-                  {{- if not (eq $idx 0) }}
-                  ,
-                  {{- end }}
-                  {
-                    "ID": "{{ $lifecycle.id }}",
-                    "Status": "{{ ternary "Disabled" "Enabled" $lifecycle.disabled }}",
-                    {{- if $lifecycle.expiry }}
-                    "Expiration": {
-                      {{- with $lifecycle.expiry.date }}
-                      "Date": "{{ . }}"
-                      {{- end }}
-                      {{- with $lifecycle.expiry.days }}
-                      "Days": {{ . }}
-                      {{- end }}
-                    }
-                    {{- with $lifecycle.expiry.nonconcurrentDays }}
-                    ,
-                    "NoncurrentVersionExpiration": {
-                      "NoncurrentDays": {{ . }}
-                    }
-                    {{- end }}
-                    {{- with $lifecycle.prefix }}
-                    ,
-                    "Filter": {
-                      "Prefix": "{{ . }}"
-                    }
-                    {{- end }}
-                  }
-                  {{- end }}
-                  {{- end }}
-                  {{- end }}
-                ]
-              }
-              EOF;
+              mc ilm import {{ $minioTarget }}/{{ $bucket.name }} < /etc/ilm/{{ $bucket.name }}.json;
+              {{- end }}
 
               {{- with $bucket.quota }}
               mc admin bucket quota {{ $minioTarget }}/{{ $bucket.name }} --{{ .type }} {{ .size }};
               {{- end }}
 
               {{- range $tag := $bucket.tags }}
-              {{- $rewind := ternary (printf "--rewind %s" $tag.rewind) ("") (not (empty $tag.rewind)) }}
-              {{- $versionId := ternary (printf "--version-id %s" ($tag.versionId | quote)) ("") (not (empty $tag.versionId)) }}
-              {{- $versions := ternary ("--versions") ("") (not (empty $tag.versions)) }}
               {{- $target := ternary (printf "%s/%s/%s" $minioTarget $bucket.name $tag.prefix) (printf "%s/%s" $minioTarget $bucket.name) (not (empty $tag.prefix)) }}
               {{- $tags := list }}
               {{- range $name, $value := $tag.tags }}
               {{- $tags = (printf "%s=%s" $name $value) | append $tags }}
               {{- end }}
               {{- $tags := join "&" $tags | quote }}
-              mc tag set {{ $rewind }} {{ $versionId }} {{ $versions }} {{ $target }} {{ $tags }};
+              mc tag set {{ $target }} {{ $tags }};
               {{- end }}
               {{- end }}
 
@@ -203,6 +166,10 @@ spec:
           resources: {{- toYaml .Values.provisioning.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
+            {{- if .Values.provisioning.enabled }}
+            - name: minio-provisioning
+              mountPath: /etc/ilm
+            {{- end }}
             {{- if .Values.auth.useCredentialsFiles }}
             - name: minio-credentials
               mountPath: /opt/bitnami/minio/secrets/
@@ -212,6 +179,11 @@ spec:
               mountPath: {{ default "/certs" .Values.tls.mountPath }}
             {{- end }}
       volumes:
+        {{- if .Values.provisioning.enabled }}
+        - name: minio-provisioning
+          configMap:
+            name: {{ $fullname }}
+        {{- end }}
         {{- if .Values.auth.useCredentialsFiles }}
         - name: minio-credentials
           secret:

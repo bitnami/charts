@@ -84,7 +84,7 @@ clientImage:
 ## @param mode MinIO&reg; server mode (`standalone` or `distributed`)
 ## ref: https://docs.minio.io/docs/distributed-minio-quickstart-guide
 ##
-mode: standalone
+mode: distributed
 ## MinIO&reg; authentication parameters
 ##
 auth:
@@ -233,18 +233,22 @@ provisioning:
       password: test-password
       policies:
         - readwrite
-      disabled: true
+        - consoleAdmin
+        - diagnostics
+      # disabled: true
   groups:
     - name: test-group
       members:
         - test-username
       policies:
         - readwrite
-      disabled: true
+      # disabled: true
   buckets:
     - name: test-bucket
       region: us-east-1
-      withLock: false
+      # TODO: erasure codes
+      withLock: true
+      # TODO: erasure codes
       lifecycle:
         - id: test-id
           prefix: test-prefix
@@ -253,15 +257,13 @@ provisioning:
             # Days !OR! date
             # date: "2021-11-11T00:00:00Z"
             nonconcurrentDays: 3
-          disabled: true
+          # disabled: true
+      # TODO: erasure codes
       quota:
         type: hard
-        size: 256GiB
+        size: 256MiB
       tags:
-        - prefix: test-prefix
-          rewind: 7d
-          versionId: "123"
-          versions: true
+        - # prefix: test-prefix
           tags:
             key1: value1
   config:
