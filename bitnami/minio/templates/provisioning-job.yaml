@@ -1,7 +1,7 @@
 {{- if .Values.provisioning.enabled }}
 {{- $fullname := printf "%s-provisioning" (include "common.names.fullname" .) }}
 {{- $releaseNamespace := .Release.Namespace }}
-{{- $minioTarget := "provisioning" }}
+{{- $minioAlias := "provisioning" }}
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -64,47 +64,49 @@ spec:
           command:
             - /bin/bash
             - -c
-            # TODO: credentials files?
             - >-
               set -e;
-              echo "Start Minio provisioning $MINIO_SCHEME $MINIO_ROOT_USER $MINIO_ROOT_PASSWORD";
+              echo "Start Minio provisioning";
 
-              mc alias set {{ $minioTarget }} $MINIO_SCHEME://{{ include "common.names.fullname" . }}:{{ .Values.service.ports.api }} $MINIO_ROOT_USER $MINIO_ROOT_PASSWORD;
+              {{- $minioUrl := printf "$MINIO_SCHEME://%s:%d" (include "common.names.fullname" .) (.Values.service.ports.api | int) }}
+              {{- $minioRootUser := ternary ("$(<$MINIO_ROOT_USER_FILE)") ("$MINIO_ROOT_USER") (.Values.auth.useCredentialsFiles)}}
+              {{- $minioRootPassword := ternary ("$(<$MINIO_ROOT_PASSWORD_FILE)") ("$MINIO_ROOT_PASSWORD") (.Values.auth.useCredentialsFiles)}}
+              mc alias set {{ $minioAlias }} {{ $minioUrl }} {{ $minioRootUser }} {{ $minioRootPassword }};
 
               {{- range $user := .Values.provisioning.users }}
-              mc admin user add {{ $minioTarget }} {{ $user.username }} {{ $user.password }};
+              mc admin user add {{ $minioAlias }} {{ $user.username }} {{ $user.password }};
               {{- range $policy := $user.policies }}
-              mc admin policy update {{ $minioTarget }} {{ $policy }} user={{ $user.username }};
+              mc admin policy update {{ $minioAlias }} {{ $policy }} user={{ $user.username }};
               {{- end }}
               {{- $userStatus := ternary ("disable") ("enable") (and (not (empty $user.disabled)) $user.disabled) }}
-              mc admin user {{ $userStatus }} {{ $minioTarget }} {{ $user.username }};
+              mc admin user {{ $userStatus }} {{ $minioAlias }} {{ $user.username }};
               {{- end }}
 
               {{- range $group := .Values.provisioning.groups }}
-              mc admin group add {{ $minioTarget }} {{ $group.name }} {{ join " " $group.members }};
+              mc admin group add {{ $minioAlias }} {{ $group.name }} {{ join " " $group.members }};
               {{- range $policy := $group.policies }}
-              mc admin policy update {{ $minioTarget }} {{ $policy }} group={{ $group.name }};
+              mc admin policy update {{ $minioAlias }} {{ $policy }} group={{ $group.name }};
               {{- end }}
               {{- $groupStatus := ternary ("disable") ("enable") (and (not (empty $group.disabled)) $group.disabled)}}
-              mc admin group {{ $groupStatus }} {{ $minioTarget }} {{ $group.name }};
+              mc admin group {{ $groupStatus }} {{ $minioAlias }} {{ $group.name }};
               {{- end }}
 
               {{- range $bucket := .Values.provisioning.buckets }}
-              {{- $target := printf "%s/%s" $minioTarget $bucket.name }}
+              {{- $target := printf "%s/%s" $minioAlias $bucket.name }}
               {{- $region := ternary (printf "--region=%s" $bucket.region) ("") (not (empty $bucket.region)) }}
               {{- $withLock := ternary ("--with-lock") ("") (and (not (empty $bucket.withLock)) $bucket.withLock) }}
               mc mb {{ $target }} --ignore-existing {{ $region }} {{ $withLock }};
 
               {{- if $bucket.lifecycle }}
-              mc ilm import {{ $minioTarget }}/{{ $bucket.name }} < /etc/ilm/{{ $bucket.name }}.json;
+              mc ilm import {{ $minioAlias }}/{{ $bucket.name }} < /etc/ilm/{{ $bucket.name }}.json;
               {{- end }}
 
               {{- with $bucket.quota }}
-              mc admin bucket quota {{ $minioTarget }}/{{ $bucket.name }} --{{ .type }} {{ .size }};
+              mc admin bucket quota {{ $minioAlias }}/{{ $bucket.name }} --{{ .type }} {{ .size }};
               {{- end }}
 
               {{- range $tag := $bucket.tags }}
-              {{- $target := ternary (printf "%s/%s/%s" $minioTarget $bucket.name $tag.prefix) (printf "%s/%s" $minioTarget $bucket.name) (not (empty $tag.prefix)) }}
+              {{- $target := ternary (printf "%s/%s/%s" $minioAlias $bucket.name $tag.prefix) (printf "%s/%s" $minioAlias $bucket.name) (not (empty $tag.prefix)) }}
               {{- $tags := list }}
               {{- range $name, $value := $tag.tags }}
               {{- $tags = (printf "%s=%s" $name $value) | append $tags }}
@@ -120,7 +122,7 @@ spec:
               {{- $options = (printf "%s=%s" $name $value) | append $options }}
               {{- end }}
               {{- $options := join " " $options }}
-              mc admin config set {{ $minioTarget }} {{ $config.name }} {{ $options }};
+              mc admin config set {{ $minioAlias }} {{ $config.name }} {{ $options }};
               {{- end }}
 
               echo "End Minio provisioning";

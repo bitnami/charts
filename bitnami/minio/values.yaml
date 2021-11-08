@@ -102,7 +102,7 @@ auth:
   forcePassword: false
   ## @param auth.useCredentialsFiles Mount credentials as a files instead of using an environment variable
   ##
-  useCredentialsFiles: false
+  useCredentialsFiles: true
   ## @param auth.forceNewKeys Force root credentials (user and password) to be reconfigured every time they change in the secrets
   ##
   forceNewKeys: false
