@@ -666,7 +666,7 @@ certificates:
 ##
 networkPolicy:
   ## @param networkPolicy.enabled Enable network policies
-  ## If ingress.enabled or metrics.enabled are true, configure networkPolicy.ingress and networkPolicy.metrics respectively to allow communication
+  ## If ingress.enabled or metrics.enabled are true, configure networkPolicy.ingress and networkPolicy.metrics selectors respectively to allow communication
   ##
   enabled: false
   ## @param networkPolicy.metrics.enabled Enable network policy for metrics (prometheus)
