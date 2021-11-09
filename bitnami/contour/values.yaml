@@ -430,7 +430,7 @@ envoy:
   ##
   containerSecurityContext:
     enabled: true
-    runAsUser: 0
+    runAsUser: 1001
   ## @param envoy.hostNetwork Envoy Pod host network access
   ## ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/#host-namespaces
   ##
