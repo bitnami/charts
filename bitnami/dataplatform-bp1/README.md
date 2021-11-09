@@ -34,7 +34,7 @@ $ helm install my-release bitnami/dataplatform-bp1
 
 This chart bootstraps Data Platform Blueprint-1 deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-The "Small" size data platform in default configuration deploys the following:
+Once the chart is installed, the deployed data platform cluster comprises of:
 1. Zookeeper with 3 nodes to be used for both Kafka and Solr
 2. Kafka with 3 nodes using the zookeeper deployed above
 3. Solr with 2 nodes using the zookeeper deployed above
