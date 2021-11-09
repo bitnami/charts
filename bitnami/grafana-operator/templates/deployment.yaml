@@ -38,9 +38,13 @@ spec:
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.operator.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
+        {{- if .Values.operator.podAffinityPreset }}
         podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.operator.podAffinityPreset "component" "grafana-operator" "context" $) | nindent 10 }}
+        {{- end }}
         podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.operator.podAntiAffinityPreset "component" "grafana-operator" "context" $) | nindent 10 }}
+        {{- if .Values.operator.nodeAffinityPreset.type }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.operator.nodeAffinityPreset.type "key" .Values.operator.nodeAffinityPreset.key "values" .Values.operator.nodeAffinityPreset.values) | nindent 10 }}
+        {{- end }}
       {{- end }}
       {{- if .Values.operator.tolerations}}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.operator.tolerations "context" $) | nindent 8 }}

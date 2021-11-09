@@ -81,9 +81,13 @@ spec:
     affinity: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.affinity "context" $) | nindent 6 }}
     {{- else }}
     affinity:
+      {{- if .Values.grafana.podAffinityPreset }}
       podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.grafana.podAffinityPreset "component" "grafana" "context" $) | nindent 8 }}
+      {{- end }}
       podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.grafana.podAntiAffinityPreset "component" "grafana" "context" $) | nindent 8 }}
+      {{- if .Values.grafana.nodeAffinityPreset.type }}
       nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.grafana.nodeAffinityPreset.type "key" .Values.grafana.nodeAffinityPreset.key "values" .Values.grafana.nodeAffinityPreset.values) | nindent 8 }}
+      {{- end }}
     {{- end }}
     {{- if .Values.grafana.livenessProbe.enabled }}
     livenessProbeSpec:
