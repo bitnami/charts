@@ -1,3 +1,7 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
 ** Please be patient while the chart is being deployed **
 
 {{- if .Values.diagnosticMode.enabled }}
@@ -31,10 +35,10 @@ Services:
   echo Secondary: {{ include "mysql.secondary.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}:{{ .Values.secondary.service.port }}
 {{- end }}
 
-Administrator credentials:
+Execute the following to get the administrator credentials:
 
   echo Username: root
-  echo Password : $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "mysql.secretName" . }} -o jsonpath="{.data.mysql-root-password}" | base64 --decode)
+  MYSQL_ROOT_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "mysql.secretName" . }} -o jsonpath="{.data.mysql-root-password}" | base64 --decode)
 
 To connect to your database:
 
@@ -44,13 +48,13 @@ To connect to your database:
 
   2. To connect to primary service (read/write):
 
-      mysql -h {{ include "mysql.primary.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} -uroot -p {{ .Values.auth.database }}
+      mysql -h {{ include "mysql.primary.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} -uroot -p"$MYSQL_ROOT_PASSWORD"
 
 {{- if eq .Values.architecture "replication" }}
 
   3. To connect to secondary service (read-only):
 
-      mysql -h {{ include "mysql.secondary.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} -uroot -p {{ .Values.auth.database }}
+      mysql -h {{ include "mysql.secondary.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} -uroot -p"$MYSQL_ROOT_PASSWORD"
 {{- end }}
 
 {{ if and (.Values.networkPolicy.enabled) (not .Values.networkPolicy.allowExternal) }}

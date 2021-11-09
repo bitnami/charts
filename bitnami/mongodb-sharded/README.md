@@ -67,8 +67,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `fullnameOverride`       | String to fully override mongodb.fullname template                                      | `""`            |
 | `clusterDomain`          | Kubernetes Cluster Domain                                                               | `cluster.local` |
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
-| `diagnosticMode.command` | Command to override all containers in the deployment                                    | `[]`            |
-| `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `[]`            |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`     |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]`  |
 
 
 ### MongoDB&reg; Sharded parameters
@@ -77,7 +77,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
 | `image.registry`                      | MongoDB&reg; Sharded image registry                                                                                                                       | `docker.io`               |
 | `image.repository`                    | MongoDB&reg; Sharded Image name                                                                                                                           | `bitnami/mongodb-sharded` |
-| `image.tag`                           | MongoDB&reg; Sharded image tag (immutable tags are recommended)                                                                                           | `4.4.8-debian-10-r32`     |
+| `image.tag`                           | MongoDB&reg; Sharded image tag (immutable tags are recommended)                                                                                           | `4.4.10-debian-10-r15`    |
 | `image.pullPolicy`                    | MongoDB&reg; Sharded image pull policy                                                                                                                    | `IfNotPresent`            |
 | `image.pullSecrets`                   | Specify docker-registry secret names as an array                                                                                                          | `[]`                      |
 | `image.debug`                         | Specify if debug logs should be enabled                                                                                                                   | `false`                   |
@@ -109,8 +109,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`           | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                   |
 | `volumePermissions.image.registry`    | Init container volume-permissions image registry                                                                                                          | `docker.io`               |
 | `volumePermissions.image.repository`  | Init container volume-permissions image name                                                                                                              | `bitnami/bitnami-shell`   |
-| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                                                                               | `10-debian-10-r179`       |
-| `volumePermissions.image.pullPolicy`  | Init container volume-permissions image pull policy                                                                                                       | `Always`                  |
+| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                                                                               | `10-debian-10-r234`       |
+| `volumePermissions.image.pullPolicy`  | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`            |
 | `volumePermissions.image.pullSecrets` | Init container volume-permissions image pull secrets                                                                                                      | `[]`                      |
 | `volumePermissions.resources`         | Init container resource requests/limit                                                                                                                    | `{}`                      |
 | `securityContext.enabled`             | Enable security context                                                                                                                                   | `true`                    |
@@ -145,51 +145,51 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Config Server parameters
 
-| Name                                  | Description                                                                                             | Value              |
-| ------------------------------------- | ------------------------------------------------------------------------------------------------------- | ------------------ |
-| `configsvr.replicas`                  | Number of nodes in the replica set (the first node will be primary)                                     | `1`                |
-| `configsvr.resources`                 | Configure pod resources                                                                                 | `{}`               |
-| `configsvr.hostAliases`               | Deployment pod host aliases                                                                             | `[]`               |
-| `configsvr.mongodbExtraFlags`         | MongoDB&reg; additional command line flags                                                              | `[]`               |
-| `configsvr.priorityClassName`         | Pod priority class name                                                                                 | `""`               |
-| `configsvr.podAffinityPreset`         | Config Server Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`               |
-| `configsvr.podAntiAffinityPreset`     | Config Server Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`             |
-| `configsvr.nodeAffinityPreset.type`   | Config Server Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`               |
-| `configsvr.nodeAffinityPreset.key`    | Config Server Node label key to match Ignored if `affinity` is set.                                     | `""`               |
-| `configsvr.nodeAffinityPreset.values` | Config Server Node label values to match. Ignored if `affinity` is set.                                 | `[]`               |
-| `configsvr.affinity`                  | Config Server Affinity for pod assignment                                                               | `{}`               |
-| `configsvr.nodeSelector`              | Config Server Node labels for pod assignment                                                            | `{}`               |
-| `configsvr.tolerations`               | Config Server Tolerations for pod assignment                                                            | `[]`               |
-| `configsvr.podManagementPolicy`       | Statefulset's pod management policy, allows parallel startup of pods                                    | `OrderedReady`     |
-| `configsvr.updateStrategy.type`       | updateStrategy for MongoDB&reg; Primary, Secondary and Arbiter statefulsets                             | `RollingUpdate`    |
-| `configsvr.config`                    | MongoDB&reg; configuration file                                                                         | `""`               |
-| `configsvr.configCM`                  | ConfigMap name with Config Server configuration file (cannot be used with configsvr.config)             | `""`               |
-| `configsvr.extraEnvVars`              | An array to add extra env vars                                                                          | `[]`               |
-| `configsvr.extraEnvVarsCM`            | Name of a ConfigMap containing extra env vars                                                           | `""`               |
-| `configsvr.extraEnvVarsSecret`        | Name of a Secret containing extra env vars                                                              | `""`               |
-| `configsvr.sidecars`                  | Add sidecars to the pod                                                                                 | `[]`               |
-| `configsvr.initContainers`            | Add init containers to the pod                                                                          | `[]`               |
-| `configsvr.podAnnotations`            | Additional pod annotations                                                                              | `{}`               |
-| `configsvr.podLabels`                 | Additional pod labels                                                                                   | `{}`               |
-| `configsvr.extraVolumes`              | Array to add extra volumes. Requires setting `extraVolumeMounts`                                        | `[]`               |
-| `configsvr.extraVolumeMounts`         | Array to add extra mounts (normally used with extraVolumes). Normally used with `extraVolumes`          | `[]`               |
-| `configsvr.schedulerName`             | Use an alternate scheduler, e.g. "stork".                                                               | `""`               |
-| `configsvr.pdb.enabled`               | Enable pod disruption budget                                                                            | `false`            |
-| `configsvr.pdb.minAvailable`          | Minimum number of available config pods allowed (`0` to disable)                                        | `0`                |
-| `configsvr.pdb.maxUnavailable`        | Maximum number of unavailable config pods allowed (`0` to disable)                                      | `1`                |
-| `configsvr.persistence.enabled`       | Use a PVC to persist data                                                                               | `true`             |
-| `configsvr.persistence.mountPath`     | Path to mount the volume at                                                                             | `/bitnami/mongodb` |
-| `configsvr.persistence.subPath`       | Subdirectory of the volume to mount at                                                                  | `""`               |
-| `configsvr.persistence.storageClass`  | Storage class of backing PVC                                                                            | `""`               |
-| `configsvr.persistence.accessModes`   | Use volume as ReadOnly or ReadWrite                                                                     | `[]`               |
-| `configsvr.persistence.size`          | PersistentVolumeClaim size                                                                              | `8Gi`              |
-| `configsvr.persistence.annotations`   | Persistent Volume annotations                                                                           | `{}`               |
-| `configsvr.serviceAccount.create`     | Specifies whether a ServiceAccount should be created for Config Server                                  | `false`            |
-| `configsvr.serviceAccount.name`       | Name of a Service Account to be used by Config Server                                                   | `""`               |
-| `configsvr.external.host`             | Primary node of an external Config Server replicaset                                                    | `""`               |
-| `configsvr.external.rootPassword`     | Root password of the external Config Server replicaset                                                  | `""`               |
-| `configsvr.external.replicasetName`   | Replicaset name of an external Config Server                                                            | `""`               |
-| `configsvr.external.replicasetKey`    | Replicaset key of an external Config Server                                                             | `""`               |
+| Name                                  | Description                                                                                             | Value               |
+| ------------------------------------- | ------------------------------------------------------------------------------------------------------- | ------------------- |
+| `configsvr.replicas`                  | Number of nodes in the replica set (the first node will be primary)                                     | `1`                 |
+| `configsvr.resources`                 | Configure pod resources                                                                                 | `{}`                |
+| `configsvr.hostAliases`               | Deployment pod host aliases                                                                             | `[]`                |
+| `configsvr.mongodbExtraFlags`         | MongoDB&reg; additional command line flags                                                              | `[]`                |
+| `configsvr.priorityClassName`         | Pod priority class name                                                                                 | `""`                |
+| `configsvr.podAffinityPreset`         | Config Server Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                |
+| `configsvr.podAntiAffinityPreset`     | Config Server Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`              |
+| `configsvr.nodeAffinityPreset.type`   | Config Server Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                |
+| `configsvr.nodeAffinityPreset.key`    | Config Server Node label key to match Ignored if `affinity` is set.                                     | `""`                |
+| `configsvr.nodeAffinityPreset.values` | Config Server Node label values to match. Ignored if `affinity` is set.                                 | `[]`                |
+| `configsvr.affinity`                  | Config Server Affinity for pod assignment                                                               | `{}`                |
+| `configsvr.nodeSelector`              | Config Server Node labels for pod assignment                                                            | `{}`                |
+| `configsvr.tolerations`               | Config Server Tolerations for pod assignment                                                            | `[]`                |
+| `configsvr.podManagementPolicy`       | Statefulset's pod management policy, allows parallel startup of pods                                    | `OrderedReady`      |
+| `configsvr.updateStrategy.type`       | updateStrategy for MongoDB&reg; Primary, Secondary and Arbiter statefulsets                             | `RollingUpdate`     |
+| `configsvr.config`                    | MongoDB&reg; configuration file                                                                         | `""`                |
+| `configsvr.configCM`                  | ConfigMap name with Config Server configuration file (cannot be used with configsvr.config)             | `""`                |
+| `configsvr.extraEnvVars`              | An array to add extra env vars                                                                          | `[]`                |
+| `configsvr.extraEnvVarsCM`            | Name of a ConfigMap containing extra env vars                                                           | `""`                |
+| `configsvr.extraEnvVarsSecret`        | Name of a Secret containing extra env vars                                                              | `""`                |
+| `configsvr.sidecars`                  | Add sidecars to the pod                                                                                 | `[]`                |
+| `configsvr.initContainers`            | Add init containers to the pod                                                                          | `[]`                |
+| `configsvr.podAnnotations`            | Additional pod annotations                                                                              | `{}`                |
+| `configsvr.podLabels`                 | Additional pod labels                                                                                   | `{}`                |
+| `configsvr.extraVolumes`              | Array to add extra volumes. Requires setting `extraVolumeMounts`                                        | `[]`                |
+| `configsvr.extraVolumeMounts`         | Array to add extra mounts (normally used with extraVolumes). Normally used with `extraVolumes`          | `[]`                |
+| `configsvr.schedulerName`             | Use an alternate scheduler, e.g. "stork".                                                               | `""`                |
+| `configsvr.pdb.enabled`               | Enable pod disruption budget                                                                            | `false`             |
+| `configsvr.pdb.minAvailable`          | Minimum number of available config pods allowed (`0` to disable)                                        | `0`                 |
+| `configsvr.pdb.maxUnavailable`        | Maximum number of unavailable config pods allowed (`0` to disable)                                      | `1`                 |
+| `configsvr.persistence.enabled`       | Use a PVC to persist data                                                                               | `true`              |
+| `configsvr.persistence.mountPath`     | Path to mount the volume at                                                                             | `/bitnami/mongodb`  |
+| `configsvr.persistence.subPath`       | Subdirectory of the volume to mount at                                                                  | `""`                |
+| `configsvr.persistence.storageClass`  | Storage class of backing PVC                                                                            | `""`                |
+| `configsvr.persistence.accessModes`   | Use volume as ReadOnly or ReadWrite                                                                     | `["ReadWriteOnce"]` |
+| `configsvr.persistence.size`          | PersistentVolumeClaim size                                                                              | `8Gi`               |
+| `configsvr.persistence.annotations`   | Persistent Volume annotations                                                                           | `{}`                |
+| `configsvr.serviceAccount.create`     | Specifies whether a ServiceAccount should be created for Config Server                                  | `false`             |
+| `configsvr.serviceAccount.name`       | Name of a Service Account to be used by Config Server                                                   | `""`                |
+| `configsvr.external.host`             | Primary node of an external Config Server replicaset                                                    | `""`                |
+| `configsvr.external.rootPassword`     | Root password of the external Config Server replicaset                                                  | `""`                |
+| `configsvr.external.replicasetName`   | Replicaset name of an external Config Server                                                            | `""`                |
+| `configsvr.external.replicasetKey`    | Replicaset key of an external Config Server                                                             | `""`                |
 
 
 ### Mongos parameters
@@ -283,15 +283,15 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Shard configuration: Persistence parameters
 
-| Name                                | Description                                                                              | Value              |
-| ----------------------------------- | ---------------------------------------------------------------------------------------- | ------------------ |
-| `shardsvr.persistence.enabled`      | Use a PVC to persist data                                                                | `true`             |
-| `shardsvr.persistence.mountPath`    | The path the volume will be mounted at, useful when using different MongoDB&reg; images. | `/bitnami/mongodb` |
-| `shardsvr.persistence.subPath`      | Subdirectory of the volume to mount at                                                   | `""`               |
-| `shardsvr.persistence.storageClass` | Storage class of backing PVC                                                             | `""`               |
-| `shardsvr.persistence.accessModes`  | Use volume as ReadOnly or ReadWrite                                                      | `[]`               |
-| `shardsvr.persistence.size`         | PersistentVolumeClaim size                                                               | `8Gi`              |
-| `shardsvr.persistence.annotations`  | Additional volume annotations                                                            | `{}`               |
+| Name                                | Description                                                                              | Value               |
+| ----------------------------------- | ---------------------------------------------------------------------------------------- | ------------------- |
+| `shardsvr.persistence.enabled`      | Use a PVC to persist data                                                                | `true`              |
+| `shardsvr.persistence.mountPath`    | The path the volume will be mounted at, useful when using different MongoDB&reg; images. | `/bitnami/mongodb`  |
+| `shardsvr.persistence.subPath`      | Subdirectory of the volume to mount at                                                   | `""`                |
+| `shardsvr.persistence.storageClass` | Storage class of backing PVC                                                             | `""`                |
+| `shardsvr.persistence.accessModes`  | Use volume as ReadOnly or ReadWrite                                                      | `["ReadWriteOnce"]` |
+| `shardsvr.persistence.size`         | PersistentVolumeClaim size                                                               | `8Gi`               |
+| `shardsvr.persistence.annotations`  | Additional volume annotations                                                            | `{}`                |
 
 
 ### Shard configuration: Arbiter parameters
@@ -336,7 +336,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                            | Start a side-car prometheus exporter                                               | `false`                    |
 | `metrics.image.registry`                     | MongoDB&reg; exporter image registry                                               | `docker.io`                |
 | `metrics.image.repository`                   | MongoDB&reg; exporter image name                                                   | `bitnami/mongodb-exporter` |
-| `metrics.image.tag`                          | MongoDB&reg; exporter image tag                                                    | `0.11.2-debian-10-r267`    |
+| `metrics.image.tag`                          | MongoDB&reg; exporter image tag                                                    | `0.11.2-debian-10-r322`    |
 | `metrics.image.pullPolicy`                   | MongoDB&reg; exporter image pull policy                                            | `Always`                   |
 | `metrics.image.pullSecrets`                  | MongoDB&reg; exporter image pull secrets                                           | `[]`                       |
 | `metrics.extraArgs`                          | String with extra arguments to the metrics exporter                                | `""`                       |

@@ -71,15 +71,16 @@ $ kubectl delete pvc -l release=my-release
 
 ### Common parameters
 
-| Name                     | Description                                                                                  | Value   |
-| ------------------------ | -------------------------------------------------------------------------------------------- | ------- |
-| `nameOverride`           | String to partially override common.names.fullname template (will maintain the release name) | `""`    |
-| `fullnameOverride`       | String to fully override common.names.fullname template                                      | `""`    |
-| `extraDeploy`            | Array of extra objects to deploy with the release (evaluated as a template)                  | `[]`    |
-| `commonAnnotations`      | Add annotations to all the deployed resources                                                | `{}`    |
-| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)      | `false` |
-| `diagnosticMode.command` | Command to override all containers in the deployment                                         | `[]`    |
-| `diagnosticMode.args`    | Args to override all containers in the deployment                                            | `[]`    |
+| Name                     | Description                                                                                  | Value          |
+| ------------------------ | -------------------------------------------------------------------------------------------- | -------------- |
+| `nameOverride`           | String to partially override common.names.fullname template (will maintain the release name) | `""`           |
+| `fullnameOverride`       | String to fully override common.names.fullname template                                      | `""`           |
+| `extraDeploy`            | Array of extra objects to deploy with the release (evaluated as a template)                  | `[]`           |
+| `commonLabels`           | Add labels to all the deployed resources                                                     | `{}`           |
+| `commonAnnotations`      | Add annotations to all the deployed resources                                                | `{}`           |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)      | `false`        |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                         | `["sleep"]`    |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                            | `["infinity"]` |
 
 
 ### PostgreSQL parameters
@@ -88,15 +89,15 @@ $ kubectl delete pvc -l release=my-release
 | --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
 | `image.registry`                              | PostgreSQL image registry                                                                                                                                 | `docker.io`                 |
 | `image.repository`                            | PostgreSQL image repository                                                                                                                               | `bitnami/postgresql`        |
-| `image.tag`                                   | PostgreSQL image tag (immutable tags are recommended)                                                                                                     | `11.13.0-debian-10-r25`     |
+| `image.tag`                                   | PostgreSQL image tag (immutable tags are recommended)                                                                                                     | `11.13.0-debian-10-r88`     |
 | `image.pullPolicy`                            | PostgreSQL image pull policy                                                                                                                              | `IfNotPresent`              |
 | `image.pullSecrets`                           | Specify image pull secrets                                                                                                                                | `[]`                        |
 | `image.debug`                                 | Specify if debug values should be set                                                                                                                     | `false`                     |
 | `volumePermissions.enabled`                   | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                     |
 | `volumePermissions.image.registry`            | Init container volume-permissions image registry                                                                                                          | `docker.io`                 |
 | `volumePermissions.image.repository`          | Init container volume-permissions image repository                                                                                                        | `bitnami/bitnami-shell`     |
-| `volumePermissions.image.tag`                 | Init container volume-permissions image tag (immutable tags are recommended)                                                                              | `10-debian-10-r185`         |
-| `volumePermissions.image.pullPolicy`          | Init container volume-permissions image pull policy                                                                                                       | `Always`                    |
+| `volumePermissions.image.tag`                 | Init container volume-permissions image tag (immutable tags are recommended)                                                                              | `10-debian-10-r246`         |
+| `volumePermissions.image.pullPolicy`          | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`              |
 | `volumePermissions.image.pullSecrets`         | Init container volume-permissions image pull secrets                                                                                                      | `[]`                        |
 | `volumePermissions.securityContext.runAsUser` | User ID for the init container                                                                                                                            | `0`                         |
 | `schedulerName`                               | Use an alternate scheduler, e.g. "stork".                                                                                                                 | `""`                        |
@@ -108,7 +109,7 @@ $ kubectl delete pvc -l release=my-release
 | `serviceAccount.enabled`                      | Enable service account (Note: Service Account will only be automatically created if `serviceAccount.name` is not set)                                     | `false`                     |
 | `serviceAccount.name`                         | Name of an already existing service account. Setting this value disables the automatic service account creation                                           | `""`                        |
 | `serviceAccount.autoMount`                    | Auto-mount the service account token in the pod                                                                                                           | `false`                     |
-| `psp.create`                                  | Create Pod Security Policy                                                                                                                                | `false`                     |
+| `psp.create`                                  | Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later               | `false`                     |
 | `rbac.create`                                 | Create Role and RoleBinding (required for PSP to work)                                                                                                    | `false`                     |
 | `replication.enabled`                         | Enable replication                                                                                                                                        | `false`                     |
 | `replication.user`                            | Replication user                                                                                                                                          | `repl_user`                 |
@@ -162,7 +163,7 @@ $ kubectl delete pvc -l release=my-release
 | `postgresqlPghbaRemoveFilters`                | Comma-separated list of patterns to remove from the pg_hba.conf file                                                                                      | `""`                        |
 | `terminationGracePeriodSeconds`               | Seconds the pod needs to terminate gracefully                                                                                                             | `""`                        |
 | `ldap.enabled`                                | Enable LDAP support                                                                                                                                       | `false`                     |
-| `ldap.url`                                    | LDAP URL beginning in the form `ldap[s]://host[:port]/basedn[                                                                                             | `""`                        |
+| `ldap.url`                                    | LDAP URL beginning in the form `ldap[s]://host[:port]/basedn`                                                                                             | `""`                        |
 | `ldap.server`                                 | IP address or name of the LDAP server.                                                                                                                    | `""`                        |
 | `ldap.port`                                   | Port number on the LDAP server to connect to                                                                                                              | `""`                        |
 | `ldap.prefix`                                 | String to prepend to the user name when forming the DN to bind                                                                                            | `""`                        |
@@ -180,6 +181,7 @@ $ kubectl delete pvc -l release=my-release
 | `service.nodePort`                            | Specify the nodePort value for the LoadBalancer and NodePort service types                                                                                | `""`                        |
 | `service.annotations`                         | Annotations for PostgreSQL service                                                                                                                        | `{}`                        |
 | `service.loadBalancerIP`                      | Load balancer IP if service type is `LoadBalancer`                                                                                                        | `""`                        |
+| `service.externalTrafficPolicy`               | Enable client source IP preservation                                                                                                                      | `Cluster`                   |
 | `service.loadBalancerSourceRanges`            | Addresses that are allowed when service is LoadBalancer                                                                                                   | `[]`                        |
 | `shmVolume.enabled`                           | Enable emptyDir volume for /dev/shm for primary and read replica(s) Pod(s)                                                                                | `true`                      |
 | `shmVolume.chmod.enabled`                     | Set to `true` to `chmod 777 /dev/shm` on a initContainer (ignored if `volumePermissions.enabled` is `false`)                                              | `true`                      |
@@ -189,7 +191,7 @@ $ kubectl delete pvc -l release=my-release
 | `persistence.mountPath`                       | The path the volume will be mounted at, useful when using different                                                                                       | `/bitnami/postgresql`       |
 | `persistence.subPath`                         | The subdirectory of the volume to mount to                                                                                                                | `""`                        |
 | `persistence.storageClass`                    | PVC Storage Class for PostgreSQL volume                                                                                                                   | `""`                        |
-| `persistence.accessModes`                     | PVC Access Mode for PostgreSQL volume                                                                                                                     | `[]`                        |
+| `persistence.accessModes`                     | PVC Access Mode for PostgreSQL volume                                                                                                                     | `["ReadWriteOnce"]`         |
 | `persistence.size`                            | PVC Storage Request for PostgreSQL volume                                                                                                                 | `8Gi`                       |
 | `persistence.annotations`                     | Annotations for the PVC                                                                                                                                   | `{}`                        |
 | `persistence.selector`                        | Selector to match an existing Persistent Volume (this value is evaluated as a template)                                                                   | `{}`                        |
@@ -202,6 +204,7 @@ $ kubectl delete pvc -l release=my-release
 | `primary.affinity`                            | Affinity for PostgreSQL primary pods assignment                                                                                                           | `{}`                        |
 | `primary.nodeSelector`                        | Node labels for PostgreSQL primary pods assignment                                                                                                        | `{}`                        |
 | `primary.tolerations`                         | Tolerations for PostgreSQL primary pods assignment                                                                                                        | `[]`                        |
+| `primary.extraPodSpec`                        | Optionally specify extra PodSpec                                                                                                                          | `{}`                        |
 | `primary.labels`                              | Map of labels to add to the statefulset (postgresql primary)                                                                                              | `{}`                        |
 | `primary.annotations`                         | Annotations for PostgreSQL primary pods                                                                                                                   | `{}`                        |
 | `primary.podLabels`                           | Map of labels to add to the pods (postgresql primary)                                                                                                     | `{}`                        |
@@ -222,6 +225,8 @@ $ kubectl delete pvc -l release=my-release
 | `readReplicas.affinity`                       | Affinity for PostgreSQL read only pods assignment                                                                                                         | `{}`                        |
 | `readReplicas.nodeSelector`                   | Node labels for PostgreSQL read only pods assignment                                                                                                      | `{}`                        |
 | `readReplicas.tolerations`                    | Tolerations for PostgreSQL read only pods assignment                                                                                                      | `[]`                        |
+| `readReplicas.topologySpreadConstraints`      | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template                                  | `[]`                        |
+| `readReplicas.extraPodSpec`                   | Optionally specify extra PodSpec                                                                                                                          | `{}`                        |
 | `readReplicas.labels`                         | Map of labels to add to the statefulsets (postgresql readReplicas)                                                                                        | `{}`                        |
 | `readReplicas.annotations`                    | Annotations for PostgreSQL read only pods                                                                                                                 | `{}`                        |
 | `readReplicas.podLabels`                      | Map of labels to add to the pods (postgresql readReplicas)                                                                                                | `{}`                        |
@@ -287,7 +292,7 @@ $ kubectl delete pvc -l release=my-release
 | `metrics.prometheusRule.rules`                | (https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/) to be created                                                                | `[]`                        |
 | `metrics.image.registry`                      | PostgreSQL Exporter image registry                                                                                                                        | `docker.io`                 |
 | `metrics.image.repository`                    | PostgreSQL Exporter image repository                                                                                                                      | `bitnami/postgres-exporter` |
-| `metrics.image.tag`                           | PostgreSQL Exporter image tag (immutable tags are recommended)                                                                                            | `0.10.0-debian-10-r53`      |
+| `metrics.image.tag`                           | PostgreSQL Exporter image tag (immutable tags are recommended)                                                                                            | `0.10.0-debian-10-r114`     |
 | `metrics.image.pullPolicy`                    | PostgreSQL Exporter image pull policy                                                                                                                     | `IfNotPresent`              |
 | `metrics.image.pullSecrets`                   | Specify image pull secrets                                                                                                                                | `[]`                        |
 | `metrics.customMetrics`                       | Define additional custom metrics                                                                                                                          | `{}`                        |

@@ -76,4 +76,5 @@ pytorch: missing-extra-volume-mounts
 {{- define "pytorch.checkRollingTags" -}}
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- include "common.warnings.rollingTag" .Values.git }}
+{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
 {{- end -}}

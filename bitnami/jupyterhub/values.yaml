@@ -51,7 +51,7 @@ hub:
     repository: bitnami/jupyterhub
     ## @param hub.image.tag Hub image tag (immutabe tags are recommended)
     ##
-    tag: 1.4.2-debian-10-r37
+    tag: 1.5.0-debian-10-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -162,7 +162,9 @@ hub:
       services: {}
       allowNamedServers: false
       namedServerLimitPerUser:
-      authenticatePrometheus:
+      {{- if .Values.hub.metrics.serviceMonitor.enabled }}
+      authenticatePrometheus: {{ .Values.hub.metrics.authenticatePrometheus }}
+      {{- end }}
       redirectToServer:
       shutdownOnLogout:
     singleuser:
@@ -178,7 +180,7 @@ hub:
           name: {{ include "jupyterhub.hubconfiguration.imageEntry" ( dict "imageRoot" .Values.auxiliaryImage "global" $) }}
           tag: {{ .Values.auxiliaryImage.tag }}
           pullPolicy: {{ .Values.auxiliaryImage.pullPolicy }}
-          pullSecrets: {{- include "jupyterhub.imagePullSecrets" . | nindent 8 }}
+          pullSecrets: {{- include "jupyterhub.imagePullSecrets.list" . | nindent 8 }}
       cloudMetadata:
         blockWithIptables: false
       events: true
@@ -244,7 +246,7 @@ hub:
         name: {{ include "jupyterhub.hubconfiguration.imageEntry" ( dict "imageRoot" .Values.singleuser.image "global" $) }}
         tag: {{ .Values.singleuser.image.tag }}
         pullPolicy: {{ .Values.singleuser.image.pullPolicy }}
-        pullSecrets: {{- include "jupyterhub.imagePullSecrets" . | nindent 8 }}
+        pullSecrets: {{- include "jupyterhub.imagePullSecrets.list" . | nindent 8 }}
       startTimeout: 300
       {{- /* We need to replace the Kubernetes memory/cpu terminology (e.g. 10Gi, 10Mi) with one compatible with Python (10G, 10M) */}}
       cpu:
@@ -512,6 +514,43 @@ hub:
     ##
     externalTrafficPolicy: Cluster
 
+  ## @section Hub Metrics parameters
+
+  metrics:
+    ## @param hub.metrics.authenticatePrometheus Use authentication for Prometheus
+    ## To allow public access without authentication for prometheus metrics set environment as follows.
+    ##
+    authenticatePrometheus: false
+    ## Prometheus Operator ServiceMonitor configuration
+    ##
+    serviceMonitor:
+      ## @param hub.metrics.serviceMonitor.enabled If the operator is installed in your cluster, set to true to create a Service Monitor Entry
+      ##
+      enabled: false
+      ## @param hub.metrics.serviceMonitor.namespace Namespace which Prometheus is running in
+      ##
+      namespace: ""
+      ## @param hub.metrics.serviceMonitor.path HTTP path to scrape for metrics
+      ##
+      path: /hub/metrics
+      ## @param hub.metrics.serviceMonitor.interval Interval at which metrics should be scraped
+      ##
+      interval: 30s
+      ## @param hub.metrics.serviceMonitor.scrapeTimeout Specify the timeout after which the scrape is ended
+      ## e.g:
+      ## scrapeTimeout: 30s
+      scrapeTimeout: ""
+      ## @param hub.metrics.serviceMonitor.relabellings Specify Metric Relabellings to add to the scrape endpoint
+      ##
+      relabellings: []
+      ## @param hub.metrics.serviceMonitor.honorLabels Specify honorLabels parameter to add the scrape endpoint
+      ##
+      honorLabels: false
+      ## @param hub.metrics.serviceMonitor.additionalLabels Used to pass Labels that are required by the installed Prometheus Operator
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
+      ##
+      additionalLabels: {}
+
 ## @section Proxy deployment parameters
 
 ## Proxy deployment parameters
@@ -527,7 +566,7 @@ proxy:
   image:
     registry: docker.io
     repository: bitnami/configurable-http-proxy
-    tag: 4.5.0-debian-10-r36
+    tag: 4.5.0-debian-10-r110
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -622,6 +661,9 @@ proxy:
     ## @param proxy.containerPort.api Proxy api container port
     ##
     api: 8001
+    ## @param proxy.containerPort.metrics Proxy metrics container port
+    ##
+    metrics: 8002
     ## @param proxy.containerPort.http Proxy http container port
     ##
     http: 8000
@@ -822,6 +864,32 @@ proxy:
       ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
       ##
       externalTrafficPolicy: Cluster
+    metrics:
+      ## @param proxy.service.metrics.type Metrics service type
+      ##
+      type: ClusterIP
+      ## @param proxy.service.metrics.port Metrics service port
+      ##
+      port: 8002
+      ## @param proxy.service.metrics.loadBalancerIP Metrics service LoadBalancer IP (optional, cloud specific)
+      ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+      ##
+      loadBalancerIP: ""
+      ## @param proxy.service.metrics.loadBalancerSourceRanges loadBalancerIP source ranges for the Service
+      ##
+      loadBalancerSourceRanges: []
+      ## @param proxy.service.metrics.nodePorts.http NodePort for the HTTP endpoint
+      ## nodePorts:
+      ##   http: <to set explicitly, choose port between 30000-32767>
+      ##   https: <to set explicitly, choose port between 30000-32767>
+      ##
+      nodePorts:
+        http: ""
+      ## @param proxy.service.metrics.externalTrafficPolicy External traffic policy for the service
+      ## Enable client source IP preservation
+      ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+      ##
+      externalTrafficPolicy: Cluster
     public:
       ## @param proxy.service.public.type Public service type
       ##
@@ -861,18 +929,24 @@ proxy:
     ## @param proxy.ingress.pathType Ingress path type
     ##
     pathType: ImplementationSpecific
-    ## Set this to true in order to add the corresponding annotations for cert-manager
-    ## @param proxy.ingress.certManager Add cert-manager annotations to the Ingress object
+    ## DEPRECATED: Use ingress.annotations instead of ingress.certManager
+    ## certManager: false
     ##
-    certManager: false
+
     ## When the ingress is enabled, a host pointing to this will be created
     ## @param proxy.ingress.hostname Set ingress rule hostname
     ##
     hostname: jupyterhub.local
-    ## @param proxy.ingress.annotations Add annotations to the Ingress object
+    ## @param proxy.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
     ## For a full list of possible ingress annotations, please see
     ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
-    ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+    ## Use this parameter to set the required annotations for cert-manager, see
+    ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
+    ##
+    ## e.g:
+    ## annotations:
+    ##   kubernetes.io/ingress.class: nginx
+    ##   cert-manager.io/cluster-issuer: cluster-issuer-name
     ##
     annotations: {}
     ## @param proxy.ingress.tls Enable ingress tls configuration for the hostname defined at proxy.ingress.hostname
@@ -915,6 +989,39 @@ proxy:
     ##   certificate:
     ##
     secrets: []
+
+  ## @section Proxy Metrics parameters
+
+  metrics:
+    ## Prometheus Operator ServiceMonitor configuration
+    ##
+    serviceMonitor:
+      ## @param proxy.metrics.serviceMonitor.enabled If the operator is installed in your cluster, set to true to create a Service Monitor Entry
+      ##
+      enabled: false
+      ## @param proxy.metrics.serviceMonitor.namespace Namespace which Prometheus is running in
+      ##
+      namespace: ""
+      ## @param proxy.metrics.serviceMonitor.path HTTP path to scrape for metrics
+      ##
+      path: /metrics
+      ## @param proxy.metrics.serviceMonitor.interval Interval at which metrics should be scraped
+      ##
+      interval: 30s
+      ## @param proxy.metrics.serviceMonitor.scrapeTimeout Specify the timeout after which the scrape is ended
+      ## e.g:
+      ## scrapeTimeout: 30s
+      scrapeTimeout: ""
+      ## @param proxy.metrics.serviceMonitor.relabellings Specify Metric Relabellings to add to the scrape endpoint
+      ##
+      relabellings: []
+      ## @param proxy.metrics.serviceMonitor.honorLabels Specify honorLabels parameter to add the scrape endpoint
+      ##
+      honorLabels: false
+      ## @param proxy.metrics.serviceMonitor.additionalLabels Used to pass Labels that are required by the installed Prometheus Operator
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
+      ##
+      additionalLabels: {}
 
 ## @section Image puller deployment parameters
 
@@ -1098,7 +1205,7 @@ singleuser:
   image:
     registry: docker.io
     repository: bitnami/jupyter-base-notebook
-    tag: 1.4.2-debian-10-r5
+    tag: 1.4.2-debian-10-r77
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1289,8 +1396,8 @@ singleuser:
 auxiliaryImage:
   registry: docker.io
   repository: bitnami/bitnami-shell
-  tag: 10-debian-10-r173
-  pullPolicy: Always
+  tag: 10-debian-10-r246
+  pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/

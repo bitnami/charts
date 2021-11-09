@@ -20,6 +20,7 @@ spec:
   {{- if .Values.envoy.updateStrategy }}
   strategy: {{- toYaml .Values.envoy.updateStrategy | nindent 4 }}
   {{- end }}
+  minReadySeconds: {{ .Values.envoy.minReadySeconds }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: envoy

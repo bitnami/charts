@@ -57,6 +57,7 @@ spec:
       {{- if .Values.hostNetwork }}
       hostNetwork: true
       {{- end }}
+      dnsPolicy: {{ .Values.dnsPolicy }}
       containers:
         {{- if .Values.extraContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.extraContainers "context" $) | nindent 8 }}

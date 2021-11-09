@@ -66,9 +66,10 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                                              | Description                                                                               | Value                               |
 | ------------------------------------------------- | ----------------------------------------------------------------------------------------- | ----------------------------------- |
+| `replicaCount`                                    | Desired number of pod replicas                                                            | `1`                                 |
 | `image.registry`                                  | Container image registry                                                                  | `docker.io`                         |
 | `image.repository`                                | Container image name                                                                      | `bitnami/kubernetes-event-exporter` |
-| `image.tag`                                       | Container image tag                                                                       | `0.10.0-debian-10-r58`              |
+| `image.tag`                                       | Container image tag                                                                       | `0.10.0-debian-10-r120`             |
 | `image.pullPolicy`                                | Container image pull policy                                                               | `IfNotPresent`                      |
 | `image.pullSecrets`                               | Specify docker-registry secret names as an array                                          | `[]`                                |
 | `hostAliases`                                     | Add deployment host aliases                                                               | `[]`                                |
@@ -109,8 +110,22 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling vs Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+### Use a different version
+
+To modify the application version used in this chart, specify a different version of the image using the `image.tag` parameter and/or a different repository using the `image.repository` parameter. Refer to the [chart documentation for more information on these parameters and how to use them with images from a private registry](https://docs.bitnami.com/kubernetes/apps/kubernetes-event-exporter/configuration/change-image-version/).
+
+### Set Pod affinity
+
+This chart allows you to set custom Pod affinity using the `affinity` parameter. Find more information about Pod's affinity in the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+
+## Troubleshooting
+
+Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).

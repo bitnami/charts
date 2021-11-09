@@ -50,15 +50,16 @@ The command removes all the Kubernetes components associated with the chart and 
 ### Global parameters
 
 | Name                      | Description                                     | Value |
-|---------------------------|-------------------------------------------------|-------|
+| ------------------------- | ----------------------------------------------- | ----- |
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
+
 ### Common parameters
 
 | Name                | Description                                       | Value           |
-|---------------------|---------------------------------------------------|-----------------|
+| ------------------- | ------------------------------------------------- | --------------- |
 | `kubeVersion`       | Override Kubernetes version                       | `""`            |
 | `nameOverride`      | String to partially override aspnet-core.fullname | `""`            |
 | `fullnameOverride`  | String to fully override aspnet-core.fullname     | `""`            |
@@ -67,27 +68,29 @@ The command removes all the Kubernetes components associated with the chart and 
 | `clusterDomain`     | Kubernetes cluster domain name                    | `cluster.local` |
 | `extraDeploy`       | Array of extra objects to deploy with the release | `[]`            |
 
+
 ### ASP.NET Core parameters
 
-| Name                 | Description                                                          | Value                  |
-|----------------------|----------------------------------------------------------------------|------------------------|
-| `image.registry`     | ASP.NET Core image registry                                          | `docker.io`            |
-| `image.repository`   | ASP.NET Core image repository                                        | `bitnami/aspnet-core`  |
-| `image.tag`          | ASP.NET Core image tag (immutable tags are recommended)              | `3.1.18-debian-10-r15` |
-| `image.pullPolicy`   | ASP.NET Core image pull policy                                       | `IfNotPresent`         |
-| `image.pullSecrets`  | ASP.NET Core image pull secrets                                      | `[]`                   |
-| `image.debug`        | Enable image debug mode                                              | `false`                |
-| `command`            | Override default container command (useful when using custom images) | `[]`                   |
-| `args`               | Override default container args (useful when using custom images)    | `[]`                   |
-| `bindURLs`           | URLs to bind                                                         | `http://+:8080`        |
-| `extraEnvVars`       | Extra environment variables to be set on ASP.NET Core container      | `[]`                   |
-| `extraEnvVarsCM`     | ConfigMap with extra environment variables                           | `""`                   |
-| `extraEnvVarsSecret` | Secret with extra environment variables                              | `""`                   |
+| Name                 | Description                                                          | Value                 |
+| -------------------- | -------------------------------------------------------------------- | --------------------- |
+| `image.registry`     | ASP.NET Core image registry                                          | `docker.io`           |
+| `image.repository`   | ASP.NET Core image repository                                        | `bitnami/aspnet-core` |
+| `image.tag`          | ASP.NET Core image tag (immutable tags are recommended)              | `3.1.21-debian-10-r0` |
+| `image.pullPolicy`   | ASP.NET Core image pull policy                                       | `IfNotPresent`        |
+| `image.pullSecrets`  | ASP.NET Core image pull secrets                                      | `[]`                  |
+| `image.debug`        | Enable image debug mode                                              | `false`               |
+| `command`            | Override default container command (useful when using custom images) | `[]`                  |
+| `args`               | Override default container args (useful when using custom images)    | `[]`                  |
+| `bindURLs`           | URLs to bind                                                         | `http://+:8080`       |
+| `extraEnvVars`       | Extra environment variables to be set on ASP.NET Core container      | `[]`                  |
+| `extraEnvVarsCM`     | ConfigMap with extra environment variables                           | `""`                  |
+| `extraEnvVarsSecret` | Secret with extra environment variables                              | `""`                  |
+
 
 ### ASP.NET Core deployment parameters
 
 | Name                                    | Description                                                                               | Value           |
-|-----------------------------------------|-------------------------------------------------------------------------------------------|-----------------|
+| --------------------------------------- | ----------------------------------------------------------------------------------------- | --------------- |
 | `replicaCount`                          | Number of ASP.NET Core replicas to deploy                                                 | `1`             |
 | `schedulerName`                         | Name of the k8s scheduler (other than default)                                            | `""`            |
 | `priorityClassName`                     | ASP.NET Core pod priority class name                                                      | `""`            |
@@ -148,14 +151,15 @@ The command removes all the Kubernetes components associated with the chart and 
 | `autoscaling.targetCPU`                 | Target CPU utilization percentage                                                         | `""`            |
 | `autoscaling.targetMemory`              | Target Memory utilization percentage                                                      | `""`            |
 
+
 ### Custom ASP.NET Core application parameters
 
 | Name                                            | Description                                                            | Value                                                               |
-|-------------------------------------------------|------------------------------------------------------------------------|---------------------------------------------------------------------|
+| ----------------------------------------------- | ---------------------------------------------------------------------- | ------------------------------------------------------------------- |
 | `appFromExternalRepo.enabled`                   | Enable to download/build ASP.NET Core app from external git repository | `true`                                                              |
 | `appFromExternalRepo.clone.image.registry`      | Git image registry                                                     | `docker.io`                                                         |
 | `appFromExternalRepo.clone.image.repository`    | Git image repository                                                   | `bitnami/git`                                                       |
-| `appFromExternalRepo.clone.image.tag`           | Git image tag (immutable tags are recommended)                         | `2.33.0-debian-10-r9`                                               |
+| `appFromExternalRepo.clone.image.tag`           | Git image tag (immutable tags are recommended)                         | `2.33.0-debian-10-r81`                                              |
 | `appFromExternalRepo.clone.image.pullPolicy`    | Git image pull policy                                                  | `IfNotPresent`                                                      |
 | `appFromExternalRepo.clone.image.pullSecrets`   | Git image pull secrets                                                 | `[]`                                                                |
 | `appFromExternalRepo.clone.repository`          | Git repository to clone                                                | `https://github.com/dotnet/AspNetCore.Docs.git`                     |
@@ -163,61 +167,62 @@ The command removes all the Kubernetes components associated with the chart and 
 | `appFromExternalRepo.clone.extraVolumeMounts`   | Add extra volume mounts for the GIT container                          | `[]`                                                                |
 | `appFromExternalRepo.publish.image.registry`    | .NET SDK image registry                                                | `docker.io`                                                         |
 | `appFromExternalRepo.publish.image.repository`  | .NET SDK image repository                                              | `bitnami/dotnet-sdk`                                                |
-| `appFromExternalRepo.publish.image.tag`         | .NET SDK image tag (immutable tags are recommended)                    | `3.1.412-debian-10-r14`                                             |
+| `appFromExternalRepo.publish.image.tag`         | .NET SDK image tag (immutable tags are recommended)                    | `3.1.414-debian-10-r26`                                             |
 | `appFromExternalRepo.publish.image.pullPolicy`  | .NET SDK image pull policy                                             | `IfNotPresent`                                                      |
 | `appFromExternalRepo.publish.image.pullSecrets` | .NET SDK image pull secrets                                            | `[]`                                                                |
 | `appFromExternalRepo.publish.subFolder`         | Sub folder under the Git repository containing the ASP.NET Core app    | `aspnetcore/fundamentals/servers/kestrel/samples/3.x/KestrelSample` |
 | `appFromExternalRepo.publish.extraFlags`        | Extra flags to be appended to "dotnet publish" command                 | `[]`                                                                |
-| `appFromExternalRepo.startCommand`              | Command used to start ASP.NET Core app                                 | `[]`                                                                |
+| `appFromExternalRepo.startCommand`              | Command used to start ASP.NET Core app                                 | `["dotnet","KestrelSample.dll"]`                                    |
 | `appFromExistingPVC.enabled`                    | Enable mounting your ASP.NET Core app from an existing PVC             | `false`                                                             |
 | `appFromExistingPVC.existingClaim`              | A existing Persistent Volume Claim containing your ASP.NET Core app    | `""`                                                                |
 
+
 ### Traffic Exposure Parameters
 
-| Name                               | Description                                                                                  | Value                    |
-|------------------------------------|----------------------------------------------------------------------------------------------|--------------------------|
-| `service.type`                     | ASP.NET Core service type                                                                    | `ClusterIP`              |
-| `service.ports.http`               | ASP.NET Core service HTTP port                                                               | `80`                     |
-| `service.nodePorts.http`           | Node ports to expose                                                                         | `""`                     |
-| `service.clusterIP`                | ASP.NET Core service Cluster IP                                                              | `""`                     |
-| `service.extraPorts`               | Extra ports to expose (normally used with the `sidecar` value)                               | `[]`                     |
-| `service.loadBalancerIP`           | ASP.NET Core service Load Balancer IP                                                        | `""`                     |
-| `service.loadBalancerSourceRanges` | ASP.NET Core service Load Balancer sources                                                   | `[]`                     |
-| `service.externalTrafficPolicy`    | ASP.NET Core service external traffic policy                                                 | `Cluster`                |
-| `service.annotations`              | Additional custom annotations for ASP.NET Core service                                       | `{}`                     |
-| `ingress.enabled`                  | Enable ingress record generation for ASP.NET Core                                            | `false`                  |
-| `ingress.pathType`                 | Ingress path type                                                                            | `ImplementationSpecific` |
-| `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                | `""`                     |
-| `ingress.hostname`                 | Default host for the ingress resource, a host pointing to this will be created               | `aspnet-core.local`      |
-| `ingress.path`                     | Default path for the ingress record                                                          | `/`                      |
-| `ingress.annotations`              | Additional custom annotations for the ingress record                                         | `{}`                     |
-| `ingress.tls`                      | Enable TLS configuration for the host defined at `ingress.hostname` parameter                | `false`                  |
-| `ingress.extraPaths`               | Any additional arbitrary paths that may need to be added to the ingress under the main host. | `[]`                     |
-| `ingress.selfSigned`               | Create a TLS secret for this ingress record using self-signed certificates generated by Helm | `false`                  |
-| `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                | `""`                     |
-| `ingress.certManager`              | Add the corresponding annotations for cert-manager integration                               | `false`                  |
-| `ingress.extraHosts`               | An array with additional hostname(s) to be covered with the ingress record                   | `[]`                     |
-| `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record          | `[]`                     |
-| `ingress.secrets`                  | Custom TLS certificates as secrets                                                           | `[]`                     |
-| `healthIngress.enabled`            | Enable healthIngress record generation for ASP.NET Core                                      | `false`                  |
-| `healthIngress.pathType`           | Ingress path type                                                                            | `ImplementationSpecific` |
-| `healthIngress.path`               | Default path for the ingress record                                                          | `/`                      |
-| `healthIngress.hostname`           | When the health ingress is enabled, a host pointing to this will be created                  | `aspnet-core.local`      |
-| `healthIngress.annotations`        | Additional custom annotations for the ingress record                                         | `{}`                     |
-| `healthIngress.tls`                | Enable TLS configuration for the host defined at `ingress.hostname` parameter                | `false`                  |
-| `healthIngress.certManager`        | Set this to true in order to add the corresponding annotations for cert-manager              | `false`                  |
-| `healthIngress.extraHosts`         | n array with additional hostname(s) to be covered with the ingress record                    | `[]`                     |
-| `healthIngress.extraTls`           | TLS configuration for additional hostname(s) to be covered with this ingress record          | `[]`                     |
-| `healthIngress.secrets`            | Custom TLS certificates as secrets                                                           | `[]`                     |
+| Name                               | Description                                                                                                                      | Value                    |
+| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.type`                     | ASP.NET Core service type                                                                                                        | `ClusterIP`              |
+| `service.ports.http`               | ASP.NET Core service HTTP port                                                                                                   | `80`                     |
+| `service.nodePorts.http`           | Node ports to expose                                                                                                             | `""`                     |
+| `service.clusterIP`                | ASP.NET Core service Cluster IP                                                                                                  | `""`                     |
+| `service.extraPorts`               | Extra ports to expose (normally used with the `sidecar` value)                                                                   | `[]`                     |
+| `service.loadBalancerIP`           | ASP.NET Core service Load Balancer IP                                                                                            | `""`                     |
+| `service.loadBalancerSourceRanges` | ASP.NET Core service Load Balancer sources                                                                                       | `[]`                     |
+| `service.externalTrafficPolicy`    | ASP.NET Core service external traffic policy                                                                                     | `Cluster`                |
+| `service.annotations`              | Additional custom annotations for ASP.NET Core service                                                                           | `{}`                     |
+| `ingress.enabled`                  | Enable ingress record generation for ASP.NET Core                                                                                | `false`                  |
+| `ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
+| `ingress.hostname`                 | Default host for the ingress resource, a host pointing to this will be created                                                   | `aspnet-core.local`      |
+| `ingress.path`                     | Default path for the ingress record                                                                                              | `/`                      |
+| `ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.tls`                      | Enable TLS configuration for the host defined at `ingress.hostname` parameter                                                    | `false`                  |
+| `ingress.extraPaths`               | Any additional arbitrary paths that may need to be added to the ingress under the main host.                                     | `[]`                     |
+| `ingress.selfSigned`               | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
+| `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
+| `ingress.extraHosts`               | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                     |
+| `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
+| `ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
+| `healthIngress.enabled`            | Enable healthIngress record generation for ASP.NET Core                                                                          | `false`                  |
+| `healthIngress.pathType`           | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `healthIngress.path`               | Default path for the ingress record                                                                                              | `/`                      |
+| `healthIngress.hostname`           | When the health ingress is enabled, a host pointing to this will be created                                                      | `aspnet-core.local`      |
+| `healthIngress.annotations`        | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `healthIngress.tls`                | Enable TLS configuration for the host defined at `ingress.hostname` parameter                                                    | `false`                  |
+| `healthIngress.extraHosts`         | n array with additional hostname(s) to be covered with the ingress record                                                        | `[]`                     |
+| `healthIngress.extraTls`           | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
+| `healthIngress.secrets`            | Custom TLS certificates as secrets                                                                                               | `[]`                     |
+
 
 ### RBAC parameters
 
 | Name                                          | Description                                          | Value  |
-|-----------------------------------------------|------------------------------------------------------|--------|
+| --------------------------------------------- | ---------------------------------------------------- | ------ |
 | `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created | `true` |
 | `serviceAccount.name`                         | The name of the ServiceAccount to use.               | `""`   |
 | `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount | `{}`   |
 | `serviceAccount.automountServiceAccountToken` | Automount service account token                      | `true` |
+
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

@@ -19,7 +19,9 @@ spec:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: data
   podManagementPolicy: Parallel
+  {{- if not .Values.data.autoscaling.enabled }}
   replicas: {{ .Values.data.replicas }}
+  {{- end }}
   serviceName: {{ template "elasticsearch.data.fullname" . }}
   template:
     metadata:
@@ -39,6 +41,9 @@ spec:
         {{- end }}
     spec:
       {{- include "elasticsearch.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.data.priorityClassName }}
+      priorityClassName: {{ .Values.data.priorityClassName | quote }}
+      {{- end }}
       {{- if .Values.data.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.data.affinity "context" $) | nindent 8 }}
       {{- else }}
@@ -58,6 +63,9 @@ spec:
       {{- end }}
       {{- if .Values.data.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.data.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.data.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.data.topologySpreadConstraints "context" $) | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ template "elasticsearch.data.serviceAccountName" . }}
       {{- if .Values.data.securityContext.enabled }}
@@ -129,7 +137,7 @@ spec:
             - name: ELASTICSEARCH_CLUSTER_HOSTS
               value: {{ include "elasticsearch.hosts" . | quote }}
             - name: ELASTICSEARCH_TOTAL_NODES
-              value: {{ add .Values.master.replicas .Values.data.replicas | quote }}
+              value: {{ add (ternary .Values.master.autoscaling.minReplicas .Values.master.replicas .Values.master.autoscaling.enabled) (ternary .Values.data.autoscaling.minReplicas .Values.data.replicas .Values.data.autoscaling.enabled) | quote }}
             {{- if .Values.plugins }}
             - name: ELASTICSEARCH_PLUGINS
               value: {{ .Values.plugins | quote }}

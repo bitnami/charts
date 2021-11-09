@@ -69,8 +69,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `clusterDomain`          | Kubernetes cluster domain name                                                          | `cluster.local` |
 | `extraDeploy`            | Array of extra objects to deploy with the release                                       | `[]`            |
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
-| `diagnosticMode.command` | Command to override all containers in the deployment                                    | `[]`            |
-| `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `[]`            |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`     |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]`  |
 
 
 ### Traffic Exposure Parameters
@@ -92,7 +92,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------ | ----------------------------------------------------------------------------------------- | -------------------- |
 | `image.registry`                     | HAProxy image registry                                                                    | `docker.io`          |
 | `image.repository`                   | HAProxy image repository                                                                  | `bitnami/haproxy`    |
-| `image.tag`                          | HAProxy image tag (immutable tags are recommended)                                        | `2.4.4-debian-10-r0` |
+| `image.tag`                          | HAProxy image tag (immutable tags are recommended)                                        | `2.4.8-debian-10-r0` |
 | `image.pullPolicy`                   | HAProxy image pull policy                                                                 | `IfNotPresent`       |
 | `image.pullSecrets`                  | HAProxy image pull secrets                                                                | `[]`                 |
 | `replicaCount`                       | Number of haproxy replicas to deploy                                                      | `1`                  |

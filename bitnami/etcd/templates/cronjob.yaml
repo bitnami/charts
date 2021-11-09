@@ -25,10 +25,35 @@ spec:
           annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.disasterRecovery.cronjob.podAnnotations "context" $) | nindent 12 }}
           {{- end }}
         spec:
+          {{- if .Values.disasterRecovery.cronjob.nodeSelector }}
+          nodeSelector: {{-  toYaml .Values.disasterRecovery.cronjob.nodeSelector | nindent 12  }}
+          {{- end }}
+          {{- if .Values.disasterRecovery.cronjob.tolerations }}
+          tolerations: {{- toYaml .Values.disasterRecovery.cronjob.tolerations | nindent 12 }}
+          {{- end }}
           {{- include "etcd.imagePullSecrets" . | nindent 10 }}
           restartPolicy: OnFailure
           {{- if .Values.podSecurityContext.enabled }}
           securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if and .Values.volumePermissions.enabled (or .Values.podSecurityContext.enabled .Values.containerSecurityContext.enabled) }}
+          initContainers:
+            - name: volume-permissions
+              image: {{ include "etcd.volumePermissions.image" . }}
+              imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
+              command:
+                - /bin/bash
+                - -ec
+                - |
+                  chown -R {{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }} /snapshots
+              securityContext:
+                runAsUser: 0
+              {{- if .Values.volumePermissions.resources }}
+              resources: {{- include "common.tplvalues.render" (dict "value" .Values.volumePermissions.resources "context" $) | nindent 16 }}
+              {{- end }}
+              volumeMounts:
+                - name: snapshot-volume
+                  mountPath: /snapshots
           {{- end }}
           containers:
             - name: etcd-snapshotter

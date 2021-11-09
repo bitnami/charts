@@ -40,7 +40,7 @@ rules:
       - watch
   - apiGroups:
       - extensions
-      - "networking.k8s.io"
+      - networking.k8s.io
     resources:
       - ingresses
     verbs:
@@ -49,7 +49,7 @@ rules:
       - watch
   - apiGroups:
       - extensions
-      - "networking.k8s.io"
+      - networking.k8s.io
     resources:
       - ingresses/status
     verbs:
@@ -59,7 +59,7 @@ rules:
     resources:
       - configmaps
     resourceNames:
-      - {{ .Values.electionID }}-{{ .Values.ingressClass }}
+      - {{ .Values.electionID }}
     verbs:
       - get
       - update
@@ -84,7 +84,8 @@ rules:
     verbs:
       - create
       - patch
-  {{- if .Values.podSecurityPolicy.enabled }}
+  {{- $pspAvailable := (semverCompare "<1.25-0" (include "common.capabilities.kubeVersion" .)) -}}
+  {{- if and $pspAvailable .Values.podSecurityPolicy.enabled }}
   - apiGroups: [{{ template "nginx-ingress-controller.podSecurityPolicy.apiGroup" . }}]
     resources: ['podsecuritypolicies']
     verbs: ['use']

@@ -41,7 +41,7 @@ fullnameOverride: ""
 image:
   registry: docker.io
   repository: bitnami/kibana
-  tag: 7.14.1-debian-10-r1
+  tag: 7.15.1-debian-10-r5
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -137,8 +137,8 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r187
-    pullPolicy: Always
+    tag: 10-debian-10-r233
+    pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -240,6 +240,9 @@ service:
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
   ##
   annotations: {}
+  ## @param service.labels Extra labels for Kibana service
+  ##
+  labels: {}
   ## @param service.loadBalancerIP loadBalancerIP if Kibana service type is `LoadBalancer`
   ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
   ##
@@ -255,9 +258,10 @@ ingress:
   ## @param ingress.enabled Enable ingress controller resource
   ##
   enabled: false
-  ## @param ingress.certManager Add annotations for cert-manager
+  ## DEPRECATED: Use ingress.annotations instead of ingress.certManager
+  ## certManager: false
   ##
-  certManager: false
+
   ## @param ingress.pathType Ingress Path type
   ##
   pathType: ImplementationSpecific
@@ -270,11 +274,16 @@ ingress:
   ## @param ingress.path The Path to Kibana. You may need to set this to '/*' in order to use this with ALB ingress controllers.
   ##
   path: /
-  ## @param ingress.annotations Ingress annotations
+  ## @param ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
   ## For a full list of possible ingress annotations, please see
   ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+  ## Use this parameter to set the required annotations for cert-manager, see
+  ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
   ##
-  ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+  ## e.g:
+  ## annotations:
+  ##   kubernetes.io/ingress.class: nginx
+  ##   cert-manager.io/cluster-issuer: cluster-issuer-name
   ##
   annotations: {}
   ## @param ingress.tls Enable TLS configuration for the hostname defined at ingress.hostname parameter

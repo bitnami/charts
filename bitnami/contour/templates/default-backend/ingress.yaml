@@ -9,11 +9,7 @@ metadata:
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
   annotations:
-    {{- if .Values.ingressClass }}
-    kubernetes.io/ingress.class: {{ .Values.ingressClass }}
-    {{- else }}
-    kubernetes.io/ingress.class: contour
-    {{- end }}
+    kubernetes.io/ingress.class: {{ include "contour.ingressClassName" . }}
     {{- if .Values.ingress.certManager }}
     kubernetes.io/tls-acme: "true"
     {{- end }}

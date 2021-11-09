@@ -16,7 +16,9 @@ spec:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: master
   podManagementPolicy: Parallel
+  {{- if not .Values.master.autoscaling.enabled }}
   replicas: {{ .Values.master.replicas }}
+  {{- end }}
   serviceName: {{ template "elasticsearch.master.fullname" . }}
   template:
     metadata:
@@ -42,6 +44,9 @@ spec:
       {{- if .Values.master.schedulerName }}
       schedulerName: {{ .Values.master.schedulerName }}
       {{- end }}
+      {{- if .Values.master.priorityClassName }}
+      priorityClassName: {{ .Values.master.priorityClassName | quote }}
+      {{- end }}
       {{- if .Values.master.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.master.affinity "context" $) | nindent 8 }}
       {{- else }}
@@ -55,6 +60,9 @@ spec:
       {{- end }}
       {{- if .Values.master.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.master.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.master.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.master.topologySpreadConstraints "context" $) | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ template "elasticsearch.master.serviceAccountName" . }}
       {{- if .Values.master.securityContext.enabled }}
@@ -126,13 +134,13 @@ spec:
             - name: ELASTICSEARCH_CLUSTER_HOSTS
               value: {{ include "elasticsearch.hosts" . | quote }}
             - name: ELASTICSEARCH_TOTAL_NODES
-              value: {{ add .Values.master.replicas .Values.data.replicas | quote }}
+              value: {{ add (ternary .Values.master.autoscaling.minReplicas .Values.master.replicas .Values.master.autoscaling.enabled) (ternary .Values.data.autoscaling.minReplicas .Values.data.replicas .Values.data.autoscaling.enabled) | quote }}
             - name: ELASTICSEARCH_CLUSTER_MASTER_HOSTS
               {{- $elasticsearchMasterFullname := include "elasticsearch.master.fullname" . }}
-              {{- $replicas := int .Values.master.replicas }}
+              {{- $replicas := int (ternary .Values.master.autoscaling.minReplicas .Values.master.replicas .Values.master.autoscaling.enabled) }}
               value: {{range $i, $e := until $replicas }}{{ $elasticsearchMasterFullname }}-{{ $e }} {{ end }}
             - name: ELASTICSEARCH_MINIMUM_MASTER_NODES
-              value: {{ add (div .Values.master.replicas 2) 1 | quote }}
+              value: {{ add (div (ternary .Values.master.autoscaling.minReplicas .Values.master.replicas .Values.master.autoscaling.enabled) 2) 1 | quote }}
             - name: ELASTICSEARCH_ADVERTISED_HOSTNAME
               value: "$(MY_POD_NAME).{{ include "elasticsearch.master.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
             {{- if .Values.plugins }}

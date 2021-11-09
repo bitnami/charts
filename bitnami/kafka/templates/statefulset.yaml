@@ -324,6 +324,12 @@ spec:
               value: {{ .Values.socketSendBufferBytes | quote }}
             - name: KAFKA_CFG_ZOOKEEPER_CONNECTION_TIMEOUT_MS
               value: {{ .Values.zookeeperConnectionTimeoutMs | quote }}
+            - name: KAFKA_CFG_AUTHORIZER_CLASS_NAME
+              value: {{ .Values.authorizerClassName | quote }}
+            - name: KAFKA_CFG_ALLOW_EVERYONE_IF_NO_ACL_FOUND
+              value: {{ .Values.allowEveryoneIfNoAclFound | quote }}
+            - name: KAFKA_CFG_SUPER_USERS
+              value: {{ .Values.superUsers | quote }}
             {{- if .Values.extraEnvVars }}
             {{ include "common.tplvalues.render" ( dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -398,7 +404,7 @@ spec:
             {{- end }}
             {{- end }}
             {{- if .Values.extraVolumeMounts }}
-            {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
         {{- if .Values.metrics.jmx.enabled }}
         - name: jmx-exporter
@@ -469,7 +475,7 @@ spec:
         {{- end }}
         {{- end }}
         {{- if .Values.extraVolumes }}
-        {{- toYaml .Values.extraVolumes | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
 {{- if not .Values.persistence.enabled }}
         - name: data

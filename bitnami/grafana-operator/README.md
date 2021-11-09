@@ -46,85 +46,15 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ## Differences between the Bitnami Grafana chart and the Bitnami Grafana Operator chart
 
-In the Bitnami catalog we offer both the *bitnami/grafana* and *bitnami/grafana-operator* charts. Each solution covers different needs and use cases.
+The Bitnami catalog offers both the `bitnami/grafana` and `bitnami/grafana-operator` charts. Each solution covers different needs and use cases.
 
-The *bitnami/grafana* chart deploys a single Grafana installation (with Grafana Image Renderer) using a Kubernetes Deployment object (together with Services, PVCs, ConfigMaps, etc.). The figure below shows the deployed objects in the cluster after executing *helm install*:
+* The `bitnami/grafana` chart deploys a single Grafana installation (with Grafana Image Renderer) using a Kubernetes Deployment object (together with Services, PVCs, ConfigMaps, etc.). Its lifecycle is managed using Helm and, at the Grafana container level, the following operations are automated: persistence management, configuration based on environment variables and plugin initialization. The chart also allows deploying dashboards and data sources using ConfigMaps. The Deployments do not require any ServiceAccounts with special RBAC privileges so this solution would fit better in more restricted Kubernetes installations.
 
-```
-                    +--------------+             +-----+
-                    |              |             |     |
- Service & Ingress  |    Grafana   +<------------+ PVC |
-<-------------------+              |             |     |
-                    |  Deployment  |             +-----+
-                    |              |
-                    +-----------+--+
-                                ^                +------------+
-                                |                |            |
-                                +----------------+ Configmaps |
-                                                 |   Secrets  |
-                                                 |            |
-                                                 +------------+
+* The `bitnami/grafana-operator` chart deploys a Grafana Operator installation using a Kubernetes Deployment. The operator will extend the Kubernetes API with the following objects: `Grafana`, `GrafanaDashboard` and `GrafanaDataSource`. From that moment, the user will be able to deploy objects of these kinds and the previously deployed Operator will take care of deploying all the required Deployments, ConfigMaps and Services for running a Grafana instance. Its lifecycle is managed using *kubectl* on the Grafana, GrafanaDashboard and GrafanaDataSource objects.
 
-```
+> Note: As the operator automatically deploys Grafana installations, the Grafana Operator pods will require a ServiceAccount with privileges to create and destroy multiple Kubernetes objects. This may be problematic for Kubernetes clusters with strict role-based access policies.
 
-Its lifecycle is managed using Helm and, at the Grafana container level, the following operations are automated: persistence management, configuration based on environment variables and plugin initialization. The chart also allows deploying dashboards and data sources using ConfigMaps. The Deployments do not require any ServiceAccounts with special RBAC privileges so this solution would fit better in more restricted Kubernetes installations.
-
-The *bitnami/grafana-operator* chart deploys a Grafana Operator installation using a Kubernetes Deployment.  The figure below shows the Grafana operator deployment after executing *helm install*:
-
-```
-+--------------------+
-|                    |      +---------------+
-|  Grafana Operator  |      |               |
-|                    |      |     RBAC      |
-|    Deployment      |      |   Privileges  |
-|                    |      |               |
-+-------+------------+      +-------+-------+
-        ^                           |
-        |   +-----------------+     |
-        +---+ Service Account +<----+
-            +-----------------+
-```
-
-The operator will extend the Kubernetes API with the following objects: *Grafana*, *GrafanaDashboards* and *GrafanaDataSources*. From that moment, the user will be able to deploy objects of these kinds and the previously deployed Operator will take care of deploying all the required Deployments, ConfigMaps and Services for running a Grafana instance. Its lifecycle is managed using *kubectl* on the Grafana, GrafanaDashboards and GrafanaDataSource objects. The following figure shows the deployed objects after deploying a *Grafana* object using *kubectl*:
-
-```
-+--------------------+
-|                    |      +---------------+
-|  Grafana Operator  |      |               |
-|                    |      |     RBAC      |
-|    Deployment      |      |   Privileges  |
-|                    |      |               |
-+--+----+------------+      +-------+-------+
-   |    ^                           |
-   |    |   +-----------------+     |
-   |    +---+ Service Account +<----+
-   |        +-----------------+
-   |
-   |
-   |
-   |
-   |                                                   Grafana
-   |                     +---------------------------------------------------------------------------+
-   |                     |                                                                           |
-   |                     |                          +--------------+             +-----+             |
-   |                     |                          |              |             |     |             |
-   +-------------------->+       Service & Ingress  |    Grafana   +<------------+ PVC |             |
-                         |      <-------------------+              |             |     |             |
-                         |                          |  Deployment  |             +-----+             |
-                         |                          |              |                                 |
-                         |                          +-----------+--+                                 |
-                         |                                      ^                +------------+      |
-                         |                                      |                |            |      |
-                         |                                      +----------------+ Configmaps |      |
-                         |                                                       |   Secrets  |      |
-                         |                                                       |            |      |
-                         |                                                       +------------+      |
-                         |                                                                           |
-                         +---------------------------------------------------------------------------+
-
-```
-
-This solution allows to easily deploy multiple Grafana instances compared to the *bitnami/grafana* chart. As the operator automatically deploys Grafana installations, the Grafana Operator pods will require a ServiceAccount with privileges to create and destroy multiple Kubernetes objects. This may be problematic for Kubernetes clusters with strict role-based access policies.
+For more information, refer to the [documentation on the differences between these charts](https://docs.bitnami.com/kubernetes/infrastructure/grafana-operator/get-started/compare-solutions/), including more information on the differences in the deployment objects.
 
 ## Parameters
 
@@ -156,7 +86,7 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `operator.updateStrategy.type`                               | Set up update strategy for Grafana Operator installation.                                                              | `Recreate`                 |
 | `operator.image.registry`                                    | Grafana Operator image registry                                                                                        | `docker.io`                |
 | `operator.image.repository`                                  | Grafana Operator image name                                                                                            | `bitnami/grafana-operator` |
-| `operator.image.tag`                                         | Grafana Operator image tag                                                                                             | `3.10.3-debian-10-r32`     |
+| `operator.image.tag`                                         | Grafana Operator image tag                                                                                             | `3.10.4-debian-10-r6`      |
 | `operator.image.pullPolicy`                                  | Grafana Operator image pull policy                                                                                     | `IfNotPresent`             |
 | `operator.image.pullSecrets`                                 | Grafana Operator image pull secrets                                                                                    | `[]`                       |
 | `operator.args.scanAllNamespaces`                            | Specify if all namespace should be scanned for dashboards and datasources. (Creates ClusterRole)                       | `false`                    |
@@ -213,7 +143,7 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `grafana.enabled`                                           | Enabled the deployment of the Grafana CRD object into the cluster                             | `true`               |
 | `grafana.image.registry`                                    | Grafana image registry                                                                        | `docker.io`          |
 | `grafana.image.repository`                                  | Grafana image name                                                                            | `bitnami/grafana`    |
-| `grafana.image.tag`                                         | Grafana image tag                                                                             | `8.1.2-debian-10-r5` |
+| `grafana.image.tag`                                         | Grafana image tag                                                                             | `8.2.2-debian-10-r5` |
 | `grafana.image.pullSecrets`                                 | Grafana image pull secrets                                                                    | `[]`                 |
 | `grafana.serviceAccount`                                    | Additional service account configuration                                                      | `{}`                 |
 | `grafana.podSecurityContext.enabled`                        | Enable pods security context                                                                  | `true`               |
@@ -241,7 +171,9 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `grafana.envFrom`                                           | Extra environment variable to pass to the running container                                   | `[]`                 |
 | `grafana.client.timeout`                                    | The timeout in seconds for the Grafana Rest API on that instance                              | `5`                  |
 | `grafana.client.preferService`                              | If the API should be used via Ingress or via the internal service                             | `true`               |
+| `grafana.labels`                                            | Add additional labels to the grafana deployment, service and ingress resources                | `{}`                 |
 | `grafana.ingress.enabled`                                   | If an ingress or OpenShift Route should be created                                            | `false`              |
+| `grafana.ingress.ingressClassName`                          | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                 | `""`                 |
 | `grafana.ingress.hostname`                                  | The hostname under which the grafana instance should be reachable                             | `grafana.local`      |
 | `grafana.ingress.path`                                      | The path for the ingress instance to forward to the grafana app                               | `/`                  |
 | `grafana.ingress.labels`                                    | Additional Labels for the ingress resource                                                    | `{}`                 |
@@ -293,59 +225,23 @@ $ helm install my-release -f values.yaml bitnami/grafana-operator
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling vs Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
-### Documentation for the Configuration of Dashboards
+### Create Grafana Dashboards
 
-After the installation you can create your Dashboards under a CRD of your kubernetes cluster.
+After the installation, create Dashboards under a CRD of your Kubernetes cluster.
 
 For more details regarding what is possible with those CRDs please have a look at [Working with Dashboards](https://github.com/integr8ly/grafana-operator/blob/master/documentation/dashboards.md).
 
-### Deploying extra resources
+### Deploy extra Grafana resources or objects
 
-There are cases where you may want to deploy extra objects, such your custom *Grafana*, *GrafanaDashboards* or *GrafanaDataSource* objects. For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter.
+There are cases where you may want to deploy extra objects, such as custom *Grafana*, *GrafanaDashboard* or *GrafanaDataSource* objects. For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter.
 
-For instance, to deploy your custom *Grafana* definition, you can install the Grafana Operator using the values below:
-
-```yaml
-grafana:
-  enabled: false
-extraDeploy:
-  - apiVersion: integreatly.org/v1alpha1
-    baseImage: docker.io/bitnami/grafana:7
-    kind: Grafana
-    metadata:
-      name: grafana
-    spec:
-      deployment:
-        securityContext:
-          runAsUser: 1001
-          fsGroup: 1001
-        containerSecurityContext:
-          runAsUser: 1001
-          fsGroup: 1001
-          allowPrivilegeEscalation: false
-      service:
-        type: LoadBalancer
-      ingress:
-        enabled: false
-      config:
-        log:
-          mode: "console"
-          level: "warn"
-        security:
-          admin_user: "admin"
-          admin_password: "hello"
-        auth.anonymous:
-          enabled: true
-      dashboardLabelSelector:
-        - matchExpressions:
-            - { key: app, operator: In, values: [grafana] }
-```
+Refer to the documentation on deploying extra Grafana resources for an [example of deploying a custom Grafana definition](https://docs.bitnami.com/kubernetes/infrastructure/grafana-operator/configuration/deploy-extra-resources/) or to the [tutorial on managing multiple Grafana instances and dashboards on Kubernetes with the Grafana Operator](https://docs.bitnami.com/tutorials/manage-multiple-grafana-operator).
 
 ## Troubleshooting
 

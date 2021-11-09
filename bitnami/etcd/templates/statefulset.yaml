@@ -30,6 +30,12 @@ spec:
         {{- if and .Values.metrics.enabled .Values.metrics.podAnnotations }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
+        {{- if (include "etcd.createConfigmap" .) }}
+        checksum/configuration: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        {{- end }}
+        {{- if (include "etcd.token.createSecret" .) }}
+        checksum/token-secret: {{ include (print $.Template.BasePath "/token-secrets.yaml") . | sha256sum }}
+        {{- end }}
     spec:
       {{- include "etcd.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.hostAliases }}
@@ -143,6 +149,12 @@ spec:
                   name: {{ include "etcd.secretName" . }}
                   key: {{ include "etcd.secretPasswordKey" . }}
             {{- end }}
+            - name: ETCD_AUTH_TOKEN
+              {{- if eq .Values.auth.token.type "jwt" }}
+              value: {{ printf "jwt,priv-key=/opt/bitnami/etcd/certs/token/%s,sign-method=%s,ttl=%s" .Values.auth.token.privateKey.filename .Values.auth.token.signMethod .Values.auth.token.ttl | quote}}
+              {{- else if eq .Values.auth.token.type "simple" }}
+              value: "simple"
+              {{- end }}
             - name: ETCD_ADVERTISE_CLIENT_URLS
               value: "{{ $etcdClientProtocol }}://$(MY_POD_NAME).{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.svc.{{ $clusterDomain }}:{{ .Values.service.port }}"
             - name: ETCD_LISTEN_CLIENT_URLS
@@ -216,6 +228,8 @@ spec:
             {{- if .Values.startFromSnapshot.enabled }}
             - name: ETCD_INIT_SNAPSHOT_FILENAME
               value: {{ .Values.startFromSnapshot.snapshotFilename | quote }}
+            - name: ETCD_INIT_SNAPSHOTS_DIR
+              value: {{ ternary "/snapshots" "/init-snapshot" (and .Values.disasterRecovery.enabled (not .Values.disasterRecovery.pvc.existingClaim)) | quote }}
             {{- end }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
@@ -292,6 +306,11 @@ spec:
           volumeMounts:
             - name: data
               mountPath: /bitnami/etcd
+            {{- if eq .Values.auth.token.type "jwt" }}
+            - name: etcd-jwt-token
+              mountPath: /opt/bitnami/etcd/certs/token/
+              readOnly: true
+            {{- end }}
             {{- if or (and .Values.startFromSnapshot.enabled (not .Values.disasterRecovery.enabled)) (and .Values.disasterRecovery.enabled .Values.startFromSnapshot.enabled .Values.disasterRecovery.pvc.existingClaim) }}
             - name: init-snapshot-volume
               mountPath: /init-snapshot
@@ -321,6 +340,12 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        {{- if eq .Values.auth.token.type "jwt" }}
+        - name: etcd-jwt-token
+          secret:
+            secretName: {{ include "etcd.token.secretName" . }}
+            defaultMode: 256
+        {{- end }}
         {{- if or (and .Values.startFromSnapshot.enabled (not .Values.disasterRecovery.enabled)) (and .Values.disasterRecovery.enabled .Values.startFromSnapshot.enabled .Values.disasterRecovery.pvc.existingClaim) }}
         - name: init-snapshot-volume
           persistentVolumeClaim:

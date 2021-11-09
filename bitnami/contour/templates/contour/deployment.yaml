@@ -96,8 +96,8 @@ spec:
             - --contour-cert-file=/certs/tls.crt
             - --contour-key-file=/certs/tls.key
             - --config-path=/config/contour.yaml
-            {{- if .Values.contour.ingressClass }}
-            - --ingress-class-name={{ .Values.contour.ingressClass }}
+            {{- if (include "contour.isIngressClassNameDefined" .) }}
+            - --ingress-class-name={{ include "contour.ingressClassName" . }}
             {{- end }}
             {{- if .Values.contour.extraArgs }}
             {{- include "common.tplvalues.render" (dict "value" .Values.contour.extraArgs "context" $) | nindent 12 }}

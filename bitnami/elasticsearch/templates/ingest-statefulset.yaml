@@ -43,6 +43,9 @@ spec:
       {{- if .Values.ingest.schedulerName }}
       schedulerName: {{ .Values.ingest.schedulerName }}
       {{- end }}
+      {{- if .Values.ingest.priorityClassName }}
+      priorityClassName: {{ .Values.ingest.priorityClassName | quote }}
+      {{- end }}
       {{- if .Values.ingest.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.ingest.affinity "context" $) | nindent 8 }}
       {{- else }}
@@ -56,6 +59,9 @@ spec:
       {{- end }}
       {{- if .Values.ingest.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.ingest.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.ingest.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.ingest.topologySpreadConstraints "context" $) | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ template "elasticsearch.ingest.serviceAccountName" . }}
       {{- if .Values.ingest.securityContext.enabled }}
@@ -109,13 +115,13 @@ spec:
             - name: ELASTICSEARCH_CLUSTER_HOSTS
               value: {{ include "elasticsearch.hosts" . | quote }}
             - name: ELASTICSEARCH_TOTAL_NODES
-              value: {{ add .Values.master.replicas .Values.data.replicas | quote }}
+              value: {{ add (ternary .Values.master.autoscaling.minReplicas .Values.master.replicas (eq .Values.master.autoscaling.enabled)) (ternary .Values.data.autoscaling.minReplicas .Values.data.replicas (eq .Values.data.autoscaling.enabled)) | quote }}
             - name: ELASTICSEARCH_CLUSTER_MASTER_HOSTS
               {{- $elasticsearchMasterFullname := include "elasticsearch.master.fullname" . }}
-              {{- $replicas := int .Values.master.replicas }}
+              {{- $replicas := int (ternary .Values.master.autoscaling.minReplicas .Values.master.replicas (eq .Values.master.autoscaling.enabled)) }}
               value: {{range $i, $e := until $replicas }}{{ $elasticsearchMasterFullname }}-{{ $e }} {{ end }}
             - name: ELASTICSEARCH_MINIMUM_MASTER_NODES
-              value: {{ add (div .Values.master.replicas 2) 1 | quote }}
+              value: {{ add (div (ternary .Values.master.autoscaling.minReplicas .Values.master.replicas (eq .Values.master.autoscaling.enabled)) 2) 1 | quote }}
             - name: ELASTICSEARCH_ADVERTISED_HOSTNAME
               value: "$(MY_POD_NAME).{{ include "elasticsearch.ingest.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
             {{- if .Values.plugins }}

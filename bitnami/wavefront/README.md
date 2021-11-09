@@ -76,18 +76,18 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Wavefront Common parameters
 
-| Name                       | Description                                                                                                                          | Value                                |
-| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------ |
-| `clusterName`              | This is a unique name for the cluster (required)                                                                                     | `KUBERNETES_CLUSTER_NAME`            |
-| `wavefront.url`            | Wavefront URL for your cluster (required)                                                                                            | `https://YOUR_CLUSTER.wavefront.com` |
-| `wavefront.token`          | Wavefront API Token (required)                                                                                                       | `YOUR_API_TOKEN`                     |
-| `wavefront.existingSecret` | Name of an existing secret containing the token                                                                                      | `""`                                 |
-| `podSecurityPolicy.create` | Specifies whether PodSecurityPolicy resources should be created                                                                      | `false`                              |
-| `rbac.create`              | Specifies whether RBAC resources should be created                                                                                   | `true`                               |
-| `serviceAccount.create`    | Create Wavefront service account                                                                                                     | `true`                               |
-| `serviceAccount.name`      | Name of Wavefront service account                                                                                                    | `""`                                 |
-| `projectPacific.enabled`   | Enable and create role binding for Tanzu Kubernetes cluster                                                                          | `false`                              |
-| `tkgi.enabled`             | Properties for TKGI environments. If enabled, a role binding to handle pod security policy will be installed within the TKGI cluster | `false`                              |
+| Name                       | Description                                                                                                                                 | Value                                |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ |
+| `clusterName`              | This is a unique name for the cluster (required)                                                                                            | `KUBERNETES_CLUSTER_NAME`            |
+| `wavefront.url`            | Wavefront URL for your cluster (required)                                                                                                   | `https://YOUR_CLUSTER.wavefront.com` |
+| `wavefront.token`          | Wavefront API Token (required)                                                                                                              | `YOUR_API_TOKEN`                     |
+| `wavefront.existingSecret` | Name of an existing secret containing the token                                                                                             | `""`                                 |
+| `podSecurityPolicy.create` | Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later | `false`                              |
+| `rbac.create`              | Specifies whether RBAC resources should be created                                                                                          | `true`                               |
+| `serviceAccount.create`    | Create Wavefront service account                                                                                                            | `true`                               |
+| `serviceAccount.name`      | Name of Wavefront service account                                                                                                           | `""`                                 |
+| `projectPacific.enabled`   | Enable and create role binding for Tanzu Kubernetes cluster                                                                                 | `false`                              |
+| `tkgi.enabled`             | Properties for TKGI environments. If enabled, a role binding to handle pod security policy will be installed within the TKGI cluster        | `false`                              |
 
 
 ### Collector parameters
@@ -97,7 +97,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `collector.enabled`                               | Setup and enable the Wavefront collector to gather metrics                                                              | `true`                                   |
 | `collector.image.registry`                        | Wavefront collector Image registry                                                                                      | `docker.io`                              |
 | `collector.image.repository`                      | Wavefront collector Image repository                                                                                    | `bitnami/wavefront-kubernetes-collector` |
-| `collector.image.tag`                             | Wavefront collector Image tag (immutable tags are recommended)                                                          | `1.5.0-scratch-r2`                       |
+| `collector.image.tag`                             | Wavefront collector Image tag (immutable tags are recommended)                                                          | `1.7.3-scratch-r0`                       |
 | `collector.image.pullPolicy`                      | Image pull policy                                                                                                       | `IfNotPresent`                           |
 | `collector.image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                        | `[]`                                     |
 | `collector.hostAliases`                           | Deployment pod host aliases                                                                                             | `[]`                                     |
@@ -163,7 +163,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `proxy.enabled`                               | Setup and enable Wavefront proxy to send metrics through                                                                                | `true`                    |
 | `proxy.image.registry`                        | Wavefront proxy image registry                                                                                                          | `docker.io`               |
 | `proxy.image.repository`                      | Wavefront proxy image repository                                                                                                        | `bitnami/wavefront-proxy` |
-| `proxy.image.tag`                             | Wavefront proxy image tag (immutable tags are recommended)                                                                              | `10.7.0-debian-10-r45`    |
+| `proxy.image.tag`                             | Wavefront proxy image tag (immutable tags are recommended)                                                                              | `10.9.0-debian-10-r18`    |
 | `proxy.image.pullPolicy`                      | Wavefront proxy image pull policy                                                                                                       | `IfNotPresent`            |
 | `proxy.image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                                        | `[]`                      |
 | `proxy.hostAliases`                           | Deployment pod host aliases                                                                                                             | `[]`                      |

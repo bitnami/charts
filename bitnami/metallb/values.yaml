@@ -56,7 +56,7 @@ rbac:
 ## PSP creation for controller and speaker
 ##
 psp:
-  ## @param psp.create create specifies whether to install Pod Security Policies.
+  ## @param psp.create Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later
   ##
   create: false
 ## Prometheus Operator alertmanager alerts
@@ -93,7 +93,7 @@ controller:
   image:
     registry: docker.io
     repository: bitnami/metallb-controller
-    tag: 0.10.2-debian-10-r64
+    tag: 0.11.0-debian-10-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -124,7 +124,7 @@ controller:
   ## Defines if the controller psp should be created.
   ##
   psp:
-    ## @param controller.psp.create create specifies whether to install Pod Security Policies.
+    ## @param controller.psp.create Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later
     ##
     create: true
   ## @param controller.priorityClassName Set pod priorityClassName
@@ -304,7 +304,7 @@ speaker:
   image:
     registry: docker.io
     repository: bitnami/metallb-speaker
-    tag: 0.10.2-debian-10-r68
+    tag: 0.11.0-debian-10-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -335,7 +335,7 @@ speaker:
   ## Defines if the speaker psp should be created.
   ##
   psp:
-    ## @param speaker.psp.create create specifies whether to install Pod Security Policies.
+    ## @param speaker.psp.create Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later
     ##
     create: true
   ## @param speaker.priorityClassName Set pod priorityClassName.

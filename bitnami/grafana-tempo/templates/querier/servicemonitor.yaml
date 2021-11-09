@@ -9,10 +9,7 @@ metadata:
   namespace: {{ .Release.Namespace }}
   {{- end }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
-      app.kubernetes.io/component: querier
-    {{- if .Values.metrics.serviceMonitor.selector }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.metrics.serviceMonitor.selector "context" $) | nindent 4 }}
-    {{- end }}
+    app.kubernetes.io/component: querier
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
@@ -22,7 +19,10 @@ metadata:
 spec:
   selector:
     matchLabels: {{ include "common.labels.matchLabels" . | nindent 6 }}
-        app.kubernetes.io/component: querier
+      {{- if .Values.metrics.serviceMonitor.selector }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.metrics.serviceMonitor.selector "context" $) | nindent 6 }}
+      {{- end }}
+      app.kubernetes.io/component: querier
   endpoints:
     - port: http
       {{- if .Values.metrics.serviceMonitor.interval }}

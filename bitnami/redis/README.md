@@ -84,8 +84,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `clusterDomain`          | Kubernetes cluster domain name                                                          | `cluster.local` |
 | `extraDeploy`            | Array of extra objects to deploy with the release                                       | `[]`            |
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
-| `diagnosticMode.command` | Command to override all containers in the deployment                                    | `[]`            |
-| `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `[]`            |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`     |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]`  |
 
 
 ### Redis&trade; Image parameters
@@ -94,7 +94,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ------------------------------------------------------- | --------------------- |
 | `image.registry`    | Redis&trade; image registry                             | `docker.io`           |
 | `image.repository`  | Redis&trade; image repository                           | `bitnami/redis`       |
-| `image.tag`         | Redis&trade; image tag (immutable tags are recommended) | `6.2.5-debian-10-r34` |
+| `image.tag`         | Redis&trade; image tag (immutable tags are recommended) | `6.2.6-debian-10-r21` |
 | `image.pullPolicy`  | Redis&trade; image pull policy                          | `IfNotPresent`        |
 | `image.pullSecrets` | Redis&trade; image pull secrets                         | `[]`                  |
 | `image.debug`       | Enable image debug mode                                 | `false`               |
@@ -171,6 +171,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `master.sidecars`                           | Add additional sidecar containers to the Redis&trade; master pod(s)                               | `[]`            |
 | `master.initContainers`                     | Add additional init containers to the Redis&trade; master pod(s)                                  | `[]`            |
 | `master.persistence.enabled`                | Enable persistence on Redis&trade; master nodes using Persistent Volume Claims                    | `true`          |
+| `master.persistence.medium`                 | Provide a medium for `emptyDir` volumes.                                                          | `""`            |
 | `master.persistence.path`                   | The path the volume will be mounted at on Redis&trade; master containers                          | `/data`         |
 | `master.persistence.subPath`                | The subdirectory of the volume to mount on Redis&trade; master containers                         | `""`            |
 | `master.persistence.storageClass`           | Persistent Volume storage class                                                                   | `""`            |
@@ -247,6 +248,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `replica.sidecars`                           | Add additional sidecar containers to the Redis&trade; replicas pod(s)                               | `[]`            |
 | `replica.initContainers`                     | Add additional init containers to the Redis&trade; replicas pod(s)                                  | `[]`            |
 | `replica.persistence.enabled`                | Enable persistence on Redis&trade; replicas nodes using Persistent Volume Claims                    | `true`          |
+| `replica.persistence.medium`                 | Provide a medium for `emptyDir` volumes.                                                            | `""`            |
 | `replica.persistence.path`                   | The path the volume will be mounted at on Redis&trade; replicas containers                          | `/data`         |
 | `replica.persistence.subPath`                | The subdirectory of the volume to mount on Redis&trade; replicas containers                         | `""`            |
 | `replica.persistence.storageClass`           | Persistent Volume storage class                                                                     | `""`            |
@@ -272,92 +274,93 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Redis&trade; Sentinel configuration parameters
 
-| Name                                          | Description                                                                                         | Value                    |
-| --------------------------------------------- | --------------------------------------------------------------------------------------------------- | ------------------------ |
-| `sentinel.enabled`                            | Use Redis&trade; Sentinel on Redis&trade; pods.                                                     | `false`                  |
-| `sentinel.image.registry`                     | Redis&trade; Sentinel image registry                                                                | `docker.io`              |
-| `sentinel.image.repository`                   | Redis&trade; Sentinel image repository                                                              | `bitnami/redis-sentinel` |
-| `sentinel.image.tag`                          | Redis&trade; Sentinel image tag (immutable tags are recommended)                                    | `6.2.5-debian-10-r34`    |
-| `sentinel.image.pullPolicy`                   | Redis&trade; Sentinel image pull policy                                                             | `IfNotPresent`           |
-| `sentinel.image.pullSecrets`                  | Redis&trade; Sentinel image pull secrets                                                            | `[]`                     |
-| `sentinel.image.debug`                        | Enable image debug mode                                                                             | `false`                  |
-| `sentinel.masterSet`                          | Master set name                                                                                     | `mymaster`               |
-| `sentinel.quorum`                             | Sentinel Quorum                                                                                     | `2`                      |
-| `sentinel.downAfterMilliseconds`              | Timeout for detecting a Redis&trade; node is down                                                   | `60000`                  |
-| `sentinel.failoverTimeout`                    | Timeout for performing a election failover                                                          | `18000`                  |
-| `sentinel.parallelSyncs`                      | Number of replicas that can be reconfigured in parallel to use the new master after a failover      | `1`                      |
-| `sentinel.configuration`                      | Configuration for Redis&trade; Sentinel nodes                                                       | `""`                     |
-| `sentinel.command`                            | Override default container command (useful when using custom images)                                | `[]`                     |
-| `sentinel.args`                               | Override default container args (useful when using custom images)                                   | `[]`                     |
-| `sentinel.preExecCmds`                        | Additional commands to run prior to starting Redis&trade; Sentinel                                  | `[]`                     |
-| `sentinel.extraEnvVars`                       | Array with extra environment variables to add to Redis&trade; Sentinel nodes                        | `[]`                     |
-| `sentinel.extraEnvVarsCM`                     | Name of existing ConfigMap containing extra env vars for Redis&trade; Sentinel nodes                | `""`                     |
-| `sentinel.extraEnvVarsSecret`                 | Name of existing Secret containing extra env vars for Redis&trade; Sentinel nodes                   | `""`                     |
-| `sentinel.containerPort`                      | Container port to open on Redis&trade; Sentinel nodes                                               | `26379`                  |
-| `sentinel.livenessProbe.enabled`              | Enable livenessProbe on Redis&trade; Sentinel nodes                                                 | `true`                   |
-| `sentinel.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                             | `20`                     |
-| `sentinel.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                    | `5`                      |
-| `sentinel.livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                                   | `5`                      |
-| `sentinel.livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                                 | `5`                      |
-| `sentinel.livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                                 | `1`                      |
-| `sentinel.readinessProbe.enabled`             | Enable readinessProbe on Redis&trade; Sentinel nodes                                                | `true`                   |
-| `sentinel.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                            | `20`                     |
-| `sentinel.readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                                   | `5`                      |
-| `sentinel.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                  | `1`                      |
-| `sentinel.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                                | `5`                      |
-| `sentinel.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                | `1`                      |
-| `sentinel.customLivenessProbe`                | Custom livenessProbe that overrides the default one                                                 | `{}`                     |
-| `sentinel.customReadinessProbe`               | Custom readinessProbe that overrides the default one                                                | `{}`                     |
-| `sentinel.resources.limits`                   | The resources limits for the Redis&trade; Sentinel containers                                       | `{}`                     |
-| `sentinel.resources.requests`                 | The requested resources for the Redis&trade; Sentinel containers                                    | `{}`                     |
-| `sentinel.containerSecurityContext.enabled`   | Enabled Redis&trade; Sentinel containers' Security Context                                          | `true`                   |
-| `sentinel.containerSecurityContext.runAsUser` | Set Redis&trade; Sentinel containers' Security Context runAsUser                                    | `1001`                   |
-| `sentinel.lifecycleHooks`                     | for the Redis&trade; sentinel container(s) to automate configuration before or after startup        | `{}`                     |
-| `sentinel.extraVolumes`                       | Optionally specify extra list of additional volumes for the Redis&trade; Sentinel                   | `[]`                     |
-| `sentinel.extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for the Redis&trade; Sentinel container(s) | `[]`                     |
-| `sentinel.service.type`                       | Redis&trade; Sentinel service type                                                                  | `ClusterIP`              |
-| `sentinel.service.port`                       | Redis&trade; service port for Redis&trade;                                                          | `6379`                   |
-| `sentinel.service.sentinelPort`               | Redis&trade; service port for Sentinel                                                              | `26379`                  |
-| `sentinel.service.nodePorts.redis`            | Node port for Redis&trade;                                                                          | `""`                     |
-| `sentinel.service.nodePorts.sentinel`         | Node port for Sentinel                                                                              | `""`                     |
-| `sentinel.service.externalTrafficPolicy`      | Redis&trade; Sentinel service external traffic policy                                               | `Cluster`                |
-| `sentinel.service.clusterIP`                  | Redis&trade; Sentinel service Cluster IP                                                            | `""`                     |
-| `sentinel.service.loadBalancerIP`             | Redis&trade; Sentinel service Load Balancer IP                                                      | `""`                     |
-| `sentinel.service.loadBalancerSourceRanges`   | Redis&trade; Sentinel service Load Balancer sources                                                 | `[]`                     |
-| `sentinel.service.annotations`                | Additional custom annotations for Redis&trade; Sentinel service                                     | `{}`                     |
-| `sentinel.terminationGracePeriodSeconds`      | Integer setting the termination grace period for the redis-node pods                                | `30`                     |
+| Name                                          | Description                                                                                                                                 | Value                    |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `sentinel.enabled`                            | Use Redis&trade; Sentinel on Redis&trade; pods.                                                                                             | `false`                  |
+| `sentinel.image.registry`                     | Redis&trade; Sentinel image registry                                                                                                        | `docker.io`              |
+| `sentinel.image.repository`                   | Redis&trade; Sentinel image repository                                                                                                      | `bitnami/redis-sentinel` |
+| `sentinel.image.tag`                          | Redis&trade; Sentinel image tag (immutable tags are recommended)                                                                            | `6.2.6-debian-10-r20`    |
+| `sentinel.image.pullPolicy`                   | Redis&trade; Sentinel image pull policy                                                                                                     | `IfNotPresent`           |
+| `sentinel.image.pullSecrets`                  | Redis&trade; Sentinel image pull secrets                                                                                                    | `[]`                     |
+| `sentinel.image.debug`                        | Enable image debug mode                                                                                                                     | `false`                  |
+| `sentinel.masterSet`                          | Master set name                                                                                                                             | `mymaster`               |
+| `sentinel.quorum`                             | Sentinel Quorum                                                                                                                             | `2`                      |
+| `sentinel.automateClusterRecovery`            | Automate cluster recovery in cases where the last replica is not considered a good replica and Sentinel won't automatically failover to it. | `false`                  |
+| `sentinel.downAfterMilliseconds`              | Timeout for detecting a Redis&trade; node is down                                                                                           | `60000`                  |
+| `sentinel.failoverTimeout`                    | Timeout for performing a election failover                                                                                                  | `18000`                  |
+| `sentinel.parallelSyncs`                      | Number of replicas that can be reconfigured in parallel to use the new master after a failover                                              | `1`                      |
+| `sentinel.configuration`                      | Configuration for Redis&trade; Sentinel nodes                                                                                               | `""`                     |
+| `sentinel.command`                            | Override default container command (useful when using custom images)                                                                        | `[]`                     |
+| `sentinel.args`                               | Override default container args (useful when using custom images)                                                                           | `[]`                     |
+| `sentinel.preExecCmds`                        | Additional commands to run prior to starting Redis&trade; Sentinel                                                                          | `[]`                     |
+| `sentinel.extraEnvVars`                       | Array with extra environment variables to add to Redis&trade; Sentinel nodes                                                                | `[]`                     |
+| `sentinel.extraEnvVarsCM`                     | Name of existing ConfigMap containing extra env vars for Redis&trade; Sentinel nodes                                                        | `""`                     |
+| `sentinel.extraEnvVarsSecret`                 | Name of existing Secret containing extra env vars for Redis&trade; Sentinel nodes                                                           | `""`                     |
+| `sentinel.containerPort`                      | Container port to open on Redis&trade; Sentinel nodes                                                                                       | `26379`                  |
+| `sentinel.livenessProbe.enabled`              | Enable livenessProbe on Redis&trade; Sentinel nodes                                                                                         | `true`                   |
+| `sentinel.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                                                     | `20`                     |
+| `sentinel.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                                                            | `5`                      |
+| `sentinel.livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                                                                           | `5`                      |
+| `sentinel.livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                                                                         | `5`                      |
+| `sentinel.livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                                                                         | `1`                      |
+| `sentinel.readinessProbe.enabled`             | Enable readinessProbe on Redis&trade; Sentinel nodes                                                                                        | `true`                   |
+| `sentinel.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                                                                    | `20`                     |
+| `sentinel.readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                                                                           | `5`                      |
+| `sentinel.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                                                          | `1`                      |
+| `sentinel.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                                                                        | `5`                      |
+| `sentinel.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                                                        | `1`                      |
+| `sentinel.customLivenessProbe`                | Custom livenessProbe that overrides the default one                                                                                         | `{}`                     |
+| `sentinel.customReadinessProbe`               | Custom readinessProbe that overrides the default one                                                                                        | `{}`                     |
+| `sentinel.resources.limits`                   | The resources limits for the Redis&trade; Sentinel containers                                                                               | `{}`                     |
+| `sentinel.resources.requests`                 | The requested resources for the Redis&trade; Sentinel containers                                                                            | `{}`                     |
+| `sentinel.containerSecurityContext.enabled`   | Enabled Redis&trade; Sentinel containers' Security Context                                                                                  | `true`                   |
+| `sentinel.containerSecurityContext.runAsUser` | Set Redis&trade; Sentinel containers' Security Context runAsUser                                                                            | `1001`                   |
+| `sentinel.lifecycleHooks`                     | for the Redis&trade; sentinel container(s) to automate configuration before or after startup                                                | `{}`                     |
+| `sentinel.extraVolumes`                       | Optionally specify extra list of additional volumes for the Redis&trade; Sentinel                                                           | `[]`                     |
+| `sentinel.extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for the Redis&trade; Sentinel container(s)                                         | `[]`                     |
+| `sentinel.service.type`                       | Redis&trade; Sentinel service type                                                                                                          | `ClusterIP`              |
+| `sentinel.service.port`                       | Redis&trade; service port for Redis&trade;                                                                                                  | `6379`                   |
+| `sentinel.service.sentinelPort`               | Redis&trade; service port for Sentinel                                                                                                      | `26379`                  |
+| `sentinel.service.nodePorts.redis`            | Node port for Redis&trade;                                                                                                                  | `""`                     |
+| `sentinel.service.nodePorts.sentinel`         | Node port for Sentinel                                                                                                                      | `""`                     |
+| `sentinel.service.externalTrafficPolicy`      | Redis&trade; Sentinel service external traffic policy                                                                                       | `Cluster`                |
+| `sentinel.service.clusterIP`                  | Redis&trade; Sentinel service Cluster IP                                                                                                    | `""`                     |
+| `sentinel.service.loadBalancerIP`             | Redis&trade; Sentinel service Load Balancer IP                                                                                              | `""`                     |
+| `sentinel.service.loadBalancerSourceRanges`   | Redis&trade; Sentinel service Load Balancer sources                                                                                         | `[]`                     |
+| `sentinel.service.annotations`                | Additional custom annotations for Redis&trade; Sentinel service                                                                             | `{}`                     |
+| `sentinel.terminationGracePeriodSeconds`      | Integer setting the termination grace period for the redis-node pods                                                                        | `30`                     |
 
 
 ### Other Parameters
 
-| Name                                          | Description                                                                                                      | Value   |
-| --------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | ------- |
-| `networkPolicy.enabled`                       | Enable creation of NetworkPolicy resources                                                                       | `false` |
-| `networkPolicy.allowExternal`                 | Don't require client label for connections                                                                       | `true`  |
-| `networkPolicy.extraIngress`                  | Add extra ingress rules to the NetworkPolicy                                                                     | `[]`    |
-| `networkPolicy.extraEgress`                   | Add extra ingress rules to the NetworkPolicy                                                                     | `[]`    |
-| `networkPolicy.ingressNSMatchLabels`          | Labels to match to allow traffic from other namespaces                                                           | `{}`    |
-| `networkPolicy.ingressNSPodMatchLabels`       | Pod labels to match to allow traffic from other namespaces                                                       | `{}`    |
-| `podSecurityPolicy.create`                    | Specifies whether a PodSecurityPolicy should be created (set `podSecurityPolicy.enabled` to `true` to enable it) | `false` |
-| `podSecurityPolicy.enabled`                   | Enable PodSecurityPolicy                                                                                         | `false` |
-| `rbac.create`                                 | Specifies whether RBAC resources should be created                                                               | `false` |
-| `rbac.rules`                                  | Custom RBAC rules to set                                                                                         | `[]`    |
-| `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                             | `true`  |
-| `serviceAccount.name`                         | The name of the ServiceAccount to use.                                                                           | `""`    |
-| `serviceAccount.automountServiceAccountToken` | Whether to auto mount the service account token                                                                  | `true`  |
-| `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                                                             | `{}`    |
-| `pdb.create`                                  | Specifies whether a PodDisruptionBudget should be created                                                        | `false` |
-| `pdb.minAvailable`                            | Min number of pods that must still be available after the eviction                                               | `1`     |
-| `pdb.maxUnavailable`                          | Max number of pods that can be unavailable after the eviction                                                    | `""`    |
-| `tls.enabled`                                 | Enable TLS traffic                                                                                               | `false` |
-| `tls.authClients`                             | Require clients to authenticate                                                                                  | `true`  |
-| `tls.autoGenerated`                           | Enable autogenerated certificates                                                                                | `false` |
-| `tls.existingSecret`                          | The name of the existing secret that contains the TLS certificates                                               | `""`    |
-| `tls.certificatesSecret`                      | DEPRECATED. Use existingSecret instead.                                                                          | `""`    |
-| `tls.certFilename`                            | Certificate filename                                                                                             | `""`    |
-| `tls.certKeyFilename`                         | Certificate Key filename                                                                                         | `""`    |
-| `tls.certCAFilename`                          | CA Certificate filename                                                                                          | `""`    |
-| `tls.dhParamsFilename`                        | File containing DH params (in order to support DH based ciphers)                                                 | `""`    |
+| Name                                          | Description                                                                                                                                 | Value   |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `networkPolicy.enabled`                       | Enable creation of NetworkPolicy resources                                                                                                  | `false` |
+| `networkPolicy.allowExternal`                 | Don't require client label for connections                                                                                                  | `true`  |
+| `networkPolicy.extraIngress`                  | Add extra ingress rules to the NetworkPolicy                                                                                                | `[]`    |
+| `networkPolicy.extraEgress`                   | Add extra ingress rules to the NetworkPolicy                                                                                                | `[]`    |
+| `networkPolicy.ingressNSMatchLabels`          | Labels to match to allow traffic from other namespaces                                                                                      | `{}`    |
+| `networkPolicy.ingressNSPodMatchLabels`       | Pod labels to match to allow traffic from other namespaces                                                                                  | `{}`    |
+| `podSecurityPolicy.create`                    | Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later | `false` |
+| `podSecurityPolicy.enabled`                   | Enable PodSecurityPolicy's RBAC rules                                                                                                       | `false` |
+| `rbac.create`                                 | Specifies whether RBAC resources should be created                                                                                          | `false` |
+| `rbac.rules`                                  | Custom RBAC rules to set                                                                                                                    | `[]`    |
+| `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                                        | `true`  |
+| `serviceAccount.name`                         | The name of the ServiceAccount to use.                                                                                                      | `""`    |
+| `serviceAccount.automountServiceAccountToken` | Whether to auto mount the service account token                                                                                             | `true`  |
+| `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                                                                                        | `{}`    |
+| `pdb.create`                                  | Specifies whether a PodDisruptionBudget should be created                                                                                   | `false` |
+| `pdb.minAvailable`                            | Min number of pods that must still be available after the eviction                                                                          | `1`     |
+| `pdb.maxUnavailable`                          | Max number of pods that can be unavailable after the eviction                                                                               | `""`    |
+| `tls.enabled`                                 | Enable TLS traffic                                                                                                                          | `false` |
+| `tls.authClients`                             | Require clients to authenticate                                                                                                             | `true`  |
+| `tls.autoGenerated`                           | Enable autogenerated certificates                                                                                                           | `false` |
+| `tls.existingSecret`                          | The name of the existing secret that contains the TLS certificates                                                                          | `""`    |
+| `tls.certificatesSecret`                      | DEPRECATED. Use existingSecret instead.                                                                                                     | `""`    |
+| `tls.certFilename`                            | Certificate filename                                                                                                                        | `""`    |
+| `tls.certKeyFilename`                         | Certificate Key filename                                                                                                                    | `""`    |
+| `tls.certCAFilename`                          | CA Certificate filename                                                                                                                     | `""`    |
+| `tls.dhParamsFilename`                        | File containing DH params (in order to support DH based ciphers)                                                                            | `""`    |
 
 
 ### Metrics Parameters
@@ -367,7 +370,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                            | Start a sidecar prometheus exporter to expose Redis&trade; metrics                               | `false`                  |
 | `metrics.image.registry`                     | Redis&trade; Exporter image registry                                                             | `docker.io`              |
 | `metrics.image.repository`                   | Redis&trade; Exporter image repository                                                           | `bitnami/redis-exporter` |
-| `metrics.image.tag`                          | Redis&trade; Redis&trade; Exporter image tag (immutable tags are recommended)                    | `1.26.0-debian-10-r5`    |
+| `metrics.image.tag`                          | Redis&trade; Redis&trade; Exporter image tag (immutable tags are recommended)                    | `1.29.0-debian-10-r6`    |
 | `metrics.image.pullPolicy`                   | Redis&trade; Exporter image pull policy                                                          | `IfNotPresent`           |
 | `metrics.image.pullSecrets`                  | Redis&trade; Exporter image pull secrets                                                         | `[]`                     |
 | `metrics.redisTargetHost`                    | A way to specify an alternative Redis&trade; hostname                                            | `localhost`              |
@@ -407,8 +410,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r174`     |
-| `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `Always`                |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r232`     |
+| `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                    |
 | `volumePermissions.resources.requests`                 | The requested resources for the init container                                                  | `{}`                    |
@@ -416,8 +419,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sysctl.enabled`                                       | Enable init container to modify Kernel settings                                                 | `false`                 |
 | `sysctl.image.registry`                                | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `sysctl.image.repository`                              | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `sysctl.image.tag`                                     | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r174`     |
-| `sysctl.image.pullPolicy`                              | Bitnami Shell image pull policy                                                                 | `Always`                |
+| `sysctl.image.tag`                                     | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r232`     |
+| `sysctl.image.pullPolicy`                              | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `sysctl.image.pullSecrets`                             | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `sysctl.command`                                       | Override default init-sysctl container command (useful when using custom images)                | `[]`                    |
 | `sysctl.mountHostSys`                                  | Mount the host `/sys` folder to `/host-sys`                                                     | `false`                 |
@@ -565,6 +568,10 @@ Find more information about how to deal with common errors related to Bitnami’
 ## Upgrading
 
 A major chart version change (like v1.2.3 -> v2.0.0) indicates that there is an incompatible breaking change needing manual actions.
+
+### To 15.0.0
+
+The parameter to enable the usage of StaticIDs was removed. The behavior is to [always use StaticIDs](https://github.com/bitnami/charts/pull/7278).
 
 ### To 14.8.0
 

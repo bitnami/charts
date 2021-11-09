@@ -1,6 +1,8 @@
-# Discourse
+# Discourse&reg;
 
 [Discourse](https://www.discourse.org/) is an open source discussion platform. It can be used as a mailing list, discussion forum, long-form chat room, and more.
+
+Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
 ## TL;DR
 
@@ -89,7 +91,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ---------------------------------------------- | --------------------------------------------------------------------------------------------------------- | -------------------- |
 | `image.registry`                               | Discourse image registry                                                                                  | `docker.io`          |
 | `image.repository`                             | Discourse image repository                                                                                | `bitnami/discourse`  |
-| `image.tag`                                    | Discourse image tag                                                                                       | `2.7.8-debian-10-r0` |
+| `image.tag`                                    | Discourse image tag                                                                                       | `2.7.9-debian-10-r5` |
 | `image.pullPolicy`                             | Discourse image pull policy                                                                               | `IfNotPresent`       |
 | `image.pullSecrets`                            | Discourse image pull secrets                                                                              | `[]`                 |
 | `image.debug`                                  | Specify if debug logs should be enabled                                                                   | `false`              |
@@ -162,30 +164,30 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Sidekiq parameters
 
-| Name                                         | Description                                                       | Value  |
-| -------------------------------------------- | ----------------------------------------------------------------- | ------ |
-| `sidekiq.containerSecurityContext`           | Container security context specification                          | `{}`   |
-| `sidekiq.command`                            | Custom command to override image cmd (evaluated as a template)    | `[]`   |
-| `sidekiq.args`                               | Custom args for the custom command (evaluated as a template)      | `[]`   |
-| `sidekiq.resources`                          | Sidekiq container resource requests and limits                    | `{}`   |
-| `sidekiq.livenessProbe.enabled`              | Enable/disable livenessProbe                                      | `true` |
-| `sidekiq.livenessProbe.initialDelaySeconds`  | Delay before liveness probe is initiated                          | `500`  |
-| `sidekiq.livenessProbe.periodSeconds`        | How often to perform the probe                                    | `10`   |
-| `sidekiq.livenessProbe.timeoutSeconds`       | When the probe times out                                          | `5`    |
-| `sidekiq.livenessProbe.failureThreshold`     | Minimum consecutive failures for the probe                        | `6`    |
-| `sidekiq.livenessProbe.successThreshold`     | Minimum consecutive successes for the probe                       | `1`    |
-| `sidekiq.readinessProbe.enabled`             | Enable/disable readinessProbe                                     | `true` |
-| `sidekiq.readinessProbe.initialDelaySeconds` | Delay before readiness probe is initiated                         | `30`   |
-| `sidekiq.readinessProbe.periodSeconds`       | How often to perform the probe                                    | `10`   |
-| `sidekiq.readinessProbe.timeoutSeconds`      | When the probe times out                                          | `5`    |
-| `sidekiq.readinessProbe.failureThreshold`    | Minimum consecutive failures for the probe                        | `6`    |
-| `sidekiq.readinessProbe.successThreshold`    | Minimum consecutive successes for the probe                       | `1`    |
-| `sidekiq.customLivenessProbe`                | Custom liveness probe to execute (when the main one is disabled)  | `{}`   |
-| `sidekiq.customReadinessProbe`               | Custom readiness probe to execute (when the main one is disabled) | `{}`   |
-| `sidekiq.extraEnvVars`                       | An array to add extra env vars                                    | `[]`   |
-| `sidekiq.extraEnvVarsCM`                     | Array to add extra configmaps                                     | `[]`   |
-| `sidekiq.extraEnvVarsSecret`                 | Name of the secret that holds extra env vars                      | `""`   |
-| `sidekiq.extraVolumeMounts`                  | Additional volume mounts                                          | `[]`   |
+| Name                                         | Description                                                       | Value                                               |
+| -------------------------------------------- | ----------------------------------------------------------------- | --------------------------------------------------- |
+| `sidekiq.containerSecurityContext`           | Container security context specification                          | `{}`                                                |
+| `sidekiq.command`                            | Custom command to override image cmd (evaluated as a template)    | `["/opt/bitnami/scripts/discourse/entrypoint.sh"]`  |
+| `sidekiq.args`                               | Custom args for the custom command (evaluated as a template)      | `["/opt/bitnami/scripts/discourse-sidekiq/run.sh"]` |
+| `sidekiq.resources`                          | Sidekiq container resource requests and limits                    | `{}`                                                |
+| `sidekiq.livenessProbe.enabled`              | Enable/disable livenessProbe                                      | `true`                                              |
+| `sidekiq.livenessProbe.initialDelaySeconds`  | Delay before liveness probe is initiated                          | `500`                                               |
+| `sidekiq.livenessProbe.periodSeconds`        | How often to perform the probe                                    | `10`                                                |
+| `sidekiq.livenessProbe.timeoutSeconds`       | When the probe times out                                          | `5`                                                 |
+| `sidekiq.livenessProbe.failureThreshold`     | Minimum consecutive failures for the probe                        | `6`                                                 |
+| `sidekiq.livenessProbe.successThreshold`     | Minimum consecutive successes for the probe                       | `1`                                                 |
+| `sidekiq.readinessProbe.enabled`             | Enable/disable readinessProbe                                     | `true`                                              |
+| `sidekiq.readinessProbe.initialDelaySeconds` | Delay before readiness probe is initiated                         | `30`                                                |
+| `sidekiq.readinessProbe.periodSeconds`       | How often to perform the probe                                    | `10`                                                |
+| `sidekiq.readinessProbe.timeoutSeconds`      | When the probe times out                                          | `5`                                                 |
+| `sidekiq.readinessProbe.failureThreshold`    | Minimum consecutive failures for the probe                        | `6`                                                 |
+| `sidekiq.readinessProbe.successThreshold`    | Minimum consecutive successes for the probe                       | `1`                                                 |
+| `sidekiq.customLivenessProbe`                | Custom liveness probe to execute (when the main one is disabled)  | `{}`                                                |
+| `sidekiq.customReadinessProbe`               | Custom readiness probe to execute (when the main one is disabled) | `{}`                                                |
+| `sidekiq.extraEnvVars`                       | An array to add extra env vars                                    | `[]`                                                |
+| `sidekiq.extraEnvVarsCM`                     | Array to add extra configmaps                                     | `[]`                                                |
+| `sidekiq.extraEnvVarsSecret`                 | Name of the secret that holds extra env vars                      | `""`                                                |
+| `sidekiq.extraVolumeMounts`                  | Additional volume mounts                                          | `[]`                                                |
 
 
 ### Volume Permissions parameters
@@ -199,19 +201,18 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Ingress parameters
 
-| Name                  | Description                                                                                   | Value                    |
-| --------------------- | --------------------------------------------------------------------------------------------- | ------------------------ |
-| `ingress.enabled`     | Enable ingress controller resource                                                            | `false`                  |
-| `ingress.certManager` | Add annotations for cert-manager                                                              | `false`                  |
-| `ingress.hostname`    | Default host for the ingress resource                                                         | `discourse.local`        |
-| `ingress.apiVersion`  | Force Ingress API version (automatically detected if not set)                                 | `""`                     |
-| `ingress.path`        | Ingress path                                                                                  | `/`                      |
-| `ingress.pathType`    | Ingress path type                                                                             | `ImplementationSpecific` |
-| `ingress.annotations` | Ingress annotations done as key:value pairs                                                   | `{}`                     |
-| `ingress.tls`         | Enable TLS configuration for the hostname defined at ingress.hostname parameter               | `false`                  |
-| `ingress.extraHosts`  | The list of additional hostnames to be covered with this ingress record.                      | `[]`                     |
-| `ingress.extraTls`    | The tls configuration for additional hostnames to be covered with this ingress record.        | `[]`                     |
-| `ingress.secrets`     | If you're providing your own certificates, please use this to add the certificates as secrets | `[]`                     |
+| Name                  | Description                                                                                                                      | Value                    |
+| --------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `ingress.enabled`     | Enable ingress controller resource                                                                                               | `false`                  |
+| `ingress.hostname`    | Default host for the ingress resource                                                                                            | `discourse.local`        |
+| `ingress.apiVersion`  | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
+| `ingress.path`        | Ingress path                                                                                                                     | `/`                      |
+| `ingress.pathType`    | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.annotations` | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.tls`         | Enable TLS configuration for the hostname defined at ingress.hostname parameter                                                  | `false`                  |
+| `ingress.extraHosts`  | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
+| `ingress.extraTls`    | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
+| `ingress.secrets`     | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
 
 
 ### Database parameters
@@ -463,6 +464,10 @@ imagePullSecrets:
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 5.0.0
+
+This major update the Redis&trade; subchart to its newest major, 15.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1500) you can find more info about the specific changes.
 
 ### To 4.0.0
 

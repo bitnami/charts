@@ -64,7 +64,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mariadb-galera
-  tag: 10.5.12-debian-10-r1
+  tag: 10.6.4-debian-10-r30
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -257,7 +257,7 @@ galera:
     forcePassword: false
 ## LDAP configuration
 ## @param ldap.enabled Enable LDAP support
-## @param ldap.uri LDAP URL beginning in the form `ldap
+## @param ldap.uri LDAP URL beginning in the form `ldap`
 ## @param ldap.base LDAP base DN
 ## @param ldap.binddn LDAP bind DN
 ## @param ldap.bindpw LDAP bind password
@@ -508,6 +508,15 @@ nodeSelector: {}
 ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
+## @param topologySpreadConstraints Topology Spread Constraints for pods assignment
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+## E.g.
+## topologySpreadConstraints:
+##   - maxSkew: 1
+##     topologyKey: topology.kubernetes.io/zone
+##     whenUnsatisfiable: DoNotSchedule
+##
+topologySpreadConstraints: {}
 ## Enable persistence using Persistent Volume Claims
 ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
 ##
@@ -690,7 +699,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mysqld-exporter
-    tag: 0.13.0-debian-10-r75
+    tag: 0.13.0-debian-10-r136
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/

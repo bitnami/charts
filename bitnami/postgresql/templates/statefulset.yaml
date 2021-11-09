@@ -4,8 +4,11 @@ metadata:
   name: {{ template "postgresql.primary.fullname" . }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: primary
-  {{- with .Values.primary.labels }}
-  {{- toYaml . | nindent 4 }}
+  {{- if .Values.commonLabels }}
+  {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.primary.labels }}
+  {{- include "common.tplvalues.render" ( dict "value" .Values.primary.labels "context" $ ) | nindent 4 }}
   {{- end }}
   annotations:
   {{- if .Values.commonAnnotations }}
@@ -34,8 +37,11 @@ spec:
       {{- include "common.labels.standard" . | nindent 8 }}
         role: primary
         app.kubernetes.io/component: primary
-      {{- with .Values.primary.podLabels }}
-      {{- toYaml . | nindent 8 }}
+      {{- if .Values.commonLabels }}
+      {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.primary.podLabels }}
+      {{- include "common.tplvalues.render" ( dict "value" .Values.primary.podLabels "context" $ ) | nindent 8 }}
       {{- end }}
       {{- with .Values.primary.podAnnotations }}
       annotations: {{- toYaml . | nindent 8 }}
@@ -578,7 +584,7 @@ spec:
           emptyDir: {}
         {{- end }}
         {{- if .Values.primary.extraVolumes }}
-        {{- toYaml .Values.primary.extraVolumes | nindent 8 }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.primary.extraVolumes "context" $ ) | nindent 8 }}
         {{- end }}
         {{- if and .Values.metrics.enabled .Values.metrics.customMetrics }}
         - name: custom-metrics
@@ -602,6 +608,9 @@ spec:
 {{- else if not .Values.persistence.enabled }}
         - name: data
           emptyDir: {}
+      {{- if .Values.primary.extraPodSpec }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.primary.extraPodSpec "context" $) | nindent 6 }}
+      {{- end }}
 {{- else if and .Values.persistence.enabled (not .Values.persistence.existingClaim) }}
   volumeClaimTemplates:
     - metadata:

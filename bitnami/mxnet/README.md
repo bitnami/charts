@@ -70,20 +70,20 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------- | ----------------------------------------------------------------------------------------------------- | ----------------------- |
 | `image.registry`                       | Apache MXNet (Incubating) image registry                                                              | `docker.io`             |
 | `image.repository`                     | Apache MXNet (Incubating) image repository                                                            | `bitnami/mxnet`         |
-| `image.tag`                            | Apache MXNet (Incubating) image tag (immutable tags are recommended)                                  | `1.8.0-debian-10-r141`  |
+| `image.tag`                            | Apache MXNet (Incubating) image tag (immutable tags are recommended)                                  | `1.8.0-debian-10-r201`  |
 | `image.pullPolicy`                     | Image pull policy                                                                                     | `IfNotPresent`          |
 | `image.pullSecrets`                    | Specify docker-registry secret names as an array                                                      | `[]`                    |
 | `image.debug`                          | Specify if debug logs should be enabled                                                               | `false`                 |
 | `git.registry`                         | Git image registry                                                                                    | `docker.io`             |
 | `git.repository`                       | Git image repository                                                                                  | `bitnami/git`           |
-| `git.tag`                              | Git image tag (immutable tags are recommended)                                                        | `2.33.0-debian-10-r8`   |
+| `git.tag`                              | Git image tag (immutable tags are recommended)                                                        | `2.33.0-debian-10-r69`  |
 | `git.pullPolicy`                       | Git image pull policy                                                                                 | `IfNotPresent`          |
 | `git.pullSecrets`                      | Specify docker-registry secret names as an array                                                      | `[]`                    |
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory                           | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                      | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image repository                                                    | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                          | `10-debian-10-r172`     |
-| `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                   | `Always`                |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                          | `10-debian-10-r233`     |
+| `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                   | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                      | `[]`                    |
 | `volumePermissions.resources.limits`   | The resources limits for the container                                                                | `{}`                    |
 | `volumePermissions.resources.requests` | The requested resources for the container                                                             | `{}`                    |
@@ -126,7 +126,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `readinessProbe.successThreshold`      | Success threshold for readinessProbe                                                                  | `1`                     |
 | `persistence.enabled`                  | Use a PVC to persist data                                                                             | `false`                 |
 | `persistence.mountPath`                | Path to mount the volume at                                                                           | `/bitnami/mxnet`        |
-| `persistence.accessModes`              | Persistent Volume Access Mode                                                                         | `[]`                    |
+| `persistence.accessModes`              | Persistent Volume Access Mode                                                                         | `["ReadWriteOnce"]`     |
 | `persistence.size`                     | Size of data volume                                                                                   | `8Gi`                   |
 | `persistence.annotations`              | Persistent Volume annotations                                                                         | `{}`                    |
 | `sidecars`                             | Attach additional containers to the pods (scheduler, worker and server nodes)                         | `[]`                    |
