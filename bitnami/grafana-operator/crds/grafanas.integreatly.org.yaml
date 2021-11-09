@@ -700,6 +700,20 @@ spec:
                         nullable: true
                         type: boolean
                     type: object
+                  unified_alerting:
+                    properties:
+                      enabled:
+                        nullable: true
+                        type: boolean
+                      evaluation_timeout:
+                        type: string
+                      execute_alerts:
+                        type: boolean
+                      max_attempts:
+                        type: integer
+                      min_interval:
+                        type: string
+                    type: object
                   users:
                     properties:
                       allow_org_create:
