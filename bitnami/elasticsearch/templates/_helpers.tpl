@@ -225,7 +225,9 @@ but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else 
 Return the appropriate apiVersion for cronjob APIs.
 */}}
 {{- define "cronjob.apiVersion" -}}
-{{- if semverCompare "< 1.21-0" .Capabilities.KubeVersion.GitVersion -}}
+{{- if semverCompare "< 1.8-0" .Capabilities.KubeVersion.GitVersion -}}
+{{- print "batch/v2alpha1" }}
+{{- else if and (semverCompare ">=1.8-0" .Capabilities.KubeVersion.GitVersion) (semverCompare "< 1.21-0" .Capabilities.KubeVersion.GitVersion) -}}
 {{- print "batch/v1beta1" }}
 {{- else if semverCompare ">=1.21-0" .Capabilities.KubeVersion.GitVersion -}}
 {{- print "batch/v1" }}
