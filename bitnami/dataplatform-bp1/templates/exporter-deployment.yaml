@@ -78,8 +78,8 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.dataplatform.exporter.args "context" $) | nindent 12 }}
           {{- end }}
           env:
-            - name: METRIC_CONFIG_PATH
-              value: "/data/bp.json"
+            - name: BP_NAME
+              value: {{ include "dataplatform.fullname" . }}
             - name: DP_URI
               value: http://{{ include "dataplatform.emitter-name" . }}:{{ .Values.dataplatform.emitter.service.ports.http }}
           {{- if or .Values.dataplatform.exporter.extraEnvVarsCM .Values.dataplatform.exporter.extraEnvVarsSecret }}
@@ -139,9 +139,6 @@ spec:
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.dataplatform.exporter.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name: exporter-config
-              mountPath: /data/bp.json  
-              subPath: bp.json        
           {{- if .Values.dataplatform.exporter.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.dataplatform.exporter.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -149,9 +146,6 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.dataplatform.exporter.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
-        - name: exporter-config
-          configMap:
-            name: {{ include "dataplatform.exporter-name" . }}-configuration
         {{- if .Values.dataplatform.exporter.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.dataplatform.exporter.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
