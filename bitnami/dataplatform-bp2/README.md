@@ -9,20 +9,18 @@ This Helm chart enables the fully automated Kubernetes deployment of such multi-
 -   Apache Spark              – In-memory data analytics
 -   Elasticsearch with Kibana – Data persistence and search
 -   Logstash                  - Data Processing Pipeline
--   Data Platform Prometheus Exporter - Prometheus exporter that emits the health metrics of the data platform
+-   Data Platform Signature State Controller – Kubernetes controller that emits data platform health and state metrics in Prometheus format.
 
 These containerized stateful software stacks are deployed in multi-node cluster configurations, which is defined by the Helm Chart blueprint for this data platform deployment, covering:
 
 -   Pod placement rules – Affinity rules to ensure placement diversity to prevent single point of failures and optimize load distribution
 -   Pod resource sizing rules – Optimized Pod and JVM sizing settings for optimal performance and efficient resource usage
 -   Default settings to ensure Pod access security
--   Optional Tanzu Observability framework configuration
+-   Optional [Tanzu Observability](https://docs.wavefront.com/kubernetes.html) framework configuration.
 
 In addition to the Pod resource optimizations, this blueprint is validated and tested to provide Kubernetes node count and sizing recommendations [(see Kubernetes Cluster Requirements)](#kubernetes-cluster-requirements) to facilitate cloud platform capacity planning. The goal is optimize the number of required Kubernetes nodes in order to optimize server resource usage and, at the same time, ensuring runtime and resource diversity.
 
-The first release of this blueprint defines a small size data platform deployment, deployed on 3 Kubernetes application nodes with physical diverse underlying server infrastructure.
-
-Use cases for this small size data platform setup include: data and application evaluation, development, and functional testing.
+This blueprint, in its default configuration, deploys the data platform on a Kubernetes cluster with three worker nodes. Use cases for this data platform setup include: data and application evaluation, development, and functional testing.
 
 ## TL;DR
 
@@ -35,8 +33,7 @@ $ helm install my-release bitnami/dataplatform-bp2
 
 This chart bootstraps Data Platform Blueprint-2 deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-The "Small" size data platform in default configuration deploys the following:
-
+Once the chart is installed, the deployed data platform cluster comprises of:
 1. Zookeeper with 3 nodes to be used for both Kafka
 2. Kafka with 3 nodes using the zookeeper deployed above
 3. Elasticsearch with 3 master nodes, 2 data nodes, 2 coordinating nodes and 1 kibana node
