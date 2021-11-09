@@ -41,9 +41,7 @@ spec:
       serviceAccountName: {{ template "minio.serviceAccountName" . }}
       initContainers:
         - name: wait-for-available-minio
-          # TODO: Add wait-for-port for minio image
-          # {{ include "minio.image" . }}
-          image: docker.io/bitnami/kafka:2.8.1-debian-10-r31
+          image: {{ include "minio.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           command:
             - /bin/bash

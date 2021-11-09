@@ -260,9 +260,11 @@ provisioning:
   ## buckets:
   ##   - name: test-bucket
   ##     region: us-east-1
-  ##     # TODO: erasure codes
+  ##     # Only when mode is 'distributed'
+  ##     # ref: https://docs.minio.io/docs/distributed-minio-quickstart-guide
   ##     withLock: true
-  ##     # TODO: erasure codes
+  ##     # Only when mode is 'distributed'
+  ##     # ref: https://docs.minio.io/docs/distributed-minio-quickstart-guide
   ##     lifecycle:
   ##       - id: TestPrefix7dRetention
   ##         prefix: test-prefix
@@ -272,7 +274,8 @@ provisioning:
   ##           # Days !OR! date
   ##           # date: "2021-11-11T00:00:00Z"
   ##           nonconcurrentDays: 3
-  ##     # TODO: erasure codes
+  ##     # Only when mode is 'distributed'
+  ##     # ref: https://docs.minio.io/docs/distributed-minio-quickstart-guide
   ##     quota:
   ##       # hard, fifo or clear(+ omit size)
   ##       type: hard
