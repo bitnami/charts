@@ -711,7 +711,7 @@ externalRedis:
 
 networkPolicy:
   ## @param networkPolicy.enabled Enable network policies
-  ## If ingress.enabled is true, configure networkPolicy.ingress to allow communication
+  ## If ingress.enabled is true, configure networkPolicy.ingress selectors to allow communication
   ##
   enabled: false
   ## @param networkPolicy.ingress.enabled Enable network policy for Ingress Proxies
