@@ -167,7 +167,7 @@ $ helm uninstall my-release
 | `envoy.podAnnotations`                              | Envoy Pod annotations                                                                                                 | `{}`                   |
 | `envoy.podSecurityContext.enabled`                  | Envoy Pod securityContext                                                                                             | `false`                |
 | `envoy.containerSecurityContext.enabled`            | Envoy Container securityContext                                                                                       | `true`                 |
-| `envoy.containerSecurityContext.runAsUser`          | User ID for the Envoy container (to change this, http and https containerPorts must be set to >1024)                  | `0`                    |
+| `envoy.containerSecurityContext.runAsUser`          | User ID for the Envoy container (to change this, http and https containerPorts must be set to >1024)                  | `1001`                 |
 | `envoy.hostNetwork`                                 | Envoy Pod host network access                                                                                         | `false`                |
 | `envoy.dnsPolicy`                                   | Envoy Pod Dns Policy's DNS Policy                                                                                     | `ClusterFirst`         |
 | `envoy.tlsExistingSecret`                           | Name of the existingSecret to be use in Envoy deployment                                                              | `""`                   |
