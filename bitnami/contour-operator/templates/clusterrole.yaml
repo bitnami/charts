@@ -97,6 +97,46 @@ rules:
       - update
       - watch
   - apiGroups:
+      - gateway.networking.k8s.io
+    resources:
+      - gatewayclasses
+      - gateways
+      - httproutes
+      - referencepolicies
+      - tlsroutes
+    verbs:
+      - get
+      - list
+      - update
+      - watch
+  - apiGroups:
+      - gateway.networking.k8s.io
+    resources:
+      - gatewayclasses/status
+      - gateways/status
+      - httproutes/status
+      - tlsroutes/status
+    verbs:
+      - create
+      - get
+      - update
+  - apiGroups:
+      - gateway.networking.k8s.io
+    resources:
+      - tcproutes
+      - udproutes
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - gateway.networking.k8s.io
+    resources:
+      - tcproutes/status
+      - udproutes/status
+    verbs:
+      - update
+  - apiGroups:
       - networking.k8s.io
     resources:
       - ingressclasses
@@ -112,47 +152,6 @@ rules:
     verbs:
       - create
       - get
-      - update
-  - apiGroups:
-      - networking.x-k8s.io
-    resources:
-      - backendpolicies
-      - gatewayclasses
-      - gateways
-      - httproutes
-      - tlsroutes
-    verbs:
-      - get
-      - list
-      - update
-      - watch
-  - apiGroups:
-      - networking.x-k8s.io
-    resources:
-      - backendpolicies/status
-      - gatewayclasses/status
-      - gateways/status
-      - httproutes/status
-      - tlsroutes/status
-    verbs:
-      - create
-      - get
-      - update
-  - apiGroups:
-      - networking.x-k8s.io
-    resources:
-      - tcproutes
-      - udproutes
-    verbs:
-      - get
-      - list
-      - watch
-  - apiGroups:
-      - networking.x-k8s.io
-    resources:
-      - tcproutes/status
-      - udproutes/status
-    verbs:
       - update
   - apiGroups:
       - operator.projectcontour.io
@@ -174,6 +173,7 @@ rules:
   - apiGroups:
       - projectcontour.io
     resources:
+      - contourconfigurations
       - extensionservices
       - httpproxies
       - tlscertificatedelegations
@@ -184,6 +184,7 @@ rules:
   - apiGroups:
       - projectcontour.io
     resources:
+      - contourconfigurations/status
       - extensionservices/status
       - httpproxies/status
     verbs:
