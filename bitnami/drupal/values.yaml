@@ -701,7 +701,7 @@ networkPolicy:
     ##   label: ingress
     ##
     namespaceSelector: {}
-  ## @param networkPolicy.ingressRules.backendOnlyAccessibleByFrontend Enable ingress rule that makes the backend (mariadb) only accesible by drupal's pods.
+  ## @param networkPolicy.ingressRules.backendOnlyAccessibleByFrontend Enable ingress rule that makes the backend (mariadb) only accessible by drupal's pods.
   ## @param networkPolicy.ingressRules.customBackendSelector [object] Backend selector labels. These labels will be used to identify the backend pods.
   ## @param networkPolicy.ingressRules.accessOnlyFrom.enabled Enable ingress rule that makes drupal only accessible from a particular origin
   ## @param networkPolicy.ingressRules.accessOnlyFrom.namespaceSelector [object] Namespace selector label that is allowed to access drupal. This label will be used to identified the allowed namespace(s).
@@ -709,7 +709,8 @@ networkPolicy:
   ## @param networkPolicy.ingressRules.customRules [object] Custom network policy ingress rule
   ##
   ingressRules:
-    ## Mysql backend only could be accessed from drupal
+    ## mariadb backend only can be accessed from drupal
+    ##
     backendOnlyAccessibleByFrontend: false
     customBackendSelector: {}
     ## Allow only from the indicated:
