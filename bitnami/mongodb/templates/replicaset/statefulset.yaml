@@ -252,7 +252,7 @@ spec:
               value: {{ $customDatabases | quote }}
             {{- end }}
             {{- if .Values.auth.enabled }}
-            {{- if and .Values.auth.username .Values.auth.database }}
+            {{- if and (not (empty $customUsers)) (not (empty $customDatabases)) }}
             - name: MONGODB_EXTRA_PASSWORDS
               valueFrom:
                 secretKeyRef:
