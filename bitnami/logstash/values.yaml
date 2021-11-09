@@ -670,7 +670,7 @@ metrics:
     ## @param metrics.service.clusterIP Static clusterIP or None for headless services
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#choosing-your-own-ip-address
     ##
-    clusterIP: None
+    clusterIP: ""
     ## @param metrics.service.annotations [object] Annotations for the Prometheus metrics service
     ##
     annotations:

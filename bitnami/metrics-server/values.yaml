@@ -120,6 +120,10 @@ securePort: 8443
 ## if you use Weave network on EKS
 ##
 hostNetwork: false
+## @param dnsPolicy Default dnsPolicy setting
+## If you enable hostNetwork then you may need to set your dnsPolicy to something other
+## than "ClusterFirst" depending on your requirements.
+dnsPolicy: "ClusterFirst"
 ## @param command Override default container command (useful when using custom images)
 ##
 command: ["metrics-server"]
