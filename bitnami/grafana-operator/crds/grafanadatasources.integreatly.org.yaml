@@ -52,7 +52,8 @@ spec:
                     isDefault:
                       type: boolean
                     jsonData:
-                      description: The most common json options See https://grafana.com/docs/administration/provisioning/#datasources
+                      description: GrafanaDataSourceJsonData contains the most common
+                        json options See https://grafana.com/docs/administration/provisioning/#datasources
                       properties:
                         addCorsHeader:
                           description: ' Useful fields for clickhouse datasource  See
@@ -139,6 +140,9 @@ spec:
                         httpMode:
                           description: Fields for InfluxDB data sources
                           type: string
+                        implementation:
+                          description: Fields for Alertmanager data sources
+                          type: string
                         interval:
                           type: string
                         logAnalyticsClientId:
@@ -223,7 +227,8 @@ spec:
                     password:
                       type: string
                     secureJsonData:
-                      description: The most common secure json options See https://grafana.com/docs/administration/provisioning/#datasources
+                      description: GrafanaDataSourceSecureJsonData contains the most
+                        common secure json options See https://grafana.com/docs/administration/provisioning/#datasources
                       properties:
                         accessKey:
                           type: string

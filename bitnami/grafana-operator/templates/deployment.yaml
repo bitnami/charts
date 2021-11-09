@@ -63,9 +63,12 @@ spec:
             - --grafana-image-tag={{ .Values.grafana.image.tag | trim }}
             - --grafana-plugins-init-container-image={{ include "grafana-operator.grafana.baseImage" . }}
             - --grafana-plugins-init-container-tag={{ .Values.grafana.image.tag | trim }}
+            {{- if .Values.operator.args.leaderElect }}
+            - --leader-elect=True
+            {{- end }}
             {{- if (and .Values.operator.args.scanAllNamespaces (not .Values.operator.args.scanNamespaces)) }}
             - --scan-all=True
-            {{- else if .Values.operator.args.scanNamespaces }}
+            {{- else if (and .Values.operator.args.scanNamespaces (not .Values.operator.args.scanAllNamespaces )) }}
             - --namespaces={{ include "grafana-operator.joinListWithComma" .Values.operator.args.scanNamespaces }}
             {{- end }}
         {{- if .Values.operator.resources }}
@@ -77,8 +80,8 @@ spec:
         {{- if .Values.operator.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
-              path: /metrics
-              port: metrics
+              path: /readyz
+              port: 8081
             initialDelaySeconds: {{ .Values.operator.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.operator.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.operator.readinessProbe.timeoutSeconds }}
@@ -88,8 +91,8 @@ spec:
         {{- if .Values.operator.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
-              path: /metrics
-              port: metrics
+              path: /healthz
+              port: 8081
             initialDelaySeconds: {{ .Values.operator.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.operator.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.operator.livenessProbe.timeoutSeconds }}

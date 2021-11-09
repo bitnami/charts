@@ -81,12 +81,17 @@ operator:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
+  ## @param operator.args.leaderElect Specify if leaderElection should be used or not. (Create LeaderElection Role)
   ## @param operator.args.scanAllNamespaces Specify if all namespace should be scanned for dashboards and datasources. (Creates ClusterRole)
   ## @param operator.args.scanNamespaces Specify the namespaces which should be scanned for dashboards and datasources (Creates ClusterRole)
   ##
   args:
+    ## This enabled leader election for the operator and creates a Role for the leader election.
+    ##
+    leaderElect: true
     ## If one of these options is set a clusterRole and clusterRoleBinding is created to
     ## ensure that the operator is able to get data from other namespaces.
+    ## The options are mutually exclusive.
     ##
     scanAllNamespaces: false
     scanNamespaces: []
