@@ -115,8 +115,10 @@ spec:
           {{- end }}
           name: shutdown-manager
           resources: {{- toYaml .Values.envoy.shutdownManager.resources | nindent 12 }}
-          {{- if .Values.envoy.extraVolumeMounts }}
           volumeMounts:
+            - name: envoy-admin
+              mountPath: /admin
+          {{- if .Values.envoy.extraVolumeMounts }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.envoy.extraVolumeMounts "context" $ ) | nindent 12 }}
           {{- end }}
 
