@@ -74,37 +74,56 @@ data:
 
     validate_quorum() {
         if is_boolean_yes "$REDIS_TLS_ENABLED"; then
-            quorum_info_command="redis-cli {{- if and .Values.auth.enabled .Values.auth.sentinel }} -a $REDIS_PASSWORD {{- end }} -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} sentinel master {{ .Values.sentinel.masterSet }}"
+            quorum_info_command="redis-cli -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} sentinel master {{ .Values.sentinel.masterSet }}"
         else
-            quorum_info_command="redis-cli {{- if and .Values.auth.enabled .Values.auth.sentinel }} -a $REDIS_PASSWORD {{- end }} -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT sentinel master {{ .Values.sentinel.masterSet }}"
+            quorum_info_command="redis-cli -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT sentinel master {{ .Values.sentinel.masterSet }}"
         fi
 
         info "about to run the command: $quorum_info_command"
 
+        {{- if and .Values.auth.enabled .Values.auth.sentinel }}
+        export REDISCLI_AUTH="$REDIS_PASSWORD"
+        {{- end }}
+
         eval $quorum_info_command | grep -Fq "s_down"
+
+        unset REDISCLI_AUTH
     }
-    
+
     trigger_manual_failover() {
         if is_boolean_yes "$REDIS_TLS_ENABLED"; then
-            failover_command="redis-cli {{- if and .Values.auth.enabled .Values.auth.sentinel }} -a $REDIS_PASSWORD {{- end }} -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} sentinel failover {{ .Values.sentinel.masterSet }}"
+            failover_command="redis-cli -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} sentinel failover {{ .Values.sentinel.masterSet }}"
         else
-            failover_command="redis-cli {{- if and .Values.auth.enabled .Values.auth.sentinel }} -a $REDIS_PASSWORD {{- end }} -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT sentinel failover {{ .Values.sentinel.masterSet }}"
+            failover_command="redis-cli -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT sentinel failover {{ .Values.sentinel.masterSet }}"
         fi
 
         info "about to run the command: $failover_command"
 
+        {{- if and .Values.auth.enabled .Values.auth.sentinel }}
+        export REDISCLI_AUTH="$REDIS_PASSWORD"
+        {{- end }}
+
         echo $($failover_command)
+
+        unset REDISCLI_AUTH
     }
 
     get_sentinel_master_info() {
         if is_boolean_yes "$REDIS_TLS_ENABLED"; then
-            sentinel_info_command="redis-cli {{- if and .Values.auth.enabled .Values.auth.sentinel }} -a $REDIS_PASSWORD {{- end }} -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
+            sentinel_info_command="redis-cli -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
         else
-            sentinel_info_command="redis-cli {{- if and .Values.auth.enabled .Values.auth.sentinel }} -a $REDIS_PASSWORD {{- end }} -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
+            sentinel_info_command="redis-cli -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
         fi
 
         info "about to run the command: $sentinel_info_command"
+
+        {{- if and .Values.auth.enabled .Values.auth.sentinel }}
+        export REDISCLI_AUTH="$REDIS_PASSWORD"
+        {{- end }}
+
         echo $($sentinel_info_command)
+
+        unset REDISCLI_AUTH
     }
 
     {{- if and .Values.replica.containerSecurityContext.runAsUser (eq (.Values.replica.containerSecurityContext.runAsUser | int) 0) }}
@@ -297,12 +316,19 @@ data:
     }
     get_sentinel_master_info() {
         if is_boolean_yes "$REDIS_TLS_ENABLED"; then
-            sentinel_info_command="redis-cli {{- if and .Values.auth.enabled .Values.auth.sentinel }} -a $REDIS_PASSWORD {{- end }} -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
+            sentinel_info_command="redis-cli -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
         else
-            sentinel_info_command="redis-cli {{- if and .Values.auth.enabled .Values.auth.sentinel }} -a $REDIS_PASSWORD {{- end }} -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
+            sentinel_info_command="redis-cli -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
         fi
         info "about to run the command: $sentinel_info_command"
+
+        {{- if and .Values.auth.enabled .Values.auth.sentinel }}
+        export REDISCLI_AUTH="$REDIS_PASSWORD"
+        {{- end }}
+
         echo $($sentinel_info_command)
+
+        unset REDISCLI_AUTH
     }
 
     # Waits for DNS to add this ip to the service DNS entry
