@@ -2,9 +2,11 @@
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
 ## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets [array] Global Docker registry secret names as an array
+## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
 global:
   imageRegistry: ""
@@ -13,8 +15,10 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  storageClass: ""
 
 ## @section Common parameters
+##
 
 ## @param nameOverride String to partially override contour.fullname include (will maintain the release name)
 ##
@@ -22,22 +26,37 @@ nameOverride: ""
 ## @param fullnameOverride String to fully override contour.fullname template
 ##
 fullnameOverride: ""
-## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
-##
-ingress:
-  apiVersion: ""
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
 kubeVersion: ""
 ## @param extraDeploy [array] Array of extra objects to deploy with the release
 ##
 extraDeploy: []
+## @param commonLabels Labels to add to all deployed objects
+##
+commonLabels: {}
+## @param commonAnnotations Annotations to add to all deployed objects
+##
+commonAnnotations: {}
+
+## Diagnostic mode in the deployment
+##
+diagnosticMode:
+  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+  ##
+  enabled: false
+  ## @param diagnosticMode.command [array] Command to override all containers in the deployment
+  ##
+  command:
+    - sleep
+  ## @param diagnosticMode.args [array] Args to override all containers in the deployment
+  ##
+  args:
+    - infinity
 
 ## @section Contour parameters
-
-## @param replicaCount Number of Contour Pod replicas
 ##
-replicaCount: 2
+
 ## To configure Contour, you must specify ONE of the following two options.
 ## @param existingConfigMap Specifies the name of an externally-defined ConfigMap to use as the configuration (this is mutually exclusive with `configInline`)
 ## Helm will not manage the contents of this ConfigMap, it is your responsibility to create it.
@@ -68,11 +87,12 @@ contour:
   ## @param contour.image.tag Contour image tag
   ## @param contour.image.pullPolicy Contour Image pull policy
   ## @param contour.image.pullSecrets [array] Contour Image pull secrets
+  ## @param contour.image.debug Enable image debug mode
   ##
   image:
     registry: docker.io
     repository: bitnami/contour
-    tag: 1.19.0-debian-10-r0
+    tag: 1.19.1-debian-10-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -86,10 +106,29 @@ contour:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
+    debug: false
+  ## @param contour.replicaCount Number of Contour Pod replicas
+  ##
+  replicaCount: 1
+  ## @param contour.priorityClassName Priority class assigned to the pods
+  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+  ##
+  priorityClassName: ""
+  ## Configures the ports the Envoy proxy listens on
+  ## @param contour.containerPorts.xds Set xds port inside Contour pod
+  ## @param contour.containerPorts.metrics Set metrics port inside Contour pod
+  ##
+  containerPorts:
+    xds: 8001
+    metrics: 8000
   ## @param contour.hostAliases [array] Add deployment host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
+  ## @param contour.updateStrategy Strategy to use to update Pods
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy: {}
   ## @param contour.extraArgs [array] Extra arguments passed to Contour container
   ##
   extraArgs: []
@@ -108,11 +147,13 @@ contour:
     ## limits:
     ##    cpu: 400m
     ##    memory: 258Mi
+    ##
     limits: {}
     ## Examples:
     ## requests:
     ##    cpu: 100m
     ##    memory: 25Mi
+    ##
     requests: {}
   ## @param contour.manageCRDs Manage the creation, upgrade and deletion of Contour CRDs.
   ##
@@ -125,6 +166,22 @@ contour:
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
   podAntiAffinityPreset: soft
+  ## @param contour.podLabels [object] Extra labels for Contour pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param contour.lifecycleHooks lifecycleHooks for the container to automate configuration before or after startup.
+  ##
+  lifecycleHooks: {}
+  ## @param contour.customLivenessProbe Override default liveness probe
+  ##
+  customLivenessProbe: {}
+  ## @param contour.customReadinessProbe Override default readiness probe
+  ##
+  customReadinessProbe: {}
+  ## @param contour.customStartupProbe Override default startup probe
+  ##
+  customStartupProbe: {}
   ## Node affinity preset
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
   ## @param contour.nodeAffinityPreset.type Contour Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
@@ -143,6 +200,12 @@ contour:
     ##   - e2e-az2
     ##
     values: []
+  ## @param contour.command Override default command
+  ##
+  command: []
+  ## @param contour.args Override default args
+  ##
+  args: []
   ## @param contour.affinity [object] Affinity for Contour pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
@@ -166,6 +229,24 @@ contour:
   serviceAccount:
     create: true
     name: ""
+  ## Contour Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param contour.podSecurityContext.enabled Default backend Pod securityContext
+  ## @param contour.podSecurityContext.fsGroup Set Default backend Pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+  ## Envoy container security context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param contour.containerSecurityContext.enabled Envoy Container securityContext
+  ## @param contour.containerSecurityContext.runAsUser User ID for the Contour container (to change this, http and https containerPorts must be set to >1024)
+  ## @param contour.containerSecurityContext.runAsNonRoot Run as noon root
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
   ## @param contour.livenessProbe.enabled Enable/disable the Liveness probe
   ## @param contour.livenessProbe.initialDelaySeconds Delay before liveness probe is initiated
   ## @param contour.livenessProbe.periodSeconds How often to perform the probe
@@ -194,16 +275,20 @@ contour:
     timeoutSeconds: 5
     failureThreshold: 3
     successThreshold: 1
-  ## @param contour.securityContext.enabled If the pod should run in a securityContext.
-  ## @param contour.securityContext.runAsNonRoot If the pod should run as a non root container.
-  ## @param contour.securityContext.runAsUser define the uid with which the pod will run
-  ## @param contour.securityContext.runAsGroup define the gid with which the pod will run
+  ## @param contour.startupProbe.enabled Enable/disable the startup probe
+  ## @param contour.startupProbe.initialDelaySeconds Delay before startup probe is initiated
+  ## @param contour.startupProbe.periodSeconds How often to perform the probe
+  ## @param contour.startupProbe.timeoutSeconds When the probe times out
+  ## @param contour.startupProbe.failureThreshold Minimum consecutive failures for the probe to be considered failed after having succeeded.
+  ## @param contour.startupProbe.successThreshold Minimum consecutive successes for the probe to be considered successful after having failed.
   ##
-  securityContext:
-    enabled: true
-    runAsNonRoot: true
-    runAsUser: 1001
-    runAsGroup: 1001
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 15
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 3
+    successThreshold: 1
   ## @param contour.certgen.serviceAccount.create Create a serviceAccount for the Contour pod
   ## @param contour.certgen.serviceAccount.name Use the serviceAccount with the specified name, a name is generated using the fullname template
   ##
@@ -217,9 +302,48 @@ contour:
   tlsExistingSecret: ""
   ## Contour Service properties
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#multi-port-services
-  ## @param contour.service.extraPorts [array] Extra ports to expose (normally used with the `sidecar` value)
   ##
   service:
+    ## @param contour.service.type Service type
+    ##
+    type: ClusterIP
+    ## @param contour.service.ports.xds Contour service xds port
+    ## @param contour.service.ports.metrics Contour service xds port
+    ##
+    ports:
+      xds: 8001
+      metrics: 8000
+    ## Node ports to expose
+    ## @param contour.service.nodePorts.xds Node port for HTTP
+    ## NOTE: choose port between <30000-32767>
+    ##
+    nodePorts:
+      xds: ""
+    ## @param contour.service.clusterIP Contour service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param contour.service.loadBalancerIP Contour service Load Balancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerIP: ""
+    ## @param contour.service.loadBalancerSourceRanges Contour service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param contour.service.externalTrafficPolicy Contour service external traffic policy
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param contour.service.annotations Additional custom annotations for Contour service
+    ##
+    annotations: {}
+    ## @param contour.service.extraPorts Extra port to expose on Contour service
+    ##
     extraPorts: []
   ## @param contour.initContainers [array] Attach additional init containers to Contour pods
   ## For example:
@@ -253,9 +377,9 @@ contour:
   ##    value: env_var_value
   ##
   extraEnvVars: []
-  ## @param contour.extraEnvVarsConfigMap ConfigMap containing extra env vars to be added to all Contour containers
+  ## @param contour.extraEnvVarsCM ConfigMap containing extra env vars to be added to all Contour containers
   ##
-  extraEnvVarsConfigMap: ""
+  extraEnvVarsCM: ""
   ## @param contour.extraEnvVarsSecret Secret containing extra env vars to be added to all Contour containers
   ##
   extraEnvVarsSecret: ""
@@ -275,6 +399,7 @@ contour:
     default: true
 
 ## @section Envoy parameters
+##
 
 envoy:
   ## @param envoy.enabled Envoy Proxy creation
@@ -291,7 +416,7 @@ envoy:
   image:
     registry: docker.io
     repository: bitnami/envoy
-    tag: 1.19.1-debian-10-r55
+    tag: 1.19.1-debian-10-r74
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -305,6 +430,10 @@ envoy:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
+  ## @param envoy.priorityClassName Priority class assigned to the pods
+  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+  ##
+  priorityClassName: ""
   ## @param envoy.extraArgs [array] Extra arguments passed to Envoy container
   ##
   extraArgs: []
@@ -321,30 +450,42 @@ envoy:
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
   ## @param envoy.resources.limits [object] Specify resource limits which the container is not allowed to succeed.
   ## @param envoy.resources.requests [object] Specify resource requests which the container needs to spawn.
+  ##
   resources:
     ## Example:
     ## limits:
     ##   cpu: 400m
     ##   memory: 250Mi
+    ##
     limits: {}
     ## Examples:
     ## requests:
     ## cpu: 100m
     ## memory: 25Mi
+    ##
     requests: {}
+  ## @param envoy.command Override default command
+  ##
+  command: []
+  ## @param envoy.args Override default args
+  ##
+  args: []
   ## @param envoy.shutdownManager.resources.limits [object] Specify resource limits which the container is not allowed to succeed.
   ## @param envoy.shutdownManager.resources.requests [object] Specify resource requests which the container needs to spawn.
+  ##
   shutdownManager:
     resources:
       ## Example:
       ## limits:
       ##   cpu: 50m
       ##   memory: 32Mi
+      ##
       limits: {}
       ## Examples:
       ## requests:
       ## cpu: 10m
       ## memory: 16Mi
+      ##
       requests: {}
   ## @param envoy.kind Install as deployment or daemonset
   ##
@@ -352,10 +493,16 @@ envoy:
   ## @param envoy.replicaCount Desired number of Controller pods
   ##
   replicaCount: 1
+  ## @param envoy.lifecycleHooks lifecycleHooks for the container to automate configuration before or after startup.
+  ##
+  lifecycleHooks: {}
   ## @param envoy.updateStrategy [object] Strategy to use to update Pods
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
-  updateStrategy: {}
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 10%
   ## @param envoy.minReadySeconds The minimum number of seconds for which a newly created Pod should be ready
   ##
   minReadySeconds: 0
@@ -420,8 +567,12 @@ envoy:
   ## Pod security context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param envoy.podSecurityContext.enabled Envoy Pod securityContext
+  ## @param envoy.podSecurityContext.fsGroup User ID for the for the mounted volumes
+  ## @param envoy.podSecurityContext.sysctls Array of sysctl options to allow
   ##
   podSecurityContext:
+    fsGroup: 0
+    sysctls: []
     enabled: false
   ## Envoy container security context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
@@ -430,7 +581,7 @@ envoy:
   ##
   containerSecurityContext:
     enabled: true
-    runAsUser: 0
+    runAsUser: 1001
   ## @param envoy.hostNetwork Envoy Pod host network access
   ## ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/#host-namespaces
   ##
@@ -479,6 +630,29 @@ envoy:
     timeoutSeconds: 1
     failureThreshold: 3
     successThreshold: 1
+  ## @param envoy.startupProbe.enabled Enable/disable the startup probe
+  ## @param envoy.startupProbe.initialDelaySeconds Delay before startup probe is initiated
+  ## @param envoy.startupProbe.periodSeconds How often to perform the probe
+  ## @param envoy.startupProbe.timeoutSeconds When the probe times out
+  ## @param envoy.startupProbe.failureThreshold Minimum consecutive failures for the probe to be considered failed after having succeeded.
+  ## @param envoy.startupProbe.successThreshold Minimum consecutive successes for the probe to be considered successful after having failed.
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 15
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 3
+    successThreshold: 1
+  ## @param envoy.customLivenessProbe Override default liveness probe
+  ##
+  customLivenessProbe: {}
+  ## @param envoy.customReadinessProbe Override default readiness probe
+  ##
+  customReadinessProbe: {}
+  ## @param envoy.customStartupProbe Override default startup probe
+  ##
+  customStartupProbe: {}
   ## @param envoy.terminationGracePeriodSeconds Envoy termination grace period in seconds
   ##
   terminationGracePeriodSeconds: 300
@@ -494,6 +668,9 @@ envoy:
     ## @param envoy.service.externalTrafficPolicy Envoy Service external cluster policy. If `envoy.service.type` is NodePort or LoadBalancer
     ##
     externalTrafficPolicy: Local
+    ## @param envoy.service.labels Labels to add to te envoy service
+    ##
+    labels: {}
     ## @param envoy.service.clusterIP Internal envoy cluster service IP
     ## e.g.:
     ## clusterIP: None
@@ -576,14 +753,15 @@ envoy:
   ##    value: env_var_value
   ##
   extraEnvVars: []
-  ## @param envoy.extraEnvVarsConfigMap ConfigMap containing extra env vars to be added to all Envoy containers
+  ## @param envoy.extraEnvVarsCM ConfigMap containing extra env vars to be added to all Envoy containers
   ##
-  extraEnvVarsConfigMap: ""
+  extraEnvVarsCM: ""
   ## @param envoy.extraEnvVarsSecret Secret containing extra env vars to be added to all Envoy containers
   ##
   extraEnvVarsSecret: ""
 
 ## @section Default backend parameters
+##
 
 ## Default 404 backend
 ##
@@ -602,7 +780,7 @@ defaultBackend:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.21.3-debian-10-r42
+    tag: 1.21.4-debian-10-r6
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -619,9 +797,62 @@ defaultBackend:
   ## @param defaultBackend.extraArgs [object] Additional command line arguments to pass to NGINX container
   ##
   extraArgs: {}
-  ## @param defaultBackend.containerPort HTTP container port number
+  ## @param defaultBackend.lifecycleHooks lifecycleHooks for the container to automate configuration before or after startup.
   ##
-  containerPort: 8080
+  lifecycleHooks: {}
+  ## @param defaultBackend.extraEnvVars [array] Array containing extra env vars to be added to all Contour containers
+  ## For example:
+  ## extraEnvVars:
+  ##  - name: MY_ENV_VAR
+  ##    value: env_var_value
+  ##
+  extraEnvVars: []
+  ## @param defaultBackend.extraEnvVarsCM ConfigMap containing extra env vars to be added to all Contour containers
+  ##
+  extraEnvVarsCM: ""
+  ## @param defaultBackend.extraEnvVarsSecret Secret containing extra env vars to be added to all Contour containers
+  ##
+  extraEnvVarsSecret: ""
+  ## @param defaultBackend.extraVolumes [array] Array to add extra volumes
+  ##
+  extraVolumes: []
+  ## @param defaultBackend.extraVolumeMounts [array] Array to add extra mounts (normally used with extraVolumes)
+  ##
+  extraVolumeMounts: []
+  ## @param defaultBackend.initContainers [array] Attach additional init containers to the http backend pods
+  ## For example:
+  ## initContainers:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##
+  initContainers: []
+  ## @param defaultBackend.sidecars [array] Add additional sidecar containers to the default backend
+  ## Example:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## Configures the ports the http backend listens on
+  ## @param defaultBackend.containerPorts.http Set http port inside Contour pod
+  ##
+  containerPorts:
+    http: 8001
+  ## @param defaultBackend.updateStrategy Strategy to use to update Pods
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy: {}
+  ## @param defaultBackend.command Override default command
+  ##
+  command: []
+  ## @param defaultBackend.args Override default args
+  ##
+  args: []
   ## @param defaultBackend.hostAliases [array] Add deployment host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -658,11 +889,13 @@ defaultBackend:
     ## limits:
     ##   cpu: 250m
     ##   memory: 256Mi
+    ##
     limits: {}
     ## Examples:
     ## requests:
     ##   cpu: 250m
     ##   memory: 256Mi
+    ##
     requests: {}
   ## Default backend containers' liveness probe. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
@@ -676,10 +909,6 @@ defaultBackend:
   ##
   livenessProbe:
     enabled: true
-    httpGet:
-      path: /
-      port: http
-      scheme: HTTP
     failureThreshold: 3
     initialDelaySeconds: 30
     periodSeconds: 10
@@ -697,21 +926,34 @@ defaultBackend:
   ##
   readinessProbe:
     enabled: true
-    httpGet:
-      path: /
-      port: http
-      scheme: HTTP
     failureThreshold: 6
     initialDelaySeconds: 0
     periodSeconds: 5
     successThreshold: 1
     timeoutSeconds: 5
+  ## @param defaultBackend.startupProbe.enabled Enable/disable the startup probe
+  ## @param defaultBackend.startupProbe.initialDelaySeconds Delay before startup probe is initiated
+  ## @param defaultBackend.startupProbe.periodSeconds How often to perform the probe
+  ## @param defaultBackend.startupProbe.timeoutSeconds When the probe times out
+  ## @param defaultBackend.startupProbe.failureThreshold Minimum consecutive failures for the probe to be considered failed after having succeeded.
+  ## @param defaultBackend.startupProbe.successThreshold Minimum consecutive successes for the probe to be considered successful after having failed.
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 15
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 3
+    successThreshold: 1
   ## @param defaultBackend.customLivenessProbe [object] Override default liveness probe, it overrides the default one (evaluated as a template)
   ##
   customLivenessProbe: {}
   ## @param defaultBackend.customReadinessProbe [object] Override default readiness probe, it overrides the default one (evaluated as a template)
   ##
   customReadinessProbe: {}
+  ## @param defaultBackend.customStartupProbe Override default startup probe
+  ##
+  customStartupProbe: {}
   ## @param defaultBackend.podLabels [object] Extra labels for Controller pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
@@ -764,11 +1006,14 @@ defaultBackend:
   tolerations: []
   ## Default backend Service parameters
   ## @param defaultBackend.service.type Service type
-  ## @param defaultBackend.service.port Service port
+  ## @param defaultBackend.service.ports.http Service port
+  ## @param defaultBackend.service.annotations Annotations to add to the service
   ##
   service:
     type: ClusterIP
-    port: 80
+    ports:
+      http: 80
+    annotations: {}
   ## PodDisruptionBudget for default backend
   ## Default backend Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
@@ -781,17 +1026,116 @@ defaultBackend:
     minAvailable: 1
     maxUnavailable: ""
 
+## Ingress parameters
+##
+ingress:
+  ## @param ingress.enabled Ingress configuration enabled
+  ## Ref: https://kubernetes.io/docs/user-guide/ingress/
+  ##
+  ## Enable Ingress.
+  ##
+  enabled: false
+
+  ## @param ingress.certManager Add annotations for cert-manager
+  ##
+  certManager: false
+
+  ## @param ingress.annotations Annotations to be added to the web ingress.
+  ## Example:
+  ##   kubernetes.io/ingress.class: nginx
+  ##   kubernetes.io/tls-acme: 'true'
+  ##
+  annotations: {}
+
+  ## Either `hosts` or `rulesOverride` must be provided if Ingress is enabled.
+  ## `hosts` sets up the Ingress with default rules per provided hostname.
+  ## @param ingress.hostname Hostename for the Ingress object
+  ##
+  hostname: contour.local
+
+  ## @param ingress.path The Path to Concourse
+  ##
+  path: /
+  ## @param ingress.rulesOverride Ingress rules override
+  ## Either `hosts` or `rulesOverride` must be provided if Ingress is enabled.
+  ## `rulesOverride` allows the user to define the full set of ingress rules, for more complex Ingress setups.
+  ##
+  rulesOverride: []
+
+  ## @param ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
+  ##
+  selfSigned: false
+
+  ## @param ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+  ##
+  ingressClassName: ""
+
+  ## @param ingress.extraPaths Add additional arbitrary paths that may need to be added to the ingress under the main host.
+  ## For example: The ALB ingress controller requires a special rule for handling SSL redirection.
+  ##
+  extraPaths: []
+
+  ## @param ingress.tls TLS configuration.
+  ## Secrets must be manually created in the namespace.
+  ## Example:
+  ##   - secretName: concourse-web-tls
+  ##     hosts:
+  ##       - concourse.domain.com
+  ##
+  tls: false
+
+  ## @param ingress.pathType Ingress Path type
+  ##
+  pathType: ImplementationSpecific
+
+  ## @param ingress.extraHosts The list of additional hostnames to be covered with this ingress record.
+  ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
+  ## extraHosts:
+  ## - name: concourse.local
+  ##   path: /
+  ##
+  extraHosts: []
+
+  ## @param ingress.extraTls The tls configuration for additional hostnames to be covered with this ingress record.
+  ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+  ## extraTls:
+  ## - hosts:
+  ##     - concourse.local
+  ##   secretName: concourse.local-tls
+  ##
+  extraTls: []
+
+  ## @param ingress.secrets If you're providing your own certificates, please use this to add the certificates as secrets
+  ## key and certificate should start with -----BEGIN CERTIFICATE----- or
+  ## -----BEGIN RSA PRIVATE KEY-----
+  ##
+  ## name should line up with a tlsSecret set further up
+  ## If you're using cert-manager, this is unneeded, as it will create the secret for you if it is not set
+  ##
+  ## It is also possible to create and manage the certificates outside of this helm chart
+  ## Please see README.md for more information
+  ## Example:
+  ## - name: concourse.local-tls
+  ##   key:
+  ##   certificate:
+  ##
+  secrets: []
+
 ## @section Metrics parameters
+##
 
 ## Prometheus Operator service monitors
-## @param prometheus.serviceMonitor.namespace Specify if the servicemonitors will be deployed into a different namespace (blank deploys into same namespace as chart)
-## @param prometheus.serviceMonitor.enabled Specify if a servicemonitor will be deployed for prometheus-operator.
-## @param prometheus.serviceMonitor.jobLabel Specify the jobLabel to use for the prometheus-operator
-## @param prometheus.serviceMonitor.interval Specify the scrape interval if not specified use default prometheus scrapeIntervall, the Prometheus default scrape interval is used.
-## @param prometheus.serviceMonitor.metricRelabelings [array] Specify additional relabeling of metrics.
-## @param prometheus.serviceMonitor.relabelings [array] Specify general relabeling.
+## @param metrics.serviceMonitor.namespace Specify if the servicemonitors will be deployed into a different namespace (blank deploys into same namespace as chart)
+## @param metrics.serviceMonitor.enabled Specify if a servicemonitor will be deployed for prometheus-operator.
+## @param metrics.serviceMonitor.jobLabel Specify the jobLabel to use for the prometheus-operator
+## @param metrics.serviceMonitor.interval Specify the scrape interval if not specified use default prometheus scrapeIntervall, the Prometheus default scrape interval is used.
+## @param metrics.serviceMonitor.metricRelabelings [array] Specify additional relabeling of metrics.
+## @param metrics.serviceMonitor.relabelings [array] Specify general relabeling.
+## @param metrics.serviceMonitor.honorLabels Specify honorLabels parameter to add the scrape endpoint
+## @param metrics.serviceMonitor.scrapeTimeout The timeout after which the scrape is ended
+## @param metrics.serviceMonitor.selector Specify honorLabels parameter to add the scrape endpoint
 ##
-prometheus:
+metrics:
   serviceMonitor:
     namespace: ""
     enabled: false
@@ -799,8 +1143,12 @@ prometheus:
     interval: ""
     metricRelabelings: []
     relabelings: []
+    honorLabels: false
+    scrapeTimeout: ""
+    selector: {}
 
 ## @section Other parameters
+##
 
 ## @param rbac.create Create the RBAC roles for API accessibility
 ##
