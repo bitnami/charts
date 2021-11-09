@@ -68,7 +68,7 @@ spec:
             - --contour-cert-file=/certs/tls.crt
             - --contour-key-file=/certs/tls.key
             - --config-path=/config/contour.yaml
-            {{- if gt (len (include "contour.ingressClassName" .)) 0 }}
+            {{- if (include "contour.isIngressClassNameDefined" .) }}
             - --ingress-class-name={{ include "contour.ingressClassName" . }}
             {{- end }}
             {{- if .Values.contour.extraArgs }}

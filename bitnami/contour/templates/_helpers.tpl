@@ -96,10 +96,22 @@ contour: envoy.kind
 
 {{/* Create the name of the IngressClass to use. */}}
 {{- define "contour.ingressClassName" -}}
+{{- $ingressClass := .Values.contour.ingressClass }}
+{{- if kindIs "string" $ingressClass -}}
+    {{ default "contour" $ingressClass }}
+{{- else if kindIs "map" $ingressClass -}}
+    {{ default "contour" $ingressClass.name }}
+{{- else -}}
+    contour
+{{- end -}}
+{{- end -}}
+
+{{/* Whether the name of the ingress class is defined or not */}}
+{{- define "contour.isIngressClassNameDefined" -}}
 {{- $ingressClass := .Values.contour.ingressClass -}}
 {{- if kindIs "string" $ingressClass -}}
-    {{ $ingressClass }}
+    true
 {{- else if and (kindIs "map" $ingressClass) (or $ingressClass.name $ingressClass.create) -}}
-    {{ $ingressClass.name | default "contour" }}
+    true
 {{- end -}}
 {{- end -}}
