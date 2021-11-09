@@ -13,7 +13,7 @@ metadata:
 spec:
   podSelector:
     matchLabels:
-      app.kubernetes.io/instance: {{ .Release.Name }}
+      {{- include "common.labels.standard" . | nindent 6 }}
   policyTypes:
     - Egress
   egress:
