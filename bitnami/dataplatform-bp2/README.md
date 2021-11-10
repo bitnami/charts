@@ -9,7 +9,7 @@ This Helm chart enables the fully automated Kubernetes deployment of such multi-
 -   Apache Spark              – In-memory data analytics
 -   Elasticsearch with Kibana – Data persistence and search
 -   Logstash                  - Data Processing Pipeline
--   Data Platform Signature State Controller – Kubernetes controller that emits data platform health and state metrics in Prometheus format.
+-   Data Platform Signature State Controller - Kubernetes controller that emits data platform health and state metrics in Prometheus format.
 
 These containerized stateful software stacks are deployed in multi-node cluster configurations, which is defined by the Helm Chart blueprint for this data platform deployment, covering:
 
@@ -344,7 +344,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `logstash.metrics.resources.limits`          | Elasticsearch metrics resource limits                 | `{}`     |
 | `logstash.metrics.resources.requests.cpu`    | Elasticsearch metrics CPUs                            | `100m`   |
 | `logstash.metrics.resources.requests.memory` | Elasticsearch metrics requested memory                | `128Mi`  |
-| `logstash.metrics.service.clusterIP`         | Static clusterIP or None for headless services        | `""`     |
 | `logstash.metrics.service.port`              | Logstash Prometheus port                              | `9198`   |
 
 
@@ -390,7 +389,7 @@ $ helm install my-release -f values.yaml bitnami/dataplatform-bp2
 
 In the default deployment, the helm chart deploys the data platform with [Metrics Emitter](https://hub.docker.com/r/bitnami/dataplatform-emitter) and [Prometheus Exporter](https://hub.docker.com/r/bitnami/dataplatform-exporter) which emit the health metrics of the data platform which can be integrated with your observability solution.
 
-To deploy the data platform with Tanzu Observability Framework with the Wavefront Collector for all the applications (Kafka/Spark/Elasticsearch/Logstash) in the data platform, you can specify the 'enabled' parameter using the `--set <component>.metrics.enabled=true` argument to `helm install`. For Example,
+- To deploy the data platform with Tanzu Observability Framework with the Wavefront Collector with enabled annotation based discovery feature for all the applications (Kafka/Spark/Elasticsearch/Logstash) in the data platform, make sure that auto discovery `wavefront.collector.discovery.enabled=true` It should be enabled by default and specify the 'enabled' parameter using the --set .metrics.enabled=true argument to helm install. For Example,
 
 ```console
 $ helm install my-release bitnami/dataplatform-bp2 \
@@ -404,9 +403,9 @@ $ helm install my-release bitnami/dataplatform-bp2 \
     --set wavefront.wavefront.url=https://<YOUR_CLUSTER>.wavefront.com \
     --set wavefront.wavefront.token=<YOUR_API_TOKEN> 
 ```
-> **NOTE**: By defaulth the Wavefront Collector is deployed with annoation based discovery feature, it scrapes metrics from all the pods in the cluster that have Prometheus annotation enabled.
+> **NOTE**: When Annotation based discovery feature is enabled in the Wavefront Collector, it scrapes metrics from all the pods in the cluster that have Prometheus annotation enabled.
 
-To deploy the data platform with Tanzu Observability Framework without the annotation based discovery feature in Wavefront Collector for all the applications (Kafka/Spark/Elasticsearch/Logstash) in the data platform, uncomment the config section in the wavefront deployment from the data platform values.yml file, and specify the 'enable' parameter to 'false' using the `--set wavefront.collector.discovery.enabled=false`  with `helm install` command, below is an example:
+- To deploy the data platform with Tanzu Observability Framework without the annotation based discovery feature in Wavefront Collector for all the applications (Kafka/Spark/Elasticsearch/Logstash) in the data platform, uncomment the config section in the wavefront deployment from the data platform values.yml file, and specify the 'enable' parameter to 'false' using the `--set wavefront.collector.discovery.enabled=false`  with `helm install` command, below is an example:
 
 ```console
 $ helm install my-release bitnami/dataplatform-bp2 \
@@ -421,10 +420,11 @@ $ helm install my-release bitnami/dataplatform-bp2 \
     --set wavefront.wavefront.url=https://<YOUR_CLUSTER>.wavefront.com \
     --set wavefront.wavefront.token=<YOUR_API_TOKEN>
 ```
+### For using an existing Wavefront deployment
 
-If you want to use an existing Wavefront deployment, make sure that auto discovery `enableDiscovery: true` and annotation based discovery `discovery.disable_annotation_discovery: false` are enabled in the Wavefront Collector ConfigMap. They should be enabled by default.
+- To enable the auto discovery feature in wavefront for the existing wavefront deployment, make sure that auto discovery `enableDiscovery: true` and annotation based discovery `discovery.disable_annotation_discovery: false` are enabled in the Wavefront Collector ConfigMap. They should be enabled by default.
 
-If you wish not to use the annotation based discovery feature in wavefront, edit the Wavefront Collector ConfigMap and add the following snippet under discovery plugins. Once done, restart the wavefront collectors DaemonSet.
+- To not use the annotation based discovery feature in wavefront, edit the Wavefront Collector ConfigMap and add the following snippet under discovery plugins. Once done, restart the wavefront collectors DaemonSet.
 
 ```console
 $ kubectl edit configmap wavefront-collector-config -n wavefront
@@ -534,7 +534,7 @@ Regular upgrade is compatible from previous versions.
 
 ### To 9.0.0
 
-This major adds annotation based discovery feature in wavefront to the chart
+This major adds annotation based discovery feature in wavefront and updates to newest versions of the exporter/emitter to the chart.
 
 ### To 8.0.0
 

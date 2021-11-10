@@ -12,4 +12,3 @@ metadata:
 data:
   bp.json: |-
     {{ .Values.dataplatform.exporter.config | nindent 4 }}
-

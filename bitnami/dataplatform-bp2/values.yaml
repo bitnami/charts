@@ -1231,12 +1231,9 @@ logstash:
       requests:
         cpu: 100m
         memory: 128Mi
-    ## @param logstash.metrics.service.clusterIP Static clusterIP or None for headless services
-    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#choosing-your-own-ip-address
     ## @param logstash.metrics.service.port Logstash Prometheus port
     ##
     service:
-      clusterIP: ""
       port: 9198
 
 ## @section Tanzu Observability (Wavefront) parameters
@@ -1289,7 +1286,7 @@ wavefront:
       enableRuntimeConfigs: true
       ## Can be used to add additional discovery rules
       ##
-      #config:
+      # config:
         ## auto-discover kafka-exporter
         ##
       #  - name: kafka-discovery
@@ -1300,6 +1297,7 @@ wavefront:
       #    port: 9308
       #    path: /metrics
       #    scheme: http
+      #    prefix: kafka.
         ## auto-discover jmx exporter
         ##
       #  - name: kafka-jmx-discovery
