@@ -3233,6 +3233,9 @@ receive:
 ## @section Thanos Receive Distributor parameters
 
 receiveDistributor:
+  ## @param receiveDistributor.enabled Enable/disable Thanos Receive Distributor component
+  ##
+  enabled: false
   ## @param receiveDistributor.logLevel Thanos Receive Distributor log level
   ##
   logLevel: info
