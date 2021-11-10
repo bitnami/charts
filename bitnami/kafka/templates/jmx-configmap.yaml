@@ -50,6 +50,10 @@ data:
         name: java_lang_$1_$4_$3_$2
       - pattern: java.lang<type=(.+), name=(.+)><>(\w+)
         name: java_lang_$1_$3_$2
+      - pattern: java.lang<name=(.*), type=GarbageCollector><>CollectionCount
+        type: COUNTER
+      - pattern: java.lang<name=(.*), type=GarbageCollector><>CollectionTime
+        type: GAUGE
       - pattern : java.lang<type=(.*)>
       - pattern: kafka.log<type=(.+), name=(.+), topic=(.+), partition=(.+)><>Value
         name: kafka_log_$1_$2
