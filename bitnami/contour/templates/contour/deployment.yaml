@@ -7,20 +7,23 @@ metadata:
   namespace: {{ .Release.Namespace }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: contour
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
-  replicas: {{ .Values.replicaCount }}
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      # This value of maxSurge means that during a rolling update
-      # the new ReplicaSet will be created first.
-      maxSurge: 50%
+  replicas: {{ .Values.contour.replicaCount }}
+  {{- if .Values.contour.updateStrategy }}
+  strategy: {{- toYaml .Values.contour.updateStrategy | nindent 4 }}
+  {{- end }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: contour
   template:
     metadata:
-      {{- if or .Values.configInline .Values.contour.podAnnotations }}
+      {{- if or .Values.configInline .Values.contour.podAnnotations .Values.commonAnnotations }}
       annotations:
         {{- if .Values.contour.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.contour.podAnnotations "context" $) | nindent 8 }}
@@ -28,11 +31,23 @@ spec:
         {{- if .Values.configInline }}
         checksum/config: {{ include (print $.Template.BasePath "/contour/configmap.yaml") . | sha256sum }}
         {{- end }}
+        {{- if .Values.commonAnnotations }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
+        {{- end }}
       {{- end }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: contour
+        {{- if .Values.contour.podLabels }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.contour.podLabels "context" $ ) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.commonLabels }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
+        {{- end }}
     spec:
       {{- include "common.images.pullSecrets" ( dict "images" (list .Values.contour.image) "global" .Values.global) | nindent 6 }}
+      {{- if .Values.contour.priorityClassName }}
+      priorityClassName: {{ .Values.contour.priorityClassName | quote }}
+      {{- end }}
       {{- if .Values.contour.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.contour.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -55,13 +70,26 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.contour.initContainers "context" $ ) | nindent 6 }}
       {{- end }}
       containers:
-        - command:
+        - name: contour
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.contour.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.contour.command "context" $) | nindent 12 }}
+          {{- else }}
+          command:
             - contour
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.contour.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.contour.args "context" $) | nindent 12 }}
+          {{- else }}
           args:
             - serve
             - --incluster
             - --xds-address=0.0.0.0
-            - --xds-port=8001
+            - --xds-port={{ .Values.contour.containerPorts.xds }}
+            - --http-port={{ .Values.contour.containerPorts.metrics }}
             - --envoy-service-http-port={{ .Values.envoy.containerPorts.http }}
             - --envoy-service-https-port={{ .Values.envoy.containerPorts.https }}
             - --contour-cafile=/certs/ca.crt
@@ -74,37 +102,60 @@ spec:
             {{- if .Values.contour.extraArgs }}
             {{- include "common.tplvalues.render" (dict "value" .Values.contour.extraArgs "context" $) | nindent 12 }}
             {{- end }}
+          {{- end }}
           image: {{ include "common.images.image" ( dict "imageRoot" .Values.contour.image "global" .Values.global) }}
           imagePullPolicy: {{ .Values.contour.image.pullPolicy }}
-          name: contour
           ports:
-            - containerPort: 8001
+            - containerPort: {{ .Values.contour.containerPorts.xds }}
               name: xds
               protocol: TCP
-            - containerPort: 8000
+            - containerPort: {{ .Values.contour.containerPorts.metrics }}
               name: metrics
               protocol: TCP
-        {{- if .Values.contour.livenessProbe.enabled }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.contour.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.contour.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.contour.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
               path: /healthz
-              port: 8000
+              port: {{ .Values.contour.containerPorts.metrics }}
             initialDelaySeconds: {{ .Values.contour.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.contour.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.contour.livenessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.contour.livenessProbe.successThreshold }}
             failureThreshold: {{ .Values.contour.livenessProbe.failureThreshold }}
-        {{- end }}
-        {{- if .Values.contour.readinessProbe.enabled }}
+          {{- else if .Values.contour.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.contour.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.contour.readinessProbe.enabled }}
           readinessProbe:
-            tcpSocket:
-              port: 8001
+            httpGet:
+              path: /healthz
+              port: {{ .Values.contour.containerPorts.metrics }}
             initialDelaySeconds: {{ .Values.contour.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.contour.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.contour.readinessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.contour.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.contour.readinessProbe.failureThreshold }}
-        {{- end }}
+          {{- else if .Values.contour.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.contour.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.contour.startupProbe.enabled }}
+          startupProbe:
+            httpGet:
+              path: /healthz
+              port: {{ .Values.contour.containerPorts.metrics }}
+            initialDelaySeconds: {{ .Values.contour.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.contour.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.contour.startupProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.contour.startupProbe.successThreshold }}
+            failureThreshold: {{ .Values.contour.startupProbe.failureThreshold }}
+          {{- else if .Values.contour.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.contour.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- end }}
           resources: {{ toYaml .Values.contour.resources | nindent 12 }}
           volumeMounts:
             - name: contourcert
@@ -127,31 +178,33 @@ spec:
                 fieldRef:
                   apiVersion: v1
                   fieldPath: metadata.name
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" (or .Values.contour.image.debug .Values.diagnosticMode.enabled) | quote }}
             {{- if .Values.contour.extraEnvVars }}
               {{- include "common.tplvalues.render" (dict "value" .Values.contour.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
-          {{- if or .Values.contour.extraEnvVarsConfigMap .Values.contour.extraEnvVarsSecret }}
+          {{- if or .Values.contour.extraEnvVarsCM .Values.contour.extraEnvVarsSecret }}
           envFrom:
-            {{- if .Values.contour.extraEnvVarsConfigMap }}
+            {{- if .Values.contour.extraEnvVarsCM }}
             - configMapRef:
-                name: {{ include "common.tplvalues.render" ( dict "value" .Values.contour.extraEnvVarsConfigMap "context" $ ) }}
+                name: {{ include "common.tplvalues.render" ( dict "value" .Values.contour.extraEnvVarsCM "context" $ ) }}
             {{- end }}
             {{- if .Values.contour.extraEnvVarsSecret }}
             - secretRef:
                 name: {{ include "common.tplvalues.render" ( dict "value" .Values.contour.extraEnvVarsSecret "context" $ ) }}
             {{- end }}
           {{- end }}
+          {{- if .Values.contour.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.contour.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
         {{- if .Values.contour.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.contour.sidecars "context" $) | nindent 8 }}
         {{- end }}
       dnsPolicy: ClusterFirst
       serviceAccountName: {{ include "contour.contourServiceAccountName" . }}
-      {{- if .Values.contour.securityContext.enabled }}
+      {{- if .Values.contour.podSecurityContext.enabled }}
       securityContext:
-        runAsUser: {{ .Values.contour.securityContext.runAsUser }}
-        runAsGroup: {{ .Values.contour.securityContext.runAsGroup }}
-        fsGroup: {{ .Values.contour.securityContext.fsGroup }}
-        runAsNonRoot: {{ .Values.contour.securityContext.runAsNonRoot }}
+        fsGroup: {{ .Values.contour.podSecurityContext.fsGroup }}
       {{- end }}
       volumes:
         - name: contourcert

@@ -17,15 +17,27 @@ spec:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: default-backend
   replicas: {{ .Values.defaultBackend.replicaCount }}
+  {{- if .Values.defaultBackend.updateStrategy }}
+  strategy: {{- toYaml .Values.defaultBackend.updateStrategy | nindent 4 }}
+  {{- end }}
   template:
     metadata:
-      {{- if .Values.defaultBackend.podAnnotations }}
-      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.podAnnotations "context" $) | nindent 8 }}
+      {{- if or .Values.defaultBackend.podAnnotations .Values.commonAnnotations }}
+      annotations:
+        {{- if .Values.defaultBackend.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.commonAnnotations }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
+        {{- end }}
       {{- end }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: default-backend
         {{- if .Values.defaultBackend.podLabels }}
         {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.podLabels "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.commonLabels }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
         {{- end }}
     spec:
       {{- include "common.images.pullSecrets" ( dict "images" (list .Values.defaultBackend.image) "global" .Values.global) | nindent 6 }}
@@ -55,6 +67,10 @@ spec:
       automountServiceAccountToken: false
       serviceAccountName: {{ include "envoy.envoyServiceAccountName" . }}
       terminationGracePeriodSeconds: 60
+      {{- if .Values.defaultBackend.initContainers }}
+      initContainers:
+        {{- include "common.tplvalues.render" ( dict "value" .Values.defaultBackend.initContainers "context" $ ) | nindent 6 }}
+      {{- end }}
       containers:
         - name: default-backend
           image: {{ include "common.images.image" ( dict "imageRoot" .Values.defaultBackend.image "global" .Values.global) }}
@@ -62,6 +78,12 @@ spec:
           {{- if .Values.defaultBackend.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.defaultBackend.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
+          {{- if .Values.defaultBackend.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.defaultBackend.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.args "context" $) | nindent 12 }}
+          {{- else }}
           args:
           {{- range $key, $value := .Values.defaultBackend.extraArgs }}
             {{- if $value }}
@@ -70,21 +92,80 @@ spec:
             - --{{ $key }}
             {{- end }}
           {{- end }}
+          {{- end }}
+          {{- if .Values.defaultBackend.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.defaultBackend.extraEnvVars }}
+          env: {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.extraEnvVars "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if or .Values.defaultBackend.extraEnvVarsCM .Values.defaultBackend.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.defaultBackend.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" ( dict "value" .Values.defaultBackend.extraEnvVarsCM "context" $ ) }}
+            {{- end }}
+            {{- if .Values.defaultBackend.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" ( dict "value" .Values.defaultBackend.extraEnvVarsSecret "context" $ ) }}
+            {{- end }}
+          {{- end }}
           {{- if .Values.defaultBackend.livenessProbe.enabled }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.defaultBackend.livenessProbe "enabled") "context" $) | nindent 12 }}
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+              scheme: HTTP
+            initialDelaySeconds: {{ .Values.defaultBackend.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.defaultBackend.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.defaultBackend.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.defaultBackend.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.defaultBackend.livenessProbe.failureThreshold }}
           {{- else if .Values.defaultBackend.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.defaultBackend.readinessProbe.enabled }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.defaultBackend.readinessProbe "enabled") "context" $) | nindent 12 }}
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+              scheme: HTTP
+            initialDelaySeconds: {{ .Values.defaultBackend.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.defaultBackend.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.defaultBackend.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.defaultBackend.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.defaultBackend.readinessProbe.failureThreshold }}
           {{- else if .Values.defaultBackend.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
+          {{- if .Values.defaultBackend.startupProbe.enabled }}
+          startupProbe:
+            httpGet:
+              path: /
+              port: http
+              scheme: HTTP
+            initialDelaySeconds: {{ .Values.defaultBackend.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.defaultBackend.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.defaultBackend.startupProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.defaultBackend.startupProbe.successThreshold }}
+            failureThreshold: {{ .Values.defaultBackend.startupProbe.failureThreshold }}
+          {{- else if .Values.defaultBackend.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
           ports:
             - name: http
-              containerPort: {{ .Values.defaultBackend.containerPort }}
+              containerPort: {{ .Values.defaultBackend.containerPorts.http }}
               protocol: TCP
           {{- if .Values.defaultBackend.resources }}
           resources: {{- toYaml .Values.defaultBackend.resources | nindent 12 }}
+          {{- if .Values.defaultBackend.extraVolumeMounts }}
+          volumeMounts: {{- include "common.tplvalues.render" ( dict "value" .Values.contour.extraVolumeMounts "context" $ ) | nindent 12 }}
           {{- end }}
+          {{- end }}
+        {{- if .Values.defaultBackend.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.defaultBackend.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.defaultBackend.extraVolumes }}
+        volumes: {{- include "common.tplvalues.render" ( dict "value" .Values.defaultBackend.extraVolumes "context" $ ) | nindent 8 }}
+        {{- end }}
 {{- end }}

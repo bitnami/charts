@@ -94,7 +94,7 @@ auth:
   ## @param auth.rootPassword Password for MinIO&reg; root user
   ##
   rootPassword: ""
-  ## @param auth.existingSecret Use existing secret for credentials details (`auth.rootUser` and `auth.rootPassword` will be ignored and picked up from this secret). The secret has to contain the keys `root-user` and `mariadb-root-password)
+  ## @param auth.existingSecret Use existing secret for credentials details (`auth.rootUser` and `auth.rootPassword` will be ignored and picked up from this secret). The secret has to contain the keys `root-user` and `root-password`)
   ##
   existingSecret: ""
   ## @param auth.forcePassword Force users to specify required passwords
