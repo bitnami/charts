@@ -1035,7 +1035,7 @@ metrics:
 
 ## @section NetworkPolicy parameters
 
-## Add networkpolcies
+## Add networkpolicies
 ##
 networkPolicy:
   ## @param networkPolicy.enabled Enable network policies
