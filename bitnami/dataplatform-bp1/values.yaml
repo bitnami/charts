@@ -1106,7 +1106,7 @@ wavefront:
       enableRuntimeConfigs: true
       ## @param wavefront.collector.discovery.config [array] Configuration for rules based auto-discovery
       ##
-      #config:
+      # config:
         ## auto-discover kafka-exporter
         ##
        # - name: kafka-discovery

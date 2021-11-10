@@ -140,8 +140,8 @@ spec:
           {{- end }}
           volumeMounts:
             - name: exporter-config
-              mountPath: /data/bp.json  
-              subPath: bp.json        
+              mountPath: /data/bp.json 
+              subPath: bp.json
           {{- if .Values.dataplatform.exporter.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.dataplatform.exporter.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}

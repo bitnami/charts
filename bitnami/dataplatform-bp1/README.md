@@ -356,7 +356,7 @@ $ helm install my-release -f values.yaml bitnami/dataplatform-bp1
 
 In the default deployment, the helm chart deploys the data platform with [Metrics Emitter](https://hub.docker.com/r/bitnami/dataplatform-emitter) and [Prometheus Exporter](https://hub.docker.com/r/bitnami/dataplatform-exporter) which emit the health metrics of the data platform which can be integrated with your observability solution.
 
-To deploy the data platform with Tanzu Observability Framework with the Wavefront Collector for all the applications (Kafka/Spark/Elasticsearch/Logstash) in the data platform, you can specify the 'enabled' parameter using the --set <component>.metrics.enabled=true argument to helm install. For Example,
+- To deploy the data platform with Tanzu Observability Framework with the Wavefront Collector with enabled annotation based discovery feature for all the applications (Kafka/Spark/Elasticsearch/Logstash) in the data platform, make sure that auto discovery `wavefront.collector.discovery.enabled=true` is enabled, It should be enabled by default and specify the 'enabled' parameter using the --set <component>.metrics.enabled=true argument to helm install. For Example,
 
 ```console
 $ helm install my-release bitnami/dataplatform-bp1 \
@@ -369,9 +369,10 @@ $ helm install my-release bitnami/dataplatform-bp1 \
     --set wavefront.wavefront.url=https://<YOUR_CLUSTER>.wavefront.com \
     --set wavefront.wavefront.token=<YOUR_API_TOKEN>
 ```
-> **NOTE**: By default annonation based discovery feature of the Wavefront Collector, it scrapes metrics from all the pods that have Prometheus annotation enabled.
+> **NOTE**: When the annotation based discovery feature is enabled in the Wavefront Collector, it scrapes metrics from all the pods that have Prometheus annotation enabled.
 
-To deploy the data platform with Tanzu Observability Framework without the annotation based discovery feature in Wavefront Collector for all the applications (Kafka/Spark/Elasticsearch/Logstash) in the data platform, uncomment the config section in the wavefront deployment from the data platform values.yml file, and specify the 'enable' parameter to 'false' using the --set wavefront.collector.discovery.enabled=false  with helm install command, below is an example:
+
+- To deploy the data platform with Tanzu Observability Framework without the annotation based discovery feature in Wavefront Collector for all the applications (Kafka/Spark/Elasticsearch/Logstash) in the data platform, uncomment the config section in the wavefront deployment from the data platform values.yml file, and specify the 'enable' parameter to 'false' using the --set wavefront.collector.discovery.enabled=false  with helm install command, below is an example:
 
 ```console
 
@@ -387,10 +388,12 @@ $ helm install my-release bitnami/dataplatform-bp1 \
     --set wavefront.wavefront.token=<YOUR_API_TOKEN>
 ```
 
-If you want to use an existing Wavefront deployment, make sure that auto discovery enableDiscovery: true and annotation based discovery discovery.disable_annotation_discovery: false are enabled in the Wavefront Collector ConfigMap. They should be enabled by default.
+### For using an existing Wavefront deployment
+
+- To enable the annotation discovery feature in wavefront for the existing wavefront deployment,  make sure that auto discovery `enableDiscovery: true` and annotation based discovery `discovery.disable_annotation_discovery: false` are enabled in the Wavefront Collector ConfigMap. They should be enabled by default.
 
 
-If you wish not to use the annotation based discovery feature in wavefront, edit the Wavefront Collector ConfigMap and add the following snippet under discovery plugins. Once done, restart the wavefront collectors DaemonSet.
+- To not use the annotation based discovery feature in wavefront, edit the Wavefront Collector ConfigMap and add the following snippet under discovery plugins. Once done, restart the wavefront collectors DaemonSet.
 
 ```console
 $ kubectl edit configmap wavefront-collector-config -n wavefront
@@ -481,7 +484,7 @@ In order to render complete information about the deployment including all the s
 
 ### To 9.0.0
 
-This major adds the auto discovery feature in wavefront to the chart.
+This major adds the auto discovery feature in wavefront and updates to newest versions of the exporter/emitter to the chart.
 
 ### To 8.0.0
 
