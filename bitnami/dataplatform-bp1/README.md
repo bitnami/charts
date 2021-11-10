@@ -356,7 +356,7 @@ $ helm install my-release -f values.yaml bitnami/dataplatform-bp1
 
 In the default deployment, the helm chart deploys the data platform with [Metrics Emitter](https://hub.docker.com/r/bitnami/dataplatform-emitter) and [Prometheus Exporter](https://hub.docker.com/r/bitnami/dataplatform-exporter) which emit the health metrics of the data platform which can be integrated with your observability solution.
 
-- To deploy the data platform with Tanzu Observability Framework with the Wavefront Collector with enabled annotation based discovery feature for all the applications (Kafka/Spark/Elasticsearch/Logstash) in the data platform, make sure that auto discovery `wavefront.collector.discovery.enabled=true` is enabled, It should be enabled by default and specify the 'enabled' parameter using the --set <component>.metrics.enabled=true argument to helm install. For Example,
+- To deploy the data platform with Tanzu Observability Framework with the Wavefront Collector with enabled annotation based discovery feature for all the applications (Kafka/Spark/Elasticsearch/Logstash) in the data platform, make sure that auto discovery `wavefront.collector.discovery.enabled=true` is enabled, It should be enabled by default and specify the 'enabled' parameter using the `--set <component>.metrics.enabled=true` argument to helm install. For Example,
 
 ```console
 $ helm install my-release bitnami/dataplatform-bp1 \
@@ -372,7 +372,7 @@ $ helm install my-release bitnami/dataplatform-bp1 \
 > **NOTE**: When the annotation based discovery feature is enabled in the Wavefront Collector, it scrapes metrics from all the pods that have Prometheus annotation enabled.
 
 
-- To deploy the data platform with Tanzu Observability Framework without the annotation based discovery feature in Wavefront Collector for all the applications (Kafka/Spark/Elasticsearch/Logstash) in the data platform, uncomment the config section in the wavefront deployment from the data platform values.yml file, and specify the 'enable' parameter to 'false' using the --set wavefront.collector.discovery.enabled=false  with helm install command, below is an example:
+- To deploy the data platform with Tanzu Observability Framework without the annotation based discovery feature in Wavefront Collector for all the applications (Kafka/Spark/Elasticsearch/Logstash) in the data platform, uncomment the config section in the wavefront deployment from the data platform values.yml file, and specify the 'enable' parameter to 'false' using the `--set wavefront.collector.discovery.enabled=false`  with helm install command, below is an example:
 
 ```console
 
