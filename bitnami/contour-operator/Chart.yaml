@@ -12,6 +12,7 @@ description: The Contour Operator extends the Kubernetes API to create, configur
 engine: gotpl
 home: https://github.com/projectcontour/contour-operator
 icon: https://bitnami.com/assets/stacks/contour-operator/img/contour-operator-stack-220x234.png
+keywords:
   - contour
   - operator
   - ingress
@@ -23,4 +24,4 @@ name: contour-operator
 sources:
   - https://github.com/projectcontour/contour-operator
   - https://github.com/bitnami/bitnami-docker-contour-operator
-version: 0.1.1
+version: 0.1.3

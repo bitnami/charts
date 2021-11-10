@@ -1,4 +1,4 @@
-{{- if .Values.web.enable }}
+{{- if .Values.web.enabled }}
 {{- if .Values.web.rbac.create -}}
 ---
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
@@ -21,7 +21,8 @@ rules:
 {{- end }}
 
 ---
-{{- if .Values.web.psp.create }}
+{{- $pspAvailable := (semverCompare "<1.25-0" (include "common.capabilities.kubeVersion" .)) -}}
+{{- if and $pspAvailable .Values.web.psp.create }}
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
 metadata:

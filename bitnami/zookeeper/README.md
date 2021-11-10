@@ -59,6 +59,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                     | Description                                                                                  | Value           |
 | ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
+| `kubeVersion`            | Override Kubernetes version                                                                  | `""`            |
 | `nameOverride`           | String to partially override common.names.fullname template (will maintain the release name) | `""`            |
 | `fullnameOverride`       | String to fully override common.names.fullname template                                      | `""`            |
 | `clusterDomain`          | Kubernetes Cluster Domain                                                                    | `cluster.local` |
@@ -76,7 +77,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
 | `image.registry`            | ZooKeeper image registry                                                                                                                 | `docker.io`            |
 | `image.repository`          | ZooKeeper image repository                                                                                                               | `bitnami/zookeeper`    |
-| `image.tag`                 | ZooKeeper Image tag (immutable tags are recommended)                                                                                     | `3.7.0-debian-10-r157` |
+| `image.tag`                 | ZooKeeper Image tag (immutable tags are recommended)                                                                                     | `3.7.0-debian-10-r188` |
 | `image.pullPolicy`          | ZooKeeper image pull policy                                                                                                              | `IfNotPresent`         |
 | `image.pullSecrets`         | Specify docker-registry secret names as an array                                                                                         | `[]`                   |
 | `image.debug`               | Specify if debug values should be set                                                                                                    | `false`                |
@@ -205,7 +206,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`           | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`    | Init container volume-permissions image registry                                                                     | `docker.io`             |
 | `volumePermissions.image.repository`  | Init container volume-permissions image repository                                                                   | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`         | Init container volume-permissions image tag (immutable tags are recommended)                                         | `10-debian-10-r202`     |
+| `volumePermissions.image.tag`         | Init container volume-permissions image tag (immutable tags are recommended)                                         | `10-debian-10-r233`     |
 | `volumePermissions.image.pullPolicy`  | Init container volume-permissions image pull policy                                                                  | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets` | Init container volume-permissions image pull secrets                                                                 | `[]`                    |
 | `volumePermissions.resources`         | Init container resource requests/limit                                                                               | `{}`                    |
@@ -321,9 +322,9 @@ You can also set the log4j logging level and what log appenders are turned on, b
 ```console
 zookeeper.root.logger=INFO, CONSOLE
 ```
-the available appender is 
+the available appender is
 
-- CONSOLE 
+- CONSOLE
 - ROLLINGFILE
 - RFAAUDIT
 - TRACEFILE

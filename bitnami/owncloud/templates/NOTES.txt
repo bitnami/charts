@@ -1,3 +1,9 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
+** Please be patient while the chart is being deployed **
+
 {{- if or .Values.mariadb.enabled .Values.externalDatabase.host -}}
 
 {{- if empty (include "owncloud.host" .) -}}
@@ -70,8 +76,6 @@ host. To configure ownCloud with the URL of your service:
 
 This deployment will be incomplete until you configure ownCloud with a resolvable database
 host. To configure ownCloud to use and external database host:
-
-
 1. Complete your ownCloud deployment by running:
 
 {{- if eq .Values.service.type "NodePort" }}

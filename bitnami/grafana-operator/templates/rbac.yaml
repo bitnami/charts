@@ -75,7 +75,7 @@ rules:
       - create
   - apiGroups:
       - extensions
-      - "networking.k8s.io"
+      - networking.k8s.io
     resources:
       - ingresses
     verbs:
@@ -199,6 +199,7 @@ rules:
       - create
   - apiGroups:
       - extensions
+      - networking.k8s.io
     resources:
       - ingresses
     verbs:

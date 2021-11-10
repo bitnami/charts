@@ -69,48 +69,48 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Parse server parameters
 
-| Name                                        | Description                                                                                            | Value                 |
-| ------------------------------------------- | ------------------------------------------------------------------------------------------------------ | --------------------- |
-| `server.image.registry`                     | Parse image registry                                                                                   | `docker.io`           |
-| `server.image.repository`                   | Parse image repository                                                                                 | `bitnami/parse`       |
-| `server.image.tag`                          | Parse image tag (immutable tags are recommended)                                                       | `4.10.4-debian-10-r0` |
-| `server.image.pullPolicy`                   | Image pull policy                                                                                      | `IfNotPresent`        |
-| `server.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                       | `[]`                  |
-| `server.hostAliases`                        | Deployment pod host aliases                                                                            | `[]`                  |
-| `server.securityContext.enabled`            | Enable security context for Parse Server                                                               | `true`                |
-| `server.securityContext.fsGroup`            | Group ID for Parse Server container                                                                    | `1001`                |
-| `server.securityContext.runAsUser`          | User ID for Parse Server container                                                                     | `1001`                |
-| `server.port`                               | Parse server port                                                                                      | `1337`                |
-| `server.mountPath`                          | Parse server API mount path                                                                            | `/parse`              |
-| `server.appId`                              | Parse server App ID                                                                                    | `myappID`             |
-| `server.masterKey`                          | Parse server Master Key                                                                                | `""`                  |
-| `server.extraEnvVars`                       | An array to add extra env vars                                                                         | `[]`                  |
-| `server.extraEnvVarsCM`                     | Name of a ConfigMap containing extra environment variables                                             | `""`                  |
-| `server.extraEnvVarsSecret`                 | Name of a Secret containing extra environment variables                                                | `""`                  |
-| `server.enableCloudCode`                    | Enable Parse Cloud Code                                                                                | `false`               |
-| `server.cloudCodeScripts`                   | Cloud Code scripts                                                                                     | `{}`                  |
-| `server.existingCloudCodeScriptsCM`         | ConfigMap with Cloud Code scripts (Note: Overrides `cloudCodeScripts`).                                | `""`                  |
-| `server.resources`                          | Parse Server pods' resource requests and limits                                                        | `{}`                  |
-| `server.livenessProbe.enabled`              | Enable livenessProbe                                                                                   | `true`                |
-| `server.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                | `120`                 |
-| `server.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                       | `10`                  |
-| `server.livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                                      | `5`                   |
-| `server.livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                                    | `5`                   |
-| `server.livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                                    | `1`                   |
-| `server.readinessProbe.enabled`             | Enable readinessProbe                                                                                  | `true`                |
-| `server.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                               | `30`                  |
-| `server.readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                                      | `5`                   |
-| `server.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                     | `5`                   |
-| `server.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                                   | `5`                   |
-| `server.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                   | `1`                   |
-| `server.podAffinityPreset`                  | Parse server pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                  |
-| `server.podAntiAffinityPreset`              | Parse server pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`                |
-| `server.nodeAffinityPreset.type`            | Parse server node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                  |
-| `server.nodeAffinityPreset.key`             | Parse server node label key to match Ignored if `affinity` is set.                                     | `""`                  |
-| `server.nodeAffinityPreset.values`          | Parse server node label values to match. Ignored if `affinity` is set.                                 | `[]`                  |
-| `server.affinity`                           | Parse server affinity for pod assignment                                                               | `{}`                  |
-| `server.nodeSelector`                       | Parse server node labels for pod assignment                                                            | `{}`                  |
-| `server.tolerations`                        | Parse server tolerations for pod assignment                                                            | `[]`                  |
+| Name                                        | Description                                                                                            | Value                  |
+| ------------------------------------------- | ------------------------------------------------------------------------------------------------------ | ---------------------- |
+| `server.image.registry`                     | Parse image registry                                                                                   | `docker.io`            |
+| `server.image.repository`                   | Parse image repository                                                                                 | `bitnami/parse`        |
+| `server.image.tag`                          | Parse image tag (immutable tags are recommended)                                                       | `4.10.4-debian-10-r25` |
+| `server.image.pullPolicy`                   | Image pull policy                                                                                      | `IfNotPresent`         |
+| `server.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                       | `[]`                   |
+| `server.hostAliases`                        | Deployment pod host aliases                                                                            | `[]`                   |
+| `server.securityContext.enabled`            | Enable security context for Parse Server                                                               | `true`                 |
+| `server.securityContext.fsGroup`            | Group ID for Parse Server container                                                                    | `1001`                 |
+| `server.securityContext.runAsUser`          | User ID for Parse Server container                                                                     | `1001`                 |
+| `server.port`                               | Parse server port                                                                                      | `1337`                 |
+| `server.mountPath`                          | Parse server API mount path                                                                            | `/parse`               |
+| `server.appId`                              | Parse server App ID                                                                                    | `myappID`              |
+| `server.masterKey`                          | Parse server Master Key                                                                                | `""`                   |
+| `server.extraEnvVars`                       | An array to add extra env vars                                                                         | `[]`                   |
+| `server.extraEnvVarsCM`                     | Name of a ConfigMap containing extra environment variables                                             | `""`                   |
+| `server.extraEnvVarsSecret`                 | Name of a Secret containing extra environment variables                                                | `""`                   |
+| `server.enableCloudCode`                    | Enable Parse Cloud Code                                                                                | `false`                |
+| `server.cloudCodeScripts`                   | Cloud Code scripts                                                                                     | `{}`                   |
+| `server.existingCloudCodeScriptsCM`         | ConfigMap with Cloud Code scripts (Note: Overrides `cloudCodeScripts`).                                | `""`                   |
+| `server.resources`                          | Parse Server pods' resource requests and limits                                                        | `{}`                   |
+| `server.livenessProbe.enabled`              | Enable livenessProbe                                                                                   | `true`                 |
+| `server.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                | `120`                  |
+| `server.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                       | `10`                   |
+| `server.livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                                      | `5`                    |
+| `server.livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                                    | `5`                    |
+| `server.livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                                    | `1`                    |
+| `server.readinessProbe.enabled`             | Enable readinessProbe                                                                                  | `true`                 |
+| `server.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                               | `30`                   |
+| `server.readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                                      | `5`                    |
+| `server.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                     | `5`                    |
+| `server.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                                   | `5`                    |
+| `server.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                   | `1`                    |
+| `server.podAffinityPreset`                  | Parse server pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                   |
+| `server.podAntiAffinityPreset`              | Parse server pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`                 |
+| `server.nodeAffinityPreset.type`            | Parse server node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                   |
+| `server.nodeAffinityPreset.key`             | Parse server node label key to match Ignored if `affinity` is set.                                     | `""`                   |
+| `server.nodeAffinityPreset.values`          | Parse server node label values to match. Ignored if `affinity` is set.                                 | `[]`                   |
+| `server.affinity`                           | Parse server affinity for pod assignment                                                               | `{}`                   |
+| `server.nodeSelector`                       | Parse server node labels for pod assignment                                                            | `{}`                   |
+| `server.tolerations`                        | Parse server tolerations for pod assignment                                                            | `[]`                   |
 
 
 ### Traffic Exposure Parameters
@@ -155,7 +155,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dashboard.enabled`                            | Enable parse dashboard                                                                                    | `true`                    |
 | `dashboard.image.registry`                     | Dashboard image registry                                                                                  | `docker.io`               |
 | `dashboard.image.repository`                   | Dashboard image repository                                                                                | `bitnami/parse-dashboard` |
-| `dashboard.image.tag`                          | Dashboard image tag (immutable tags are recommended)                                                      | `2.2.0-debian-10-r35`     |
+| `dashboard.image.tag`                          | Dashboard image tag (immutable tags are recommended)                                                      | `3.2.1-debian-10-r16`     |
 | `dashboard.image.pullPolicy`                   | Image pull policy                                                                                         | `IfNotPresent`            |
 | `dashboard.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                          | `[]`                      |
 | `dashboard.hostAliases`                        | Deployment pod host aliases                                                                               | `[]`                      |
@@ -199,7 +199,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`           | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
 | `volumePermissions.image.registry`    | Init container volume-permissions image registry                                                                                                          | `docker.io`             |
 | `volumePermissions.image.repository`  | Init container volume-permissions image name                                                                                                              | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                                                                               | `10-debian-10-r207`     |
+| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                                                                               | `10-debian-10-r234`     |
 | `volumePermissions.image.pullPolicy`  | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets` | Init container volume-permissions image pull secrets                                                                                                      | `[]`                    |
 | `volumePermissions.resources`         | The resources for the container                                                                                                                           | `{}`                    |

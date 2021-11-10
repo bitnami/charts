@@ -1,6 +1,8 @@
-*************************************************************************
-*** PLEASE BE PATIENT: JupyterHub may take a few minutes to install   ***
-*************************************************************************
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
+** Please be patient while the chart is being deployed **
 
 {{- if .Values.proxy.ingress.enabled }}
 
