@@ -249,10 +249,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                                          | Description                                                                                                                | Value   |
 | ------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- | ------- |
 | `networkPolicy.enabled`                                       | Enable network policies                                                                                                    | `false` |
-| `networkPolicy.metrics.enabled`                               | Enable network policy for metrics (prometheus)                                                                             | `true`  |
+| `networkPolicy.metrics.enabled`                               | Enable network policy for metrics (prometheus)                                                                             | `false` |
 | `networkPolicy.metrics.namespaceSelector`                     | Monitoring namespace selector labels. These labels will be used to identify the prometheus' namespace.                     | `{}`    |
 | `networkPolicy.metrics.podSelector`                           | Monitoring pod selector labels. These labels will be used to identify the Prometheus pods.                                 | `{}`    |
-| `networkPolicy.ingress.enabled`                               | Enable network policy for Ingress Proxys                                                                                   | `true`  |
+| `networkPolicy.ingress.enabled`                               | Enable network policy for Ingress Proxies                                                                                  | `false` |
 | `networkPolicy.ingress.namespaceSelector`                     | Ingress Proxy namespace selector labels. These labels will be used to identify the Ingress Proxy's namespace.              | `{}`    |
 | `networkPolicy.ingress.podSelector`                           | Ingress Proxy pods selector labels. These labels will be used to identify the Ingress Proxy pods.                          | `{}`    |
 | `networkPolicy.ingressRules.backendOnlyAccessibleByFrontend`  | Enable ingress rule that makes the backend (mariadb) only accesible by drupal's pods.                                      | `false` |
