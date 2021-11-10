@@ -59,6 +59,9 @@ spec:
         - name: minio
           image: {{ include "minio.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.provisioning.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.provisioning.command "context" $) | nindent 12 }}
+          {{- else }}
           command:
             - /bin/bash
             - -c
@@ -124,6 +127,10 @@ spec:
               {{- end }}
 
               echo "End Minio provisioning";
+          {{- end }}
+          {{- if .Values.provisioning.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.provisioning.args "context" $) | nindent 12 }}
+          {{- end }}
           env:
             - name: MINIO_SCHEME
               value: {{ ternary "https" "http" .Values.tls.enabled | quote }}

@@ -210,6 +210,12 @@ provisioning:
   ## @param provisioning.podAnnotations Provisioning Pod annotations.
   ##
   podAnnotations: {}
+  ## @param provisioning.command Default provisioning container command (useful when using custom images). Use array form
+  ##
+  command: []
+  ## @param provisioning.args Default provisioning container args (useful when using custom images). Use array form
+  ##
+  args: []
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
