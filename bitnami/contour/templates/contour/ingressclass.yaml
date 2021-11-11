@@ -7,7 +7,7 @@ kind: IngressClass
 metadata:
   name: {{ include "contour.ingressClassName" . }}
   annotations:
-    ingressclass.kubernetes.io/is-default-class: {{ $ingressClass.default | quote }}
+    ingressclass.kubernetes.io/is-default-class: {{ default true $ingressClass.default | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: contour
 spec:

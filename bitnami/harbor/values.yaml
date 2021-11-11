@@ -606,6 +606,10 @@ nginx:
   ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
   ##
   affinity: {}
+  ## @param nginx.priorityClassName NGINX pods Priority Class Name
+  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+  ##
+  priorityClassName: ""
   ## @param nginx.nodeSelector NGINX Node labels for pod assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
@@ -810,6 +814,10 @@ portal:
   ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
   ##
   affinity: {}
+  ## @param portal.priorityClassName Portal pods Priority Class Name
+  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+  ##
+  priorityClassName: ""
   ## @param portal.nodeSelector Harbor Portal Node labels for pod assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
@@ -1017,6 +1025,10 @@ core:
   ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
   ##
   affinity: {}
+  ## @param core.priorityClassName Core pods Priority Class Name
+  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+  ##
+  priorityClassName: ""
   ## @param core.nodeSelector Harbor core Node labels for pod assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
@@ -1249,6 +1261,10 @@ jobservice:
   ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
   ##
   affinity: {}
+  ## @param jobservice.priorityClassName Jobservice pods Priority Class Name
+  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+  ##
+  priorityClassName: ""
   ## @param jobservice.nodeSelector Harbor Jobservice Node labels for pod assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
@@ -1597,6 +1613,10 @@ registry:
   ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
   ##
   affinity: {}
+  ## @param registry.priorityClassName Registry pods Priority Class Name
+  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+  ##
+  priorityClassName: ""
   ## @param registry.nodeSelector Harbor Registry Node labels for pod assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
@@ -1856,6 +1876,10 @@ chartmuseum:
   ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
   ##
   affinity: {}
+  ## @param chartmuseum.priorityClassName Chartmuseum pods Priority Class Name
+  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+  ##
+  priorityClassName: ""
   ## @param chartmuseum.nodeSelector ChartMuseum Node labels for pod assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
@@ -2212,6 +2236,10 @@ clair:
   ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
   ##
   affinity: {}
+  ## @param clair.priorityClassName Clair pods Priority Class Name
+  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+  ##
+  priorityClassName: ""
   ## @param clair.nodeSelector Harbor Clair Node labels for pod assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
@@ -2439,6 +2467,10 @@ notary:
     ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
     ##
     affinity: {}
+    ## @param notary.server.priorityClassName Notary server pods Priority Class Name
+    ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+    ##
+    priorityClassName: ""
     ## @param notary.server.nodeSelector Notary server Node labels for pod assignment
     ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
     ##
@@ -2559,6 +2591,10 @@ notary:
     ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
     ##
     affinity: {}
+    ## @param notary.signer.priorityClassName Notary signer pods Priority Class Name
+    ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+    ##
+    priorityClassName: ""
     ## @param notary.signer.nodeSelector Notary signer Node labels for pod assignment
     ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
     ##
@@ -2839,6 +2875,10 @@ trivy:
   ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
   ##
   affinity: {}
+  ## @param trivy.priorityClassName Trivy pods Priority Class Name
+  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+  ##
+  priorityClassName: ""
   ## @param trivy.nodeSelector Trivy Node labels for pod assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
@@ -2994,6 +3034,10 @@ redis:
   master:
     persistence:
       enabled: true
+    ## @param redis.master.priorityClassName Redis pods Priority Class Name
+    ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+    ##
+    priorityClassName: ""
   ## Redis&trade; Replica parameters
   ## @param redis.replica.persistence.enabled Enable persistence for replica Redis
   ##

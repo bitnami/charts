@@ -433,7 +433,7 @@ spec:
             - name: PG_EXPORTER_WEB_LISTEN_ADDRESS
               value: :{{ .Values.metrics.service.port }}
             - name: DATA_SOURCE_URI
-              value: {{ printf "127.0.0.1:%s/%s?sslmode=disable" .Values.service.port (include "postgresql-ha.postgresqlDatabase" .) | quote }}
+              value: {{ printf "127.0.0.1:%d/%s?sslmode=disable" (.Values.service.port | int64) (include "postgresql-ha.postgresqlDatabase" .) | quote }}
             {{- if .Values.postgresql.usePasswordFile }}
             - name: DATA_SOURCE_PASS_FILE
               value: "/opt/bitnami/postgresql/secrets/postgresql-password"

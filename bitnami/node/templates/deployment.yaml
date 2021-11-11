@@ -123,7 +123,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ template "node.mongodb.fullname" . }}
-                  key: mongodb-password
+                  key: mongodb-passwords
             - name: DATABASE_NAME
               value: {{ .Values.mongodb.auth.database | quote }}
             - name: DATABASE_CONNECTION_OPTIONS

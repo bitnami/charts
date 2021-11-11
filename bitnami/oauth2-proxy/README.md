@@ -118,6 +118,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `configuration.existingSecret`                         | Secret with the client ID, secret and cookie secret | `""`               |
 | `configuration.google.enabled`                         | Enable Google service account                       | `false`            |
 | `configuration.google.adminEmail`                      | Google admin email                                  | `""`               |
+| `configuration.google.googleGroup`                     | Restrict logins to members of this google group     | `""`               |
 | `configuration.google.serviceAccountJson`              | Google Service account JSON                         | `""`               |
 | `configuration.google.existingSecret`                  | Existing secret containing Google Service Account   | `""`               |
 | `configuration.content`                                | Default configuration                               | `""`               |
