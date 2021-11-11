@@ -93,9 +93,9 @@ spec:
             - receive
             - --log.level={{ .Values.receiveDistributor.logLevel }}
             - --log.format={{ .Values.receiveDistributor.logFormat }}
-            - --grpc-address=0.0.0.0:{{ .Values.receive.service.grpc.port }}
-            - --http-address=0.0.0.0:{{ .Values.receive.service.http.port }}
-            - --remote-write.address=0.0.0.0:{{ .Values.receive.service.remoteWrite.port }}
+            - --grpc-address=0.0.0.0:{{ .Values.receive.service.ports.grpc }}
+            - --http-address=0.0.0.0:{{ .Values.receive.service.ports.http }}
+            - --remote-write.address=0.0.0.0:{{ .Values.receive.service.ports.remoteWrite }}
             - --label={{ .Values.receiveDistributor.replicaLabel }}="$(NAME)"
             - --label=receive="true"
             - --receive.hashrings-file=/var/lib/thanos-receive/hashrings.json
@@ -132,13 +132,13 @@ spec:
             {{- end }}
           {{- end }}
           ports:
-            - containerPort: {{ .Values.receive.service.grpc.port }}
+            - containerPort: {{ .Values.receive.service.ports.grpc }}
               name: grpc
               protocol: TCP
-            - containerPort: {{ .Values.receive.service.http.port }}
+            - containerPort: {{ .Values.receive.service.ports.http }}
               name: http
               protocol: TCP
-            - containerPort: {{ .Values.receive.service.remoteWrite.port }}
+            - containerPort: {{ .Values.receive.service.ports.remoteWrite }}
               name: remote-write
               protocol: TCP
           {{- if .Values.receiveDistributor.livenessProbe.enabled }}
