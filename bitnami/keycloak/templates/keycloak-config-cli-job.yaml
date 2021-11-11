@@ -44,9 +44,7 @@ spec:
         - name: keycloak-config-cli
           image: {{ template "keycloak.keycloakConfigCli.image" . }}
           imagePullPolicy: {{ .Values.keycloakConfigCli.image.pullPolicy }}
-          {{- if .Values.keycloakConfigCli.command }}
-          command: {{- include "common.tplvalues.render" (dict "value" .Values.keycloakConfigCli.command "context" $) | nindent 12 }}
-          {{- end }}
+          command: {{ include "keycloak.keycloakConfigCli.command" . }}
           {{- if .Values.keycloakConfigCli.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.keycloakConfigCli.args "context" $) | nindent 12 }}
           {{- end }}
