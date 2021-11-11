@@ -52,17 +52,6 @@ Return true if a configmap object should be created for keycloak-config-cli
 {{- end -}}
 
 {{/*
-Return the keycloak-config-cli command, using appVersion for default jar in the container may not be compatible with keycloak
-*/}}
-{{- define "keycloak.keycloakConfigCli.command" -}}
-{{- if .Values.keycloakConfigCli.command -}}
-{{- .Values.keycloakConfigCli.command -}}
-{{- else -}}
-["java", "-jar", {{- printf "/opt/bitnami/keycloak-config-cli/keycloak-config-cli-%s.jar" .Chart.AppVersion | quote }}]
-{{- end -}}
-{{- end -}}
-
-{{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "keycloak.imagePullSecrets" -}}
