@@ -191,7 +191,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.service.nodePort`                    | Kubernetes HTTP node port                                                                                                        | `""`                        |
 | `metrics.service.loadBalancerIP`              | loadBalancerIP if service type is `LoadBalancer`                                                                                 | `""`                        |
 | `metrics.service.loadBalancerSourceRanges`    | Addresses that are allowed when service is LoadBalancer                                                                          | `[]`                        |
-| `metrics.service.clusterIP`                   | Static clusterIP or None for headless services                                                                                   | `""`                      |
+| `metrics.service.clusterIP`                   | Static clusterIP or None for headless services                                                                                   | `""`                        |
 | `metrics.service.annotations`                 | Annotations for the Prometheus metrics service                                                                                   | `{}`                        |
 | `podDisruptionBudget.create`                  | If true, create a pod disruption budget for pods.                                                                                | `false`                     |
 | `podDisruptionBudget.minAvailable`            | Minimum number / percentage of pods that should remain scheduled                                                                 | `1`                         |

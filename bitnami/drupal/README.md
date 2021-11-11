@@ -255,7 +255,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.ingress.enabled`                               | Enable network policy for Ingress Proxies                                                                                  | `false` |
 | `networkPolicy.ingress.namespaceSelector`                     | Ingress Proxy namespace selector labels. These labels will be used to identify the Ingress Proxy's namespace.              | `{}`    |
 | `networkPolicy.ingress.podSelector`                           | Ingress Proxy pods selector labels. These labels will be used to identify the Ingress Proxy pods.                          | `{}`    |
-| `networkPolicy.ingressRules.backendOnlyAccessibleByFrontend`  | Enable ingress rule that makes the backend (mariadb) only accesible by drupal's pods.                                      | `false` |
+| `networkPolicy.ingressRules.backendOnlyAccessibleByFrontend`  | Enable ingress rule that makes the backend (mariadb) only accessible by drupal's pods.                                     | `false` |
 | `networkPolicy.ingressRules.customBackendSelector`            | Backend selector labels. These labels will be used to identify the backend pods.                                           | `{}`    |
 | `networkPolicy.ingressRules.accessOnlyFrom.enabled`           | Enable ingress rule that makes drupal only accessible from a particular origin                                             | `false` |
 | `networkPolicy.ingressRules.accessOnlyFrom.namespaceSelector` | Namespace selector label that is allowed to access drupal. This label will be used to identified the allowed namespace(s). | `{}`    |
