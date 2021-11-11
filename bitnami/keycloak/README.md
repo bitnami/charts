@@ -294,7 +294,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.user`           | non admin username for Keycloak Database                                      | `bn_keycloak`      |
 | `externalDatabase.password`       | Database password                                                             | `""`               |
 | `externalDatabase.database`       | Database name                                                                 | `bitnami_keycloak` |
-| `externalDatabase.existingSecret` | Use an existing secret file with the external PostgreSQL credentials          | `""`               |
+| `externalDatabase.vendor`         | Database vendor                                                               | `postgresql`       |
+| `externalDatabase.existingSecret` | Use an existing secret file with the external Database credentials            | `""`               |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
@@ -379,7 +380,7 @@ The chart also facilitates the creation of TLS secrets for use with the Ingress 
 
 ### Use with ingress offloading SSL
 
-If your ingress controller has the SSL Termination, you can add the following env vars in `extraEnvVars` 
+If your ingress controller has the SSL Termination, you can add the following env vars in `extraEnvVars`
 ```yaml
 - name: KEYCLOAK_PROXY_ADDRESS_FORWARDING
   value: "true"
