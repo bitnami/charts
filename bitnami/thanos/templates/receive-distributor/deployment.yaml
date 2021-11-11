@@ -93,9 +93,9 @@ spec:
             - receive
             - --log.level={{ .Values.receiveDistributor.logLevel }}
             - --log.format={{ .Values.receiveDistributor.logFormat }}
-            - --grpc-address=0.0.0.0:{{ .Values.receive.service.ports.grpc }}
-            - --http-address=0.0.0.0:{{ .Values.receive.service.ports.http }}
-            - --remote-write.address=0.0.0.0:{{ .Values.receive.service.ports.remoteWrite }}
+            - --grpc-address=0.0.0.0:{{ if .Values.receive.service.grpc }}{{ coalesce .Values.receive.service.ports.grpc .Values.receive.service.grpc.port }}{{ else }}{{ .Values.receive.service.ports.grpc }}{{ end }}
+            - --http-address=0.0.0.0:{{ if .Values.receive.service.http }}{{ coalesce .Values.receive.service.ports.http .Values.receive.service.http.port }}{{ else }}{{ .Values.receive.service.ports.http }}{{ end }}
+            - --remote-write.address=0.0.0.0:{{ if .Values.receive.service.remoteWrite }}{{ coalesce .Values.receive.service.ports.remoteWrite .Values.receive.service.remoteWrite.port }}{{ else }}{{ .Values.receive.service.ports.remoteWrite }}{{ end }}
             - --label={{ .Values.receiveDistributor.replicaLabel }}="$(NAME)"
             - --label=receive="true"
             - --receive.hashrings-file=/var/lib/thanos-receive/hashrings.json
@@ -132,13 +132,13 @@ spec:
             {{- end }}
           {{- end }}
           ports:
-            - containerPort: {{ .Values.receive.service.ports.grpc }}
+            - containerPort: {{ if .Values.receive.service.grpc }}{{ coalesce .Values.receive.service.ports.grpc .Values.receive.service.grpc.port }}{{ else }}{{ .Values.receive.service.ports.grpc }}{{ end }}
               name: grpc
               protocol: TCP
-            - containerPort: {{ .Values.receive.service.ports.http }}
+            - containerPort: {{ if .Values.receive.service.http }}{{ coalesce .Values.receive.service.ports.http .Values.receive.service.http.port }}{{ else }}{{ .Values.receive.service.ports.http }}{{ end }}
               name: http
               protocol: TCP
-            - containerPort: {{ .Values.receive.service.ports.remoteWrite }}
+            - containerPort: {{ if .Values.receive.service.remoteWrite }}{{ coalesce .Values.receive.service.ports.remoteWrite .Values.receive.service.remoteWrite.port }}{{ else }}{{ .Values.receive.service.ports.remoteWrite }}{{ end }}
               name: remote-write
               protocol: TCP
           {{- if .Values.receiveDistributor.livenessProbe.enabled }}
