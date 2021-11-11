@@ -233,7 +233,7 @@ keycloak: replicaCount
 {{- define "keycloak.validateValues.database" -}}
 {{- if and (not .Values.postgresql.enabled) (not .Values.externalDatabase.host) (not .Values.externalDatabase.existingSecret) -}}
 keycloak: database
-    You disabled the PostgreSQL sub-chart but did not specify an external PostgreSQL host.
+    You disabled the PostgreSQL sub-chart but did not specify an external Database host.
     Either deploy the PostgreSQL sub-chart (--set postgresql.enabled=true),
     or set a value for the external database host (--set externalDatabase.host=FOO)
     or set a value for the external database existing secret (--set externalDatabase.existingSecret=BAR).

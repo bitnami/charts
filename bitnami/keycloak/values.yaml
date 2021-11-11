@@ -937,3 +937,6 @@ externalDatabase:
   ## @param externalDatabase.existingSecret Use an existing secret file with the external PostgreSQL credentials
   ##
   existingSecret: ""
+  ## @param externalDatabase.vendor Database vendor
+  ##
+  vendor: "postgres"

@@ -204,6 +204,8 @@ spec:
                   name: {{ $globalSecretName }}
                   key: {{ include "common.secrets.key" (dict "existingSecret" .Values.auth.existingSecret "key" "management-password") }}
                 {{- end }}
+            - name: DB_VENDOR
+              value: {{ .Values.externalDatabase.vendor }}
             - name: KEYCLOAK_DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -212,7 +214,7 @@ spec:
                   key: {{ include "common.secrets.key" (dict "existingSecret" .Values.auth.existingSecretPerPassword "key" "databasePassword") }}
                 {{- else }}
                   name: {{ include "keycloak.databaseSecretName" . }}
-                  key: "postgresql-password"
+                  key: "database-password"
                 {{- end }}
             {{- if .Values.auth.tls.enabled }}
             {{- if or .Values.auth.tls.keystorePassword .Values.auth.existingSecretPerPassword }}
