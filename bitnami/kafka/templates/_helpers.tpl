@@ -63,7 +63,7 @@ Return the proper image name (for the init container volume-permissions image)
 {{/*
 Create a default fully qualified Kafka exporter name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-*/}
+*/}}
 {{- define "kafka.metrics.kafka.fullname" -}}
   {{- printf "%s-exporter" (include "kafka.fullname" .) | trunc 63 | trimSuffix "-" }}
 {{- end -}}
