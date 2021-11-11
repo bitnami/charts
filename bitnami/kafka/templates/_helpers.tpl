@@ -61,9 +61,10 @@ Return the proper image name (for the init container volume-permissions image)
 {{- end -}}
 
 {{/*
-Return the proper service name for Kafka exporter
-*/}}
-{{- define "kafka.metrics.kafka.name" -}}
+Create a default fully qualified Kafka exporter name.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+*/}
+{{- define "kafka.metrics.kafka.fullname" -}}
   {{- printf "%s-exporter" (include "kafka.fullname" .) | trunc 63 | trimSuffix "-" }}
 {{- end -}}
 
@@ -72,7 +73,7 @@ Return the proper service name for Kafka exporter
  */}}
 {{- define "kafka.metrics.kafka.serviceAccountName" -}}
 {{- if .Values.metrics.kafka.serviceAccount.create -}}
-    {{ default (include "kafka.metrics.kafka.name" .) .Values.metrics.kafka.serviceAccount.name }}
+    {{ default (include "kafka.metrics.kafka.fullname" .) .Values.metrics.kafka.serviceAccount.name }}
 {{- else -}}
     {{ default "default" .Values.metrics.kafka.serviceAccount.name }}
 {{- end -}}
