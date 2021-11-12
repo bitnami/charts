@@ -313,10 +313,7 @@ keycloakConfigCli:
     helm.sh/hook-weight: "5"
   ## @param keycloakConfigCli.command Command for running the container (set to default if not set). Use array form
   ##
-  command:
-    - java
-    - -jar
-    - '{{- printf "/opt/bitnami/keycloak-config-cli/keycloak-config-cli-%s.jar" .Chart.AppVersion }}'
+  command: []
   ## @param keycloakConfigCli.args Args for running the container (set to default if not set). Use array form
   ##
   args: []
