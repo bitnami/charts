@@ -737,15 +737,15 @@ networkPolicy:
     ##   label: ingress
     ##
     namespaceSelector: {}
-  ## @param networkPolicy.ingressRules.backendOnlyAccessibleByFrontend Enable ingress rule that makes the backend (mariadb) only accessible by Osclass's pods.
+  ## @param networkPolicy.ingressRules.backendOnlyAccessibleByFrontend Enable ingress rule that makes the backend (mariadb) only accessible by ownCloud's pods.
   ## @param networkPolicy.ingressRules.customBackendSelector [object] Backend selector labels. These labels will be used to identify the backend pods.
-  ## @param networkPolicy.ingressRules.accessOnlyFrom.enabled Enable ingress rule that makes Osclass only accessible from a particular origin
-  ## @param networkPolicy.ingressRules.accessOnlyFrom.namespaceSelector [object] Namespace selector label that is allowed to access Osclass. This label will be used to identified the allowed namespace(s).
-  ## @param networkPolicy.ingressRules.accessOnlyFrom.podSelector [object] Pods selector label that is allowed to access Osclass. This label will be used to identified the allowed pod(s).
+  ## @param networkPolicy.ingressRules.accessOnlyFrom.enabled Enable ingress rule that makes ownCloud only accessible from a particular origin
+  ## @param networkPolicy.ingressRules.accessOnlyFrom.namespaceSelector [object] Namespace selector label that is allowed to access ownCloud. This label will be used to identified the allowed namespace(s).
+  ## @param networkPolicy.ingressRules.accessOnlyFrom.podSelector [object] Pods selector label that is allowed to access ownCloud. This label will be used to identified the allowed pod(s).
   ## @param networkPolicy.ingressRules.customRules [object] Custom network policy ingress rule
   ##
   ingressRules:
-    ## mariadb backend only can be accessed from Osclass
+    ## mariadb backend only can be accessed from ownCloud
     ##
     backendOnlyAccessibleByFrontend: false
     customBackendSelector: {}
