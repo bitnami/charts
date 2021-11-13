@@ -1141,7 +1141,7 @@ metrics:
   ##           usage: "GAUGE"
   ##           description: "Size of the database in bytes"
   ##
-  customMetrics: ""
+  customMetrics: {}
   ## @param metrics.extraEnvVars An array to add extra environment variables to configure postgres-exporter
   ## see: https://github.com/wrouesnel/postgres_exporter#environment-variables
   ## For example:
