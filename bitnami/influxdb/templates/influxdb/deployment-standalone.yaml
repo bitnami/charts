@@ -52,6 +52,9 @@ spec:
         fsGroup: {{ .Values.influxdb.securityContext.fsGroup }}
       {{- end }}
       {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
+      {{- if .Values.serviceAccount.enabled }}
+      serviceAccountName: {{ default (include "common.names.fullname" . ) .Values.serviceAccount.name}}
+      {{- end }}
       initContainers:
         - name: init-chmod-data
           image: {{ include "influxdb.volumePermissions.image" . }}
