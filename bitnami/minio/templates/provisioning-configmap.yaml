@@ -1,0 +1,58 @@
+{{- if .Values.provisioning.enabled }}
+{{- $fullname := printf "%s-provisioning" (include "common.names.fullname" .) }}
+{{- $releaseNamespace := .Release.Namespace }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $fullname }}
+  namespace: {{ $releaseNamespace }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: minio-provisioning
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+data:
+  {{- range $bucket := .Values.provisioning.buckets }}
+  {{- if $bucket.lifecycle }}
+  {{ $bucket.name }}.json: |
+    {
+      "Rules": [
+        {{- range $idx, $lifecycle := $bucket.lifecycle }}
+        {{- if not (eq $idx 0) }}
+        ,
+        {{- end }}
+        {
+          "ID": "{{ $lifecycle.id }}",
+          "Status": "{{ ternary "Disabled" "Enabled" (and (not (empty $lifecycle.disabled)) $lifecycle.disabled) }}",
+          {{- if $lifecycle.expiry }}
+          "Expiration": {
+            {{- with $lifecycle.expiry.date }}
+            "Date": "{{ . }}"
+            {{- end }}
+            {{- with $lifecycle.expiry.days }}
+            "Days": {{ . }}
+            {{- end }}
+          }
+          {{- with $lifecycle.expiry.nonconcurrentDays }}
+          ,
+          "NoncurrentVersionExpiration": {
+            "NoncurrentDays": {{ . }}
+          }
+          {{- end }}
+          {{- with $lifecycle.prefix }}
+          ,
+          "Filter": {
+            "Prefix": "{{ . }}"
+          }
+          {{- end }}
+        }
+        {{- end }}
+        {{- end }}
+      ]
+    }
+  {{- end }}
+  {{- end }}
+{{- end }}

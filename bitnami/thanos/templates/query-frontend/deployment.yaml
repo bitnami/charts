@@ -42,7 +42,7 @@ spec:
       {{- end }}
     spec:
       {{- include "thanos.imagePullSecrets" . | nindent 6 }}
-      serviceAccount: {{ include "thanos.serviceaccount.name" (dict "component" "query-frontend" "context" $) }}
+      serviceAccount: {{ include "thanos.serviceAccount.name" (dict "component" "query-frontend" "context" $) }}
       {{- if .Values.queryFrontend.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -63,8 +63,17 @@ spec:
       {{- if .Values.queryFrontend.priorityClassName }}
       priorityClassName: {{ .Values.queryFrontend.priorityClassName | quote }}
       {{- end }}
+      {{- if .Values.queryFrontend.schedulerName }}
+      schedulerName: {{ .Values.queryFrontend.schedulerName }}
+      {{- end }}
       {{- if .Values.queryFrontend.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.queryFrontend.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      {{- if .Values.queryFrontend.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.topologySpreadConstraints "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.queryFrontend.initContainers }}
+      initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.initContainers "context" $) | nindent 8 }}
       {{- end }}
       containers:
         {{- if .Values.queryFrontend.sidecars }}
@@ -76,7 +85,13 @@ spec:
           {{- if .Values.queryFrontend.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.queryFrontend.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
+          {{- if .Values.queryFrontend.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.command "context" $) | nindent 12 }}
+          {{- end }}
           args:
+            {{- if .Values.queryFrontend.args }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.args "context" $) | nindent 12 }}
+            {{- else }}
             - query-frontend
             - --log.level={{ .Values.queryFrontend.logLevel }}
             - --log.format={{ .Values.queryFrontend.logFormat }}
@@ -88,35 +103,51 @@ spec:
             {{- if .Values.queryFrontend.extraFlags }}
             {{- .Values.queryFrontend.extraFlags | toYaml | nindent 12 }}
             {{- end }}
+            {{- end }}
           {{- if .Values.queryFrontend.extraEnvVars }}
-          env:
-            {{- toYaml .Values.queryFrontend.extraEnvVars | nindent 12 }}
+          env: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.extraEnvVars "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if or .Values.queryFrontend.extraEnvVarsCM .Values.queryFrontend.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.queryFrontend.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.queryFrontend.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.queryFrontend.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.queryFrontend.extraEnvVarsSecret "context" $) }}
+            {{- end }}
           {{- end }}
           ports:
             - name: http
               containerPort: 10902
               protocol: TCP
           {{- if .Values.queryFrontend.livenessProbe.enabled }}
-          livenessProbe:
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.queryFrontend.livenessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /-/healthy
               port: http
-            initialDelaySeconds: {{ .Values.queryFrontend.livenessProbe.initialDelaySeconds }}
-            timeoutSeconds: {{ .Values.queryFrontend.livenessProbe.timeoutSeconds }}
-            periodSeconds: {{ .Values.queryFrontend.livenessProbe.periodSeconds }}
-            successThreshold: {{ .Values.queryFrontend.livenessProbe.successThreshold }}
-            failureThreshold: {{ .Values.queryFrontend.livenessProbe.failureThreshold }}
+          {{- else if .Values.queryFrontend.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.queryFrontend.readinessProbe.enabled }}
-          readinessProbe:
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.queryFrontend.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /-/ready
               port: http
-            initialDelaySeconds: {{ .Values.queryFrontend.readinessProbe.initialDelaySeconds }}
-            timeoutSeconds: {{ .Values.queryFrontend.readinessProbe.timeoutSeconds }}
-            periodSeconds: {{ .Values.queryFrontend.readinessProbe.periodSeconds }}
-            successThreshold: {{ .Values.queryFrontend.readinessProbe.successThreshold }}
-            failureThreshold: {{ .Values.queryFrontend.readinessProbe.failureThreshold }}
+          {{- else if .Values.queryFrontend.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.queryFrontend.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.queryFrontend.startupProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /-/ready
+              port: http
+          {{- else if .Values.queryFrontend.customReadinessProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.queryFrontend.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.queryFrontend.resources }}
           resources: {{- toYaml .Values.queryFrontend.resources | nindent 12 }}

@@ -37,7 +37,7 @@ spec:
         {{- end }}
     spec:
       {{- include "thanos.imagePullSecrets" . | nindent 6 }}
-      serviceAccount: {{ include "thanos.serviceaccount.name" (dict "component" "bucketweb" "context" $) }}
+      serviceAccount: {{ include "thanos.serviceAccount.name" (dict "component" "bucketweb" "context" $) }}
       {{- if .Values.bucketweb.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.bucketweb.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -58,8 +58,17 @@ spec:
       {{- if .Values.bucketweb.priorityClassName }}
       priorityClassName: {{ .Values.bucketweb.priorityClassName | quote }}
       {{- end }}
+      {{- if .Values.bucketweb.schedulerName }}
+      schedulerName: {{ .Values.bucketweb.schedulerName }}
+      {{- end }}
       {{- if .Values.bucketweb.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.bucketweb.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      {{- if .Values.bucketweb.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.bucketweb.topologySpreadConstraints "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.bucketweb.initContainers }}
+      initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.bucketweb.initContainers "context" $) | nindent 8 }}
       {{- end }}
       containers:
         {{- if .Values.bucketweb.sidecars }}
@@ -71,7 +80,13 @@ spec:
           {{- if .Values.bucketweb.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.bucketweb.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
+          {{- if .Values.bucketweb.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.bucketweb.command "context" $) | nindent 12 }}
+          {{- end }}
           args:
+            {{- if .Values.bucketweb.args }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.bucketweb.args "context" $) | nindent 12 }}
+            {{- else }}
             - tools
             - bucket
             - web
@@ -88,35 +103,51 @@ spec:
             {{- if .Values.bucketweb.extraFlags }}
             {{- .Values.bucketweb.extraFlags | toYaml | nindent 12 }}
             {{- end }}
+            {{- end }}
           {{- if .Values.bucketweb.extraEnvVars }}
-          env:
-            {{- toYaml .Values.bucketweb.extraEnvVars | nindent 12 }}
+          env: {{- include "common.tplvalues.render" (dict "value" .Values.bucketweb.extraEnvVars "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if or .Values.bucketweb.extraEnvVarsCM .Values.bucketweb.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.bucketweb.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.bucketweb.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.bucketweb.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.bucketweb.extraEnvVarsSecret "context" $) }}
+            {{- end }}
           {{- end }}
           ports:
             - name: http
               containerPort: 8080
               protocol: TCP
           {{- if .Values.bucketweb.livenessProbe.enabled }}
-          livenessProbe:
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.bucketweb.livenessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /-/healthy
               port: http
-            initialDelaySeconds: {{ .Values.bucketweb.livenessProbe.initialDelaySeconds }}
-            timeoutSeconds: {{ .Values.bucketweb.livenessProbe.timeoutSeconds }}
-            periodSeconds: {{ .Values.bucketweb.livenessProbe.periodSeconds }}
-            successThreshold: {{ .Values.bucketweb.livenessProbe.successThreshold }}
-            failureThreshold: {{ .Values.bucketweb.livenessProbe.failureThreshold }}
+          {{- else if .Values.bucketweb.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.bucketweb.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.bucketweb.readinessProbe.enabled }}
-          readinessProbe:
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.bucketweb.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /-/ready
               port: http
-            initialDelaySeconds: {{ .Values.bucketweb.readinessProbe.initialDelaySeconds }}
-            timeoutSeconds: {{ .Values.bucketweb.readinessProbe.timeoutSeconds }}
-            periodSeconds: {{ .Values.bucketweb.readinessProbe.periodSeconds }}
-            successThreshold: {{ .Values.bucketweb.readinessProbe.successThreshold }}
-            failureThreshold: {{ .Values.bucketweb.readinessProbe.failureThreshold }}
+          {{- else if .Values.bucketweb.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.bucketweb.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.bucketweb.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.bucketweb.startupProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /-/ready
+              port: http
+          {{- else if .Values.bucketweb.customReadinessProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.bucketweb.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.bucketweb.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.bucketweb.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.bucketweb.resources }}
           resources: {{- toYaml .Values.bucketweb.resources | nindent 12 }}

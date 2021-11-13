@@ -182,6 +182,10 @@ spec:
             - name: datasources
               mountPath: /opt/bitnami/grafana/conf/provisioning/datasources
             {{- end }}
+            {{- if .Values.notifiers.configMapName }}
+            - name: notifiers
+              mountPath: /opt/bitnami/grafana/conf/provisioning/notifiers
+            {{- end }}
             {{- if .Values.ldap.enabled }}
             - name: ldap
               mountPath: /opt/bitnami/grafana/conf/ldap.toml
@@ -194,7 +198,7 @@ spec:
               readOnly: {{ .readOnly }}
             {{- end }}
             {{- if .Values.grafana.extraVolumeMounts }}
-            {{- include "common.tplvalues.render" (dict "value" .Values.grafana.extraVolumeMounts "context" $) | nindent 8 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.grafana.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
           ports:
             - name: dashboard
@@ -288,6 +292,11 @@ spec:
         - name: datasources
           secret:
             secretName: {{ .Values.datasources.secretName }}
+        {{- end }}
+        {{- if .Values.notifiers.configMapName }}
+        - name: notifiers
+          configMap:
+            name: {{ .Values.notifiers.configMapName }}
         {{- end }}
         {{- if .Values.config.useGrafanaIniFile }}
         - name: grafana-ini
