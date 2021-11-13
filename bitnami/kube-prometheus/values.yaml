@@ -659,7 +659,7 @@ prometheus:
   ## @param prometheus.alertingEndpoints Alertmanagers to which alerts will be sent
   ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#alertmanagerendpoints
   ##
-  alertingEndpoints: []
+  alertingEndpoints: false
   ## @param prometheus.externalLabels External labels to add to any time series or alerts when communicating with external systems
   ##
   externalLabels: {}
