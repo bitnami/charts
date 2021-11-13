@@ -113,8 +113,6 @@ smtp:
   skipVerify: "false"
   ## @param smtp.existingSecret Name of existing secret containing SMTP credentials (user and password)
   ##
-  ## @param smtp.existingSecret Name of existing secret containing SMTP credentials (user and password)
-  ##
   existingSecret: ""
   ## @param smtp.existingSecretUserKey User key on the existing secret
   ##
