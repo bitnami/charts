@@ -170,6 +170,9 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `smtp.user`                        | SMTP user                                                                         | `user`               |
 | `smtp.password`                    | SMTP password                                                                     | `password`           |
 | `smtp.host`                        | Custom host for the smtp server                                                   | `""`                 |
+| `smtp.fromAddress`                 | From address                                                                      | `""`                 |
+| `smtp.fromName`                    | From name                                                                         | `""`                 |
+| `smtp.skipVerify`                  | Enable skip verify                                                                | `"false"`            |
 | `smtp.existingSecret`              | Name of existing secret containing SMTP credentials (user and password)           | `""`                 |
 | `smtp.existingSecretUserKey`       | User key on the existing secret                                                   | `user`               |
 | `smtp.existingSecretPasswordKey`   | Password key on the existing secret                                               | `password`           |

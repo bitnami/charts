@@ -102,6 +102,17 @@ smtp:
   ##   host: mysmtphost.com
   ##
   host: ""
+  ## @param smtp.fromAddress From address
+  ##
+  fromAddress: ""
+  ## @param smtp.fromName From name
+  ##
+  fromName: ""
+  ## @param smtp.skipVerify Enable skip verify
+  ##
+  skipVerify: "false"
+  ## @param smtp.existingSecret Name of existing secret containing SMTP credentials (user and password)
+  ##
   ## @param smtp.existingSecret Name of existing secret containing SMTP credentials (user and password)
   ##
   existingSecret: ""
