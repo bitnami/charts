@@ -833,9 +833,6 @@ psp:
 ##
 rbac:
   create: false
-## @param topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
-## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
-##
 
 ## @section Volume permissions parameters
 
