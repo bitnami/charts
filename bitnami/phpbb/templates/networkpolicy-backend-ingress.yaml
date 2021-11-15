@@ -23,5 +23,5 @@ spec:
     - from:
         - podSelector:
             matchLabels:
-              test: testerino
+              {{- include "common.labels.matchLabels" . | nindent 14 }}
 {{- end }}
