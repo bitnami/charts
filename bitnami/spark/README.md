@@ -288,7 +288,7 @@ To submit an application to the Apache Spark cluster, use the `spark-submit` scr
 The command below illustrates the process of deploying one of the sample applications included with Apache Spark. Replace the MASTER-IP-ADDRESS and MASTER-PORT placeholders with the correct master IP address and port for your deployment.
 
 ```bash
-$ ./bin/spark-submit --class org.apache.spark.examples.SparkPi --master spark://MASTER-IP-ADDRESS:MASTER-PORT  --deploy-mode cluster  ./examples/jars/spark-examples_2.11-2.4.3.jar 1000
+$ ./bin/spark-submit --class org.apache.spark.examples.SparkPi --conf spark.kubernetes.container.image=bitnami/spark:3 --master spark://MASTER-IP-ADDRESS:MASTER-PORT --deploy-mode cluster ./examples/jars/spark-examples_2.11-2.4.3.jar 1000
 ```
 
 For a complete walkthrough of the process using a custom application, refer to the [detailed Apache Spark tutorial](https://docs.bitnami.com/tutorials/process-data-spark-kubernetes/).
