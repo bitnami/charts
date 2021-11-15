@@ -25,6 +25,13 @@ spec:
     metadata:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: metrics
+        {{- if .Values.metrics.kafka.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.metrics.kafka.podLabels "context" $) | nindent 8 }}
+        {{- end }}
+      annotations:
+        {{- if .Values.metrics.kafka.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.metrics.kafka.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
     spec:
       {{- include "kafka.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.metrics.kafka.schedulerName }}

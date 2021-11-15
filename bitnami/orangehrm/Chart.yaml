@@ -1,7 +1,7 @@
 annotations:
   category: HumanResourceManagement
 apiVersion: v2
-appVersion: 4.8.0-0
+appVersion: 4.9.0-0
 dependencies:
   - condition: mariadb.enabled
     name: mariadb
