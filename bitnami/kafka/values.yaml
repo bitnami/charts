@@ -943,6 +943,21 @@ metrics:
       ##   - myRegistryKeySecretName
       ##
       pullSecrets: []
+    ## Kafka exporter pods ServiceAccount
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+    ##
+    serviceAccount:
+      ## @param metrics.kafka.serviceAccount.create Enable creation of ServiceAccount for Kafka exporter pods
+      ##
+      create: true
+      ## @param metrics.kafka.serviceAccount.name The name of the service account to use. If not set and `create` is `true`, a name is generated
+      ## If not set and create is true, a name is generated using the kafka.metrics.kafka.serviceAccountName template
+      ##
+      name: ""
+      ## @param metrics.kafka.serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
+      ## Can be set to false if pods using this serviceAccount do not need to use K8s API
+      ##
+      automountServiceAccountToken: true
     ## @param metrics.kafka.schedulerName Name of the k8s scheduler (other than default) for Kafka Exporter
     ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
     ##
