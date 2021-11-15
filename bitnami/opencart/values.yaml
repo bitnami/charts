@@ -725,6 +725,7 @@ networkPolicy:
     backendOnlyAccessibleByFrontend: false
     customBackendSelector: {}
     ## Allow only from the indicated:
+    ##
     accessOnlyFrom:
       enabled: false
       ## e.g:
@@ -744,12 +745,14 @@ networkPolicy:
     ##       - namespaceSelector:
     ##           matchLabels:
     ##             label: example
+    ##
     customRules: {}
   ## @param networkPolicy.egressRules.denyConnectionsToExternal Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).
   ## @param networkPolicy.egressRules.customRules [object] Custom network policy rule
   ##
   egressRules:
-    # Deny connections to external. This is not compatible with an external database.
+    ## Deny connections to external. This is not compatible with an external database.
+    ##
     denyConnectionsToExternal: false
     ## Additional custom egress rules
     ## e.g:
@@ -758,4 +761,5 @@ networkPolicy:
     ##       - namespaceSelector:
     ##           matchLabels:
     ##             label: example
+    ##
     customRules: {}
