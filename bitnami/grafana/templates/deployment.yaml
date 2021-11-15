@@ -186,7 +186,7 @@ spec:
               readOnly: {{ .readOnly }}
             {{- end }}
             {{- if .Values.grafana.extraVolumeMounts }}
-            {{- include "common.tplvalues.render" (dict "value" .Values.grafana.extraVolumeMounts "context" $) | nindent 8 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.grafana.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
           ports:
             - name: dashboard

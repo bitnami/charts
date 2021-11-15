@@ -29,3 +29,4 @@ sources:
   - https://github.com/bitnami/bitnami-docker-thanos
   - https://thanos.io
 version: 8.0.3
+
