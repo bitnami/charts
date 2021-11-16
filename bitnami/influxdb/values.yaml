@@ -821,6 +821,7 @@ serviceAccount:
   ## @param serviceAccount.name Name of an already existing service account. Setting this value disables the automatic service account creation
   ##
   name: ""
+
 ## Pod Security Policy
 ## ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/
 ## @param psp.create Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later
