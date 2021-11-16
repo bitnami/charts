@@ -15,8 +15,11 @@ spec:
     matchLabels:
       {{- if .Values.networkPolicy.ingressRules.customBackendSelector }}
       {{- include "common.tplvalues.render" (dict "value" .Values.networkPolicy.ingressRules.customBackendSelector "context" $) | nindent 6 }}
-      {{- else }}
+      {{- else if eq .Values.databaseType "mariadb" }}
       app.kubernetes.io/name: mariadb
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      {{- else if eq .Values.databaseType "postgresql" }}
+      app.kubernetes.io/name: postgresql
       app.kubernetes.io/instance: {{ .Release.Name }}
       {{- end }}
   ingress:
