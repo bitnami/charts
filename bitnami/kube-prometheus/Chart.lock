@@ -7,6 +7,6 @@ dependencies:
   version: 2.3.13
 - name: kube-state-metrics
   repository: https://charts.bitnami.com/bitnami
-  version: 2.1.15
-digest: sha256:a1d9a1d7be209764db52912c9a53d7751f0e973383492fa5bbc6f374c1104a28
-generated: "2021-11-04T16:02:12.336752696Z"
+  version: 2.1.16
+digest: sha256:70c7c7b7bdb6c6dbfcd0c3c2f18a041a2ccf3ff7ef21867a296af19db7f879a7
+generated: "2021-11-16T09:47:56.462619739Z"
