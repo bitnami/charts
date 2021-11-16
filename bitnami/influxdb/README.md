@@ -238,28 +238,32 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Metrics parameters
 
-| Name                                       | Description                                                                                            | Value               |
-| ------------------------------------------ | ------------------------------------------------------------------------------------------------------ | ------------------- |
-| `metrics.enabled`                          | Enable the export of Prometheus metrics                                                                | `false`             |
-| `metrics.service.type`                     | Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`)                                    | `ClusterIP`         |
-| `metrics.service.port`                     | InfluxDB&trade; Prometheus port                                                                        | `9122`              |
-| `metrics.service.nodePort`                 | Kubernetes HTTP node port                                                                              | `""`                |
-| `metrics.service.loadBalancerIP`           | loadBalancerIP if service type is `LoadBalancer`                                                       | `""`                |
-| `metrics.service.loadBalancerSourceRanges` | Address that are allowed when service is LoadBalancer                                                  | `[]`                |
-| `metrics.service.clusterIP`                | Static clusterIP or None for headless services                                                         | `""`                |
-| `metrics.service.annotations`              | Annotations for the Prometheus metrics service                                                         | `{}`                |
-| `metrics.serviceMonitor.enabled`           | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`) | `false`             |
-| `metrics.serviceMonitor.namespace`         | Namespace in which Prometheus is running                                                               | `""`                |
-| `metrics.serviceMonitor.interval`          | Interval at which metrics should be scraped.                                                           | `""`                |
-| `metrics.serviceMonitor.scrapeTimeout`     | Timeout after which the scrape is ended                                                                | `""`                |
-| `metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                                                    | `{}`                |
-| `networkPolicy.enabled`                    | Enable NetworkPolicy                                                                                   | `false`             |
-| `networkPolicy.allowExternal`              | Don't require client label for connections                                                             | `true`              |
-| `persistence.enabled`                      | Enable data persistence                                                                                | `true`              |
-| `persistence.existingClaim`                | Use a existing PVC which must be created manually before bound                                         | `""`                |
-| `persistence.storageClass`                 | Specify the `storageClass` used to provision the volume                                                | `""`                |
-| `persistence.accessModes`                  | Access mode of data volume                                                                             | `["ReadWriteOnce"]` |
-| `persistence.size`                         | Size of data volume                                                                                    | `8Gi`               |
+| Name                                       | Description                                                                                                                                 | Value               |
+| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
+| `metrics.enabled`                          | Enable the export of Prometheus metrics                                                                                                     | `false`             |
+| `metrics.service.type`                     | Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`)                                                                         | `ClusterIP`         |
+| `metrics.service.port`                     | InfluxDB&trade; Prometheus port                                                                                                             | `9122`              |
+| `metrics.service.nodePort`                 | Kubernetes HTTP node port                                                                                                                   | `""`                |
+| `metrics.service.loadBalancerIP`           | loadBalancerIP if service type is `LoadBalancer`                                                                                            | `""`                |
+| `metrics.service.loadBalancerSourceRanges` | Address that are allowed when service is LoadBalancer                                                                                       | `[]`                |
+| `metrics.service.clusterIP`                | Static clusterIP or None for headless services                                                                                              | `""`                |
+| `metrics.service.annotations`              | Annotations for the Prometheus metrics service                                                                                              | `{}`                |
+| `metrics.serviceMonitor.enabled`           | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)                                      | `false`             |
+| `metrics.serviceMonitor.namespace`         | Namespace in which Prometheus is running                                                                                                    | `""`                |
+| `metrics.serviceMonitor.interval`          | Interval at which metrics should be scraped.                                                                                                | `""`                |
+| `metrics.serviceMonitor.scrapeTimeout`     | Timeout after which the scrape is ended                                                                                                     | `""`                |
+| `metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                                                                                         | `{}`                |
+| `networkPolicy.enabled`                    | Enable NetworkPolicy                                                                                                                        | `false`             |
+| `networkPolicy.allowExternal`              | Don't require client label for connections                                                                                                  | `true`              |
+| `persistence.enabled`                      | Enable data persistence                                                                                                                     | `true`              |
+| `persistence.existingClaim`                | Use a existing PVC which must be created manually before bound                                                                              | `""`                |
+| `persistence.storageClass`                 | Specify the `storageClass` used to provision the volume                                                                                     | `""`                |
+| `persistence.accessModes`                  | Access mode of data volume                                                                                                                  | `["ReadWriteOnce"]` |
+| `persistence.size`                         | Size of data volume                                                                                                                         | `8Gi`               |
+| `serviceAccount.enabled`                   | Enable service account (Note: Service Account will only be automatically created if `serviceAccount.name` is not set)                       | `false`             |
+| `serviceAccount.name`                      | Name of an already existing service account. Setting this value disables the automatic service account creation                             | `""`                |
+| `psp.create`                               | Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later | `false`             |
+| `rbac.create`                              | Create Role and RoleBinding (required for PSP to work)                                                                                      | `false`             |
 
 
 ### Volume permissions parameters
