@@ -19,6 +19,7 @@ metadata:
     {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.annotations "context" $ ) | nindent 4 }}
     {{- end }}
 spec:
+  type: {{ .Values.primary.service.type }}
   {{- if and .Values.primary.service.clusterIP (eq .Values.primary.service.type "ClusterIP") }}
   clusterIP: {{ .Values.primary.service.clusterIP }}
   {{- end }}
