@@ -3,7 +3,7 @@ apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
   name: {{ include "mariadb.secondary.fullname" . }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: secondary
     {{- if .Values.commonLabels }}
@@ -19,14 +19,10 @@ spec:
     matchLabels: {{ include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: secondary
   serviceName: {{ include "mariadb.secondary.fullname" . }}
-  updateStrategy:
-    type: {{ .Values.secondary.updateStrategy }}
-    {{- if (eq "Recreate" .Values.secondary.updateStrategy) }}
-    rollingUpdate: null
-    {{- else if .Values.secondary.rollingUpdatePartition }}
-    rollingUpdate:
-      partition: {{ .Values.secondary.rollingUpdatePartition }}
-    {{- end }}
+  podManagementPolicy: {{ .Values.secondary.podManagementPolicy }}
+  {{- if .Values.secondary.updateStrategy }}
+  updateStrategy: {{- toYaml .Values.secondary.updateStrategy | nindent 4 }}
+  {{- end }}
   template:
     metadata:
       annotations:
@@ -38,13 +34,16 @@ spec:
         {{- end }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: secondary
+        {{- if .Values.secondary.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.secondary.podLabels "context" $) | nindent 8 }}
+        {{- end }}
         {{- if .Values.commonLabels }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
         {{- end }}
     spec:
       {{- include "mariadb.imagePullSecrets" . | nindent 6 }}
-      {{- if .Values.schedulerName }}
-      schedulerName: {{ .Values.schedulerName | quote }}
+      {{- if or .Values.secondary.schedulerName .Values.schedulerName }}
+      schedulerName: {{ (coalesce .Values.secondary.schedulerName .Values.schedulerName) | quote }}
       {{- end }}
       serviceAccountName: {{ template "mariadb.serviceAccountName" . }}
       {{- if .Values.secondary.hostAliases }}
@@ -119,6 +118,9 @@ spec:
           {{- else if .Values.secondary.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.secondary.args "context" $) | nindent 12 }}
           {{- end }}
+          {{- if .Values.secondary.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.secondary.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
           env:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
@@ -127,7 +129,7 @@ spec:
             - name: MARIADB_MASTER_HOST
               value: {{ include "mariadb.primary.fullname" . }}
             - name: MARIADB_MASTER_PORT_NUMBER
-              value: {{ .Values.primary.service.port | quote }}
+              value: {{ coalesce .Values.primary.service.ports.mysql .Values.primary.service.port | quote }}
             - name: MARIADB_MASTER_ROOT_USER
               value: "root"
             {{- if .Values.auth.usePasswordFiles }}
