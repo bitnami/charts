@@ -827,8 +827,9 @@ serviceAccount:
 ##
 psp:
   create: false
-## Creates role for ServiceAccount
-## Required for PSP
+
+## Role Based Access
+## Ref: https://kubernetes.io/docs/admin/authorization/rbac/
 ## @param rbac.create Create Role and RoleBinding (required for PSP to work)
 ##
 rbac:
