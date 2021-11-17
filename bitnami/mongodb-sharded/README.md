@@ -66,6 +66,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `nameOverride`           | String to partially override mongodb.fullname template (will maintain the release name) | `""`            |
 | `fullnameOverride`       | String to fully override mongodb.fullname template                                      | `""`            |
 | `clusterDomain`          | Kubernetes Cluster Domain                                                               | `cluster.local` |
+| `extraDeploy`            | Array of extra objects to deploy with the release                                       | `[]`            |
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
 | `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]`  |

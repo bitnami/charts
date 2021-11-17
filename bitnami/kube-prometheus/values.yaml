@@ -26,6 +26,9 @@ nameOverride: ""
 ## @param fullnameOverride String to fully override `kube-prometheus.fullname` template with a string
 ##
 fullnameOverride: ""
+## @param extraDeploy Array of extra objects to deploy with the release
+##
+extraDeploy: []
 
 ## @section Prometheus Operator Parameters
 

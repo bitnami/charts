@@ -68,6 +68,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `fullnameOverride`  | String to fully override discourse.fullname template                                      | `""`  |
 | `commonLabels`      | Labels to be added to all deployed resources                                              | `{}`  |
 | `commonAnnotations` | Annotations to be added to all deployed resources                                         | `{}`  |
+| `extraDeploy`       | Array of extra objects to deploy with the release                                         | `[]`  |
 
 
 ### Service parameters

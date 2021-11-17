@@ -33,7 +33,9 @@ commonLabels: {}
 ## @param commonAnnotations Annotations to be added to all deployed resources
 ##
 commonAnnotations: {}
-
+## @param extraDeploy Array of extra objects to deploy with the release
+##
+extraDeploy: []
 
 ## @section Service parameters
 
