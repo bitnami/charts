@@ -157,11 +157,11 @@ This solution allows to easily deploy multiple Contour instances compared to the
 | `image.pullSecrets`                     | Contour Operator image pull secrets                                                                                      | `[]`                       |
 | `contourImage.registry`                 | Contour Image registry                                                                                                   | `docker.io`                |
 | `contourImage.repository`               | Contour Image repository                                                                                                 | `bitnami/contour`          |
-| `contourImage.tag`                      | Contour Image tag (immutable tags are recommended)                                                                       | `1.19.1-debian-10-r0`      |
+| `contourImage.tag`                      | Contour Image tag (immutable tags are recommended)                                                                       | `1.19.1-debian-10-r6`      |
 | `contourImage.pullSecrets`              | Contour Image pull secrets                                                                                               | `[]`                       |
 | `envoyImage.registry`                   | Envoy Image registry                                                                                                     | `docker.io`                |
 | `envoyImage.repository`                 | Envoy Image repository                                                                                                   | `bitnami/envoy`            |
-| `envoyImage.tag`                        | Envoy Image tag (immutable tags are recommended)                                                                         | `1.19.1-debian-10-r74`     |
+| `envoyImage.tag`                        | Envoy Image tag (immutable tags are recommended)                                                                         | `1.19.1-debian-10-r81`     |
 | `envoyImage.pullSecrets`                | Envoy Image pull secrets                                                                                                 | `[]`                       |
 | `replicaCount`                          | Number of Contour Operator replicas to deploy                                                                            | `1`                        |
 | `livenessProbe.enabled`                 | Enable livenessProbe on Contour Operator nodes                                                                           | `true`                     |
