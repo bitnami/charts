@@ -536,7 +536,7 @@ server:
   url: ""
 
   ## Argo CD server config. This object will be directly rendered
-  ## @param server.config [string] Argo CD server configuration that will end on the argocd-cm Config Map
+  ## @param server.config [object] Argo CD server configuration that will end on the argocd-cm Config Map
   ## Ref: https://argoproj.github.io/argo-cd/operator-manual/user-management/
   ## E.g:
   ## repositories:
