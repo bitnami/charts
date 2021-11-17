@@ -141,7 +141,7 @@ spec:
             - --grpc-client-tls-secure
             - --grpc-client-tls-cert=/certs/client/{{ include "common.secrets.key" (dict "existingSecret" .Values.query.grpc.client.tls.existingSecret "key" "tls-cert") }}
             - --grpc-client-tls-key=/certs/client/{{ include "common.secrets.key" (dict "existingSecret" .Values.query.grpc.client.tls.existingSecret "key" "tls-key") }}
-            - --grpc-client-tls-client-ca=/certs/client/{{ include "common.secrets.key" (dict "existingSecret" .Values.query.grpc.client.tls.existingSecret "key" "ca-cert") }}
+            - --grpc-client-tls-ca=/certs/client/{{ include "common.secrets.key" (dict "existingSecret" .Values.query.grpc.client.tls.existingSecret "key" "ca-cert") }}
             {{- end }}
             {{- if .Values.query.grpc.client.servername }}
             - --grpc-client-server-name={{.Values.query.grpc.client.servername}}
