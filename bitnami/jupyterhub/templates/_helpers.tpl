@@ -215,7 +215,6 @@ Compile all warnings into a single message.
 {{- end -}}
 {{- end -}}
 
-
 {{/*
 Return true if cert-manager required annotations for TLS signed certificates are set in the Ingress annotations
 Ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
