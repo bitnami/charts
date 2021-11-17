@@ -107,7 +107,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `primary.lifecycleHooks`                        | for the MariaDB Primary container(s) to automate configuration before or after startup                            | `{}`                |
 | `primary.hostAliases`                           | Add deployment host aliases                                                                                       | `[]`                |
 | `primary.configuration`                         | MariaDB Primary configuration to be injected as ConfigMap                                                         | `""`                |
-| `primary.existingConfiguration`                 | Name of existing ConfigMap with MariaDB Primary configuration.                                                    | `""`                |
+| `primary.existingConfigmap`                     | Name of existing ConfigMap with MariaDB Primary configuration.                                                    | `""`                |
 | `primary.updateStrategy.type`                   | MariaDB primary statefulset strategy type                                                                         | `RollingUpdate`     |
 | `primary.rollingUpdatePartition`                | Partition update strategy for Mariadb Primary statefulset                                                         | `""`                |
 | `primary.podAnnotations`                        | Additional pod annotations for MariaDB primary pods                                                               | `{}`                |
@@ -196,7 +196,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `secondary.lifecycleHooks`                        | for the MariaDB Secondary container(s) to automate configuration before or after startup                              | `{}`                |
 | `secondary.hostAliases`                           | Add deployment host aliases                                                                                           | `[]`                |
 | `secondary.configuration`                         | MariaDB Secondary configuration to be injected as ConfigMap                                                           | `""`                |
-| `secondary.existingConfiguration`                 | Name of existing ConfigMap with MariaDB Secondary configuration.                                                      | `""`                |
+| `secondary.existingConfigmap`                     | Name of existing ConfigMap with MariaDB Secondary configuration.                                                      | `""`                |
 | `secondary.updateStrategy.type`                   | MariaDB secondary statefulset strategy type                                                                           | `RollingUpdate`     |
 | `secondary.rollingUpdatePartition`                | Partition update strategy for Mariadb Secondary statefulset                                                           | `""`                |
 | `secondary.podAnnotations`                        | Additional pod annotations for MariaDB secondary pods                                                                 | `{}`                |
@@ -467,7 +467,7 @@ Affected values:
 ### To 8.0.0
 
 - Several parameters were renamed or disappeared in favor of new ones on this major version:
-  - The terms *master* and *slave* have been replaced by the terms *primary* and *secondary*. Therefore, parameters prefixed with `master` or `slave` are now prefixed with `primary` or `secondary`, respectively.
+  - The terms _master_ and _slave_ have been replaced by the terms _primary_ and _secondary_. Therefore, parameters prefixed with `master` or `slave` are now prefixed with `primary` or `secondary`, respectively.
   - `securityContext.*` is deprecated in favor of `primary.podSecurityContext`, `primary.containerSecurityContext`, `secondary.podSecurityContext`, and `secondary.containerSecurityContext`.
   - Credentials parameter are reorganized under the `auth` parameter.
   - `replication.enabled` parameter is deprecated in favor of `architecture` parameter that accepts two values: `standalone` and `replication`.
