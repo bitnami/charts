@@ -65,6 +65,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `fullnameOverride`       | String to fully override ebjca.fullname template                                        | `""`           |
 | `commonLabels`           | Add labels to all the deployed resources                                                | `{}`           |
 | `commonAnnotations`      | Annotations to be added to all deployed resources                                       | `{}`           |
+| `extraDeploy`            | Array of extra objects to deploy with the release                                       | `[]`           |
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`        |
 | `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`    |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]` |

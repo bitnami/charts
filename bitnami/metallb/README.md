@@ -63,6 +63,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `fullnameOverride`  | String to fully override metallb.fullname template                                     | `""`  |
 | `commonLabels`      | Add labels to all the deployed resources                                               | `{}`  |
 | `commonAnnotations` | Add annotations to all the deployed resources                                          | `{}`  |
+| `extraDeploy`       | Array of extra objects to deploy with the release                                      | `[]`  |
 
 
 ### MetalLB parameters
