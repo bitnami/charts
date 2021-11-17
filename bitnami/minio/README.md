@@ -224,7 +224,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.allowExternal`      | Don't require client label for connections                                                                                       | `true`                   |
 | `networkPolicy.extraFromClauses`   | Allows to add additional clauses (e.g `podSelector`) to the existing `from` clause in NetworkPolicy                              | `{}`                     |
 
-
 ### Persistence parameters
 
 | Name                        | Description                                                          | Value               |
