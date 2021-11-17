@@ -730,8 +730,8 @@ envoy:
   ## @param envoy.containerPorts.https Sets https port inside Envoy pod  (change this to >1024 to run envoy as a non-root user)
   ##
   containerPorts:
-    http: 80
-    https: 443
+    http: 8080
+    https: 8443
   ## @param envoy.initContainers [array] Attach additional init containers to Envoy pods
   ## For example:
   ## initContainers:
