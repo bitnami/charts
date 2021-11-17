@@ -323,7 +323,6 @@ $ kubectl delete pvc -l release=my-release
 | `metrics.readinessProbe.failureThreshold`                                 | Failure threshold for readinessProbe                                                                                                                      | `6`                         |
 | `metrics.readinessProbe.successThreshold`                                 | Success threshold for readinessProbe                                                                                                                      | `1`                         |
 
-
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
