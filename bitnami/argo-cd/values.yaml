@@ -573,15 +573,12 @@ server:
   ##          clientSecret: $dex.github.clientSecret
   ##          orgs:
   ##          - name: your-github-org
-  config: |
-    {{- if .Values.config.styles }}
-    ui.cssurl: "./custom/custom.styles.css"
-    {{- end }}
+  config:
     ## Argo CD external base URL. Required when configuring SSO. Required when enabling dex.
     ## E.g:
     ## url: https://argocd.example.com
     ##
-    url: {{ .Values.server.url | quote }}
+    url: "{{ .Values.server.url }}"
     ## Argo CD instance label key
     ##
     application.instanceLabelKey: argocd.argoproj.io/instance
