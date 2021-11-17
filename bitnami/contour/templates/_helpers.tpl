@@ -111,7 +111,7 @@ contour: envoy.kind
 {{- $ingressClass := .Values.contour.ingressClass -}}
 {{- if kindIs "string" $ingressClass -}}
     true
-{{- else if and (kindIs "map" $ingressClass) (or $ingressClass.name $ingressClass.create) -}}
+{{- else if and (kindIs "map" $ingressClass) ($ingressClass.name) -}}
     true
 {{- end -}}
 {{- end -}}
