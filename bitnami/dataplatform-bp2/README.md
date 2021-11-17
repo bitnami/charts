@@ -98,10 +98,11 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common parameters
 
-| Name                | Description                                | Value |
-| ------------------- | ------------------------------------------ | ----- |
-| `commonLabels`      | Labels to add to all deployed objects      | `{}`  |
-| `commonAnnotations` | Annotations to add to all deployed objects | `{}`  |
+| Name                | Description                                       | Value |
+| ------------------- | ------------------------------------------------- | ----- |
+| `commonLabels`      | Labels to add to all deployed objects             | `{}`  |
+| `commonAnnotations` | Annotations to add to all deployed objects        | `{}`  |
+| `extraDeploy`       | Array of extra objects to deploy with the release | `[]`  |
 
 
 ### Data Platform Chart parameters
@@ -180,7 +181,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dataplatform.emitter.enabled`                                | Start Data Platform metrics emitter                                                                              | `true`                          |
 | `dataplatform.emitter.image.registry`                         | Data Platform emitter image registry                                                                             | `docker.io`                     |
 | `dataplatform.emitter.image.repository`                       | Data Platform emitter image repository                                                                           | `bitnami/dataplatform-emitter`  |
-| `dataplatform.emitter.image.tag`                              | Data Platform emitter image tag (immutable tags are recommended)                                                 | `0.0.11-scratch-r0`             |
+| `dataplatform.emitter.image.tag`                              | Data Platform emitter image tag (immutable tags are recommended)                                                 | `1.0.1-scratch-r0`              |
 | `dataplatform.emitter.image.pullPolicy`                       | Data Platform emitter image pull policy                                                                          | `IfNotPresent`                  |
 | `dataplatform.emitter.image.pullSecrets`                      | Specify docker-registry secret names as an array                                                                 | `[]`                            |
 | `dataplatform.emitter.livenessProbe.enabled`                  | Enable livenessProbe                                                                                             | `true`                          |

@@ -222,6 +222,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `apiIngress.secrets`               | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
 | `networkPolicy.enabled`            | Enable the default NetworkPolicy policy                                                                                          | `false`                  |
 | `networkPolicy.allowExternal`      | Don't require client label for connections                                                                                       | `true`                   |
+| `networkPolicy.extraFromClauses`   | Allows to add extra 'from' clauses to the NetworkPolicy                                                                          | `{}`                     |
 
 
 ### Persistence parameters

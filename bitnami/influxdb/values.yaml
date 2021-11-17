@@ -811,6 +811,31 @@ persistence:
   ##
   size: 8Gi
 
+## Pod Service Account
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+##
+serviceAccount:
+  ## @param serviceAccount.enabled Enable service account (Note: Service Account will only be automatically created if `serviceAccount.name` is not set)
+  ##
+  enabled: false
+  ## @param serviceAccount.name Name of an already existing service account. Setting this value disables the automatic service account creation
+  ##
+  name: ""
+
+## Pod Security Policy
+## ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/
+## @param psp.create Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later
+##
+psp:
+  create: false
+
+## Role Based Access
+## Ref: https://kubernetes.io/docs/admin/authorization/rbac/
+## @param rbac.create Create Role and RoleBinding (required for PSP to work)
+##
+rbac:
+  create: false
+
 ## @section Volume permissions parameters
 
 ## Init Container parameters
