@@ -104,6 +104,8 @@ spec:
             - {{ .Values.persistence.mountPath }}
             {{- else if eq .Values.gateway.type "s3" }}
             - {{ .Values.gateway.auth.s3.serviceEndpoint }}
+            {{- else if and (eq .Values.gateway.type "azure") .Values.gateway.auth.azure.serviceEndpoint }}
+            - {{ .Values.gateway.auth.azure.serviceEndpoint }}
             {{- end }}
             {{- end }}
           env:
