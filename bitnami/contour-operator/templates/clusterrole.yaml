@@ -174,6 +174,7 @@ rules:
   - apiGroups:
       - projectcontour.io
     resources:
+      - contourconfigurations
       - extensionservices
       - httpproxies
       - tlscertificatedelegations
@@ -184,6 +185,7 @@ rules:
   - apiGroups:
       - projectcontour.io
     resources:
+      - contourconfigurations/status
       - extensionservices/status
       - httpproxies/status
     verbs:

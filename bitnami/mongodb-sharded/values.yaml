@@ -28,6 +28,9 @@ fullnameOverride: ""
 ## ref: https://kubernetes.io/docs/tasks/administer-cluster/dns-custom-nameservers/#introduction
 ##
 clusterDomain: cluster.local
+## @param extraDeploy Array of extra objects to deploy with the release
+##
+extraDeploy: []
 
 ## Enable diagnostic mode in the deployment
 ##
