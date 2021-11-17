@@ -357,8 +357,8 @@ networkPolicy:
   ##
   enabled: false
   ## @param networkPolicy.metrics.enabled Enable network policy for metrics (prometheus)
-  ## @param networkPolicy.metrics.namespaceSelector [object] Monitoring namespace selector labels. These labels will be used to identify the prometheus' namespace.
-  ## @param networkPolicy.metrics.podSelector [object] Monitoring pod selector labels. These labels will be used to identify the Prometheus pods.
+  ## @param networkPolicy.metrics.namespaceSelector magento Monitoring namespace selector labels. These labels will be used to identify the prometheus' namespace.
+  ## @param networkPolicy.metrics.podSelector magento Monitoring pod selector labels. These labels will be used to identify the Prometheus pods.
   ##
   metrics:
     enabled: false
@@ -373,8 +373,8 @@ networkPolicy:
     ##
     namespaceSelector: {}
   ## @param networkPolicy.ingress.enabled Enable network policy for Ingress Proxies
-  ## @param networkPolicy.ingress.namespaceSelector [object] Ingress Proxy namespace selector labels. These labels will be used to identify the Ingress Proxy's namespace.
-  ## @param networkPolicy.ingress.podSelector [object] Ingress Proxy pods selector labels. These labels will be used to identify the Ingress Proxy pods.
+  ## @param networkPolicy.ingress.namespaceSelector magento Ingress Proxy namespace selector labels. These labels will be used to identify the Ingress Proxy's namespace.
+  ## @param networkPolicy.ingress.podSelector magento Ingress Proxy pods selector labels. These labels will be used to identify the Ingress Proxy pods.
   ##
   ingress:
     enabled: false
@@ -389,11 +389,11 @@ networkPolicy:
     ##
     namespaceSelector: {}
   ## @param networkPolicy.ingressRules.backendOnlyAccessibleByFrontend Enable ingress rule that makes the backend (mariadb, elasticsearch) only accessible by magento's pods.
-  ## @param networkPolicy.ingressRules.customBackendSelector [object] Backend selector labels. These labels will be used to identify the backend pods.
+  ## @param networkPolicy.ingressRules.customBackendSelector magento Backend selector labels. These labels will be used to identify the backend pods.
   ## @param networkPolicy.ingressRules.accessOnlyFrom.enabled Enable ingress rule that makes magento only accessible from a particular origin
-  ## @param networkPolicy.ingressRules.accessOnlyFrom.namespaceSelector [object] Namespace selector label that is allowed to access magento. This label will be used to identified the allowed namespace(s).
-  ## @param networkPolicy.ingressRules.accessOnlyFrom.podSelector [object] Pods selector label that is allowed to access magento. This label will be used to identified the allowed pod(s).
-  ## @param networkPolicy.ingressRules.customRules [object] Custom network policy ingress rule
+  ## @param networkPolicy.ingressRules.accessOnlyFrom.namespaceSelector magento Namespace selector label that is allowed to access magento. This label will be used to identified the allowed namespace(s).
+  ## @param networkPolicy.ingressRules.accessOnlyFrom.podSelector magento Pods selector label that is allowed to access magento. This label will be used to identified the allowed pod(s).
+  ## @param networkPolicy.ingressRules.customRules magento Custom network policy ingress rule
   ##
   ingressRules:
     ## mariadb and elacticsearch backends only can be accessed from magento
@@ -408,6 +408,7 @@ networkPolicy:
     ##             label: example
     customBackendSelector: {}
     ## Allow only from the indicated:
+    ##
     accessOnlyFrom:
       enabled: false
       ## e.g:
@@ -429,7 +430,7 @@ networkPolicy:
     ##             label: example
     customRules: {}
   ## @param networkPolicy.egressRules.denyConnectionsToExternal Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).
-  ## @param networkPolicy.egressRules.customRules [object] Custom network policy rule
+  ## @param networkPolicy.egressRules.customRules magento Custom network policy rule
   ##
   egressRules:
     # Deny connections to external. This is not compatible with an external database.
