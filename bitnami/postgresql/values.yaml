@@ -729,9 +729,13 @@ resources:
 ## Add networkpolicies
 ##
 networkPolicy:
+  ## @param networkPolicy.enabled Enable network policies
+  ## If ingress.enabled or metrics.enabled are true, configure networkPolicy.ingress and networkPolicy.metrics selectors respectively to allow communication
+  ##
+  enabled: false
   ## @param networkPolicy.metrics.enabled Enable network policy for metrics (prometheus)
-  ## @param networkPolicy.metrics.namespaceSelector [object] Monitoring namespace selector labels. These labels will be used to identify the prometheus' namespace.
-  ## @param networkPolicy.metrics.podSelector [object] Monitoring pod selector labels. These labels will be used to identify the Prometheus pods.
+  ## @param networkPolicy.metrics.namespaceSelector Monitoring namespace selector labels. These labels will be used to identify the prometheus' namespace.
+  ## @param networkPolicy.metrics.podSelector Monitoring pod selector labels. These labels will be used to identify the Prometheus pods.
   ##
   metrics:
     enabled: false
@@ -746,16 +750,17 @@ networkPolicy:
     ##
     namespaceSelector: {}
   ## @param networkPolicy.ingressRules.primaryAccessOnlyFrom.enabled Enable ingress rule that makes primary mariadb nodes only accessible from a particular origin.
-  ## @param networkPolicy.ingressRules.primaryAccessOnlyFrom.namespaceSelector [object] Namespace selector label that is allowed to access the primary node. This label will be used to identified the allowed namespace(s).
-  ## @param networkPolicy.ingressRules.primaryAccessOnlyFrom.podSelector [object] Pods selector label that is allowed to access the primary node. This label will be used to identified the allowed pod(s).
-  ## @param networkPolicy.ingressRules.primaryAccessOnlyFrom.customRules [object] Custom network policy for the primary node.
+  ## @param networkPolicy.ingressRules.primaryAccessOnlyFrom.namespaceSelector Namespace selector label that is allowed to access the primary node. This label will be used to identified the allowed namespace(s).
+  ## @param networkPolicy.ingressRules.primaryAccessOnlyFrom.podSelector Pods selector label that is allowed to access the primary node. This label will be used to identified the allowed pod(s).
+  ## @param networkPolicy.ingressRules.primaryAccessOnlyFrom.customRules Custom network policy for the primary node.
   ## @param networkPolicy.ingressRules.readReplicasAccessOnlyFrom.enabled Enable ingress rule that makes primary mariadb nodes only accessible from a particular origin.
-  ## @param networkPolicy.ingressRules.readReplicasAccessOnlyFrom.namespaceSelector [object] Namespace selector label that is allowed to acces the secondary nodes. This label will be used to identified the allowed namespace(s).
-  ## @param networkPolicy.ingressRules.readReplicasAccessOnlyFrom.podSelector [object] Pods selector label that is allowed to access the secondary nodes. This label will be used to identified the allowed pod(s).
-  ## @param networkPolicy.ingressRules.readReplicasAccessOnlyFrom.customRules [object] Custom network policy for the secondary nodes.
+  ## @param networkPolicy.ingressRules.readReplicasAccessOnlyFrom.namespaceSelector Namespace selector label that is allowed to acces the secondary nodes. This label will be used to identified the allowed namespace(s).
+  ## @param networkPolicy.ingressRules.readReplicasAccessOnlyFrom.podSelector Pods selector label that is allowed to access the secondary nodes. This label will be used to identified the allowed pod(s).
+  ## @param networkPolicy.ingressRules.readReplicasAccessOnlyFrom.customRules Custom network policy for the secondary nodes.
   ##
   ingressRules:
     ## Allow access to the primary node only from the indicated:
+    ##
     primaryAccessOnlyFrom:
       enabled: false
       ## e.g:
@@ -798,7 +803,7 @@ networkPolicy:
       ##             label: example
       customRules: {}
   ## @param networkPolicy.egressRules.denyConnectionsToExternal Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).
-  ## @param networkPolicy.egressRules.customRules [object] Custom network policy rule
+  ## @param networkPolicy.egressRules.customRules Custom network policy rule
   ##
   egressRules:
     # Deny connections to external. This is not compatible with an external database.
