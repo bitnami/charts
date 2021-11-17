@@ -68,6 +68,7 @@ $ helm delete --purge my-release
 | `nameOverride`           | String to partially override common.names.fullname template (will maintain the release name) | `""`            |
 | `fullnameOverride`       | String to fully override common.names.fullname template                                      | `""`            |
 | `clusterDomain`          | Kubernetes cluster domain                                                                    | `cluster.local` |
+| `extraDeploy`            | Array of extra objects to deploy with the release                                            | `[]`            |
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)      | `false`         |
 | `diagnosticMode.command` | Command to override all containers in the deployment                                         | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                            | `["infinity"]`  |

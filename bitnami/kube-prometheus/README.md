@@ -76,6 +76,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------ | ---------------------------------------------------------------------------------------------------------- | ----- |
 | `nameOverride`     | String to partially override `kube-prometheus.name` template with a string (will prepend the release name) | `""`  |
 | `fullnameOverride` | String to fully override `kube-prometheus.fullname` template with a string                                 | `""`  |
+| `extraDeploy`      | Array of extra objects to deploy with the release                                                          | `[]`  |
 
 
 ### Prometheus Operator Parameters

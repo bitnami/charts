@@ -27,6 +27,9 @@ nameOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname template with a string
 ##
 fullnameOverride: ""
+## @param extraDeploy Array of extra objects to deploy with the release
+##
+extraDeploy: []
 
 ## @section Kibana parameters
 
