@@ -91,7 +91,6 @@ spec:
       {{- end }}
       containers:
         {{- $replicaCount := int .Values.replicaCount }}
-        {{- $clientPort := int .Values.service.port }}
         {{- $peerPort := int .Values.service.peerPort }}
         {{- $etcdFullname := include "common.names.fullname" . }}
         {{- $releaseNamespace := .Release.Namespace }}
@@ -158,11 +157,11 @@ spec:
             - name: ETCD_ADVERTISE_CLIENT_URLS
               value: "{{ $etcdClientProtocol }}://$(MY_POD_NAME).{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.svc.{{ $clusterDomain }}:{{ .Values.service.port }}"
             - name: ETCD_LISTEN_CLIENT_URLS
-              value: "{{ $etcdClientProtocol }}://0.0.0.0:{{ .Values.service.port }}"
+              value: "{{ $etcdClientProtocol }}://0.0.0.0:{{ .Values.containerPorts.client }}"
             - name: ETCD_INITIAL_ADVERTISE_PEER_URLS
               value: "{{ $etcdPeerProtocol }}://$(MY_POD_NAME).{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.svc.{{ $clusterDomain }}:{{ .Values.service.peerPort }}"
             - name: ETCD_LISTEN_PEER_URLS
-              value: "{{ $etcdPeerProtocol }}://0.0.0.0:{{ .Values.service.peerPort }}"
+              value: "{{ $etcdPeerProtocol }}://0.0.0.0:{{ .Values.containerPorts.peer }}"
             {{- if .Values.autoCompactionMode }}
             - name: ETCD_AUTO_COMPACTION_MODE
               value: {{ .Values.autoCompactionMode | quote }}
