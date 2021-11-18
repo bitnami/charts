@@ -157,6 +157,12 @@ spec:
             - name: NO_PROXY
               value: {{ include "harbor.noProxy" . | quote }}
             {{- end }}
+            {{- if .Values.persistence.imageChartStorage.azure.accountkeySecret.name }}
+            - name: REGISTRY_STORAGE_AZURE_ACCOUNTKEY
+              valueFrom:
+                name: {{ .Values.persistence.imageChartStorage.azure.accountkeySecret.name }}
+                key: {{ .Values.persistence.imageChartStorage.azure.accountkeySecret.key }}
+            {{- end }}
             {{- if .Values.registry.server.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.registry.server.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}

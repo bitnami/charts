@@ -149,6 +149,13 @@ spec:
             - name: INTERNAL_TLS_TRUST_CA_PATH
               value: /etc/harbor/ssl/chartmuseum/ca.crt
             {{- end }}
+            {{- if .Values.persistence.imageChartStorage.azure.accountkeySecret.name }}
+            - name: AZURE_STORAGE_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.persistence.imageChartStorage.azure.accountkeySecret.name }}
+                  key: {{ .Values.persistence.imageChartStorage.azure.accountkeySecret.key }}
+            {{- end }}
             {{- if .Values.chartmuseum.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.chartmuseum.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
