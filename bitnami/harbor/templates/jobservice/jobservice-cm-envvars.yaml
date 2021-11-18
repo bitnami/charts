@@ -15,7 +15,9 @@ data:
   TOKEN_SERVICE_URL: {{ include "harbor.tokenService.url" . | quote }}
   REGISTRY_URL: {{ include "harbor.registry.url" . | quote }}
   REGISTRY_CONTROLLER_URL: {{ include "harbor.registryCtl.url" . | quote }}
+  {{- if not .Values.registry.credentials.username }}
   REGISTRY_CREDENTIAL_USERNAME: {{ .Values.registry.credentials.username | quote }}
+  {{- end }}
   {{- if has "jobservice" .Values.proxy.components }}
   HTTP_PROXY: {{ .Values.proxy.httpProxy | quote }}
   HTTPS_PROXY: {{ .Values.proxy.httpsProxy | quote }}

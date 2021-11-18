@@ -158,6 +158,20 @@ spec:
             - name: INTERNAL_TLS_TRUST_CA_PATH
               value: /etc/harbor/ssl/jobservice/ca.crt
             {{- end }}
+            {{- if .Values.registry.credentials.usernameSecret.name }}
+            - name: REGISTRY_CREDENTIAL_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.registry.credentials.usernameSecret.name }}
+                  key: {{ .Values.registry.credentials.usernameSecret.key }}
+            {{- end }}
+            {{- if .Values.registry.credentials.passwordSecret.name }}
+            - name: REGISTRY_CREDENTIAL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.registry.credentials.passwordSecret.name }}
+                  key: {{ .Values.registry.credentials.passwordSecret.key }}
+            {{- end }}
             {{- if .Values.jobservice.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.jobservice.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}

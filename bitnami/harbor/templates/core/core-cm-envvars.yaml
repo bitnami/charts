@@ -39,7 +39,9 @@ data:
   CHART_CACHE_DRIVER: "redis"
   PORTAL_URL: {{ include "harbor.portal.url" . | quote }}
   REGISTRY_CONTROLLER_URL: {{ include "harbor.registryCtl.url" . | quote }}
+  {{- if not .Values.registry.credentials.usernameSecret.name }}
   REGISTRY_CREDENTIAL_USERNAME: {{ .Values.registry.credentials.username | quote }}
+  {{- end }}
   PERMITTED_REGISTRY_TYPES_FOR_PROXY_CACHE: "docker-hub,harbor,azure-acr,aws-ecr,google-gcr,quay,docker-registry"
   {{- if .Values.core.uaaSecretName }}
   UAA_CA_ROOT: "/etc/core/auth-ca/auth-ca.crt"
