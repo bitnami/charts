@@ -394,7 +394,7 @@ contour:
   ## ingressClass: contour
   ##
   ingressClass:
-  #  name: contour
+    ##  name: contour
     create: true
     default: true
 
