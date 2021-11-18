@@ -962,6 +962,7 @@ gateway:
     ## Authentication configuration for Azure. Ignored unless type=azure
     ## @param gateway.auth.azure.accessKey Access key to access MinIO&reg; using Azure Gateway
     ## @param gateway.auth.azure.secretKey Secret key to access MinIO&reg; using Azure Gateway
+    ## @param gateway.auth.azure.serviceEndpoint Azure Blob Storage custom endpoint
     ## @param gateway.auth.azure.storageAccountName Azure Storage Account Name to use to access Azure Blob Storage
     ## @param gateway.auth.azure.storageAccountKey Azure Storage Account Key to use to access Azure Blob Storage
     ## @param gateway.auth.azure.storageAccountNameExistingSecret Existing Secret name to extract Azure Storage Account Name from to access Azure Blob Storage
@@ -972,6 +973,7 @@ gateway:
     azure:
       accessKey: ""
       secretKey: ""
+      serviceEndpoint: ""
       storageAccountName: ""
       storageAccountKey: ""
       storageAccountNameExistingSecret: ""
