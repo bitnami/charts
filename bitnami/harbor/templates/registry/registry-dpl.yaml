@@ -157,6 +157,12 @@ spec:
             - name: NO_PROXY
               value: {{ include "harbor.noProxy" . | quote }}
             {{- end }}
+            {{- if .Values.registry.credentials.htpasswdSecret.name }}
+            - name: REGISTRY_HTPASSWD
+              valueFrom:
+                name: {{ .Values.registry.credentials.htpasswdSecret.name }}
+                key: {{ .Values.registry.credentials.htpasswdSecret.key }}
+            {{- end }}
             {{- if .Values.persistence.imageChartStorage.azure.accountkeySecret.name }}
             - name: REGISTRY_STORAGE_AZURE_ACCOUNTKEY
               valueFrom:
