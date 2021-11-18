@@ -170,6 +170,13 @@ spec:
                   name: {{ .Values.persistence.imageChartStorage.s3.secretkeySecret.name }}
                   key: {{ .Values.persistence.imageChartStorage.s3.secretkeySecret.key }}
             {{- end }}
+            {{- if .Values.persistence.imageChartStorage.swift.passwordSecret.name }}
+            - name: OS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.persistence.imageChartStorage.swift.passwordSecret.name }}
+                  key: {{ .Values.persistence.imageChartStorage.swift.passwordSecret.key }}
+            {{- end }}
             {{- if .Values.chartmuseum.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.chartmuseum.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}

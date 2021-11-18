@@ -184,6 +184,27 @@ spec:
                   name: {{ .Values.persistence.imageChartStorage.s3.secretkeySecret.name }}
                   key: {{ .Values.persistence.imageChartStorage.s3.secretkeySecret.key }}
             {{- end }}
+            {{- if .Values.persistence.imageChartStorage.swift.passwordSecret.name }}
+            - name: REGISTRY_STORAGE_SWIFT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.persistence.imageChartStorage.swift.passwordSecret.name }}
+                  key: {{ .Values.persistence.imageChartStorage.swift.passwordSecret.key }}
+            {{- end }}
+            {{- if .Values.persistence.imageChartStorage.swift.secretkeySecret.name }}
+            - name: REGISTRY_STORAGE_SWIFT_SECRETKEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.persistence.imageChartStorage.swift.secretkeySecret.name }}
+                  key: {{ .Values.persistence.imageChartStorage.swift.secretkeySecret.key }}
+            {{- end }}
+            {{- if .Values.persistence.imageChartStorage.swift.accesskeySecret.name }}
+            - name: REGISTRY_STORAGE_SWIFT_ACCESSKEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.persistence.imageChartStorage.swift.accesskeySecret.name }}
+                  key: {{ .Values.persistence.imageChartStorage.swift.accesskeySecret.key }}
+            {{- end }}
             {{- if .Values.registry.server.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.registry.server.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
