@@ -170,6 +170,20 @@ spec:
                   name: {{ .Values.persistence.imageChartStorage.gcs.encodedkeySecret.name }}
                   key: {{ .Values.persistence.imageChartStorage.gcs.encodedkeySecret.key }}
             {{- end }}
+            {{- if .Values.persistence.imageChartStorage.s3.accesskeySecret.name }}
+            - name: REGISTRY_STORAGE_S3_ACCESSKEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.persistence.imageChartStorage.s3.accesskeySecret.name }}
+                  key: {{ .Values.persistence.imageChartStorage.s3.accesskeySecret.key }}
+            {{- end }}
+            {{- if .Values.persistence.imageChartStorage.s3.secretkeySecret.name }}
+            - name: REGISTRY_STORAGE_S3_SECRETKEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.persistence.imageChartStorage.s3.secretkeySecret.name }}
+                  key: {{ .Values.persistence.imageChartStorage.s3.secretkeySecret.key }}
+            {{- end }}
             {{- if .Values.registry.server.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.registry.server.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}

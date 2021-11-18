@@ -385,7 +385,9 @@ persistence:
     ## ref: https://docs.docker.com/registry/storage-drivers/s3/
     ## @param persistence.imageChartStorage.s3.region S3 storage type setting: Region
     ## @param persistence.imageChartStorage.s3.bucket S3 storage type setting: Bucket name
+    ## @param persistence.imageChartStorage.s3.accesskeySecret If .name is set, will read the key from existing secret from key .key in secret of name .name instead
     ## @param persistence.imageChartStorage.s3.accesskey S3 storage type setting: Access key name
+    ## @param persistence.imageChartStorage.s3.secretkeySecret If .name is set, will read the key from existing secret from key .key in secret of name .name instead
     ## @param persistence.imageChartStorage.s3.secretkey S3 storage type setting: Secret Key name
     ## @param persistence.imageChartStorage.s3.regionendpoint S3 storage type setting: Region Endpoint
     ## @param persistence.imageChartStorage.s3.encrypt S3 storage type setting: Encrypt
@@ -401,7 +403,13 @@ persistence:
     s3:
       region: us-west-1
       bucket: bucketname
+      accesskeySecret:
+        name: ""
+        key: "access-key"
       accesskey: ""
+      secretkeySecret:
+        name: ""
+        key: "secret-key"
       secretkey: ""
       regionendpoint: ""
       encrypt: ""
