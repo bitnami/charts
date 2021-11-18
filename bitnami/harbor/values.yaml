@@ -1051,8 +1051,12 @@ core:
   ## @param core.secretName Fill the name of a kubernetes secret if you want to use your own TLS certificate and private key for token encryption/decryption. The secret must contain two keys named: `tls.crt` - the certificate and `tls.key` - the private key. The default key pair will be used if it isn't set
   ##
   secretName: ""
+  ## @param core.csrfKeySecret If .name is set, will read the key from existing secret from key .key in secret of name .name instead
   ## @param core.csrfKey The CSRF key. Will be generated automatically if it isn't specified
   ##
+  csrfKeySecret:
+    name: ""
+    key: "csrf-key"
   csrfKey: ""
   ## @param core.lifecycleHooks LifecycleHook to set additional configuration at startup, e.g. LDAP settings via REST API. Evaluated as a template
   ##

@@ -177,6 +177,13 @@ spec:
                   name: {{ .Values.registry.credentials.passwordSecret.name }}
                   key: {{ .Values.registry.credentials.passwordSecret.key }}
             {{- end }}
+            {{- if .Values.core.csrfKeySecret.name }}
+            - name: CSRF_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.core.csrfKeySecret.name }}
+                  key: {{ .Values.core.csrfKeySecret.key }}
+            {{- end }}
             {{- if .Values.core.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.core.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
