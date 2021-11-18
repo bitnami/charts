@@ -177,6 +177,13 @@ spec:
                   name: {{ .Values.persistence.imageChartStorage.swift.passwordSecret.name }}
                   key: {{ .Values.persistence.imageChartStorage.swift.passwordSecret.key }}
             {{- end }}
+            {{- if .Values.persistence.imageChartStorage.oss.accesskeysecretSecret.name }}
+            - name: ALIBABA_CLOUD_ACCESS_KEY_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.persistence.imageChartStorage.oss.accesskeysecretSecret.name }}
+                  key: {{ .Values.persistence.imageChartStorage.oss.accesskeysecretSecret.key }}
+            {{- end }}
             {{- if .Values.chartmuseum.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.chartmuseum.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}

@@ -205,6 +205,13 @@ spec:
                   name: {{ .Values.persistence.imageChartStorage.swift.accesskeySecret.name }}
                   key: {{ .Values.persistence.imageChartStorage.swift.accesskeySecret.key }}
             {{- end }}
+            {{- if .Values.persistence.imageChartStorage.oss.accesskeysecretSecret.name }}
+            - name: REGISTRY_STORAGE_OSS_ACCESSKEYSECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.persistence.imageChartStorage.oss.accesskeysecretSecret.name }}
+                  key: {{ .Values.persistence.imageChartStorage.oss.accesskeysecretSecret.key }}
+            {{- end }}
             {{- if .Values.registry.server.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.registry.server.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
