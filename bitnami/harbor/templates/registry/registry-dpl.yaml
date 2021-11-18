@@ -163,6 +163,13 @@ spec:
                 name: {{ .Values.persistence.imageChartStorage.azure.accountkeySecret.name }}
                 key: {{ .Values.persistence.imageChartStorage.azure.accountkeySecret.key }}
             {{- end }}
+            {{- if .Values.persistence.imageChartStorage.gcs.encodedkeySecret.name }}
+            - name: GCS_KEY_DATA
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.persistence.imageChartStorage.gcs.encodedkeySecret.name }}
+                  key: {{ .Values.persistence.imageChartStorage.gcs.encodedkeySecret.key }}
+            {{- end }}
             {{- if .Values.registry.server.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.registry.server.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}

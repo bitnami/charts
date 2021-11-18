@@ -366,6 +366,7 @@ persistence:
       realm: ""
     ## Images/charts storage parameters when type is "gcs"
     ## @param persistence.imageChartStorage.gcs.bucket GCS storage type setting: Bucket name
+    ## @param persistence.imageChartStorage.gcs.encodedkeySecret If .name is set, will read the key from existing secret from key .key in secret of name .name instead
     ## @param persistence.imageChartStorage.gcs.encodedkey GCS storage type setting: Base64 encoded key
     ## @param persistence.imageChartStorage.gcs.rootdirectory GCS storage type setting: Root directory name
     ## @param persistence.imageChartStorage.gcs.chunksize GCS storage type setting: Chunk size name
@@ -374,6 +375,9 @@ persistence:
       bucket: bucketname
       ## The base64 encoded json file which contains the gcs key (file's content)
       ##
+      encodedkeySecret:
+        name: ""
+        key: "encodedkey"
       encodedkey: base64-encoded-json-key-file
       rootdirectory: ""
       chunksize: ""
