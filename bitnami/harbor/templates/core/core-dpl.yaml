@@ -191,6 +191,13 @@ spec:
                   name: {{ .Values.harborAdminPasswordSecret.name }}
                   key: {{ .Values.harborAdminPasswordSecret.key }}
             {{- end }}
+            {{- if .Values.externalDatabase.passwordSecret.name }}
+            - name: POSTGRESQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.externalDatabase.passwordSecret.name }}
+                  key: {{ .Values.externalDatabase.passwordSecret.key }}
+            {{- end }}
             {{- if .Values.core.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.core.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
