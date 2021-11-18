@@ -163,6 +163,12 @@ spec:
                 name: {{ .Values.registry.credentials.htpasswdSecret.name }}
                 key: {{ .Values.registry.credentials.htpasswdSecret.key }}
             {{- end }}
+            {{- if .Values.registry.secretSecret.name }}
+            - name: REGISTRY_HTTP_SECRET
+              valueFrom:
+                name: {{ .Values.registry.secretSecret.name }}
+                key: {{ .Values.registry.secretSecret.key }}
+            {{- end }}
             {{- if .Values.persistence.imageChartStorage.azure.accountkeySecret.name }}
             - name: REGISTRY_STORAGE_AZURE_ACCOUNTKEY
               valueFrom:

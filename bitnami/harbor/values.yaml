@@ -1690,10 +1690,14 @@ registry:
   automountServiceAccountToken: false
   ## @param registry.secret Secret is used to secure the upload state from client and registry storage backend. See: https://github.com/docker/distribution/blob/master/docs/configuration.md
   ## and registry storage backend.
+  ## @param registry.secretSecret If .name is set, will read the secret from existing secret from key .key in secret of name .name instead
   ## See: https://github.com/docker/distribution/blob/master/docs/configuration.md#http
   ## If a secret key is not specified, Helm will generate one.
   ## Must be a string of 16 chars.
   ##
+  secretSecret:
+    name: ""
+    key: secret
   secret: ""
   ## @param registry.relativeurls Make the registry return relative URLs in Location headers. The client is responsible for resolving the correct URL.
   ##
