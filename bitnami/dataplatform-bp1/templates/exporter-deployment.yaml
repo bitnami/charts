@@ -151,7 +151,7 @@ spec:
       volumes:
         - name: exporter-config
           configMap:
-            name: {{ include "dataplatform.exporter-name" . }}-configuration
+            name: {{- include "dataplatform.exporter-name" . }}-configuration
         {{- if .Values.dataplatform.exporter.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.dataplatform.exporter.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
