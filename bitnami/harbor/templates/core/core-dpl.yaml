@@ -146,8 +146,13 @@ spec:
             - name: CORE_SECRET
               valueFrom:
                 secretKeyRef:
+                  {{- if .Values.core.secretSecret }}
+                  name: {{ .Values.core.secretSecret.name }}
+                  key: {{ .Values.core.secretSecret.key }}
+                  {{- else }}
                   name: {{ include "harbor.core" . }}
                   key: secret
+                  {{- end }}
             - name: JOBSERVICE_SECRET
               valueFrom:
                 secretKeyRef:
