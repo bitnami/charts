@@ -1,0 +1,37 @@
+{{- if and .Values.networkPolicy.enabled .Values.replication.enabled .Values.networkPolicy.ingressRules.readReplicasAccessOnlyFrom.enabled }}
+apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
+kind: NetworkPolicy
+metadata:
+  name: {{ printf "%s-ingress-readreplicas" (include "common.names.fullname" .) }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/component: read
+      {{- include "common.labels.standard" . | nindent 6 }}
+  ingress:
+    {{- if and .Values.networkPolicy.ingressRules.readReplicasAccessOnlyFrom.enabled (or .Values.networkPolicy.ingressRules.readReplicasAccessOnlyFrom.namespaceSelector .Values.networkPolicy.ingressRules.readReplicasAccessOnlyFrom.podSelector) }}
+    - from:
+        {{- if .Values.networkPolicy.ingressRules.readReplicasAccessOnlyFrom.namespaceSelector }}
+        - namespaceSelector:
+            matchLabels:
+              {{- include "common.tplvalues.render" (dict "value" .Values.networkPolicy.ingressRules.readReplicasAccessOnlyFrom.namespaceSelector "context" $) | nindent 14 }}
+        {{- end }}
+        {{- if .Values.networkPolicy.ingressRules.readReplicasAccessOnlyFrom.podSelector }}
+        - podSelector:
+            matchLabels:
+              {{- include "common.tplvalues.render" (dict "value" .Values.networkPolicy.ingressRules.readReplicasAccessOnlyFrom.podSelector "context" $) | nindent 14 }}
+        {{- end }}
+      ports:
+        - port: {{ template "postgresql.port" . }}
+    {{- end }}
+    {{- if .Values.networkPolicy.ingressRules.readReplicasAccessOnlyFrom.customRules }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.networkPolicy.ingressRules.readReplicasAccessOnlyFrom.customRules "context" $) | nindent 4 }}
+    {{- end }}
+{{- end }}
