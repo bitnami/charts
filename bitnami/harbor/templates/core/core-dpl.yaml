@@ -184,6 +184,13 @@ spec:
                   name: {{ .Values.core.csrfKeySecret.name }}
                   key: {{ .Values.core.csrfKeySecret.key }}
             {{- end }}
+            {{- if .Values.harborAdminPasswordSecret.name }}
+            - name: HARBOR_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.harborAdminPasswordSecret.name }}
+                  key: {{ .Values.harborAdminPasswordSecret.key }}
+            {{- end }}
             {{- if .Values.core.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.core.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
