@@ -1329,10 +1329,14 @@ jobservice:
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
+  ## @param jobservice.secretSecret If .name is set, will read the secret from existing secret from key .key in secret of name .name instead
   ## @param jobservice.secret Secret used when the job service communicates with other components. If a secret key is not specified, Helm will generate one. Must be a string of 16 chars.
   ## If a secret key is not specified, Helm will generate one.
   ## Must be a string of 16 chars.
   ##
+  secretSecret:
+    name: ""
+    key: secret
   secret: ""
   ## @param jobservice.automountServiceAccountToken Automount service account token
   ##

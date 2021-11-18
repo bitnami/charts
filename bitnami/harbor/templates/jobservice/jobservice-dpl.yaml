@@ -146,8 +146,13 @@ spec:
             - name: JOBSERVICE_SECRET
               valueFrom:
                 secretKeyRef:
+                  {{- if .Values.jobservice.secretSecret.name }}
+                  name: {{ .Values.jobservice.secretSecret.name }}
+                  key: {{ .Values.jobservice.secretSecret.key }}
+                  {{- else }}
                   name: {{ include "harbor.jobservice" . }}
                   key: secret
+                  {{- end }}
             {{- if .Values.internalTLS.enabled }}
             - name: INTERNAL_TLS_ENABLED
               value: "true"
