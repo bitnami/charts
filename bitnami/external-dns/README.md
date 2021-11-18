@@ -59,6 +59,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `nameOverride`     | String to partially override external-dns.fullname template (will maintain the release name) | `""`            |
 | `fullnameOverride` | String to fully override external-dns.fullname template                                      | `""`            |
 | `clusterDomain`    | Kubernetes Cluster Domain                                                                    | `cluster.local` |
+| `extraDeploy`      | Array of extra objects to deploy with the release                                            | `[]`            |
 
 
 ### external-dns parameters
