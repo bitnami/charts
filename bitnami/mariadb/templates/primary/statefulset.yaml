@@ -18,14 +18,9 @@ spec:
     matchLabels: {{ include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: primary
   serviceName: {{ include "mariadb.primary.fullname" . }}
-  updateStrategy:
-    type: {{ .Values.primary.updateStrategy }}
-    {{- if (eq "Recreate" .Values.primary.updateStrategy) }}
-    rollingUpdate: null
-    {{- else if .Values.primary.rollingUpdatePartition }}
-    rollingUpdate:
-      partition: {{ .Values.primary.rollingUpdatePartition }}
-    {{- end }}
+  {{- if .Values.primary.updateStrategy }}
+  updateStrategy: {{- toYaml .Values.primary.updateStrategy | nindent 4 }}
+  {{- end }}
   template:
     metadata:
       annotations:
@@ -37,6 +32,9 @@ spec:
         {{- end }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: primary
+        {{- if .Values.primary.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.primary.podLabels "context" $) | nindent 8 }}
+        {{- end }}
         {{- if .Values.commonLabels }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
         {{- end }}
@@ -45,8 +43,8 @@ spec:
       {{- if .Values.primary.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.primary.hostAliases "context" $) | nindent 8 }}
       {{- end }}
-      {{- if .Values.schedulerName }}
-      schedulerName: {{ .Values.schedulerName | quote }}
+      {{- if or .Values.primary.schedulerName .Values.schedulerName }}
+      schedulerName: {{ (coalesce .Values.primary.schedulerName .Values.schedulerName) | quote }}
       {{- end }}
       serviceAccountName: {{ template "mariadb.serviceAccountName" . }}
       {{- if .Values.primary.affinity }}
@@ -62,6 +60,9 @@ spec:
       {{- end }}
       {{- if .Values.primary.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.primary.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.primary.schedulerName }}
+      schedulerName: {{ .Values.primary.schedulerName }}
       {{- end }}
       {{- if .Values.primary.topologySpreadConstraints }}
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.primary.topologySpreadConstraints "context" $) | nindent 8 }}
@@ -117,6 +118,9 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
           {{- else if .Values.primary.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.primary.args "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.primary.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.primary.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           env:
             - name: BITNAMI_DEBUG
