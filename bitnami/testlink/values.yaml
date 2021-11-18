@@ -488,6 +488,7 @@ networkPolicy:
     ##       - namespaceSelector:
     ##           matchLabels:
     ##             label: example
+    ##
     customBackendSelector: {}
     ## Allow only from the indicated:
     accessOnlyFrom:
