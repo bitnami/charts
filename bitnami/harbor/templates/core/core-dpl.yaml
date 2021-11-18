@@ -250,9 +250,15 @@ spec:
                 path: app.conf
         - name: secret-key
           secret:
+            {{- if .Values.core.secretKeySecret.name }}
+            secretName: {{ .Values.core.secretKeySecret.name }}
+            items:
+              - key: {{ .Values.core.secretKeySecret.key }}
+            {{- else }}
             secretName: {{ include "harbor.core" . }}
             items:
               - key: secretKey
+            {{- end }}
                 path: key
         {{- if .Values.caBundleSecretName }}
 {{ include "harbor.caBundleVolume" . | indent 8 }}

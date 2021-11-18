@@ -919,10 +919,14 @@ core:
   ## @param core.uaaSecretName If using external UAA auth which has a self signed cert, you can provide a pre-created secret containing it under the key `ca.crt`.
   ##
   uaaSecretName: ""
+  ## @param core.secretKeySecret If .name is set, will read the key from existing secret from key .key in secret of name .name instead
   ## @param core.secretKey The key used for encryption. Must be a string of 16 chars
   ## e.g:
   ## secretKey: "not-a-secure-string"
   ##
+  secretKeySecret:
+    name: ""
+    key: secretKey
   secretKey: ""
   ## @param core.updateStrategy.type Update strategy - only really applicable for deployments with RWO PVs attached
   ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
