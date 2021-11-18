@@ -105,6 +105,12 @@ spec:
           env:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.trivyImage.debug | quote }}
+            {{- if .Values.trivy.gitHubTokenSecret.name }}
+            - name: SCANNER_TRIVY_GITHUB_TOKEN
+              valueFrom:
+                name: {{.Values.trivy.gitHubTokenSecret.name }}
+                key: {{.Values.trivy.gitHubTokenSecret.key }}
+            {{- end }}
             {{- if .Values.trivy.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.trivy.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}

@@ -2825,6 +2825,11 @@ trivy:
   ## https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line
   ##
   gitHubToken: ""
+  ## @param trivy.gitHubTokenSecret.name If set will read the token from a secret of this name instead
+  ## @param trivy.gitHubTokenSecret.key the key inside the secret to read from
+  gitHubTokenSecret:
+    name: ""
+    key: "token"
   ## @param trivy.skipUpdate The flag to disable Trivy DB downloads from GitHub
   ## You might want to set the value of this flag to `true` in test or CI/CD environments to avoid GitHub rate limiting issues.
   ## If the value is set to `true` you have to manually download the `trivy.db` file and mount it in the
