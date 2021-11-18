@@ -86,7 +86,9 @@ spec:
             {{- if .Values.operator.args.zapTimeEncoding }}
             - --zap-time-encoding={{ .Values.operator.args.zapTimeEncoding }}
             {{- end }}
+            {{- if .Values.operator.args.extraArgs }}
             {{- include "common.tplvalues.render" (dict "value" .Values.operator.args.extraArgs "context" $) | nindent 12 }}
+            {{- end }}
         {{- if .Values.operator.resources }}
           resources: {{- toYaml .Values.operator.resources | nindent 12 }}
         {{- end }}
