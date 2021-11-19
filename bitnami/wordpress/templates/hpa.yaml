@@ -36,4 +36,3 @@ spec:
             averageUtilization: {{ .Values.autoscaling.targetCPU }}
     {{- end }}
 {{- end }}
-
