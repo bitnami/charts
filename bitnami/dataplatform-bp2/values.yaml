@@ -1279,17 +1279,17 @@ wavefront:
         cpu: 200m
         memory: 10Mi
     discovery:
+      ## @param wavefront.collector.discovery.enabled Rules based and Prometheus endpoints auto-discovery
+      ##
       enabled: true
-      ## Whether to enable runtime discovery configurations
+      ## @param wavefront.collector.discovery.enableRuntimeConfigs Enable runtime discovery rules
       ## Ref: https://github.com/wavefrontHQ/wavefront-collector-for-kubernetes/blob/master/docs/discovery.md#runtime-configurations
       ##
       enableRuntimeConfigs: true
-      ## Can be used to add additional discovery rules
+      ## @param wavefront.collector.discovery.config [array] Configuration for rules based auto-discovery
       ##
       ## Example:
       ## config:
-        ## auto-discover kafka-exporter
-        ##
       ##  - name: kafka-discovery
       ##    type: prometheus
       ##    selectors:
@@ -1299,8 +1299,6 @@ wavefront:
       ##    path: /metrics
       ##    scheme: http
       ##    prefix: kafka.
-        ## auto-discover jmx exporter
-        ##
       ##  - name: kafka-jmx-discovery
       ##    type: prometheus
       ##    selectors:
@@ -1310,8 +1308,6 @@ wavefront:
       ##    path: /metrics
       ##    scheme: http
       ##    prefix: kafkajmx.
-        ## auto-discover elasticsearch
-        ##
       ##  - name: elasticsearch-discovery
       ##    type: prometheus
       ##    selectors:
@@ -1320,8 +1316,6 @@ wavefront:
       ##    port: 9114
       ##    path: /metrics
       ##    scheme: http
-        ## auto-discover logstash
-        ##
       ##  - name: logstash-discovery
       ##    type: prometheus
       ##    selectors:
@@ -1330,8 +1324,6 @@ wavefront:
       ##    port: 9198
       ##    path: /metrics
       ##    scheme: http
-        ## auto-discover spark
-        ##
       ##  - name: spark-worker-discovery
       ##    type: prometheus
       ##    selectors:
@@ -1341,8 +1333,6 @@ wavefront:
       ##    path: /metrics/
       ##    scheme: http
       ##    prefix: spark.
-        ## auto-discover spark
-        ##
       ##  - name: spark-master-discovery
       ##    type: prometheus
       ##    selectors:
