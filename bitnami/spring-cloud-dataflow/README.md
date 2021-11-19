@@ -59,6 +59,7 @@ helm uninstall my-release
 | ------------------ | ------------------------------------------------------------------------------------- | --------------- |
 | `nameOverride`     | String to partially override scdf.fullname template (will maintain the release name). | `""`            |
 | `fullnameOverride` | String to fully override scdf.fullname template.                                      | `""`            |
+| `commonLabels`     | Labels to add to all deployed objects                                                 | `{}`            |
 | `kubeVersion`      | Force target Kubernetes version (using Helm capabilities if not set)                  | `""`            |
 | `clusterDomain`    | Default Kubernetes cluster domain                                                     | `cluster.local` |
 | `extraDeploy`      | Array of extra objects to deploy with the release                                     | `[]`            |
