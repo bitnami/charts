@@ -383,7 +383,7 @@ contour:
   ## @param contour.extraEnvVarsSecret Secret containing extra env vars to be added to all Contour containers
   ##
   extraEnvVarsSecret: ""
-  ## @param contour.ingressClass.name Name of the ingress class to route through this controller
+  ## @param contour.ingressClass.name Name of the ingress class to route through this controller.
   ## @param contour.ingressClass.create Whether to create or not the IngressClass resource
   ## @param contour.ingressClass.default Mark IngressClass resource as default for cluster
   ##
@@ -394,7 +394,7 @@ contour:
   ## ingressClass: contour
   ##
   ingressClass:
-    name: contour
+    name: ""
     create: true
     default: true
 
