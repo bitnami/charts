@@ -239,15 +239,15 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.additionalRules`    | Additional NetworkPolicy rules                                                                                                   | `{}`                     |
 
 
-### RBAC parameters
+### RBAC parameter
 
-| Name                    | Description                                               | Value   |
-| ----------------------- | --------------------------------------------------------- | ------- |
-| `serviceAccount.create` | Enable the creation of a ServiceAccount for Keycloak pods | `true`  |
-| `serviceAccount.name`   | Name of the created ServiceAccount                        | `""`    |
-| `serviceAccount.automountServiceAccountToken` | Auto-mount the service account token in the pod     | `false` |
-| `rbac.create`           | Whether to create and use RBAC resources or not           | `false` |
-| `rbac.rules`            | Custom RBAC rules                                         | `[]`    |
+| Name                                          | Description                                               | Value   |
+| --------------------------------------------- | --------------------------------------------------------- | ------- |
+| `serviceAccount.create`                       | Enable the creation of a ServiceAccount for Keycloak pods | `true`  |
+| `serviceAccount.name`                         | Name of the created ServiceAccount                        | `""`    |
+| `serviceAccount.automountServiceAccountToken` | Auto-mount the service account token in the pod           | `false` |
+| `rbac.create`                                 | Whether to create and use RBAC resources or not           | `false` |
+| `rbac.rules`                                  | Custom RBAC rules                                         | `[]`    |
 
 
 ### Other parameters
