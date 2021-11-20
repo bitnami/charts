@@ -157,12 +157,6 @@ spec:
             - name: NO_PROXY
               value: {{ include "harbor.noProxy" . | quote }}
             {{- end }}
-            {{- if .Values.registry.credentials.htpasswdSecret.name }}
-            - name: REGISTRY_HTPASSWD
-              valueFrom:
-                name: {{ .Values.registry.credentials.htpasswdSecret.name }}
-                key: {{ .Values.registry.credentials.htpasswdSecret.key }}
-            {{- end }}
             {{- if .Values.registry.secretSecret.name }}
             - name: REGISTRY_HTTP_SECRET
               valueFrom:
@@ -398,9 +392,15 @@ spec:
       volumes:
         - name: registry-htpasswd
           secret:
+            {{- if not .Values.registry.credentials.htpasswdSecret.name }}
+            secretName: {{ .Values.registry.credentials.htpasswdSecret.name }}
+            items:
+              - key: {{ .Values.registry.credentials.htpasswdSecret.key }}
+            {{- else }}
             secretName: {{ template "harbor.registry" . }}
             items:
               - key: REGISTRY_HTPASSWD
+            {{- end }}
                 path: passwd
         - name: registry-root-certificate
           secret:
