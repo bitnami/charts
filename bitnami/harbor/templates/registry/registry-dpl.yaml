@@ -175,13 +175,6 @@ spec:
                 name: {{ .Values.persistence.imageChartStorage.azure.accountkeySecret.name }}
                 key: {{ .Values.persistence.imageChartStorage.azure.accountkeySecret.key }}
             {{- end }}
-            {{- if .Values.persistence.imageChartStorage.gcs.encodedkeySecret.name }}
-            - name: GCS_KEY_DATA
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.persistence.imageChartStorage.gcs.encodedkeySecret.name }}
-                  key: {{ .Values.persistence.imageChartStorage.gcs.encodedkeySecret.key }}
-            {{- end }}
             {{- if .Values.persistence.imageChartStorage.s3.accesskeySecret.name }}
             - name: REGISTRY_STORAGE_S3_ACCESSKEY
               valueFrom:
@@ -437,9 +430,15 @@ spec:
         {{- if and .Values.persistence.enabled (eq .Values.persistence.imageChartStorage.type "gcs") }}
         - name: gcs-key
           secret:
+            {{- if .Values.persistence.imageChartStorage.gcs.encodedkeySecret.name }}
+            secretName: {{ .Values.persistence.imageChartStorage.gcs.encodedkeySecret.name }}
+            items:
+              - key: {{ .Values.persistence.imageChartStorage.gcs.encodedkeySecret.key }}
+            {{- else }}
             secretName: {{ include "harbor.registry" . }}
             items:
               - key: GCS_KEY_DATA
+            {{- end }}
                 path: gcs-key.json
         {{- end }}
         {{- if .Values.persistence.imageChartStorage.caBundleSecretName }}
