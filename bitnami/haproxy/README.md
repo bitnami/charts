@@ -84,6 +84,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.loadBalancerSourceRanges` | haproxy service Load Balancer sources             | `[]`           |
 | `service.externalTrafficPolicy`    | haproxy service external traffic policy           | `Cluster`      |
 | `service.annotations`              | Additional custom annotations for haproxy service | `{}`           |
+| `service.labels`                   | Additional custom labels for haproxy service      | `{}`           |
 
 
 ### HAProxy Parameters

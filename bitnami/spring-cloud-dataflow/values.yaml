@@ -24,6 +24,9 @@ nameOverride: ""
 ## @param fullnameOverride String to fully override scdf.fullname template.
 ##
 fullnameOverride: ""
+## @param commonLabels Labels to add to all deployed objects
+##
+commonLabels: {}
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
 kubeVersion: ""

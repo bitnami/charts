@@ -53,7 +53,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/argo-cd
-  tag: 2.1.6-debian-10-r0
+  tag: 2.1.7-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -536,7 +536,7 @@ server:
   url: ""
 
   ## Argo CD server config. This object will be directly rendered
-  ## @param server.config [string] Argo CD server configuration that will end on the argocd-cm Config Map
+  ## @param server.config [object] Argo CD server configuration that will end on the argocd-cm Config Map
   ## Ref: https://argoproj.github.io/argo-cd/operator-manual/user-management/
   ## E.g:
   ## repositories:
@@ -573,15 +573,12 @@ server:
   ##          clientSecret: $dex.github.clientSecret
   ##          orgs:
   ##          - name: your-github-org
-  config: |
-    {{- if .Values.config.styles }}
-    ui.cssurl: "./custom/custom.styles.css"
-    {{- end }}
+  config:
     ## Argo CD external base URL. Required when configuring SSO. Required when enabling dex.
     ## E.g:
     ## url: https://argocd.example.com
     ##
-    url: {{ .Values.server.url | quote }}
+    url: "{{ .Values.server.url }}"
     ## Argo CD instance label key
     ##
     application.instanceLabelKey: argocd.argoproj.io/instance
@@ -1342,7 +1339,7 @@ dex:
   image:
     registry: docker.io
     repository: bitnami/dex
-    tag: 2.30.0-debian-10-r85
+    tag: 2.30.2-debian-10-r1
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1822,7 +1819,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r235
+    tag: 10-debian-10-r255
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1873,7 +1870,7 @@ redis:
   image:
     registry: docker.io
     repository: bitnami/redis
-    tag: 6.2.6-debian-10-r23
+    tag: 6.2.6-debian-10-r42
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images

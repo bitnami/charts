@@ -95,10 +95,11 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common parameters
 
-| Name                | Description                                | Value |
-| ------------------- | ------------------------------------------ | ----- |
-| `commonLabels`      | Labels to add to all deployed objects      | `{}`  |
-| `commonAnnotations` | Annotations to add to all deployed objects | `{}`  |
+| Name                | Description                                       | Value |
+| ------------------- | ------------------------------------------------- | ----- |
+| `commonLabels`      | Labels to add to all deployed objects             | `{}`  |
+| `commonAnnotations` | Annotations to add to all deployed objects        | `{}`  |
+| `extraDeploy`       | Array of extra objects to deploy with the release | `[]`  |
 
 
 ### Data Platform Chart parameters

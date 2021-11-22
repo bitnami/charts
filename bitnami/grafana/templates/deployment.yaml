@@ -8,6 +8,9 @@ metadata:
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
     app.kubernetes.io/component: grafana
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   replicas: {{ .Values.grafana.replicaCount }}
   selector:
@@ -129,6 +132,18 @@ spec:
             - name: GF_SMTP_HOST
               value: {{ .Values.smtp.host }}
             {{- end }}
+            {{- if .Values.smtp.fromAddress }}
+            - name: GF_SMTP_FROM_ADDRESS
+              value: {{ .Values.smtp.fromAddress }}
+            {{- end }}
+            {{- if .Values.smtp.fromName }}
+            - name: GF_SMTP_FROM_NAME
+              value: {{ .Values.smtp.fromName }}
+            {{- end }}
+            {{- if .Values.smtp.skipVerify }}
+            - name: GF_SMTP_SKIP_VERIFY
+              value: "{{ .Values.smtp.skipVerify }}"
+            {{- end }}
             - name: GF_SMTP_USER
               valueFrom:
                 secretKeyRef:
@@ -186,7 +201,7 @@ spec:
               readOnly: {{ .readOnly }}
             {{- end }}
             {{- if .Values.grafana.extraVolumeMounts }}
-            {{- include "common.tplvalues.render" (dict "value" .Values.grafana.extraVolumeMounts "context" $) | nindent 8 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.grafana.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
           ports:
             - name: dashboard

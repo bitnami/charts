@@ -24,14 +24,14 @@ In order to replicate the container startup scripts execute this command:
 
 {{- else }}
 
-{{- if or (contains .Values.client.service.type "LoadBalancer") (contains .Values.client.service.type "nodePort") }}
+{{- if or (contains .Values.service.type "LoadBalancer") (contains .Values.service.type "nodePort") }}
 {{- if not .Values.auth.enabled }}
 {{ if and (not .Values.networkPolicy.enabled) (.Values.networkPolicy.allowExternal) }}
 
 -------------------------------------------------------------------------------
  WARNING
 
-    By specifying "client.service.type=NodePort/LoadBalancer" and "auth.enabled=false"
+    By specifying "service.type=NodePort/LoadBalancer" and "auth.enabled=false"
     you have most likely exposed the NATS service externally without any authentication
     mechanism.
 
@@ -44,37 +44,37 @@ In order to replicate the container startup scripts execute this command:
 {{- end }}
 {{- end }}
 
-NATS can be accessed via port {{ .Values.client.service.port }} on the following DNS name from within your cluster:
+NATS can be accessed via port {{ .Values.service.ports.client }} on the following DNS name from within your cluster:
 
-   {{ template "common.names.fullname" . }}-client.{{ .Release.Namespace }}.svc.cluster.local
+   {{ include "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
 
 {{- if .Values.auth.enabled }}
 
 To get the authentication credentials, run:
 
-    export NATS_USER=$(kubectl get cm --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} -o jsonpath='{.data.*}' | grep -m 1 user | awk '{print $2}' | tr -d '"')
-    export NATS_PASS=$(kubectl get cm --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} -o jsonpath='{.data.*}' | grep -m 1 password | awk '{print $2}' | tr -d '"')
+    export NATS_USER=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} -o jsonpath='{.data.*}' | base64 --decode | grep -m 1 user | awk '{print $2}' | tr -d '"')
+    export NATS_PASS=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} -o jsonpath='{.data.*}' | base64 --decode | grep -m 1 password | awk '{print $2}' | tr -d '"')
     echo -e "Client credentials:\n\tUser: $NATS_USER\n\tPassword: $NATS_PASS"
 
 {{- end }}
 
-NATS monitoring service can be accessed via port {{ .Values.monitoring.service.port }} on the following DNS name from within your cluster:
+NATS monitoring service can be accessed via port {{ .Values.service.ports.monitoring }} on the following DNS name from within your cluster:
 
-    {{ template "common.names.fullname" . }}-monitoring.{{ .Release.Namespace }}.svc.cluster.local
+    {{ include "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
 
 You can create a Golang pod to be used as a NATS client:
 
-      kubectl run {{ include "common.names.fullname" . }}-client --restart='Never' --image docker.io/bitnami/golang --namespace {{ .Release.Namespace }} --command -- sleep infinity
+      kubectl run {{ include "common.names.fullname" . }}-client --restart='Never' --env="NATS_USER=$NATS_USER" --env="NATS_PASS=$NATS_PASS" --image docker.io/bitnami/golang --namespace {{ .Release.Namespace }} --command -- sleep infinity
       kubectl exec --tty -i {{ include "common.names.fullname" . }}-client --namespace {{ .Release.Namespace }} -- bash
       GO111MODULE=off go get github.com/nats-io/nats.go
       cd $GOPATH/src/github.com/nats-io/nats.go/examples/nats-pub && go install && cd
       cd $GOPATH/src/github.com/nats-io/nats.go/examples/nats-echo && go install && cd
       {{- if .Values.auth.enabled }}
-      nats-echo -s nats://NATS_USER:NATS_PASS@{{ template "common.names.fullname" . }}-client.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.client.service.port }} SomeSubject
-      nats-pub -s nats://NATS_USER:NATS_PASS@{{ template "common.names.fullname" . }}-client.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.client.service.port }} -reply Hi SomeSubject "Hi everyone"
+      nats-echo -s nats://$NATS_USER:$NATS_PASS@{{ include "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.service.ports.client }} SomeSubject
+      nats-pub -s nats://$NATS_USER:$NATS_PASS@{{ include "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.service.ports.client }} -reply Hi SomeSubject "Hi everyone"
       {{- else }}
-      nats-echo -s nats://{{ template "common.names.fullname" . }}-client.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.client.service.port }} SomeSubject
-      nats-pub -s nats://{{ template "common.names.fullname" . }}-client.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.client.service.port }} -reply Hi SomeSubject "Hi everyone"
+      nats-echo -s nats://{{ include "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.service.ports.client }} SomeSubject
+      nats-pub -s nats://{{ include "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.service.ports.client }} -reply Hi SomeSubject "Hi everyone"
       {{- end }}
 
 To access the Monitoring svc from outside the cluster, follow the steps below:
@@ -91,24 +91,24 @@ To access the Monitoring svc from outside the cluster, follow the steps below:
 
 1. Get the NATS monitoring URL by running:
 
-{{- if contains "NodePort" .Values.monitoring.service.type }}
+{{- if contains "NodePort" .Values.service.type }}
 
     export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
-    export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ printf "%s-monitoring" (include "common.names.fullname" .) }})
+    export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "common.names.fullname" . }})
     echo "Monitoring URL: http://$NODE_IP:$NODE_PORT/"
 
-{{- else if contains "LoadBalancer" .Values.monitoring.service.type }}
+{{- else if contains "LoadBalancer" .Values.service.type }}
 
     NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ printf "%s-monitoring" (include "common.names.fullname" .) }}'
+        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ include "common.names.fullname" . }}'
 
-    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ printf "%s-monitoring" (include "common.names.fullname" .) }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
     echo "Monitoring URL: http://$SERVICE_IP/"
 
-{{- else if contains "ClusterIP" .Values.monitoring.service.type }}
+{{- else if contains "ClusterIP" .Values.service.type }}
 
-    echo "Monitoring URL: http://127.0.0.1:{{ .Values.monitoring.service.port }}"
-    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ printf "%s-monitoring" (include "common.names.fullname" .) }} {{ .Values.monitoring.service.port }}:{{ .Values.monitoring.service.port }}
+    echo "Monitoring URL: http://127.0.0.1:{{ .Values.service.ports.monitoring }}"
+    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "common.names.fullname" . }} {{ .Values.service.ports.monitoring }}:{{ .Values.service.ports.monitoring }}
 {{- end }}
 {{- end }}
 
@@ -125,5 +125,6 @@ To access the Monitoring svc from outside the cluster, follow the steps below:
 {{- end }}
 {{- end }}
 
+{{- include "common.warnings.rollingTag" .Values.image }}
+{{- include "common.warnings.rollingTag" .Values.metrics.image }}
 {{- include "nats.validateValues" . -}}
-{{- include "nats.checkRollingTags" . -}}
