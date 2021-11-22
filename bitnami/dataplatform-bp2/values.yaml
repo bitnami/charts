@@ -1298,7 +1298,6 @@ wavefront:
       ##    port: 9308
       ##    path: /metrics
       ##    scheme: http
-      ##    prefix: kafka.
       ##  - name: kafka-jmx-discovery
       ##    type: prometheus
       ##    selectors:
