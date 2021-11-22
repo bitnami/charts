@@ -148,7 +148,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.size`                         | PVC Storage Request for Tomcat volume                                                                                    | `8Gi`               |
 | `persistence.existingClaim`                | An Existing PVC name for Tomcat volume                                                                                   | `""`                |
 | `persistence.selectorLabels`               | Selector labels to use in volume claim template in statefulset                                                           | `{}`                |
-| `networkPolicy.enabled`                    | Enable creation of NetworkPolicy resources.                                                                              | `false`             |
+| `networkPolicy.enabled`                    | Enable creation of NetworkPolicy resources. Only Ingress traffic is filtered for now.                                    | `false`             |
 | `networkPolicy.allowExternal`              | Don't require client label for connections                                                                               | `true`              |
 | `networkPolicy.explicitNamespacesSelector` | A Kubernetes LabelSelector to explicitly select namespaces from which traffic could be allowed                           | `{}`                |
 
