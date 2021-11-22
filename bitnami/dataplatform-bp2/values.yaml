@@ -1342,6 +1342,7 @@ wavefront:
       ##    path: /metrics/
       ##    scheme: http
       ##    prefix: spark.
+      ##
       config: []
   proxy:
     ## Wavefront Proxy resource requests and limits
