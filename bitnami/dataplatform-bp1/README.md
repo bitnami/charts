@@ -412,7 +412,6 @@ Add the below config:
           port: 9308
           path: /metrics
           scheme: http
-          prefix: kafka.
 
         ## auto-discover jmx exporter
         - name: kafka-jmx-discovery
