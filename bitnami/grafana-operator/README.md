@@ -196,6 +196,7 @@ For more information, refer to the [documentation on the differences between the
 | `grafana.secrets`                                           | Extra secrets to mount into the grafana pod                                                   | `[]`                 |
 | `grafana.jsonnetLibrarySelector`                            | Configuring the read for jsonnetLibraries to pull in.                                         | `{}`                 |
 | `grafana.dashboardLabelSelectors`                           | This selects dashboards on the label.                                                         | `{}`                 |
+| `grafana.dashboardNamespaceSelector`                        | This selects dashboards only in the Namespaces that have the specified namespace label.       | `{}`                 |
 | `grafana.livenessProbe.enabled`                             | Enable livenessProbe                                                                          | `true`               |
 | `grafana.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                       | `120`                |
 | `grafana.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                              | `10`                 |
