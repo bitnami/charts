@@ -836,6 +836,7 @@ kafka:
         ## set the LoadBalancer service type to internal only.
         ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
         ## @param kafka.metrics.jmx.service.annotations [object] Exporter service annotation
+        ##
         annotations:
           prometheus.io/scrape: "true"
           prometheus.io/port: "5556"
