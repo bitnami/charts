@@ -153,7 +153,7 @@ spec:
   secrets: {{ toYaml .Values.grafana.secrets | nindent 4 }}
   {{- end }}
   dashboardLabelSelector: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.dashboardLabelSelectors "context" $ ) | nindent 4 }}
-  {{ -if .Values.grafana.dashboardNamespaceSelector }}
+  {{- if .Values.grafana.dashboardNamespaceSelector }}
   dashboardNamespaceSelector: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.dashboardNamespaceSelector "context" $ ) | nindent 4 }}
   {{- end }}
   jsonnet:
