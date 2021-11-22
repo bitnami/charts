@@ -546,6 +546,12 @@ grafana:
   dashboardLabelSelectors:
     - matchLabels:
         app.kubernetes.io/instance: "{{ .Release.Name }}"
+  ## @param grafana.dashboardNamespaceSelector [object] This selects namespaces on the label.
+  ## Ref: https://github.com/grafana-operator/grafana-operator/blob/9bd3f95c0a6ecc9d3e5f9e6c0c5cadf6e87e9232/documentation/multi_namespace_support.md#2-dashboardnamespaceselector
+  ##
+  dashboardNamespaceSelector: []
+    #- matchLabels:
+    #    key: value
   ## Grafana containers' liveness probe
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ## @param grafana.livenessProbe.enabled Enable livenessProbe
