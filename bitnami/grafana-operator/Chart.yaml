@@ -25,4 +25,4 @@ name: grafana-operator
 sources:
   - https://github.com/grafana-operator/grafana-operator
   - https://github.com/bitnami/bitnami-docker-grafana-operator
-version: 1.4.1
+version: 1.5.0
