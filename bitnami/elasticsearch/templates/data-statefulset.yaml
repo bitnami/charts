@@ -71,6 +71,9 @@ spec:
       {{- if .Values.data.securityContext.enabled }}
       securityContext:
         fsGroup: {{ .Values.data.securityContext.fsGroup }}
+      {{- if .Values.data.extraPodSecurityContext }}
+      {{- toYaml .Values.data.extraPodSecurityContext  | nindent 8 }}
+      {{- end }}
       {{- end }}
       {{- if or .Values.data.initContainers .Values.sysctlImage.enabled (and .Values.volumePermissions.enabled .Values.data.persistence.enabled) }}
       initContainers:
@@ -120,6 +123,9 @@ spec:
           {{- if .Values.data.securityContext.enabled }}
           securityContext:
             runAsUser: {{ .Values.data.securityContext.runAsUser }}
+          {{- if .Values.data.extraContainerSecurityContext }}
+          {{- toYaml .Values.data.extraContainerSecurityContext  | nindent 12 }}
+          {{- end }} 
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}

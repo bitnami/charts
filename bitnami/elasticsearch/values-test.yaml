@@ -271,17 +271,11 @@ master:
     fsGroup: 1001
     runAsUser: 1001
   ## If security Context is enabled: Extend securityContext for master nodes on pod level.
-  extraPodSecurityContext: {}
-    ## E.g
-    ## allowPrivilegeEscalation: false
-    ## runAsGroup: 1001
+  extraPodSecurityContext: 
+    extraPodSecurityContext: "master"
   ## If security Context is enabled: Extend securityContext for master nodes on container level.
-  extraContainerSecurityContext: {}
-    ## E.g
-    ## allowPrivilegeEscalation: false
-    ## readOnlyRootFilesystem: true
-    ## capabilities:
-    ##   add: ["NET_ADMIN", "SYS_TIME"]
+  extraContainerSecurityContext:
+    extraContainerSecurityContext: "master"
   ## @param master.podAffinityPreset Master-eligible Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
@@ -539,17 +533,11 @@ coordinating:
     fsGroup: 1001
     runAsUser: 1001
   ## If security Context is enabled: Extend securityContext for coordinating-only nodes on pod level.
-  extraPodSecurityContext: {}
-    ## E.g
-    ## allowPrivilegeEscalation: false
-    ## runAsGroup: 1001
+  extraPodSecurityContext: 
+    extraPodSecurityContext: "coordinating"
   ## If security Context is enabled: Extend securityContext for coordinating-only nodes on container level.
-  extraContainerSecurityContext: {}
-    ## E.g
-    ## allowPrivilegeEscalation: false
-    ## readOnlyRootFilesystem: true
-    ## capabilities:
-    ##   add: ["NET_ADMIN", "SYS_TIME"]
+  extraContainerSecurityContext:
+    extraContainerSecurityContext: "coordinating"
   ## @param coordinating.podAffinityPreset Coordinating Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
@@ -774,17 +762,10 @@ data:
     fsGroup: 1001
     runAsUser: 1001
   ## If security Context is enabled: Extend securityContext for data nodes on pod level.
-  extraPodSecurityContext: {}
-    ## E.g
-    ## allowPrivilegeEscalation: false
-    ## runAsGroup: 1001
-  ## If security Context is enabled: Extend securityContext for data nodes on container level.
-  extraContainerSecurityContext: {}
-    ## E.g
-    ## allowPrivilegeEscalation: false
-    ## readOnlyRootFilesystem: true
-    ## capabilities:
-    ##   add: ["NET_ADMIN", "SYS_TIME"]
+  extraPodSecurityContext:
+    extraPodSecurityContext: "data"
+  extraContainerSecurityContext:
+    extraContainerSecurityContext: "data"
   ## @param data.podAffinityPreset Data Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
@@ -984,7 +965,7 @@ data:
 ingest:
   ## @param ingest.enabled Enable ingest nodes
   ##
-  enabled: false
+  enabled: true
   ## @param ingest.name Ingest node pod name
   ##
   name: ingest
@@ -1028,17 +1009,11 @@ ingest:
     fsGroup: 1001
     runAsUser: 1001
   ## If security Context is enabled: Extend securityContext for ingest nodes on pod level.
-  extraPodSecurityContext: {}
-    ## E.g
-    ## allowPrivilegeEscalation: false
-    ## runAsGroup: 1001
+  extraPodSecurityContext:
+    extraPodSecurityContext: "ingest"
   ## If security Context is enabled: Extend securityContext for ingest nodes on container level.
-  extraContainerSecurityContext: {}
-    ## E.g
-    ## allowPrivilegeEscalation: false
-    ## readOnlyRootFilesystem: true
-    ## capabilities:
-    ##   add: ["NET_ADMIN", "SYS_TIME"]
+  extraContainerSecurityContext:
+    extraContainerSecurityContext: "ingest"
   ## @param ingest.podAffinityPreset Ingest Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
