@@ -550,8 +550,8 @@ grafana:
   ## Ref: https://github.com/grafana-operator/grafana-operator/blob/master/documentation/multi_namespace_support.md#2-dashboardnamespaceselector
   ##
   dashboardNamespaceSelector: []
-    #- matchLabels:
-    #    key: value
+  # - matchLabels:
+  #     key: value
   ## Grafana containers' liveness probe
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ## @param grafana.livenessProbe.enabled Enable livenessProbe
