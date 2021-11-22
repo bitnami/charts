@@ -548,10 +548,12 @@ grafana:
         app.kubernetes.io/instance: "{{ .Release.Name }}"
   ## @param grafana.dashboardNamespaceSelector Watch for dashboards only in the Namespaces that have the specified namespace label
   ## Ref: https://github.com/grafana-operator/grafana-operator/blob/master/documentation/multi_namespace_support.md#2-dashboardnamespaceselector
+  ## e.g:
+  ## dashboardNamespaceSelector:
+  ##   - matchLabels:
+  ##     key: value
   ##
   dashboardNamespaceSelector: []
-  # - matchLabels:
-  #     key: value
   ## Grafana containers' liveness probe
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ## @param grafana.livenessProbe.enabled Enable livenessProbe
