@@ -546,7 +546,7 @@ grafana:
   dashboardLabelSelectors:
     - matchLabels:
         app.kubernetes.io/instance: "{{ .Release.Name }}"
-  ## @param grafana.dashboardNamespaceSelector [object] This selects namespaces on the label.
+  ## @param grafana.dashboardNamespaceSelector Watch for dashboards only in the Namespaces that have the specified namespace label
   ## Ref: https://github.com/grafana-operator/grafana-operator/blob/master/documentation/multi_namespace_support.md#2-dashboardnamespaceselector
   ##
   dashboardNamespaceSelector: []
