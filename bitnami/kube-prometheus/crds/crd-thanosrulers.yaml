@@ -1,11 +1,11 @@
-# https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.51.0/example/prometheus-operator-crd/monitoring.coreos.com_thanosrulers.yaml
+# https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.52.0/example/prometheus-operator-crd/monitoring.coreos.com_thanosrulers.yaml
 
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.4.1
+    controller-gen.kubebuilder.io/version: v0.6.2
   creationTimestamp: null
   name: thanosrulers.monitoring.coreos.com
 spec:
@@ -322,10 +322,71 @@ spec:
                                         The requirements are ANDed.
                                       type: object
                                   type: object
+                                namespaceSelector:
+                                  description: A label query over the set of namespaces
+                                    that the term applies to. The term is applied
+                                    to the union of the namespaces selected by this
+                                    field and the ones listed in the namespaces field.
+                                    null selector and null or empty namespaces list
+                                    means "this pod's namespace". An empty selector
+                                    ({}) matches all namespaces. This field is beta-level
+                                    and is only honored when PodAffinityNamespaceSelector
+                                    feature is enabled.
+                                  properties:
+                                    matchExpressions:
+                                      description: matchExpressions is a list of label
+                                        selector requirements. The requirements are
+                                        ANDed.
+                                      items:
+                                        description: A label selector requirement
+                                          is a selector that contains values, a key,
+                                          and an operator that relates the key and
+                                          values.
+                                        properties:
+                                          key:
+                                            description: key is the label key that
+                                              the selector applies to.
+                                            type: string
+                                          operator:
+                                            description: operator represents a key's
+                                              relationship to a set of values. Valid
+                                              operators are In, NotIn, Exists and
+                                              DoesNotExist.
+                                            type: string
+                                          values:
+                                            description: values is an array of string
+                                              values. If the operator is In or NotIn,
+                                              the values array must be non-empty.
+                                              If the operator is Exists or DoesNotExist,
+                                              the values array must be empty. This
+                                              array is replaced during a strategic
+                                              merge patch.
+                                            items:
+                                              type: string
+                                            type: array
+                                        required:
+                                        - key
+                                        - operator
+                                        type: object
+                                      type: array
+                                    matchLabels:
+                                      additionalProperties:
+                                        type: string
+                                      description: matchLabels is a map of {key,value}
+                                        pairs. A single {key,value} in the matchLabels
+                                        map is equivalent to an element of matchExpressions,
+                                        whose key field is "key", the operator is
+                                        "In", and the values array contains only "value".
+                                        The requirements are ANDed.
+                                      type: object
+                                  type: object
                                 namespaces:
-                                  description: namespaces specifies which namespaces
-                                    the labelSelector applies to (matches against);
-                                    null or empty list means "this pod's namespace"
+                                  description: namespaces specifies a static list
+                                    of namespace names that the term applies to. The
+                                    term is applied to the union of the namespaces
+                                    listed in this field and the ones selected by
+                                    namespaceSelector. null or empty namespaces list
+                                    and null namespaceSelector means "this pod's namespace"
                                   items:
                                     type: string
                                   type: array
@@ -417,10 +478,66 @@ spec:
                                     requirements are ANDed.
                                   type: object
                               type: object
+                            namespaceSelector:
+                              description: A label query over the set of namespaces
+                                that the term applies to. The term is applied to the
+                                union of the namespaces selected by this field and
+                                the ones listed in the namespaces field. null selector
+                                and null or empty namespaces list means "this pod's
+                                namespace". An empty selector ({}) matches all namespaces.
+                                This field is beta-level and is only honored when
+                                PodAffinityNamespaceSelector feature is enabled.
+                              properties:
+                                matchExpressions:
+                                  description: matchExpressions is a list of label
+                                    selector requirements. The requirements are ANDed.
+                                  items:
+                                    description: A label selector requirement is a
+                                      selector that contains values, a key, and an
+                                      operator that relates the key and values.
+                                    properties:
+                                      key:
+                                        description: key is the label key that the
+                                          selector applies to.
+                                        type: string
+                                      operator:
+                                        description: operator represents a key's relationship
+                                          to a set of values. Valid operators are
+                                          In, NotIn, Exists and DoesNotExist.
+                                        type: string
+                                      values:
+                                        description: values is an array of string
+                                          values. If the operator is In or NotIn,
+                                          the values array must be non-empty. If the
+                                          operator is Exists or DoesNotExist, the
+                                          values array must be empty. This array is
+                                          replaced during a strategic merge patch.
+                                        items:
+                                          type: string
+                                        type: array
+                                    required:
+                                    - key
+                                    - operator
+                                    type: object
+                                  type: array
+                                matchLabels:
+                                  additionalProperties:
+                                    type: string
+                                  description: matchLabels is a map of {key,value}
+                                    pairs. A single {key,value} in the matchLabels
+                                    map is equivalent to an element of matchExpressions,
+                                    whose key field is "key", the operator is "In",
+                                    and the values array contains only "value". The
+                                    requirements are ANDed.
+                                  type: object
+                              type: object
                             namespaces:
-                              description: namespaces specifies which namespaces the
-                                labelSelector applies to (matches against); null or
-                                empty list means "this pod's namespace"
+                              description: namespaces specifies a static list of namespace
+                                names that the term applies to. The term is applied
+                                to the union of the namespaces listed in this field
+                                and the ones selected by namespaceSelector. null or
+                                empty namespaces list and null namespaceSelector means
+                                "this pod's namespace"
                               items:
                                 type: string
                               type: array
@@ -514,10 +631,71 @@ spec:
                                         The requirements are ANDed.
                                       type: object
                                   type: object
+                                namespaceSelector:
+                                  description: A label query over the set of namespaces
+                                    that the term applies to. The term is applied
+                                    to the union of the namespaces selected by this
+                                    field and the ones listed in the namespaces field.
+                                    null selector and null or empty namespaces list
+                                    means "this pod's namespace". An empty selector
+                                    ({}) matches all namespaces. This field is beta-level
+                                    and is only honored when PodAffinityNamespaceSelector
+                                    feature is enabled.
+                                  properties:
+                                    matchExpressions:
+                                      description: matchExpressions is a list of label
+                                        selector requirements. The requirements are
+                                        ANDed.
+                                      items:
+                                        description: A label selector requirement
+                                          is a selector that contains values, a key,
+                                          and an operator that relates the key and
+                                          values.
+                                        properties:
+                                          key:
+                                            description: key is the label key that
+                                              the selector applies to.
+                                            type: string
+                                          operator:
+                                            description: operator represents a key's
+                                              relationship to a set of values. Valid
+                                              operators are In, NotIn, Exists and
+                                              DoesNotExist.
+                                            type: string
+                                          values:
+                                            description: values is an array of string
+                                              values. If the operator is In or NotIn,
+                                              the values array must be non-empty.
+                                              If the operator is Exists or DoesNotExist,
+                                              the values array must be empty. This
+                                              array is replaced during a strategic
+                                              merge patch.
+                                            items:
+                                              type: string
+                                            type: array
+                                        required:
+                                        - key
+                                        - operator
+                                        type: object
+                                      type: array
+                                    matchLabels:
+                                      additionalProperties:
+                                        type: string
+                                      description: matchLabels is a map of {key,value}
+                                        pairs. A single {key,value} in the matchLabels
+                                        map is equivalent to an element of matchExpressions,
+                                        whose key field is "key", the operator is
+                                        "In", and the values array contains only "value".
+                                        The requirements are ANDed.
+                                      type: object
+                                  type: object
                                 namespaces:
-                                  description: namespaces specifies which namespaces
-                                    the labelSelector applies to (matches against);
-                                    null or empty list means "this pod's namespace"
+                                  description: namespaces specifies a static list
+                                    of namespace names that the term applies to. The
+                                    term is applied to the union of the namespaces
+                                    listed in this field and the ones selected by
+                                    namespaceSelector. null or empty namespaces list
+                                    and null namespaceSelector means "this pod's namespace"
                                   items:
                                     type: string
                                   type: array
@@ -609,10 +787,66 @@ spec:
                                     requirements are ANDed.
                                   type: object
                               type: object
+                            namespaceSelector:
+                              description: A label query over the set of namespaces
+                                that the term applies to. The term is applied to the
+                                union of the namespaces selected by this field and
+                                the ones listed in the namespaces field. null selector
+                                and null or empty namespaces list means "this pod's
+                                namespace". An empty selector ({}) matches all namespaces.
+                                This field is beta-level and is only honored when
+                                PodAffinityNamespaceSelector feature is enabled.
+                              properties:
+                                matchExpressions:
+                                  description: matchExpressions is a list of label
+                                    selector requirements. The requirements are ANDed.
+                                  items:
+                                    description: A label selector requirement is a
+                                      selector that contains values, a key, and an
+                                      operator that relates the key and values.
+                                    properties:
+                                      key:
+                                        description: key is the label key that the
+                                          selector applies to.
+                                        type: string
+                                      operator:
+                                        description: operator represents a key's relationship
+                                          to a set of values. Valid operators are
+                                          In, NotIn, Exists and DoesNotExist.
+                                        type: string
+                                      values:
+                                        description: values is an array of string
+                                          values. If the operator is In or NotIn,
+                                          the values array must be non-empty. If the
+                                          operator is Exists or DoesNotExist, the
+                                          values array must be empty. This array is
+                                          replaced during a strategic merge patch.
+                                        items:
+                                          type: string
+                                        type: array
+                                    required:
+                                    - key
+                                    - operator
+                                    type: object
+                                  type: array
+                                matchLabels:
+                                  additionalProperties:
+                                    type: string
+                                  description: matchLabels is a map of {key,value}
+                                    pairs. A single {key,value} in the matchLabels
+                                    map is equivalent to an element of matchExpressions,
+                                    whose key field is "key", the operator is "In",
+                                    and the values array contains only "value". The
+                                    requirements are ANDed.
+                                  type: object
+                              type: object
                             namespaces:
-                              description: namespaces specifies which namespaces the
-                                labelSelector applies to (matches against); null or
-                                empty list means "this pod's namespace"
+                              description: namespaces specifies a static list of namespace
+                                names that the term applies to. The term is applied
+                                to the union of the namespaces listed in this field
+                                and the ones selected by namespaceSelector. null or
+                                empty namespaces list and null namespaceSelector means
+                                "this pod's namespace"
                               items:
                                 type: string
                               type: array
@@ -633,8 +867,8 @@ spec:
                 type: object
               alertDropLabels:
                 description: AlertDropLabels configure the label names which should
-                  be dropped in ThanosRuler alerts. If `labels` field is not provided,
-                  `thanos_ruler_replica` will be dropped in alerts by default.
+                  be dropped in ThanosRuler alerts. The replica label `thanos_ruler_replica`
+                  will always be dropped in alerts.
                 items:
                   type: string
                 type: array
@@ -643,6 +877,31 @@ spec:
                   'Source' field of all alerts. Maps to the '--alert.query-url' CLI
                   arg.
                 type: string
+              alertRelabelConfigFile:
+                description: AlertRelabelConfigFile specifies the path of the alert
+                  relabeling configuration file. When used alongside with AlertRelabelConfigs,
+                  alertRelabelConfigFile takes precedence.
+                type: string
+              alertRelabelConfigs:
+                description: 'AlertRelabelConfigs configures alert relabeling in ThanosRuler.
+                  Alert relabel configurations must have the form as specified in
+                  the official Prometheus documentation: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#alert_relabel_configs
+                  Alternative to AlertRelabelConfigFile, and lower order priority.'
+                properties:
+                  key:
+                    description: The key of the secret to select from.  Must be a
+                      valid secret key.
+                    type: string
+                  name:
+                    description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                      TODO: Add other useful fields. apiVersion, kind, uid?'
+                    type: string
+                  optional:
+                    description: Specify whether the Secret or its key must be defined
+                    type: boolean
+                required:
+                - key
+                type: object
               alertmanagersConfig:
                 description: Define configuration for connecting to alertmanager.  Only
                   available with thanos v0.10.0 and higher.  Maps to the `alertmanagers.config`
@@ -690,10 +949,11 @@ spec:
                         CMD is used if this is not provided. Variable references $(VAR_NAME)
                         are expanded using the container''s environment. If a variable
                         cannot be resolved, the reference in the input string will
-                        be unchanged. The $(VAR_NAME) syntax can be escaped with a
-                        double $$, ie: $$(VAR_NAME). Escaped references will never
-                        be expanded, regardless of whether the variable exists or
-                        not. Cannot be updated. More info: https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#running-a-command-in-a-shell'
+                        be unchanged. Double $$ are reduced to a single $, which allows
+                        for escaping the $(VAR_NAME) syntax: i.e. "$$(VAR_NAME)" will
+                        produce the string literal "$(VAR_NAME)". Escaped references
+                        will never be expanded, regardless of whether the variable
+                        exists or not. Cannot be updated. More info: https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#running-a-command-in-a-shell'
                       items:
                         type: string
                       type: array
@@ -702,10 +962,12 @@ spec:
                         The docker image''s ENTRYPOINT is used if this is not provided.
                         Variable references $(VAR_NAME) are expanded using the container''s
                         environment. If a variable cannot be resolved, the reference
-                        in the input string will be unchanged. The $(VAR_NAME) syntax
-                        can be escaped with a double $$, ie: $$(VAR_NAME). Escaped
-                        references will never be expanded, regardless of whether the
-                        variable exists or not. Cannot be updated. More info: https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#running-a-command-in-a-shell'
+                        in the input string will be unchanged. Double $$ are reduced
+                        to a single $, which allows for escaping the $(VAR_NAME) syntax:
+                        i.e. "$$(VAR_NAME)" will produce the string literal "$(VAR_NAME)".
+                        Escaped references will never be expanded, regardless of whether
+                        the variable exists or not. Cannot be updated. More info:
+                        https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#running-a-command-in-a-shell'
                       items:
                         type: string
                       type: array
@@ -722,13 +984,15 @@ spec:
                             type: string
                           value:
                             description: 'Variable references $(VAR_NAME) are expanded
-                              using the previous defined environment variables in
+                              using the previously defined environment variables in
                               the container and any service environment variables.
                               If a variable cannot be resolved, the reference in the
-                              input string will be unchanged. The $(VAR_NAME) syntax
-                              can be escaped with a double $$, ie: $$(VAR_NAME). Escaped
-                              references will never be expanded, regardless of whether
-                              the variable exists or not. Defaults to "".'
+                              input string will be unchanged. Double $$ are reduced
+                              to a single $, which allows for escaping the $(VAR_NAME)
+                              syntax: i.e. "$$(VAR_NAME)" will produce the string
+                              literal "$(VAR_NAME)". Escaped references will never
+                              be expanded, regardless of whether the variable exists
+                              or not. Defaults to "".'
                             type: string
                           valueFrom:
                             description: Source for the environment variable's value.
@@ -755,9 +1019,10 @@ spec:
                                 type: object
                               fieldRef:
                                 description: 'Selects a field of the pod: supports
-                                  metadata.name, metadata.namespace, metadata.labels,
-                                  metadata.annotations, spec.nodeName, spec.serviceAccountName,
-                                  status.hostIP, status.podIP, status.podIPs.'
+                                  metadata.name, metadata.namespace, `metadata.labels[''<KEY>'']`,
+                                  `metadata.annotations[''<KEY>'']`, spec.nodeName,
+                                  spec.serviceAccountName, status.hostIP, status.podIP,
+                                  status.podIPs.'
                                 properties:
                                   apiVersion:
                                     description: Version of the schema the FieldPath
@@ -1177,6 +1442,23 @@ spec:
                           required:
                           - port
                           type: object
+                        terminationGracePeriodSeconds:
+                          description: Optional duration in seconds the pod needs
+                            to terminate gracefully upon probe failure. The grace
+                            period is the duration in seconds after the processes
+                            running in the pod are sent a termination signal and the
+                            time when the processes are forcibly halted with a kill
+                            signal. Set this value longer than the expected cleanup
+                            time for your process. If this value is nil, the pod's
+                            terminationGracePeriodSeconds will be used. Otherwise,
+                            this value overrides the value provided by the pod spec.
+                            Value must be non-negative integer. The value zero indicates
+                            stop immediately via the kill signal (no opportunity to
+                            shut down). This is a beta field and requires enabling
+                            ProbeTerminationGracePeriod feature gate. Minimum value
+                            is 1. spec.terminationGracePeriodSeconds is used if unset.
+                          format: int64
+                          type: integer
                         timeoutSeconds:
                           description: 'Number of seconds after which the probe times
                             out. Defaults to 1 second. Minimum value is 1. More info:
@@ -1345,6 +1627,23 @@ spec:
                           required:
                           - port
                           type: object
+                        terminationGracePeriodSeconds:
+                          description: Optional duration in seconds the pod needs
+                            to terminate gracefully upon probe failure. The grace
+                            period is the duration in seconds after the processes
+                            running in the pod are sent a termination signal and the
+                            time when the processes are forcibly halted with a kill
+                            signal. Set this value longer than the expected cleanup
+                            time for your process. If this value is nil, the pod's
+                            terminationGracePeriodSeconds will be used. Otherwise,
+                            this value overrides the value provided by the pod spec.
+                            Value must be non-negative integer. The value zero indicates
+                            stop immediately via the kill signal (no opportunity to
+                            shut down). This is a beta field and requires enabling
+                            ProbeTerminationGracePeriod feature gate. Minimum value
+                            is 1. spec.terminationGracePeriodSeconds is used if unset.
+                          format: int64
+                          type: integer
                         timeoutSeconds:
                           description: 'Number of seconds after which the probe times
                             out. Defaults to 1 second. Minimum value is 1. More info:
@@ -1354,7 +1653,7 @@ spec:
                       type: object
                     resources:
                       description: 'Compute Resources required by this container.
-                        Cannot be updated. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
+                        Cannot be updated. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
                       properties:
                         limits:
                           additionalProperties:
@@ -1364,7 +1663,7 @@ spec:
                             pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
                             x-kubernetes-int-or-string: true
                           description: 'Limits describes the maximum amount of compute
-                            resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
+                            resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
                           type: object
                         requests:
                           additionalProperties:
@@ -1377,13 +1676,14 @@ spec:
                             resources required. If Requests is omitted for a container,
                             it defaults to Limits if that is explicitly specified,
                             otherwise to an implementation-defined value. More info:
-                            https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
+                            https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
                           type: object
                       type: object
                     securityContext:
-                      description: 'Security options the pod should run with. More
-                        info: https://kubernetes.io/docs/concepts/policy/security-context/
-                        More info: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/'
+                      description: 'SecurityContext defines the security options the
+                        container should be run with. If set, the fields of SecurityContext
+                        override the equivalent fields of PodSecurityContext. More
+                        info: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/'
                       properties:
                         allowPrivilegeEscalation:
                           description: 'AllowPrivilegeEscalation controls whether
@@ -1480,6 +1780,30 @@ spec:
                                 to the container.
                               type: string
                           type: object
+                        seccompProfile:
+                          description: The seccomp options to use by this container.
+                            If seccomp options are provided at both the pod & container
+                            level, the container options override the pod options.
+                          properties:
+                            localhostProfile:
+                              description: localhostProfile indicates a profile defined
+                                in a file on the node should be used. The profile
+                                must be preconfigured on the node to work. Must be
+                                a descending path, relative to the kubelet's configured
+                                seccomp profile location. Must only be set if type
+                                is "Localhost".
+                              type: string
+                            type:
+                              description: "type indicates which kind of seccomp profile
+                                will be applied. Valid options are: \n Localhost -
+                                a profile defined in a file on the node should be
+                                used. RuntimeDefault - the container runtime default
+                                profile should be used. Unconfined - no profile should
+                                be applied."
+                              type: string
+                          required:
+                          - type
+                          type: object
                         windowsOptions:
                           description: The Windows specific settings applied to all
                             containers. If unspecified, the options from the PodSecurityContext
@@ -1496,6 +1820,19 @@ spec:
                               description: GMSACredentialSpecName is the name of the
                                 GMSA credential spec to use.
                               type: string
+                            hostProcess:
+                              description: HostProcess determines if a container should
+                                be run as a 'Host Process' container. This field is
+                                alpha-level and will only be honored by components
+                                that enable the WindowsHostProcessContainers feature
+                                flag. Setting this field without the feature flag
+                                will result in errors when validating the Pod. All
+                                of a Pod's containers must have the same effective
+                                HostProcess value (it is not allowed to have a mix
+                                of HostProcess containers and non-HostProcess containers).  In
+                                addition, if HostProcess is true then HostNetwork
+                                must also be set to true.
+                              type: boolean
                             runAsUserName:
                               description: The UserName in Windows to run the entrypoint
                                 of the container process. Defaults to the user specified
@@ -1514,8 +1851,7 @@ spec:
                         can be used to provide different probe parameters at the beginning
                         of a Pod''s lifecycle, when it might take a long time to load
                         data or warm a cache, than during steady-state operation.
-                        This cannot be updated. This is a beta feature enabled by
-                        the StartupProbe feature flag. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes'
+                        This cannot be updated. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes'
                       properties:
                         exec:
                           description: One and only one of the following should be
@@ -1622,6 +1958,23 @@ spec:
                           required:
                           - port
                           type: object
+                        terminationGracePeriodSeconds:
+                          description: Optional duration in seconds the pod needs
+                            to terminate gracefully upon probe failure. The grace
+                            period is the duration in seconds after the processes
+                            running in the pod are sent a termination signal and the
+                            time when the processes are forcibly halted with a kill
+                            signal. Set this value longer than the expected cleanup
+                            time for your process. If this value is nil, the pod's
+                            terminationGracePeriodSeconds will be used. Otherwise,
+                            this value overrides the value provided by the pod spec.
+                            Value must be non-negative integer. The value zero indicates
+                            stop immediately via the kill signal (no opportunity to
+                            shut down). This is a beta field and requires enabling
+                            ProbeTerminationGracePeriod feature gate. Minimum value
+                            is 1. spec.terminationGracePeriodSeconds is used if unset.
+                          format: int64
+                          type: integer
                         timeoutSeconds:
                           description: 'Number of seconds after which the probe times
                             out. Defaults to 1 second. Minimum value is 1. More info:
@@ -1909,10 +2262,11 @@ spec:
                         CMD is used if this is not provided. Variable references $(VAR_NAME)
                         are expanded using the container''s environment. If a variable
                         cannot be resolved, the reference in the input string will
-                        be unchanged. The $(VAR_NAME) syntax can be escaped with a
-                        double $$, ie: $$(VAR_NAME). Escaped references will never
-                        be expanded, regardless of whether the variable exists or
-                        not. Cannot be updated. More info: https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#running-a-command-in-a-shell'
+                        be unchanged. Double $$ are reduced to a single $, which allows
+                        for escaping the $(VAR_NAME) syntax: i.e. "$$(VAR_NAME)" will
+                        produce the string literal "$(VAR_NAME)". Escaped references
+                        will never be expanded, regardless of whether the variable
+                        exists or not. Cannot be updated. More info: https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#running-a-command-in-a-shell'
                       items:
                         type: string
                       type: array
@@ -1921,10 +2275,12 @@ spec:
                         The docker image''s ENTRYPOINT is used if this is not provided.
                         Variable references $(VAR_NAME) are expanded using the container''s
                         environment. If a variable cannot be resolved, the reference
-                        in the input string will be unchanged. The $(VAR_NAME) syntax
-                        can be escaped with a double $$, ie: $$(VAR_NAME). Escaped
-                        references will never be expanded, regardless of whether the
-                        variable exists or not. Cannot be updated. More info: https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#running-a-command-in-a-shell'
+                        in the input string will be unchanged. Double $$ are reduced
+                        to a single $, which allows for escaping the $(VAR_NAME) syntax:
+                        i.e. "$$(VAR_NAME)" will produce the string literal "$(VAR_NAME)".
+                        Escaped references will never be expanded, regardless of whether
+                        the variable exists or not. Cannot be updated. More info:
+                        https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#running-a-command-in-a-shell'
                       items:
                         type: string
                       type: array
@@ -1941,13 +2297,15 @@ spec:
                             type: string
                           value:
                             description: 'Variable references $(VAR_NAME) are expanded
-                              using the previous defined environment variables in
+                              using the previously defined environment variables in
                               the container and any service environment variables.
                               If a variable cannot be resolved, the reference in the
-                              input string will be unchanged. The $(VAR_NAME) syntax
-                              can be escaped with a double $$, ie: $$(VAR_NAME). Escaped
-                              references will never be expanded, regardless of whether
-                              the variable exists or not. Defaults to "".'
+                              input string will be unchanged. Double $$ are reduced
+                              to a single $, which allows for escaping the $(VAR_NAME)
+                              syntax: i.e. "$$(VAR_NAME)" will produce the string
+                              literal "$(VAR_NAME)". Escaped references will never
+                              be expanded, regardless of whether the variable exists
+                              or not. Defaults to "".'
                             type: string
                           valueFrom:
                             description: Source for the environment variable's value.
@@ -1974,9 +2332,10 @@ spec:
                                 type: object
                               fieldRef:
                                 description: 'Selects a field of the pod: supports
-                                  metadata.name, metadata.namespace, metadata.labels,
-                                  metadata.annotations, spec.nodeName, spec.serviceAccountName,
-                                  status.hostIP, status.podIP, status.podIPs.'
+                                  metadata.name, metadata.namespace, `metadata.labels[''<KEY>'']`,
+                                  `metadata.annotations[''<KEY>'']`, spec.nodeName,
+                                  spec.serviceAccountName, status.hostIP, status.podIP,
+                                  status.podIPs.'
                                 properties:
                                   apiVersion:
                                     description: Version of the schema the FieldPath
@@ -2396,6 +2755,23 @@ spec:
                           required:
                           - port
                           type: object
+                        terminationGracePeriodSeconds:
+                          description: Optional duration in seconds the pod needs
+                            to terminate gracefully upon probe failure. The grace
+                            period is the duration in seconds after the processes
+                            running in the pod are sent a termination signal and the
+                            time when the processes are forcibly halted with a kill
+                            signal. Set this value longer than the expected cleanup
+                            time for your process. If this value is nil, the pod's
+                            terminationGracePeriodSeconds will be used. Otherwise,
+                            this value overrides the value provided by the pod spec.
+                            Value must be non-negative integer. The value zero indicates
+                            stop immediately via the kill signal (no opportunity to
+                            shut down). This is a beta field and requires enabling
+                            ProbeTerminationGracePeriod feature gate. Minimum value
+                            is 1. spec.terminationGracePeriodSeconds is used if unset.
+                          format: int64
+                          type: integer
                         timeoutSeconds:
                           description: 'Number of seconds after which the probe times
                             out. Defaults to 1 second. Minimum value is 1. More info:
@@ -2564,6 +2940,23 @@ spec:
                           required:
                           - port
                           type: object
+                        terminationGracePeriodSeconds:
+                          description: Optional duration in seconds the pod needs
+                            to terminate gracefully upon probe failure. The grace
+                            period is the duration in seconds after the processes
+                            running in the pod are sent a termination signal and the
+                            time when the processes are forcibly halted with a kill
+                            signal. Set this value longer than the expected cleanup
+                            time for your process. If this value is nil, the pod's
+                            terminationGracePeriodSeconds will be used. Otherwise,
+                            this value overrides the value provided by the pod spec.
+                            Value must be non-negative integer. The value zero indicates
+                            stop immediately via the kill signal (no opportunity to
+                            shut down). This is a beta field and requires enabling
+                            ProbeTerminationGracePeriod feature gate. Minimum value
+                            is 1. spec.terminationGracePeriodSeconds is used if unset.
+                          format: int64
+                          type: integer
                         timeoutSeconds:
                           description: 'Number of seconds after which the probe times
                             out. Defaults to 1 second. Minimum value is 1. More info:
@@ -2573,7 +2966,7 @@ spec:
                       type: object
                     resources:
                       description: 'Compute Resources required by this container.
-                        Cannot be updated. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
+                        Cannot be updated. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
                       properties:
                         limits:
                           additionalProperties:
@@ -2583,7 +2976,7 @@ spec:
                             pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
                             x-kubernetes-int-or-string: true
                           description: 'Limits describes the maximum amount of compute
-                            resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
+                            resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
                           type: object
                         requests:
                           additionalProperties:
@@ -2596,13 +2989,14 @@ spec:
                             resources required. If Requests is omitted for a container,
                             it defaults to Limits if that is explicitly specified,
                             otherwise to an implementation-defined value. More info:
-                            https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
+                            https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
                           type: object
                       type: object
                     securityContext:
-                      description: 'Security options the pod should run with. More
-                        info: https://kubernetes.io/docs/concepts/policy/security-context/
-                        More info: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/'
+                      description: 'SecurityContext defines the security options the
+                        container should be run with. If set, the fields of SecurityContext
+                        override the equivalent fields of PodSecurityContext. More
+                        info: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/'
                       properties:
                         allowPrivilegeEscalation:
                           description: 'AllowPrivilegeEscalation controls whether
@@ -2699,6 +3093,30 @@ spec:
                                 to the container.
                               type: string
                           type: object
+                        seccompProfile:
+                          description: The seccomp options to use by this container.
+                            If seccomp options are provided at both the pod & container
+                            level, the container options override the pod options.
+                          properties:
+                            localhostProfile:
+                              description: localhostProfile indicates a profile defined
+                                in a file on the node should be used. The profile
+                                must be preconfigured on the node to work. Must be
+                                a descending path, relative to the kubelet's configured
+                                seccomp profile location. Must only be set if type
+                                is "Localhost".
+                              type: string
+                            type:
+                              description: "type indicates which kind of seccomp profile
+                                will be applied. Valid options are: \n Localhost -
+                                a profile defined in a file on the node should be
+                                used. RuntimeDefault - the container runtime default
+                                profile should be used. Unconfined - no profile should
+                                be applied."
+                              type: string
+                          required:
+                          - type
+                          type: object
                         windowsOptions:
                           description: The Windows specific settings applied to all
                             containers. If unspecified, the options from the PodSecurityContext
@@ -2715,6 +3133,19 @@ spec:
                               description: GMSACredentialSpecName is the name of the
                                 GMSA credential spec to use.
                               type: string
+                            hostProcess:
+                              description: HostProcess determines if a container should
+                                be run as a 'Host Process' container. This field is
+                                alpha-level and will only be honored by components
+                                that enable the WindowsHostProcessContainers feature
+                                flag. Setting this field without the feature flag
+                                will result in errors when validating the Pod. All
+                                of a Pod's containers must have the same effective
+                                HostProcess value (it is not allowed to have a mix
+                                of HostProcess containers and non-HostProcess containers).  In
+                                addition, if HostProcess is true then HostNetwork
+                                must also be set to true.
+                              type: boolean
                             runAsUserName:
                               description: The UserName in Windows to run the entrypoint
                                 of the container process. Defaults to the user specified
@@ -2733,8 +3164,7 @@ spec:
                         can be used to provide different probe parameters at the beginning
                         of a Pod''s lifecycle, when it might take a long time to load
                         data or warm a cache, than during steady-state operation.
-                        This cannot be updated. This is a beta feature enabled by
-                        the StartupProbe feature flag. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes'
+                        This cannot be updated. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes'
                       properties:
                         exec:
                           description: One and only one of the following should be
@@ -2841,6 +3271,23 @@ spec:
                           required:
                           - port
                           type: object
+                        terminationGracePeriodSeconds:
+                          description: Optional duration in seconds the pod needs
+                            to terminate gracefully upon probe failure. The grace
+                            period is the duration in seconds after the processes
+                            running in the pod are sent a termination signal and the
+                            time when the processes are forcibly halted with a kill
+                            signal. Set this value longer than the expected cleanup
+                            time for your process. If this value is nil, the pod's
+                            terminationGracePeriodSeconds will be used. Otherwise,
+                            this value overrides the value provided by the pod spec.
+                            Value must be non-negative integer. The value zero indicates
+                            stop immediately via the kill signal (no opportunity to
+                            shut down). This is a beta field and requires enabling
+                            ProbeTerminationGracePeriod feature gate. Minimum value
+                            is 1. spec.terminationGracePeriodSeconds is used if unset.
+                          format: int64
+                          type: integer
                         timeoutSeconds:
                           description: 'Number of seconds after which the probe times
                             out. Defaults to 1 second. Minimum value is 1. More info:
@@ -2963,8 +3410,9 @@ spec:
                 additionalProperties:
                   type: string
                 description: Labels configure the external label pairs to ThanosRuler.
-                  If not provided, default replica label `thanos_ruler_replica` will
-                  be added as a label and be dropped in alerts.
+                  A default replica label `thanos_ruler_replica` will be always added  as
+                  a label with the value of the pod's name and it will be dropped
+                  in the alerts.
                 type: object
               listenLocal:
                 description: ListenLocal makes the Thanos ruler listen on loopback,
@@ -3114,7 +3562,7 @@ spec:
                       pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
                       x-kubernetes-int-or-string: true
                     description: 'Limits describes the maximum amount of compute resources
-                      allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
+                      allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
                     type: object
                   requests:
                     additionalProperties:
@@ -3126,7 +3574,7 @@ spec:
                     description: 'Requests describes the minimum amount of compute
                       resources required. If Requests is omitted for a container,
                       it defaults to Limits if that is explicitly specified, otherwise
-                      to an implementation-defined value. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
+                      to an implementation-defined value. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
                     type: object
                 type: object
               retention:
@@ -3250,7 +3698,7 @@ spec:
                       support fsGroup based ownership(and permissions). It will have
                       no effect on ephemeral volume types such as: secret, configmaps
                       and emptydir. Valid values are "OnRootMismatch" and "Always".
-                      If not specified defaults to "Always".'
+                      If not specified, "Always" is used.'
                     type: string
                   runAsGroup:
                     description: The GID to run the entrypoint of the container process.
@@ -3300,6 +3748,27 @@ spec:
                           the container.
                         type: string
                     type: object
+                  seccompProfile:
+                    description: The seccomp options to use by the containers in this
+                      pod.
+                    properties:
+                      localhostProfile:
+                        description: localhostProfile indicates a profile defined
+                          in a file on the node should be used. The profile must be
+                          preconfigured on the node to work. Must be a descending
+                          path, relative to the kubelet's configured seccomp profile
+                          location. Must only be set if type is "Localhost".
+                        type: string
+                      type:
+                        description: "type indicates which kind of seccomp profile
+                          will be applied. Valid options are: \n Localhost - a profile
+                          defined in a file on the node should be used. RuntimeDefault
+                          - the container runtime default profile should be used.
+                          Unconfined - no profile should be applied."
+                        type: string
+                    required:
+                    - type
+                    type: object
                   supplementalGroups:
                     description: A list of groups applied to the first process run
                       in each container, in addition to the container's primary GID.  If
@@ -3342,6 +3811,17 @@ spec:
                         description: GMSACredentialSpecName is the name of the GMSA
                           credential spec to use.
                         type: string
+                      hostProcess:
+                        description: HostProcess determines if a container should
+                          be run as a 'Host Process' container. This field is alpha-level
+                          and will only be honored by components that enable the WindowsHostProcessContainers
+                          feature flag. Setting this field without the feature flag
+                          will result in errors when validating the Pod. All of a
+                          Pod's containers must have the same effective HostProcess
+                          value (it is not allowed to have a mix of HostProcess containers
+                          and non-HostProcess containers).  In addition, if HostProcess
+                          is true then HostNetwork must also be set to true.
+                        type: boolean
                       runAsUserName:
                         description: The UserName in Windows to run the entrypoint
                           of the container process. Defaults to the user specified
@@ -3387,6 +3867,217 @@ spec:
                           More info: http://kubernetes.io/docs/user-guide/volumes#emptydir'
                         pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
                         x-kubernetes-int-or-string: true
+                    type: object
+                  ephemeral:
+                    description: 'EphemeralVolumeSource to be used by the Prometheus
+                      StatefulSets. This is a beta field in k8s 1.21, for lower versions,
+                      starting with k8s 1.19, it requires enabling the GenericEphemeralVolume
+                      feature gate. More info: https://kubernetes.io/docs/concepts/storage/ephemeral-volumes/#generic-ephemeral-volumes'
+                    properties:
+                      volumeClaimTemplate:
+                        description: "Will be used to create a stand-alone PVC to
+                          provision the volume. The pod in which this EphemeralVolumeSource
+                          is embedded will be the owner of the PVC, i.e. the PVC will
+                          be deleted together with the pod.  The name of the PVC will
+                          be `<pod name>-<volume name>` where `<volume name>` is the
+                          name from the `PodSpec.Volumes` array entry. Pod validation
+                          will reject the pod if the concatenated name is not valid
+                          for a PVC (for example, too long). \n An existing PVC with
+                          that name that is not owned by the pod will *not* be used
+                          for the pod to avoid using an unrelated volume by mistake.
+                          Starting the pod is then blocked until the unrelated PVC
+                          is removed. If such a pre-created PVC is meant to be used
+                          by the pod, the PVC has to updated with an owner reference
+                          to the pod once the pod exists. Normally this should not
+                          be necessary, but it may be useful when manually reconstructing
+                          a broken cluster. \n This field is read-only and no changes
+                          will be made by Kubernetes to the PVC after it has been
+                          created. \n Required, must not be nil."
+                        properties:
+                          metadata:
+                            description: May contain labels and annotations that will
+                              be copied into the PVC when creating it. No other fields
+                              are allowed and will be rejected during validation.
+                            type: object
+                          spec:
+                            description: The specification for the PersistentVolumeClaim.
+                              The entire content is copied unchanged into the PVC
+                              that gets created from this template. The same fields
+                              as in a PersistentVolumeClaim are also valid here.
+                            properties:
+                              accessModes:
+                                description: 'AccessModes contains the desired access
+                                  modes the volume should have. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#access-modes-1'
+                                items:
+                                  type: string
+                                type: array
+                              dataSource:
+                                description: 'This field can be used to specify either:
+                                  * An existing VolumeSnapshot object (snapshot.storage.k8s.io/VolumeSnapshot)
+                                  * An existing PVC (PersistentVolumeClaim) If the
+                                  provisioner or an external controller can support
+                                  the specified data source, it will create a new
+                                  volume based on the contents of the specified data
+                                  source. If the AnyVolumeDataSource feature gate
+                                  is enabled, this field will always have the same
+                                  contents as the DataSourceRef field.'
+                                properties:
+                                  apiGroup:
+                                    description: APIGroup is the group for the resource
+                                      being referenced. If APIGroup is not specified,
+                                      the specified Kind must be in the core API group.
+                                      For any other third-party types, APIGroup is
+                                      required.
+                                    type: string
+                                  kind:
+                                    description: Kind is the type of resource being
+                                      referenced
+                                    type: string
+                                  name:
+                                    description: Name is the name of resource being
+                                      referenced
+                                    type: string
+                                required:
+                                - kind
+                                - name
+                                type: object
+                              dataSourceRef:
+                                description: 'Specifies the object from which to populate
+                                  the volume with data, if a non-empty volume is desired.
+                                  This may be any local object from a non-empty API
+                                  group (non core object) or a PersistentVolumeClaim
+                                  object. When this field is specified, volume binding
+                                  will only succeed if the type of the specified object
+                                  matches some installed volume populator or dynamic
+                                  provisioner. This field will replace the functionality
+                                  of the DataSource field and as such if both fields
+                                  are non-empty, they must have the same value. For
+                                  backwards compatibility, both fields (DataSource
+                                  and DataSourceRef) will be set to the same value
+                                  automatically if one of them is empty and the other
+                                  is non-empty. There are two important differences
+                                  between DataSource and DataSourceRef: * While DataSource
+                                  only allows two specific types of objects, DataSourceRef   allows
+                                  any non-core object, as well as PersistentVolumeClaim
+                                  objects. * While DataSource ignores disallowed values
+                                  (dropping them), DataSourceRef   preserves all values,
+                                  and generates an error if a disallowed value is   specified.
+                                  (Alpha) Using this field requires the AnyVolumeDataSource
+                                  feature gate to be enabled.'
+                                properties:
+                                  apiGroup:
+                                    description: APIGroup is the group for the resource
+                                      being referenced. If APIGroup is not specified,
+                                      the specified Kind must be in the core API group.
+                                      For any other third-party types, APIGroup is
+                                      required.
+                                    type: string
+                                  kind:
+                                    description: Kind is the type of resource being
+                                      referenced
+                                    type: string
+                                  name:
+                                    description: Name is the name of resource being
+                                      referenced
+                                    type: string
+                                required:
+                                - kind
+                                - name
+                                type: object
+                              resources:
+                                description: 'Resources represents the minimum resources
+                                  the volume should have. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#resources'
+                                properties:
+                                  limits:
+                                    additionalProperties:
+                                      anyOf:
+                                      - type: integer
+                                      - type: string
+                                      pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                                      x-kubernetes-int-or-string: true
+                                    description: 'Limits describes the maximum amount
+                                      of compute resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
+                                    type: object
+                                  requests:
+                                    additionalProperties:
+                                      anyOf:
+                                      - type: integer
+                                      - type: string
+                                      pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                                      x-kubernetes-int-or-string: true
+                                    description: 'Requests describes the minimum amount
+                                      of compute resources required. If Requests is
+                                      omitted for a container, it defaults to Limits
+                                      if that is explicitly specified, otherwise to
+                                      an implementation-defined value. More info:
+                                      https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
+                                    type: object
+                                type: object
+                              selector:
+                                description: A label query over volumes to consider
+                                  for binding.
+                                properties:
+                                  matchExpressions:
+                                    description: matchExpressions is a list of label
+                                      selector requirements. The requirements are
+                                      ANDed.
+                                    items:
+                                      description: A label selector requirement is
+                                        a selector that contains values, a key, and
+                                        an operator that relates the key and values.
+                                      properties:
+                                        key:
+                                          description: key is the label key that the
+                                            selector applies to.
+                                          type: string
+                                        operator:
+                                          description: operator represents a key's
+                                            relationship to a set of values. Valid
+                                            operators are In, NotIn, Exists and DoesNotExist.
+                                          type: string
+                                        values:
+                                          description: values is an array of string
+                                            values. If the operator is In or NotIn,
+                                            the values array must be non-empty. If
+                                            the operator is Exists or DoesNotExist,
+                                            the values array must be empty. This array
+                                            is replaced during a strategic merge patch.
+                                          items:
+                                            type: string
+                                          type: array
+                                      required:
+                                      - key
+                                      - operator
+                                      type: object
+                                    type: array
+                                  matchLabels:
+                                    additionalProperties:
+                                      type: string
+                                    description: matchLabels is a map of {key,value}
+                                      pairs. A single {key,value} in the matchLabels
+                                      map is equivalent to an element of matchExpressions,
+                                      whose key field is "key", the operator is "In",
+                                      and the values array contains only "value".
+                                      The requirements are ANDed.
+                                    type: object
+                                type: object
+                              storageClassName:
+                                description: 'Name of the StorageClass required by
+                                  the claim. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#class-1'
+                                type: string
+                              volumeMode:
+                                description: volumeMode defines what type of volume
+                                  is required by the claim. Value of Filesystem is
+                                  implied when not included in claim spec.
+                                type: string
+                              volumeName:
+                                description: VolumeName is the binding reference to
+                                  the PersistentVolume backing this claim.
+                                type: string
+                            type: object
+                        required:
+                        - spec
+                        type: object
                     type: object
                   volumeClaimTemplate:
                     description: A PVC spec to be used by the Prometheus StatefulSets.
@@ -3445,20 +4136,52 @@ spec:
                             type: array
                           dataSource:
                             description: 'This field can be used to specify either:
-                              * An existing VolumeSnapshot object (snapshot.storage.k8s.io/VolumeSnapshot
-                              - Beta) * An existing PVC (PersistentVolumeClaim) *
-                              An existing custom resource/object that implements data
-                              population (Alpha) In order to use VolumeSnapshot object
-                              types, the appropriate feature gate must be enabled
-                              (VolumeSnapshotDataSource or AnyVolumeDataSource) If
-                              the provisioner or an external controller can support
-                              the specified data source, it will create a new volume
-                              based on the contents of the specified data source.
-                              If the specified data source is not supported, the volume
-                              will not be created and the failure will be reported
-                              as an event. In the future, we plan to support more
-                              data source types and the behavior of the provisioner
-                              may change.'
+                              * An existing VolumeSnapshot object (snapshot.storage.k8s.io/VolumeSnapshot)
+                              * An existing PVC (PersistentVolumeClaim) If the provisioner
+                              or an external controller can support the specified
+                              data source, it will create a new volume based on the
+                              contents of the specified data source. If the AnyVolumeDataSource
+                              feature gate is enabled, this field will always have
+                              the same contents as the DataSourceRef field.'
+                            properties:
+                              apiGroup:
+                                description: APIGroup is the group for the resource
+                                  being referenced. If APIGroup is not specified,
+                                  the specified Kind must be in the core API group.
+                                  For any other third-party types, APIGroup is required.
+                                type: string
+                              kind:
+                                description: Kind is the type of resource being referenced
+                                type: string
+                              name:
+                                description: Name is the name of resource being referenced
+                                type: string
+                            required:
+                            - kind
+                            - name
+                            type: object
+                          dataSourceRef:
+                            description: 'Specifies the object from which to populate
+                              the volume with data, if a non-empty volume is desired.
+                              This may be any local object from a non-empty API group
+                              (non core object) or a PersistentVolumeClaim object.
+                              When this field is specified, volume binding will only
+                              succeed if the type of the specified object matches
+                              some installed volume populator or dynamic provisioner.
+                              This field will replace the functionality of the DataSource
+                              field and as such if both fields are non-empty, they
+                              must have the same value. For backwards compatibility,
+                              both fields (DataSource and DataSourceRef) will be set
+                              to the same value automatically if one of them is empty
+                              and the other is non-empty. There are two important
+                              differences between DataSource and DataSourceRef: *
+                              While DataSource only allows two specific types of objects,
+                              DataSourceRef   allows any non-core object, as well
+                              as PersistentVolumeClaim objects. * While DataSource
+                              ignores disallowed values (dropping them), DataSourceRef   preserves
+                              all values, and generates an error if a disallowed value
+                              is   specified. (Alpha) Using this field requires the
+                              AnyVolumeDataSource feature gate to be enabled.'
                             properties:
                               apiGroup:
                                 description: APIGroup is the group for the resource
@@ -3488,7 +4211,7 @@ spec:
                                   pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
                                   x-kubernetes-int-or-string: true
                                 description: 'Limits describes the maximum amount
-                                  of compute resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
+                                  of compute resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
                                 type: object
                               requests:
                                 additionalProperties:
@@ -3501,7 +4224,7 @@ spec:
                                   of compute resources required. If Requests is omitted
                                   for a container, it defaults to Limits if that is
                                   explicitly specified, otherwise to an implementation-defined
-                                  value. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
+                                  value. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
                                 type: object
                             type: object
                           selector:
@@ -3723,16 +4446,19 @@ spec:
                       type: object
                     maxSkew:
                       description: 'MaxSkew describes the degree to which pods may
-                        be unevenly distributed. It''s the maximum permitted difference
-                        between the number of matching pods in any two topology domains
-                        of a given topology type. For example, in a 3-zone cluster,
-                        MaxSkew is set to 1, and pods with the same labelSelector
-                        spread as 1/1/0: | zone1 | zone2 | zone3 | |   P   |   P   |       |
-                        - if MaxSkew is 1, incoming pod can only be scheduled to zone3
-                        to become 1/1/1; scheduling it onto zone1(zone2) would make
-                        the ActualSkew(2-0) on zone1(zone2) violate MaxSkew(1). -
-                        if MaxSkew is 2, incoming pod can be scheduled onto any zone.
-                        It''s a required field. Default value is 1 and 0 is not allowed.'
+                        be unevenly distributed. When `whenUnsatisfiable=DoNotSchedule`,
+                        it is the maximum permitted difference between the number
+                        of matching pods in the target topology and the global minimum.
+                        For example, in a 3-zone cluster, MaxSkew is set to 1, and
+                        pods with the same labelSelector spread as 1/1/0: | zone1
+                        | zone2 | zone3 | |   P   |   P   |       | - if MaxSkew is
+                        1, incoming pod can only be scheduled to zone3 to become 1/1/1;
+                        scheduling it onto zone1(zone2) would make the ActualSkew(2-0)
+                        on zone1(zone2) violate MaxSkew(1). - if MaxSkew is 2, incoming
+                        pod can be scheduled onto any zone. When `whenUnsatisfiable=ScheduleAnyway`,
+                        it is used to give higher precedence to topologies that satisfy
+                        it. It''s a required field. Default value is 1 and 0 is not
+                        allowed.'
                       format: int32
                       type: integer
                     topologyKey:
@@ -3745,17 +4471,20 @@ spec:
                     whenUnsatisfiable:
                       description: 'WhenUnsatisfiable indicates how to deal with a
                         pod if it doesn''t satisfy the spread constraint. - DoNotSchedule
-                        (default) tells the scheduler not to schedule it - ScheduleAnyway
-                        tells the scheduler to still schedule it It''s considered
-                        as "Unsatisfiable" if and only if placing incoming pod on
-                        any topology violates "MaxSkew". For example, in a 3-zone
-                        cluster, MaxSkew is set to 1, and pods with the same labelSelector
-                        spread as 3/1/1: | zone1 | zone2 | zone3 | | P P P |   P   |   P   |
-                        If WhenUnsatisfiable is set to DoNotSchedule, incoming pod
-                        can only be scheduled to zone2(zone3) to become 3/2/1(3/1/2)
-                        as ActualSkew(2-1) on zone2(zone3) satisfies MaxSkew(1). In
-                        other words, the cluster can still be imbalanced, but scheduler
-                        won''t make it *more* imbalanced. It''s a required field.'
+                        (default) tells the scheduler not to schedule it. - ScheduleAnyway
+                        tells the scheduler to schedule the pod in any location,   but
+                        giving higher precedence to topologies that would help reduce
+                        the   skew. A constraint is considered "Unsatisfiable" for
+                        an incoming pod if and only if every possible node assigment
+                        for that pod would violate "MaxSkew" on some topology. For
+                        example, in a 3-zone cluster, MaxSkew is set to 1, and pods
+                        with the same labelSelector spread as 3/1/1: | zone1 | zone2
+                        | zone3 | | P P P |   P   |   P   | If WhenUnsatisfiable is
+                        set to DoNotSchedule, incoming pod can only be scheduled to
+                        zone2(zone3) to become 3/2/1(3/1/2) as ActualSkew(2-1) on
+                        zone2(zone3) satisfies MaxSkew(1). In other words, the cluster
+                        can still be imbalanced, but scheduler won''t make it *more*
+                        imbalanced. It''s a required field.'
                       type: string
                   required:
                   - maxSkew
@@ -3951,12 +4680,15 @@ spec:
                         this volume
                       properties:
                         defaultMode:
-                          description: 'Optional: mode bits to use on created files
-                            by default. Must be a value between 0 and 0777. Defaults
-                            to 0644. Directories within the path are not affected
-                            by this setting. This might be in conflict with other
-                            options that affect the file mode, like fsGroup, and the
-                            result can be other mode bits set.'
+                          description: 'Optional: mode bits used to set permissions
+                            on created files by default. Must be an octal value between
+                            0000 and 0777 or a decimal value between 0 and 511. YAML
+                            accepts both octal and decimal values, JSON requires decimal
+                            values for mode bits. Defaults to 0644. Directories within
+                            the path are not affected by this setting. This might
+                            be in conflict with other options that affect the file
+                            mode, like fsGroup, and the result can be other mode bits
+                            set.'
                           format: int32
                           type: integer
                         items:
@@ -3976,8 +4708,11 @@ spec:
                                 description: The key to project.
                                 type: string
                               mode:
-                                description: 'Optional: mode bits to use on this file,
-                                  must be a value between 0 and 0777. If not specified,
+                                description: 'Optional: mode bits used to set permissions
+                                  on this file. Must be an octal value between 0000
+                                  and 0777 or a decimal value between 0 and 511. YAML
+                                  accepts both octal and decimal values, JSON requires
+                                  decimal values for mode bits. If not specified,
                                   the volume defaultMode will be used. This might
                                   be in conflict with other options that affect the
                                   file mode, like fsGroup, and the result can be other
@@ -4005,8 +4740,9 @@ spec:
                           type: boolean
                       type: object
                     csi:
-                      description: CSI (Container Storage Interface) represents storage
-                        that is handled by an external CSI driver (Alpha feature).
+                      description: CSI (Container Storage Interface) represents ephemeral
+                        storage that is handled by certain external CSI drivers (Beta
+                        feature).
                       properties:
                         driver:
                           description: Driver is the name of the CSI driver that handles
@@ -4053,11 +4789,15 @@ spec:
                       properties:
                         defaultMode:
                           description: 'Optional: mode bits to use on created files
-                            by default. Must be a value between 0 and 0777. Defaults
-                            to 0644. Directories within the path are not affected
-                            by this setting. This might be in conflict with other
-                            options that affect the file mode, like fsGroup, and the
-                            result can be other mode bits set.'
+                            by default. Must be a Optional: mode bits used to set
+                            permissions on created files by default. Must be an octal
+                            value between 0000 and 0777 or a decimal value between
+                            0 and 511. YAML accepts both octal and decimal values,
+                            JSON requires decimal values for mode bits. Defaults to
+                            0644. Directories within the path are not affected by
+                            this setting. This might be in conflict with other options
+                            that affect the file mode, like fsGroup, and the result
+                            can be other mode bits set.'
                           format: int32
                           type: integer
                         items:
@@ -4083,8 +4823,11 @@ spec:
                                 - fieldPath
                                 type: object
                               mode:
-                                description: 'Optional: mode bits to use on this file,
-                                  must be a value between 0 and 0777. If not specified,
+                                description: 'Optional: mode bits used to set permissions
+                                  on this file, must be an octal value between 0000
+                                  and 0777 or a decimal value between 0 and 511. YAML
+                                  accepts both octal and decimal values, JSON requires
+                                  decimal values for mode bits. If not specified,
                                   the volume defaultMode will be used. This might
                                   be in conflict with other options that affect the
                                   file mode, like fsGroup, and the result can be other
@@ -4150,6 +4893,239 @@ spec:
                             is undefined. More info: http://kubernetes.io/docs/user-guide/volumes#emptydir'
                           pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
                           x-kubernetes-int-or-string: true
+                      type: object
+                    ephemeral:
+                      description: "Ephemeral represents a volume that is handled
+                        by a cluster storage driver. The volume's lifecycle is tied
+                        to the pod that defines it - it will be created before the
+                        pod starts, and deleted when the pod is removed. \n Use this
+                        if: a) the volume is only needed while the pod runs, b) features
+                        of normal volumes like restoring from snapshot or capacity
+                        \   tracking are needed, c) the storage driver is specified
+                        through a storage class, and d) the storage driver supports
+                        dynamic volume provisioning through    a PersistentVolumeClaim
+                        (see EphemeralVolumeSource for more    information on the
+                        connection between this volume type    and PersistentVolumeClaim).
+                        \n Use PersistentVolumeClaim or one of the vendor-specific
+                        APIs for volumes that persist for longer than the lifecycle
+                        of an individual pod. \n Use CSI for light-weight local ephemeral
+                        volumes if the CSI driver is meant to be used that way - see
+                        the documentation of the driver for more information. \n A
+                        pod can use both types of ephemeral volumes and persistent
+                        volumes at the same time. \n This is a beta feature and only
+                        available when the GenericEphemeralVolume feature gate is
+                        enabled."
+                      properties:
+                        volumeClaimTemplate:
+                          description: "Will be used to create a stand-alone PVC to
+                            provision the volume. The pod in which this EphemeralVolumeSource
+                            is embedded will be the owner of the PVC, i.e. the PVC
+                            will be deleted together with the pod.  The name of the
+                            PVC will be `<pod name>-<volume name>` where `<volume
+                            name>` is the name from the `PodSpec.Volumes` array entry.
+                            Pod validation will reject the pod if the concatenated
+                            name is not valid for a PVC (for example, too long). \n
+                            An existing PVC with that name that is not owned by the
+                            pod will *not* be used for the pod to avoid using an unrelated
+                            volume by mistake. Starting the pod is then blocked until
+                            the unrelated PVC is removed. If such a pre-created PVC
+                            is meant to be used by the pod, the PVC has to updated
+                            with an owner reference to the pod once the pod exists.
+                            Normally this should not be necessary, but it may be useful
+                            when manually reconstructing a broken cluster. \n This
+                            field is read-only and no changes will be made by Kubernetes
+                            to the PVC after it has been created. \n Required, must
+                            not be nil."
+                          properties:
+                            metadata:
+                              description: May contain labels and annotations that
+                                will be copied into the PVC when creating it. No other
+                                fields are allowed and will be rejected during validation.
+                              type: object
+                            spec:
+                              description: The specification for the PersistentVolumeClaim.
+                                The entire content is copied unchanged into the PVC
+                                that gets created from this template. The same fields
+                                as in a PersistentVolumeClaim are also valid here.
+                              properties:
+                                accessModes:
+                                  description: 'AccessModes contains the desired access
+                                    modes the volume should have. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#access-modes-1'
+                                  items:
+                                    type: string
+                                  type: array
+                                dataSource:
+                                  description: 'This field can be used to specify
+                                    either: * An existing VolumeSnapshot object (snapshot.storage.k8s.io/VolumeSnapshot)
+                                    * An existing PVC (PersistentVolumeClaim) If the
+                                    provisioner or an external controller can support
+                                    the specified data source, it will create a new
+                                    volume based on the contents of the specified
+                                    data source. If the AnyVolumeDataSource feature
+                                    gate is enabled, this field will always have the
+                                    same contents as the DataSourceRef field.'
+                                  properties:
+                                    apiGroup:
+                                      description: APIGroup is the group for the resource
+                                        being referenced. If APIGroup is not specified,
+                                        the specified Kind must be in the core API
+                                        group. For any other third-party types, APIGroup
+                                        is required.
+                                      type: string
+                                    kind:
+                                      description: Kind is the type of resource being
+                                        referenced
+                                      type: string
+                                    name:
+                                      description: Name is the name of resource being
+                                        referenced
+                                      type: string
+                                  required:
+                                  - kind
+                                  - name
+                                  type: object
+                                dataSourceRef:
+                                  description: 'Specifies the object from which to
+                                    populate the volume with data, if a non-empty
+                                    volume is desired. This may be any local object
+                                    from a non-empty API group (non core object) or
+                                    a PersistentVolumeClaim object. When this field
+                                    is specified, volume binding will only succeed
+                                    if the type of the specified object matches some
+                                    installed volume populator or dynamic provisioner.
+                                    This field will replace the functionality of the
+                                    DataSource field and as such if both fields are
+                                    non-empty, they must have the same value. For
+                                    backwards compatibility, both fields (DataSource
+                                    and DataSourceRef) will be set to the same value
+                                    automatically if one of them is empty and the
+                                    other is non-empty. There are two important differences
+                                    between DataSource and DataSourceRef: * While
+                                    DataSource only allows two specific types of objects,
+                                    DataSourceRef   allows any non-core object, as
+                                    well as PersistentVolumeClaim objects. * While
+                                    DataSource ignores disallowed values (dropping
+                                    them), DataSourceRef   preserves all values, and
+                                    generates an error if a disallowed value is   specified.
+                                    (Alpha) Using this field requires the AnyVolumeDataSource
+                                    feature gate to be enabled.'
+                                  properties:
+                                    apiGroup:
+                                      description: APIGroup is the group for the resource
+                                        being referenced. If APIGroup is not specified,
+                                        the specified Kind must be in the core API
+                                        group. For any other third-party types, APIGroup
+                                        is required.
+                                      type: string
+                                    kind:
+                                      description: Kind is the type of resource being
+                                        referenced
+                                      type: string
+                                    name:
+                                      description: Name is the name of resource being
+                                        referenced
+                                      type: string
+                                  required:
+                                  - kind
+                                  - name
+                                  type: object
+                                resources:
+                                  description: 'Resources represents the minimum resources
+                                    the volume should have. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#resources'
+                                  properties:
+                                    limits:
+                                      additionalProperties:
+                                        anyOf:
+                                        - type: integer
+                                        - type: string
+                                        pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                                        x-kubernetes-int-or-string: true
+                                      description: 'Limits describes the maximum amount
+                                        of compute resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
+                                      type: object
+                                    requests:
+                                      additionalProperties:
+                                        anyOf:
+                                        - type: integer
+                                        - type: string
+                                        pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                                        x-kubernetes-int-or-string: true
+                                      description: 'Requests describes the minimum
+                                        amount of compute resources required. If Requests
+                                        is omitted for a container, it defaults to
+                                        Limits if that is explicitly specified, otherwise
+                                        to an implementation-defined value. More info:
+                                        https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
+                                      type: object
+                                  type: object
+                                selector:
+                                  description: A label query over volumes to consider
+                                    for binding.
+                                  properties:
+                                    matchExpressions:
+                                      description: matchExpressions is a list of label
+                                        selector requirements. The requirements are
+                                        ANDed.
+                                      items:
+                                        description: A label selector requirement
+                                          is a selector that contains values, a key,
+                                          and an operator that relates the key and
+                                          values.
+                                        properties:
+                                          key:
+                                            description: key is the label key that
+                                              the selector applies to.
+                                            type: string
+                                          operator:
+                                            description: operator represents a key's
+                                              relationship to a set of values. Valid
+                                              operators are In, NotIn, Exists and
+                                              DoesNotExist.
+                                            type: string
+                                          values:
+                                            description: values is an array of string
+                                              values. If the operator is In or NotIn,
+                                              the values array must be non-empty.
+                                              If the operator is Exists or DoesNotExist,
+                                              the values array must be empty. This
+                                              array is replaced during a strategic
+                                              merge patch.
+                                            items:
+                                              type: string
+                                            type: array
+                                        required:
+                                        - key
+                                        - operator
+                                        type: object
+                                      type: array
+                                    matchLabels:
+                                      additionalProperties:
+                                        type: string
+                                      description: matchLabels is a map of {key,value}
+                                        pairs. A single {key,value} in the matchLabels
+                                        map is equivalent to an element of matchExpressions,
+                                        whose key field is "key", the operator is
+                                        "In", and the values array contains only "value".
+                                        The requirements are ANDed.
+                                      type: object
+                                  type: object
+                                storageClassName:
+                                  description: 'Name of the StorageClass required
+                                    by the claim. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#class-1'
+                                  type: string
+                                volumeMode:
+                                  description: volumeMode defines what type of volume
+                                    is required by the claim. Value of Filesystem
+                                    is implied when not included in claim spec.
+                                  type: string
+                                volumeName:
+                                  description: VolumeName is the binding reference
+                                    to the PersistentVolume backing this claim.
+                                  type: string
+                              type: object
+                          required:
+                          - spec
+                          type: object
                       type: object
                     fc:
                       description: FC represents a Fibre Channel resource that is
@@ -4485,12 +5461,14 @@ spec:
                         and downward API
                       properties:
                         defaultMode:
-                          description: Mode bits to use on created files by default.
-                            Must be a value between 0 and 0777. Directories within
-                            the path are not affected by this setting. This might
-                            be in conflict with other options that affect the file
-                            mode, like fsGroup, and the result can be other mode bits
-                            set.
+                          description: Mode bits used to set permissions on created
+                            files by default. Must be an octal value between 0000
+                            and 0777 or a decimal value between 0 and 511. YAML accepts
+                            both octal and decimal values, JSON requires decimal values
+                            for mode bits. Directories within the path are not affected
+                            by this setting. This might be in conflict with other
+                            options that affect the file mode, like fsGroup, and the
+                            result can be other mode bits set.
                           format: int32
                           type: integer
                         sources:
@@ -4523,13 +5501,17 @@ spec:
                                           description: The key to project.
                                           type: string
                                         mode:
-                                          description: 'Optional: mode bits to use
-                                            on this file, must be a value between
-                                            0 and 0777. If not specified, the volume
-                                            defaultMode will be used. This might be
-                                            in conflict with other options that affect
-                                            the file mode, like fsGroup, and the result
-                                            can be other mode bits set.'
+                                          description: 'Optional: mode bits used to
+                                            set permissions on this file. Must be
+                                            an octal value between 0000 and 0777 or
+                                            a decimal value between 0 and 511. YAML
+                                            accepts both octal and decimal values,
+                                            JSON requires decimal values for mode
+                                            bits. If not specified, the volume defaultMode
+                                            will be used. This might be in conflict
+                                            with other options that affect the file
+                                            mode, like fsGroup, and the result can
+                                            be other mode bits set.'
                                           format: int32
                                           type: integer
                                         path:
@@ -4584,13 +5566,17 @@ spec:
                                           - fieldPath
                                           type: object
                                         mode:
-                                          description: 'Optional: mode bits to use
-                                            on this file, must be a value between
-                                            0 and 0777. If not specified, the volume
-                                            defaultMode will be used. This might be
-                                            in conflict with other options that affect
-                                            the file mode, like fsGroup, and the result
-                                            can be other mode bits set.'
+                                          description: 'Optional: mode bits used to
+                                            set permissions on this file, must be
+                                            an octal value between 0000 and 0777 or
+                                            a decimal value between 0 and 511. YAML
+                                            accepts both octal and decimal values,
+                                            JSON requires decimal values for mode
+                                            bits. If not specified, the volume defaultMode
+                                            will be used. This might be in conflict
+                                            with other options that affect the file
+                                            mode, like fsGroup, and the result can
+                                            be other mode bits set.'
                                           format: int32
                                           type: integer
                                         path:
@@ -4656,13 +5642,17 @@ spec:
                                           description: The key to project.
                                           type: string
                                         mode:
-                                          description: 'Optional: mode bits to use
-                                            on this file, must be a value between
-                                            0 and 0777. If not specified, the volume
-                                            defaultMode will be used. This might be
-                                            in conflict with other options that affect
-                                            the file mode, like fsGroup, and the result
-                                            can be other mode bits set.'
+                                          description: 'Optional: mode bits used to
+                                            set permissions on this file. Must be
+                                            an octal value between 0000 and 0777 or
+                                            a decimal value between 0 and 511. YAML
+                                            accepts both octal and decimal values,
+                                            JSON requires decimal values for mode
+                                            bits. If not specified, the volume defaultMode
+                                            will be used. This might be in conflict
+                                            with other options that affect the file
+                                            mode, like fsGroup, and the result can
+                                            be other mode bits set.'
                                           format: int32
                                           type: integer
                                         path:
@@ -4721,8 +5711,6 @@ spec:
                                 type: object
                             type: object
                           type: array
-                      required:
-                      - sources
                       type: object
                     quobyte:
                       description: Quobyte represents a Quobyte mount on the host
@@ -4873,12 +5861,15 @@ spec:
                         this volume. More info: https://kubernetes.io/docs/concepts/storage/volumes#secret'
                       properties:
                         defaultMode:
-                          description: 'Optional: mode bits to use on created files
-                            by default. Must be a value between 0 and 0777. Defaults
-                            to 0644. Directories within the path are not affected
-                            by this setting. This might be in conflict with other
-                            options that affect the file mode, like fsGroup, and the
-                            result can be other mode bits set.'
+                          description: 'Optional: mode bits used to set permissions
+                            on created files by default. Must be an octal value between
+                            0000 and 0777 or a decimal value between 0 and 511. YAML
+                            accepts both octal and decimal values, JSON requires decimal
+                            values for mode bits. Defaults to 0644. Directories within
+                            the path are not affected by this setting. This might
+                            be in conflict with other options that affect the file
+                            mode, like fsGroup, and the result can be other mode bits
+                            set.'
                           format: int32
                           type: integer
                         items:
@@ -4898,8 +5889,11 @@ spec:
                                 description: The key to project.
                                 type: string
                               mode:
-                                description: 'Optional: mode bits to use on this file,
-                                  must be a value between 0 and 0777. If not specified,
+                                description: 'Optional: mode bits used to set permissions
+                                  on this file. Must be an octal value between 0000
+                                  and 0777 or a decimal value between 0 and 511. YAML
+                                  accepts both octal and decimal values, JSON requires
+                                  decimal values for mode bits. If not specified,
                                   the volume defaultMode will be used. This might
                                   be in conflict with other options that affect the
                                   file mode, like fsGroup, and the result can be other

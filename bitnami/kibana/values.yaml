@@ -27,6 +27,9 @@ nameOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname template with a string
 ##
 fullnameOverride: ""
+## @param extraDeploy Array of extra objects to deploy with the release
+##
+extraDeploy: []
 
 ## @section Kibana parameters
 
@@ -41,7 +44,7 @@ fullnameOverride: ""
 image:
   registry: docker.io
   repository: bitnami/kibana
-  tag: 7.15.1-debian-10-r5
+  tag: 7.15.2-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -137,7 +140,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r233
+    tag: 10-debian-10-r248
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -240,6 +243,9 @@ service:
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
   ##
   annotations: {}
+  ## @param service.labels Extra labels for Kibana service
+  ##
+  labels: {}
   ## @param service.loadBalancerIP loadBalancerIP if Kibana service type is `LoadBalancer`
   ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
   ##

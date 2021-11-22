@@ -179,6 +179,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `master.persistence.size`                   | Persistent Volume size                                                                            | `8Gi`           |
 | `master.persistence.annotations`            | Additional custom annotations for the PVC                                                         | `{}`            |
 | `master.persistence.selector`               | Additional labels to match for the PVC                                                            | `{}`            |
+| `master.persistence.dataSource`             | Custom PVC data source                                                                            | `{}`            |
 | `master.persistence.existingClaim`          | Use a existing PVC which must be created manually before bound                                    | `""`            |
 | `master.service.type`                       | Redis&trade; master service type                                                                  | `ClusterIP`     |
 | `master.service.port`                       | Redis&trade; master service port                                                                  | `6379`          |
@@ -256,6 +257,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `replica.persistence.size`                   | Persistent Volume size                                                                              | `8Gi`           |
 | `replica.persistence.annotations`            | Additional custom annotations for the PVC                                                           | `{}`            |
 | `replica.persistence.selector`               | Additional labels to match for the PVC                                                              | `{}`            |
+| `replica.persistence.dataSource`             | Custom PVC data source                                                                              | `{}`            |
 | `replica.service.type`                       | Redis&trade; replicas service type                                                                  | `ClusterIP`     |
 | `replica.service.port`                       | Redis&trade; replicas service port                                                                  | `6379`          |
 | `replica.service.nodePort`                   | Node port for Redis&trade; replicas                                                                 | `""`            |

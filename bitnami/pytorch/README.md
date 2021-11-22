@@ -62,6 +62,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------ | -------------------------------------------------------------------------------------------- | ----- |
 | `nameOverride`     | String to partially override common.names.fullname template (will maintain the release name) | `""`  |
 | `fullnameOverride` | String to fully override common.names.fullname template                                      | `""`  |
+| `extraDeploy`      | Array of extra objects to deploy with the release                                            | `[]`  |
 
 
 ### PyTorch parameters

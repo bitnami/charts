@@ -80,7 +80,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`                              | InfluxDB&trade; image registry                                                                                                                                                                                                                                       | `docker.io`           |
 | `image.repository`                            | InfluxDB&trade; image repository                                                                                                                                                                                                                                     | `bitnami/influxdb`    |
-| `image.tag`                                   | InfluxDB&trade; image tag (immutable tags are recommended)                                                                                                                                                                                                           | `2.0.9-debian-10-r25` |
+| `image.tag`                                   | InfluxDB&trade; image tag (immutable tags are recommended)                                                                                                                                                                                                           | `2.0.9-debian-10-r45` |
 | `image.pullPolicy`                            | InfluxDB&trade; image pull policy                                                                                                                                                                                                                                    | `IfNotPresent`        |
 | `image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                                                                                                                                                                     | `[]`                  |
 | `image.debug`                                 | Specify if debug logs should be enabled                                                                                                                                                                                                                              | `false`               |
@@ -159,7 +159,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------- | -------------------------- |
 | `relay.image.registry`                     | InfluxDB Relay&trade; image registry                                                                                   | `docker.io`                |
 | `relay.image.repository`                   | InfluxDB Relay&trade; image repository                                                                                 | `bitnami/influxdb-relay`   |
-| `relay.image.tag`                          | InfluxDB Relay&trade; image tag (immutable tags are recommended)                                                       | `0.20200717.0-scratch-r12` |
+| `relay.image.tag`                          | InfluxDB Relay&trade; image tag (immutable tags are recommended)                                                       | `0.20200717.0-scratch-r13` |
 | `relay.image.pullPolicy`                   | InfluxDB Relay&trade; image pull policy                                                                                | `IfNotPresent`             |
 | `relay.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                       | `[]`                       |
 | `relay.configuration`                      | InfluxDB Relay&trade; Configuration. Specify content for relay.toml                                                    | `""`                       |
@@ -238,28 +238,32 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Metrics parameters
 
-| Name                                       | Description                                                                                            | Value               |
-| ------------------------------------------ | ------------------------------------------------------------------------------------------------------ | ------------------- |
-| `metrics.enabled`                          | Enable the export of Prometheus metrics                                                                | `false`             |
-| `metrics.service.type`                     | Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`)                                    | `ClusterIP`         |
-| `metrics.service.port`                     | InfluxDB&trade; Prometheus port                                                                        | `9122`              |
-| `metrics.service.nodePort`                 | Kubernetes HTTP node port                                                                              | `""`                |
-| `metrics.service.loadBalancerIP`           | loadBalancerIP if service type is `LoadBalancer`                                                       | `""`                |
-| `metrics.service.loadBalancerSourceRanges` | Address that are allowed when service is LoadBalancer                                                  | `[]`                |
-| `metrics.service.clusterIP`                | Static clusterIP or None for headless services                                                         | `""`                |
-| `metrics.service.annotations`              | Annotations for the Prometheus metrics service                                                         | `{}`                |
-| `metrics.serviceMonitor.enabled`           | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`) | `false`             |
-| `metrics.serviceMonitor.namespace`         | Namespace in which Prometheus is running                                                               | `""`                |
-| `metrics.serviceMonitor.interval`          | Interval at which metrics should be scraped.                                                           | `""`                |
-| `metrics.serviceMonitor.scrapeTimeout`     | Timeout after which the scrape is ended                                                                | `""`                |
-| `metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                                                    | `{}`                |
-| `networkPolicy.enabled`                    | Enable NetworkPolicy                                                                                   | `false`             |
-| `networkPolicy.allowExternal`              | Don't require client label for connections                                                             | `true`              |
-| `persistence.enabled`                      | Enable data persistence                                                                                | `true`              |
-| `persistence.existingClaim`                | Use a existing PVC which must be created manually before bound                                         | `""`                |
-| `persistence.storageClass`                 | Specify the `storageClass` used to provision the volume                                                | `""`                |
-| `persistence.accessModes`                  | Access mode of data volume                                                                             | `["ReadWriteOnce"]` |
-| `persistence.size`                         | Size of data volume                                                                                    | `8Gi`               |
+| Name                                       | Description                                                                                                                                 | Value               |
+| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
+| `metrics.enabled`                          | Enable the export of Prometheus metrics                                                                                                     | `false`             |
+| `metrics.service.type`                     | Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`)                                                                         | `ClusterIP`         |
+| `metrics.service.port`                     | InfluxDB&trade; Prometheus port                                                                                                             | `9122`              |
+| `metrics.service.nodePort`                 | Kubernetes HTTP node port                                                                                                                   | `""`                |
+| `metrics.service.loadBalancerIP`           | loadBalancerIP if service type is `LoadBalancer`                                                                                            | `""`                |
+| `metrics.service.loadBalancerSourceRanges` | Address that are allowed when service is LoadBalancer                                                                                       | `[]`                |
+| `metrics.service.clusterIP`                | Static clusterIP or None for headless services                                                                                              | `""`                |
+| `metrics.service.annotations`              | Annotations for the Prometheus metrics service                                                                                              | `{}`                |
+| `metrics.serviceMonitor.enabled`           | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)                                      | `false`             |
+| `metrics.serviceMonitor.namespace`         | Namespace in which Prometheus is running                                                                                                    | `""`                |
+| `metrics.serviceMonitor.interval`          | Interval at which metrics should be scraped.                                                                                                | `""`                |
+| `metrics.serviceMonitor.scrapeTimeout`     | Timeout after which the scrape is ended                                                                                                     | `""`                |
+| `metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                                                                                         | `{}`                |
+| `networkPolicy.enabled`                    | Enable NetworkPolicy                                                                                                                        | `false`             |
+| `networkPolicy.allowExternal`              | Don't require client label for connections                                                                                                  | `true`              |
+| `persistence.enabled`                      | Enable data persistence                                                                                                                     | `true`              |
+| `persistence.existingClaim`                | Use a existing PVC which must be created manually before bound                                                                              | `""`                |
+| `persistence.storageClass`                 | Specify the `storageClass` used to provision the volume                                                                                     | `""`                |
+| `persistence.accessModes`                  | Access mode of data volume                                                                                                                  | `["ReadWriteOnce"]` |
+| `persistence.size`                         | Size of data volume                                                                                                                         | `8Gi`               |
+| `serviceAccount.enabled`                   | Enable service account (Note: Service Account will only be automatically created if `serviceAccount.name` is not set)                       | `false`             |
+| `serviceAccount.name`                      | Name of an already existing service account. Setting this value disables the automatic service account creation                             | `""`                |
+| `psp.create`                               | Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later | `false`             |
+| `rbac.create`                              | Create Role and RoleBinding (required for PSP to work)                                                                                      | `false`             |
 
 
 ### Volume permissions parameters
@@ -269,7 +273,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                   | Enable init container that changes the owner and group of the persistent volume mountpoint to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`            | Init container volume-permissions image registry                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`          | Init container volume-permissions image name                                                                      | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Init container volume-permissions image tag                                                                       | `10-debian-10-r233`     |
+| `volumePermissions.image.tag`                 | Init container volume-permissions image tag                                                                       | `10-debian-10-r254`     |
 | `volumePermissions.image.pullPolicy`          | Init container volume-permissions image pull policy                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                                                  | `[]`                    |
 | `volumePermissions.securityContext.runAsUser` | User ID for the init container (when facing issues in OpenShift or uid unknown, try value "auto")                 | `0`                     |
@@ -303,7 +307,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `backup.uploadProviders.google.bucketName`        | google storage bucket name name                                                                         | `gs://bucket/influxdb`     |
 | `backup.uploadProviders.google.image.registry`    | Google Cloud SDK image registry                                                                         | `docker.io`                |
 | `backup.uploadProviders.google.image.repository`  | Google Cloud SDK image name                                                                             | `bitnami/google-cloud-sdk` |
-| `backup.uploadProviders.google.image.tag`         | Google Cloud SDK image tag                                                                              | `0.361.0-debian-10-r7`     |
+| `backup.uploadProviders.google.image.tag`         | Google Cloud SDK image tag                                                                              | `0.365.0-debian-10-r0`     |
 | `backup.uploadProviders.google.image.pullPolicy`  | Google Cloud SDK image pull policy                                                                      | `IfNotPresent`             |
 | `backup.uploadProviders.google.image.pullSecrets` | Specify docker-registry secret names as an array                                                        | `[]`                       |
 | `backup.uploadProviders.azure.enabled`            | Enable upload to azure storage container                                                                | `false`                    |
@@ -313,7 +317,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `backup.uploadProviders.azure.containerName`      | Destination container                                                                                   | `influxdb-container`       |
 | `backup.uploadProviders.azure.image.registry`     | Azure CLI image registry                                                                                | `docker.io`                |
 | `backup.uploadProviders.azure.image.repository`   | Azure CLI image repository                                                                              | `bitnami/azure-cli`        |
-| `backup.uploadProviders.azure.image.tag`          | Azure CLI image tag (immutable tags are recommended)                                                    | `2.29.1-debian-10-r5`      |
+| `backup.uploadProviders.azure.image.tag`          | Azure CLI image tag (immutable tags are recommended)                                                    | `2.30.0-debian-10-r15`     |
 | `backup.uploadProviders.azure.image.pullPolicy`   | Azure CLI image pull policy                                                                             | `IfNotPresent`             |
 | `backup.uploadProviders.azure.image.pullSecrets`  | Specify docker-registry secret names as an array                                                        | `[]`                       |
 

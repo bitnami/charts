@@ -59,6 +59,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `nameOverride`     | String to partially override external-dns.fullname template (will maintain the release name) | `""`            |
 | `fullnameOverride` | String to fully override external-dns.fullname template                                      | `""`            |
 | `clusterDomain`    | Kubernetes Cluster Domain                                                                    | `cluster.local` |
+| `extraDeploy`      | Array of extra objects to deploy with the release                                            | `[]`            |
 
 
 ### external-dns parameters
@@ -192,6 +193,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `zoneNameFilters`                             | Filter target zones by zone domain (optional)                                                                                                                                | `[]`                      |
 | `zoneIdFilters`                               | Limit possible target zones by zone id (optional)                                                                                                                            | `[]`                      |
 | `annotationFilter`                            | Filter sources managed by external-dns via annotation using label selector (optional)                                                                                        | `""`                      |
+| `labelFilter`                                 | Select sources managed by external-dns using label selector (optional)                                                                                                       | `""`                      |
 | `dryRun`                                      | When enabled, prints DNS record changes rather than actually performing them (optional)                                                                                      | `false`                   |
 | `triggerLoopOnEvent`                          | When enabled, triggers run loop on create/update/delete events in addition to regular interval (optional)                                                                    | `false`                   |
 | `interval`                                    | Interval update period to use                                                                                                                                                | `1m`                      |

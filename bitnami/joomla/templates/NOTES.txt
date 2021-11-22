@@ -7,7 +7,7 @@ APP VERSION: {{ .Chart.AppVersion }}
 ** Notice : Usually with ingress the service.type should be set to ClusterIP, which is not the case to this deployment! **
 {{- end }}
 
-1. Access you Joomla! instance with:
+1. Access your Joomla! instance with:
 
 {{- if .Values.ingress.enabled }}
   {{ if .Values.ingress.tls }}

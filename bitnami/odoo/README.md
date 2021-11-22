@@ -59,20 +59,20 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common parameters
 
-| Name                | Description                                        | Value                        |
-| ------------------- | -------------------------------------------------- | ---------------------------- |
-| `kubeVersion`       | Override Kubernetes version                        | `""`                         |
-| `nameOverride`      | String to partially override common.names.fullname | `""`                         |
-| `fullnameOverride`  | String to fully override common.names.fullname     | `""`                         |
-| `commonLabels`      | Labels to add to all deployed objects              | `{}`                         |
-| `commonAnnotations` | Annotations to add to all deployed objects         | `{}`                         |
-| `extraDeploy`       | Array of extra objects to deploy with the release  | `[]`                         |
-| `image.registry`    | Odoo image registry                                | `docker.io`                  |
-| `image.repository`  | Odoo image repository                              | `bitnami/odoo`               |
-| `image.tag`         | Odoo image tag (immutable tags are recommended)    | `15.0.20211010-debian-10-r0` |
-| `image.pullPolicy`  | Odoo image pull policy                             | `IfNotPresent`               |
-| `image.pullSecrets` | Odoo image pull secrets                            | `[]`                         |
-| `image.debug`       | Enable image debug mode                            | `false`                      |
+| Name                | Description                                        | Value                         |
+| ------------------- | -------------------------------------------------- | ----------------------------- |
+| `kubeVersion`       | Override Kubernetes version                        | `""`                          |
+| `nameOverride`      | String to partially override common.names.fullname | `""`                          |
+| `fullnameOverride`  | String to fully override common.names.fullname     | `""`                          |
+| `commonLabels`      | Labels to add to all deployed objects              | `{}`                          |
+| `commonAnnotations` | Annotations to add to all deployed objects         | `{}`                          |
+| `extraDeploy`       | Array of extra objects to deploy with the release  | `[]`                          |
+| `image.registry`    | Odoo image registry                                | `docker.io`                   |
+| `image.repository`  | Odoo image repository                              | `bitnami/odoo`                |
+| `image.tag`         | Odoo image tag (immutable tags are recommended)    | `15.0.20211010-debian-10-r14` |
+| `image.pullPolicy`  | Odoo image pull policy                             | `IfNotPresent`                |
+| `image.pullSecrets` | Odoo image pull secrets                            | `[]`                          |
+| `image.debug`       | Enable image debug mode                            | `false`                       |
 
 
 ### Odoo Configuration parameters
@@ -237,6 +237,24 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.postgresqlPostgresUser`     | External Database admin username                                                  | `postgres`      |
 | `externalDatabase.postgresqlPostgresPassword` | External Database admin password                                                  | `""`            |
 | `externalDatabase.existingSecret`             | Name of existing secret object                                                    | `""`            |
+
+
+### NetworkPolicy parameters
+
+| Name                                                          | Description                                                                                                              | Value   |
+| ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ------- |
+| `networkPolicy.enabled`                                       | Enable network policies                                                                                                  | `false` |
+| `networkPolicy.ingress.enabled`                               | Enable network policy for Ingress Proxies                                                                                | `false` |
+| `networkPolicy.ingress.namespaceSelector`                     | Ingress Proxy namespace selector labels. These labels will be used to identify the Ingress Proxy's namespace.            | `{}`    |
+| `networkPolicy.ingress.podSelector`                           | Ingress Proxy pods selector labels. These labels will be used to identify the Ingress Proxy pods.                        | `{}`    |
+| `networkPolicy.ingressRules.backendOnlyAccessibleByFrontend`  | Enable ingress rule that makes the backend (mariadb) only accessible by Odoo's pods.                                     | `false` |
+| `networkPolicy.ingressRules.customBackendSelector`            | Backend selector labels. These labels will be used to identify the backend pods.                                         | `{}`    |
+| `networkPolicy.ingressRules.accessOnlyFrom.enabled`           | Enable ingress rule that makes Odoo only accessible from a particular origin                                             | `false` |
+| `networkPolicy.ingressRules.accessOnlyFrom.namespaceSelector` | Namespace selector label that is allowed to access Odoo. This label will be used to identified the allowed namespace(s). | `{}`    |
+| `networkPolicy.ingressRules.accessOnlyFrom.podSelector`       | Pods selector label that is allowed to access Odoo. This label will be used to identified the allowed pod(s).            | `{}`    |
+| `networkPolicy.ingressRules.customRules`                      | Custom network policy ingress rule                                                                                       | `{}`    |
+| `networkPolicy.egressRules.denyConnectionsToExternal`         | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).                           | `false` |
+| `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                               | `{}`    |
 
 
 The above parameters map to the env variables defined in [bitnami/odoo](http://github.com/bitnami/bitnami-docker-odoo). For more information please refer to the [bitnami/odoo](http://github.com/bitnami/bitnami-docker-odoo) image documentation.
@@ -501,3 +519,11 @@ Use the workaround below to upgrade from versions previous to 3.0.0. The followi
 $ kubectl patch deployment odoo-odoo --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
 $ kubectl patch deployment odoo-postgresql --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
 ```
+
+## Community supported solution
+
+Please, note this Helm chart is a community-supported solution. This means that the Bitnami team is not actively working on new features/improvements nor providing support through GitHub Issues for this Helm chart. Any new issue will stay open for 20 days to allow the community to contribute, after 15 days without activity the issue will be marked as stale being closed after 5 days.
+
+The Bitnami team will review any PR that is created, feel free to create a PR if you find any issue or want to implement a new feature.
+
+New versions are not going to be affected. Once a new version is released in the upstream project, the Bitnami container image will be updated to use the latest version.
