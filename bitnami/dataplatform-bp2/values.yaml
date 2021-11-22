@@ -813,6 +813,7 @@ kafka:
       ## Service configuration
       ## @param kafka.metrics.jmx.service.port JMX Prometheus exporter service port
       ## @param kafka.metrics.jmx.service.annotations [object] Exporter service annotations
+      ##
       service:
         port: 5556
         ## Provide any additional annotations which may be required. This can be used to

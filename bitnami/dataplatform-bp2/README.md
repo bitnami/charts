@@ -509,7 +509,6 @@ Below is the command to restart the DaemonSets
 $ kubectl rollout restart daemonsets wavefront-collector -n wavefront
 ```
 
-
 ## Configuration and installation details
 
 ### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
