@@ -1152,7 +1152,8 @@ wavefront:
       ##    port: 8080
       ##    path: /metrics/
       ##    scheme: http
-      ##    prefix: spark. 
+      ##    prefix: spark.
+      ##
       config: []
   proxy:
     ## Wavefront Proxy resource requests and limits
