@@ -97,7 +97,7 @@ tempo:
   memBallastSizeMbs: 1024
   ## @param tempo.dataDir Tempo components data directory
   ##
-  dataDir: /bitnami/tempo-grafana/data
+  dataDir: /bitnami/grafana-tempo/data
   traces:
     jaeger:
       ## @param tempo.traces.jaeger.grpc Enable Tempo to ingest Jaeger GRPC traces

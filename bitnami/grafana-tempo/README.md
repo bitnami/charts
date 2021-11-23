@@ -86,7 +86,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `tempo.containerPort`                  | Tempo components web port                                  | `3100`                        |
 | `tempo.grpcContainerPort`              | Tempo components GRPC port                                 | `9095`                        |
 | `tempo.memBallastSizeMbs`              | Tempo components memory ballast size in MB                 | `1024`                        |
-| `tempo.dataDir`                        | Tempo components data directory                            | `/bitnami/tempo-grafana/data` |
+| `tempo.dataDir`                        | Tempo components data directory                            | `/bitnami/grafana-tempo/data` |
 | `tempo.traces.jaeger.grpc`             | Enable Tempo to ingest Jaeger GRPC traces                  | `true`                        |
 | `tempo.traces.jaeger.thriftBinary`     | Enable Tempo to ingest Jaeger Thrift Binary traces         | `false`                       |
 | `tempo.traces.jaeger.thriftCompact`    | Enable Tempo to ingest Jaeger Thrift Compact traces        | `false`                       |
