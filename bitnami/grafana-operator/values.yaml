@@ -500,7 +500,6 @@ grafana:
       reporting_enabled: false
       check_for_updates: false
     security:
-      disable_initial_admin_creation: false
       disable_gravatar: false
       # ## Grafana Admin credentials, if omitted they will be admin:<random_pass>
       # admin_user:
