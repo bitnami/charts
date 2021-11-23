@@ -60,8 +60,6 @@ spec:
           ports:
             - containerPort: {{ .Values.operator.containerPorts.metrics }}
               name: metrics
-          # command:
-          #   - grafana-operator
           args:
             - --grafana-image={{ include "grafana-operator.grafana.baseImage" . }}
             - --grafana-image-tag={{ .Values.grafana.image.tag | trim }}
