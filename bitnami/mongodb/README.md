@@ -117,6 +117,7 @@ Refer to the [chart documentation for more information on each of these architec
 | `tls.image.tag`          | Init container TLS certs setup image tag (immutable tags are recommended)                                                     | `1.21.3-debian-10-r54` |
 | `tls.image.pullPolicy`   | Init container TLS certs setup image pull policy                                                                              | `IfNotPresent`         |
 | `tls.extraDnsNames`      | Add extra dns names to the CA, can solve x509 auth issue for pod clients                                                      | `[]`                   |
+| `tls.mode`               | Allows to set the tls mode which should be used when tls is enabled (options: `allowTLS`, `preferTLS`, `requireTLS`)          | `requireTLS`           |
 | `hostAliases`            | Add deployment host aliases                                                                                                   | `[]`                   |
 | `replicaSetName`         | Name of the replica set (only when `architecture=replicaset`)                                                                 | `rs0`                  |
 | `replicaSetHostnames`    | Enable DNS hostnames in the replicaset config (only when `architecture=replicaset`)                                           | `true`                 |
