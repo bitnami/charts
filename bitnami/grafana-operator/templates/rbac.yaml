@@ -258,9 +258,9 @@ metadata:
 roleRef:
   name: {{ include "common.names.fullname" . }}
   {{- if or .Values.operator.args.scanAllNamespaces  .Values.operator.args.scanNamespaces }}
-  kind: ClusterRoleBinding
+  kind: ClusterRole
   {{- else }}
-  kind: RoleBinding
+  kind: Role
   {{- end }} 
   apiGroup: rbac.authorization.k8s.io
 subjects:
