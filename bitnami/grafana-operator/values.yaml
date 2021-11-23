@@ -95,7 +95,8 @@ operator:
   args:
     ## This enabled leader election for the operator and creates a Role for the leader election.
     ##
-    leaderElect: true
+    ## this needs to be toggled for v4.0.2
+    leaderElect: false
     ## If one of these options is set a clusterRole and clusterRoleBinding is created to
     ## ensure that the operator is able to get data from other namespaces.
     ## The options are mutually exclusive.
