@@ -65,9 +65,9 @@ operator:
   ## @param operator.image.pullSecrets Grafana Operator image pull secrets
   ##
   image:
-    registry: docker.io
-    repository: bitnami/grafana-operator
-    tag: 3.10.4-debian-10-r32
+    registry: ghcr.io/cellebyte
+    repository: grafana-operator/grafana-operator
+    tag: v4.0.2-dev.1
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## Ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -95,8 +95,7 @@ operator:
   args:
     ## This enabled leader election for the operator and creates a Role for the leader election.
     ##
-    ## this needs to be toggled for v4.0.2
-    leaderElect: false
+    leaderElect: true
     ## If one of these options is set a clusterRole and clusterRoleBinding is created to
     ## ensure that the operator is able to get data from other namespaces.
     ## The options are mutually exclusive.
