@@ -276,7 +276,7 @@ extraVolumeMounts: []
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 ##
 serviceAccount:
-  ## @param serviceAccount.create Enable creation of ServiceAccount for nginx pod
+  ## @param serviceAccount.create Enable creation of ServiceAccount for node pod
   ##
   create: false
   ## @param serviceAccount.name The name of the ServiceAccount to use.
