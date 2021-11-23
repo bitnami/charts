@@ -19,7 +19,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 - Kubernetes 1.12+
 - Helm 3.1.0
-- An Operator for `ServiceType: LoadBalancer` like [MetalLB](../metallb/README.md)
+- An Operator for `ServiceType: LoadBalancer` like [MetalLB](https://github.com/bitnami/charts/tree/master/bitnami/metallb)
 
 ## Installing the Chart
 
