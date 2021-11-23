@@ -47,5 +47,4 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: {{ include "kubernetes-event-exporter.serviceAccountName" . }}
-  namespace: monitoring
 {{- end -}}

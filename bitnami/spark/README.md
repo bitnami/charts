@@ -285,13 +285,20 @@ These values can be set at the same time in a single ConfigMap or using two Conf
 
 To submit an application to the Apache Spark cluster, use the `spark-submit` script, which is available at [https://github.com/apache/spark/tree/master/bin](https://github.com/apache/spark/tree/master/bin).
 
-The command below illustrates the process of deploying one of the sample applications included with Apache Spark. Replace the MASTER-IP-ADDRESS and MASTER-PORT placeholders with the correct master IP address and port for your deployment.
+The command below illustrates the process of deploying one of the sample applications included with Apache Spark. Replace the `k8s-apiserver-host` and `k8s-apiserver-port` placeholders with the correct master host/IP address and port for your deployment.
 
 ```bash
-$ ./bin/spark-submit --class org.apache.spark.examples.SparkPi --master spark://MASTER-IP-ADDRESS:MASTER-PORT  --deploy-mode cluster  ./examples/jars/spark-examples_2.11-2.4.3.jar 1000
+$ ./bin/spark-submit \
+    --class org.apache.spark.examples.SparkPi \
+    --conf spark.kubernetes.container.image=bitnami/spark:3 \
+    --master k8s://https://k8s-apiserver-host:k8s-apiserver-port \
+    --deploy-mode cluster \
+    ./examples/jars/spark-examples_2.12-3.2.0.jar 1000
 ```
 
-For a complete walkthrough of the process using a custom application, refer to the [detailed Apache Spark tutorial](https://docs.bitnami.com/tutorials/process-data-spark-kubernetes/).
+This command example assumes that you have downloaded a Spark binary distribution, which can be found at [Download Apache Spark](https://spark.apache.org/downloads.html).
+
+For a complete walkthrough of the process using a custom application, refer to the [detailed Apache Spark tutorial](https://docs.bitnami.com/tutorials/process-data-spark-kubernetes/) or Spark's guide to [Running Spark on Kubernetes](https://spark.apache.org/docs/latest/running-on-kubernetes.html).
 
 > Be aware that it is currently not possible to submit an application to a standalone cluster if RPC authentication is configured. [Learn more about the issue](https://issues.apache.org/jira/browse/SPARK-25078).
 

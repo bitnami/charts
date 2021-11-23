@@ -8,6 +8,18 @@ Return the proper Tomcat image name
 {{- end -}}
 
 {{/*
+Return the Tomcat ports map
+*/}}
+{{- define "tomcat.ports" -}}
+- port: {{ .Values.containerPort }}
+  protocol: TCP
+{{- range .Values.containerExtraPorts }}
+- port: {{ include "common.tplvalues.render" (dict "value" .containerPort "context" $) }}
+  protocol: TCP
+{{- end }}
+{{- end -}}
+
+{{/*
 Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.

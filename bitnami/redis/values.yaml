@@ -395,6 +395,8 @@ master:
     ##     app: my-app
     ##
     selector: {}
+    ## @param master.persistence.dataSource Custom PVC data source
+    dataSource: {}
     ## @param master.persistence.existingClaim Use a existing PVC which must be created manually before bound
     ## NOTE: requires master.persistence.enabled: true
     ##
@@ -707,6 +709,8 @@ replica:
     ##     app: my-app
     ##
     selector: {}
+    ## @param replica.persistence.dataSource Custom PVC data source
+    dataSource: {}
   ## Redis&trade; replicas service parameters
   ##
   service:

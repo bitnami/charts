@@ -96,6 +96,9 @@ service:
   ## @param service.annotations Additional custom annotations for haproxy service
   ##
   annotations: {}
+  ## @param service.labels Additional custom labels for haproxy service
+  ##
+  labels: {}
 
 ## @section HAProxy Parameters
 ##

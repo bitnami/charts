@@ -9,20 +9,18 @@ This Helm chart enables the fully automated Kubernetes deployment of such multi-
 -   Apache Spark              – In-memory data analytics
 -   Elasticsearch with Kibana – Data persistence and search
 -   Logstash                  - Data Processing Pipeline
--   Data Platform Prometheus Exporter - Prometheus exporter that emits the health metrics of the data platform
+-   Data Platform Signature State Controller - Kubernetes controller that emits data platform health and state metrics in Prometheus format.
 
 These containerized stateful software stacks are deployed in multi-node cluster configurations, which is defined by the Helm Chart blueprint for this data platform deployment, covering:
 
 -   Pod placement rules – Affinity rules to ensure placement diversity to prevent single point of failures and optimize load distribution
 -   Pod resource sizing rules – Optimized Pod and JVM sizing settings for optimal performance and efficient resource usage
 -   Default settings to ensure Pod access security
--   Optional Tanzu Observability framework configuration
+-   Optional [Tanzu Observability](https://docs.wavefront.com/kubernetes.html) framework configuration.
 
 In addition to the Pod resource optimizations, this blueprint is validated and tested to provide Kubernetes node count and sizing recommendations [(see Kubernetes Cluster Requirements)](#kubernetes-cluster-requirements) to facilitate cloud platform capacity planning. The goal is optimize the number of required Kubernetes nodes in order to optimize server resource usage and, at the same time, ensuring runtime and resource diversity.
 
-The first release of this blueprint defines a small size data platform deployment, deployed on 3 Kubernetes application nodes with physical diverse underlying server infrastructure.
-
-Use cases for this small size data platform setup include: data and application evaluation, development, and functional testing.
+This blueprint, in its default configuration, deploys the data platform on a Kubernetes cluster with three worker nodes. Use cases for this data platform setup include: data and application evaluation, development, and functional testing.
 
 ## TL;DR
 
@@ -35,8 +33,7 @@ $ helm install my-release bitnami/dataplatform-bp2
 
 This chart bootstraps Data Platform Blueprint-2 deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-The "Small" size data platform in default configuration deploys the following:
-
+Once the chart is installed, the deployed data platform cluster comprises of:
 1. Zookeeper with 3 nodes to be used for both Kafka
 2. Kafka with 3 nodes using the zookeeper deployed above
 3. Elasticsearch with 3 master nodes, 2 data nodes, 2 coordinating nodes and 1 kibana node
@@ -44,9 +41,7 @@ The "Small" size data platform in default configuration deploys the following:
 5. Spark with 1 Master and 2 worker nodes
 6. Data Platform Metrics emitter and Prometheus exporter
 
-The data platform can be optionally deployed with the Tanzu observability framework. In that case, the wavefront collectors will be set up as a DaemonSet to collect the Kubernetes cluster metrics to enable runtime feed into the Tanzu Observability service. It will also be pre-configured to scrape the metrics from the Prometheus endpoint that each application (Kafka/Spark/Elasticsearch/Logstash) emits the metrics to.
-
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
+The data platform can be optionally deployed with the Tanzu observability framework. In that case, the wavefront collectors will be set up as a DaemonSet to collect the Kubernetes cluster metrics to enable runtime feed into the Tanzu Observability service.
 
 ## Prerequisites
 
@@ -68,19 +63,21 @@ To install the chart with the release name `my-release`:
 
 ```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/dataplatform-bp2
+$ helm install my-release bitnami/dataplatform-bp2 
 ```
 
 These commands deploy Data Platform on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists recommended configurations of the parameters to bring up an optimal and resilient data platform. Please refer the individual charts for the remaining set of configurable parameters.
 
 > **Tip**: List all releases using `helm list`
 
+> **Recommendation**: It is a recommended best practice to create a dedicated namespace for the data platform cluster and deploy the data platform helm chart in the same.
+
 ## Uninstalling the Chart
 
 To uninstall/delete the `my-release` deployment:
 
 ```console
-$ helm delete my-release
+$ helm delete my-release 
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -98,10 +95,11 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common parameters
 
-| Name                | Description                                | Value |
-| ------------------- | ------------------------------------------ | ----- |
-| `commonLabels`      | Labels to add to all deployed objects      | `{}`  |
-| `commonAnnotations` | Annotations to add to all deployed objects | `{}`  |
+| Name                | Description                                       | Value |
+| ------------------- | ------------------------------------------------- | ----- |
+| `commonLabels`      | Labels to add to all deployed objects             | `{}`  |
+| `commonAnnotations` | Annotations to add to all deployed objects        | `{}`  |
+| `extraDeploy`       | Array of extra objects to deploy with the release | `[]`  |
 
 
 ### Data Platform Chart parameters
@@ -115,9 +113,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dataplatform.exporter.enabled`                               | Start a prometheus exporter                                                                                      | `true`                          |
 | `dataplatform.exporter.image.registry`                        | dataplatform exporter image registry                                                                             | `docker.io`                     |
 | `dataplatform.exporter.image.repository`                      | dataplatform exporter image repository                                                                           | `bitnami/dataplatform-exporter` |
-| `dataplatform.exporter.image.tag`                             | dataplatform exporter image tag (immutable tags are recommended)                                                 | `0.0.11-scratch-r4`             |
+| `dataplatform.exporter.image.tag`                             | dataplatform exporter image tag (immutable tags are recommended)                                                 | `1.0.1-scratch-r0`              |
 | `dataplatform.exporter.image.pullPolicy`                      | dataplatform exporter image pull policy                                                                          | `IfNotPresent`                  |
 | `dataplatform.exporter.image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                 | `[]`                            |
+| `dataplatform.exporter.config`                                | Data Platform Metrics Configuration emitted in Prometheus format                                                 | `""`                            |
 | `dataplatform.exporter.livenessProbe.enabled`                 | Enable livenessProbe                                                                                             | `true`                          |
 | `dataplatform.exporter.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                          | `10`                            |
 | `dataplatform.exporter.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                                 | `5`                             |
@@ -180,7 +179,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dataplatform.emitter.enabled`                                | Start Data Platform metrics emitter                                                                              | `true`                          |
 | `dataplatform.emitter.image.registry`                         | Data Platform emitter image registry                                                                             | `docker.io`                     |
 | `dataplatform.emitter.image.repository`                       | Data Platform emitter image repository                                                                           | `bitnami/dataplatform-emitter`  |
-| `dataplatform.emitter.image.tag`                              | Data Platform emitter image tag (immutable tags are recommended)                                                 | `0.0.11-scratch-r0`             |
+| `dataplatform.emitter.image.tag`                              | Data Platform emitter image tag (immutable tags are recommended)                                                 | `1.0.1-scratch-r1`              |
 | `dataplatform.emitter.image.pullPolicy`                       | Data Platform emitter image pull policy                                                                          | `IfNotPresent`                  |
 | `dataplatform.emitter.image.pullSecrets`                      | Specify docker-registry secret names as an array                                                                 | `[]`                            |
 | `dataplatform.emitter.livenessProbe.enabled`                  | Enable livenessProbe                                                                                             | `true`                          |
@@ -266,6 +265,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `kafka.metrics.jmx.resources.requests.cpu`      | CPU capacity request for Kafka prometheus nodes                                                                                    | `100m`                |
 | `kafka.metrics.jmx.resources.requests.memory`   | Memory capacity request for Kafka prometheus nodes                                                                                 | `128Mi`               |
 | `kafka.metrics.jmx.service.port`                | JMX Prometheus exporter service port                                                                                               | `5556`                |
+| `kafka.metrics.jmx.service.annotations`         | Exporter service annotations                                                                                                       | `{}`                  |
 | `kafka.zookeeper.enabled`                       | Enable the Kafka subchart's Zookeeper                                                                                              | `true`                |
 | `kafka.zookeeper.replicaCount`                  | Number of Zookeeper nodes                                                                                                          | `3`                   |
 | `kafka.zookeeper.heapSize`                      | Size in MB for the Java Heap options (Xmx and XMs) in Zookeeper. This env var is ignored if Xmx an Xms are configured via JVMFLAGS | `4096`                |
@@ -346,27 +346,29 @@ The command removes all the Kubernetes components associated with the chart and 
 | `logstash.metrics.resources.requests.cpu`    | Elasticsearch metrics CPUs                            | `100m`   |
 | `logstash.metrics.resources.requests.memory` | Elasticsearch metrics requested memory                | `128Mi`  |
 | `logstash.metrics.service.port`              | Logstash Prometheus port                              | `9198`   |
-| `logstash.metrics.service.annotations`       | Annotations for the Prometheus metrics service        | `{}`     |
 
 
 ### Tanzu Observability (Wavefront) parameters
 
-| Name                                                 | Description                                    | Value                                |
-| ---------------------------------------------------- | ---------------------------------------------- | ------------------------------------ |
-| `wavefront.enabled`                                  | Enable Tanzu Observability Framework           | `false`                              |
-| `wavefront.clusterName`                              | Cluster name                                   | `KUBERNETES_CLUSTER_NAME`            |
-| `wavefront.wavefront.url`                            | Tanzu Observability cluster URL                | `https://YOUR_CLUSTER.wavefront.com` |
-| `wavefront.wavefront.token`                          | Tanzu Observability access token               | `YOUR_API_TOKEN`                     |
-| `wavefront.wavefront.existingSecret`                 | Tanzu Observability existing secret            | `""`                                 |
-| `wavefront.collector.resources.limits`               | Wavefront collector metrics resource limits    | `{}`                                 |
-| `wavefront.collector.resources.requests.cpu`         | Wavefront collector metrics CPUs               | `200m`                               |
-| `wavefront.collector.resources.requests.memory`      | Wavefront collector metrics requested memory   | `10Mi`                               |
-| `wavefront.collector.discovery.enabled`              | Enable wavefront discovery                     | `true`                               |
-| `wavefront.collector.discovery.enableRuntimeConfigs` | Enable runtime configs for wavefront discovery | `true`                               |
-| `wavefront.collector.discovery.config`               | Wavefront discovery config                     | `[]`                                 |
-| `wavefront.proxy.resources.limits`                   | Wavefront Proxy metrics resource limits        | `{}`                                 |
-| `wavefront.proxy.resources.requests.cpu`             | Wavefront Proxy metrics CPUs                   | `100m`                               |
-| `wavefront.proxy.resources.requests.memory`          | Wavefront Proxy metrics requested memory       | `5Gi`                                |
+| Name                                                 | Description                                         | Value                                |
+| ---------------------------------------------------- | --------------------------------------------------- | ------------------------------------ |
+| `wavefront.enabled`                                  | Enable Tanzu Observability Framework                | `false`                              |
+| `wavefront.clusterName`                              | Cluster name                                        | `KUBERNETES_CLUSTER_NAME`            |
+| `wavefront.wavefront.url`                            | Tanzu Observability cluster URL                     | `https://YOUR_CLUSTER.wavefront.com` |
+| `wavefront.wavefront.token`                          | Tanzu Observability access token                    | `YOUR_API_TOKEN`                     |
+| `wavefront.wavefront.existingSecret`                 | Tanzu Observability existing secret                 | `""`                                 |
+| `wavefront.collector.resources.limits`               | Wavefront collector metrics resource limits         | `{}`                                 |
+| `wavefront.collector.resources.requests.cpu`         | Wavefront collector metrics CPUs                    | `200m`                               |
+| `wavefront.collector.resources.requests.memory`      | Wavefront collector metrics requested memory        | `10Mi`                               |
+| `wavefront.collector.discovery.enabled`              | Enable wavefront discovery                          | `true`                               |
+| `wavefront.collector.discovery.enableRuntimeConfigs` | Enable runtime configs for wavefront discovery      | `true`                               |
+| `wavefront.collector.discovery.config`               | Wavefront discovery config                          | `[]`                                 |
+| `wavefront.collector.discovery.enabled`              | Rules based and Prometheus endpoints auto-discovery | `true`                               |
+| `wavefront.collector.discovery.enableRuntimeConfigs` | Enable runtime discovery rules                      | `true`                               |
+| `wavefront.collector.discovery.config`               | Configuration for rules based auto-discovery        | `[]`                                 |
+| `wavefront.proxy.resources.limits`                   | Wavefront Proxy metrics resource limits             | `{}`                                 |
+| `wavefront.proxy.resources.requests.cpu`             | Wavefront Proxy metrics CPUs                        | `100m`                               |
+| `wavefront.proxy.resources.requests.memory`          | Wavefront Proxy metrics requested memory            | `5Gi`                                |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
@@ -382,7 +384,7 @@ The above command deploys the data platform with Kafka with 3 nodes (replicas).
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example
 
 ```console
-$ helm install my-release -f values.yaml bitnami/dataplatform-bp2
+$ helm install my-release -f values.yaml bitnami/dataplatform-bp2 
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -391,7 +393,7 @@ $ helm install my-release -f values.yaml bitnami/dataplatform-bp2
 
 In the default deployment, the helm chart deploys the data platform with [Metrics Emitter](https://hub.docker.com/r/bitnami/dataplatform-emitter) and [Prometheus Exporter](https://hub.docker.com/r/bitnami/dataplatform-exporter) which emit the health metrics of the data platform which can be integrated with your observability solution.
 
-In case you need to deploy the data platform with Tanzu Observability Framework for all the applications (Kafka/Spark/Elasticsearch/Logstash) in the data platform, you can specify the 'enabled' parameter using the `--set <component>.metrics.enabled=true` argument to `helm install`. For Example,
+- To deploy the data platform with Tanzu Observability Framework with the Wavefront Collector with enabled annotation based discovery feature for all the applications (Kafka/Spark/Elasticsearch/Logstash) in the data platform, make sure that auto discovery `wavefront.collector.discovery.enabled=true` is enabled, It should be enabled by default and specify the 'enabled' parameter using the ` --set <component>.metrics.enabled=true` argument to helm install. For Example,
 
 ```console
 $ helm install my-release bitnami/dataplatform-bp2 \
@@ -403,10 +405,30 @@ $ helm install my-release bitnami/dataplatform-bp2 \
     --set wavefront.enabled=true \
     --set wavefront.clusterName=<K8s-CLUSTER-NAME> \
     --set wavefront.wavefront.url=https://<YOUR_CLUSTER>.wavefront.com \
+    --set wavefront.wavefront.token=<YOUR_API_TOKEN> 
+```
+> **NOTE**: When Annotation based discovery feature is enabled in the Wavefront Collector, it scrapes metrics from all the pods in the cluster that have Prometheus annotation enabled.
+
+- To deploy the data platform with Tanzu Observability Framework without the annotation based discovery feature in Wavefront Collector for all the applications (Kafka/Spark/Elasticsearch/Logstash) in the data platform, uncomment the config section in the wavefront deployment from the data platform values.yml file, and specify the 'enable' parameter to 'false' using the `--set wavefront.collector.discovery.enabled=false`  with `helm install` command, below is an example:
+
+```console
+$ helm install my-release bitnami/dataplatform-bp2 \
+    --set kafka.metrics.kafka.enabled=true \
+    --set kafka.metrics.jmx.enabled=true \
+    --set spark.metrics.enabled=true \
+    --set elasticsearch.metrics.enabled=true \
+    --set logstash.metrics.enabled=true \
+    --set wavefront.enabled=true \
+    --set wavefront.collector.discovery.enabled=false \
+    --set wavefront.clusterName=<K8s-CLUSTER-NAME> \
+    --set wavefront.wavefront.url=https://<YOUR_CLUSTER>.wavefront.com \
     --set wavefront.wavefront.token=<YOUR_API_TOKEN>
 ```
+### For using an existing Wavefront deployment
 
-If you want to use an existing Wavefront deployment, edit the Wavefront Collector ConfigMap and add the following snippet under discovery plugins. Once done, restart the wavefront collectors DaemonSet.
+- To enable the auto discovery feature in wavefront for the existing wavefront deployment, make sure that auto discovery `enableDiscovery: true` and annotation based discovery `discovery.disable_annotation_discovery: false` are enabled in the Wavefront Collector ConfigMap. They should be enabled by default.
+
+- To not use the annotation based discovery feature in wavefront, edit the Wavefront Collector ConfigMap and add the following snippet under discovery plugins. Once done, restart the wavefront collectors DaemonSet.
 
 ```console
 $ kubectl edit configmap wavefront-collector-config -n wavefront
@@ -414,7 +436,7 @@ $ kubectl edit configmap wavefront-collector-config -n wavefront
 
 Add the below config:
 
-```yaml
+```console
       discovery:
         enable_runtime_plugins: true
         plugins:
@@ -427,7 +449,6 @@ Add the below config:
           port: 9308
           path: /metrics
           scheme: http
-          prefix: kafka.
 
         ## auto-discover jmx exporter
         - name: kafka-jmx-discovery
@@ -512,6 +533,10 @@ Elasticsearch dependency version was bumped to a new major version changing the 
 Regular upgrade is compatible from previous versions.
 
 ## Upgrading
+
+### To 9.0.0
+
+This major adds annotation based discovery feature in wavefront and updates to newest versions of the exporter/emitter to the chart.
 
 ### To 8.0.0
 
