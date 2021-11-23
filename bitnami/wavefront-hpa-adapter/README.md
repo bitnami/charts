@@ -190,7 +190,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ### Connect to a Wavefront instance
 
-Wavefront HPA for Kubernetes only works when it configured to use a Wavefront SaaS instance with a proper API token. This is done by setting the `wavefront.url` and `wavefront.token` values. Obtain an instance and an API token by signing up for an account through the [official Wavefront sign-up page](https://www.wavefront.com/sign-up). Refer to the [chart documentation for a configuration example](https://docs.bitnami.com/kubernetes/apps/wavefront-hpa-adapter-for-kubernetes/get-started/configure-connection/).
+Wavefront HPA for Kubernetes only works when it configured to use a Wavefront SaaS instance with a proper API token. This is done by setting the `wavefront.url` and `wavefront.token` values. Obtain an instance and an API token by signing up for an account through the [official Wavefront sign-up page](https://www.wavefront.com/sign-up).
 
 ## Troubleshooting
 

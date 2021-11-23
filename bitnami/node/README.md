@@ -343,8 +343,6 @@ Deploying the helm chart enabling the Azure external database makes the followin
 - You would want an Azure CosmosDB MongoDB&reg; database
 - Your application uses DATABASE_HOST, DATABASE_PORT, DATABASE_USER, DATABASE_PASSWORD, and DATABASE_NAME environment variables to connect to the database.
 
-You can read more about the kubernetes service catalog at https://github.com/kubernetes-bitnami/service-catalog
-
 ## Persistence
 
 The [Bitnami Node](https://github.com/bitnami/bitnami-docker-node) image stores the Node application and configurations at the `/app`  path of the container.
