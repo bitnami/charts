@@ -294,7 +294,7 @@ spec:
               value: {{ ternary "yes" "no" .Values.directoryPerDB | quote }}
             {{- $extraFlags := .Values.hidden.extraFlags | join " " -}}
             {{- if .Values.tls.enabled }}
-              {{- $extraFlags = printf "%s %s" "--tlsMode=requireTLS --tlsCertificateKeyFile=/certs/mongodb.pem --tlsCAFile=/certs/mongodb-ca-cert" $extraFlags  }}
+              {{- $extraFlags = printf "%s %s" "--tlsMode={{ .Values.tls.mode }} --tlsCertificateKeyFile=/certs/mongodb.pem --tlsCAFile=/certs/mongodb-ca-cert" $extraFlags  }}
             {{- end }}
             {{- if ne $extraFlags ""}}
             - name: MONGODB_EXTRA_FLAGS
