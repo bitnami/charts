@@ -233,10 +233,12 @@ rules:
   - patch
   - update
   - watch
+{{- if or .Values.operator.args.scanAllNamespaces  .Values.operator.args.scanNamespaces }}
 - nonResourceURLs:
   - /metrics
   verbs:
   - get
+{{- end }}
 ---
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 {{- if or .Values.operator.args.scanAllNamespaces  .Values.operator.args.scanNamespaces }}
