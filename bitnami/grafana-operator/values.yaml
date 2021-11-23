@@ -84,6 +84,13 @@ operator:
   ## @param operator.args.leaderElect Specify if leaderElection should be used or not. (Create LeaderElection Role)
   ## @param operator.args.scanAllNamespaces Specify if all namespace should be scanned for dashboards and datasources. (Creates ClusterRole)
   ## @param operator.args.scanNamespaces Specify the namespaces which should be scanned for dashboards and datasources (Creates ClusterRole)
+  ## @param operator.args.zapDevel Enable zap development mode (changes defaults to console encoder, debug log level, disables sampling and stacktrace from 'warning' level)
+  ## @param operator.args.zapEncoder Zap log encoding ('json' or 'console')
+  ## @param operator.args.zapLevel Zap log level (one of 'debug', 'info', 'error' or any integer value > 0) (default info)
+  ## @param operator.args.zapSample Enable zap log sampling. Sampling will be disabled for integer log levels > 1
+  ## @param operator.args.zapStacktraceLevel Set the minimum log level that triggers stacktrace generation (default error)
+  ## @param operator.args.zapTimeEncoding Sets the zap time format ('epoch', 'millis', 'nano', or 'iso8601') (default )
+  ## @param operator.args.extraArgs Extra arguments for the grafana operator (Evaluated as a template)
   ##
   args:
     ## This enabled leader election for the operator and creates a Role for the leader election.
@@ -95,6 +102,14 @@ operator:
     ##
     scanAllNamespaces: false
     scanNamespaces: []
+    zapDevel: false
+    zapEncoder: ""
+    zapLevel: ""
+    zapSample: ""
+    zapStacktraceLevel: ""
+    zapTimeEncoding: ""
+    extraArgs: []
+
   ## @param operator.rbac.create Create specifies whether to install and use RBAC rules
   ##
   rbac:
@@ -536,6 +551,14 @@ grafana:
   dashboardLabelSelectors:
     - matchLabels:
         app.kubernetes.io/instance: "{{ .Release.Name }}"
+  ## @param grafana.dashboardNamespaceSelector Watch for dashboards only in the Namespaces that have the specified namespace label
+  ## Ref: https://github.com/grafana-operator/grafana-operator/blob/master/documentation/multi_namespace_support.md#2-dashboardnamespaceselector
+  ## e.g:
+  ## dashboardNamespaceSelector:
+  ##   - matchLabels:
+  ##     key: value
+  ##
+  dashboardNamespaceSelector: []
   ## Grafana containers' liveness probe
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ## @param grafana.livenessProbe.enabled Enable livenessProbe

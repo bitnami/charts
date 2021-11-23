@@ -54,7 +54,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/minio
-  tag: 2021.10.27-debian-10-r0
+  tag: 2021.11.9-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -80,7 +80,7 @@ image:
 clientImage:
   registry: docker.io
   repository: bitnami/minio-client
-  tag: 2021.10.7-debian-10-r20
+  tag: 2021.11.5-debian-10-r3
 ## @param mode MinIO&reg; server mode (`standalone` or `distributed`)
 ## ref: https://docs.minio.io/docs/distributed-minio-quickstart-guide
 ##
@@ -94,7 +94,7 @@ auth:
   ## @param auth.rootPassword Password for MinIO&reg; root user
   ##
   rootPassword: ""
-  ## @param auth.existingSecret Use existing secret for credentials details (`auth.rootUser` and `auth.rootPassword` will be ignored and picked up from this secret). The secret has to contain the keys `root-user` and `mariadb-root-password)
+  ## @param auth.existingSecret Use existing secret for credentials details (`auth.rootUser` and `auth.rootPassword` will be ignored and picked up from this secret). The secret has to contain the keys `root-user` and `root-password`)
   ##
   existingSecret: ""
   ## @param auth.forcePassword Force users to specify required passwords
@@ -196,6 +196,114 @@ statefulset:
   ## @param statefulset.drivesPerNode Number of drives attached to every node (only for MinIO&reg; distributed mode)
   ##
   drivesPerNode: 1
+
+## MinIO&reg; provisioning
+##
+provisioning:
+  ## @param provisioning.enabled Enable MinIO&reg; provisioning Job
+  ##
+  enabled: false
+  ## @param provisioning.schedulerName Name of the k8s scheduler (other than default) for MinIO&reg; provisioning
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param provisioning.podAnnotations Provisioning Pod annotations.
+  ##
+  podAnnotations: {}
+  ## @param provisioning.command Default provisioning container command (useful when using custom images). Use array form
+  ##
+  command: []
+  ## @param provisioning.args Default provisioning container args (useful when using custom images). Use array form
+  ##
+  args: []
+  ## @param provisioning.extraVolumes Optionally specify extra list of additional volumes for MinIO&reg; provisioning pod
+  ##
+  extraVolumes: []
+  ## @param provisioning.extraVolumeMounts Optionally specify extra list of additional volumeMounts for MinIO&reg; provisioning container
+  ##
+  extraVolumeMounts: []
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## @param provisioning.resources.limits The resources limits for the container
+  ## @param provisioning.resources.requests The requested resources for the container
+  ##
+  resources:
+    ## Example:
+    ## limits:
+    ##    cpu: 100m
+    ##    memory: 64Mi
+    limits: {}
+    ## Examples:
+    ## requests:
+    ##    cpu: 200m
+    ##    memory: 128Mi
+    requests: {}
+  ## @param provisioning.users MinIO&reg; users provisioning
+  ## https://docs.min.io/docs/minio-admin-complete-guide.html#user
+  ## e.g.
+  ## users:
+  ##   - username: test-username
+  ##     password: test-password
+  ##     disabled: false
+  ##     policies:
+  ##       - readwrite
+  ##       - consoleAdmin
+  ##       - diagnostics
+  users: []
+  ## @param provisioning.groups MinIO&reg; groups provisioning
+  ## https://docs.min.io/docs/minio-admin-complete-guide.html#group
+  ## e.g.
+  ## groups
+  ##   - name: test-group
+  ##     disabled: false
+  ##     members:
+  ##       - test-username
+  ##     policies:
+  ##       - readwrite
+  groups: []
+  ## @param provisioning.buckets MinIO&reg; buckets, lifecycle, quota and tags provisioning
+  ## Buckets https://docs.min.io/docs/minio-client-complete-guide.html#mb
+  ## Lifecycle https://docs.min.io/docs/minio-client-complete-guide.html#ilm
+  ## Quotas https://docs.min.io/docs/minio-admin-complete-guide.html#bucket
+  ## Tags https://docs.min.io/docs/minio-client-complete-guide.html#tag
+  ## e.g.
+  ## buckets:
+  ##   - name: test-bucket
+  ##     region: us-east-1
+  ##     # Only when mode is 'distributed'
+  ##     # ref: https://docs.minio.io/docs/distributed-minio-quickstart-guide
+  ##     withLock: true
+  ##     # Only when mode is 'distributed'
+  ##     # ref: https://docs.minio.io/docs/distributed-minio-quickstart-guide
+  ##     lifecycle:
+  ##       - id: TestPrefix7dRetention
+  ##         prefix: test-prefix
+  ##         disabled: false
+  ##         expiry:
+  ##           days: 7
+  ##           # Days !OR! date
+  ##           # date: "2021-11-11T00:00:00Z"
+  ##           nonconcurrentDays: 3
+  ##     # Only when mode is 'distributed'
+  ##     # ref: https://docs.minio.io/docs/distributed-minio-quickstart-guide
+  ##     quota:
+  ##       # hard, fifo or clear(+ omit size)
+  ##       type: hard
+  ##       size: 10GiB
+  ##     tags:
+  ##       key1: value1
+  buckets: []
+  ## @param provisioning.config MinIO&reg; config provisioning
+  ## https://docs.min.io/docs/minio-server-configuration-guide.html
+  ## e.g.
+  ## config:
+  ##   - name: region
+  ##     options:
+  ##       name: us-east-1
+  config: []
+
 ## @param hostAliases MinIO&reg; pod host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
@@ -638,6 +746,13 @@ networkPolicy:
   ## listening on. When true, MinIO&reg; will accept connections from any source (with the correct destination port).
   ##
   allowExternal: true
+  ## @param networkPolicy.extraFromClauses Allows to add extra 'from' clauses to the NetworkPolicy
+  extraFromClauses: {}
+  ## Example
+  ## extraFromClauses:
+  ## - podSelector:
+  ##     matchLabels:
+  ##       a: b
 
 ## @section Persistence parameters
 
@@ -691,7 +806,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r234
+    tag: 10-debian-10-r246
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -847,6 +962,7 @@ gateway:
     ## Authentication configuration for Azure. Ignored unless type=azure
     ## @param gateway.auth.azure.accessKey Access key to access MinIO&reg; using Azure Gateway
     ## @param gateway.auth.azure.secretKey Secret key to access MinIO&reg; using Azure Gateway
+    ## @param gateway.auth.azure.serviceEndpoint Azure Blob Storage custom endpoint
     ## @param gateway.auth.azure.storageAccountName Azure Storage Account Name to use to access Azure Blob Storage
     ## @param gateway.auth.azure.storageAccountKey Azure Storage Account Key to use to access Azure Blob Storage
     ## @param gateway.auth.azure.storageAccountNameExistingSecret Existing Secret name to extract Azure Storage Account Name from to access Azure Blob Storage
@@ -857,6 +973,7 @@ gateway:
     azure:
       accessKey: ""
       secretKey: ""
+      serviceEndpoint: ""
       storageAccountName: ""
       storageAccountKey: ""
       storageAccountNameExistingSecret: ""

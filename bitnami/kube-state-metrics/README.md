@@ -65,6 +65,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `fullnameOverride`  | String to fully override `kube-state-metrics.fullname` template with a string                                 | `""`  |
 | `commonLabels`      | Add labels to all the deployed resources                                                                      | `{}`  |
 | `commonAnnotations` | Add annotations to all the deployed resources                                                                 | `{}`  |
+| `extraDeploy`       | Array of extra objects to deploy with the release                                                             | `[]`  |
 
 
 ### kube-state-metrics parameters
@@ -79,7 +80,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.name`                           | The name of the ServiceAccount to create                                                                                                                           | `""`                         |
 | `image.registry`                                | kube-state-metrics image registry                                                                                                                                  | `docker.io`                  |
 | `image.repository`                              | kube-state-metrics image repository                                                                                                                                | `bitnami/kube-state-metrics` |
-| `image.tag`                                     | kube-state-metrics Image tag (immutable tags are recommended)                                                                                                      | `2.2.3-debian-10-r14`        |
+| `image.tag`                                     | kube-state-metrics Image tag (immutable tags are recommended)                                                                                                      | `2.2.4-debian-10-r0`         |
 | `image.pullPolicy`                              | kube-state-metrics image pull policy                                                                                                                               | `IfNotPresent`               |
 | `image.pullSecrets`                             | Specify docker-registry secret names as an array                                                                                                                   | `[]`                         |
 | `extraArgs`                                     | Additional command line arguments to pass to kube-state-metrics                                                                                                    | `{}`                         |

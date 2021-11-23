@@ -776,8 +776,7 @@ networkPolicy:
   ##
   additionalRules: {}
 
-## @section RBAC parameters
-
+## @section RBAC parameter
 ## Specifies whether a ServiceAccount should be created
 ##
 serviceAccount:
@@ -788,6 +787,9 @@ serviceAccount:
   ## If not set and create is true, a name is generated using the fullname template
   ##
   name: ""
+  ## @param serviceAccount.automountServiceAccountToken Auto-mount the service account token in the pod
+  ##
+  automountServiceAccountToken: false
 ## Specifies whether RBAC resources should be created
 ##
 rbac:

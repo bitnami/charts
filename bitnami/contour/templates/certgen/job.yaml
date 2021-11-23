@@ -9,8 +9,14 @@ metadata:
     "helm.sh/hook": "pre-install,pre-upgrade"
     "helm.sh/hook-weight": "1"
     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: contour-certgen
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
 spec:
   ttlSecondsAfterFinished: 0
   template:
@@ -25,8 +31,11 @@ spec:
       {{- if .Values.contour.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.contour.affinity "context" $) | nindent 8 }}
       {{- end }}
-      {{- if .Values.contour.tolerations}}
+      {{- if .Values.contour.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.contour.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.contour.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.contour.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       containers:
         - name: contour
@@ -49,27 +58,23 @@ spec:
             {{- if .Values.contour.extraEnvVars }}
               {{- include "common.tplvalues.render" (dict "value" .Values.contour.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
-          {{- if or .Values.contour.extraEnvVarsConfigMap .Values.contour.extraEnvVarsSecret }}
+          {{- if or .Values.contour.extraEnvVarsCM .Values.contour.extraEnvVarsSecret }}
           envFrom:
-            {{- if .Values.contour.extraEnvVarsConfigMap }}
+            {{- if .Values.contour.extraEnvVarsCM }}
             - configMapRef:
-                name: {{ include "common.tplvalues.render" ( dict "value" .Values.contour.extraEnvVarsConfigMap "context" $ ) }}
+                name: {{ include "common.tplvalues.render" ( dict "value" .Values.contour.extraEnvVarsCM "context" $ ) }}
             {{- end }}
             {{- if .Values.contour.extraEnvVarsSecret }}
             - secretRef:
                 name: {{ include "common.tplvalues.render" ( dict "value" .Values.contour.extraEnvVarsSecret "context" $ ) }}
             {{- end }}
           {{- end }}
+          {{- if .Values.contour.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.contour.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
           resources: {{ toYaml .Values.contour.resources | nindent 12 }}
       restartPolicy: Never
       serviceAccountName: {{ include "contour.contourCertGenServiceAccountName" . }}
-      {{- if .Values.contour.securityContext.enabled }}
-      securityContext:
-        runAsUser: {{ .Values.contour.securityContext.runAsUser }}
-        runAsGroup: {{ .Values.contour.securityContext.runAsGroup }}
-        fsGroup: {{ .Values.contour.securityContext.fsGroup }}
-        runAsNonRoot: {{ .Values.contour.securityContext.runAsNonRoot }}
-      {{- end }}
   parallelism: 1
   completions: 1
   backoffLimit: 1

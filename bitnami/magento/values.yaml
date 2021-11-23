@@ -51,7 +51,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/magento
-  tag: 2.4.3-debian-10-r57
+  tag: 2.4.3-debian-10-r63
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -347,6 +347,104 @@ podAnnotations: {}
 ##
 podLabels: {}
 
+## @section NetworkPolicy parameters
+
+## Add networkpolicies
+##
+networkPolicy:
+  ## @param networkPolicy.enabled Enable network policies
+  ## If ingress.enabled or metrics.enabled are true, configure networkPolicy.ingress and networkPolicy.metrics selectors respectively to allow communication
+  ##
+  enabled: false
+  ## @param networkPolicy.metrics.enabled Enable network policy for metrics (prometheus)
+  ## @param networkPolicy.metrics.namespaceSelector magento Monitoring namespace selector labels. These labels will be used to identify the prometheus' namespace.
+  ## @param networkPolicy.metrics.podSelector magento Monitoring pod selector labels. These labels will be used to identify the Prometheus pods.
+  ##
+  metrics:
+    enabled: false
+    ## e.g:
+    ## podSelector:
+    ##   label: monitoring
+    ##
+    podSelector: {}
+    ## e.g:
+    ## namespaceSelector:
+    ##   label: monitoring
+    ##
+    namespaceSelector: {}
+  ## @param networkPolicy.ingress.enabled Enable network policy for Ingress Proxies
+  ## @param networkPolicy.ingress.namespaceSelector magento Ingress Proxy namespace selector labels. These labels will be used to identify the Ingress Proxy's namespace.
+  ## @param networkPolicy.ingress.podSelector magento Ingress Proxy pods selector labels. These labels will be used to identify the Ingress Proxy pods.
+  ##
+  ingress:
+    enabled: false
+    ## e.g:
+    ## podSelector:
+    ##   label: ingress
+    ##
+    podSelector: {}
+    ## e.g:
+    ## namespaceSelector:
+    ##   label: ingress
+    ##
+    namespaceSelector: {}
+  ## @param networkPolicy.ingressRules.backendOnlyAccessibleByFrontend Enable ingress rule that makes the backend (mariadb, elasticsearch) only accessible by magento's pods.
+  ## @param networkPolicy.ingressRules.customBackendSelector magento Backend selector labels. These labels will be used to identify the backend pods.
+  ## @param networkPolicy.ingressRules.accessOnlyFrom.enabled Enable ingress rule that makes magento only accessible from a particular origin
+  ## @param networkPolicy.ingressRules.accessOnlyFrom.namespaceSelector magento Namespace selector label that is allowed to access magento. This label will be used to identified the allowed namespace(s).
+  ## @param networkPolicy.ingressRules.accessOnlyFrom.podSelector magento Pods selector label that is allowed to access magento. This label will be used to identified the allowed pod(s).
+  ## @param networkPolicy.ingressRules.customRules magento Custom network policy ingress rule
+  ##
+  ingressRules:
+    ## mariadb and elacticsearch backends only can be accessed from magento
+    ##
+    backendOnlyAccessibleByFrontend: false
+    ## Additional custom backend selector
+    ## e.g:
+    ## customBackendSelector:
+    ##   - to:
+    ##       - namespaceSelector:
+    ##           matchLabels:
+    ##             label: example
+    customBackendSelector: {}
+    ## Allow only from the indicated:
+    ##
+    accessOnlyFrom:
+      enabled: false
+      ## e.g:
+      ## podSelector:
+      ##   label: access
+      ##
+      podSelector: {}
+      ## e.g:
+      ## namespaceSelector:
+      ##   label: access
+      ##
+      namespaceSelector: {}
+    ## custom ingress rules
+    ## e.g:
+    ## customRules:
+    ##   - from:
+    ##       - namespaceSelector:
+    ##           matchLabels:
+    ##             label: example
+    customRules: {}
+  ## @param networkPolicy.egressRules.denyConnectionsToExternal Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).
+  ## @param networkPolicy.egressRules.customRules magento Custom network policy rule
+  ##
+  egressRules:
+    # Deny connections to external. This is not compatible with an external database.
+    denyConnectionsToExternal: false
+    ## Additional custom egress rules
+    ## e.g:
+    ## customRules:
+    ##   - to:
+    ##       - namespaceSelector:
+    ##           matchLabels:
+    ##             label: example
+    customRules: {}
+
+
 ## @section Database parameters
 
 ## MariaDB chart configuration
@@ -366,7 +464,7 @@ mariadb:
   image:
     registry: docker.io
     repository: bitnami/mariadb
-    tag: 10.3.31-debian-10-r79
+    tag: 10.3.32-debian-10-r2
   ## @param mariadb.architecture MariaDB architecture. Allowed values: `standalone` or `replication`
   ##
   architecture: standalone
@@ -530,7 +628,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r233
+    tag: 10-debian-10-r250
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -695,7 +793,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.10.1-debian-10-r35
+    tag: 0.10.1-debian-10-r52
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -793,7 +891,7 @@ certificates:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r233
+    tag: 10-debian-10-r250
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images

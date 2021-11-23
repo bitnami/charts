@@ -25,6 +25,9 @@ fullnameOverride: ""
 ## @param clusterDomain Kubernetes Cluster Domain
 ##
 clusterDomain: cluster.local
+## @param extraDeploy Array of extra objects to deploy with the release
+##
+extraDeploy: []
 
 ## @section external-dns parameters
 
@@ -518,6 +521,9 @@ zoneIdFilters: []
 ## @param annotationFilter Filter sources managed by external-dns via annotation using label selector (optional)
 ##
 annotationFilter: ""
+## @param labelFilter Select sources managed by external-dns using label selector (optional)
+##
+labelFilter: ""
 ## @param dryRun When enabled, prints DNS record changes rather than actually performing them (optional)
 ##
 dryRun: false

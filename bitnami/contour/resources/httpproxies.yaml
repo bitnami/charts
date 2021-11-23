@@ -2,7 +2,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.6.0
+    controller-gen.kubebuilder.io/version: v0.6.2
   creationTimestamp: null
   name: httpproxies.projectcontour.io
 spec:
@@ -331,6 +331,12 @@ spec:
                             description: RequestHashPolicy contains configuration
                               for an individual hash policy on a request attribute.
                             properties:
+                              hashSourceIP:
+                                description: HashSourceIP should be set to true when
+                                  request source IP hash based load balancing is desired.
+                                  It must be the only hash option field set, otherwise
+                                  this request hash policy object will be ignored.
+                                type: boolean
                               headerHashOptions:
                                 description: HeaderHashOptions should be set when
                                   request header hash based load balancing is desired.
@@ -698,10 +704,13 @@ spec:
                       description: The retry policy for this route.
                       properties:
                         count:
+                          default: 1
                           description: NumRetries is maximum allowed number of retries.
-                            If not supplied, the number of retries is one.
+                            If set to -1, then retries are disabled. If set to 0 or
+                            not supplied, the value is set to the Envoy default of
+                            1.
                           format: int64
-                          minimum: 0
+                          minimum: -1
                           type: integer
                         perTryTimeout:
                           description: PerTryTimeout specifies the timeout per retry
@@ -1032,6 +1041,12 @@ spec:
                           description: RequestHashPolicy contains configuration for
                             an individual hash policy on a request attribute.
                           properties:
+                            hashSourceIP:
+                              description: HashSourceIP should be set to true when
+                                request source IP hash based load balancing is desired.
+                                It must be the only hash option field set, otherwise
+                                this request hash policy object will be ignored.
+                              type: boolean
                             headerHashOptions:
                               description: HeaderHashOptions should be set when request
                                 header hash based load balancing is desired. It must
@@ -1379,7 +1394,7 @@ spec:
                     description: The fully qualified domain name of the root of the
                       ingress tree all leaves of the DAG rooted at this object relate
                       to the fqdn.
-                    pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
+                    pattern: ^(\*\.)?[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
                     type: string
                   rateLimitPolicy:
                     description: The policy for rate limiting on the virtual host.
@@ -1665,6 +1680,9 @@ spec:
                 type: object
             type: object
           status:
+            default:
+              currentStatus: NotReconciled
+              description: Waiting for controller
             description: Status is a container for computed information about the
               HTTPProxy.
             properties:
