@@ -23,6 +23,8 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.podLabels "context" $) | nindent 8 }}
         {{- end }}
     spec:
+      automountServiceAccountToken: {{ .Values.serviceAccount.autoMount }}
+      serviceAccountName: {{ template "node.serviceAccountName" . }}
       {{- include "node.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}

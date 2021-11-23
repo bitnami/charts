@@ -138,6 +138,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `initContainers`                        | Add init containers to the Node pods                                                      | `[]`                   |
 | `extraVolumes`                          | Extra volumes to add to the deployment                                                    | `[]`                   |
 | `extraVolumeMounts`                     | Extra volume mounts to add to the container                                               | `[]`                   |
+| `serviceAccount.create`                 | Enable creation of ServiceAccount for nginx pod                                           | `false`                |
+| `serviceAccount.name`                   | The name of the ServiceAccount to use.                                                    | `""`                   |
+| `serviceAccount.annotations`            | Annotations for service account. Evaluated as a template.                                 | `{}`                   |
+| `serviceAccount.autoMount`              | Auto-mount the service account token in the pod                                           | `false`                |
 | `containerSecurityContext.enabled`      | Node Container securityContext                                                            | `true`                 |
 | `containerSecurityContext.runAsUser`    | User ID for the Node container                                                            | `1001`                 |
 | `containerSecurityContext.runAsNonRoot` | Set container's Security Context runAsNonRoot                                             | `true`                 |

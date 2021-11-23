@@ -272,6 +272,23 @@ extraVolumes: []
 ## @param extraVolumeMounts Extra volume mounts to add to the container
 ##
 extraVolumeMounts: []
+## Pods Service Account
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+##
+serviceAccount:
+  ## @param serviceAccount.create Enable creation of ServiceAccount for nginx pod
+  ##
+  create: false
+  ## @param serviceAccount.name The name of the ServiceAccount to use.
+  ## If not set and create is true, a name is generated using the `common.names.fullname` template
+  name: ""
+  ## @param serviceAccount.annotations Annotations for service account. Evaluated as a template.
+  ## Only used if `create` is `true`.
+  ##
+  annotations: {}
+  ## @param serviceAccount.autoMount Auto-mount the service account token in the pod
+  ##
+  autoMount: false
 ## SecurityContext configuration
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 ## @param containerSecurityContext.enabled Node Container securityContext
