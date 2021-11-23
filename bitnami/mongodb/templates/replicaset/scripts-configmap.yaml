@@ -161,7 +161,7 @@ data:
     function logger ()
     #$1 is the line to be logged
     {
-      echo "$(date -u)  replicaSetConfigurationSettings.sh -- ${1}" >&1
+      echo "replicaSetConfigurationSettings.sh -- ${1}" >&1
     }
 
     SLEEP_PERIOD=10
