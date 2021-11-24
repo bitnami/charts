@@ -547,7 +547,7 @@ By default `cluster.init` will be set to `true` in order to initialize the Redis
 
 ## Persistence
 
-By default, the chart mounts a [Persistent Volume](http://kubernetes.io/docs/user-guide/persistent-volumes/) at the `/bitnami` path. The volume is created using dynamic volume provisioning.
+By default, the chart mounts a [Persistent Volume](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) at the `/bitnami` path. The volume is created using dynamic volume provisioning.
 
 ## NetworkPolicy
 

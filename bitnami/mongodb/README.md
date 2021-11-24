@@ -521,7 +521,7 @@ Refer to the chart documentation for more information on, and examples of, confi
 
 The [Bitnami MongoDB&reg;](https://github.com/bitnami/bitnami-docker-mongodb) image stores the MongoDB&reg; data and configurations at the `/bitnami/mongodb` path of the container.
 
-The chart mounts a [Persistent Volume](http://kubernetes.io/docs/user-guide/persistent-volumes/) at this location. The volume is created using dynamic volume provisioning.
+The chart mounts a [Persistent Volume](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) at this location. The volume is created using dynamic volume provisioning.
 
 If you encounter errors when working with persistent volumes, refer to our [troubleshooting guide for persistent volumes](https://docs.bitnami.com/kubernetes/faq/troubleshooting/troubleshooting-persistence-volumes/).
 

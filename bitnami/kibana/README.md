@@ -1,6 +1,6 @@
 # Kibana
 
-[Kibana](https://kibana.com/) is an open source, browser based analytics and search dashboard for Elasticsearch.
+[Kibana](https://www.elastic.co/kibana/) is an open source, browser based analytics and search dashboard for Elasticsearch.
 
 ## TL;DR
 
@@ -322,7 +322,7 @@ As an alternative, you can use one of the preset configurations for pod affinity
 
 The [Bitnami Kibana](https://github.com/bitnami/bitnami-docker-kibana) image can persist data. If enabled, the persisted path is `/bitnami/kibana` by default.
 
-The chart mounts a [Persistent Volume](http://kubernetes.io/docs/user-guide/persistent-volumes/) at this location. The volume is created using dynamic volume provisioning.
+The chart mounts a [Persistent Volume](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) at this location. The volume is created using dynamic volume provisioning.
 
 ### Add extra volumes
 

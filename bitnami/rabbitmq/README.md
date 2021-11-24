@@ -352,7 +352,7 @@ Set the *auth.tls.failIfNoPeerCert* parameter to *false* to allow a TLS connecti
 
 Set the *auth.tls.sslOptionsVerify* to *verify_peer* to force a node to perform peer verification. When set to *verify_none*, peer verification will be disabled and certificate exchange won't be performed.
 
-Refer to the chart documentation for [more information and examples of enabling TLS and using Let's Encrypt certificates](https://docs.bitnami.com/kubernetes/infrastructure/rabbitmq/administration/enable-tls/).
+Refer to the chart documentation for [more information and examples of enabling TLS and using Let's Encrypt certificates](https://docs.bitnami.com/kubernetes/infrastructure/rabbitmq/administration/enable-tls-ingress/).
 
 ### Load custom definitions
 
@@ -453,7 +453,7 @@ More information: [Clustering Guide: Restarting](https://www.rabbitmq.com/cluste
 
 The [Bitnami RabbitMQ](https://github.com/bitnami/bitnami-docker-rabbitmq) image stores the RabbitMQ data and configurations at the `/opt/bitnami/rabbitmq/var/lib/rabbitmq/` path of the container.
 
-The chart mounts a [Persistent Volume](http://kubernetes.io/docs/user-guide/persistent-volumes/) at this location. By default, the volume is created using dynamic volume provisioning. An existing PersistentVolumeClaim can also be defined.
+The chart mounts a [Persistent Volume](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) at this location. By default, the volume is created using dynamic volume provisioning. An existing PersistentVolumeClaim can also be defined.
 
 ### Use existing PersistentVolumeClaims
 

@@ -944,7 +944,7 @@ prometheus:
       capabilities:
         drop:
           - ALL
-    ## @param prometheus.thanos.prometheusUrl Override default prometheus url "http://localhost:9090"
+    ## @param prometheus.thanos.prometheusUrl Override default prometheus url `http://localhost:9090`
     ##
     prometheusUrl: ""
     ## @param prometheus.thanos.extraArgs Additional arguments passed to the thanos sidecar container
