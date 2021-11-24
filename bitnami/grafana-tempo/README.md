@@ -17,7 +17,7 @@ This chart bootstraps a [Grafana Tempo](https://github.com/grafana/tempo) Deploy
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
-[Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/infrastructure/grafana-tempo/get-started/understand-default-configuration/).
+[Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/infrastructure/grafana-tempo/get-started/).
 
 ## Prerequisites
 
@@ -86,7 +86,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `tempo.containerPort`                  | Tempo components web port                                  | `3100`                        |
 | `tempo.grpcContainerPort`              | Tempo components GRPC port                                 | `9095`                        |
 | `tempo.memBallastSizeMbs`              | Tempo components memory ballast size in MB                 | `1024`                        |
-| `tempo.dataDir`                        | Tempo components data directory                            | `/bitnami/tempo-grafana/data` |
+| `tempo.dataDir`                        | Tempo components data directory                            | `/bitnami/grafana-tempo/data` |
 | `tempo.traces.jaeger.grpc`             | Enable Tempo to ingest Jaeger GRPC traces                  | `true`                        |
 | `tempo.traces.jaeger.thriftBinary`     | Enable Tempo to ingest Jaeger Thrift Binary traces         | `false`                       |
 | `tempo.traces.jaeger.thriftCompact`    | Enable Tempo to ingest Jaeger Thrift Compact traces        | `false`                       |
@@ -639,7 +639,7 @@ The tempo configuration file `tempo.yaml` is shared across the different compone
 
 ## Persistence
 
-The [Bitnami grafana-tempo](https://github.com/bitnami/bitnami-docker-grafana-tempo) image stores the grafana-tempo `ingester` data at the `/bitnami` path of the container. Persistent Volume Claims are used to keep the data across deployments. [Learn more about persistence in the chart documentation](https://docs.bitnami.com/kubernetes/apps/grafana-tempo/configuration/chart-persistence/).
+The [Bitnami grafana-tempo](https://github.com/bitnami/bitnami-docker-grafana-tempo) image stores the grafana-tempo `ingester` data at the `/bitnami` path of the container. Persistent Volume Claims are used to keep the data across deployments.
 
 ### Additional environment variables
 
@@ -681,7 +681,7 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 ### Sidecars
 
-If additional containers are needed in the same pod as grafana-tempo (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter inside each of the subsections: `distributor`, `compactor`, `ingester`, `querier`, `queryFrontend` and `vulture` . If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/apps/grafana-tempo/administration/configure-use-sidecars/).
+If additional containers are needed in the same pod as grafana-tempo (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter inside each of the subsections: `distributor`, `compactor`, `ingester`, `querier`, `queryFrontend` and `vulture` . If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/infrastructure/grafana-tempo/configuration/configure-sidecar-init-containers/).
 
 ### Pod affinity
 

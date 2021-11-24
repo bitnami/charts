@@ -197,6 +197,9 @@ tls:
   ##   - "DNS.7": "$test"
   ##
   extraDnsNames: []
+  ## @param tls.mode Allows to set the tls mode which should be used when tls is enabled (options: `allowTLS`, `preferTLS`, `requireTLS`)
+  ##
+  mode: requireTLS
 ## @param hostAliases Add deployment host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##

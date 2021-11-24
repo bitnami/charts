@@ -515,7 +515,7 @@ This chart facilitates the creation of TLS secrets for use with the Ingress cont
 * Helm creates self-signed certificates and generates/manages certificate secrets.
 * An additional tool (like [cert-manager](https://github.com/jetstack/cert-manager/)) manages the secrets for the application.
 
-Refer to the [chart documentation for more information on working with TLS](https://docs.bitnami.com/kubernetes/infrastructure/jupyterhub/administration/enable-tls).
+Refer to the [chart documentation for more information on working with TLS](https://docs.bitnami.com/kubernetes/infrastructure/jupyterhub/administration/enable-tls-ingress/).
 
 ### Set pod affinity
 

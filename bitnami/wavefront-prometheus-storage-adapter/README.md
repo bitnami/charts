@@ -180,8 +180,6 @@ The Wavefront Prometheus Storage Adapter chart needs to be connected to a Wavefr
 
 - Using an external Wavefront Proxy instance: This is done by setting the `externalProxy.host` and `externalProxy.port` values. In this case, you should set the `wavefront.enabled` value to `false`. You also need to configure the Wavefront SaaS URL and token using the `wavefront.wavefront.url` and `wavefront.wavefront.token` parameters.
 
-Refer to the [chart documentation for more detailed configuration examples](https://docs.bitnami.com/kubernetes/apps/wavefront-storage-adapter-for-prometheus/get-started/configure-connection/).
-
 ### Configure Prometheus
 
 Once the Wavefront Prometheus Storage Adapter is deployed, you will need to configure the `prometheus.yml` file in your Prometheus installation adding the following lines (substitute the RELEASE_NAME placeholder):
