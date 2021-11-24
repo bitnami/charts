@@ -105,9 +105,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podSecurityContext.enabled`            | Enabled NGINX pods' Security Context                                                      | `false` |
 | `podSecurityContext.fsGroup`            | Set NGINX pod's Security Context fsGroup                                                  | `1001`  |
 | `podSecurityContext.sysctls`            | sysctl settings of the NGINX pods                                                         | `[]`    |
-| `containerSecurityContext.enabled`      | Enabled NGINX Core containers' Security Context                                           | `false` |
-| `containerSecurityContext.runAsUser`    | Set NGINX Core container's Security Context runAsUser                                     | `1001`  |
-| `containerSecurityContext.runAsNonRoot` | Set NGINX Core container's Security Context runAsNonRoot                                  | `true`  |
+| `containerSecurityContext.enabled`      | Enabled NGINX containers' Security Context                                           | `false` |
+| `containerSecurityContext.runAsUser`    | Set NGINX container's Security Context runAsUser                                     | `1001`  |
+| `containerSecurityContext.runAsNonRoot` | Set NGINX container's Security Context runAsNonRoot                                  | `true`  |
 | `containerPorts.http`                   | Sets http port inside NGINX container                                                     | `8080`  |
 | `containerPorts.https`                  | Sets https port inside NGINX container                                                    | `""`    |
 | `resources.limits`                      | The resources limits for the NGINX container                                              | `{}`    |
