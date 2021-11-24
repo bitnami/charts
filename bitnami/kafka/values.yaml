@@ -408,7 +408,7 @@ advertisedListeners: []
 listenerSecurityProtocolMap: ""
 ## @param allowPlaintextListener Allow to use the PLAINTEXT listener
 ##
-allowPlaintextListener: true
+allowPlaintextListener: no
 ## @param interBrokerListenerName The listener that the brokers should communicate on
 ##
 interBrokerListenerName: INTERNAL
