@@ -126,3 +126,14 @@ This check is introduced as a regexMatch instead of {{ if .Capabilities.HelmVers
   {{- true -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Return the appropriate apiVersion for HorizontalPodAutoscaler.
+*/}}
+{{- define "common.capabilities.autoscaling.apiVersion" -}}
+{{- if semverCompare "<1.12-0" (include "common.capabilities.kubeVersion" .) -}}
+{{- print "autoscaling/v2beta1" -}}
+{{- else -}}
+{{- print "autoscaling/v2beta2" -}}
+{{- end -}}
+{{- end -}}
