@@ -133,15 +133,15 @@ spec:
             - --store={{ . }}
             {{- end }}
             {{- if .Values.query.grpc.server.tls.enabled }}
-            - --grpc-server-tls-cert=/certs/server/{{ include "common.secrets.key" (dict "existingSecret" .Values.query.grpc.server.tls.existingSecret "key" "tls-cert") }}
-            - --grpc-server-tls-key=/certs/server/{{ include "common.secrets.key" (dict "existingSecret" .Values.query.grpc.server.tls.existingSecret "key" "tls-key") }}
-            - --grpc-server-tls-client-ca=/certs/server/{{ include "common.secrets.key" (dict "existingSecret" .Values.query.grpc.server.tls.existingSecret "key" "ca-cert") }}
+            - --grpc-server-tls-cert=/certs/server/{{ include "common.secrets.key" (dict "existingSecret" .Values.query.grpc.server.tls.existingSecret "key" "tls.crt") }}
+            - --grpc-server-tls-key=/certs/server/{{ include "common.secrets.key" (dict "existingSecret" .Values.query.grpc.server.tls.existingSecret "key" "tls.key") }}
+            - --grpc-server-tls-client-ca=/certs/server/{{ include "common.secrets.key" (dict "existingSecret" .Values.query.grpc.server.tls.existingSecret "key" "ca.crt") }}
             {{- end }}
             {{- if .Values.query.grpc.client.tls.enabled }}
             - --grpc-client-tls-secure
-            - --grpc-client-tls-cert=/certs/client/{{ include "common.secrets.key" (dict "existingSecret" .Values.query.grpc.client.tls.existingSecret "key" "tls-cert") }}
-            - --grpc-client-tls-key=/certs/client/{{ include "common.secrets.key" (dict "existingSecret" .Values.query.grpc.client.tls.existingSecret "key" "tls-key") }}
-            - --grpc-client-tls-ca=/certs/client/{{ include "common.secrets.key" (dict "existingSecret" .Values.query.grpc.client.tls.existingSecret "key" "ca-cert") }}
+            - --grpc-client-tls-cert=/certs/client/{{ include "common.secrets.key" (dict "existingSecret" .Values.query.grpc.client.tls.existingSecret "key" "tls.crt") }}
+            - --grpc-client-tls-key=/certs/client/{{ include "common.secrets.key" (dict "existingSecret" .Values.query.grpc.client.tls.existingSecret "key" "tls.key") }}
+            - --grpc-client-tls-ca=/certs/client/{{ include "common.secrets.key" (dict "existingSecret" .Values.query.grpc.client.tls.existingSecret "key" "ca.crt") }}
             {{- end }}
             {{- if .Values.query.grpc.client.servername }}
             - --grpc-client-server-name={{.Values.query.grpc.client.servername}}
