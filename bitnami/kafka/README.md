@@ -147,7 +147,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `listeners`                                | The address(es) the socket server listens on. Auto-calculated it's set to an empty array                                                             | `[]`                                |
 | `advertisedListeners`                      | The address(es) (hostname:port) the broker will advertise to producers and consumers. Auto-calculated it's set to an empty array                     | `[]`                                |
 | `listenerSecurityProtocolMap`              | The protocol->listener mapping. Auto-calculated it's set to nil                                                                                      | `""`                                |
-| `allowPlaintextListener`                   | Allow to use the PLAINTEXT listener                                                                                                                  | `true`                              |
+| `allowPlaintextListener`                   | Allow to use the PLAINTEXT listener                                                                                                                  | `no`                              |
 | `interBrokerListenerName`                  | The listener that the brokers should communicate on                                                                                                  | `INTERNAL`                          |
 
 
