@@ -512,9 +512,8 @@ spec:
   {{- if not .Values.hidden.persistence.enabled }}
         - name: datadir
           {{- if .Values.hidden.persistence.medium }}
-          emptyDir: {
+          emptyDir:
             medium: {{ .Values.hidden.persistence.medium | quote }}
-          }
           {{- else }}
           emptyDir: {}
           {{- end }}
