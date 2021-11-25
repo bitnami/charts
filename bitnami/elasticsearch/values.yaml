@@ -270,12 +270,13 @@ master:
     enabled: true
     fsGroup: 1001
     runAsUser: 1001
-  ## If security Context is enabled: Extend securityContext for master nodes on pod level.
+  
+  ## @param master.extraPodSecurityContext Extend securityContext for master nodes on pod level.
   extraPodSecurityContext: {}
     ## E.g
     ## allowPrivilegeEscalation: false
     ## runAsGroup: 1001
-  ## If security Context is enabled: Extend securityContext for master nodes on container level.
+  ## @param master.extraContainerSecurityContext  Extend securityContext for master nodes on container level.
   extraContainerSecurityContext: {}
     ## E.g
     ## allowPrivilegeEscalation: false
@@ -538,12 +539,12 @@ coordinating:
     enabled: true
     fsGroup: 1001
     runAsUser: 1001
-  ## If security Context is enabled: Extend securityContext for coordinating-only nodes on pod level.
+  ## @param coordinating.extraPodSecurityContext Extend securityContext for coordinating-only nodes on pod level.
   extraPodSecurityContext: {}
     ## E.g
     ## allowPrivilegeEscalation: false
     ## runAsGroup: 1001
-  ## If security Context is enabled: Extend securityContext for coordinating-only nodes on container level.
+  ## @param coordinating.extraContainerSecurityContext Extend securityContext for coordinating-only nodes on container level.
   extraContainerSecurityContext: {}
     ## E.g
     ## allowPrivilegeEscalation: false
@@ -773,12 +774,12 @@ data:
     enabled: true
     fsGroup: 1001
     runAsUser: 1001
-  ## If security Context is enabled: Extend securityContext for data nodes on pod level.
+  ## @param data.extraPodSecurityContext Extend securityContext for data nodes on pod level.
   extraPodSecurityContext: {}
     ## E.g
     ## allowPrivilegeEscalation: false
     ## runAsGroup: 1001
-  ## If security Context is enabled: Extend securityContext for data nodes on container level.
+  ## @param data.extraContainerSecurityContext Extend securityContext for data nodes on container level.
   extraContainerSecurityContext: {}
     ## E.g
     ## allowPrivilegeEscalation: false
@@ -1027,12 +1028,12 @@ ingest:
     enabled: true
     fsGroup: 1001
     runAsUser: 1001
-  ## If security Context is enabled: Extend securityContext for ingest nodes on pod level.
+  ## @param ingest.extraPodSecurityContext Extend securityContext for ingest nodes on pod level.
   extraPodSecurityContext: {}
     ## E.g
     ## allowPrivilegeEscalation: false
     ## runAsGroup: 1001
-  ## If security Context is enabled: Extend securityContext for ingest nodes on container level.
+  ## @param ingest.extraContainerSecurityContext Extend securityContext for ingest nodes on container level.
   extraContainerSecurityContext: {}
     ## E.g
     ## allowPrivilegeEscalation: false
