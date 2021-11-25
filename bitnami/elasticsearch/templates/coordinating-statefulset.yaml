@@ -104,7 +104,7 @@ spec:
             runAsUser: {{ .Values.coordinating.securityContext.runAsUser }}
           {{- if .Values.coordinating.extraContainerSecurityContext }}
           {{- toYaml .Values.coordinating.extraContainerSecurityContext  | nindent 12 }}
-          {{- end }}            
+          {{- end }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}

@@ -270,7 +270,6 @@ master:
     enabled: true
     fsGroup: 1001
     runAsUser: 1001
-  
   ## @param master.extraPodSecurityContext Extend securityContext for master nodes on pod level.
   extraPodSecurityContext: {}
     ## E.g

@@ -103,7 +103,7 @@ spec:
             runAsUser: {{ .Values.ingest.securityContext.runAsUser }}
           {{- if .Values.ingest.extraContainerSecurityContext }}
           {{- toYaml .Values.ingest.extraContainerSecurityContext  | nindent 12 }}
-          {{- end }} 
+          {{- end }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
