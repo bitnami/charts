@@ -15,10 +15,16 @@ Note, returns 127.0.0.1 if using ClusterIP.
 {{/*
 Gets the host to be used for this application.
 If not using ClusterIP, or if a host or LoadBalancerIP is not defined, the value will be empty.
+When using Ingress, it will be set to the Ingress hostname.
 */}}
 {{- define "mediawiki.host" -}}
+{{- if .Values.ingress.enabled }}
+{{- $host := .Values.ingress.hostname | default "" -}}
+{{- default (include "mediawiki.serviceIP" .) $host -}}
+{{- else -}}
 {{- $host := index .Values (printf "%sHost" .Chart.Name) | default "" -}}
 {{- default (include "mediawiki.serviceIP" .) $host -}}
+{{- end -}}
 {{- end -}}
 
 {{/*
