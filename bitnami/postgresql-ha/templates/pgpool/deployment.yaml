@@ -276,7 +276,7 @@ spec:
             {{- end }}
           ports:
             - name: postgresql
-              containerPort: {{ .Values.postgresql.containerPort }}
+              containerPort: {{ .Values.pgpool.containerPort }}
               protocol: TCP
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.pgpool.livenessProbe.enabled }}

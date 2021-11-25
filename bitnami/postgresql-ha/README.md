@@ -273,6 +273,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `pgpool.pdb.minAvailable`                   | Minimum number / percentage of pods that should remain scheduled                                                   | `1`                   |
 | `pgpool.pdb.maxUnavailable`                 | Maximum number / percentage of pods that may be made unavailable                                                   | `""`                  |
 | `pgpool.updateStrategy`                     | Strategy used to replace old Pods by new ones                                                                      | `{}`                  |
+| `pgpool.containerPort`                      | Pgpool port                                                                                                        | `5432`                |
 | `pgpool.minReadySeconds`                    | How many seconds a pod needs to be ready before killing the next, during update                                    | `""`                  |
 | `pgpool.adminUsername`                      | Pgpool Admin username                                                                                              | `admin`               |
 | `pgpool.adminPassword`                      | Pgpool Admin password                                                                                              | `""`                  |

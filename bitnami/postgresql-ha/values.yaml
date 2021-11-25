@@ -825,6 +825,9 @@ pgpool:
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
   ##
   updateStrategy: {}
+  ## @param pgpool.containerPort Pgpool port
+  ##
+  containerPort: 5432
   ## @param pgpool.minReadySeconds How many seconds a pod needs to be ready before killing the next, during update
   ##
   minReadySeconds: ""
