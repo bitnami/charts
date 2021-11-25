@@ -154,6 +154,9 @@ postgresql:
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategyType: RollingUpdate
+  ## @param postgresql.containerPort PostgreSQL port
+  ##
+  containerPort: 5432
   ## @param postgresql.hostAliases Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1042,6 +1045,9 @@ metrics:
     ##    memory: 256Mi
     ##
     requests: {}
+  ## @param metrics.containerPort Prometheus metrics exporter port
+  ##
+  containerPort: 9187
   ## Prometheus exporter container's liveness probe
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ## @param metrics.livenessProbe.enabled Enable livenessProbe
