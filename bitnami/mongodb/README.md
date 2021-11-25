@@ -243,6 +243,7 @@ Refer to the [chart documentation for more information on each of these architec
 | Name                                          | Description                                                                        | Value               |
 | --------------------------------------------- | ---------------------------------------------------------------------------------- | ------------------- |
 | `persistence.enabled`                         | Enable MongoDB&reg; data persistence using PVC                                     | `true`              |
+| `persistence.medium`                          | Provide a medium for `emptyDir` volumes.                                           | `""`                |
 | `persistence.existingClaim`                   | Provide an existing `PersistentVolumeClaim` (only when `architecture=standalone`)  | `""`                |
 | `persistence.storageClass`                    | PVC Storage Class for MongoDB&reg; data volume                                     | `""`                |
 | `persistence.accessModes`                     | PV Access Mode                                                                     | `["ReadWriteOnce"]` |
@@ -398,6 +399,7 @@ Refer to the [chart documentation for more information on each of these architec
 | `hidden.pdb.minAvailable`                            | Minimum number/percentage of hidden node pods that should remain scheduled                           | `1`                 |
 | `hidden.pdb.maxUnavailable`                          | Maximum number/percentage of hidden node pods that may be made unavailable                           | `""`                |
 | `hidden.persistence.enabled`                         | Enable hidden node data persistence using PVC                                                        | `true`              |
+| `hidden.persistence.medium`                          | Provide a medium for `emptyDir` volumes.                                                             | `""`                |
 | `hidden.persistence.storageClass`                    | PVC Storage Class for hidden node data volume                                                        | `""`                |
 | `hidden.persistence.accessModes`                     | PV Access Mode                                                                                       | `["ReadWriteOnce"]` |
 | `hidden.persistence.size`                            | PVC Storage Request for hidden node data volume                                                      | `8Gi`               |
