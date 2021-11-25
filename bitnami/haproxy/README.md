@@ -17,7 +17,7 @@ This chart bootstraps a [HAProxy](https://github.com/haproxytech/haproxy) Deploy
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
-[Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/infrastructure/haproxy/get-started/understand-default-configuration/).
+[Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/infrastructure/haproxy/get-started/).
 
 ## Prerequisites
 
@@ -93,7 +93,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------ | ----------------------------------------------------------------------------------------- | -------------------- |
 | `image.registry`                     | HAProxy image registry                                                                    | `docker.io`          |
 | `image.repository`                   | HAProxy image repository                                                                  | `bitnami/haproxy`    |
-| `image.tag`                          | HAProxy image tag (immutable tags are recommended)                                        | `2.4.8-debian-10-r0` |
+| `image.tag`                          | HAProxy image tag (immutable tags are recommended)                                        | `2.5.0-debian-10-r0` |
 | `image.pullPolicy`                   | HAProxy image pull policy                                                                 | `IfNotPresent`       |
 | `image.pullSecrets`                  | HAProxy image pull secrets                                                                | `[]`                 |
 | `replicaCount`                       | Number of haproxy replicas to deploy                                                      | `1`                  |

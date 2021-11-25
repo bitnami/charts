@@ -75,14 +75,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### WordPress Image parameters
 
-| Name                | Description                                          | Value                |
-| ------------------- | ---------------------------------------------------- | -------------------- |
-| `image.registry`    | WordPress image registry                             | `docker.io`          |
-| `image.repository`  | WordPress image repository                           | `bitnami/wordpress`  |
-| `image.tag`         | WordPress image tag (immutable tags are recommended) | `5.8.2-debian-10-r7` |
-| `image.pullPolicy`  | WordPress image pull policy                          | `IfNotPresent`       |
-| `image.pullSecrets` | WordPress image pull secrets                         | `[]`                 |
-| `image.debug`       | Enable image debug mode                              | `false`              |
+| Name                | Description                                          | Value                 |
+| ------------------- | ---------------------------------------------------- | --------------------- |
+| `image.registry`    | WordPress image registry                             | `docker.io`           |
+| `image.repository`  | WordPress image repository                           | `bitnami/wordpress`   |
+| `image.tag`         | WordPress image tag (immutable tags are recommended) | `5.8.2-debian-10-r12` |
+| `image.pullPolicy`  | WordPress image pull policy                          | `IfNotPresent`        |
+| `image.pullSecrets` | WordPress image pull secrets                         | `[]`                  |
+| `image.debug`       | Enable image debug mode                              | `false`               |
 
 
 ### WordPress Configuration parameters
@@ -229,7 +229,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                   | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`            | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`          | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r254`     |
+| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r258`     |
 | `volumePermissions.image.pullPolicy`          | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`         | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`          | The resources limits for the init container                                                     | `{}`                    |
@@ -258,7 +258,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                         | Start a sidecar prometheus exporter to expose metrics                        | `false`                   |
 | `metrics.image.registry`                  | Apache Exporter image registry                                               | `docker.io`               |
 | `metrics.image.repository`                | Apache Exporter image repository                                             | `bitnami/apache-exporter` |
-| `metrics.image.tag`                       | Apache Exporter image tag (immutable tags are recommended)                   | `0.10.1-debian-10-r56`    |
+| `metrics.image.tag`                       | Apache Exporter image tag (immutable tags are recommended)                   | `0.10.1-debian-10-r60`    |
 | `metrics.image.pullPolicy`                | Apache Exporter image pull policy                                            | `IfNotPresent`            |
 | `metrics.image.pullSecrets`               | Apache Exporter image pull secrets                                           | `[]`                      |
 | `metrics.resources.limits`                | The resources limits for the Prometheus exporter container                   | `{}`                      |
@@ -403,7 +403,7 @@ To enable Ingress integration, set `ingress.enabled` to `true`. The `ingress.hos
 
 ### TLS secrets
 
-The chart also facilitates the creation of TLS secrets for use with the Ingress controller, with different options for certificate management. [Learn more about TLS secrets](https://docs.bitnami.com/kubernetes/apps/wordpress/administration/enable-tls/).
+The chart also facilitates the creation of TLS secrets for use with the Ingress controller, with different options for certificate management. [Learn more about TLS secrets](https://docs.bitnami.com/kubernetes/apps/wordpress/administration/enable-tls-ingress/).
 
 ### `.htaccess` files
 
