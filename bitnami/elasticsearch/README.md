@@ -80,7 +80,7 @@ $ helm delete --purge my-release
 | ------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------ |
 | `image.registry`                           | Elasticsearch image registry                                                                                                                        | `docker.io`                    |
 | `image.repository`                         | Elasticsearch image repository                                                                                                                      | `bitnami/elasticsearch`        |
-| `image.tag`                                | Elasticsearch image tag (immutable tags are recommended)                                                                                            | `7.15.2-debian-10-r0`          |
+| `image.tag`                                | Elasticsearch image tag (immutable tags are recommended)                                                                                            | `7.15.2-debian-10-r10`         |
 | `image.pullPolicy`                         | Elasticsearch image pull policy                                                                                                                     | `IfNotPresent`                 |
 | `image.pullSecrets`                        | Elasticsearch image pull secrets                                                                                                                    | `[]`                           |
 | `image.debug`                              | Enable image debug mode                                                                                                                             | `false`                        |
@@ -391,7 +391,7 @@ $ helm delete --purge my-release
 | `curator.name`                               | Elasticsearch Curator pod name                                                                                                              | `curator`                       |
 | `curator.image.registry`                     | Elasticsearch Curator image registry                                                                                                        | `docker.io`                     |
 | `curator.image.repository`                   | Elasticsearch Curator image repository                                                                                                      | `bitnami/elasticsearch-curator` |
-| `curator.image.tag`                          | Elasticsearch Curator image tag                                                                                                             | `5.8.4-debian-10-r179`          |
+| `curator.image.tag`                          | Elasticsearch Curator image tag                                                                                                             | `5.8.4-debian-10-r190`          |
 | `curator.image.pullPolicy`                   | Elasticsearch Curator image pull policy                                                                                                     | `IfNotPresent`                  |
 | `curator.image.pullSecrets`                  | Elasticsearch Curator image pull secrets                                                                                                    | `[]`                            |
 | `curator.cronjob.schedule`                   | Schedule for the CronJob                                                                                                                    | `0 1 * * *`                     |
@@ -440,7 +440,7 @@ $ helm delete --purge my-release
 | `metrics.name`                               | Metrics pod name                                                                                                         | `metrics`                        |
 | `metrics.image.registry`                     | Metrics exporter image registry                                                                                          | `docker.io`                      |
 | `metrics.image.repository`                   | Metrics exporter image repository                                                                                        | `bitnami/elasticsearch-exporter` |
-| `metrics.image.tag`                          | Metrics exporter image tag                                                                                               | `1.3.0-debian-10-r19`            |
+| `metrics.image.tag`                          | Metrics exporter image tag                                                                                               | `1.3.0-debian-10-r31`            |
 | `metrics.image.pullPolicy`                   | Metrics exporter image pull policy                                                                                       | `IfNotPresent`                   |
 | `metrics.image.pullSecrets`                  | Metrics exporter image pull secrets                                                                                      | `[]`                             |
 | `metrics.extraArgs`                          | Extra arguments to add to the default exporter command                                                                   | `[]`                             |
@@ -487,7 +487,7 @@ $ helm delete --purge my-release
 | `sysctlImage.enabled`            | Enable kernel settings modifier image       | `true`                  |
 | `sysctlImage.registry`           | Kernel settings modifier image registry     | `docker.io`             |
 | `sysctlImage.repository`         | Kernel settings modifier image repository   | `bitnami/bitnami-shell` |
-| `sysctlImage.tag`                | Kernel settings modifier image tag          | `10-debian-10-r248`     |
+| `sysctlImage.tag`                | Kernel settings modifier image tag          | `10-debian-10-r259`     |
 | `sysctlImage.pullPolicy`         | Kernel settings modifier image pull policy  | `IfNotPresent`          |
 | `sysctlImage.pullSecrets`        | Kernel settings modifier image pull secrets | `[]`                    |
 | `sysctlImage.resources.limits`   | The resources limits for the container      | `{}`                    |
@@ -501,7 +501,7 @@ $ helm delete --purge my-release
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                                                              | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `10-debian-10-r248`     |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `10-debian-10-r259`     |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Init container volume-permissions image pull secrets                                                                                                      | `[]`                    |
 | `volumePermissions.resources.limits`   | The resources limits for the container                                                                                                                    | `{}`                    |

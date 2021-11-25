@@ -158,7 +158,7 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | ---------------------------------- | --------------------------------------------------------------------------------- | -------------------- |
 | `image.registry`                   | Grafana image registry                                                            | `docker.io`          |
 | `image.repository`                 | Grafana image repository                                                          | `bitnami/grafana`    |
-| `image.tag`                        | Grafana image tag (immutable tags are recommended)                                | `8.2.5-debian-10-r0` |
+| `image.tag`                        | Grafana image tag (immutable tags are recommended)                                | `8.2.5-debian-10-r6` |
 | `image.pullPolicy`                 | Grafana image pull policy                                                         | `IfNotPresent`       |
 | `image.pullSecrets`                | Grafana image pull secrets                                                        | `[]`                 |
 | `hostAliases`                      | Add deployment host aliases                                                       | `[]`                 |
@@ -336,7 +336,7 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `imageRenderer.enabled`                              | Enable using a remote rendering service to render PNG images                                            | `false`                          |
 | `imageRenderer.image.registry`                       | Grafana Image Renderer image registry                                                                   | `docker.io`                      |
 | `imageRenderer.image.repository`                     | Grafana Image Renderer image repository                                                                 | `bitnami/grafana-image-renderer` |
-| `imageRenderer.image.tag`                            | Grafana Image Renderer image tag (immutable tags are recommended)                                       | `3.2.1-debian-10-r36`            |
+| `imageRenderer.image.tag`                            | Grafana Image Renderer image tag (immutable tags are recommended)                                       | `3.3.0-debian-10-r5`             |
 | `imageRenderer.image.pullPolicy`                     | Grafana Image Renderer image pull policy                                                                | `IfNotPresent`                   |
 | `imageRenderer.image.pullSecrets`                    | Grafana image Renderer pull secrets                                                                     | `[]`                             |
 | `imageRenderer.replicaCount`                         | Number of Grafana Image Renderer Pod replicas                                                           | `1`                              |
@@ -382,7 +382,7 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r255`     |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r260`     |
 | `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                    |
