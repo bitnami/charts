@@ -481,9 +481,8 @@ spec:
   {{- if not .Values.persistence.enabled }}
         - name: datadir
           {{- if .Values.persistence.medium }}
-          emptyDir: {
+          emptyDir:
             medium: {{ .Values.persistence.medium | quote }}
-          }
           {{- else }}
           emptyDir: {}
           {{- end }}
