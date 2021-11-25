@@ -345,8 +345,8 @@ $ helm delete --purge my-release
 | `ingest.securityContext.enabled`            | Enable security context for ingest pods                                                                                  | `true`          |
 | `ingest.securityContext.fsGroup`            | Group ID for the container for ingest pods                                                                               | `1001`          |
 | `ingest.securityContext.runAsUser`          | User ID for the container for ingest pods                                                                                | `1001`          |
-| `ingest.extraPodSecurityContext`            | Extra security context parameters on pod level. Used if `ingest.securityContext.enabled` is set to `true`                | `{}`            |
-| `ingest.extraContainerSecurityContext`      | Extra security context parameters on container level. Used if `ingest.securityContext.enabled` is set to `true`          | `{}`            |
+| `ingest.extraPodSecurityContext`            | Extra security context parameters on pod level.                                                                          | `{}`            |
+| `ingest.extraContainerSecurityContext`      | Extra security context parameters on container level.                                                                    | `{}`            |
 | `ingest.podAffinityPreset`                  | Ingest Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                               | `""`            |
 | `ingest.podAntiAffinityPreset`              | Ingest Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                          | `""`            |
 | `ingest.nodeAffinityPreset.type`            | Ingest Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                         | `""`            |
