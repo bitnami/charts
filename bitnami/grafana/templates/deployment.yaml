@@ -79,7 +79,12 @@ spec:
           image: {{ include "volumePermissions.image" . }}
           imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
           command:
-            - chown -R {{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }} /bitnami/grafana
+            - /bin/bash
+            - '-ec'
+          args:
+            - |
+              mkdir -p /bitnami/grafana
+              chown -R {{ .Values.grafana.containerSecurityContext.runAsUser }}:{{ .Values.grafana.podSecurityContext.fsGroup }} /bitnami/grafana
           securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.volumePermissions.containerSecurityContext "context" $) | nindent 12 }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- include "common.tplvalues.render" (dict "value" .Values.volumePermissions.resources "context" $) | nindent 12 }}
