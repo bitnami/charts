@@ -339,7 +339,31 @@ persistence:
   ## Applicable when deployment.type is statefulset
   ##
   selectorLabels: {}
-
+networkPolicy:
+  ## @param networkPolicy.enabled Enable creation of NetworkPolicy resources. Only Ingress traffic is filtered for now.
+  ##
+  enabled: false
+  ## @param networkPolicy.allowExternal Don't require client label for connections
+  ## The Policy model to apply. When set to false, only pods with the correct
+  ## client label will have network access to every tomcat port defined on containerPort and containerExtraPorts.
+  ## When true, tomcat will accept connections from any source
+  ## (with the correct destination port).
+  ##
+  allowExternal: true
+  ## @param networkPolicy.explicitNamespacesSelector A Kubernetes LabelSelector to explicitly select namespaces from which traffic could be allowed
+  ## If explicitNamespacesSelector is missing or set to {}, only client Pods that are in the networkPolicy's namespace
+  ## and that match other criteria, the ones that have the good label, can reach the tomcat.
+  ## But sometimes, we want the tomcat to be accessible to clients from other namespaces, in this case, we can use this
+  ## LabelSelector to select these namespaces, note that the networkPolicy's namespace should also be explicitly added.
+  ##
+  ## Example:
+  ## explicitNamespacesSelector:
+  ##   matchLabels:
+  ##     role: frontend
+  ##   matchExpressions:
+  ##    - {key: role, operator: In, values: [frontend]}
+  ##
+  explicitNamespacesSelector: {}
 ## @section Traffic Exposure parameters
 
 ## Service parameters

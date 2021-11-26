@@ -166,11 +166,11 @@ podSecurityContext:
   ##   value: "10000"
   ##
   sysctls: []
-## NGINX Core containers' Security Context (only main container).
+## NGINX containers' Security Context.
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-## @param containerSecurityContext.enabled Enabled NGINX Core containers' Security Context
-## @param containerSecurityContext.runAsUser Set NGINX Core container's Security Context runAsUser
-## @param containerSecurityContext.runAsNonRoot Set NGINX Core container's Security Context runAsNonRoot
+## @param containerSecurityContext.enabled Enabled NGINX containers' Security Context
+## @param containerSecurityContext.runAsUser Set NGINX container's Security Context runAsUser
+## @param containerSecurityContext.runAsNonRoot Set NGINX container's Security Context runAsNonRoot
 ##
 containerSecurityContext:
   enabled: false

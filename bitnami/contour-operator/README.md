@@ -328,7 +328,7 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 ### Sidecars
 
-If additional containers are needed in the same pod as contour-operator (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter. If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/apps/contour-operator/administration/configure-use-sidecars/).
+If additional containers are needed in the same pod as contour-operator (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter. If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/infrastructure/contour-operator/configuration/configure-sidecar-init-containers/).
 
 ### Pod affinity
 

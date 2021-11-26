@@ -11,6 +11,9 @@ metadata:
     app.kubernetes.io/component: image-renderer
   {{- if and .Values.imageRenderer.metrics.enabled .Values.imageRenderer.metrics.annotations }}
   annotations: {{- include "common.tplvalues.render" (dict "value" .Values.imageRenderer.metrics.annotations "context" $) | nindent 4 }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
+    {{- end }}
   {{- end }}
 spec:
   type: ClusterIP

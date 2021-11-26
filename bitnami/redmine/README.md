@@ -13,7 +13,7 @@ $ helm install my-release bitnami/redmine
 
 This chart bootstraps a [Redmine](https://github.com/bitnami/bitnami-docker-redmine) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-It also packages the [Bitnami MariaDB chart](https://github.com/kubernetes/charts/tree/master/bitnami/mariadb) and the [PostgreSQL chart](https://github.com/kubernetes/charts/tree/master/bitnami/postgresql) which are required for bootstrapping a MariaDB/PostgreSQL deployment for the database requirements of the Redmine application.
+It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) and the [PostgreSQL chart](https://github.com/bitnami/charts/tree/master/bitnami/postgresql) which are required for bootstrapping a MariaDB/PostgreSQL deployment for the database requirements of the Redmine application.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This chart has been tested to work with NGINX Ingress, cert-manager, fluentd and Prometheus on top of the [BKPR](https://kubeprod.io/).
 
@@ -334,20 +334,20 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 
 ### NetworkPolicy parameters
 
-| Name                                                          | Description                                                                                                                    | Value   |
-| ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ------- |
-| `networkPolicy.enabled`                                       | Enable network policies                                                                                                        | `false` |
-| `networkPolicy.ingress.enabled`                               | Enable network policy for Ingress Proxies                                                                                      | `false` |
-| `networkPolicy.ingress.namespaceSelector`                     | Ingress Proxy namespace selector labels. These labels will be used to identify the Ingress Proxy's namespace.                  | `{}`    |
-| `networkPolicy.ingress.podSelector`                           | Ingress Proxy pods selector labels. These labels will be used to identify the Ingress Proxy pods.                              | `{}`    |
-| `networkPolicy.ingressRules.backendOnlyAccessibleByFrontend`  | Enable ingress rule that makes the backend (mariadb) only accessible by PrestaShop's pods.                                     | `false` |
-| `networkPolicy.ingressRules.customBackendSelector`            | Backend selector labels. These labels will be used to identify the backend pods.                                               | `{}`    |
-| `networkPolicy.ingressRules.accessOnlyFrom.enabled`           | Enable ingress rule that makes PrestaShop only accessible from a particular origin                                             | `false` |
-| `networkPolicy.ingressRules.accessOnlyFrom.namespaceSelector` | Namespace selector label that is allowed to access PrestaShop. This label will be used to identified the allowed namespace(s). | `{}`    |
-| `networkPolicy.ingressRules.accessOnlyFrom.podSelector`       | Pods selector label that is allowed to access PrestaShop. This label will be used to identified the allowed pod(s).            | `{}`    |
-| `networkPolicy.ingressRules.customRules`                      | Custom network policy ingress rule                                                                                             | `{}`    |
-| `networkPolicy.egressRules.denyConnectionsToExternal`         | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).                                 | `false` |
-| `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                     | `{}`    |
+| Name                                                          | Description                                                                                                                 | Value   |
+| ------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `networkPolicy.enabled`                                       | Enable network policies                                                                                                     | `false` |
+| `networkPolicy.ingress.enabled`                               | Enable network policy for Ingress Proxies                                                                                   | `false` |
+| `networkPolicy.ingress.namespaceSelector`                     | Ingress Proxy namespace selector labels. These labels will be used to identify the Ingress Proxy's namespace.               | `{}`    |
+| `networkPolicy.ingress.podSelector`                           | Ingress Proxy pods selector labels. These labels will be used to identify the Ingress Proxy pods.                           | `{}`    |
+| `networkPolicy.ingressRules.backendOnlyAccessibleByFrontend`  | Enable ingress rule that makes the backend (mariadb) only accessible by Redmine's pods.                                     | `false` |
+| `networkPolicy.ingressRules.customBackendSelector`            | Backend selector labels. These labels will be used to identify the backend pods.                                            | `{}`    |
+| `networkPolicy.ingressRules.accessOnlyFrom.enabled`           | Enable ingress rule that makes Redmine only accessible from a particular origin                                             | `false` |
+| `networkPolicy.ingressRules.accessOnlyFrom.namespaceSelector` | Namespace selector label that is allowed to access Redmine. This label will be used to identified the allowed namespace(s). | `{}`    |
+| `networkPolicy.ingressRules.accessOnlyFrom.podSelector`       | Pods selector label that is allowed to access Redmine. This label will be used to identified the allowed pod(s).            | `{}`    |
+| `networkPolicy.ingressRules.customRules`                      | Custom network policy ingress rule                                                                                          | `{}`    |
+| `networkPolicy.egressRules.denyConnectionsToExternal`         | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).                              | `false` |
+| `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                  | `{}`    |
 
 
 The above parameters map to the env variables defined in [bitnami/redmine](http://github.com/bitnami/bitnami-docker-redmine). For more information please refer to the [bitnami/redmine](http://github.com/bitnami/bitnami-docker-redmine) image documentation.

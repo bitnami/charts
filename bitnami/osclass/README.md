@@ -1,6 +1,6 @@
 # Osclass
 
-[Osclass](https://osclass.org/) is a PHP script that allows you to quickly create and manage your own free classifieds site. Using this script, you can provide free advertising for items for sale, real estate, jobs, cars... Hundreds of free classified advertising sites are using Osclass.
+[Osclass](https://osclass-classifieds.com/) is a PHP script that allows you to quickly create and manage your own free classifieds site. Using this script, you can provide free advertising for items for sale, real estate, jobs, cars... Hundreds of free classified advertising sites are using Osclass.
 
 ## TL;DR
 
@@ -13,7 +13,7 @@ $ helm install my-release bitnami/osclass
 
 This chart bootstraps an [Osclass](https://github.com/bitnami/bitnami-docker-osclass) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-It also packages the [Bitnami MariaDB chart](https://github.com/kubernetes/charts/tree/master/bitnami/mariadb) which is required for bootstrapping a MariaDB deployment for the database requirements of the Osclass application.
+It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) which is required for bootstrapping a MariaDB deployment for the database requirements of the Osclass application.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This chart has been tested to work with NGINX Ingress, cert-manager, fluentd and Prometheus on top of the [BKPR](https://kubeprod.io/).
 
@@ -71,14 +71,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Osclass Image parameters
 
-| Name                | Description                                        | Value                  |
-| ------------------- | -------------------------------------------------- | ---------------------- |
-| `image.registry`    | Osclass image registry                             | `docker.io`            |
-| `image.repository`  | Osclass image repository                           | `bitnami/osclass`      |
-| `image.tag`         | Osclass image tag (immutable tags are recommended) | `4.4.0-debian-10-r174` |
-| `image.pullPolicy`  | Osclass image pull policy                          | `IfNotPresent`         |
-| `image.pullSecrets` | Osclass image pull secrets                         | `[]`                   |
-| `image.debug`       | Enable Bitnami debug mode in Osclass image         | `false`                |
+| Name                | Description                                        | Value                |
+| ------------------- | -------------------------------------------------- | -------------------- |
+| `image.registry`    | Osclass image registry                             | `docker.io`          |
+| `image.repository`  | Osclass image repository                           | `bitnami/osclass`    |
+| `image.tag`         | Osclass image tag (immutable tags are recommended) | `8.0.0-debian-10-r0` |
+| `image.pullPolicy`  | Osclass image pull policy                          | `IfNotPresent`       |
+| `image.pullSecrets` | Osclass image pull secrets                         | `[]`                 |
+| `image.debug`       | Enable Bitnami debug mode in Osclass image         | `false`              |
 
 
 ### Osclass Configuration parameters
@@ -139,7 +139,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `certificates.extraEnvVarsSecret`                    | Secret with extra environment variables                                                   | `""`                                     |
 | `certificates.image.registry`                        | Apache Exporter image registry                                                            | `docker.io`                              |
 | `certificates.image.repository`                      | Apache Exporter image repository                                                          | `bitnami/bitnami-shell`                  |
-| `certificates.image.tag`                             | Apache Exporter image tag (immutable tags are recommended)                                | `10-debian-10-r252`                      |
+| `certificates.image.tag`                             | Apache Exporter image tag (immutable tags are recommended)                                | `10-debian-10-r255`                      |
 | `certificates.image.pullPolicy`                      | Apache Exporter image pull policy                                                         | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Apache Exporter image pull secrets                                                        | `[]`                                     |
 | `lifecycleHooks`                                     | lifecycleHooks for the container to automate configuration before or after startup.       | `{}`                                     |
@@ -226,7 +226,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`         | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`       | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`              | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r252`     |
+| `volumePermissions.image.tag`              | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r255`     |
 | `volumePermissions.image.pullPolicy`       | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`      | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`       | The resources limits for the init container                                                     | `{}`                    |
@@ -254,7 +254,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                         | Start a sidecar prometheus exporter to expose metrics                        | `false`                   |
 | `metrics.image.registry`                  | Apache Exporter image registry                                               | `docker.io`               |
 | `metrics.image.repository`                | Apache Exporter image repository                                             | `bitnami/apache-exporter` |
-| `metrics.image.tag`                       | Apache Exporter image tag (immutable tags are recommended)                   | `0.10.1-debian-10-r54`    |
+| `metrics.image.tag`                       | Apache Exporter image tag (immutable tags are recommended)                   | `0.10.1-debian-10-r57`    |
 | `metrics.image.pullPolicy`                | Apache Exporter image pull policy                                            | `IfNotPresent`            |
 | `metrics.image.pullSecrets`               | Apache Exporter image pull secrets                                           | `[]`                      |
 | `metrics.resources.limits`                | The resources limits for the Prometheus exporter container                   | `{}`                      |
@@ -381,7 +381,7 @@ To enable Ingress integration, set `ingress.enabled` to `true`. The `ingress.hos
 
 ### TLS secrets
 
-The chart also facilitates the creation of TLS secrets for use with the Ingress controller, with different options for certificate management. [Learn more about TLS secrets](https://docs.bitnami.com/kubernetes/apps/wordpress/administration/enable-tls/).
+The chart also facilitates the creation of TLS secrets for use with the Ingress controller, with different options for certificate management. [Learn more about TLS secrets](https://docs.bitnami.com/kubernetes/apps/wordpress/administration/enable-tls-ingress/).
 
 ## Troubleshooting
 

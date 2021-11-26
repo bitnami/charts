@@ -62,6 +62,8 @@ spec:
             - /bin/bash
             - -ec
             - |
+              # Allow the mv to move hidden directories
+              shopt -s dotglob
               [[ -f "/opt/bitnami/scripts/git/entrypoint.sh" ]] && source "/opt/bitnami/scripts/git/entrypoint.sh"
               git clone {{ .Values.cloneHtdocsFromGit.repository }} --branch {{ .Values.cloneHtdocsFromGit.branch }} /tmp/repo
               [[ "$?" -eq 0 ]] && rm -rf /app/* && mv /tmp/repo/* /app/

@@ -1,6 +1,6 @@
 # etcd
 
-[etcd](https://www.etcd.org/) is an object-relational database management system (ORDBMS) with an emphasis on extensibility and on standards-compliance.
+[etcd](https://etcd.io/) is an object-relational database management system (ORDBMS) with an emphasis on extensibility and on standards-compliance.
 
 ## TL;DR
 
@@ -77,7 +77,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------- | ----------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`                       | etcd image registry                                                                             | `docker.io`           |
 | `image.repository`                     | etcd image name                                                                                 | `bitnami/etcd`        |
-| `image.tag`                            | etcd image tag                                                                                  | `3.5.1-debian-10-r10` |
+| `image.tag`                            | etcd image tag                                                                                  | `3.5.1-debian-10-r31` |
 | `image.pullPolicy`                     | etcd image pull policy                                                                          | `IfNotPresent`        |
 | `image.pullSecrets`                    | etcd image pull secrets                                                                         | `[]`                  |
 | `image.debug`                          | Enable image debug mode                                                                         | `false`               |
@@ -213,7 +213,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                     | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                         | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                          | `10-debian-10-r233`     |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                          | `10-debian-10-r256`     |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                  | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                     | `[]`                    |
 | `volumePermissions.resources.limits`   | Init container volume-permissions resource  limits                                                                   | `{}`                    |
@@ -332,7 +332,7 @@ The etcd chart can be configured with Role-based access control and TLS encrypti
 
 The [Bitnami etcd](https://github.com/bitnami/bitnami-docker-etcd) image stores the etcd data at the `/bitnami/etcd` path of the container. Persistent Volume Claims are used to keep the data across statefulsets.
 
-The chart mounts a [Persistent Volume](https://kubernetes.io/docs/user-guide/persistent-volumes/) volume at this location. The volume is created using dynamic volume provisioning by default. An existing PersistentVolumeClaim can also be defined for this purpose.
+The chart mounts a [Persistent Volume](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) volume at this location. The volume is created using dynamic volume provisioning by default. An existing PersistentVolumeClaim can also be defined for this purpose.
 
 If you encounter errors when working with persistent volumes, refer to our [troubleshooting guide for persistent volumes](https://docs.bitnami.com/kubernetes/faq/troubleshooting/troubleshooting-persistence-volumes/).
 

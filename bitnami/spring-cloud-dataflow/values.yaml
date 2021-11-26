@@ -24,6 +24,9 @@ nameOverride: ""
 ## @param fullnameOverride String to fully override scdf.fullname template.
 ##
 fullnameOverride: ""
+## @param commonLabels Labels to add to all deployed objects
+##
+commonLabels: {}
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
 kubeVersion: ""
@@ -111,6 +114,19 @@ server:
     ## @param server.configuration.metricsDashboard Endpoint to the metricsDashboard instance
     ##
     metricsDashboard: ""
+    ## @param server.configuration.defaultSpringApplicationJSON Injects default values for environment variable SPRING_APPLICATION_JSON
+    ## {
+    ##   "maven": {
+    ##     "local-repository": null,
+    ##     "remote-repositories": {
+    ##       "repo1": {
+    ##         "url": "https://repo.spring.io/libs-snapshot"
+    ##       }
+    ##     }
+    ##   }
+    ## }
+    ##
+    defaultSpringApplicationJSON: true
   ## @param server.existingConfigmap ConfigMap with Spring Cloud Dataflow Server Configuration
   ## NOTE: When it's set the server.configuration.* and deployer.*
   ##  parameters are ignored,

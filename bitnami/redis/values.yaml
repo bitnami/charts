@@ -75,7 +75,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/redis
-  tag: 6.2.6-debian-10-r21
+  tag: 6.2.6-debian-10-r49
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -395,6 +395,8 @@ master:
     ##     app: my-app
     ##
     selector: {}
+    ## @param master.persistence.dataSource Custom PVC data source
+    dataSource: {}
     ## @param master.persistence.existingClaim Use a existing PVC which must be created manually before bound
     ## NOTE: requires master.persistence.enabled: true
     ##
@@ -707,6 +709,8 @@ replica:
     ##     app: my-app
     ##
     selector: {}
+    ## @param replica.persistence.dataSource Custom PVC data source
+    dataSource: {}
   ## Redis&trade; replicas service parameters
   ##
   service:
@@ -785,7 +789,7 @@ sentinel:
   image:
     registry: docker.io
     repository: bitnami/redis-sentinel
-    tag: 6.2.6-debian-10-r20
+    tag: 6.2.6-debian-10-r49
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1121,7 +1125,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/redis-exporter
-    tag: 1.29.0-debian-10-r6
+    tag: 1.31.4-debian-10-r6
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1301,7 +1305,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r232
+    tag: 10-debian-10-r261
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1347,7 +1351,7 @@ sysctl:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r232
+    tag: 10-debian-10-r261
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

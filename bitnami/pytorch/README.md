@@ -192,7 +192,7 @@ cloneFilesFromGit.revision=master
 
 The [Bitnami PyTorch](https://github.com/bitnami/bitnami-docker-pytorch) image can persist data. If enabled, the persisted path is `/bitnami/pytorch` by default.
 
-The chart mounts a [Persistent Volume](http://kubernetes.io/docs/user-guide/persistent-volumes/) at this location. The volume is created using dynamic volume provisioning.
+The chart mounts a [Persistent Volume](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) at this location. The volume is created using dynamic volume provisioning.
 
 ### Adjust permissions of persistent volume mountpoint
 

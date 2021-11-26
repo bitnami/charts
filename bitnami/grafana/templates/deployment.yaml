@@ -8,6 +8,9 @@ metadata:
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
     app.kubernetes.io/component: grafana
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   replicas: {{ .Values.grafana.replicaCount }}
   selector:
