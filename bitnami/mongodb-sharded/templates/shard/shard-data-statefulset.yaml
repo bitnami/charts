@@ -94,7 +94,7 @@ spec:
             runAsUser: {{ $.Values.securityContext.runAsUser }}
           {{- end }}
           ports:
-            - containerPort: {{ $.Values.service.port }}
+            - containerPort: {{ $.Values.common.containerPorts.mongo }}
               name: mongodb
           env:
             - name: MONGODB_ENABLE_NUMACTL
@@ -111,6 +111,8 @@ spec:
               {{- else }}
               value: "no"
               {{- end }}
+            - name: MONGODB_PORT_NUMBER
+              value: {{ $.Values.common.containerPorts.mongo | quote }}
             - name: MONGODB_SHARDING_MODE
               value: "shardsvr"
             - name: MONGODB_POD_NAME

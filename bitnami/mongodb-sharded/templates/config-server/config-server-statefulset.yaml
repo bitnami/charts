@@ -91,7 +91,7 @@ spec:
             runAsUser: {{ .Values.securityContext.runAsUser }}
           {{- end }}
           ports:
-            - containerPort: {{ .Values.service.port }}
+            - containerPort: {{ .Values.common.containerPorts.mongo }}
               name: mongodb
           env:
             - name: MONGODB_ENABLE_NUMACTL
@@ -114,6 +114,8 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
+            - name: MONGODB_PORT_NUMBER
+              value: {{ $.Values.common.containerPorts.mongo | quote }}
             - name: MONGODB_INITIAL_PRIMARY_HOST
               value: {{ include "mongodb-sharded.configServer.primaryHost" . }}
             - name: MONGODB_REPLICA_SET_NAME
