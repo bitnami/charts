@@ -21,7 +21,7 @@ $ helm install my-release bitnami/harbor
 
 ## Introduction
 
-This [Helm](https://github.com/kubernetes/helm) chart installs [Harbor](https://github.com/goharbor/harbor) in a Kubernetes cluster. Welcome to [contribute](CONTRIBUTING.md) to Helm Chart for Harbor.
+This [Helm](https://github.com/kubernetes/helm) chart installs [Harbor](https://github.com/goharbor/harbor) in a Kubernetes cluster. Welcome to [contribute](https://github.com/bitnami/charts/blob/master/CONTRIBUTING.md) to Helm Chart for Harbor.
 
 ## Prerequisites
 

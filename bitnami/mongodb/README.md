@@ -117,6 +117,7 @@ Refer to the [chart documentation for more information on each of these architec
 | `tls.image.tag`          | Init container TLS certs setup image tag (immutable tags are recommended)                                                     | `1.21.3-debian-10-r54` |
 | `tls.image.pullPolicy`   | Init container TLS certs setup image pull policy                                                                              | `IfNotPresent`         |
 | `tls.extraDnsNames`      | Add extra dns names to the CA, can solve x509 auth issue for pod clients                                                      | `[]`                   |
+| `tls.mode`               | Allows to set the tls mode which should be used when tls is enabled (options: `allowTLS`, `preferTLS`, `requireTLS`)          | `requireTLS`           |
 | `hostAliases`            | Add deployment host aliases                                                                                                   | `[]`                   |
 | `replicaSetName`         | Name of the replica set (only when `architecture=replicaset`)                                                                 | `rs0`                  |
 | `replicaSetHostnames`    | Enable DNS hostnames in the replicaset config (only when `architecture=replicaset`)                                           | `true`                 |
@@ -242,6 +243,7 @@ Refer to the [chart documentation for more information on each of these architec
 | Name                                          | Description                                                                        | Value               |
 | --------------------------------------------- | ---------------------------------------------------------------------------------- | ------------------- |
 | `persistence.enabled`                         | Enable MongoDB&reg; data persistence using PVC                                     | `true`              |
+| `persistence.medium`                          | Provide a medium for `emptyDir` volumes.                                           | `""`                |
 | `persistence.existingClaim`                   | Provide an existing `PersistentVolumeClaim` (only when `architecture=standalone`)  | `""`                |
 | `persistence.storageClass`                    | PVC Storage Class for MongoDB&reg; data volume                                     | `""`                |
 | `persistence.accessModes`                     | PV Access Mode                                                                     | `["ReadWriteOnce"]` |
@@ -397,6 +399,7 @@ Refer to the [chart documentation for more information on each of these architec
 | `hidden.pdb.minAvailable`                            | Minimum number/percentage of hidden node pods that should remain scheduled                           | `1`                 |
 | `hidden.pdb.maxUnavailable`                          | Maximum number/percentage of hidden node pods that may be made unavailable                           | `""`                |
 | `hidden.persistence.enabled`                         | Enable hidden node data persistence using PVC                                                        | `true`              |
+| `hidden.persistence.medium`                          | Provide a medium for `emptyDir` volumes.                                                             | `""`                |
 | `hidden.persistence.storageClass`                    | PVC Storage Class for hidden node data volume                                                        | `""`                |
 | `hidden.persistence.accessModes`                     | PV Access Mode                                                                                       | `["ReadWriteOnce"]` |
 | `hidden.persistence.size`                            | PVC Storage Request for hidden node data volume                                                      | `8Gi`               |
@@ -520,7 +523,7 @@ Refer to the chart documentation for more information on, and examples of, confi
 
 The [Bitnami MongoDB&reg;](https://github.com/bitnami/bitnami-docker-mongodb) image stores the MongoDB&reg; data and configurations at the `/bitnami/mongodb` path of the container.
 
-The chart mounts a [Persistent Volume](http://kubernetes.io/docs/user-guide/persistent-volumes/) at this location. The volume is created using dynamic volume provisioning.
+The chart mounts a [Persistent Volume](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) at this location. The volume is created using dynamic volume provisioning.
 
 If you encounter errors when working with persistent volumes, refer to our [troubleshooting guide for persistent volumes](https://docs.bitnami.com/kubernetes/faq/troubleshooting/troubleshooting-persistence-volumes/).
 

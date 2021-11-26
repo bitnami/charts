@@ -289,7 +289,7 @@ grafana:
   image:
     registry: docker.io
     repository: bitnami/grafana
-    tag: 8.2.2-debian-10-r5
+    tag: 8.2.5-debian-10-r6
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
