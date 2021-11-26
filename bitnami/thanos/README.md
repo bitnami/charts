@@ -1199,10 +1199,9 @@ metrics:
     enabled: true
 minio:
   enabled: true
-  accessKey:
-    password: "minio"
-  secretKey:
-    password: "minio123"
+  auth:
+    rootUser: "admin"
+    rootPassword: "minio123"
   defaultBuckets: "thanos"
 ```
 
