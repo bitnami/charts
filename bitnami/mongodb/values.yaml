@@ -279,6 +279,20 @@ enableJournal: true
 ##     #keyFile: /opt/bitnami/mongodb/conf/keyfile
 ##
 configuration: ""
+## @section replicaSetConfigurationSettings settings applied during runtime (not via configuration file)
+## If enabled, these are applied by a script which is called within setup.sh
+## for documentation see https://docs.mongodb.com/manual/reference/replica-configuration/#replica-set-configuration-fields
+## @param replicaSetConfigurationSettings.enabled Enable MongoDB&reg; Switch to enable/disable configuring MongoDB&reg; run time rs.conf settings
+## @param replicaSetConfigurationSettings.configuration run-time rs.conf settings
+##
+replicaSetConfigurationSettings:
+  enabled: false
+  configuration:
+##    chainingAllowed : false
+##    heartbeatTimeoutSecs : 10
+##    heartbeatIntervalMillis : 2000
+##    electionTimeoutMillis : 10000
+##    catchUpTimeoutMillis : 30000
 ## @param existingConfigmap Name of existing ConfigMap with MongoDB&reg; configuration for Primary and Secondary nodes
 ## NOTE: When it's set the arbiter.configuration parameter is ignored
 ##
