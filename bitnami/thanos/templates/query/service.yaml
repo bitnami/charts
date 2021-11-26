@@ -45,8 +45,8 @@ spec:
       targetPort: grpc
       protocol: TCP
       name: grpc
-      {{- if and (or (eq $query.service.type "NodePort") (eq $query.service.type "LoadBalancer")) $query.service.nodePorts.http }}
-      nodePort: {{ $query.service.nodePorts.http }}
+      {{- if and (or (eq $query.service.type "NodePort") (eq $query.service.type "LoadBalancer")) $query.service.nodePorts.grpc }}
+      nodePort: {{ $query.service.nodePorts.grpc }}
       {{- else if eq $query.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
