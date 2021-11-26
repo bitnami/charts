@@ -1025,7 +1025,7 @@ metrics:
     secondary: []
   ## MariaDB metrics container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param metrics.containerSecurityContextenabled Enable security context for MariaDB metrics container
+  ## @param metrics.containerSecurityContext.enabled Enable security context for MariaDB metrics container
   ## Example:
   ##   containerSecurityContext:
   ##     enabled: true
