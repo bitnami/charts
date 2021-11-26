@@ -772,6 +772,10 @@ persistence:
   ## @param persistence.enabled Enable MongoDB&reg; data persistence using PVC
   ##
   enabled: true
+  ## @param persistence.medium Provide a medium for `emptyDir` volumes.
+  ## Requires persistence.enabled: false
+  ##
+  medium: ""
   ## @param persistence.existingClaim Provide an existing `PersistentVolumeClaim` (only when `architecture=standalone`)
   ## Requires persistence.enabled: true
   ## If defined, PVC must be created manually before volume will be bound
@@ -1465,6 +1469,10 @@ hidden:
     ## @param hidden.persistence.enabled Enable hidden node data persistence using PVC
     ##
     enabled: true
+    ## @param hidden.persistence.medium Provide a medium for `emptyDir` volumes.
+    ## Requires hidden.persistence.enabled: false
+    ##
+    medium: ""
     ## @param hidden.persistence.storageClass PVC Storage Class for hidden node data volume
     ## If defined, storageClassName: <storageClass>
     ## If set to "-", storageClassName: "", which disables dynamic provisioning
