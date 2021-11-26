@@ -65,9 +65,9 @@ operator:
   ## @param operator.image.pullSecrets Grafana Operator image pull secrets
   ##
   image:
-    registry: ghcr.io/cellebyte
-    repository: grafana-operator/grafana-operator
-    tag: v4.0.2-dev.1
+    registry: docker.io
+    repository: bitnami/grafana-operator
+    tag: 4.0.2-debian-10-r1
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## Ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
