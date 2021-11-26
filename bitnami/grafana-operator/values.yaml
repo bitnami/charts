@@ -326,14 +326,12 @@ grafana:
   ## @param grafana.containerSecurityContext.enabled Enable containers security context
   ## @param grafana.containerSecurityContext.runAsUser User ID for the containers
   ## @param grafana.containerSecurityContext.runAsGroup Group ID for the containers
-  ## @param grafana.containerSecurityContext.fsGroup Filesystem Group ID for the containers
   ## @param grafana.containerSecurityContext.allowPrivilegeEscalation Don't allow privilege escalation for the containers
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsGroup: 1001
-    fsGroup: 1001
     allowPrivilegeEscalation: false
   ## Grafana containers' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/

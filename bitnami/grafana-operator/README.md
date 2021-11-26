@@ -162,7 +162,6 @@ For more information, refer to the [documentation on the differences between the
 | `grafana.containerSecurityContext.enabled`                  | Enable containers security context                                                            | `true`               |
 | `grafana.containerSecurityContext.runAsUser`                | User ID for the containers                                                                    | `1001`               |
 | `grafana.containerSecurityContext.runAsGroup`               | Group ID for the containers                                                                   | `1001`               |
-| `grafana.containerSecurityContext.fsGroup`                  | Filesystem Group ID for the containers                                                        | `1001`               |
 | `grafana.containerSecurityContext.allowPrivilegeEscalation` | Don't allow privilege escalation for the containers                                           | `false`              |
 | `grafana.resources.limits`                                  | The resources limits for the container                                                        | `{}`                 |
 | `grafana.resources.requests`                                | The requested resources for the container                                                     | `{}`                 |
