@@ -72,7 +72,7 @@ image:
   tag: 9.1.0-debian-10-r41
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -230,7 +230,7 @@ customReadinessProbe: {}
 ##
 customStartupProbe: {}
 ## SonarQube resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## ref: https://kubernetes.io/docs/user-guide/compute-resources/
 ## @param resources.limits The resources limits for the SonarQube containers
 ## @param resources.requests [object] The requested resources for the SonarQube containers
 ##
@@ -392,7 +392,7 @@ service:
   ##
   loadBalancerSourceRanges: []
   ## @param service.externalTrafficPolicy SonarQube service external traffic policy
-  ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+  ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
   externalTrafficPolicy: Cluster
   ## @param service.annotations Additional custom annotations for SonarQube service
@@ -402,7 +402,7 @@ service:
   ##
   extraPorts: []
 ## SonarQube ingress parameters
-## ref: http://kubernetes.io/docs/user-guide/ingress/
+## ref: https://kubernetes.io/docs/user-guide/ingress/
 ##
 ingress:
   ## @param ingress.enabled Enable ingress record generation for SonarQube
@@ -495,7 +495,7 @@ ingress:
 ## @section Persistence Parameters
 
 ## Persistence Parameters
-## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
 ##
 persistence:
   ## @param persistence.enabled Enable persistence using Persistent Volume Claims
@@ -550,7 +550,7 @@ volumePermissions:
     ##
     pullSecrets: []
   ## Init container's resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param volumePermissions.resources.limits The resources limits for the init container
   ## @param volumePermissions.resources.requests The requested resources for the init container
   ##
@@ -597,7 +597,7 @@ sysctl:
     ##
     pullSecrets: []
   ## Init container's resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param sysctl.resources.limits The resources limits for the init container
   ## @param sysctl.resources.requests The requested resources for the init container
   ##
@@ -678,7 +678,7 @@ metrics:
     containerPorts:
       metrics: 10445
     ## Prometheus JMX Exporter' resource requests and limits
-    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
     ## @param metrics.jmx.resources.limits The resources limits for the init container
     ## @param metrics.jmx.resources.requests The requested resources for the init container
     ##
@@ -807,7 +807,7 @@ postgresql:
     ##
     port: 5432
   ## Enable persistence using Persistent Volume Claims
-  ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
   persistence:
     ## @param postgresql.persistence.enabled Use PVCs when deploying the PostgreSQL chart

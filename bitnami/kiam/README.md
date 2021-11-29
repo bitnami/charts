@@ -15,7 +15,7 @@
 
 Bitnami charts for Helm are carefully engineered, actively maintained and are the quickest and easiest way to deploy containers on a Kubernetes cluster that are ready to handle production workloads.
 
-This chart bootstraps a [kiam](https://github.com/bitnami/bitnami-docker-kiam) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [kiam](https://github.com/bitnami/bitnami-docker-kiam) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
@@ -75,7 +75,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ------------------------------------------------ | ---------------------- |
 | `image.registry`    | kiam image registry                              | `docker.io`            |
 | `image.repository`  | kiam image name                                  | `bitnami/kiam`         |
-| `image.tag`         | kiam image tag                                   | `3.6.0-debian-10-r347` |
+| `image.tag`         | kiam image tag                                   | `3.6.0-debian-10-r372` |
 | `image.pullPolicy`  | kiam image pull policy                           | `IfNotPresent`         |
 | `image.pullSecrets` | Specify docker-registry secret names as an array | `[]`                   |
 

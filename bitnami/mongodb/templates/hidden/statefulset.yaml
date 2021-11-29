@@ -511,7 +511,12 @@ spec:
         {{- end }}
   {{- if not .Values.hidden.persistence.enabled }}
         - name: datadir
+          {{- if .Values.hidden.persistence.medium }}
+          emptyDir:
+            medium: {{ .Values.hidden.persistence.medium | quote }}
+          {{- else }}
           emptyDir: {}
+          {{- end }}
   {{- else }}
   volumeClaimTemplates:
     - metadata:

@@ -11,7 +11,7 @@ $ helm install my-release bitnami/drupal
 
 ## Introduction
 
-This chart bootstraps a [Drupal](https://github.com/bitnami/bitnami-docker-drupal) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Drupal](https://github.com/bitnami/bitnami-docker-drupal) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) which is required for bootstrapping a MariaDB deployment as a database for the Drupal application.
 
@@ -75,7 +75,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------ | --------------------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`                     | Drupal image registry                                                                                                 | `docker.io`           |
 | `image.repository`                   | Drupal Image name                                                                                                     | `bitnami/drupal`      |
-| `image.tag`                          | Drupal Image tag                                                                                                      | `9.2.10-debian-10-r0` |
+| `image.tag`                          | Drupal Image tag                                                                                                      | `9.2.10-debian-10-r1` |
 | `image.pullPolicy`                   | Drupal image pull policy                                                                                              | `IfNotPresent`        |
 | `image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                      | `[]`                  |
 | `image.debug`                        | Specify if debug logs should be enabled                                                                               | `false`               |
@@ -200,7 +200,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                                                              | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `10-debian-10-r260`     |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `10-debian-10-r261`     |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                                          | `[]`                    |
 | `volumePermissions.resources.limits`   | The resources limits for the container                                                                                                                    | `{}`                    |
@@ -214,7 +214,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`           | Start a exporter side-car                        | `false`                   |
 | `metrics.image.registry`    | Apache exporter image registry                   | `docker.io`               |
 | `metrics.image.repository`  | Apache exporter image repository                 | `bitnami/apache-exporter` |
-| `metrics.image.tag`         | Apache exporter image tag                        | `0.10.1-debian-10-r62`    |
+| `metrics.image.tag`         | Apache exporter image tag                        | `0.10.1-debian-10-r63`    |
 | `metrics.image.pullPolicy`  | Image pull policy                                | `IfNotPresent`            |
 | `metrics.image.pullSecrets` | Specify docker-registry secret names as an array | `[]`                      |
 | `metrics.resources`         | Metrics exporter resource requests and limits    | `{}`                      |
@@ -239,7 +239,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `certificates.extraEnvVarsSecret`                    | Secret containing extra env vars (in case of sensitive data)         | `""`                                     |
 | `certificates.image.registry`                        | Container sidecar registry                                           | `docker.io`                              |
 | `certificates.image.repository`                      | Container sidecar image                                              | `bitnami/bitnami-shell`                  |
-| `certificates.image.tag`                             | Container sidecar image tag                                          | `10-debian-10-r260`                      |
+| `certificates.image.tag`                             | Container sidecar image tag                                          | `10-debian-10-r261`                      |
 | `certificates.image.pullPolicy`                      | Container sidecar image pull policy                                  | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Container sidecar image pull secrets                                 | `[]`                                     |
 
@@ -265,7 +265,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                 | `{}`    |
 
 
-The above parameters map to the env variables defined in [bitnami/drupal](http://github.com/bitnami/bitnami-docker-drupal). For more information please refer to the [bitnami/drupal](http://github.com/bitnami/bitnami-docker-drupal) image documentation.
+The above parameters map to the env variables defined in [bitnami/drupal](https://github.com/bitnami/bitnami-docker-drupal). For more information please refer to the [bitnami/drupal](https://github.com/bitnami/bitnami-docker-drupal) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

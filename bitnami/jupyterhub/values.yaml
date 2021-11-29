@@ -54,7 +54,7 @@ hub:
     tag: 1.5.0-debian-10-r8
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
     ## @param hub.image.pullPolicy Hub image pull policy
     ##
@@ -302,7 +302,7 @@ hub:
   ##
   hostAliases: []
   ## hub resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -495,7 +495,7 @@ hub:
     ## @param hub.service.port Hub service HTTP port
     port: 8081
     ## @param hub.service.loadBalancerIP Hub service LoadBalancer IP (optional, cloud specific)
-    ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+    ## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
     ##
     loadBalancerIP: ""
     ## @param hub.service.loadBalancerSourceRanges loadBalancerIP source ranges for the Service
@@ -510,7 +510,7 @@ hub:
       http: ""
     ## @param hub.service.externalTrafficPolicy External traffic policy for the service
     ## Enable client source IP preservation
-    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
     externalTrafficPolicy: Cluster
 
@@ -569,7 +569,7 @@ proxy:
     tag: 4.5.0-debian-10-r120
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -671,7 +671,7 @@ proxy:
   ##
   priorityClassName: ""
   ## proxy resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -846,7 +846,7 @@ proxy:
       ##
       port: 8001
       ## @param proxy.service.api.loadBalancerIP API service LoadBalancer IP (optional, cloud specific)
-      ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+      ## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
       ##
       loadBalancerIP: ""
       ## @param proxy.service.api.loadBalancerSourceRanges loadBalancerIP source ranges for the Service
@@ -861,7 +861,7 @@ proxy:
         http: ""
       ## @param proxy.service.api.externalTrafficPolicy External traffic policy for the service
       ## Enable client source IP preservation
-      ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+      ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
       ##
       externalTrafficPolicy: Cluster
     metrics:
@@ -872,7 +872,7 @@ proxy:
       ##
       port: 8002
       ## @param proxy.service.metrics.loadBalancerIP Metrics service LoadBalancer IP (optional, cloud specific)
-      ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+      ## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
       ##
       loadBalancerIP: ""
       ## @param proxy.service.metrics.loadBalancerSourceRanges loadBalancerIP source ranges for the Service
@@ -887,7 +887,7 @@ proxy:
         http: ""
       ## @param proxy.service.metrics.externalTrafficPolicy External traffic policy for the service
       ## Enable client source IP preservation
-      ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+      ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
       ##
       externalTrafficPolicy: Cluster
     public:
@@ -899,7 +899,7 @@ proxy:
       ##
       port: 80
       ## @param proxy.service.public.loadBalancerIP Public service LoadBalancer IP (optional, cloud specific)
-      ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+      ## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
       ##
       loadBalancerIP: ""
       ## @param proxy.service.public.loadBalancerSourceRanges loadBalancerIP source ranges for the Service
@@ -914,7 +914,7 @@ proxy:
         http: ""
       ## @param proxy.service.public.externalTrafficPolicy External traffic policy for the service
       ## Enable client source IP preservation
-      ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+      ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
       ##
       externalTrafficPolicy: Cluster
   ## Configure the ingress resource that allows you to access to your JupyterHub instance
@@ -1053,7 +1053,7 @@ imagePuller:
   ##
   hostAliases: []
   ## imagePuller resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -1219,7 +1219,7 @@ singleuser:
     tag: 1.5.0-debian-10-r8
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
     ##
     pullPolicy: IfNotPresent
@@ -1246,7 +1246,7 @@ singleuser:
   ##
   notebookDir: /opt/bitnami/jupyterhub-singleuser
   ## singleuser resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -1352,7 +1352,7 @@ singleuser:
   ## @section Single User Persistence parameters
 
   ## Enable persistence using Persistent Volume Claims
-  ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
   persistence:
     ## @param singleuser.persistence.enabled Enable persistent volume creation on Single User instances
@@ -1476,7 +1476,7 @@ postgresql:
     ##
     port: 5432
   ## Enable persistence using Persistent Volume Claims
-  ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
   persistence:
     ## @param postgresql.persistence.enabled Use PVCs when deploying the PostgreSQL chart

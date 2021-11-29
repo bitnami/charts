@@ -57,7 +57,7 @@ image:
   tag: 2.303.3-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -215,7 +215,7 @@ nodeSelector: {}
 ##
 tolerations: {}
 ## Jenkins containers' resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## ref: https://kubernetes.io/docs/user-guide/compute-resources/
 ## @param resources.limits The resources limits for the Jenkins container
 ## @param resources.requests [object] The requested resources for the Jenkins container
 ##
@@ -325,14 +325,14 @@ service:
   ##
   loadBalancerSourceRanges: []
   ## @param service.externalTrafficPolicy Jenkins service external traffic policy
-  ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+  ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
   externalTrafficPolicy: Cluster
   ## @param service.annotations Additional custom annotations for Jenkins service
   ##
   annotations: {}
 ## Configure the ingress resource that allows you to access the Jenkins installation
-## ref: http://kubernetes.io/docs/user-guide/ingress/
+## ref: https://kubernetes.io/docs/user-guide/ingress/
 ##
 ingress:
   ## @param ingress.enabled Enable ingress record generation for Jenkins
@@ -427,7 +427,7 @@ ingress:
 ## @section Persistence Parameters
 
 ## Persistence Parameters
-## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
 ##
 persistence:
   ## @param persistence.enabled Enable persistence using Persistent Volume Claims
@@ -479,7 +479,7 @@ volumePermissions:
     ##
     pullSecrets: []
   ## Init container's resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param volumePermissions.resources.limits The resources limits for the init container
   ## @param volumePermissions.resources.requests The requested resources for the init container
   ##
@@ -532,7 +532,7 @@ metrics:
     enabled: true
     runAsUser: 1001
   ## Jenkins exporter resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param metrics.resources.limits The resources limits for the Jenkins exporter container
   ## @param metrics.resources.requests The requested resources for the Jenkins exporter container
   ##

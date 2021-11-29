@@ -416,6 +416,11 @@ spec:
             - name: scripts
               mountPath: /scripts/setup.sh
               subPath: setup.sh
+            {{ if .Values.replicaSetConfigurationSettings.enabled }}
+            - name: scripts
+              mountPath: /scripts/replicaSetConfigurationSettings.sh
+              subPath: replicaSetConfigurationSettings.sh
+            {{- end }}
             {{- if and .Values.externalAccess.enabled .Values.externalAccess.autoDiscovery.enabled (eq .Values.externalAccess.service.type "LoadBalancer") }}
             - name: shared
               mountPath: /shared
@@ -545,7 +550,12 @@ spec:
         {{- end }}
   {{- if not .Values.persistence.enabled }}
         - name: datadir
+          {{- if .Values.persistence.medium }}
+          emptyDir:
+            medium: {{ .Values.persistence.medium | quote }}
+          {{- else }}
           emptyDir: {}
+          {{- end }}
   {{- else }}
   volumeClaimTemplates:
     - metadata:

@@ -13,7 +13,7 @@ $ helm install my-release bitnami/moodle
 
 ## Introduction
 
-This chart bootstraps a [Moodle&trade;](https://github.com/bitnami/bitnami-docker-moodle) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Moodle&trade;](https://github.com/bitnami/bitnami-docker-moodle) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) which is required for bootstrapping a MariaDB deployment for the database requirements of the Moodle&trade; application.
 
@@ -272,7 +272,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                 | `{}`    |
 
 
-The above parameters map to the env variables defined in [bitnami/moodle](http://github.com/bitnami/bitnami-docker-moodle). For more information please refer to the [bitnami/moodle](http://github.com/bitnami/bitnami-docker-moodle) image documentation.
+The above parameters map to the env variables defined in [bitnami/moodle](https://github.com/bitnami/bitnami-docker-moodle). For more information please refer to the [bitnami/moodle](https://github.com/bitnami/bitnami-docker-moodle) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

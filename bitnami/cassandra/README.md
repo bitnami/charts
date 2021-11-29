@@ -11,7 +11,7 @@ $ helm install my-release bitnami/cassandra
 
 ## Introduction
 
-This chart bootstraps an [Apache Cassandra](https://github.com/bitnami/bitnami-docker-cassandra) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps an [Apache Cassandra](https://github.com/bitnami/bitnami-docker-cassandra) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
@@ -77,7 +77,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------------- | ---------------------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`              | Cassandra image registry                                                                                               | `docker.io`           |
 | `image.repository`            | Cassandra image repository                                                                                             | `bitnami/cassandra`   |
-| `image.tag`                   | Cassandra image tag (immutable tags are recommended)                                                                   | `4.0.1-debian-10-r48` |
+| `image.tag`                   | Cassandra image tag (immutable tags are recommended)                                                                   | `4.0.1-debian-10-r76` |
 | `image.pullPolicy`            | image pull policy                                                                                                      | `IfNotPresent`        |
 | `image.pullSecrets`           | Cassandra image pull secrets                                                                                           | `[]`                  |
 | `image.debug`                 | Enable image debug mode                                                                                                | `false`               |
@@ -221,7 +221,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                   | Enable init container that changes the owner and group of the persistent volume | `false`                 |
 | `volumePermissions.image.registry`            | Init container volume                                                           | `docker.io`             |
 | `volumePermissions.image.repository`          | Init container volume                                                           | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Init container volume                                                           | `10-debian-10-r232`     |
+| `volumePermissions.image.tag`                 | Init container volume                                                           | `10-debian-10-r260`     |
 | `volumePermissions.image.pullPolicy`          | Init container volume                                                           | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                | `[]`                    |
 | `volumePermissions.resources.limits`          | The resources limits for the container                                          | `{}`                    |
@@ -236,7 +236,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                          | Start a side-car prometheus exporter                                                                   | `false`                      |
 | `metrics.image.registry`                   | Cassandra exporter image registry                                                                      | `docker.io`                  |
 | `metrics.image.repository`                 | Cassandra exporter image name                                                                          | `bitnami/cassandra-exporter` |
-| `metrics.image.tag`                        | Cassandra exporter image tag                                                                           | `2.3.4-debian-10-r557`       |
+| `metrics.image.tag`                        | Cassandra exporter image tag                                                                           | `2.3.4-debian-10-r585`       |
 | `metrics.image.pullPolicy`                 | image pull policy                                                                                      | `IfNotPresent`               |
 | `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                                                       | `[]`                         |
 | `metrics.resources.limits`                 | The resources limits for the container                                                                 | `{}`                         |
@@ -272,7 +272,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `tls.tlsEncryptionSecretName` | Secret with the encryption of the TLS certificates                                            | `""`    |
 
 
-The above parameters map to the env variables defined in [bitnami/cassandra](http://github.com/bitnami/bitnami-docker-cassandra). For more information please refer to the [bitnami/cassandra](http://github.com/bitnami/bitnami-docker-cassandra) image documentation.
+The above parameters map to the env variables defined in [bitnami/cassandra](https://github.com/bitnami/bitnami-docker-cassandra). For more information please refer to the [bitnami/cassandra](https://github.com/bitnami/bitnami-docker-cassandra) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

@@ -1,6 +1,6 @@
 # Redmine
 
-[Redmine](http://www.redmine.org) is a free and open source, web-based project management and issue tracking tool.
+[Redmine](https://www.redmine.org) is a free and open source, web-based project management and issue tracking tool.
 
 ## TL;DR
 
@@ -11,7 +11,7 @@ $ helm install my-release bitnami/redmine
 
 ## Introduction
 
-This chart bootstraps a [Redmine](https://github.com/bitnami/bitnami-docker-redmine) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Redmine](https://github.com/bitnami/bitnami-docker-redmine) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) and the [PostgreSQL chart](https://github.com/bitnami/charts/tree/master/bitnami/postgresql) which are required for bootstrapping a MariaDB/PostgreSQL deployment for the database requirements of the Redmine application.
 
@@ -350,7 +350,7 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 | `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                  | `{}`    |
 
 
-The above parameters map to the env variables defined in [bitnami/redmine](http://github.com/bitnami/bitnami-docker-redmine). For more information please refer to the [bitnami/redmine](http://github.com/bitnami/bitnami-docker-redmine) image documentation.
+The above parameters map to the env variables defined in [bitnami/redmine](https://github.com/bitnami/bitnami-docker-redmine). For more information please refer to the [bitnami/redmine](https://github.com/bitnami/bitnami-docker-redmine) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

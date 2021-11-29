@@ -76,7 +76,7 @@ image:
   tag: 10.5.13-debian-10-r6
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
@@ -300,7 +300,7 @@ primary:
     runAsUser: 1001
     runAsNonRoot: true
   ## MariaDB primary container's resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -405,7 +405,7 @@ primary:
   ##
   extraEnvVarsSecret: ""
   ## Enable persistence using Persistent Volume Claims
-  ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
   persistence:
     ## @param primary.persistence.enabled Enable persistence on MariaDB primary replicas using a `PersistentVolumeClaim`. If false, use emptyDir
@@ -477,7 +477,7 @@ primary:
     ##
     loadBalancerIP: ""
     ## @param primary.service.externalTrafficPolicy Enable client source IP preservation
-    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
     externalTrafficPolicy: Cluster
     ## @param primary.service.loadBalancerSourceRanges Address that are allowed when MariaDB Primary service is LoadBalancer
@@ -672,7 +672,7 @@ secondary:
     runAsUser: 1001
     runAsNonRoot: true
   ## MariaDB secondary container's resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -777,7 +777,7 @@ secondary:
   ##
   extraEnvVarsSecret: ""
   ## Enable persistence using Persistent Volume Claims
-  ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
   persistence:
     ## @param secondary.persistence.enabled Enable persistence on MariaDB secondary replicas using a `PersistentVolumeClaim`
@@ -847,7 +847,7 @@ secondary:
     ##
     loadBalancerIP: ""
     ## @param secondary.service.externalTrafficPolicy Enable client source IP preservation
-    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
     externalTrafficPolicy: Cluster
     ## @param secondary.service.loadBalancerSourceRanges Address that are allowed when MariaDB secondary service is LoadBalancer
@@ -1024,7 +1024,7 @@ metrics:
     primary: []
     secondary: []
   ## Mysqld Prometheus exporter resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
