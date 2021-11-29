@@ -62,7 +62,7 @@ image:
   tag: 0.9.8-scratch-r6
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   ## @param image.pullPolicy Adapter image pull policy
   ##
@@ -141,7 +141,7 @@ args: []
 hostAliases: []
 
 ## wavefront-hpa-adapter resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## ref: https://kubernetes.io/docs/user-guide/compute-resources/
 ##
 resources:
   # We usually recommend not to specify default resources and to leave this as a conscious
@@ -426,7 +426,7 @@ service:
   extraPorts: []
 
   ## loadBalancerIP for the Service (optional, cloud specific)
-  ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+  ## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
   ## @param service.loadBalancerIP Adapter service LoadBalancer IP
   ##
   loadBalancerIP: ""
@@ -447,7 +447,7 @@ service:
   nodePorts:
     http: ""
   ## Enable client source IP preservation
-  ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+  ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ## @param service.externalTrafficPolicy External traffic policy for the service
   ##
   externalTrafficPolicy: Cluster

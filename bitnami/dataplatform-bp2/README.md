@@ -31,7 +31,7 @@ $ helm install my-release bitnami/dataplatform-bp2
 
 ## Introduction
 
-This chart bootstraps Data Platform Blueprint-2 deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps Data Platform Blueprint-2 deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Once the chart is installed, the deployed data platform cluster comprises of:
 1. Zookeeper with 3 nodes to be used for both Kafka
