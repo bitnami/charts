@@ -40,7 +40,7 @@ extraDeploy: []
 ## @section Parse server parameters
 
 ## loadBalancerIP for the Parse Service (optional, cloud specific)
-## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
 ##
 server:
   ## Bitnami Parse image version
@@ -57,7 +57,7 @@ server:
     tag: 4.10.4-debian-10-r46
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -131,7 +131,7 @@ server:
   ##
   existingCloudCodeScriptsCM: ""
   ## @param server.resources Parse Server pods' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ##
   resources: {}
   ## Parse Server pods' liveness probes
@@ -210,7 +210,7 @@ server:
 ## @section Traffic Exposure Parameters
 
 ## Kubernetes serviceType for Parse Deployment
-## ref: http://kubernetes.io/docs/user-guide/services/#publishing-services---service-types
+## ref: https://kubernetes.io/docs/user-guide/services/#publishing-services---service-types
 ##
 service:
   ## @param service.type Kubernetes Service type
@@ -227,11 +227,11 @@ service:
   nodePorts:
     http: ""
   ## @param service.externalTrafficPolicy Enable client source IP preservation
-  ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+  ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
   externalTrafficPolicy: Cluster
 ## Configure the ingress resource that allows you to access the Parse installation.
-## ref: http://kubernetes.io/docs/user-guide/ingress/
+## ref: https://kubernetes.io/docs/user-guide/ingress/
 ##
 ingress:
   ## @param ingress.enabled Set to true to enable ingress record generation
@@ -337,7 +337,7 @@ ingress:
 ## @section Persistence Parameters
 
 ## Enable persistence using Persistent Volume Claims
-## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
 ##
 persistence:
   ## @param persistence.enabled Enable Parse persistence using PVC
@@ -378,7 +378,7 @@ dashboard:
     tag: 3.2.1-debian-10-r45
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -417,7 +417,7 @@ dashboard:
   ##
   appName: MyDashboard
   ## @param dashboard.resources Parse Dashboard pods' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ##
   resources: {}
   ## Parse Dashboard pods' liveness probe
@@ -575,7 +575,7 @@ mongodb:
     ##
     database: bitnami_parse
   ## Enable persistence using Persistent Volume Claims
-  ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
   persistence:
     ## @param mongodb.persistence.enabled Enable MongoDB&reg; persistence using PVC
