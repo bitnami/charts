@@ -262,16 +262,16 @@ master:
   podLabels: {}
   ## Pod Security Context for master-eligible pods.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
-  ## @param master.securityContext.enabled Enable security context for master-eligible pods
-  ## @param master.securityContext.fsGroup Group ID for the container for master-eligible pods
+  ## @param master.podSecurityContext.enabled Enable security context for master-eligible pods
+  ## @param master.podSecurityContext.fsGroup Group ID for the container for master-eligible pods
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
   ## Container Security Context for master-eligible pods.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
-  ## @param master.securityContext.enabled Enable security context for master-eligible pods
-  ## @param master.securityContext.runAsUser User ID for the container for master-eligible pods
+  ## @param master.containerSecurityContext.enabled Enable security context for master-eligible pods
+  ## @param master.containerSecurityContext.runAsUser User ID for the container for master-eligible pods
   ##
   containerSecurityContext:
     enabled: true
@@ -524,16 +524,16 @@ coordinating:
   podLabels: {}
   ## Pod Security Context for data pods.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
-  ## @param coordinating.securityContext.enabled Enable security context for coordinating-only pods
-  ## @param coordinating.securityContext.fsGroup Group ID for the container for coordinating-only pods
+  ## @param coordinating.podSecurityContext.enabled Enable security context for coordinating-only pods
+  ## @param coordinating.podSecurityContext.fsGroup Group ID for the container for coordinating-only pods
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
   ## Container Security Context for data pods.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
-  ## @param coordinating.securityContext.enabled Enable security context for coordinating-only pods
-  ## @param coordinating.securityContext.runAsUser User ID for the container for coordinating-only pods
+  ## @param coordinating.containerSecurityContext.enabled Enable security context for coordinating-only pods
+  ## @param coordinating.containerSecurityContext.runAsUser User ID for the container for coordinating-only pods
   ##
   containerSecurityContext:
     enabled: true
@@ -753,16 +753,16 @@ data:
   podLabels: {}
   ## Pod Security Context for data pods.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
-  ## @param data.securityContext.enabled Enable security context for data pods
-  ## @param data.securityContext.fsGroup Group ID for the container for data pods
+  ## @param data.podSecurityContext.enabled Enable security context for data pods
+  ## @param data.podSecurityContext.fsGroup Group ID for the container for data pods
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
   ## Container Security Context for data pods.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
-  ## @param data.securityContext.enabled Enable security context for data pods
-  ## @param data.securityContext.runAsUser User ID for the container for data pods
+  ## @param data.containerSecurityContext.enabled Enable security context for data pods
+  ## @param data.containerSecurityContext.runAsUser User ID for the container for data pods
   ##
   containerSecurityContext:
     enabled: true
@@ -1001,16 +1001,16 @@ ingest:
   podLabels: {}
   ## Pod Security Context for data pods.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
-  ## @param ingest.securityContext.enabled Enable security context for ingest pods
-  ## @param ingest.securityContext.fsGroup Group ID for the container for ingest pods
+  ## @param ingest.podSecurityContext.enabled Enable security context for ingest pods
+  ## @param ingest.podSecurityContext.fsGroup Group ID for the container for ingest pods
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
   ## Container Security Context for data pods.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
-  ## @param cooingestrdinating.securityContext.enabled Enable security context for ingest pods
-  ## @param ingest.securityContext.runAsUser User ID for the container for ingest pods
+  ## @param ingest.containerSecurityContext.enabled Enable security context for ingest pods
+  ## @param ingest.containerSecurityContext.runAsUser User ID for the container for ingest pods
   ##
   containerSecurityContext:
     enabled: true
