@@ -11,7 +11,7 @@ $ helm install my-release bitnami/geode
 
 ## Introduction
 
-This chart bootstraps an [Apache Geode](https://github.com/bitnami/bitnami-docker-geode) cluster on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps an [Apache Geode](https://github.com/bitnami/bitnami-docker-geode) cluster on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
 
@@ -356,7 +356,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.allowExternal`                 | Don't require client label for connections                             | `true`  |
 
 
-The above parameters map to the env variables defined in [bitnami/geode](http://github.com/bitnami/bitnami-docker-geode). For more information please refer to the [bitnami/geode](http://github.com/bitnami/bitnami-docker-geode) image documentation.
+The above parameters map to the env variables defined in [bitnami/geode](https://github.com/bitnami/bitnami-docker-geode). For more information please refer to the [bitnami/geode](https://github.com/bitnami/bitnami-docker-geode) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

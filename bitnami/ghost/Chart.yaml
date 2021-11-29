@@ -32,5 +32,5 @@ maintainers:
 name: ghost
 sources:
   - https://github.com/bitnami/bitnami-docker-ghost
-  - http://www.ghost.org/
+  - https://www.ghost.org/
 version: 15.1.3

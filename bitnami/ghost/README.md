@@ -11,7 +11,7 @@ $ helm install my-release bitnami/ghost
 
 ## Introduction
 
-This chart bootstraps a [Ghost](https://github.com/bitnami/bitnami-docker-ghost) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Ghost](https://github.com/bitnami/bitnami-docker-ghost) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) which is required for bootstrapping a MariaDB deployment for the database requirements of the Ghost application.
 
@@ -259,7 +259,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                | `{}`    |
 
 
-The above parameters map to the env variables defined in [bitnami/ghost](http://github.com/bitnami/bitnami-docker-ghost). For more information please refer to the [bitnami/ghost](http://github.com/bitnami/bitnami-docker-ghost) image documentation.
+The above parameters map to the env variables defined in [bitnami/ghost](https://github.com/bitnami/bitnami-docker-ghost). For more information please refer to the [bitnami/ghost](https://github.com/bitnami/bitnami-docker-ghost) image documentation.
 
 > **Note**:
 >

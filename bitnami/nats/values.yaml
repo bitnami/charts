@@ -66,7 +66,7 @@ image:
   tag: 2.6.5-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
@@ -319,7 +319,7 @@ containerSecurityContext:
   runAsUser: 1001
   runAsNonRoot: true
 ## NATS resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## ref: https://kubernetes.io/docs/user-guide/compute-resources/
 ## @param resources.limits The resources limits for the NATS containers
 ## @param resources.requests The requested resources for the NATS containers
 ##
@@ -517,7 +517,7 @@ service:
   ##
   loadBalancerSourceRanges: []
   ## @param service.externalTrafficPolicy NATS service external traffic policy
-  ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+  ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
   externalTrafficPolicy: Cluster
   ## @param service.annotations Additional custom annotations for NATS service
@@ -527,7 +527,7 @@ service:
   ##
   extraPorts: []
 ## NATS ingress parameters
-## ref: http://kubernetes.io/docs/user-guide/ingress/
+## ref: https://kubernetes.io/docs/user-guide/ingress/
 ##
 ingress:
   ## @param ingress.enabled Set to true to enable ingress record generation
@@ -663,7 +663,7 @@ metrics:
     ##
     pullSecrets: []
   ## @param metrics.resources Metrics exporter resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ##
   resources: {}
   ## @param metrics.containerPort Prometheus metrics exporter port

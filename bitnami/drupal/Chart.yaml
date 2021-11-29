@@ -30,5 +30,5 @@ maintainers:
 name: drupal
 sources:
   - https://github.com/bitnami/bitnami-docker-drupal
-  - http://www.drupal.org/
-version: 10.4.7
+  - https://www.drupal.org/
+version: 10.4.8

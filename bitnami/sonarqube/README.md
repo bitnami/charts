@@ -11,7 +11,7 @@ $ helm install my-release bitnami/sonarqube
 
 ## Introduction
 
-This chart bootstraps an [SonarQube](https://github.com/bitnami/bitnami-docker-sonarqube) cluster on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps an [SonarQube](https://github.com/bitnami/bitnami-docker-sonarqube) cluster on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
 
@@ -306,7 +306,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.port`           | Port of an external PostgreSQL to connect (only if postgresql.enabled=false)                                    | `5432`      |
 
 
-The above parameters map to the env variables defined in [bitnami/sonarqube](http://github.com/bitnami/bitnami-docker-sonarqube). For more information please refer to the [bitnami/sonarqube](http://github.com/bitnami/bitnami-docker-sonarqube) image documentation.
+The above parameters map to the env variables defined in [bitnami/sonarqube](https://github.com/bitnami/bitnami-docker-sonarqube). For more information please refer to the [bitnami/sonarqube](https://github.com/bitnami/bitnami-docker-sonarqube) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

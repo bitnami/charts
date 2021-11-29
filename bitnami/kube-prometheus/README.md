@@ -11,7 +11,7 @@ $ helm install my-release bitnami/kube-prometheus
 
 ## Introduction
 
-This chart bootstraps [Prometheus Operator](https://github.com/bitnami/bitnami-docker-prometheus-operator) on [Kubernetes](http://kubernetes.io) using the [Helm](https://helm.sh) package manager.
+This chart bootstraps [Prometheus Operator](https://github.com/bitnami/bitnami-docker-prometheus-operator) on [Kubernetes](https://kubernetes.io) using the [Helm](https://helm.sh) package manager.
 
 In the default configuration the chart deploys the following components on the Kubernetes cluster:
 

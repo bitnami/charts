@@ -48,7 +48,7 @@ image:
   tag: 3.6.0-debian-10-r372
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -180,7 +180,7 @@ server:
     keyFileName: key.pem
     caFileName: ca.pem
   ## Kiam server resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -342,7 +342,7 @@ server:
     ##
     clusterIP: None
     ## @param server.service.loadBalancerIP loadBalancerIP if service type is `LoadBalancer`
-    ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+    ## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
     ##
     loadBalancerIP: ""
     ## @param server.service.loadBalancerSourceRanges Address that are allowed when service is LoadBalancer
@@ -353,7 +353,7 @@ server:
     ##
     loadBalancerSourceRanges: []
     ## @param server.service.externalTrafficPolicy Enable client source IP preservation
-    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
     externalTrafficPolicy: Cluster
     ## @param server.service.annotations Annotations for kiam service
@@ -548,7 +548,7 @@ agent:
   ##
   args: []
   ## Container resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -706,7 +706,7 @@ agent:
     ##
     clusterIP: ""
     ## @param agent.service.loadBalancerIP loadBalancerIP if service type is `LoadBalancer`
-    ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+    ## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
     ##
     loadBalancerIP: ""
     ## @param agent.service.loadBalancerSourceRanges Address that are allowed when service is LoadBalancer
@@ -717,7 +717,7 @@ agent:
     ##
     loadBalancerSourceRanges: []
     ## @param agent.service.externalTrafficPolicy Enable client source IP preservation
-    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
     externalTrafficPolicy: Cluster
     ## @param agent.service.annotations Annotations for kiam service
