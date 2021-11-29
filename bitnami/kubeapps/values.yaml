@@ -156,7 +156,7 @@ frontend:
     tag: 1.21.4-debian-10-r21
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -189,7 +189,7 @@ frontend:
   ##
   replicaCount: 2
   ## Frontend containers' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param frontend.resources.limits.cpu The CPU limits for the NGINX container
   ## @param frontend.resources.limits.memory The memory limits for the NGINX container
   ## @param frontend.resources.requests.cpu The requested CPU for the NGINX container
@@ -393,7 +393,7 @@ frontend:
     ##
     loadBalancerSourceRanges: []
     ## @param frontend.service.externalTrafficPolicy Frontend service external traffic policy
-    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
     externalTrafficPolicy: Cluster
     ## @param frontend.service.annotations Additional custom annotations for frontend service
@@ -420,7 +420,7 @@ dashboard:
     tag: 2.4.1-debian-10-r42
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -491,7 +491,7 @@ dashboard:
   ##
   containerPort: 8080
   ## Dashboard containers' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param dashboard.resources.limits.cpu The CPU limits for the Dashboard container
   ## @param dashboard.resources.limits.memory The memory limits for the Dashboard container
   ## @param dashboard.resources.requests.cpu The requested CPU for the Dashboard container
@@ -680,7 +680,7 @@ apprepository:
     tag: 2.4.1-scratch-r1
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -705,7 +705,7 @@ apprepository:
     tag: 2.4.1-scratch-r1
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -781,7 +781,7 @@ apprepository:
   ##
   replicaCount: 1
   ## AppRepository Controller containers' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param apprepository.resources.limits.cpu The CPU limits for the AppRepository Controller container
   ## @param apprepository.resources.limits.memory The memory limits for the AppRepository Controller container
   ## @param apprepository.resources.requests.cpu The requested CPU for the AppRepository Controller container
@@ -888,7 +888,7 @@ kubeops:
     tag: 2.4.1-scratch-r1
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -939,7 +939,7 @@ kubeops:
   ##
   containerPort: 8080
   ## Kubeops containers' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param kubeops.resources.limits.cpu The CPU limits for the Kubeops container
   ## @param kubeops.resources.limits.memory The memory limits for the Kubeops container
   ## @param kubeops.resources.requests.cpu The requested CPU for the Kubeops container
@@ -1101,7 +1101,7 @@ assetsvc:
     tag: 2.4.1-scratch-r1
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1132,7 +1132,7 @@ assetsvc:
   ##
   containerPort: 8080
   ## Assetsvc containers' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param assetsvc.resources.limits.cpu The CPU limits for the Assetsvc container
   ## @param assetsvc.resources.limits.memory The memory limits for the Assetsvc container
   ## @param assetsvc.resources.requests.cpu The requested CPU for the Assetsvc container
@@ -1298,7 +1298,7 @@ authProxy:
     tag: 7.2.0-debian-10-r32
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1375,7 +1375,7 @@ authProxy:
     runAsUser: 1001
     runAsNonRoot: true
   ## OAuth2 Proxy containers' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param authProxy.resources.limits.cpu The CPU limits for the OAuth2 Proxy container
   ## @param authProxy.resources.limits.memory The memory limits for the OAuth2 Proxy container
   ## @param authProxy.resources.requests.cpu The requested CPU for the OAuth2 Proxy container
@@ -1411,7 +1411,7 @@ pinnipedProxy:
     tag: 2.4.1-debian-10-r47
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1448,7 +1448,7 @@ pinnipedProxy:
     runAsUser: 1001
     runAsNonRoot: true
   ## Pinniped Proxy containers' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param pinnipedProxy.resources.limits.cpu The CPU limits for the Pinniped Proxy container
   ## @param pinnipedProxy.resources.limits.memory The memory limits for the Pinniped Proxy container
   ## @param pinnipedProxy.resources.requests.cpu The requested CPU for the Pinniped Proxy container
@@ -1527,7 +1527,7 @@ testImage:
   tag: 1.21.4-debian-10-r21
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -1560,7 +1560,7 @@ postgresql:
   ##
   postgresqlPassword: ""
   ## PostgreSQL Persistence parameters
-  ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
   ## @param postgresql.persistence.enabled Enable persistence on PostgreSQL using PVC(s)
   ## @param postgresql.persistence.size Persistent Volume size
   ##
@@ -1573,7 +1573,7 @@ postgresql:
   securityContext:
     enabled: false
   ## PostreSQL containers' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param postgresql.resources.limits The resources limits for the PostreSQL container
   ## @param postgresql.resources.requests.cpu The requested CPU for the PostreSQL container
   ## @param postgresql.resources.requests.memory The requested memory for the PostreSQL container
@@ -1611,7 +1611,7 @@ kubeappsapis:
     tag: 2.4.1-debian-10-r47
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1646,7 +1646,7 @@ kubeappsapis:
   ##
   containerPort: 50051
   ## KubeappsAPIs containers' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param kubeappsapis.resources.limits.cpu The CPU limits for the KubeappsAPIs container
   ## @param kubeappsapis.resources.limits.memory The memory limits for the KubeappsAPIs container
   ## @param kubeappsapis.resources.requests.cpu The requested CPU for the KubeappsAPIs container

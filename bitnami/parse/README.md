@@ -11,7 +11,7 @@ $ helm install my-release bitnami/parse
 
 ## Introduction
 
-This chart bootstraps a [Parse](https://github.com/bitnami/bitnami-docker-parse) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Parse](https://github.com/bitnami/bitnami-docker-parse) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This chart has been tested to work with NGINX Ingress, cert-manager, fluentd and Prometheus on top of the [BKPR](https://kubeprod.io/).
 
@@ -221,7 +221,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `mongodb.persistence.size`         | PVC Storage Request for MongoDB&reg; volume | `8Gi`           |
 
 
-The above parameters map to the env variables defined in [bitnami/parse](http://github.com/bitnami/bitnami-docker-parse). For more information please refer to the [bitnami/parse](http://github.com/bitnami/bitnami-docker-parse) image documentation.
+The above parameters map to the env variables defined in [bitnami/parse](https://github.com/bitnami/bitnami-docker-parse). For more information please refer to the [bitnami/parse](https://github.com/bitnami/bitnami-docker-parse) image documentation.
 
 > **Note**:
 >
