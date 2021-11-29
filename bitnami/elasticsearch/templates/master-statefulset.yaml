@@ -65,12 +65,9 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.master.topologySpreadConstraints "context" $) | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ template "elasticsearch.master.serviceAccountName" . }}
-      {{- if .Values.master.securityContext.enabled }}
+      {{- if .Values.master.podSecurityContext.enabled }}
       securityContext:
-        fsGroup: {{ .Values.master.securityContext.fsGroup }}
-      {{- if .Values.master.extraPodSecurityContext }}
-      {{- toYaml .Values.master.extraPodSecurityContext  | nindent 8 }}
-      {{- end }}
+        {{- omit .Values.master.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       {{- if or .Values.master.initContainers .Values.sysctlImage.enabled (and .Values.volumePermissions.enabled .Values.master.persistence.enabled) }}
       initContainers:
@@ -117,12 +114,9 @@ spec:
         - name: elasticsearch
           image: {{ include "elasticsearch.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
-          {{- if .Values.master.securityContext.enabled }}
+          {{- if .Values.master.containerSecurityContext.enabled }}
           securityContext:
-            runAsUser: {{ .Values.master.securityContext.runAsUser }}
-          {{- if .Values.master.extraContainerSecurityContext }}
-          {{- toYaml .Values.master.extraContainerSecurityContext  | nindent 12 }}
-          {{- end }}
+            {{- omit .Values.master.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
