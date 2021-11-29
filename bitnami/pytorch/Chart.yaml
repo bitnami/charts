@@ -23,5 +23,5 @@ maintainers:
 name: pytorch
 sources:
   - https://github.com/bitnami/bitnami-docker-pytorch
-  - http://pytorch.org/
-version: 2.3.20
+  - https://pytorch.org/
+version: 2.3.21

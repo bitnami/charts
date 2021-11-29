@@ -71,7 +71,7 @@ dataplatform:
       tag: 1.0.1-scratch-r0
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-      ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+      ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
       ##
       pullPolicy: IfNotPresent
       ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
@@ -253,7 +253,7 @@ dataplatform:
     ##
     args: []
     ## Exporter resource requests and limits
-    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
     ## We usually recommend not to specify default resources and to leave this as a conscious
     ## choice for the user. This also increases chances charts run on environments with little
     ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -419,7 +419,7 @@ dataplatform:
       ports:
         http: 9090
       ## @param dataplatform.exporter.service.loadBalancerIP Load balancer IP for the Data Platform Exporter Service (optional, cloud specific)
-      ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+      ## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
       ##
       loadBalancerIP: ""
       ## @param dataplatform.exporter.service.nodePorts.http Node ports for the HTTP exporter service
@@ -457,7 +457,7 @@ dataplatform:
       tag: 1.0.1-scratch-r1
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-      ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+      ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
       ##
       pullPolicy: IfNotPresent
       ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
@@ -530,7 +530,7 @@ dataplatform:
     ##
     args: []
     ## Data Platform metrics emitter resource requests and limits
-    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
     ## We usually recommend not to specify default resources and to leave this as a conscious
     ## choice for the user. This also increases chances charts run on environments with little
     ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -693,7 +693,7 @@ dataplatform:
       ports:
         http: 8091
       ## @param dataplatform.emitter.service.loadBalancerIP Load balancer IP for the dataplatform emitter Service (optional, cloud specific)
-      ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+      ## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
       ##
       loadBalancerIP: ""
       ## @param dataplatform.emitter.service.nodePorts.http Node ports for the HTTP emitter service
@@ -781,7 +781,7 @@ kafka:
       ##
       enabled: false
       ## Prometheus Kafka Exporter' resource requests and limits
-      ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+      ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
       ## @param kafka.metrics.kafka.resources.limits Resource limits for kafka prometheus exporter
       ## @param kafka.metrics.kafka.resources.requests.cpu CPU capacity request for Kafka prometheus nodes
       ## @param kafka.metrics.kafka.resources.requests.memory Memory capacity request for Kafka prometheus nodes
@@ -803,7 +803,7 @@ kafka:
       ##
       enabled: false
       ## Prometheus JMX Exporter' resource requests and limits
-      ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+      ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
       ## @param kafka.metrics.jmx.resources.limits Resource limits for kafka prometheus exporter
       ## @param kafka.metrics.jmx.resources.requests.cpu CPU capacity request for Kafka prometheus nodes
       ## @param kafka.metrics.jmx.resources.requests.memory Memory capacity request for Kafka prometheus nodes
@@ -1029,7 +1029,7 @@ elasticsearch:
             topologyKey: "kubernetes.io/hostname"
 
     ## Elasticsearch master-eligible container's resource requests and limits
-    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
     ##
     resources:
       ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -1080,7 +1080,7 @@ elasticsearch:
             topologyKey: "kubernetes.io/hostname"
 
     ## Elasticsearch data container's resource requests and limits
-    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
     ##
     resources:
       limits: {}
@@ -1124,7 +1124,7 @@ elasticsearch:
                     - "{{ .Release.Name }}"
             topologyKey: "kubernetes.io/hostname"
     ## Elasticsearch coordinating-only container's resource requests and limits
-    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
     ##
     resources:
       ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -1147,7 +1147,7 @@ elasticsearch:
   metrics:
     enabled: false
     ## Elasticsearch Prometheus exporter resource requests and limits
-    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
     ## We usually recommend not to specify default resources and to leave this as a conscious
     ## choice for the user. This also increases chances charts run on environments with little
     ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -1208,7 +1208,7 @@ logstash:
     - name: LS_JAVA_OPTS
       value: "-Xmx1g -Xms1g"
   ## Logstash containers' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param logstash.resources.limits Elasticsearch metrics resource limits
   ## @param logstash.resources.requests.cpu Elasticsearch metrics CPUs
   ## @param logstash.resources.requests.memory Elasticsearch metrics requested memory
@@ -1225,7 +1225,7 @@ logstash:
     ##
     enabled: false
     ## Logstash Prometheus Exporter containers' resource requests and limits
-    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
     ## @param logstash.metrics.resources.limits Elasticsearch metrics resource limits
     ## @param logstash.metrics.resources.requests.cpu Elasticsearch metrics CPUs
     ## @param logstash.metrics.resources.requests.memory Elasticsearch metrics requested memory
@@ -1349,7 +1349,7 @@ wavefront:
       config: []
   proxy:
     ## Wavefront Proxy resource requests and limits
-    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
     ## @param wavefront.proxy.resources.limits Wavefront Proxy metrics resource limits
     ## @param wavefront.proxy.resources.requests.cpu Wavefront Proxy metrics CPUs
     ## @param wavefront.proxy.resources.requests.memory Wavefront Proxy metrics requested memory
