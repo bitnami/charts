@@ -11,7 +11,7 @@ $ helm install my-release bitnami/wordpress
 
 ## Introduction
 
-This chart bootstraps a [WordPress](https://github.com/bitnami/bitnami-docker-wordpress) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [WordPress](https://github.com/bitnami/bitnami-docker-wordpress) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) which is required for bootstrapping a MariaDB deployment for the database requirements of the WordPress application, and the [Bitnami Memcached chart](https://github.com/bitnami/charts/tree/master/bitnami/memcached) that can be used to cache database queries.
 
@@ -321,7 +321,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalCache.port`                       | External cache server port                                                | `11211`             |
 
 
-The above parameters map to the env variables defined in [bitnami/wordpress](http://github.com/bitnami/bitnami-docker-wordpress). For more information please refer to the [bitnami/wordpress](http://github.com/bitnami/bitnami-docker-wordpress) image documentation.
+The above parameters map to the env variables defined in [bitnami/wordpress](https://github.com/bitnami/bitnami-docker-wordpress). For more information please refer to the [bitnami/wordpress](https://github.com/bitnami/bitnami-docker-wordpress) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

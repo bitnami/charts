@@ -31,5 +31,5 @@ maintainers:
 name: mediawiki
 sources:
   - https://github.com/bitnami/bitnami-docker-mediawiki
-  - http://www.mediawiki.org/
-version: 12.4.2
+  - https://www.mediawiki.org/
+version: 12.4.3

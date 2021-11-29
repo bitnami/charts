@@ -50,7 +50,7 @@ operator:
     tag: 0.52.1-debian-10-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -169,7 +169,7 @@ operator:
     ##
     relabelings: []
   ## @param operator.resources Configure resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ##
   resources: {}
   ## @param operator.podAffinityPreset Pod affinity preset
@@ -477,7 +477,7 @@ prometheus:
     relabelings: []
   ## Configure the ingress resource that allows you to access the
   ## Alertmanager installation. Set up the URL
-  ## ref: http://kubernetes.io/docs/user-guide/ingress/
+  ## ref: https://kubernetes.io/docs/user-guide/ingress/
   ##
   ingress:
     ## @param prometheus.ingress.enabled Enable ingress controller resource
@@ -568,7 +568,7 @@ prometheus:
   ##
   externalUrl: ""
   ## @param prometheus.resources CPU/Memory resource requests/limits for node
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ##
   resources: {}
   ## @param prometheus.podAffinityPreset Prometheus Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
@@ -917,7 +917,7 @@ prometheus:
       repository: bitnami/thanos
       tag: 0.23.1-scratch-r3
       ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-      ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+      ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
       ##
       pullPolicy: IfNotPresent
       ## Optionally specify an array of imagePullSecrets.
@@ -968,7 +968,7 @@ prometheus:
     ##
     extraVolumeMounts: []
     ## Thanos sidecar container resource requests and limits.
-    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
     ## We usually recommend not to specify default resources and to leave this as a conscious
     ## choice for the user. This also increases chances charts run on environments with little
     ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -1067,7 +1067,7 @@ prometheus:
       extraPorts: []
     ## Configure the ingress resource that allows you to access the
     ## Thanos Sidecar installation. Set up the URL
-    ## ref: http://kubernetes.io/docs/user-guide/ingress/
+    ## ref: https://kubernetes.io/docs/user-guide/ingress/
     ##
     ingress:
       ## @param prometheus.thanos.ingress.enabled Enable ingress controller resource
@@ -1252,7 +1252,7 @@ alertmanager:
     relabelings: []
   ## Configure the ingress resource that allows you to access the
   ## Alertmanager installation. Set up the URL
-  ## ref: http://kubernetes.io/docs/user-guide/ingress/
+  ## ref: https://kubernetes.io/docs/user-guide/ingress/
   ##
   ingress:
     ## @param alertmanager.ingress.enabled Enable ingress controller resource
@@ -1341,7 +1341,7 @@ alertmanager:
   ##
   externalUrl: ""
   ## @param alertmanager.resources CPU/Memory resource requests/limits for node
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ##
   resources: {}
   ## @param alertmanager.podAffinityPreset Alertmanager Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
