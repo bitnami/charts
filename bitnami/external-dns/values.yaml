@@ -315,6 +315,9 @@ google:
   ## @param google.serviceAccountKey When using the Google provider, specify the service account key JSON file. In this case a new secret will be created holding this service account (optional)
   ##
   serviceAccountKey: ""
+  ## @param google.zoneVisibility When using the Google provider, fiter for zones of a specific visibility (private or public)
+  ##
+  zoneVisibility: ""
 ## Hetzner configuration to be set via arguments/env. variables
 ##
 hetzner:
