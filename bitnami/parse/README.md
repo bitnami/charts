@@ -73,7 +73,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------- | ------------------------------------------------------------------------------------------------------ | ---------------------- |
 | `server.image.registry`                     | Parse image registry                                                                                   | `docker.io`            |
 | `server.image.repository`                   | Parse image repository                                                                                 | `bitnami/parse`        |
-| `server.image.tag`                          | Parse image tag (immutable tags are recommended)                                                       | `4.10.4-debian-10-r25` |
+| `server.image.tag`                          | Parse image tag (immutable tags are recommended)                                                       | `4.10.4-debian-10-r46` |
 | `server.image.pullPolicy`                   | Image pull policy                                                                                      | `IfNotPresent`         |
 | `server.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                       | `[]`                   |
 | `server.hostAliases`                        | Deployment pod host aliases                                                                            | `[]`                   |
@@ -155,7 +155,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dashboard.enabled`                            | Enable parse dashboard                                                                                    | `true`                    |
 | `dashboard.image.registry`                     | Dashboard image registry                                                                                  | `docker.io`               |
 | `dashboard.image.repository`                   | Dashboard image repository                                                                                | `bitnami/parse-dashboard` |
-| `dashboard.image.tag`                          | Dashboard image tag (immutable tags are recommended)                                                      | `3.2.1-debian-10-r16`     |
+| `dashboard.image.tag`                          | Dashboard image tag (immutable tags are recommended)                                                      | `3.2.1-debian-10-r45`     |
 | `dashboard.image.pullPolicy`                   | Image pull policy                                                                                         | `IfNotPresent`            |
 | `dashboard.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                          | `[]`                      |
 | `dashboard.hostAliases`                        | Deployment pod host aliases                                                                               | `[]`                      |
@@ -199,7 +199,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`           | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
 | `volumePermissions.image.registry`    | Init container volume-permissions image registry                                                                                                          | `docker.io`             |
 | `volumePermissions.image.repository`  | Init container volume-permissions image name                                                                                                              | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                                                                               | `10-debian-10-r234`     |
+| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                                                                               | `10-debian-10-r263`     |
 | `volumePermissions.image.pullPolicy`  | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets` | Init container volume-permissions image pull secrets                                                                                                      | `[]`                    |
 | `volumePermissions.resources`         | The resources for the container                                                                                                                           | `{}`                    |
