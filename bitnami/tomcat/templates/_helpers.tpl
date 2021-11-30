@@ -29,6 +29,18 @@ If release name contains chart name it will be used as a full name.
 {{- end -}}
 
 {{/*
+Return the appropriate apiVersion for networkpolicy.
+*/}}
+{{- define "tomcat.networkPolicy.apiVersion" -}}
+{{- if semverCompare ">=1.4-0, <1.7-0" .Capabilities.KubeVersion.GitVersion -}}
+"extensions/v1beta1"
+{{- else if semverCompare "^1.7-0" .Capabilities.KubeVersion.GitVersion -}}
+"networking.k8s.io/v1"
+{{- end -}}
+{{- end -}}
+
+
+{{/*
 Return the proper image name (for the init container volume-permissions image)
 */}}
 {{- define "tomcat.volumePermissions.image" -}}
