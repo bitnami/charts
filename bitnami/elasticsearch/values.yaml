@@ -262,11 +262,21 @@ master:
   podLabels: {}
   ## Pod Security Context for master-eligible pods.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ## @param master.securityContext.enabled Enable security context for master-eligible pods
+  ## @param master.securityContext.fsGroup Group ID for the container for master-eligible pods
+  ## @param master.securityContext.runAsUser User ID for the container for master-eligible pods
+  ##
+  securityContext:
+    enabled: true
+    fsGroup: 1001
+    runAsUser: 1001
+  ## Pod Security Context for master-eligible pods.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param master.podSecurityContext.enabled Enable security context for master-eligible pods
   ## @param master.podSecurityContext.fsGroup Group ID for the container for master-eligible pods
   ##
   podSecurityContext:
-    enabled: true
+    enabled: false
     fsGroup: 1001
   ## Container Security Context for master-eligible pods.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
@@ -274,7 +284,7 @@ master:
   ## @param master.containerSecurityContext.runAsUser User ID for the container for master-eligible pods
   ##
   containerSecurityContext:
-    enabled: true
+    enabled: false
     runAsUser: 1001
   ## @param master.podAffinityPreset Master-eligible Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
@@ -522,13 +532,23 @@ coordinating:
   ## @param coordinating.podLabels Extra labels to add to Pod
   ##
   podLabels: {}
+  ## Pod Security Context for coordintating-only pods.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ## @param coordinating.securityContext.enabled Enable security context for master-eligible pods
+  ## @param coordinating.securityContext.fsGroup Group ID for the container for master-eligible pods
+  ## @param coordinating.securityContext.runAsUser User ID for the container for master-eligible pods
+  ##
+  securityContext:
+    enabled: true
+    fsGroup: 1001
+    runAsUser: 1001
   ## Pod Security Context for data pods.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param coordinating.podSecurityContext.enabled Enable security context for coordinating-only pods
   ## @param coordinating.podSecurityContext.fsGroup Group ID for the container for coordinating-only pods
   ##
   podSecurityContext:
-    enabled: true
+    enabled: false
     fsGroup: 1001
   ## Container Security Context for data pods.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
@@ -536,7 +556,7 @@ coordinating:
   ## @param coordinating.containerSecurityContext.runAsUser User ID for the container for coordinating-only pods
   ##
   containerSecurityContext:
-    enabled: true
+    enabled: false
     runAsUser: 1001
   ## @param coordinating.podAffinityPreset Coordinating Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
@@ -751,6 +771,16 @@ data:
   ## @param data.podLabels Extra labels to add to Pod
   ##
   podLabels: {}
+  ## Pod Security Context for data pods.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ## @param data.securityContext.enabled Enable security context for master-eligible pods
+  ## @param data.securityContext.fsGroup Group ID for the container for master-eligible pods
+  ## @param data.securityContext.runAsUser User ID for the container for master-eligible pods
+  ##
+  securityContext:
+    enabled: true
+    fsGroup: 1001
+    runAsUser: 1001
   ## Pod Security Context for data pods.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param data.podSecurityContext.enabled Enable security context for data pods
@@ -999,6 +1029,16 @@ ingest:
   ## @param ingest.podLabels Extra labels to add to Pod
   ##
   podLabels: {}
+  ## Pod Security Context for ingest pods.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ## @param ingest.securityContext.enabled Enable security context for master-eligible pods
+  ## @param ingest.securityContext.fsGroup Group ID for the container for master-eligible pods
+  ## @param ingest.securityContext.runAsUser User ID for the container for master-eligible pods
+  ##
+  securityContext:
+    enabled: true
+    fsGroup: 1001
+    runAsUser: 1001
   ## Pod Security Context for data pods.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param ingest.podSecurityContext.enabled Enable security context for ingest pods
