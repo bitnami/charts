@@ -170,7 +170,7 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | ------------------------------------------------- | -------------------------------------------------------------------------------------------- | ---------------------------- |
 | `dashboard.image.registry`                        | Dashboard image registry                                                                     | `docker.io`                  |
 | `dashboard.image.repository`                      | Dashboard image repository                                                                   | `bitnami/kubeapps-dashboard` |
-| `dashboard.image.tag`                             | Dashboard image tag (immutable tags are recommended)                                         | `2.4.1-debian-10-r43`        |
+| `dashboard.image.tag`                             | Dashboard image tag (immutable tags are recommended)                                         | `2.4.2-debian-10-r0`         |
 | `dashboard.image.pullPolicy`                      | Dashboard image pull policy                                                                  | `IfNotPresent`               |
 | `dashboard.image.pullSecrets`                     | Dashboard image pull secrets                                                                 | `[]`                         |
 | `dashboard.image.debug`                           | Enable image debug mode                                                                      | `false`                      |
@@ -236,12 +236,12 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | ----------------------------------------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------------- |
 | `apprepository.image.registry`                        | Kubeapps AppRepository Controller image registry                                          | `docker.io`                                 |
 | `apprepository.image.repository`                      | Kubeapps AppRepository Controller image repository                                        | `bitnami/kubeapps-apprepository-controller` |
-| `apprepository.image.tag`                             | Kubeapps AppRepository Controller image tag (immutable tags are recommended)              | `2.4.1-scratch-r1`                          |
+| `apprepository.image.tag`                             | Kubeapps AppRepository Controller image tag (immutable tags are recommended)              | `2.4.2-scratch-r0`                          |
 | `apprepository.image.pullPolicy`                      | Kubeapps AppRepository Controller image pull policy                                       | `IfNotPresent`                              |
 | `apprepository.image.pullSecrets`                     | Kubeapps AppRepository Controller image pull secrets                                      | `[]`                                        |
 | `apprepository.syncImage.registry`                    | Kubeapps Asset Syncer image registry                                                      | `docker.io`                                 |
 | `apprepository.syncImage.repository`                  | Kubeapps Asset Syncer image repository                                                    | `bitnami/kubeapps-asset-syncer`             |
-| `apprepository.syncImage.tag`                         | Kubeapps Asset Syncer image tag (immutable tags are recommended)                          | `2.4.1-scratch-r1`                          |
+| `apprepository.syncImage.tag`                         | Kubeapps Asset Syncer image tag (immutable tags are recommended)                          | `2.4.2-scratch-r0`                          |
 | `apprepository.syncImage.pullPolicy`                  | Kubeapps Asset Syncer image pull policy                                                   | `IfNotPresent`                              |
 | `apprepository.syncImage.pullSecrets`                 | Kubeapps Asset Syncer image pull secrets                                                  | `[]`                                        |
 | `apprepository.initialRepos`                          | Initial chart repositories to configure                                                   | `[]`                                        |
@@ -282,7 +282,7 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `kubeops.enabled`                               | Specifies whether this component should be installed.                                     | `true`                     |
 | `kubeops.image.registry`                        | Kubeops image registry                                                                    | `docker.io`                |
 | `kubeops.image.repository`                      | Kubeops image repository                                                                  | `bitnami/kubeapps-kubeops` |
-| `kubeops.image.tag`                             | Kubeops image tag (immutable tags are recommended)                                        | `2.4.1-scratch-r1`         |
+| `kubeops.image.tag`                             | Kubeops image tag (immutable tags are recommended)                                        | `2.4.2-scratch-r0`         |
 | `kubeops.image.pullPolicy`                      | Kubeops image pull policy                                                                 | `IfNotPresent`             |
 | `kubeops.image.pullSecrets`                     | Kubeops image pull secrets                                                                | `[]`                       |
 | `kubeops.namespaceHeaderName`                   | Additional header name for trusted namespaces                                             | `""`                       |
@@ -342,7 +342,7 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `assetsvc.enabled`                               | Specifies whether this deprecated component should be installed.                          | `false`                     |
 | `assetsvc.image.registry`                        | Kubeapps Assetsvc image registry                                                          | `docker.io`                 |
 | `assetsvc.image.repository`                      | Kubeapps Assetsvc image repository                                                        | `bitnami/kubeapps-assetsvc` |
-| `assetsvc.image.tag`                             | Kubeapps Assetsvc image tag (immutable tags are recommended)                              | `2.4.1-scratch-r1`          |
+| `assetsvc.image.tag`                             | Kubeapps Assetsvc image tag (immutable tags are recommended)                              | `2.4.2-scratch-r0`          |
 | `assetsvc.image.pullPolicy`                      | Kubeapps Assetsvc image pull policy                                                       | `IfNotPresent`              |
 | `assetsvc.image.pullSecrets`                     | Kubeapps Assetsvc image pull secrets                                                      | `[]`                        |
 | `assetsvc.replicaCount`                          | Number of Assetsvc replicas to deploy                                                     | `1`                         |
@@ -430,7 +430,7 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `pinnipedProxy.enabled`                               | Specifies whether Kubeapps should configure Pinniped Proxy               | `false`                           |
 | `pinnipedProxy.image.registry`                        | Pinniped Proxy image registry                                            | `docker.io`                       |
 | `pinnipedProxy.image.repository`                      | Pinniped Proxy image repository                                          | `bitnami/kubeapps-pinniped-proxy` |
-| `pinnipedProxy.image.tag`                             | Pinniped Proxy image tag (immutable tags are recommended)                | `2.4.1-debian-10-r50`             |
+| `pinnipedProxy.image.tag`                             | Pinniped Proxy image tag (immutable tags are recommended)                | `2.4.2-debian-10-r0`              |
 | `pinnipedProxy.image.pullPolicy`                      | Pinniped Proxy image pull policy                                         | `IfNotPresent`                    |
 | `pinnipedProxy.image.pullSecrets`                     | Pinniped Proxy image pull secrets                                        | `[]`                              |
 | `pinnipedProxy.defaultPinnipedNamespace`              | Specify the (default) namespace in which pinniped concierge is installed | `pinniped-concierge`              |
@@ -489,7 +489,7 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `kubeappsapis.pluginConfig.core.packages.v1alpha1.timeoutSeconds`          | Value to wait for Kubernetes commands to complete                                         | `300`                   |
 | `kubeappsapis.image.registry`                                              | Kubeapps-APIs image registry                                                              | `docker.io`             |
 | `kubeappsapis.image.repository`                                            | Kubeapps-APIs image repository                                                            | `bitnami/kubeapps-apis` |
-| `kubeappsapis.image.tag`                                                   | Kubeapps-APIs image tag (immutable tags are recommended)                                  | `2.4.1-debian-10-r51`   |
+| `kubeappsapis.image.tag`                                                   | Kubeapps-APIs image tag (immutable tags are recommended)                                  | `2.4.2-debian-10-r0`    |
 | `kubeappsapis.image.pullPolicy`                                            | Kubeapps-APIs image pull policy                                                           | `IfNotPresent`          |
 | `kubeappsapis.image.pullSecrets`                                           | Kubeapps-APIs image pull secrets                                                          | `[]`                    |
 | `kubeappsapis.replicaCount`                                                | Number of frontend replicas to deploy                                                     | `2`                     |
