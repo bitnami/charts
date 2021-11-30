@@ -11,7 +11,7 @@ $ helm install my-release bitnami/concourse
 
 ## Introduction
 
-This chart bootstraps a [Concourse](https://concourse-ci.org/) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Concourse](https://concourse-ci.org/) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 It also packages [Bitnami Postgresql](https://github.com/bitnami/charts/tree/master/bitnami/postgresql)
 
@@ -336,7 +336,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 See https://github.com/bitnami-labs/readme-generator-for-helm to create the table
 
-The above parameters map to the env variables defined in [bitnami/concourse](http://github.com/bitnami/bitnami-docker-concourse). For more information please refer to the [bitnami/concourse](http://github.com/bitnami/bitnami-docker-concourse) image documentation.
+The above parameters map to the env variables defined in [bitnami/concourse](https://github.com/bitnami/bitnami-docker-concourse). For more information please refer to the [bitnami/concourse](https://github.com/bitnami/bitnami-docker-concourse) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

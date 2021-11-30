@@ -11,7 +11,7 @@ $ helm install my-release bitnami/kube-state-metrics
 
 ## Introduction
 
-This chart bootstraps [kube-state-metrics](https://github.com/bitnami/bitnami-docker-kube-state-metrics) on [Kubernetes](http://kubernetes.io) using the [Helm](https://helm.sh) package manager.
+This chart bootstraps [kube-state-metrics](https://github.com/bitnami/bitnami-docker-kube-state-metrics) on [Kubernetes](https://kubernetes.io) using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
 

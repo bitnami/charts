@@ -13,7 +13,7 @@ $ helm install my-release bitnami/grafana-tempo
 
 Bitnami charts for Helm are carefully engineered, actively maintained and are the quickest and easiest way to deploy containers on a Kubernetes cluster that are ready to handle production workloads.
 
-This chart bootstraps a [Grafana Tempo](https://github.com/grafana/tempo) Deployment in a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Grafana Tempo](https://github.com/grafana/tempo) Deployment in a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
@@ -80,7 +80,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------- | ---------------------------------------------------------- | ----------------------------- |
 | `tempo.image.registry`                 | Grafana Tempo image registry                               | `docker.io`                   |
 | `tempo.image.repository`               | Grafana Tempo image repository                             | `bitnami/grafana-tempo`       |
-| `tempo.image.tag`                      | Grafana Tempo image tag (immutable tags are recommended)   | `1.1.0-debian-10-r54`         |
+| `tempo.image.tag`                      | Grafana Tempo image tag (immutable tags are recommended)   | `1.2.1-debian-10-r0`          |
 | `tempo.image.pullPolicy`               | Grafana Tempo image pull policy                            | `IfNotPresent`                |
 | `tempo.image.pullSecrets`              | Grafana Tempo image pull secrets                           | `[]`                          |
 | `tempo.containerPort`                  | Tempo components web port                                  | `3100`                        |
@@ -432,7 +432,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryFrontend.initContainers`                           | Add additional init containers to the queryFrontend pod(s)                                              | `[]`                          |
 | `queryFrontend.query.image.registry`                     | Grafana Tempo Query image registry                                                                      | `docker.io`                   |
 | `queryFrontend.query.image.repository`                   | Grafana Tempo Query image repository                                                                    | `bitnami/grafana-tempo-query` |
-| `queryFrontend.query.image.tag`                          | Grafana Tempo Query image tag (immutable tags are recommended)                                          | `1.1.0-debian-10-r58`         |
+| `queryFrontend.query.image.tag`                          | Grafana Tempo Query image tag (immutable tags are recommended)                                          | `1.2.1-debian-10-r8`          |
 | `queryFrontend.query.image.pullPolicy`                   | Grafana Tempo Query image pull policy                                                                   | `IfNotPresent`                |
 | `queryFrontend.query.image.pullSecrets`                  | Grafana Tempo Query image pull secrets                                                                  | `[]`                          |
 | `queryFrontend.query.command`                            | Override default container command (useful when using custom images)                                    | `[]`                          |
@@ -489,7 +489,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `vulture.enabled`                            | Enable vulture deployment                                                                         | `true`                          |
 | `vulture.image.registry`                     | Grafana Vulture image registry                                                                    | `docker.io`                     |
 | `vulture.image.repository`                   | Grafana Vulture image repository                                                                  | `bitnami/grafana-tempo-vulture` |
-| `vulture.image.tag`                          | Grafana Vulture image tag (immutable tags are recommended)                                        | `1.1.0-debian-10-r59`           |
+| `vulture.image.tag`                          | Grafana Vulture image tag (immutable tags are recommended)                                        | `1.2.1-debian-10-r8`            |
 | `vulture.image.pullPolicy`                   | Grafana Vulture image pull policy                                                                 | `IfNotPresent`                  |
 | `vulture.image.pullSecrets`                  | Grafana Vulture image pull secrets                                                                | `[]`                            |
 | `vulture.replicaCount`                       | Number of vulture replicas to deploy                                                              | `1`                             |
@@ -560,7 +560,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r233`     |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r261`     |
 | `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                    |
@@ -606,7 +606,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 See https://github.com/bitnami-labs/readme-generator-for-helm to create the table
 
-The above parameters map to the env variables defined in [bitnami/grafana-tempo](http://github.com/bitnami/bitnami-docker-grafana-tempo). For more information please refer to the [bitnami/grafana-tempo](http://github.com/bitnami/bitnami-docker-grafana-tempo) image documentation.
+The above parameters map to the env variables defined in [bitnami/grafana-tempo](https://github.com/bitnami/bitnami-docker-grafana-tempo). For more information please refer to the [bitnami/grafana-tempo](https://github.com/bitnami/bitnami-docker-grafana-tempo) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

@@ -13,7 +13,7 @@
 
 Bitnami charts for Helm are carefully engineered, actively maintained and are the quickest and easiest way to deploy containers on a Kubernetes cluster that are ready to handle production workloads.
 
-This chart bootstraps a [Keycloak](https://github.com/bitnami/bitnami-docker-keycloak) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Keycloak](https://github.com/bitnami/bitnami-docker-keycloak) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
@@ -76,7 +76,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------- | --------------------------------------------------------------------------------------------- | ---------------------- |
 | `image.registry`                  | Keycloak image registry                                                                       | `docker.io`            |
 | `image.repository`                | Keycloak image repository                                                                     | `bitnami/keycloak`     |
-| `image.tag`                       | Keycloak image tag (immutable tags are recommended)                                           | `15.0.2-debian-10-r66` |
+| `image.tag`                       | Keycloak image tag (immutable tags are recommended)                                           | `15.0.2-debian-10-r94` |
 | `image.pullPolicy`                | Keycloak image pull policy                                                                    | `IfNotPresent`         |
 | `image.pullSecrets`               | Specify docker-registry secret names as an array                                              | `[]`                   |
 | `image.debug`                     | Specify if debug logs should be enabled                                                       | `false`                |
@@ -123,7 +123,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `keycloakConfigCli.enabled`                               | Whether to enable keycloak-config-cli                                                           | `false`                       |
 | `keycloakConfigCli.image.registry`                        | keycloak-config-cli container image registry                                                    | `docker.io`                   |
 | `keycloakConfigCli.image.repository`                      | keycloak-config-cli container image repository                                                  | `bitnami/keycloak-config-cli` |
-| `keycloakConfigCli.image.tag`                             | keycloak-config-cli container image tag                                                         | `4.3.0-debian-10-r29`         |
+| `keycloakConfigCli.image.tag`                             | keycloak-config-cli container image tag                                                         | `4.3.0-debian-10-r54`         |
 | `keycloakConfigCli.image.pullPolicy`                      | keycloak-config-cli container image pull policy                                                 | `IfNotPresent`                |
 | `keycloakConfigCli.image.pullSecrets`                     | keycloak-config-cli container image pull secrets                                                | `[]`                          |
 | `keycloakConfigCli.annotations`                           | Annotations for keycloak-config-cli job                                                         | `undefined`                   |

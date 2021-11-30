@@ -13,7 +13,7 @@ $ helm install my-release bitnami/odoo
 
 ## Introduction
 
-This chart bootstraps a [Odoo](https://github.com/bitnami/bitnami-docker-odoo) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Odoo](https://github.com/bitnami/bitnami-docker-odoo) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This chart has been tested to work with NGINX Ingress, cert-manager, fluentd and Prometheus on top of the [BKPR](https://kubeprod.io/).
 
@@ -59,20 +59,20 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common parameters
 
-| Name                | Description                                        | Value                         |
-| ------------------- | -------------------------------------------------- | ----------------------------- |
-| `kubeVersion`       | Override Kubernetes version                        | `""`                          |
-| `nameOverride`      | String to partially override common.names.fullname | `""`                          |
-| `fullnameOverride`  | String to fully override common.names.fullname     | `""`                          |
-| `commonLabels`      | Labels to add to all deployed objects              | `{}`                          |
-| `commonAnnotations` | Annotations to add to all deployed objects         | `{}`                          |
-| `extraDeploy`       | Array of extra objects to deploy with the release  | `[]`                          |
-| `image.registry`    | Odoo image registry                                | `docker.io`                   |
-| `image.repository`  | Odoo image repository                              | `bitnami/odoo`                |
-| `image.tag`         | Odoo image tag (immutable tags are recommended)    | `15.0.20211010-debian-10-r14` |
-| `image.pullPolicy`  | Odoo image pull policy                             | `IfNotPresent`                |
-| `image.pullSecrets` | Odoo image pull secrets                            | `[]`                          |
-| `image.debug`       | Enable image debug mode                            | `false`                       |
+| Name                | Description                                        | Value                        |
+| ------------------- | -------------------------------------------------- | ---------------------------- |
+| `kubeVersion`       | Override Kubernetes version                        | `""`                         |
+| `nameOverride`      | String to partially override common.names.fullname | `""`                         |
+| `fullnameOverride`  | String to fully override common.names.fullname     | `""`                         |
+| `commonLabels`      | Labels to add to all deployed objects              | `{}`                         |
+| `commonAnnotations` | Annotations to add to all deployed objects         | `{}`                         |
+| `extraDeploy`       | Array of extra objects to deploy with the release  | `[]`                         |
+| `image.registry`    | Odoo image registry                                | `docker.io`                  |
+| `image.repository`  | Odoo image repository                              | `bitnami/odoo`               |
+| `image.tag`         | Odoo image tag (immutable tags are recommended)    | `15.0.20211110-debian-10-r0` |
+| `image.pullPolicy`  | Odoo image pull policy                             | `IfNotPresent`               |
+| `image.pullSecrets` | Odoo image pull secrets                            | `[]`                         |
+| `image.debug`       | Enable image debug mode                            | `false`                      |
 
 
 ### Odoo Configuration parameters
@@ -257,7 +257,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                               | `{}`    |
 
 
-The above parameters map to the env variables defined in [bitnami/odoo](http://github.com/bitnami/bitnami-docker-odoo). For more information please refer to the [bitnami/odoo](http://github.com/bitnami/bitnami-docker-odoo) image documentation.
+The above parameters map to the env variables defined in [bitnami/odoo](https://github.com/bitnami/bitnami-docker-odoo). For more information please refer to the [bitnami/odoo](https://github.com/bitnami/bitnami-docker-odoo) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

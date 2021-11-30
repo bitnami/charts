@@ -11,7 +11,7 @@ $ helm install my-release bitnami/spark
 
 ## Introduction
 
-This chart bootstraps an [Apache Spark](https://github.com/bitnami/bitnami-docker-spark) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps an [Apache Spark](https://github.com/bitnami/bitnami-docker-spark) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
@@ -68,15 +68,15 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Spark parameters
 
-| Name                | Description                                      | Value                |
-| ------------------- | ------------------------------------------------ | -------------------- |
-| `image.registry`    | Spark image registry                             | `docker.io`          |
-| `image.repository`  | Spark image repository                           | `bitnami/spark`      |
-| `image.tag`         | Spark image tag (immutable tags are recommended) | `3.2.0-debian-10-r2` |
-| `image.pullPolicy`  | Spark image pull policy                          | `IfNotPresent`       |
-| `image.pullSecrets` | Specify docker-registry secret names as an array | `[]`                 |
-| `image.debug`       | Enable image debug mode                          | `false`              |
-| `hostNetwork`       | Enable HOST Network                              | `false`              |
+| Name                | Description                                      | Value                 |
+| ------------------- | ------------------------------------------------ | --------------------- |
+| `image.registry`    | Spark image registry                             | `docker.io`           |
+| `image.repository`  | Spark image repository                           | `bitnami/spark`       |
+| `image.tag`         | Spark image tag (immutable tags are recommended) | `3.2.0-debian-10-r29` |
+| `image.pullPolicy`  | Spark image pull policy                          | `IfNotPresent`        |
+| `image.pullSecrets` | Specify docker-registry secret names as an array | `[]`                  |
+| `image.debug`       | Enable image debug mode                          | `false`               |
+| `hostNetwork`       | Enable HOST Network                              | `false`               |
 
 
 ### RBAC parameters

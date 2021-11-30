@@ -65,7 +65,7 @@ server:
     tag: 3.2.4-scratch-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
@@ -139,7 +139,7 @@ server:
   ##
   customStartupProbe: {}
   ## server resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param server.resources.limits The resources limits for the server containers
   ## @param server.resources.requests The requested resources for the server containers
   ##
@@ -436,7 +436,7 @@ server:
     ##
     loadBalancerSourceRanges: []
     ## @param server.service.externalTrafficPolicy server service external traffic policy
-    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
     externalTrafficPolicy: Cluster
     ## @param server.service.annotations Additional custom annotations for server service
@@ -465,7 +465,7 @@ controller:
     tag: 3.2.4-scratch-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -536,7 +536,7 @@ controller:
   ##
   customStartupProbe: {}
   ## controller resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param controller.resources.limits The resources limits for the controller containers
   ## @param controller.resources.requests The requested resources for the controller containers
   ##
@@ -910,7 +910,7 @@ controller:
     ##
     loadBalancerSourceRanges: []
     ## @param controller.service.externalTrafficPolicy controller service external traffic policy
-    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
     externalTrafficPolicy: Cluster
     ## @param controller.service.annotations Additional custom annotations for controller service
@@ -937,7 +937,7 @@ executor:
     tag: 3.2.3-debian-10-r21
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
@@ -949,7 +949,7 @@ executor:
     ##
     pullSecrets: []
   ## Init container's resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param executor.resources.limits The resources limits for the init container
   ## @param executor.resources.requests The requested resources for the init container
   ##
@@ -975,7 +975,7 @@ executor:
 ## @section Traffic Exposure Parameters
 
 ## Server ingress parameters
-## ref: http://kubernetes.io/docs/user-guide/ingress/
+## ref: https://kubernetes.io/docs/user-guide/ingress/
 ##
 ingress:
   ## @param ingress.enabled Enable ingress record generation for server

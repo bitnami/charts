@@ -11,7 +11,7 @@ $ helm install my-release bitnami/rabbitmq
 
 ## Introduction
 
-This chart bootstraps a [RabbitMQ](https://github.com/bitnami/bitnami-docker-rabbitmq) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [RabbitMQ](https://github.com/bitnami/bitnami-docker-rabbitmq) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This chart has been tested to work with NGINX Ingress, cert-manager, fluentd and Prometheus on top of the [BKPR](https://kubeprod.io/).
 
@@ -60,7 +60,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | -------------------------------------------------------------- | --------------------- |
 | `image.registry`    | RabbitMQ image registry                                        | `docker.io`           |
 | `image.repository`  | RabbitMQ image repository                                      | `bitnami/rabbitmq`    |
-| `image.tag`         | RabbitMQ image tag (immutable tags are recommended)            | `3.9.10-debian-10-r0` |
+| `image.tag`         | RabbitMQ image tag (immutable tags are recommended)            | `3.9.10-debian-10-r4` |
 | `image.pullPolicy`  | RabbitMQ image pull policy                                     | `IfNotPresent`        |
 | `image.pullSecrets` | Specify docker-registry secret names as an array               | `[]`                  |
 | `image.debug`       | Set to true if you would like to see extra information on logs | `false`               |
@@ -283,14 +283,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                     | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image repository                                                                   | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                          | `10-debian-10-r257`     |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                          | `10-debian-10-r261`     |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                  | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                     | `[]`                    |
 | `volumePermissions.resources.limits`   | Init container volume-permissions resource limits                                                                    | `{}`                    |
 | `volumePermissions.resources.requests` | Init container volume-permissions resource requests                                                                  | `{}`                    |
 
 
-The above parameters map to the env variables defined in [bitnami/rabbitmq](http://github.com/bitnami/bitnami-docker-rabbitmq). For more information please refer to the [bitnami/rabbitmq](http://github.com/bitnami/bitnami-docker-rabbitmq) image documentation.
+The above parameters map to the env variables defined in [bitnami/rabbitmq](https://github.com/bitnami/bitnami-docker-rabbitmq). For more information please refer to the [bitnami/rabbitmq](https://github.com/bitnami/bitnami-docker-rabbitmq) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -356,7 +356,7 @@ Refer to the chart documentation for [more information and examples of enabling 
 
 ### Load custom definitions
 
-It is possible to [load a RabbitMQ definitions file to configure RabbitMQ](http://www.rabbitmq.com/management.html#load-definitions).
+It is possible to [load a RabbitMQ definitions file to configure RabbitMQ](https://www.rabbitmq.com/management.html#load-definitions).
 
 Because definitions may contain RabbitMQ credentials, [store the JSON as a Kubernetes secret](https://kubernetes.io/docs/concepts/configuration/secret/#using-secrets-as-files-from-a-pod). Within the secret's data, choose a key name that corresponds with the desired load definitions filename (i.e. `load_definition.json`) and use the JSON object as the value.
 

@@ -100,7 +100,7 @@ clusterOperator:
     tag: 1.10.0-scratch-r2
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -179,7 +179,7 @@ clusterOperator:
   customStartupProbe: {}
 
   ## RabbitMQ Cluster Operator resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param clusterOperator.resources.limits The resources limits for the RabbitMQ Cluster Operator containers
   ## @param clusterOperator.resources.requests The requested resources for the RabbitMQ Cluster Operator containers
   ##
@@ -389,7 +389,7 @@ clusterOperator:
       ##
       loadBalancerSourceRanges: []
       ## @param clusterOperator.metrics.service.externalTrafficPolicy RabbitMQ Cluster Operator metrics service external traffic policy
-      ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+      ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
       ##
       externalTrafficPolicy: Cluster
       ## @param clusterOperator.metrics.service.annotations [object] Additional custom annotations for RabbitMQ Cluster Operator metrics service
@@ -452,7 +452,7 @@ msgTopologyOperator:
     tag: 1.2.1-scratch-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -539,7 +539,7 @@ msgTopologyOperator:
   existingWebhookCertCABundle: ""
 
   ## RabbitMQ Messaging Topology Operator resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param msgTopologyOperator.resources.limits The resources limits for the RabbitMQ Messaging Topology Operator containers
   ## @param msgTopologyOperator.resources.requests The requested resources for the RabbitMQ Messaging Topology Operator containers
   ##
@@ -719,7 +719,7 @@ msgTopologyOperator:
     ##
     loadBalancerSourceRanges: []
     ## @param msgTopologyOperator.service.externalTrafficPolicy RabbitMQ Messaging Topology Operator webhook service external traffic policy
-    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
     externalTrafficPolicy: Cluster
     ## @param msgTopologyOperator.service.annotations [object] Additional custom annotations for RabbitMQ Messaging Topology Operator webhook service
@@ -792,7 +792,7 @@ msgTopologyOperator:
       ##
       loadBalancerSourceRanges: []
       ## @param msgTopologyOperator.metrics.service.externalTrafficPolicy RabbitMQ Cluster Operator metrics service external traffic policy
-      ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+      ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
       ##
       externalTrafficPolicy: Cluster
       ## @param msgTopologyOperator.metrics.service.annotations [object] Additional custom annotations for RabbitMQ Cluster Operator metrics service

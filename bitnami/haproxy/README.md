@@ -1,6 +1,6 @@
 # HAProxy
 
-[HAProxy](http://www.haproxy.org/) is a TCP proxy and a HTTP reverse proxy. It supports SSL termination and offloading, TCP and HTTP normalization, traffic regulation, caching and protection against DDoS attacks.
+[HAProxy](https://www.haproxy.org/) is a TCP proxy and a HTTP reverse proxy. It supports SSL termination and offloading, TCP and HTTP normalization, traffic regulation, caching and protection against DDoS attacks.
 
 ## TL;DR
 
@@ -13,7 +13,7 @@ $ helm install my-release bitnami/haproxy
 
 Bitnami charts for Helm are carefully engineered, actively maintained and are the quickest and easiest way to deploy containers on a Kubernetes cluster that are ready to handle production workloads.
 
-This chart bootstraps a [HAProxy](https://github.com/haproxytech/haproxy) Deployment in a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [HAProxy](https://github.com/haproxytech/haproxy) Deployment in a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
@@ -93,7 +93,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------ | ----------------------------------------------------------------------------------------- | -------------------- |
 | `image.registry`                     | HAProxy image registry                                                                    | `docker.io`          |
 | `image.repository`                   | HAProxy image repository                                                                  | `bitnami/haproxy`    |
-| `image.tag`                          | HAProxy image tag (immutable tags are recommended)                                        | `2.4.8-debian-10-r0` |
+| `image.tag`                          | HAProxy image tag (immutable tags are recommended)                                        | `2.5.0-debian-10-r0` |
 | `image.pullPolicy`                   | HAProxy image pull policy                                                                 | `IfNotPresent`       |
 | `image.pullSecrets`                  | HAProxy image pull secrets                                                                | `[]`                 |
 | `replicaCount`                       | Number of haproxy replicas to deploy                                                      | `1`                  |
@@ -161,7 +161,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.name`   | The name of the ServiceAccount to use.               | `""`   |
 
 
-The above parameters map to the env variables defined in [bitnami/haproxy](http://github.com/bitnami/bitnami-docker-haproxy). For more information please refer to the [bitnami/haproxy](http://github.com/bitnami/bitnami-docker-haproxy) image documentation.
+The above parameters map to the env variables defined in [bitnami/haproxy](https://github.com/bitnami/bitnami-docker-haproxy). For more information please refer to the [bitnami/haproxy](https://github.com/bitnami/bitnami-docker-haproxy) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

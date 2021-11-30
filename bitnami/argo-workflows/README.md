@@ -11,7 +11,7 @@ $ helm install my-release bitnami/argo-workflows
 
 ## Introduction
 
-This chart bootstraps a [Argo Workflows](https://argoproj.github.io/workflows) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Argo Workflows](https://argoproj.github.io/workflows) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This chart has been tested to work with NGINX Ingress, cert-manager, fluentd and Prometheus on top of the [BKPR](https://kubeprod.io/).
 
@@ -358,7 +358,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 See https://github.com/bitnami-labs/readme-generator-for-helm to create the table
 
-The above parameters map to the env variables defined in [bitnami/argo-workflow-cli](http://github.com/bitnami/bitnami-docker-argo-workflow-cli). For more information please refer to the [bitnami/argo-workflow-cli](https://github.com/bitnami/bitnami-docker-argo-workflow-cli) image documentation.
+The above parameters map to the env variables defined in [bitnami/argo-workflow-cli](https://github.com/bitnami/bitnami-docker-argo-workflow-cli). For more information please refer to the [bitnami/argo-workflow-cli](https://github.com/bitnami/bitnami-docker-argo-workflow-cli) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

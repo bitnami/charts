@@ -13,7 +13,7 @@ $ helm install my-release bitnami/nginx-ingress-controller
 
 Bitnami charts for Helm are carefully engineered, actively maintained and are the quickest and easiest way to deploy containers on a Kubernetes cluster that are ready to handle production workloads.
 
-This chart bootstraps a [ingress-nginx](https://github.com/kubernetes/ingress-nginx) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [ingress-nginx](https://github.com/kubernetes/ingress-nginx) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
@@ -72,7 +72,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
 | `image.registry`                       | Nginx Ingress Controller image registry                                                                                                            | `docker.io`                        |
 | `image.repository`                     | Nginx Ingress Controller image repository                                                                                                          | `bitnami/nginx-ingress-controller` |
-| `image.tag`                            | Nginx Ingress Controller image tag (immutable tags are recommended)                                                                                | `1.0.5-debian-10-r4`               |
+| `image.tag`                            | Nginx Ingress Controller image tag (immutable tags are recommended)                                                                                | `1.1.0-debian-10-r0`               |
 | `image.pullPolicy`                     | Nginx Ingress Controller image pull policy                                                                                                         | `IfNotPresent`                     |
 | `image.pullSecrets`                    | Specify docker-registry secret names as an array                                                                                                   | `[]`                               |
 | `containerPorts`                       | Controller container ports to open                                                                                                                 | `{}`                               |
@@ -179,7 +179,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `defaultBackend.hostAliases`                        | Add deployment host aliases                                                               | `[]`                   |
 | `defaultBackend.image.registry`                     | Default backend image registry                                                            | `docker.io`            |
 | `defaultBackend.image.repository`                   | Default backend image repository                                                          | `bitnami/nginx`        |
-| `defaultBackend.image.tag`                          | Default backend image tag (immutable tags are recommended)                                | `1.21.4-debian-10-r17` |
+| `defaultBackend.image.tag`                          | Default backend image tag (immutable tags are recommended)                                | `1.21.4-debian-10-r19` |
 | `defaultBackend.image.pullPolicy`                   | Image pull policy                                                                         | `IfNotPresent`         |
 | `defaultBackend.image.pullSecrets`                  | Specify docker-registry secret names as an array                                          | `[]`                   |
 | `defaultBackend.extraArgs`                          | Additional command line arguments to pass to Nginx container                              | `{}`                   |

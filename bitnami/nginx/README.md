@@ -13,7 +13,7 @@ $ helm install my-release bitnami/nginx
 
 Bitnami charts for Helm are carefully engineered, actively maintained and are the quickest and easiest way to deploy containers on a Kubernetes cluster that are ready to handle production workloads.
 
-This chart bootstraps a [NGINX Open Source](https://github.com/bitnami/bitnami-docker-nginx) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [NGINX Open Source](https://github.com/bitnami/bitnami-docker-nginx) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
@@ -105,9 +105,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podSecurityContext.enabled`            | Enabled NGINX pods' Security Context                                                      | `false` |
 | `podSecurityContext.fsGroup`            | Set NGINX pod's Security Context fsGroup                                                  | `1001`  |
 | `podSecurityContext.sysctls`            | sysctl settings of the NGINX pods                                                         | `[]`    |
-| `containerSecurityContext.enabled`      | Enabled NGINX containers' Security Context                                           | `false` |
-| `containerSecurityContext.runAsUser`    | Set NGINX container's Security Context runAsUser                                     | `1001`  |
-| `containerSecurityContext.runAsNonRoot` | Set NGINX container's Security Context runAsNonRoot                                  | `true`  |
+| `containerSecurityContext.enabled`      | Enabled NGINX containers' Security Context                                                | `false` |
+| `containerSecurityContext.runAsUser`    | Set NGINX container's Security Context runAsUser                                          | `1001`  |
+| `containerSecurityContext.runAsNonRoot` | Set NGINX container's Security Context runAsNonRoot                                       | `true`  |
 | `containerPorts.http`                   | Sets http port inside NGINX container                                                     | `8080`  |
 | `containerPorts.https`                  | Sets https port inside NGINX container                                                    | `""`    |
 | `resources.limits`                      | The resources limits for the NGINX container                                              | `{}`    |

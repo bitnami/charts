@@ -101,7 +101,7 @@ image:
   repository: bitnami/mongodb
   tag: 4.4.10-debian-10-r20
   ## Specify a imagePullPolicy
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -279,6 +279,20 @@ enableJournal: true
 ##     #keyFile: /opt/bitnami/mongodb/conf/keyfile
 ##
 configuration: ""
+## @section replicaSetConfigurationSettings settings applied during runtime (not via configuration file)
+## If enabled, these are applied by a script which is called within setup.sh
+## for documentation see https://docs.mongodb.com/manual/reference/replica-configuration/#replica-set-configuration-fields
+## @param replicaSetConfigurationSettings.enabled Enable MongoDB&reg; Switch to enable/disable configuring MongoDB&reg; run time rs.conf settings
+## @param replicaSetConfigurationSettings.configuration run-time rs.conf settings
+##
+replicaSetConfigurationSettings:
+  enabled: false
+  configuration:
+##    chainingAllowed : false
+##    heartbeatTimeoutSecs : 10
+##    heartbeatIntervalMillis : 2000
+##    electionTimeoutMillis : 10000
+##    catchUpTimeoutMillis : 30000
 ## @param existingConfigmap Name of existing ConfigMap with MongoDB&reg; configuration for Primary and Secondary nodes
 ## NOTE: When it's set the arbiter.configuration parameter is ignored
 ##
@@ -425,7 +439,7 @@ containerSecurityContext:
   runAsUser: 1001
   runAsNonRoot: true
 ## MongoDB&reg; containers' resource requests and limits.
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## ref: https://kubernetes.io/docs/user-guide/compute-resources/
 ## We usually recommend not to specify default resources and to leave this as a conscious
 ## choice for the user. This also increases chances charts run on environments with little
 ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -643,7 +657,7 @@ externalAccess:
       tag: 1.19.16-debian-10-r4
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-      ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+      ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
       ##
       pullPolicy: IfNotPresent
       ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
@@ -654,7 +668,7 @@ externalAccess:
       ##
       pullSecrets: []
     ## Init Container resource requests and limits
-    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
     ## We usually recommend not to specify default resources and to leave this as a conscious
     ## choice for the user. This also increases chances charts run on environments with little
     ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -766,12 +780,16 @@ externalAccess:
 ##
 
 ## Enable persistence using Persistent Volume Claims
-## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
 ##
 persistence:
   ## @param persistence.enabled Enable MongoDB&reg; data persistence using PVC
   ##
   enabled: true
+  ## @param persistence.medium Provide a medium for `emptyDir` volumes.
+  ## Requires persistence.enabled: false
+  ##
+  medium: ""
   ## @param persistence.existingClaim Provide an existing `PersistentVolumeClaim` (only when `architecture=standalone`)
   ## Requires persistence.enabled: true
   ## If defined, PVC must be created manually before volume will be bound
@@ -938,7 +956,7 @@ volumePermissions:
     tag: 10-debian-10-r239
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
@@ -949,7 +967,7 @@ volumePermissions:
     ##
     pullSecrets: []
   ## Init Container resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -1115,7 +1133,7 @@ arbiter:
     enabled: true
     runAsUser: 1001
   ## MongoDB&reg; Arbiter containers' resource requests and limits.
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -1348,7 +1366,7 @@ hidden:
   ##
   runtimeClassName: ""
   ## MongoDB&reg; Hidden containers' resource requests and limits.
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -1459,12 +1477,16 @@ hidden:
     ##
     maxUnavailable: ""
   ## Enable persistence using Persistent Volume Claims
-  ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
   persistence:
     ## @param hidden.persistence.enabled Enable hidden node data persistence using PVC
     ##
     enabled: true
+    ## @param hidden.persistence.medium Provide a medium for `emptyDir` volumes.
+    ## Requires hidden.persistence.enabled: false
+    ##
+    medium: ""
     ## @param hidden.persistence.storageClass PVC Storage Class for hidden node data volume
     ## If defined, storageClassName: <storageClass>
     ## If set to "-", storageClassName: "", which disables dynamic provisioning
@@ -1544,7 +1566,7 @@ metrics:
   ##
   extraUri: ""
   ## Metrics exporter container resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following

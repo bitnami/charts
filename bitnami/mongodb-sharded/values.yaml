@@ -61,10 +61,10 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mongodb-sharded
-  tag: 4.4.10-debian-10-r15
+  tag: 4.4.10-debian-10-r44
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -211,7 +211,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r234
+    tag: 10-debian-10-r264
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -332,7 +332,7 @@ configsvr:
   ##
   replicas: 1
   ## @param configsvr.resources Configure pod resources
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ##
   resources: {}
   ## @param configsvr.hostAliases Deployment pod host aliases
@@ -469,7 +469,7 @@ configsvr:
     ##
     maxUnavailable: 1
   ## Enable persistence using Persistent Volume Claims
-  ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
   persistence:
     ## @param configsvr.persistence.enabled Use a PVC to persist data
@@ -539,7 +539,7 @@ mongos:
   ##
   replicas: 1
   ## @param mongos.resources Configure pod resources
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ##
   resources: {}
   ## @param mongos.hostAliases Deployment pod host aliases
@@ -755,7 +755,7 @@ shardsvr:
     ##
     replicas: 1
     ## @param shardsvr.dataNode.resources Configure pod resources
-    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
     ##
     resources: {}
     ## @param shardsvr.dataNode.mongodbExtraFlags MongoDB&reg; additional command line flags
@@ -919,7 +919,7 @@ shardsvr:
   ## @section Shard configuration: Persistence parameters
 
   ## Enable persistence using Persistent Volume Claims
-  ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
   persistence:
     ## @param shardsvr.persistence.enabled Use a PVC to persist data
@@ -966,7 +966,7 @@ shardsvr:
     ##
     hostAliases: []
     ## @param shardsvr.arbiter.resources Configure pod resources
-    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
     ##
     resources: {}
     ## @param shardsvr.arbiter.mongodbExtraFlags MongoDB&reg; additional command line flags
@@ -1118,7 +1118,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mongodb-exporter
-    tag: 0.11.2-debian-10-r322
+    tag: 0.11.2-debian-10-r353
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1133,7 +1133,7 @@ metrics:
   ##
   extraArgs: ""
   ## @param metrics.resources Metrics exporter resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ##
   resources: {}
   ## Metrics exporter liveness probe
