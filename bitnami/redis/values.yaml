@@ -78,7 +78,7 @@ image:
   tag: 6.2.6-debian-10-r49
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -221,7 +221,7 @@ master:
   ##
   customReadinessProbe: {}
   ## Redis&trade; master resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param master.resources.limits The resources limits for the Redis&trade; master containers
   ## @param master.resources.requests The requested resources for the Redis&trade; master containers
   ##
@@ -355,7 +355,7 @@ master:
   ##
   initContainers: []
   ## Persistence parameters
-  ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
   persistence:
     ## @param master.persistence.enabled Enable persistence on Redis&trade; master nodes using Persistent Volume Claims
@@ -527,7 +527,7 @@ replica:
   ##
   customReadinessProbe: {}
   ## Redis&trade; replicas resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param replica.resources.limits The resources limits for the Redis&trade; replicas containers
   ## @param replica.resources.requests The requested resources for the Redis&trade; replicas containers
   ##
@@ -669,7 +669,7 @@ replica:
   ##
   initContainers: []
   ## Persistence Parameters
-  ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
   persistence:
     ## @param replica.persistence.enabled Enable persistence on Redis&trade; replicas nodes using Persistent Volume Claims
@@ -792,7 +792,7 @@ sentinel:
     tag: 6.2.6-debian-10-r49
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -892,7 +892,7 @@ sentinel:
   ##
   customReadinessProbe: {}
   ## Redis&trade; Sentinel resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param sentinel.resources.limits The resources limits for the Redis&trade; Sentinel containers
   ## @param sentinel.resources.requests The requested resources for the Redis&trade; Sentinel containers
   ##
@@ -1160,7 +1160,7 @@ metrics:
   ##
   extraVolumeMounts: []
   ## Redis&trade; exporter resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param metrics.resources.limits The resources limits for the Redis&trade; exporter container
   ## @param metrics.resources.requests The requested resources for the Redis&trade; exporter container
   ##
@@ -1316,7 +1316,7 @@ volumePermissions:
     ##
     pullSecrets: []
   ## Init container's resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param volumePermissions.resources.limits The resources limits for the init container
   ## @param volumePermissions.resources.requests The requested resources for the init container
   ##
@@ -1368,7 +1368,7 @@ sysctl:
   ##
   mountHostSys: false
   ## Init container's resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param sysctl.resources.limits The resources limits for the init container
   ## @param sysctl.resources.requests The requested resources for the init container
   ##

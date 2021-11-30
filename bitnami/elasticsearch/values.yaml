@@ -68,7 +68,7 @@ image:
   tag: 7.15.2-debian-10-r10
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -318,7 +318,7 @@ master:
   ##
   topologySpreadConstraints: []
   ## Elasticsearch master-eligible container's resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -399,7 +399,7 @@ master:
   ##
   sidecars: []
   ## Enable persistence using Persistent Volume Claims
-  ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
   persistence:
     ## @param master.persistence.enabled Enable persistence using a `PersistentVolumeClaim`
@@ -574,7 +574,7 @@ coordinating:
   ##
   topologySpreadConstraints: []
   ## Elasticsearch coordinating-only container's resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -798,7 +798,7 @@ data:
   ##
   topologySpreadConstraints: []
   ## Elasticsearch data container's resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -879,7 +879,7 @@ data:
   ##
   sidecars: []
   ## Enable persistence using Persistent Volume Claims
-  ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
   persistence:
     ## @param data.persistence.enabled Enable persistence using a `PersistentVolumeClaim`
@@ -1040,7 +1040,7 @@ ingest:
   ##
   topologySpreadConstraints: []
   ## Elasticsearch ingest container's resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -1338,7 +1338,7 @@ curator:
       #   logformat: default
       #   blacklist: ['elasticsearch', 'urllib3']
   ## Curator resources requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -1514,7 +1514,7 @@ metrics:
   ##
   topologySpreadConstraints: []
   ## Elasticsearch Prometheus exporter resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -1621,7 +1621,7 @@ sysctlImage:
   tag: 10-debian-10-r259
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -1633,7 +1633,7 @@ sysctlImage:
   ##
   pullSecrets: []
   ## Init container' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -1682,7 +1682,7 @@ volumePermissions:
     ##
     pullSecrets: []
   ## Init container' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following

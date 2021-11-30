@@ -11,7 +11,7 @@ $ helm install my-release bitnami/mysql
 
 ## Introduction
 
-This chart bootstraps a [MySQL](https://github.com/bitnami/bitnami-docker-mysql) replication cluster deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [MySQL](https://github.com/bitnami/bitnami-docker-mysql) replication cluster deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
@@ -318,7 +318,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.additionalLabels`    | Used to pass Labels that are used by the Prometheus installed in your cluster to select Service Monitors to work with | `{}`                      |
 
 
-The above parameters map to the env variables defined in [bitnami/mysql](http://github.com/bitnami/bitnami-docker-mysql). For more information please refer to the [bitnami/mysql](http://github.com/bitnami/bitnami-docker-mysql) image documentation.
+The above parameters map to the env variables defined in [bitnami/mysql](https://github.com/bitnami/bitnami-docker-mysql). For more information please refer to the [bitnami/mysql](https://github.com/bitnami/bitnami-docker-mysql) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

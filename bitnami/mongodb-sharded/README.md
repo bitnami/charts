@@ -15,7 +15,7 @@ $ helm install my-release bitnami/mongodb-sharded
 
 ## Introduction
 
-This chart bootstraps a [MongoDB&reg; Sharded](https://github.com/bitnami/bitnami-docker-mongodb-sharded) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [MongoDB&reg; Sharded](https://github.com/bitnami/bitnami-docker-mongodb-sharded) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This chart has been tested to work with NGINX Ingress, cert-manager, fluentd and Prometheus on top of the [BKPR](https://kubeprod.io/).
 
@@ -105,6 +105,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `common.podLabels`                    | Additional pod labels                                                                                                                                     | `{}`                      |
 | `common.extraVolumes`                 | Array to add extra volumes                                                                                                                                | `[]`                      |
 | `common.extraVolumeMounts`            | Array to add extra mounts (normally used with extraVolumes)                                                                                               | `[]`                      |
+| `common.containerPorts.mongo`         | MongoDB container port                                                                                                                                    | `27017`                   |
 | `common.serviceAccount.create`        | Whether to create a Service Account for all pods automatically                                                                                            | `false`                   |
 | `common.serviceAccount.name`          | Name of a Service Account to be used by all Pods                                                                                                          | `""`                      |
 | `volumePermissions.enabled`           | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                   |

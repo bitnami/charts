@@ -118,6 +118,8 @@ spec:
             - name: MONGODB_ADVERTISED_HOSTNAME
               value: "$(MONGODB_POD_NAME)"
             {{- end }}
+            - name: MONGODB_PORT_NUMBER
+              value: {{ $.Values.common.containerPorts.mongo | quote }}
             - name: MONGODB_CFG_PRIMARY_HOST
               value: {{ include "mongodb-sharded.configServer.primaryHost" . }}
             - name: MONGODB_CFG_REPLICA_SET_NAME
@@ -177,7 +179,7 @@ spec:
           {{- end }}
           ports:
             - name: mongodb
-              containerPort: 27017
+              containerPort: {{ $.Values.common.containerPorts.mongo }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
