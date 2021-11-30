@@ -492,9 +492,6 @@ spec:
         {{- range $key, $value := .Values.persistence.annotations }}
           {{ $key }}: {{ $value }}
         {{- end }}
-        {{- if .Values.commonAnnotations }}
-          {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 10 }}
-        {{- end }}
         {{- if .Values.commonLabels }}
         labels:
           {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 10 }}
@@ -518,9 +515,6 @@ spec:
         annotations:
         {{- range $key, $value := .Values.persistence.annotations }}
           {{ $key }}: {{ $value }}
-        {{- end }}
-        {{- if .Values.commonAnnotations }}
-          {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 10 }}
         {{- end }}
         {{- if .Values.commonLabels }}
         labels:
