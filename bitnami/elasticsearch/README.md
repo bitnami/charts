@@ -704,6 +704,10 @@ Find more information about how to deal with common errors related to Bitnami’
 
 ## Upgrading
 
+### To 18.0.0
+
+This version changes the way how **securityContext** is defined. If using this chart with custom ``` securityContext.fsGroup ``` or ``` securityContext.runAsUser ``` settings as both will be set to their defaults!
+
 ### To 17.0.0
 
 This version bumps in a major the version of the Kibana Helm Chart bundled as dependecy, [here](https://github.com/bitnami/charts/tree/master/bitnami/kibana#to-900) you can see the changes implemented in this Kibana major version.
