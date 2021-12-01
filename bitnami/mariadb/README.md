@@ -303,6 +303,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                                         | Description                                                                       | Value                     |
 | -------------------------------------------- | --------------------------------------------------------------------------------- | ------------------------- |
+| `metrics.containerSecurityContext.enabled`   | Metrics container securityContext                                                 | `false`                   |
 | `metrics.enabled`                            | Start a side-car prometheus exporter                                              | `false`                   |
 | `metrics.image.registry`                     | Exporter image registry                                                           | `docker.io`               |
 | `metrics.image.repository`                   | Exporter image repository                                                         | `bitnami/mysqld-exporter` |
