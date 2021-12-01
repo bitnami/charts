@@ -17,8 +17,8 @@ spec:
     metadata:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: configsvr
-        {{- if $.Values.configsvr.podLabels }}
-          {{- include "common.tplvalues.render" ( dict "value" $.Values.configsvr.podLabels "context" $ ) | nindent 8 }}
+        {{- if .Values.configsvr.podLabels }}
+          {{- include "common.tplvalues.render" ( dict "value" .Values.configsvr.podLabels "context" $ ) | nindent 8 }}
         {{- end }}
       {{- if or .Values.common.podAnnotations .Values.configsvr.podAnnotations .Values.metrics.enabled }}
       annotations:
@@ -75,10 +75,10 @@ spec:
             - name: datadir
               mountPath: {{ .Values.configsvr.persistence.mountPath }}
         {{- end }}
-        {{- with $.Values.configsvr.initContainers }}
+        {{- with .Values.configsvr.initContainers }}
         {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8}}
         {{- end }}
-        {{- with $.Values.common.initContainers }}
+        {{- with .Values.common.initContainers }}
         {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8}}
         {{- end }}
       containers:
@@ -91,11 +91,11 @@ spec:
             runAsUser: {{ .Values.securityContext.runAsUser }}
           {{- end }}
           ports:
-            - containerPort: {{ .Values.service.port }}
+            - containerPort: {{ .Values.common.containerPorts.mongo }}
               name: mongodb
           env:
             - name: MONGODB_ENABLE_NUMACTL
-              value: {{ ternary "yes" "no" $.Values.common.mongodbEnableNumactl | quote }}
+              value: {{ ternary "yes" "no" .Values.common.mongodbEnableNumactl | quote }}
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
             - name: MONGODB_SYSTEM_LOG_VERBOSITY
@@ -114,6 +114,8 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
+            - name: MONGODB_PORT_NUMBER
+              value: {{ .Values.common.containerPorts.mongo | quote }}
             - name: MONGODB_INITIAL_PRIMARY_HOST
               value: {{ include "mongodb-sharded.configServer.primaryHost" . }}
             - name: MONGODB_REPLICA_SET_NAME
@@ -156,10 +158,10 @@ spec:
               value: {{ .Values.configsvr.mongodbExtraFlags | join " " | quote }}
             {{- end }}
             {{- if .Values.common.extraEnvVars }}
-              {{- include "common.tplvalues.render" ( dict "value" $.Values.common.extraEnvVars "context" $ ) | nindent 12 }}
+              {{- include "common.tplvalues.render" ( dict "value" .Values.common.extraEnvVars "context" $ ) | nindent 12 }}
             {{- end }}
             {{- if .Values.configsvr.extraEnvVars }}
-              {{- include "common.tplvalues.render" ( dict "value" $.Values.configsvr.extraEnvVars "context" $ ) | nindent 12 }}
+              {{- include "common.tplvalues.render" ( dict "value" .Values.configsvr.extraEnvVars "context" $ ) | nindent 12 }}
             {{- end }}
           {{- if or .Values.common.extraEnvVarsCM .Values.common.extraEnvVarsSecret .Values.configsvr.extraEnvVarsCM .Values.configsvr.extraEnvVarsSecret }}
           envFrom:
@@ -238,10 +240,10 @@ spec:
               mountPath: /docker-entrypoint-initdb.d/secret
             {{- end }}
             {{- if .Values.common.extraVolumeMounts }}
-              {{- include "common.tplvalues.render" ( dict "value" $.Values.common.extraVolumeMounts "context" $ ) | nindent 12 }}
+              {{- include "common.tplvalues.render" ( dict "value" .Values.common.extraVolumeMounts "context" $ ) | nindent 12 }}
             {{- end }}
             {{- if .Values.configsvr.extraVolumeMounts }}
-              {{- include "common.tplvalues.render" ( dict "value" $.Values.configsvr.extraVolumeMounts "context" $ ) | nindent 12 }}
+              {{- include "common.tplvalues.render" ( dict "value" .Values.configsvr.extraVolumeMounts "context" $ ) | nindent 12 }}
             {{- end }}
           resources: {{- toYaml .Values.configsvr.resources | nindent 12 }}
         {{- if .Values.metrics.enabled }}
@@ -312,10 +314,10 @@ spec:
           {{- end }}
           resources: {{ toYaml .Values.metrics.resources | nindent 12 }}
         {{- end }}
-        {{- with $.Values.configsvr.sidecars }}
+        {{- with .Values.configsvr.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8}}
         {{- end }}
-        {{- with $.Values.common.sidecars }}
+        {{- with .Values.common.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8}}
         {{- end }}
       volumes:
@@ -345,10 +347,10 @@ spec:
             defaultMode: 0755
         {{- end }}
         {{- if .Values.common.extraVolumes }}
-          {{- include "common.tplvalues.render" ( dict "value" $.Values.common.extraVolumes "context" $ ) | nindent 8 }}
+          {{- include "common.tplvalues.render" ( dict "value" .Values.common.extraVolumes "context" $ ) | nindent 8 }}
         {{- end }}
         {{- if .Values.configsvr.extraVolumes }}
-          {{- include "common.tplvalues.render" ( dict "value" $.Values.configsvr.extraVolumes "context" $ ) | nindent 8 }}
+          {{- include "common.tplvalues.render" ( dict "value" .Values.configsvr.extraVolumes "context" $ ) | nindent 8 }}
         {{- end }}
   {{- if .Values.configsvr.persistence.enabled }}
   volumeClaimTemplates:

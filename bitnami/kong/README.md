@@ -11,7 +11,7 @@
 
 ## Introduction
 
-This chart bootstraps a [kong](https://github.com/bitnami/bitnami-docker-kong) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager. It also includes the [kong-ingress-controller](https://github.com/bitnami/bitnami-docker-kong-ingress-controller) container for managing Ingress resources using Kong.
+This chart bootstraps a [kong](https://github.com/bitnami/bitnami-docker-kong) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager. It also includes the [kong-ingress-controller](https://github.com/bitnami/bitnami-docker-kong-ingress-controller) container for managing Ingress resources using Kong.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
 

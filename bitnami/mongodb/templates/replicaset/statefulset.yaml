@@ -151,6 +151,11 @@ spec:
               DNS.3 = $my_hostname.$svc.$MY_POD_NAMESPACE.svc.{{ .Values.clusterDomain }}
               DNS.4 = localhost
               DNS.5 = 127.0.0.1
+              {{- if .Values.tls.extraDnsNames }}
+              {{- range $key, $dnsName := .Values.tls.extraDnsNames }}
+              {{ $key }} = {{ $dnsName }}
+              {{- end }}
+              {{- end }}
               {{- if .Values.externalAccess.service.loadBalancerIPs }}
               {{- range $key, $val := .Values.externalAccess.service.loadBalancerIPs }}
               IP.{{ $key }} = {{ $val | quote }}
@@ -416,6 +421,11 @@ spec:
             - name: scripts
               mountPath: /scripts/setup.sh
               subPath: setup.sh
+            {{ if .Values.replicaSetConfigurationSettings.enabled }}
+            - name: scripts
+              mountPath: /scripts/replicaSetConfigurationSettings.sh
+              subPath: replicaSetConfigurationSettings.sh
+            {{- end }}
             {{- if and .Values.externalAccess.enabled .Values.externalAccess.autoDiscovery.enabled (eq .Values.externalAccess.service.type "LoadBalancer") }}
             - name: shared
               mountPath: /shared

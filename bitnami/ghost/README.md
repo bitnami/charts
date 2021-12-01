@@ -11,7 +11,7 @@ $ helm install my-release bitnami/ghost
 
 ## Introduction
 
-This chart bootstraps a [Ghost](https://github.com/bitnami/bitnami-docker-ghost) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Ghost](https://github.com/bitnami/bitnami-docker-ghost) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) which is required for bootstrapping a MariaDB deployment for the database requirements of the Ghost application.
 
@@ -76,7 +76,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ------------------------------------------------ | --------------------- |
 | `image.registry`    | Ghost image registry                             | `docker.io`           |
 | `image.repository`  | Ghost image repository                           | `bitnami/ghost`       |
-| `image.tag`         | Ghost image tag (immutable tags are recommended) | `4.23.0-debian-10-r0` |
+| `image.tag`         | Ghost image tag (immutable tags are recommended) | `4.24.0-debian-10-r0` |
 | `image.pullPolicy`  | Ghost image pull policy                          | `IfNotPresent`        |
 | `image.pullSecrets` | Ghost image pull secrets                         | `[]`                  |
 | `image.debug`       | Enable image debug mode                          | `false`               |
@@ -210,7 +210,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                   | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`            | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`          | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r261`     |
+| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r264`     |
 | `volumePermissions.image.pullPolicy`          | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`         | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`          | The resources limits for the init container                                                     | `{}`                    |
@@ -259,7 +259,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                | `{}`    |
 
 
-The above parameters map to the env variables defined in [bitnami/ghost](http://github.com/bitnami/bitnami-docker-ghost). For more information please refer to the [bitnami/ghost](http://github.com/bitnami/bitnami-docker-ghost) image documentation.
+The above parameters map to the env variables defined in [bitnami/ghost](https://github.com/bitnami/bitnami-docker-ghost). For more information please refer to the [bitnami/ghost](https://github.com/bitnami/bitnami-docker-ghost) image documentation.
 
 > **Note**:
 >
