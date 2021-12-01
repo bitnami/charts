@@ -289,7 +289,7 @@ grafana:
   image:
     registry: ghcr.io
     repository: cellebyte/grafana
-    tag: 8.2.5-devdebian-10-r11
+    tag: 8.3.0-devdebian-10-r0
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
