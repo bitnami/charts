@@ -204,7 +204,7 @@ spec:
                   name: {{ $globalSecretName }}
                   key: {{ include "common.secrets.key" (dict "existingSecret" .Values.auth.existingSecret "key" "management-password") }}
                 {{- end }}
-            - name: DB_VENDOR
+            - name: KEYCLOAK_DB_VENDOR
               value: {{ .Values.externalDatabase.vendor }}
             - name: KEYCLOAK_DATABASE_PASSWORD
               valueFrom:
