@@ -147,9 +147,9 @@ server:
   ## @param server.tlsFiles [object] Base64-encoded PEM values for server's CA certificate(s), certificate and private key
   ##
   tlsFiles:
-    ca:
-    cert:
-    key:
+    ca: ""
+    cert: ""
+    key: ""
   ## @param server.gatewayTimeoutCreation Timeout when creating the kiam gateway
   ##
   gatewayTimeoutCreation: 1s
@@ -336,8 +336,8 @@ server:
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     ##
     nodePorts:
-      http:
-      metrics:
+      http: ""
+      metrics: ""
     ## @param server.service.clusterIP kiam service clusterIP IP
     ##
     clusterIP: None
@@ -481,9 +481,9 @@ agent:
   ## @param agent.tlsFiles [object] Base64-encoded PEM values for server's CA certificate(s), certificate and private key
   ##
   tlsFiles:
-    ca:
-    cert:
-    key:
+    ca: ""
+    cert: ""
+    key: ""
   ## @param agent.podSecurityPolicy.create Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later
   ## @param agent.podSecurityPolicy.allowedHostPaths Extra host paths to allow in the PodSecurityPolicy
   ##
@@ -701,7 +701,7 @@ agent:
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     ##
     nodePorts:
-      metrics:
+      metrics: ""
     ## @param agent.service.clusterIP kiam service clusterIP IP
     ##
     clusterIP: ""

@@ -722,9 +722,9 @@ msgTopologyOperator:
     ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
     externalTrafficPolicy: Cluster
-    ## @param msgTopologyOperator.service.annotations [object] Additional custom annotations for RabbitMQ Messaging Topology Operator webhook service
+    ## @param msgTopologyOperator.service.annotations Additional custom annotations for RabbitMQ Messaging Topology Operator webhook service
     ##
-    annotations:
+    annotations: {}
 
   ## RBAC configuration
   ##
