@@ -149,7 +149,7 @@ service:
 ##   python [file] [args]
 ##
 entrypoint:
-  file:
+  file: ""
   workDir: /app
   # args:
 ## @param mode Apache MXNet (Incubating) deployment mode. Can be `standalone` or `distributed`

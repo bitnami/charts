@@ -135,7 +135,7 @@ Refer to the [chart documentation for more information on each of these architec
 | Name                                            | Description                                                                                     | Value   |
 | ----------------------------------------------- | ----------------------------------------------------------------------------------------------- | ------- |
 | `replicaSetConfigurationSettings.enabled`       | Enable MongoDB&reg; Switch to enable/disable configuring MongoDB&reg; run time rs.conf settings | `false` |
-| `replicaSetConfigurationSettings.configuration` | run-time rs.conf settings                                                                       | `nil`   |
+| `replicaSetConfigurationSettings.configuration` | run-time rs.conf settings                                                                       | `{}`    |
 | `existingConfigmap`                             | Name of existing ConfigMap with MongoDB&reg; configuration for Primary and Secondary nodes      | `""`    |
 | `initdbScripts`                                 | Dictionary of initdb scripts                                                                    | `{}`    |
 | `initdbScriptsConfigMap`                        | Existing ConfigMap with custom initdb scripts                                                   | `""`    |

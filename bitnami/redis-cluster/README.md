@@ -78,23 +78,17 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Redis&trade; Cluster Common parameters
 
-| Name                     | Description                                                                                  | Value           |
-| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
-| `nameOverride`           | String to partially override common.names.fullname template (will maintain the release name) | `""`            |
-| `fullnameOverride`       | String to fully override common.names.fullname template                                      | `""`            |
-| `clusterDomain`          | Kubernetes Cluster Domain                                                                    | `cluster.local` |
-| `commonAnnotations`      | Annotations to add to all deployed objects                                                   | `{}`            |
-| `commonLabels`           | Labels to add to all deployed objects                                                        | `{}`            |
-| `extraDeploy`            | Array of extra objects to deploy with the release (evaluated as a template)                  | `[]`            |
-| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)      | `false`         |
-| `diagnosticMode.command` | Command to override all containers in the deployment                                         | `["sleep"]`     |
-| `diagnosticMode.args`    | Args to override all containers in the deployment                                            | `["infinity"]`  |
-
-
-### Redis&trade; Cluster Common parameters
-
 | Name                                          | Description                                                                                                                                         | Value                   |
 | --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
+| `nameOverride`                                | String to partially override common.names.fullname template (will maintain the release name)                                                        | `""`                    |
+| `fullnameOverride`                            | String to fully override common.names.fullname template                                                                                             | `""`                    |
+| `clusterDomain`                               | Kubernetes Cluster Domain                                                                                                                           | `cluster.local`         |
+| `commonAnnotations`                           | Annotations to add to all deployed objects                                                                                                          | `{}`                    |
+| `commonLabels`                                | Labels to add to all deployed objects                                                                                                               | `{}`                    |
+| `extraDeploy`                                 | Array of extra objects to deploy with the release (evaluated as a template)                                                                         | `[]`                    |
+| `diagnosticMode.enabled`                      | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                                                             | `false`                 |
+| `diagnosticMode.command`                      | Command to override all containers in the deployment                                                                                                | `["sleep"]`             |
+| `diagnosticMode.args`                         | Args to override all containers in the deployment                                                                                                   | `["infinity"]`          |
 | `image.registry`                              | Redis&trade; cluster image registry                                                                                                                 | `docker.io`             |
 | `image.repository`                            | Redis&trade; cluster image repository                                                                                                               | `bitnami/redis-cluster` |
 | `image.tag`                                   | Redis&trade; cluster image tag (immutable tags are recommended)                                                                                     | `6.2.6-debian-10-r49`   |
@@ -276,37 +270,37 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Metrics sidecar parameters
 
-| Name                                       | Description                                                                                                              | Value                    |
-| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------ | ------------------------ |
-| `metrics.enabled`                          | Start a side-car prometheus exporter                                                                                     | `false`                  |
-| `metrics.image.registry`                   | Redis&trade; exporter image registry                                                                                     | `docker.io`              |
-| `metrics.image.repository`                 | Redis&trade; exporter image name                                                                                         | `bitnami/redis-exporter` |
-| `metrics.image.tag`                        | Redis&trade; exporter image tag                                                                                          | `1.31.4-debian-10-r7`    |
-| `metrics.image.pullPolicy`                 | Redis&trade; exporter image pull policy                                                                                  | `IfNotPresent`           |
-| `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                                                                         | `[]`                     |
-| `metrics.resources`                        | Metrics exporter resource requests and limits                                                                            | `{}`                     |
-| `metrics.extraArgs`                        | Extra arguments for the binary; possible values [here](https://github.com/oliver006/redis_exporter                       | `{}`                     |
-| `metrics.podAnnotations`                   | Additional annotations for Metrics exporter pod                                                                          | `{}`                     |
-| `metrics.podLabels`                        | Additional labels for Metrics exporter pod                                                                               | `{}`                     |
-| `metrics.serviceMonitor.enabled`           | If `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)                   | `false`                  |
-| `metrics.serviceMonitor.namespace`         | Optional namespace which Prometheus is running in                                                                        | `""`                     |
-| `metrics.serviceMonitor.interval`          | How frequently to scrape metrics (use by default, falling back to Prometheus' default)                                   | `""`                     |
-| `metrics.serviceMonitor.scrapeTimeout`     | Timeout after which the scrape is ended                                                                                  | `""`                     |
-| `metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                                                                      | `{}`                     |
-| `metrics.serviceMonitor.labels`            | ServiceMonitor extra labels                                                                                              | `{}`                     |
-| `metrics.serviceMonitor.annotations`       | ServiceMonitor annotations                                                                                               | `{}`                     |
-| `metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in prometheus.                                        | `""`                     |
-| `metrics.serviceMonitor.relabelings`       | RelabelConfigs to apply to samples before scraping                                                                       | `[]`                     |
-| `metrics.serviceMonitor.metricRelabelings` | MetricRelabelConfigs to apply to samples before ingestion                                                                | `[]`                     |
-| `metrics.prometheusRule.enabled`           | Set this to true to create prometheusRules for Prometheus operator                                                       | `false`                  |
-| `metrics.prometheusRule.additionalLabels`  | Additional labels that can be used so prometheusRules will be discovered by Prometheus                                   | `{}`                     |
-| `metrics.prometheusRule.namespace`         | namespace where prometheusRules resource should be created                                                               | `""`                     |
-| `metrics.prometheusRule.rules`             | (https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/) to be created, check values for an example. | `[]`                     |
-| `metrics.priorityClassName`                | Metrics exporter pod priorityClassName                                                                                   | `""`                     |
-| `metrics.service.type`                     | Kubernetes Service type (redis metrics)                                                                                  | `ClusterIP`              |
-| `metrics.service.loadBalancerIP`           | Use serviceLoadBalancerIP to request a specific static IP, otherwise leave blank                                         | `""`                     |
-| `metrics.service.annotations`              | Annotations for the services to monitor.                                                                                 | `{}`                     |
-| `metrics.service.labels`                   | Additional labels for the metrics service                                                                                | `{}`                     |
+| Name                                       | Description                                                                                                                        | Value                    |
+| ------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `metrics.enabled`                          | Start a side-car prometheus exporter                                                                                               | `false`                  |
+| `metrics.image.registry`                   | Redis&trade; exporter image registry                                                                                               | `docker.io`              |
+| `metrics.image.repository`                 | Redis&trade; exporter image name                                                                                                   | `bitnami/redis-exporter` |
+| `metrics.image.tag`                        | Redis&trade; exporter image tag                                                                                                    | `1.31.4-debian-10-r7`    |
+| `metrics.image.pullPolicy`                 | Redis&trade; exporter image pull policy                                                                                            | `IfNotPresent`           |
+| `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                                                                                   | `[]`                     |
+| `metrics.resources`                        | Metrics exporter resource requests and limits                                                                                      | `{}`                     |
+| `metrics.extraArgs`                        | Extra arguments for the binary; possible values [here](https://github.com/oliver006/redis_exporter                                 | `{}`                     |
+| `metrics.podAnnotations`                   | Additional annotations for Metrics exporter pod                                                                                    | `{}`                     |
+| `metrics.podLabels`                        | Additional labels for Metrics exporter pod                                                                                         | `{}`                     |
+| `metrics.serviceMonitor.enabled`           | If `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)                             | `false`                  |
+| `metrics.serviceMonitor.namespace`         | Optional namespace which Prometheus is running in                                                                                  | `""`                     |
+| `metrics.serviceMonitor.interval`          | How frequently to scrape metrics (use by default, falling back to Prometheus' default)                                             | `""`                     |
+| `metrics.serviceMonitor.scrapeTimeout`     | Timeout after which the scrape is ended                                                                                            | `""`                     |
+| `metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                                                                                | `{}`                     |
+| `metrics.serviceMonitor.labels`            | ServiceMonitor extra labels                                                                                                        | `{}`                     |
+| `metrics.serviceMonitor.annotations`       | ServiceMonitor annotations                                                                                                         | `{}`                     |
+| `metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in prometheus.                                                  | `""`                     |
+| `metrics.serviceMonitor.relabelings`       | RelabelConfigs to apply to samples before scraping                                                                                 | `[]`                     |
+| `metrics.serviceMonitor.metricRelabelings` | MetricRelabelConfigs to apply to samples before ingestion                                                                          | `[]`                     |
+| `metrics.prometheusRule.enabled`           | Set this to true to create prometheusRules for Prometheus operator                                                                 | `false`                  |
+| `metrics.prometheusRule.additionalLabels`  | Additional labels that can be used so prometheusRules will be discovered by Prometheus                                             | `{}`                     |
+| `metrics.prometheusRule.namespace`         | namespace where prometheusRules resource should be created                                                                         | `""`                     |
+| `metrics.prometheusRule.rules`             | Create specified [rules](https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/), check values for an example. | `[]`                     |
+| `metrics.priorityClassName`                | Metrics exporter pod priorityClassName                                                                                             | `""`                     |
+| `metrics.service.type`                     | Kubernetes Service type (redis metrics)                                                                                            | `ClusterIP`              |
+| `metrics.service.loadBalancerIP`           | Use serviceLoadBalancerIP to request a specific static IP, otherwise leave blank                                                   | `""`                     |
+| `metrics.service.annotations`              | Annotations for the services to monitor.                                                                                           | `{}`                     |
+| `metrics.service.labels`                   | Additional labels for the metrics service                                                                                          | `{}`                     |
 
 
 ### Sysctl Image parameters

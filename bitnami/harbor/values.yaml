@@ -202,9 +202,9 @@ service:
   ## @param service.nodePorts [object] Service parameters when type is "nodePort"
   ##
   nodePorts:
-    http:
-    https:
-    notary:
+    http: ""
+    https: ""
+    notary: ""
   ## @param service.loadBalancerIP Load Balancer IP
   ##
   loadBalancerIP: ""
