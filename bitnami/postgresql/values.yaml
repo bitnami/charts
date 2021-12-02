@@ -887,7 +887,7 @@ metrics:
     ## @param metrics.prometheusRule.namespace namespace where prometheusRules resource should be created
     ##
     namespace: ""
-    ## @param metrics.prometheusRule.rules [Rules](https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/) to be created
+    ## @param metrics.prometheusRule.rules Create specified [Rules](https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/)
     ## Make sure to constraint the rules to the current postgresql service.
     ## rules:
     ##   - alert: HugeReplicationLag
