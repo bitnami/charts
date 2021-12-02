@@ -67,11 +67,10 @@ spec:
       serviceAccountName: {{ template "elasticsearch.master.serviceAccountName" . }}
       {{- if or .Values.master.podSecurityContext.enabled .Values.master.securityContext.enabled }}
       securityContext:
-        {{- if .Values.master.securityContext.enabled }}
-        fsGroup: {{ .Values.master.securityContext.fsGroup }}
-        {{- end }}
         {{- if .Values.master.podSecurityContext.enabled }}
         {{- omit .Values.master.podSecurityContext "enabled" | toYaml | nindent 8 }}
+        {{- else }}
+        fsGroup: {{ .Values.master.securityContext.fsGroup }}
         {{- end }}
       {{- end }}
       {{- if or .Values.master.initContainers .Values.sysctlImage.enabled (and .Values.volumePermissions.enabled .Values.master.persistence.enabled) }}
@@ -121,11 +120,10 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if or .Values.master.containerSecurityContext.enabled .Values.master.securityContext.enabled }}
           securityContext:
-            {{- if .Values.master.securityContext.enabled }}
-            runAsUser: {{ .Values.master.securityContext.runAsUser }}
-            {{- end }}
             {{- if .Values.master.containerSecurityContext.enabled }}
             {{- omit .Values.master.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+            {{ else }}
+            runAsUser: {{ .Values.master.securityContext.runAsUser }}
             {{- end }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}

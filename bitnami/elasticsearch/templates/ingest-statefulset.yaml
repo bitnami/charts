@@ -66,11 +66,10 @@ spec:
       serviceAccountName: {{ template "elasticsearch.ingest.serviceAccountName" . }}
       {{- if or .Values.ingest.podSecurityContext.enabled .Values.ingest.securityContext.enabled }}
       securityContext:
-        {{- if .Values.ingest.securityContext.enabled }}
-        fsGroup: {{ .Values.ingest.securityContext.fsGroup }}
-        {{- end }}
         {{- if .Values.ingest.podSecurityContext.enabled }}
         {{- omit .Values.ingest.podSecurityContext "enabled" | toYaml | nindent 8 }}
+        {{- else }}
+        fsGroup: {{ .Values.ingest.securityContext.fsGroup }}
         {{- end }}
       {{- end }}
       {{- if or .Values.ingest.initContainers  .Values.sysctlImage.enabled }}
@@ -102,11 +101,10 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if or .Values.ingest.containerSecurityContext.enabled .Values.ingest.securityContext.enabled }}
           securityContext:
-            {{- if .Values.ingest.securityContext.enabled }}
-            runAsUser: {{ .Values.ingest.securityContext.runAsUser }}
-            {{- end }}
             {{- if .Values.ingest.containerSecurityContext.enabled }}
             {{- omit .Values.ingest.containerSecurityContext "enabled" | toYaml | nindent 8 }}
+            {{- else }}
+            runAsUser: {{ .Values.ingest.securityContext.runAsUser }}
             {{- end }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
