@@ -287,7 +287,7 @@ configuration: ""
 ##
 replicaSetConfigurationSettings:
   enabled: false
-  configuration:
+  configuration: {}
 ##    chainingAllowed : false
 ##    heartbeatTimeoutSecs : 10
 ##    heartbeatIntervalMillis : 2000
