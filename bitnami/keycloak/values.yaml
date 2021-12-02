@@ -304,7 +304,7 @@ keycloakConfigCli:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-  ## @param keycloakConfigCli.annotations [objects] Annotations for keycloak-config-cli job
+  ## @param keycloakConfigCli.annotations [object] Annotations for keycloak-config-cli job
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   annotations:

@@ -835,7 +835,7 @@ metrics:
   ## @param metrics.prometheusRule.enabled Set this to true to create prometheusRules for Prometheus operator
   ## @param metrics.prometheusRule.additionalLabels Additional labels that can be used so prometheusRules will be discovered by Prometheus
   ## @param metrics.prometheusRule.namespace namespace where prometheusRules resource should be created
-  ## @param metrics.prometheusRule.rules [rules](https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/) to be created, check values for an example.
+  ## @param metrics.prometheusRule.rules Create specified [rules](https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/), check values for an example.
   ##
   prometheusRule:
     enabled: false
