@@ -532,17 +532,17 @@ coordinating:
   ## @param coordinating.podLabels Extra labels to add to Pod
   ##
   podLabels: {}
-  ## Pod Security Context for coordintating-only pods.
+  ## Pod Security Context for coordinating-only pods.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
-  ## @param coordinating.securityContext.enabled Enable security context for master-eligible pods
-  ## @param coordinating.securityContext.fsGroup Group ID for the container for master-eligible pods
-  ## @param coordinating.securityContext.runAsUser User ID for the container for master-eligible pods
+  ## @param coordinating.securityContext.enabled Enable security context for coordinating-only pods
+  ## @param coordinating.securityContext.fsGroup Group ID for the container for coordinating-only pods
+  ## @param coordinating.securityContext.runAsUser User ID for the container for coordinating-only pods
   ##
   securityContext:
     enabled: true
     fsGroup: 1001
     runAsUser: 1001
-  ## Pod Security Context for data pods.
+  ## Pod Security Context for coordinating-only pods.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param coordinating.podSecurityContext.enabled Enable security context for coordinating-only pods
   ## @param coordinating.podSecurityContext.fsGroup Group ID for the container for coordinating-only pods
@@ -550,7 +550,7 @@ coordinating:
   podSecurityContext:
     enabled: false
     fsGroup: 1001
-  ## Container Security Context for data pods.
+  ## Container Security Context for coordinating-only pods.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param coordinating.containerSecurityContext.enabled Enable security context for coordinating-only pods
   ## @param coordinating.containerSecurityContext.runAsUser User ID for the container for coordinating-only pods
@@ -773,9 +773,9 @@ data:
   podLabels: {}
   ## Pod Security Context for data pods.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
-  ## @param data.securityContext.enabled Enable security context for master-eligible pods
-  ## @param data.securityContext.fsGroup Group ID for the container for master-eligible pods
-  ## @param data.securityContext.runAsUser User ID for the container for master-eligible pods
+  ## @param data.securityContext.enabled Enable security context for data pods
+  ## @param data.securityContext.fsGroup Group ID for the container for data pods
+  ## @param data.securityContext.runAsUser User ID for the container for data pods
   ##
   securityContext:
     enabled: true
@@ -1031,15 +1031,15 @@ ingest:
   podLabels: {}
   ## Pod Security Context for ingest pods.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
-  ## @param ingest.securityContext.enabled Enable security context for master-eligible pods
-  ## @param ingest.securityContext.fsGroup Group ID for the container for master-eligible pods
-  ## @param ingest.securityContext.runAsUser User ID for the container for master-eligible pods
+  ## @param ingest.securityContext.enabled Enable security context for ingest pods
+  ## @param ingest.securityContext.fsGroup Group ID for the container for ingest pods
+  ## @param ingest.securityContext.runAsUser User ID for the container for ingest pods
   ##
   securityContext:
     enabled: true
     fsGroup: 1001
     runAsUser: 1001
-  ## Pod Security Context for data pods.
+  ## Pod Security Context for ingest pods.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param ingest.podSecurityContext.enabled Enable security context for ingest pods
   ## @param ingest.podSecurityContext.fsGroup Group ID for the container for ingest pods
@@ -1047,7 +1047,7 @@ ingest:
   podSecurityContext:
     enabled: true
     fsGroup: 1001
-  ## Container Security Context for data pods.
+  ## Container Security Context for ingest pods.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param ingest.containerSecurityContext.enabled Enable security context for ingest pods
   ## @param ingest.containerSecurityContext.runAsUser User ID for the container for ingest pods
