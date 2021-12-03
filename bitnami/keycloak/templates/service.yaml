@@ -32,6 +32,7 @@ spec:
   loadBalancerIP: {{ .Values.service.loadBalancerIP }}
   {{- end }}
   ports:
+    {{- if .Values.service.port }}
     - name: http
       port: {{ .Values.service.port }}
       protocol: TCP
@@ -41,6 +42,8 @@ spec:
       {{- else if eq .Values.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
+    {{- end }}
+    {{- if .Values.service.httpsPort }}
     - name: https
       port: {{ .Values.service.httpsPort }}
       protocol: TCP
@@ -50,5 +53,6 @@ spec:
       {{- else if eq .Values.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
+    {{- end }}
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: keycloak
