@@ -213,8 +213,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                               | Description                                                                                                                      | Value                    |
 | ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
 | `service.type`                     | Kubernetes service type                                                                                                          | `LoadBalancer`           |
-| `service.port`                     | Service HTTP port                                                                                                                | `80`                     |
-| `service.httpsPort`                | HTTPS Port                                                                                                                       | `443`                    |
+| `service.port`                     | Service HTTP port. 0 will disable http mapping.                                                                                  | `80`                     |
+| `service.httpsPort`                | HTTPS Port. 0 will disable https mapping.                                                                                        | `443`                    |
 | `service.nodePorts`                | Specify the nodePort values for the LoadBalancer and NodePort service types.                                                     | `{}`                     |
 | `service.clusterIP`                | Keycloak service clusterIP IP                                                                                                    | `""`                     |
 | `service.loadBalancerIP`           | loadBalancerIP for the SuiteCRM Service (optional, cloud specific)                                                               | `""`                     |
