@@ -127,7 +127,7 @@ spec:
             - name: OWNCLOUD_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "common.names.fullname" . }}
+                  name: {{ include "owncloud.secretName" . }}
                   key: owncloud-password
             - name: OWNCLOUD_EMAIL
               value: {{ .Values.owncloudEmail | quote }}
@@ -141,7 +141,7 @@ spec:
             - name: OWNCLOUD_SMTP_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "common.names.fullname" . }}
+                  name: {{ include "owncloud.secretName" . }}
                   key: smtp-password
             {{- end }}
             - name: OWNCLOUD_SMTP_PROTOCOL

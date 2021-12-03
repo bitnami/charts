@@ -12,11 +12,12 @@ jobs:
       - name: Fetch history
         run: git fetch --prune --unshallow
 
+      - name: Set up chart-testing
+        uses: helm/chart-testing-action@v2.1.0
+
       - name: Run chart-testing (lint)
-        uses: helm/chart-testing-action@v1.1.0
-        with:
-          config: .github/ct-lint.yaml
-          command: lint
+        run: ct lint --config .github/ct-lint.yaml
+
   test:
     runs-on: ubuntu-latest
     steps:
@@ -26,14 +27,15 @@ jobs:
       - name: Fetch history
         run: git fetch --prune --unshallow
 
+      - name: Set up chart-testing
+        uses: helm/chart-testing-action@v2.1.0
+
       - name: Create kind cluster
-        uses: helm/kind-action@v1.0.0-rc.1
+        uses: helm/kind-action@v1.2.0
 
       - name: Run chart-testing (install)
-        uses: helm/chart-testing-action@v1.1.0
-        with:
-          config: .github/ct-install.yaml
-          command: install
+        run: ct install --config .github/ct-install.yaml
+
   check-categories:
     runs-on: ubuntu-latest
     steps:

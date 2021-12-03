@@ -5,14 +5,12 @@ volumePermissions:
   enabled: true
 
 mode: distributed
-
 useCredentialsFile: true
-
 disableWebUI: false
 
 podAnnotations:
   prometheus.io/scrape: "true"
-  prometheus.io/path: "/minio/prometheus/metric"
+  prometheus.io/path: "/minio/v2/metrics/cluster"
   prometheus.io/port: "9000"
 
 resources:
@@ -25,3 +23,7 @@ ingress:
 
 networkPolicy:
   enabled: true
+  allowExternal: false
+
+pdb:
+  create: true

@@ -1,0 +1,50 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "grafana-tempo.query-frontend.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: query-frontend
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if or .Values.commonAnnotations .Values.queryFrontend.service.annotations }}
+  annotations:
+    {{- if .Values.queryFrontend.service.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.queryFrontend.service.annotations "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+spec:
+  type: {{ .Values.queryFrontend.service.type }}
+  {{- if .Values.queryFrontend.service.clusterIP }}
+  clusterIP: {{ .Values.queryFrontend.service.clusterIP }}
+  {{- end }}
+  {{- if (or (eq .Values.queryFrontend.service.type "LoadBalancer") (eq .Values.queryFrontend.service.type "NodePort")) }}
+  externalTrafficPolicy: {{ .Values.queryFrontend.service.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{ if eq .Values.queryFrontend.service.type "LoadBalancer" }}
+  loadBalancerSourceRanges: {{ .Values.queryFrontend.service.loadBalancerSourceRanges }}
+  {{ end }}
+  {{- if (and (eq .Values.queryFrontend.service.type "LoadBalancer") (not (empty .Values.queryFrontend.service.loadBalancerIP))) }}
+  loadBalancerIP: {{ .Values.queryFrontend.service.loadBalancerIP }}
+  {{- end }}
+  publishNotReadyAddresses: true
+  ports:
+    - name: http
+      port: {{ .Values.queryFrontend.service.port }}
+      targetPort: http
+      protocol: TCP
+      {{- if (and (or (eq .Values.queryFrontend.service.type "NodePort") (eq .Values.queryFrontend.service.type "LoadBalancer")) (not (empty .Values.queryFrontend.service.nodePorts.http))) }}
+      nodePort: {{ .Values.queryFrontend.service.nodePorts.http }}
+      {{- else if eq .Values.queryFrontend.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    - name: grpc
+      port: {{ .Values.queryFrontend.service.grpcPort }}
+      targetPort: grpc
+      protocol: TCP
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/component: query-frontend

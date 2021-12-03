@@ -4,15 +4,26 @@ metadata:
   name: {{ include "rabbitmq.fullname" . }}-headless
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
+  {{- if or (.Values.service.annotationsHeadless) (.Values.commonAnnotations) }}
+  annotations:
+    {{- if .Values.commonAnnotations}}
+    {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
+    {{- end -}}
+    {{- if .Values.service.annotationsHeadless}}
+    {{- include "common.tplvalues.render" (dict "value" .Values.service.annotationsHeadless "context" $) | nindent 4 }}
+    {{- end -}}
+  {{- end }}
 spec:
   clusterIP: None
   ports:
     - name: {{ .Values.service.epmdPortName }}
       port: 4369
       targetPort: epmd
+    {{- if or (.Values.service.portEnabled) (not .Values.auth.tls.enabled) }}
     - name: amqp
       port: {{ .Values.service.port }}
       targetPort: {{ .Values.service.portName }}
+    {{- end }}
     {{- if .Values.auth.tls.enabled }}
     - name: {{ .Values.service.tlsPortName }}
       port: {{ .Values.service.tlsPort }}
@@ -21,7 +32,10 @@ spec:
     - name: {{ .Values.service.distPortName }}
       port: {{ .Values.service.distPort }}
       targetPort: dist
+    {{- if .Values.service.managerPortEnabled }}
     - name: {{ .Values.service.managerPortName }}
       port: {{ .Values.service.managerPort }}
       targetPort: stats
+    {{- end }}
   selector: {{ include "common.labels.matchLabels" . | nindent 4 }}
+  publishNotReadyAddresses: true

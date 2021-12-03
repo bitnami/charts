@@ -1,6 +1,6 @@
 {{- if and .Values.operator.rbac.create .Values.operator.enabled }}
 ---
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: Role
 metadata:
   name: {{ include "common.names.fullname" . }}
@@ -75,6 +75,7 @@ rules:
       - create
   - apiGroups:
       - extensions
+      - networking.k8s.io
     resources:
       - ingresses
     verbs:
@@ -103,7 +104,7 @@ rules:
       - deletecollection
       - watch
 ---
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: RoleBinding
 metadata:
   name: {{ include "common.names.fullname" . }}
@@ -117,13 +118,13 @@ metadata:
 roleRef:
   name: {{ include "common.names.fullname" . }}
   kind: Role
-  apiGroup: ""
+  apiGroup: rbac.authorization.k8s.io
 subjects:
   - kind: ServiceAccount
     name: {{ include "grafana-operator.serviceAccountName" . }}
-{{- if or .Values.operator.args.scanAllNamespaces  .Values.operator.args.scanNamespaces}}
+{{- if or .Values.operator.args.scanAllNamespaces  .Values.operator.args.scanNamespaces }}
 ---
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
 metadata:
   name: {{ include "common.names.fullname" . }}
@@ -136,18 +137,98 @@ metadata:
   {{- end }}
 rules:
   - apiGroups:
-      - integreatly.org
+      - ""
     resources:
-      - grafanadashboards
-      - grafanadashboards/status
-    verbs: ['get', 'list', 'update', 'watch']
+      - pods
+      - services
+      - endpoints
+      - persistentvolumeclaims
+      - configmaps
+      - secrets
+      - serviceaccounts
+      - configmaps
+    verbs:
+      - get
+      - list
+      - create
+      - update
+      - delete
+      - deletecollection
+      - watch
   - apiGroups:
       - ""
     resources:
-      - namespaces
-    verbs: ['get', 'list', 'watch']
+      - events
+    verbs:
+      - get
+      - list
+      - watch
+      - create
+      - delete
+      - update
+      - patch
+  - apiGroups:
+      - apps
+    resources:
+      - deployments
+      - deployments/finalizers
+      - daemonsets
+      - replicasets
+      - statefulsets
+    verbs:
+      - get
+      - list
+      - create
+      - update
+      - delete
+      - deletecollection
+      - watch
+  - apiGroups:
+      - route.openshift.io
+    resources:
+      - routes
+      - routes/custom-host
+    verbs:
+      - get
+      - list
+      - create
+      - update
+      - delete
+      - deletecollection
+      - watch
+      - create
+  - apiGroups:
+      - extensions
+      - networking.k8s.io
+    resources:
+      - ingresses
+    verbs:
+      - get
+      - list
+      - create
+      - update
+      - delete
+      - deletecollection
+      - watch
+  - apiGroups:
+      - integreatly.org
+    resources:
+      - grafanas
+      - grafanas/status
+      - grafanas/finalizers
+      - grafanadashboards
+      - grafanadatasources
+      - grafanadatasources/status
+    verbs:
+      - get
+      - list
+      - create
+      - update
+      - delete
+      - deletecollection
+      - watch
 ---
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRoleBinding
 metadata:
   name: {{ include "common.names.fullname" . }}
@@ -161,7 +242,7 @@ metadata:
 roleRef:
   name: {{ include "common.names.fullname" . }}
   kind: ClusterRole
-  apiGroup: ""
+  apiGroup: rbac.authorization.k8s.io
 subjects:
   - kind: ServiceAccount
     name: {{ include "grafana-operator.serviceAccountName" . }}

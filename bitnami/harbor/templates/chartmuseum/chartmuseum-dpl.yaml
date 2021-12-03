@@ -23,7 +23,7 @@ spec:
     metadata:
       labels: {{- include "common.labels.matchLabels" . | nindent 8 }}
         {{- if .Values.commonLabels }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
         {{- end }}
         {{- if .Values.chartmuseum.podLabels }}
         {{- include "common.tplvalues.render" (dict "value" .Values.chartmuseum.podLabels "context" $) | nindent 8 }}
@@ -41,7 +41,10 @@ spec:
         {{- end }}
     spec:
       {{- include "harbor.imagePullSecrets" . | nindent 6 }}
-      automountServiceAccountToken: false
+      automountServiceAccountToken: {{ .Values.chartmuseum.automountServiceAccountToken }}
+      {{- if .Values.chartmuseum.priorityClassName }}
+      priorityClassName: {{ .Values.chartmuseum.priorityClassName | quote }}
+      {{- end }}
       {{- if .Values.chartmuseum.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.chartmuseum.affinity "context" $) | nindent 8 }}
       {{- else }}

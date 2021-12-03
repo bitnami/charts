@@ -11,8 +11,11 @@ metadata:
     {{- toYaml . | nindent 4 }}
     {{- end }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
     {{- if .Values.service.labels }}
-{{ toYaml .Values.service.labels | indent 4 }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.service.labels "context" $ ) | nindent 4 }}
     {{- end }}
 spec:
   type: {{ .Values.service.type }}

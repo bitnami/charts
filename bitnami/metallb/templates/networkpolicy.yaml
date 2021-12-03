@@ -2,12 +2,12 @@
 kind: NetworkPolicy
 apiVersion: {{ template "networkPolicy.apiVersion" . }}
 metadata:
-  name: {{ include "metallb.fullname" . }}-controller
+  name: {{ include "common.names.fullname" . }}-controller
   labels:
     app.kubernetes.io/component: controller
 spec:
   podSelector:
-    matchLabels: {{- include "metallb.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: controller
   policyTypes:
     - Ingress

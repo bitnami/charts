@@ -93,7 +93,7 @@ apache: htdocs-git-branch
 Validate values of Apache - Incorrect extra volume settings
 */}}
 {{- define "apache.validateValues.extraVolumes" -}}
-{{- if and (.Values.extraVolumes) (not .Values.extraVolumeMounts) -}}
+{{- if and (.Values.extraVolumes) (not (or .Values.extraVolumeMounts .Values.cloneHtdocsFromGit.extraVolumeMounts)) -}}
 apache: missing-extra-volume-mounts
     You specified extra volumes but not mount points for them. Please set
     the extraVolumeMounts value

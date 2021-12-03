@@ -1,6 +1,6 @@
 {{- if and .Values.rbac.create .Values.controller.rbac.create -}}
 ---
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
 metadata:
   name: {{ include "common.names.fullname" . }}-controller
@@ -45,7 +45,7 @@ rules:
       - use
 ---
 ## Role bindings
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRoleBinding
 metadata:
   name: {{ include "common.names.fullname" . }}-controller

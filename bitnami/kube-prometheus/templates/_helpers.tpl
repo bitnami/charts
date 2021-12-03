@@ -138,7 +138,7 @@ Return the proper Prometheus Operator image name
 Return the proper Prometheus Operator Reloader image name
 */}}
 {{- define "kube-prometheus.prometheusConfigReloader.image" -}}
-{{- if and .Values.operator.prometheusConfigReloader.image.registry (and .Values.operator.prometheusConfigReloader.image.repository .Values.operator.prometheusConfigReloader.image.tag) }}
+{{- if and .Values.operator.prometheusConfigReloader.image.repository .Values.operator.prometheusConfigReloader.image.tag }}
 {{- include "common.images.image" (dict "imageRoot" .Values.operator.prometheusConfigReloader.image "global" .Values.global) }}
 {{- else -}}
 {{- include "kube-prometheus.image" . -}}
@@ -203,17 +203,6 @@ Create the name of the alertmanager service account to use
     {{ default (include "kube-prometheus.alertmanager.fullname" .) .Values.alertmanager.serviceAccount.name }}
 {{- else -}}
     {{ default "default" .Values.alertmanager.serviceAccount.name }}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return the appropriate apiVersion for PodSecurityPolicy.
-*/}}
-{{- define "podSecurityPolicy.apiVersion" -}}
-{{- if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
-{{- print "policy/v1beta1" -}}
-{{- else -}}
-{{- print "extensions/v1beta1" -}}
 {{- end -}}
 {{- end -}}
 

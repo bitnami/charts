@@ -2,24 +2,26 @@
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
-  name: {{ template "redis.fullname" . }}
+  name: {{ template "common.names.fullname" . }}
   {{- if .Values.metrics.prometheusRule.namespace }}
   namespace: {{ .Values.metrics.prometheusRule.namespace }}
   {{- else }}
   namespace: {{ .Release.Namespace | quote }}
   {{- end }}
-  labels:
-    app: {{ template "redis.name" . }}
-    chart: {{ template "redis.chart" . }}
-    release: {{ .Release.Name | quote }}
-    heritage: {{ .Release.Service | quote }}
-{{- with .Values.metrics.prometheusRule.additionalLabels }}
-{{- toYaml . | nindent 4 }}
-{{- end }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.metrics.prometheusRule.additionalLabels }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.metrics.prometheusRule.additionalLabels "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
-{{- with .Values.metrics.prometheusRule.rules }}
+  {{- with .Values.metrics.prometheusRule.rules }}
   groups:
-    - name: {{ template "redis.name" $ }}
+    - name: {{ template "common.names.name" $ }}
       rules: {{- tpl (toYaml .) $ | nindent 8 }}
-{{- end }}
+  {{- end }}
 {{- end }}

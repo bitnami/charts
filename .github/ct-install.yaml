@@ -13,4 +13,6 @@ excluded-charts:
   - ejbca
   - wavefront
   - harbor
+  - dataplatform-bp1
+  - dataplatform-bp2
 remote: origin

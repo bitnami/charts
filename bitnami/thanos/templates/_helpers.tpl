@@ -27,7 +27,7 @@ Return the proper Thanos image name
 Return the proper init container volume-permissions image name
 */}}
 {{- define "thanos.volumePermissions.image" -}}
-{{- include "common.images.image" ( dict "imageRoot" .Values.volumePermissions "global" .Values.global ) -}}
+{{- include "common.images.image" ( dict "imageRoot" .Values.volumePermissions.image "global" .Values.global ) -}}
 {{- end -}}
 
 {{/*
@@ -176,6 +176,7 @@ Check if there are rolling tags in the images
 */}}
 {{- define "thanos.checkRollingTags" -}}
 {{- include "common.warnings.rollingTag" .Values.image -}}
+{{- include "common.warnings.rollingTag" .Values.volumePermissions.image -}}
 {{- end -}}
 
 {{/*
@@ -186,6 +187,7 @@ Compile all warnings into a single message, and call fail.
 {{- $messages := append $messages (include "thanos.validateValues.objstore" .) -}}
 {{- $messages := append $messages (include "thanos.validateValues.ruler.alertmanagers" .) -}}
 {{- $messages := append $messages (include "thanos.validateValues.ruler.config" .) -}}
+{{- $messages := append $messages (include "thanos.validateValues.sharded.service" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
@@ -209,9 +211,20 @@ thanos: objstore configuration
 
 {{/* Validate values of Thanos - Ruler Alertmanager(s) */}}
 {{- define "thanos.validateValues.ruler.alertmanagers" -}}
-{{- if and .Values.ruler.enabled (empty .Values.ruler.alertmanagers) -}}
+{{/* Check the emptiness of the values */}}
+{{- if and .Values.ruler.enabled ( and (empty .Values.ruler.alertmanagers) (empty .Values.ruler.alertmanagersConfig)) -}}
 thanos: ruler alertmanagers
-    When enabling Ruler component, you must provide alermanagers URL(s).
+    When enabling Ruler component, you must provide either alermanagers URL(s) or an alertmanagers configuration.
+    See https://github.com/thanos-io/thanos/blob/ef94b7e6468d94e2c47943ebf5fc6db24c48d867/docs/components/rule.md#flags and https://github.com/thanos-io/thanos/blob/ef94b7e6468d94e2c47943ebf5fc6db24c48d867/docs/components/rule.md#Configuration for more information.
+{{- end -}}
+{{/* Check that the values are defined in a mutually exclusive manner */}}
+{{- if and .Values.ruler.enabled .Values.ruler.alertmanagers .Values.ruler.alertmanagersConfig -}}
+thanos: ruler alertmanagers
+    Only one of the following can be used at one time:
+        * .Values.ruler.alertmanagers
+        * .Values.ruler.alertmanagersConfig
+    Otherwise, the configurations will collide and Thanos will error out. Please consolidate your configuration
+    into one of the above options.
 {{- end -}}
 {{- end -}}
 
@@ -227,11 +240,54 @@ thanos: ruler configuration
 {{- end -}}
 {{- end -}}
 
+{{/* Validate values of Thanos - number of sharded service properties */}}
+{{- define "thanos.validateValues.sharded.service" -}}
+{{- if and .Values.storegateway.sharded.enabled (not (empty .Values.storegateway.sharded.service.clusterIPs) ) -}}
+{{- if eq "false" (include "thanos.validateValues.storegateway.sharded.length" (dict "property" $.Values.storegateway.sharded.service.clusterIPs "context" $) ) }}
+thanos: storegateway.sharded.service.clusterIPs
+    The number of shards does not match the number of ClusterIPs $.Values.storegateway.sharded.service.clusterIPs
+{{- end -}}
+{{- end -}}
+{{- if and .Values.storegateway.sharded.enabled (not (empty .Values.storegateway.sharded.service.loadBalancerIPs) ) -}}
+{{- if eq "false" (include "thanos.validateValues.storegateway.sharded.length" (dict "property" $.Values.storegateway.sharded.service.loadBalancerIPs "context" $) ) }}
+thanos: storegateway.sharded.service.loadBalancerIPs
+    The number of shards does not match the number of loadBalancerIPs $.Values.storegateway.sharded.service.loadBalancerIPs
+{{- end -}}
+{{- end -}}
+{{- if and .Values.storegateway.sharded.enabled (not (empty .Values.storegateway.sharded.service.http.nodePorts) ) -}}
+{{- if eq "false" (include "thanos.validateValues.storegateway.sharded.length" (dict "property" $.Values.storegateway.sharded.service.http.nodePorts "context" $) ) }}
+thanos: storegateway.sharded.service.http.nodePorts
+    The number of shards does not match the number of http.nodePorts $.Values.storegateway.sharded.service.http.nodePorts
+{{- end -}}
+{{- end -}}
+{{- if and .Values.storegateway.sharded.enabled (not (empty .Values.storegateway.sharded.service.grpc.nodePorts) ) -}}
+{{- if eq "false" (include "thanos.validateValues.storegateway.sharded.length" (dict "property" $.Values.storegateway.sharded.service.grpc.nodePorts "context" $) ) }}
+thanos: storegateway.sharded.service.grpc.nodePorts
+    The number of shards does not match the number of grpc.nodePorts $.Values.storegateway.sharded.service.grpc.nodePorts
+{{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{- define "thanos.validateValues.storegateway.sharded.length" -}}
+{{/* Get number of shards */}}
+{{- $shards := int 0 }}
+{{- if .context.Values.storegateway.sharded.hashPartitioning.shards }}
+  {{- $shards = int .context.Values.storegateway.sharded.hashPartitioning.shards }}
+{{- else }}
+  {{- $shards = len .context.Values.storegateway.sharded.timePartitioning }}
+{{- end }}
+{{- $propertyLength := (len .property) -}}
+{{/* Validate property */}}
+{{- if ne $shards $propertyLength -}}
+false
+{{- end }}
+{{- end }}
+
 {{/* Service account name
 Usage:
-{{ include "thanos.serviceaccount.name" (dict "component" "bucketweb" "context" $) }}
+{{ include "thanos.serviceAccount.name" (dict "component" "bucketweb" "context" $) }}
 */}}
-{{- define "thanos.serviceaccount.name" -}}
+{{- define "thanos.serviceAccount.name" -}}
 {{- $name := printf "%s-%s" (include "common.names.fullname" .context) .component -}}
 
 {{- if .context.Values.existingServiceAccount -}}
@@ -247,9 +303,9 @@ Usage:
 {{- end -}}
 
 {{/* Service account use existing
-{{- include "thanos.serviceaccount.use-existing" (dict "component" "bucketweb" "context" $) -}}
+{{- include "thanos.serviceAccount.useExisting" (dict "component" "bucketweb" "context" $) -}}
 */}}
-{{- define "thanos.serviceaccount.use-existing" -}}
+{{- define "thanos.serviceAccount.useExisting" -}}
 {{- $component := index .context.Values .component -}}
 {{- if .context.Values.existingServiceAccount -}}
     {{- true -}}
@@ -262,8 +318,66 @@ Usage:
 Return true if a hashring configmap object should be created
 */}}
 {{- define "thanos.receive.createConfigmap" -}}
-{{- if and .Values.receive.enabled .Values.receive.config (not .Values.receive.existingConfigmap) }}
+{{- if and .Values.receive.enabled (not .Values.receive.existingConfigmap) }}
     {{- true -}}
 {{- else -}}
+{{- end -}}
+{{- end -}}
+
+
+{{/* Return the proper pod fqdn of the replica.
+Usage:
+{{ include "thanos.receive.podFqdn" (dict "root" . "extra" $suffix ) }}
+*/}}
+{{- define "thanos.receive.podFqdn" -}}
+{{- printf "\"%s-receive-%d.%s-receive-headless.%s.svc.%s:10901\"" (include "common.names.fullname" .root ) .extra (include "common.names.fullname" .root ) .root.Release.Namespace .root.Values.clusterDomain -}}
+{{- end -}}
+
+{{/* Returns a proper configuration when no config is specified
+Usage:
+{{ include "thanos.receive.config" . }}
+*/}}
+{{- define "thanos.receive.config" -}}
+{{- if not .Values.receive.config -}}
+{{- if .Values.receive.service.additionalHeadless -}}
+{{- $count := int .Values.receive.replicaCount -}}
+{{- $endpoints_dict := dict "endpoints" (list)  -}}
+{{- $root := . -}}
+{{- range $i := until $count -}}
+{{- $data := dict "root" $root "extra" $i -}}
+{{- $noop := (include "thanos.receive.podFqdn" $data) | append $endpoints_dict.endpoints | set $endpoints_dict "endpoints" -}}
+{{- end -}}
+[
+  {
+    "endpoints": [
+{{ join ",\n" $endpoints_dict.endpoints | indent 6 }}
+    ]
+  }
+]
+{{- else -}}
+[
+  {
+    "endpoints": [
+        "127.0.0.1:10901"
+    ]
+  }
+]
+{{- end -}}
+{{- else -}}
+{{- if (typeIs "string" .Values.receive.config)}}
+{{- .Values.receive.config -}}
+{{- else -}}
+{{- .Values.receive.config | toPrettyJson -}}
+{{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return true if cert-manager required annotations for TLS signed certificates are set in the Ingress annotations
+Ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
+*/}}
+{{- define "thanos.ingress.certManagerRequest" -}}
+{{ if or (hasKey . "cert-manager.io/cluster-issuer") (hasKey . "cert-manager.io/issuer") }}
+    {{- true -}}
 {{- end -}}
 {{- end -}}

@@ -22,8 +22,8 @@ service:
   port:
     {{- if typeIs "string" .servicePort }}
     name: {{ .servicePort }}
-    {{- else if typeIs "int" .servicePort }}
-    number: {{ .servicePort }}
+    {{- else if or (typeIs "int" .servicePort) (typeIs "float64" .servicePort) }}
+    number: {{ .servicePort | int }}
     {{- end }}
 {{- end -}}
 {{- end -}}
@@ -35,6 +35,19 @@ Usage:
 */}}
 {{- define "common.ingress.supportsPathType" -}}
 {{- if (semverCompare "<1.18-0" (include "common.capabilities.kubeVersion" .)) -}}
+{{- print "false" -}}
+{{- else -}}
+{{- print "true" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Returns true if the ingressClassname field is supported
+Usage:
+{{ include "common.ingress.supportsIngressClassname" . }}
+*/}}
+{{- define "common.ingress.supportsIngressClassname" -}}
+{{- if semverCompare "<1.18-0" (include "common.capabilities.kubeVersion" .) -}}
 {{- print "false" -}}
 {{- else -}}
 {{- print "true" -}}

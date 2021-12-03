@@ -12,5 +12,4 @@ internalTLS:
 
 redis:
   enabled: true
-  cluster:
-    enabled: true
+  architecture: standalone

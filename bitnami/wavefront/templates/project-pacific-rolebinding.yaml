@@ -1,6 +1,6 @@
 {{- if .Values.projectPacific.enabled }}
 kind: RoleBinding
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 metadata:
   {{- if .Values.commonLabels }}
   labels: {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}

@@ -1,269 +1,406 @@
+## @section Global parameters
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
-## Current available global Docker image parameters: imageRegistry and imagePullSecrets
+## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+
+## @param global.imageRegistry Global Docker image registry
+## @param global.imagePullSecrets Global Docker registry secret names as an array
+## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
-# global:
-#   imageRegistry: myRegistryName
-#   imagePullSecrets:
-#     - myRegistryKeySecretName
-#   storageClass: myStorageClass
+global:
+  imageRegistry: ""
+  ## E.g.
+  ## imagePullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  imagePullSecrets: []
+  storageClass: ""
+
+## @section Common parameters
+
+## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
+##
+nameOverride: ""
+## @param fullnameOverride String to fully override common.names.fullname template
+##
+fullnameOverride: ""
+## @param commonLabels Labels to add to all deployed objects
+##
+commonLabels: {}
+## @param commonAnnotations Annotations to add to all deployed objects
+##
+commonAnnotations: {}
+## @param clusterDomain Default Kubernetes cluster domain
+##
+clusterDomain: cluster.local
+## @param extraDeploy Array of extra objects to deploy with the release
+##
+extraDeploy: []
+
+## @section Memcached parameters
 
 ## Bitnami Memcached image version
 ## ref: https://hub.docker.com/r/bitnami/memcached/tags/
+## @param image.registry Memcached image registry
+## @param image.repository Memcached image repository
+## @param image.tag Memcached image tag (immutable tags are recommended)
+## @param image.pullPolicy Memcached image pull policy
+## @param image.pullSecrets Specify docker-registry secret names as an array
+## @param image.debug Enable image debug mode
 ##
 image:
   registry: docker.io
   repository: bitnami/memcached
-  tag: 1.6.9-debian-10-r55
+  tag: 1.6.12-debian-10-r50
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## e.g:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
   ##
-  # pullSecrets:
-  #   - myRegistryKeySecretName
-
+  pullSecrets: []
   ## Set to true if you would like to see extra information on logs
   ##
   debug: false
-
-## Extra environment vars to pass.
-## ref: https://github.com/bitnami/bitnami-docker-memcached#configuration
-##
-extraEnv: []
-
-## String to partially override common.names.fullname template (will maintain the release name)
-##
-# nameOverride:
-
-## Number of containers to run
-##
-replicaCount: 1
-
-## String to fully override common.names.fullname template
-##
-# fullnameOverride:
-
-# Cluster domain
-clusterDomain: cluster.local
-
-## Memcached architecture. Allowed values: standalone or high-availability
+## @param architecture Memcached architecture. Allowed values: standalone or high-availability
 ##
 architecture: standalone
-
-## Deployment pod host aliases
+## @param hostAliases Add deployment host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
 hostAliases: []
-
-## Memcached admin user
+## @param memcachedUsername Memcached admin user
 ## ref: https://github.com/bitnami/bitnami-docker-memcached#creating-the-memcached-admin-user
 ##
-# memcachedUsername:
-
-## Memcached admin password
+memcachedUsername: ""
+## @param memcachedPassword Memcached admin password
 ## ref: https://github.com/bitnami/bitnami-docker-memcached#creating-the-memcached-admin-user
 ##
-# memcachedPassword:
-
+memcachedPassword: ""
+## @param replicaCount Number of containers
+##
+replicaCount: 1
+## @param command Default container command (useful when using custom images)
+##
+command: []
+## @param arguments Default container args (useful when using custom images)
+## e.g:
+## arguments:
+##   - /run.sh
+##   - -m <maxMemoryLimit>
+##   - -I <maxItemSize>
+##   - -vv
+##
+arguments:
+  - /run.sh
+## @param extraEnv Additional env vars to pass
+## ref: https://github.com/bitnami/bitnami-docker-memcached#configuration
+##
+extraEnv: []
+## Pod disruption budget configuration
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/disruptions/
+##
+podDisruptionBudget:
+  ## @param podDisruptionBudget.create Specifies whether a Pod disruption budget should be created
+  ##
+  create: false
+  ## @param podDisruptionBudget.minAvailable Minimum number of pods that need to be available
+  ##
+  minAvailable: ""
+  ## @param podDisruptionBudget.maxUnavailable Maximum number of pods that can be unavailable
+  ##
+  maxUnavailable: 1
 ## Service parameters
 ##
-##
 service:
-  ## Service type
+  ## @param service.type Kubernetes service type for Memcached
   ##
   type: ClusterIP
-  ## Memcached port
+  ## @param service.port Memcached service port
   ##
   port: 11211
-  ## Specify the nodePort value for the LoadBalancer and NodePort service types.
+  ## @param service.nodePort Kubernetes Service nodePort
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ##
   nodePort: ""
-  ## Set the LoadBalancer service type to internal only.
+  ## @param service.loadBalancerIP `loadBalancerIP` if service type is `LoadBalancer`
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
   ##
-  # loadBalancerIP:
-  ## Annotations for the Memcached service
+  loadBalancerIP: ""
+  ## @param service.annotations Additional annotations for Memcached service
   ##
   annotations: {}
 
+## Memcached Autoscaling
+## @param autoscaling.enabled Enable memcached statefulset autoscaling (requires architecture: "high-availability")
+## @param autoscaling.minReplicas memcached statefulset autoscaling minimum number of replicas
+## @param autoscaling.maxReplicas memcached statefulset autoscaling maximum number of replicas
+## @param autoscaling.targetCPU memcached statefulset autoscaling target CPU percentage
+## @param autoscaling.targetMemory memcached statefulset autoscaling target CPU memory
+##
+autoscaling:
+  enabled: false
+  minReplicas: 3
+  maxReplicas: 6
+  targetCPU: 50
+  targetMemory: 50
+
 ## Memcached containers' resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+## We usually recommend not to specify default resources and to leave this as a conscious
+## choice for the user. This also increases chances charts run on environments with little
+## resources, such as Minikube. If you do want to specify resources, uncomment the following
+## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+## @param resources.limits CPU/Memory resource limits
+## @param resources.requests [object] CPU/Memory resource requests
 ##
 resources:
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## Example:
+  ## limits:
+  ##    cpu: 100m
+  ##    memory: 128Mi
   limits: {}
-  #   cpu: 100m
-  #   memory: 128Mi
   requests:
     memory: 256Mi
     cpu: 250m
-
+## @param portName Name of the main port exposed by memcached
 ## If you want to override the port name (can be usefull when using a service mesh)
 ## ref for istio: https://istio.io/latest/docs/ops/configuration/traffic-management/protocol-selection/
 ##
 portName: memcache
-
 ## Pod Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+## @param securityContext.enabled Enable security context
+## @param securityContext.fsGroup Group ID for the container
+## @param securityContext.runAsUser User ID for the container
+## @param securityContext.readOnlyRootFilesystem Enable read-only filesystem
 ##
 securityContext:
   enabled: true
   fsGroup: 1001
   runAsUser: 1001
   readOnlyRootFilesystem: false
-
-## Pod annotations
+## @param podLabels Pod extra labels
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+##
+podLabels: {}
+## @param podAnnotations Pod annotations
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
 podAnnotations: {}
-
-## Pod affinity preset
+## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-## Allowed values: soft, hard
 ##
 podAffinityPreset: ""
-
-## Pod anti-affinity preset
+## @param podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-## Allowed values: soft, hard
 ##
 podAntiAffinityPreset: soft
-
 ## Node affinity preset
 ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-## Allowed values: soft, hard
 ##
 nodeAffinityPreset:
-  ## Node affinity type
-  ## Allowed values: soft, hard
+  ## @param nodeAffinityPreset.type Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ##
   type: ""
-  ## Node label key to match
+  ## @param nodeAffinityPreset.key Node label key to match. Ignored if `affinity` is set.
   ## E.g.
   ## key: "kubernetes.io/e2e-az-name"
   ##
   key: ""
-  ## Node label values to match
+  ## @param nodeAffinityPreset.values Node label values to match. Ignored if `affinity` is set.
   ## E.g.
   ## values:
   ##   - e2e-az1
   ##   - e2e-az2
   ##
   values: []
-
-## Affinity for pod assignment. Evaluated as a template.
+## @param affinity Affinity for pod assignment
 ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 ## Note: podAffinityPreset, podAntiAffinityPreset, and nodeAffinityPreset will be ignored when it's set
 ##
 affinity: {}
-
-## Node labels for pod assignment. Evaluated as a template.
+## @param nodeSelector Node labels for pod assignment
 ## ref: https://kubernetes.io/docs/user-guide/node-selection/
 ##
 nodeSelector: {}
-
-## Tolerations for pod assignment. Evaluated as a template.
+## @param tolerations Tolerations for pod assignment
 ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
-
-## Pod priority
+## @param topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains
+## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+##
+topologySpreadConstraints: {}
+## @param priorityClassName Pod priority
 ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
 ##
-# priorityClassName: ""
-
+priorityClassName: ""
+## @param initContainers Add additional init containers to the Memcached pod
+## Example:
+## initContainers:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
+##
+initContainers: []
+## @param sidecars Add additional sidecar containers to the Memcached pod
+## Example:
+## sidecars:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
+##
+sidecars: []
+## memcached pods ServiceAccount
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+##
+serviceAccount:
+  ## @param serviceAccount.create Enable creation of ServiceAccount for memcached pods
+  ##
+  create: true
+  ## @param serviceAccount.name The name of the ServiceAccount to use.
+  ## If not set and create is true, a name is generated using the memcached.serviceAccountName template
+  ##
+  name: ""
+  ## @param serviceAccount.automountServiceAccountToken Enable/disable auto mounting of the service account token
+  ##
+  automountServiceAccountToken: true
 ## Persistence - used for dumping and restoring states between recreations
 ## Ref: https://github.com/memcached/memcached/wiki/WarmRestart
 ##
 persistence:
+  ## @param persistence.enabled Enable persistence using PVC (Requires architecture: "high-availability")
+  ##
   enabled: false
-  ## Persistent Volume Storage Class
+  ## @param persistence.storageClass PVC Storage Class for Memcached volume
   ## If defined, storageClassName: <storageClass>
   ## If set to "-", storageClassName: "", which disables dynamic provisioning
   ## If undefined (the default) or set to null, no storageClassName spec is
   ##  set, choosing the default provisioner.  (gp2 on AWS, standard on
   ##  GKE, AWS & OpenStack)
   ##
-  # storageClass: "-"
-  ## Persistent Volume Claim annotations
+  storageClass: ""
+  ## @param persistence.annotations Persistent Volume Claim annotations
   ##
   annotations: {}
-  ## Persistent Volume Access Mode
+  ## @param persistence.accessModes Persistent Volume Access Mode
   ##
   accessModes:
     - ReadWriteOnce
-  ## Persistent Volume size
+  ## @param persistence.size PVC Storage Request for Memcached volume
   ##
   size: 8Gi
-
-## Args for running memcached
-## Ref: https://github.com/memcached/memcached/wiki/ConfiguringServer
-##
-arguments:
-  - /run.sh
-  # - -m <maxMemoryLimit>
-  # - -I <maxItemSize>
-  # - -vv
-
 ## Prometheus Exporter / Metrics
 ##
 metrics:
+  ## @param metrics.enabled Start a side-car prometheus exporter
+  ##
   enabled: false
   ## Bitnami Memcached Prometheus Exporter image
   ## ref: https://hub.docker.com/r/bitnami/memcached-exporter/tags/
+  ## @param metrics.image.registry Memcached exporter image registry
+  ## @param metrics.image.repository Memcached exporter image repository
+  ## @param metrics.image.tag Memcached exporter image tag (immutable tags are recommended)
+  ## @param metrics.image.pullPolicy Image pull policy
+  ## @param metrics.image.pullSecrets Specify docker-registry secret names as an array
   ##
   image:
     registry: docker.io
     repository: bitnami/memcached-exporter
-    tag: 0.8.0-debian-10-r46
+    tag: 0.9.0-debian-10-r221
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
     ##
-    # pullSecrets:
-    #   - myRegistryKeySecretName
-  ## Metrics exporter pod Annotation and Labels
+    pullSecrets: []
+  ## @param metrics.podAnnotations [object] Metrics exporter pod Annotation and Labels
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations:
     prometheus.io/scrape: "true"
     prometheus.io/port: "9150"
+  ## @param metrics.portName Memcached exporter port name
   ## If you want to override the port name (can be usefull when using a service mesh)
   ## ref for istio: https://istio.io/latest/docs/ops/configuration/traffic-management/protocol-selection/
   ##
   portName: metrics
   ## Memcached Prometheus exporter resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## @param metrics.resources.limits The resources limits for the container
+  ## @param metrics.resources.requests The requested resources for the container
   ##
   resources:
-    # We usually recommend not to specify default resources and to leave this as a conscious
-    # choice for the user. This also increases chances charts run on environments with little
-    # resources, such as Minikube. If you do want to specify resources, uncomment the following
-    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ## Example:
+    ## limits:
+    ##    cpu: 100m
+    ##    memory: 128Mi
     limits: {}
-    #   cpu: 100m
-    #   memory: 128Mi
+    ## Examples:
+    ## requests:
+    ##    cpu: 100m
+    ##    memory: 128Mi
     requests: {}
-    #   cpu: 100m
-    #   memory: 128Mi
+  ## Configure extra options for liveness probe
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param metrics.livenessProbe.enabled Enable livenessProbe
+  ## @param metrics.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param metrics.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param metrics.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param metrics.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param metrics.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 15
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 3
+    successThreshold: 1
+  ## Configure extra options for readiness probe
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param metrics.readinessProbe.enabled Enable readinessProbe
+  ## @param metrics.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param metrics.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param metrics.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param metrics.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param metrics.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 3
+    successThreshold: 1
   service:
-    ## Service type
+    ## @param metrics.service.type Kubernetes service type for Prometheus metrics
     ##
     type: ClusterIP
-    ## Memcached Prometheus exporter port
+    ## @param metrics.service.port Prometheus metrics service port
     ##
     port: 9150
-    ## Annotations for the Prometheus metrics service
+    ## @param metrics.service.annotations [object] Annotations for the Prometheus metrics service
     ##
     annotations:
       prometheus.io/scrape: "true"
@@ -271,23 +408,101 @@ metrics:
   ## Prometheus Operator ServiceMonitor configuration
   ##
   serviceMonitor:
+    ## @param metrics.serviceMonitor.enabled Create ServiceMonitor resource(s) for scraping metrics using PrometheusOperator
+    ##
     enabled: false
-    ## Namespace in which Prometheus is running
+    ## @param metrics.serviceMonitor.namespace The namespace in which the ServiceMonitor will be created
+    ## e.g:
+    ## namespace: monitoring
     ##
-    # namespace: monitoring
-
-    ## Interval at which metrics should be scraped.
+    namespace: ""
+    ## @param metrics.serviceMonitor.interval The interval at which metrics should be scraped
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ## e.g:
+    ## interval: 10s
     ##
-    # interval: 10s
-
-    ## Timeout after which the scrape is ended
+    interval: ""
+    ## @param metrics.serviceMonitor.scrapeTimeout The timeout after which the scrape is ended
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ## e.g:
+    ## scrapeTimeout: 10s
     ##
-    # scrapeTimeout: 10s
-
-    ## ServiceMonitor selector labels
+    scrapeTimeout: ""
+    ## @param metrics.serviceMonitor.selector Additional labels for ServiceMonitor resource
     ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+    ## e.g:
+    ## selector:
+    ##   prometheus: my-prometheus
     ##
-    # selector:
-    #   prometheus: my-prometheus
+    selector: {}
+    ## @param metrics.serviceMonitor.metricRelabelings MetricRelabelConfigs to apply to samples before ingestion
+    ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#metric_relabel_configs
+    ## e.g:
+    ## metricRelabelings:
+    ## - sourceLabels: [__meta_kubernetes_pod_label_app_kubernetes_io_instance]
+    ##   separator: ;
+    ##   regex: ^(.*)$
+    ##   targetLabel: pod_name
+    ##   replacement: $1
+    ##   action: replace
+    ##
+    metricRelabelings: []
+    ## @param metrics.serviceMonitor.relabelings Metrics relabelings to add to the scrape endpoint, applied before scraping
+    ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+    ## e.g:
+    ## relabelings:
+    ## - sourceLabels: [__meta_kubernetes_pod_label_app_kubernetes_io_instance]
+    ##   separator: ;
+    ##   regex: ^(.*)$
+    ##   targetLabel: pod_name
+    ##   replacement: $1
+    ##   action: replace
+    ##
+    relabelings: []
+## Init Container parameters
+## Change the owner and group of the persistent volume(s) mountpoint(s) to 'runAsUser:fsGroup' on each component
+## values from the securityContext section of the component
+##
+volumePermissions:
+  ## @param volumePermissions.image.registry Init container volume-permissions image registry
+  ## @param volumePermissions.image.repository Init container volume-permissions image repository
+  ## @param volumePermissions.image.tag Init container volume-permissions image tag (immutable tags are recommended)
+  ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
+  ## @param volumePermissions.image.pullSecrets Specify docker-registry secret names as an array
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/bitnami-shell
+    tag: 10-debian-10-r260
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## Example:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+  ## Init Container resource requests and limits
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## @param volumePermissions.resources.limits Init container volume-permissions resource limits
+  ## @param volumePermissions.resources.requests Init container volume-permissions resource requests
+  ##
+  resources:
+    ## Example:
+    ## limits:
+    ##    cpu: 100m
+    ##    memory: 128Mi
+    limits: {}
+    ## Examples:
+    ## requests:
+    ##    cpu: 100m
+    ##    memory: 128Mi
+    requests: {}

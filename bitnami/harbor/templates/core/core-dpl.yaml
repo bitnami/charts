@@ -22,7 +22,7 @@ spec:
     metadata:
       labels: {{- include "common.labels.matchLabels" . | nindent 8 }}
         {{- if .Values.commonLabels }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
         {{- end }}
         {{- if .Values.core.podLabels }}
         {{- include "common.tplvalues.render" (dict "value" .Values.core.podLabels "context" $) | nindent 8 }}
@@ -42,7 +42,10 @@ spec:
         {{- end }}
     spec:
       {{- include "harbor.imagePullSecrets" . | nindent 6 }}
-      automountServiceAccountToken: false
+      automountServiceAccountToken: {{ .Values.core.automountServiceAccountToken }}
+      {{- if .Values.core.priorityClassName }}
+      priorityClassName: {{ .Values.core.priorityClassName | quote }}
+      {{- end }}
       {{- if .Values.core.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.core.affinity "context" $) | nindent 8 }}
       {{- else }}
@@ -186,7 +189,7 @@ spec:
             {{- end }}
             {{- if .Values.core.uaaSecretName }}
             - name: auth-ca-cert
-              mountPath: /etc/core/ca/auth-ca.crt
+              mountPath: /etc/core/auth-ca/auth-ca.crt
               subPath: auth-ca.crt
             {{- end }}
             - name: psc

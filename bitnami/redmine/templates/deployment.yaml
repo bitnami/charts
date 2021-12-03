@@ -2,6 +2,7 @@ apiVersion: {{ template "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ include "common.names.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: redmine
     {{- if .Values.commonLabels }}
@@ -14,7 +15,7 @@ spec:
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: redmine
-  replicas: {{ .Values.replicas }}
+  replicas: {{ .Values.replicaCount }}
   strategy: {{ toYaml .Values.updateStrategy | nindent 4 }}
   template:
     metadata:
@@ -28,6 +29,9 @@ spec:
       {{- end }}
     spec:
       {{- include "redmine.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.schedulerName }}
+      schedulerName: {{ .Values.schedulerName | quote }}
+      {{- end }}
       {{- if .Values.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -56,14 +60,14 @@ spec:
         {{- include "certificates.initContainer" . | indent 8 }}
         {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
         - name: volume-permissions
-          image: {{ include "redmine.volumePermissions.image" . }}
-          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
+          image: {{ include "redmine.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           command:
             - sh
             - -c
             - |
               mkdir -p "/bitnami/redmine"
-              chown -R "{{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}" "/bitnami/redmine"
+              chown -R "redmine:root" "/bitnami/redmine"
           securityContext:
             runAsUser: 0
           {{- if .Values.volumePermissions.resources }}
@@ -96,17 +100,19 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
           {{- end }}
           env:
-            {{- if eq .Values.databaseType "mariadb" }}
-            - name: REDMINE_DB_MYSQL
-            {{- else }}
-            - name: REDMINE_DB_POSTGRES
-            {{- end }}
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" .Values.image.debug | quote }}
+            - name: ALLOW_EMPTY_PASSWORD
+              value: {{ ternary "yes" "no" .Values.allowEmptyPassword | quote }}
+            - name: REDMINE_DATABASE_TYPE
+              value: {{ .Values.databaseType | quote }}
+            - name: REDMINE_DATABASE_HOST
               value: {{ template "redmine.database.host" . }}
-            - name: REDMINE_DB_NAME
+            - name: REDMINE_DATABASE_NAME
               value: {{ template "redmine.database.name" . }}
-            - name: REDMINE_DB_USERNAME
+            - name: REDMINE_DATABASE_USER
               value: {{ template "redmine.database.username" . }}
-            - name: REDMINE_DB_PASSWORD
+            - name: REDMINE_DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ template "redmine.database.secretName" . }}
@@ -115,10 +121,8 @@ spec:
                   {{- else }}
                   key: postgresql-password
                   {{- end }}
-            {{- if (include "redmine.useExternalDB" .) }}
-            - name: REDMINE_DB_PORT_NUMBER
-              value: {{ .Values.externalDatabase.port | quote }}
-            {{- end }}
+            - name: REDMINE_DATABASE_PORT_NUMBER
+              value: {{ include "redmine.database.port" . | quote }}
             - name: REDMINE_USERNAME
               value: {{ default "" .Values.redmineUsername | quote }}
             - name: REDMINE_PASSWORD
@@ -131,27 +135,30 @@ spec:
             - name: REDMINE_LANG
               value: {{ .Values.redmineLanguage | quote }}
             {{- if .Values.smtpHost }}
-            - name: SMTP_HOST
+            - name: REDMINE_SMTP_HOST
               value: {{ .Values.smtpHost | quote }}
             {{- end }}
             {{- if .Values.smtpPort }}
-            - name: SMTP_PORT
+            - name: REDMINE_SMTP_PORT_NUMBER
               value: {{ .Values.smtpPort | quote }}
             {{- end }}
             {{- if .Values.smtpUser }}
-            - name: SMTP_USER
+            - name: REDMINE_SMTP_USER
               value: {{ .Values.smtpUser | quote }}
             {{- end }}
             {{- if .Values.smtpPassword }}
-            - name: SMTP_PASSWORD
+            - name: REDMINE_SMTP_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ template "redmine.secretName" . }}
                   key: smtp-password
             {{- end }}
             {{- if .Values.smtpTls }}
-            - name: SMTP_TLS
-              value: {{ .Values.smtpTls | quote }}
+            - name: REDMINE_SMTP_PROTOCOL
+              value: "tls"
+            {{- else if .Values.smtpProtocol }}
+            - name: REDMINE_SMTP_PROTOCOL
+              value: {{ .Values.smtpProtocol | quote }}
             {{- end }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
@@ -166,13 +173,13 @@ spec:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.extraEnvVarsSecret "context" $) }}
             {{- end }}
           ports:
-            - name: http-redmine
-              containerPort: {{ .Values.containerPorts.http }}
+            - name: http
+              containerPort: {{ .Values.containerPort }}
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
               path: {{ .Values.livenessProbe.path }}
-              port: http-redmine
+              port: http
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
@@ -185,7 +192,7 @@ spec:
           readinessProbe:
             httpGet:
               path: {{ .Values.readinessProbe.path }}
-              port: http-redmine
+              port: http
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
@@ -194,8 +201,25 @@ spec:
           {{- else if .Values.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
+          {{- if .Values.startupProbe.enabled }}
+          startupProbe:
+            httpGet:
+              path: {{ .Values.startupProbe.path }}
+              port: http
+            initialDelaySeconds: {{ .Values.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.startupProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.startupProbe.successThreshold }}
+            failureThreshold: {{ .Values.startupProbe.failureThreshold }}
+          {{- else if .Values.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
           volumeMounts:
             {{- include "certificates.volumeMount" . | indent 12 }}
+            {{- if .Values.customPostInitScripts }}
+            - mountPath: /docker-entrypoint-init.d
+              name: custom-postinit
+            {{- end }}
             {{- if .Values.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
@@ -213,6 +237,12 @@ spec:
           {{- else }}
           emptyDir: {}
           {{- end }}
+        {{- if .Values.customPostInitScripts }}
+        - name: custom-postinit
+          configMap:
+            name: {{ printf "%s-postinit" (include "common.names.fullname" .) }}
+            defaultMode: 0755
+        {{- end }}
         {{- if .Values.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
         {{- end }}

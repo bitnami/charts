@@ -27,5 +27,6 @@ maintainers:
 name: testlink
 sources:
   - https://github.com/bitnami/bitnami-docker-testlink
-  - http://www.testlink.org/
-version: 9.2.0
+  - https://www.testlink.org/
+
+version: 9.3.1

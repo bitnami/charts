@@ -1,6 +1,6 @@
 # Redmine
 
-[Redmine](http://www.redmine.org) is a free and open source, web-based project management and issue tracking tool.
+[Redmine](https://www.redmine.org) is a free and open source, web-based project management and issue tracking tool.
 
 ## TL;DR
 
@@ -11,9 +11,9 @@ $ helm install my-release bitnami/redmine
 
 ## Introduction
 
-This chart bootstraps a [Redmine](https://github.com/bitnami/bitnami-docker-redmine) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Redmine](https://github.com/bitnami/bitnami-docker-redmine) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-It also packages the [Bitnami MariaDB chart](https://github.com/kubernetes/charts/tree/master/bitnami/mariadb) and the [PostgreSQL chart](https://github.com/kubernetes/charts/tree/master/bitnami/postgresql) which are required for bootstrapping a MariaDB/PostgreSQL deployment for the database requirements of the Redmine application.
+It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) and the [PostgreSQL chart](https://github.com/bitnami/charts/tree/master/bitnami/postgresql) which are required for bootstrapping a MariaDB/PostgreSQL deployment for the database requirements of the Redmine application.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This chart has been tested to work with NGINX Ingress, cert-manager, fluentd and Prometheus on top of the [BKPR](https://kubeprod.io/).
 
@@ -56,249 +56,301 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 
 ## Parameters
 
-The following table lists the configurable parameters of the Redmine chart and their default values.
+### Global parameters
 
-| Parameter                 | Description                                     | Default                                                 |
-|---------------------------|-------------------------------------------------|---------------------------------------------------------|
-| `global.imageRegistry`    | Global Docker image registry                    | `nil`                                                   |
-| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]` (does not add image pull secrets to deployed pods) |
-| `global.storageClass`     | Global storage class for dynamic provisioning   | `nil`                                                   |
+| Name                      | Description                                     | Value |
+| ------------------------- | ----------------------------------------------- | ----- |
+| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
+| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
+| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
+
 
 ### Common parameters
 
-| Parameter           | Description                                                                 | Default |
-|---------------------|-----------------------------------------------------------------------------|---------|
-| `nameOverride`      | String to partially override redmine.fullname template                      | `nil`   |
-| `fullnameOverride`  | String to fully override redmine.fullname template                          | `nil`   |
-| `commonLabels`      | Labels to add to all deployed objects                                       | `nil`   |
-| `commonAnnotations` | Annotations to add to all deployed objects                                  | `[]`    |
-| `extraDeploy`       | Array of extra objects to deploy with the release (evaluated as a template) | `nil`   |
-| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)        | `nil`   |
+| Name                | Description                                        | Value                 |
+| ------------------- | -------------------------------------------------- | --------------------- |
+| `kubeVersion`       | Override Kubernetes version                        | `""`                  |
+| `nameOverride`      | String to partially override common.names.fullname | `""`                  |
+| `fullnameOverride`  | String to fully override common.names.fullname     | `""`                  |
+| `commonLabels`      | Labels to add to all deployed objects              | `{}`                  |
+| `commonAnnotations` | Annotations to add to all deployed objects         | `{}`                  |
+| `extraDeploy`       | Array of extra objects to deploy with the release  | `[]`                  |
+| `image.registry`    | Redmine image registry                             | `docker.io`           |
+| `image.repository`  | Redmine image repository                           | `bitnami/redmine`     |
+| `image.tag`         | Redmine image tag (immutable tags are recommended) | `4.2.3-debian-10-r36` |
+| `image.pullPolicy`  | Redmine image pull policy                          | `IfNotPresent`        |
+| `image.pullSecrets` | Redmine image pull secrets                         | `[]`                  |
+| `image.debug`       | Enable image debug mode                            | `false`               |
 
-### Redmine parameters
 
-| Parameter             | Description                                                                                                                                                   | Default                                                 |
-|-----------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
-| `image.registry`      | Redmine image registry                                                                                                                                        | `docker.io`                                             |
-| `image.repository`    | Redmine image name                                                                                                                                            | `bitnami/redmine`                                       |
-| `image.tag`           | Redmine image tag                                                                                                                                             | `{TAG_NAME}`                                            |
-| `image.pullPolicy`    | Image pull policy                                                                                                                                             | `IfNotPresent`                                          |
-| `image.pullSecrets`   | Specify docker-registry secret names as an array                                                                                                              | `[]` (does not add image pull secrets to deployed pods) |
-| `hostAliases`         | Add deployment host aliases                                                                                                                                   | `[]`                                                    |
-| `redmineUsername`     | User of the application                                                                                                                                       | `user`                                                  |
-| `redminePassword`     | Application password                                                                                                                                          | _random 10 character long alphanumeric string_          |
-| `redmineEmail`        | Admin email                                                                                                                                                   | `user@example.com`                                      |
-| `redmineLanguage`     | Redmine default data language                                                                                                                                 | `en`                                                    |
-| `smtpHost`            | SMTP host                                                                                                                                                     | `nil`                                                   |
-| `smtpPort`            | SMTP port                                                                                                                                                     | `nil`                                                   |
-| `smtpUser`            | SMTP user                                                                                                                                                     | `nil`                                                   |
-| `smtpPassword`        | SMTP password                                                                                                                                                 | `nil`                                                   |
-| `smtpTls`             | Use TLS encryption with SMTP                                                                                                                                  | `nil`                                                   |
-| `command`             | Override default container command (useful when using custom images)                                                                                          | `[]`                                                    |
-| `args`                | Override default container args (useful when using custom images)                                                                                             | `[]`                                                    |
-| `containerPorts.http` | Redmine container HTTP port                                                                                                                                   | `3000`                                                  |
-| `extraEnvVars`        | Extra environment variables to be set on redmine container                                                                                                    | `{}`                                                    |
-| `extraEnvVarsCM`      | Name of existing ConfigMap containing extra env vars                                                                                                          | `nil`                                                   |
-| `extraEnvVarsSecret`  | Name of existing Secret containing extra env vars                                                                                                             | `nil`                                                   |
-| `existingSecret`      | Use existing secret for password details (`redminePassword` and `smtpPassword` will be ignored). Must contain the keys `redmine-password` and `smtp-password` | `nil`                                                   |
+### Redmine Configuration parameters
 
-### Mailreceiver-CronJob parameters
+| Name                    | Description                                                            | Value              |
+| ----------------------- | ---------------------------------------------------------------------- | ------------------ |
+| `redmineUsername`       | Redmine username                                                       | `user`             |
+| `redminePassword`       | Redmine user password                                                  | `""`               |
+| `redmineEmail`          | Redmine user email                                                     | `user@example.com` |
+| `redmineLanguage`       | Redmine default data language                                          | `en`               |
+| `customPostInitScripts` | Custom post-init.d user scripts                                        | `{}`               |
+| `smtpHost`              | SMTP server host                                                       | `""`               |
+| `smtpPort`              | SMTP server port                                                       | `""`               |
+| `smtpUser`              | SMTP username                                                          | `""`               |
+| `smtpPassword`          | SMTP user password                                                     | `""`               |
+| `smtpProtocol`          | SMTP protocol                                                          | `""`               |
+| `existingSecret`        | Name of existing secret containing Redmine credentials                 | `""`               |
+| `smtpExistingSecret`    | The name of an existing secret with SMTP credentials                   | `""`               |
+| `allowEmptyPassword`    | Allow the container to be started with blank passwords                 | `false`            |
+| `command`               | Override default container command (useful when using custom images)   | `[]`               |
+| `args`                  | Override default container args (useful when using custom images)      | `[]`               |
+| `extraEnvVars`          | Array with extra environment variables to add to the Redmine container | `[]`               |
+| `extraEnvVarsCM`        | Name of existing ConfigMap containing extra env vars                   | `""`               |
+| `extraEnvVarsSecret`    | Name of existing Secret containing extra env vars                      | `""`               |
 
-| Parameter                                         | Description                                                                                                                                   | Default                                     |
-|---------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------|
-| `mailReceiver.enabled`                            | Whether to enable scheduled mail-to-task CronJob                                                                                              | `false`                                     |
-| `mailReceiver.schedule`                           | Kubernetes CronJob schedule                                                                                                                   | `*/5 * * * *`                               |
-| `mailReceiver.suspend`                            | Whether to create suspended CronJob                                                                                                           | `true`                                      |
-| `mailReceiver.image.registry`                     | Mail to Task image registry                                                                                                                   | `docker.io`                                 |
-| `mailReceiver.image.repository`                   | Mail to Task image repository                                                                                                                 | `bitnami/redmine`                           |
-| `mailReceiver.image.tag`                          | Mail to Task image tag                                                                                                                        | `{TAG_NAME}`                                |
-| `mailReceiver.image.pullPolicy`                   | Mail to Task image pull policy                                                                                                                | `IfNotPresent`                              |
-| `mailReceiver.mailProtocol`                       | Mail protocol to use for reading emails: `IMAP` or `POP3`                                                                                     | `IMAP`                                      |
-| `mailReceiver.host`                               | Server to receive emails from                                                                                                                 | `""`                                        |
-| `mailReceiver.port`                               | TCP port on the `host`                                                                                                                        | `143`                                       |
-| `mailReceiver.username`                           | Login to authenticate on the `host`                                                                                                           | `""`                                        |
-| `mailReceiver.password`                           | Password to authenticate on the `host`                                                                                                        | `""`                                        |
-| `mailReceiver.ssl`                                | Whether use SSL/TLS to connect to the `host`                                                                                                  | `true`                                      |
-| `mailReceiver.startTLS`                           | Whether use StartTLS to connect to the `host`                                                                                                 | `false`                                     |
-| `mailReceiver.imapFolder`                         | IMAP only. Folder to read emails from                                                                                                         | `INBOX`                                     |
-| `mailReceiver.moveOnsuccess`                      | IMAP only. Folder to move processed emails to                                                                                                 | `""`                                        |
-| `mailReceiver.moveOnFailure`                      | IMAP only. Folder to move emails with processing errors to                                                                                    | `""`                                        |
-| `mailReceiver.unknownUserAction`                  | Action to perform is an email received from unregistered user                                                                                 | `ignore`                                    |
-| `mailReceiver.noPermissionCheck`                  | Whether skip permission check during creating a new task                                                                                      | `0`                                         |
-| `mailReceiver.noAccountNotice`                    | Whether send an email to an unregistered user created during a new task creation                                                              | `1`                                         |
-| `mailReceiver.defaultGroup`                       | Defines a group list to add created user to                                                                                                   | `""`                                        |
-| `mailReceiver.project`                            | Defines identifier of the target project for a new task                                                                                       | `""`                                        |
-| `mailReceiver.projectFromSubaddress`              | Defines email address to select project from subaddress                                                                                       | `""`                                        |
-| `mailReceiver.status`                             | Defines a new task status                                                                                                                     | `""`                                        |
-| `mailReceiver.tracker`                            | Defines a new task tracker                                                                                                                    | `""`                                        |
-| `mailReceiver.category`                           | Defines a new task category                                                                                                                   | `""`                                        |
-| `mailReceiver.priority`                           | Defines a new task priority                                                                                                                   | `""`                                        |
-| `mailReceiver.assignedTo`                         | Defines a new task priority                                                                                                                   | `""`                                        |
-| `mailReceiver.allowOverride`                      | Defines if email content is allowed to set attributes values. Values is a comma separated list of attributes or `all` to allow all attributes | `""`                                        |
-| `mailReceiver.podAnnotations`                     | Additional pod annotations                                                                                                                    | `{}`                                        |
-| `mailReceiver.podLabels`                          | Additional pod labels                                                                                                                         | `{}`                                        |
-| `mailReceiver.command`                            | Override default container command (useful when using custom images)                                                                          | `["bash"]`                                  |
-| `mailReceiver.args`                               | Override default container args (useful when using custom images)                                                                             | `["-c", "/cj/receive.sh"]`                  |
-| `mailReceiver.nodeSelector`                       | Node labels for pod assignment                                                                                                                | `{}` (The value is evaluated as a template) |
-| `mailReceiver.tolerations`                        | List of node taints to tolerate                                                                                                               | `[]` (The value is evaluated as a template) |
-| `mailReceiver.podSecurityContext.enabled`         | Enable security context for mailReceiver pods                                                                                                 | `true`                                      |
-| `mailReceiver.podSecurityContext.fsGroup`         | Group ID for the volumes of the pod                                                                                                           | `1001`                                      |
-| `mailReceiver.containerSecurityContext.enabled`   | mailReceiver Container securityContext                                                                                                        | `false`                                     |
-| `mailReceiver.containerSecurityContext.runAsUser` | User ID for the mailReceiver container                                                                                                        | `1001`                                      |
-| `mailReceiver.podAffinityPreset`                  | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                           | `""`                                        |
-| `mailReceiver.podAntiAffinityPreset`              | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                      | `soft`                                      |
-| `mailReceiver.nodeAffinityPreset.type`            | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                     | `""`                                        |
-| `mailReceiver.nodeAffinityPreset.key`             | Node label key to match Ignored if `affinity` is set.                                                                                         | `""`                                        |
-| `mailReceiver.nodeAffinityPreset.values`          | Node label values to match. Ignored if `affinity` is set.                                                                                     | `[]`                                        |
-| `mailReceiver.affinity`                           | Affinity for pod assignment                                                                                                                   | `{}` (evaluated as a template)              |
-| `mailReceiver.extraEnvVars`                       | Extra environment variables to be set on mailReceiver container                                                                               | `{}`                                        |
-| `mailReceiver.extraEnvVarsCM`                     | Name of existing ConfigMap containing extra env vars                                                                                          | `nil`                                       |
-| `mailReceiver.extraEnvVarsSecret`                 | Name of existing Secret containing extra env vars                                                                                             | `nil`                                       |
-| `mailReceiver.extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for mailReceiver container                                                           | `[]`                                        |
-| `mailReceiver.extraVolumes`                       | Optionally specify extra list of additional volumes for mailReceiver container                                                                | `[]`                                        |
-| `mailReceiver.initContainers`                     | Add additional init containers to the mailReceiver pods                                                                                       | `{}` (evaluated as a template)              |
-| `mailReceiver.sidecars`                           | Add additional sidecar containers to the mailReceiver pods                                                                                    | `{}` (evaluated as a template)              |
 
-### Volume Permissions parameters
+### Redmine deployment parameters
 
-| Parameter                             | Description                                                                                                                                               | Default                                                 |
-|---------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
-| `volumePermissions.enabled`           | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                                                 |
-| `volumePermissions.image.registry`    | Init container volume-permissions image registry                                                                                                          | `docker.io`                                             |
-| `volumePermissions.image.repository`  | Init container volume-permissions image name                                                                                                              | `bitnami/minideb`                                       |
-| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                                                                               | `buster`                                                |
-| `volumePermissions.image.pullSecrets` | Specify docker-registry secret names as an array                                                                                                          | `[]` (does not add image pull secrets to deployed pods) |
-| `volumePermissions.image.pullPolicy`  | Init container volume-permissions image pull policy                                                                                                       | `Always`                                                |
-| `volumePermissions.resources`         | Init container resource requests/limit                                                                                                                    | `nil`                                                   |
+| Name                                 | Description                                                                               | Value           |
+| ------------------------------------ | ----------------------------------------------------------------------------------------- | --------------- |
+| `replicaCount`                       | Number of Redmine replicas to deploy                                                      | `1`             |
+| `updateStrategy.type`                | Redmine deployment strategy type                                                          | `RollingUpdate` |
+| `updateStrategy.rollingUpdate`       | Redmine deployment rolling update configuration parameters                                | `{}`            |
+| `schedulerName`                      | Alternate scheduler                                                                       | `""`            |
+| `serviceAccount.create`              | Specifies whether a ServiceAccount should be created                                      | `false`         |
+| `serviceAccount.name`                | The name of the ServiceAccount to create. Defaults to the `redmine.fullname` macro        | `""`            |
+| `hostAliases`                        | Redmine pod host aliases                                                                  | `[]`            |
+| `extraVolumes`                       | Optionally specify extra list of additional volumes for Redmine pods                      | `[]`            |
+| `extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for Redmine container(s)         | `[]`            |
+| `sidecars`                           | Add additional sidecar containers to the Redmine pod                                      | `[]`            |
+| `initContainers`                     | Add additional init containers to the Redmine pods                                        | `[]`            |
+| `podLabels`                          | Extra labels for Redmine pods                                                             | `{}`            |
+| `podAnnotations`                     | Annotations for Redmine pods                                                              | `{}`            |
+| `podAffinityPreset`                  | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`            |
+| `podAntiAffinityPreset`              | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`          |
+| `nodeAffinityPreset.type`            | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`            |
+| `nodeAffinityPreset.key`             | Node label key to match. Ignored if `affinity` is set                                     | `""`            |
+| `nodeAffinityPreset.values`          | Node label values to match. Ignored if `affinity` is set                                  | `[]`            |
+| `affinity`                           | Affinity for pod assignment                                                               | `{}`            |
+| `nodeSelector`                       | Node labels for pod assignment                                                            | `{}`            |
+| `tolerations`                        | Tolerations for pod assignment                                                            | `[]`            |
+| `resources.limits`                   | The resources limits for the Redmine container                                            | `{}`            |
+| `resources.requests`                 | The requested resources for the Redmine container                                         | `{}`            |
+| `containerPort`                      | Redmine HTTP container port                                                               | `3000`          |
+| `podSecurityContext.enabled`         | Enabled Redmine pods' Security Context                                                    | `false`         |
+| `podSecurityContext.fsGroup`         | Set Redmine pod's Security Context fsGroup                                                | `1001`          |
+| `containerSecurityContext.enabled`   | Enabled Redmine containers' Security Context                                              | `false`         |
+| `containerSecurityContext.runAsUser` | Set Redmine container's Security Context runAsUser                                        | `1001`          |
+| `livenessProbe.enabled`              | Enable livenessProbe                                                                      | `true`          |
+| `livenessProbe.path`                 | Path for to check for livenessProbe                                                       | `/`             |
+| `livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                   | `300`           |
+| `livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                          | `10`            |
+| `livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                         | `5`             |
+| `livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                       | `6`             |
+| `livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                       | `1`             |
+| `readinessProbe.enabled`             | Enable readinessProbe                                                                     | `true`          |
+| `readinessProbe.path`                | Path to check for readinessProbe                                                          | `/`             |
+| `readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                  | `5`             |
+| `readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                         | `10`            |
+| `readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                        | `5`             |
+| `readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                      | `6`             |
+| `readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                      | `1`             |
+| `startupProbe.enabled`               | Enable startupProbe                                                                       | `false`         |
+| `startupProbe.path`                  | Path to check for startupProbe                                                            | `/`             |
+| `startupProbe.initialDelaySeconds`   | Initial delay seconds for startupProbe                                                    | `300`           |
+| `startupProbe.periodSeconds`         | Period seconds for startupProbe                                                           | `10`            |
+| `startupProbe.timeoutSeconds`        | Timeout seconds for startupProbe                                                          | `5`             |
+| `startupProbe.failureThreshold`      | Failure threshold for startupProbe                                                        | `6`             |
+| `startupProbe.successThreshold`      | Success threshold for startupProbe                                                        | `1`             |
+| `customLivenessProbe`                | Custom livenessProbe that overrides the default one                                       | `{}`            |
+| `customReadinessProbe`               | Custom readinessProbe that overrides the default one                                      | `{}`            |
+| `customStartupProbe`                 | Custom startupProbe that overrides the default one                                        | `{}`            |
 
-### Database parameters
 
-| Parameter                         | Description                                                                                                                              | Default                                                |
-|-----------------------------------|------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------|
-| `databaseType`                    | Select database type                                                                                                                     | `mariadb` (allowed values: "mariadb" and "postgresql") |
-| `mariadb.enabled`                 | Whether to deploy a MariaDB server to satisfy the database requirements                                                                  | `true`                                                 |
-| `mariadb.existingSecret`          | Optional secret storing the MariaDB passwords                                                                                            | `nil`                                                  |
-| `mariadb.auth.rootPassword`       | MariaDB admin password                                                                                                                   | `nil`                                                  |
-| `postgresql.enabled`              | Whether to deploy a PostgreSQL server to satisfy the database requirements                                                               | `false`                                                |
-| `postgresql.postgresqlDatabase`   | PostgreSQL database                                                                                                                      | `bitnami_redmine`                                      |
-| `postgresql.postgresqlUsername`   | PostgreSQL user                                                                                                                          | `bn_redmine`                                           |
-| `postgresql.postgresqlPassword`   | PostgreSQL password                                                                                                                      | `nil`                                                  |
-| `externalDatabase.host`           | Host of the external database                                                                                                            | `""`                                                   |
-| `externalDatabase.name`           | Name of the external database                                                                                                            | `bitnami_redmine`                                      |
-| `externalDatabase.user`           | External db user                                                                                                                         | `bn_redmine`                                           |
-| `externalDatabase.password`       | Password for the db user                                                                                                                 | `""`                                                   |
-| `externalDatabase.port`           | Database port number                                                                                                                     | `3306`                                                 |
-| `externalDatabase.existingSecret` | Use an existing secret for external db password. Must contain the keys `redmine-password` or `mariadb-password` depending on the DB type | `""`                                                   |
+### Traffic Exposure Parameters
 
-### Deployment parameters
+| Name                               | Description                                                                                                                      | Value                    |
+| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.type`                     | Redmine service type                                                                                                             | `LoadBalancer`           |
+| `service.port`                     | Redmine service HTTP port                                                                                                        | `80`                     |
+| `service.nodePort`                 | Node port for HTTP                                                                                                               | `""`                     |
+| `service.clusterIP`                | Redmine service Cluster IP                                                                                                       | `""`                     |
+| `service.loadBalancerIP`           | Redmine service Load Balancer IP                                                                                                 | `""`                     |
+| `service.loadBalancerSourceRanges` | Redmine service Load Balancer sources                                                                                            | `[]`                     |
+| `service.externalTrafficPolicy`    | Redmine service external traffic policy                                                                                          | `Cluster`                |
+| `service.annotations`              | Additional custom annotations for Redmine service                                                                                | `{}`                     |
+| `service.extraPorts`               | Extra port to expose on Redmine service                                                                                          | `[]`                     |
+| `ingress.enabled`                  | Enable ingress record generation for Redmine                                                                                     | `false`                  |
+| `ingress.selfSigned`               | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
+| `ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
+| `ingress.hostname`                 | Default host for the ingress record                                                                                              | `redmine.local`          |
+| `ingress.path`                     | Default path for the ingress record                                                                                              | `/`                      |
+| `ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.tls`                      | Enable TLS configuration for the host defined at `ingress.hostname` parameter                                                    | `false`                  |
+| `ingress.extraHosts`               | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                     |
+| `ingress.extraPaths`               | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |
+| `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
+| `ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
 
-| Parameter                            | Description                                                                               | Default                                     |
-|--------------------------------------|-------------------------------------------------------------------------------------------|---------------------------------------------|
-| `replicas`                           | The number of pod replicas                                                                | `1`                                         |
-| `updateStrategy.type`                | Update strategy to use for the deployment                                                 | `RollingUpdate`                             |
-| `priorityClassName`                  | Redmine priorityClassName                                                                 | `nil`                                       |
-| `nodeSelector`                       | Node labels for pod assignment                                                            | `{}` (The value is evaluated as a template) |
-| `tolerations`                        | List of node taints to tolerate                                                           | `[]` (The value is evaluated as a template) |
-| `podAnnotations`                     | Additional pod annotations                                                                | `{}`                                        |
-| `podLabels`                          | Additional pod labels                                                                     | `{}`                                        |
-| `podAffinityPreset`                  | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                                        |
-| `podAntiAffinityPreset`              | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`                                      |
-| `nodeAffinityPreset.type`            | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                                        |
-| `nodeAffinityPreset.key`             | Node label key to match Ignored if `affinity` is set.                                     | `""`                                        |
-| `nodeAffinityPreset.values`          | Node label values to match. Ignored if `affinity` is set.                                 | `[]`                                        |
-| `affinity`                           | Affinity for pod assignment                                                               | `{}` (evaluated as a template)              |
-| `podAnnotations`                     | Pod annotations                                                                           | `{}`                                        |
-| `podSecurityContext.enabled`         | Enable security context for Redmine pods                                                  | `false`                                     |
-| `podSecurityContext.fsGroup`         | Group ID for the volumes of the pod                                                       | `0`                                         |
-| `containerSecurityContext.enabled`   | Redmine Container securityContext                                                         | `false`                                     |
-| `containerSecurityContext.runAsUser` | User ID for the Redmine container                                                         | `0`                                         |
-| `livenessProbe.enabled`              | Whether to enable the livenessProbe or not                                                | `true`                                      |
-| `livenessProbe.enabled`              | The path against which to perform the livenessProbe                                       | `/`                                         |
-| `livenessProbe.initialDelaySeconds`  | Delay before liveness probe is initiated                                                  | 300                                         |
-| `livenessProbe.periodSeconds`        | How often to perform the probe                                                            | 10                                          |
-| `livenessProbe.timeoutSeconds`       | When the probe times out                                                                  | 5                                           |
-| `livenessProbe.successThreshold`     | Minimum consecutive successes for the probe                                               | 1                                           |
-| `livenessProbe.failureThreshold`     | Minimum consecutive failures for the probe                                                | 3                                           |
-| `readinessProbe.enabled`             | Whether to enable the livenessProbe or not                                                | `true`                                      |
-| `readinessProbe.enabled`             | The path against which to perform the readinessProbe                                      | `/`                                         |
-| `readinessProbe.initialDelaySeconds` | Delay before readiness probe is initiated                                                 | 5                                           |
-| `readinessProbe.periodSeconds`       | How often to perform the probe                                                            | 10                                          |
-| `readinessProbe.timeoutSeconds`      | When the probe times out                                                                  | 1                                           |
-| `readinessProbe.successThreshold`    | Minimum consecutive successes for the probe                                               | 1                                           |
-| `readinessProbe.failureThreshold`    | Minimum consecutive failures for the probe                                                | 3                                           |
-| `customLivenessProbe`                | Override default liveness probe                                                           | `nil`                                       |
-| `customReadinessProbe`               | Override default readiness probe                                                          | `nil`                                       |
-| `resources`                          | Resources allocation (Requests and Limits)                                                | `{}`                                        |
-| `extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for redmine container            | `[]`                                        |
-| `extraVolumes`                       | Optionally specify extra list of additional volumes for redmine container                 | `[]`                                        |
-| `initContainers`                     | Add additional init containers to the redmine pods                                        | `{}` (evaluated as a template)              |
-| `sidecars`                           | Add additional sidecar containers to the redmine pods                                     | `{}` (evaluated as a template)              |
 
-### Exposure parameters
+### Persistence Parameters
 
-| Parameter                          | Description                                                          | Default                                      |
-|------------------------------------|----------------------------------------------------------------------|----------------------------------------------|
-| `service.type`                     | Kubernetes Service type                                              | `LoadBalancer`                               |
-| `service.port`                     | Service HTTP port                                                    | `80`                                         |
-| `service.clusterIP`                | Redmine service clusterIP IP                                         | `None`                                       |
-| `service.nodePorts.http`           | Kubernetes http node port                                            | `""`                                         |
-| `service.externalTrafficPolicy`    | Enable client source IP preservation                                 | `Cluster`                                    |
-| `service.loadBalancerIP`           | LoadBalancer service IP address                                      | `""`                                         |
-| `service.loadBalancerSourceRanges` | An array of load balancer sources                                    | `0.0.0.0/0`                                  |
-| `serviceAccount.create`            | Specifies whether a ServiceAccount should be created                 | `false`                                      |
-| `serviceAccount.name`              | The name of the ServiceAccount to create                             | Generated using the `redmine.fullname` macro |
-| `service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP" | `None`                                       |
-| `ingress.enabled`                  | Enable ingress controller resource                                   | `false`                                      |
-| `ingress.certManager`              | Add annotations for cert-manager                                     | `false`                                      |
-| `ingress.path`                     | Ingress path                                                         | `/`                                          |
-| `ingress.pathType`                 | Ingress path type                                                    | `ImplementationSpecific`                     |
-| `ingress.hostname`                 | Default host for the ingress resource                                | `redmine.local`                              |
-| `ingress.tls`                      | Enable TLS configuration                                             | `false`                                      |
-| `ingress.annotations`              | Ingress annotations                                                  | `{}`                                         |
-| `ingress.extraHosts[0].name`       | Extra hosts for your Redmine installation                            | `nil`                                        |
-| `ingress.extraHosts[0].path`       | Path within the url structure                                        | `nil`                                        |
-| `ingress.extraTls[0].hosts[0]`     | Extra TLS hosts                                                      | `nil`                                        |
-| `ingress.extraTls[0].secretName`   | TLS Secret (certificates) for extra TLS hosts                        | `nil`                                        |
-| `ingress.secrets[0].name`          | TLS Secret Name                                                      | `nil`                                        |
-| `ingress.secrets[0].certificate`   | TLS Secret Certificate                                               | `nil`                                        |
-| `ingress.secrets[0].key`           | TLS Secret Key                                                       | `nil`                                        |
+| Name                                          | Description                                                                                     | Value   |
+| --------------------------------------------- | ----------------------------------------------------------------------------------------------- | ------- |
+| `persistence.enabled`                         | Enable persistence using Persistent Volume Claims                                               | `true`  |
+| `persistence.storageClass`                    | Persistent Volume storage class                                                                 | `""`    |
+| `persistence.accessModes`                     | Persistent Volume access modes                                                                  | `[]`    |
+| `persistence.size`                            | Persistent Volume size                                                                          | `8Gi`   |
+| `persistence.dataSource`                      | Custom PVC data source                                                                          | `{}`    |
+| `persistence.existingClaim`                   | The name of an existing PVC to use for persistence                                              | `""`    |
+| `volumePermissions.enabled`                   | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false` |
+| `volumePermissions.resources.limits`          | The resources limits for the init container                                                     | `{}`    |
+| `volumePermissions.resources.requests`        | The requested resources for the init container                                                  | `{}`    |
+| `volumePermissions.securityContext.runAsUser` | Set init container's Security Context runAsUser                                                 | `0`     |
 
-### Persistence parameters
 
-| Parameter                   | Description                  | Default                                     |
-|-----------------------------|------------------------------|---------------------------------------------|
-| `persistence.enabled`       | Enable persistence using PVC | `true`                                      |
-| `persistence.existingClaim` | The name of an existing PVC  | `nil`                                       |
-| `persistence.storageClass`  | PVC Storage Class            | `nil` (uses alpha storage class annotation) |
-| `persistence.accessModes`   | PVC Access Modes             | `[ReadWriteOnce]`                           |
-| `persistence.size`          | PVC Storage Request          | `8Gi`                                       |
+### Other Parameters
 
-### Pod Disruption parameters
+| Name                                 | Description                                                    | Value   |
+| ------------------------------------ | -------------------------------------------------------------- | ------- |
+| `podDisruptionBudget.create`         | Enable a Pod Disruption Budget creation                        | `false` |
+| `podDisruptionBudget.minAvailable`   | Minimum number/percentage of pods that should remain scheduled | `""`    |
+| `podDisruptionBudget.maxUnavailable` | Maximum number/percentage of pods that may be made unavailable | `""`    |
+| `autoscaling.enabled`                | Enable Horizontal POD autoscaling for Redmine                  | `false` |
+| `autoscaling.minReplicas`            | Minimum number of Redmine replicas                             | `1`     |
+| `autoscaling.maxReplicas`            | Maximum number of Redmine replicas                             | `11`    |
+| `autoscaling.targetCPU`              | Target CPU utilization percentage                              | `50`    |
+| `autoscaling.targetMemory`           | Target Memory utilization percentage                           | `50`    |
 
-| Parameter                            | Description                  | Default |
-|--------------------------------------|------------------------------|---------|
-| `podDisruptionBudget.enabled`        | Pod Disruption Budget toggle | `false` |
-| `podDisruptionBudget.minAvailable`   | Minimum available pods       | `nil`   |
-| `podDisruptionBudget.maxUnavailable` | Maximum unavailable pods     | `nil`   |
+
+### Database Parameters
+
+| Name                                        | Description                                                                                                                              | Value             |
+| ------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ----------------- |
+| `databaseType`                              | Redmine database type. Allowed values: `mariadb` and `postgresql`                                                                        | `mariadb`         |
+| `mariadb.enabled`                           | Whether to deploy a MariaDB server to satisfy the database requirements                                                                  | `true`            |
+| `mariadb.architecture`                      | MariaDB architecture. Allowed values: `standalone` or `replication`                                                                      | `standalone`      |
+| `mariadb.auth.rootPassword`                 | MariaDB root password                                                                                                                    | `""`              |
+| `mariadb.auth.username`                     | MariaDB username                                                                                                                         | `bn_redmine`      |
+| `mariadb.auth.password`                     | MariaDB password                                                                                                                         | `""`              |
+| `mariadb.auth.existingSecret`               | Name of existing secret object                                                                                                           | `""`              |
+| `mariadb.primary.persistence.enabled`       | Enable MariaDB persistence using PVC                                                                                                     | `true`            |
+| `mariadb.primary.persistence.existingClaim` | Provide an existing `PersistentVolumeClaim`, the value is evaluated as a template                                                        | `""`              |
+| `mariadb.primary.persistence.storageClass`  | PVC Storage Class for MariaDB volume                                                                                                     | `""`              |
+| `mariadb.primary.persistence.accessModes`   | PVC Access Mode for MariaDB volume                                                                                                       | `[]`              |
+| `mariadb.primary.persistence.size`          | PVC Storage Request for MariaDB volume                                                                                                   | `8Gi`             |
+| `mariadb.primary.persistence.hostPath`      | Set path in case you want to use local host path volumes (not recommended in production)                                                 | `""`              |
+| `postgresql.enabled`                        | Whether to deploy a PostgreSQL server to satisfy the database requirements                                                               | `true`            |
+| `postgresql.postgresqlUsername`             | PostgreSQL username                                                                                                                      | `bn_redmine`      |
+| `postgresql.postgresqlPassword`             | PostgreSQL password                                                                                                                      | `""`              |
+| `postgresql.postgresqlDatabase`             | PostgreSQL database                                                                                                                      | `bitnami_redmine` |
+| `postgresql.existingSecret`                 | Name of existing secret object                                                                                                           | `""`              |
+| `postgresql.persistence.enabled`            | Enable PostgreSQL persistence using PVC                                                                                                  | `true`            |
+| `postgresql.persistence.existingClaim`      | Provide an existing `PersistentVolumeClaim`, the value is evaluated as a template                                                        | `""`              |
+| `postgresql.persistence.storageClass`       | PVC Storage Class for PostgreSQL volume                                                                                                  | `""`              |
+| `postgresql.persistence.accessMode`         | PVC Access Mode for PostgreSQL volume                                                                                                    | `ReadWriteOnce`   |
+| `postgresql.persistence.size`               | PVC Storage Request for PostgreSQL volume                                                                                                | `8Gi`             |
+| `externalDatabase.host`                     | External Database server host                                                                                                            | `""`              |
+| `externalDatabase.port`                     | External Database server port                                                                                                            | `5432`            |
+| `externalDatabase.user`                     | External Database username                                                                                                               | `bn_redmine`      |
+| `externalDatabase.password`                 | External Database user password                                                                                                          | `""`              |
+| `externalDatabase.database`                 | External Database database name                                                                                                          | `bitnami_redmine` |
+| `externalDatabase.existingSecret`           | Use an existing secret for external db password. Must contain the keys `redmine-password` or `mariadb-password` depending on the DB type | `""`              |
+
+
+### Mail Receiver/Cron Job Parameters
+
+| Name                                                 | Description                                                                                                                                   | Value                     |
+| ---------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
+| `mailReceiver.enabled`                               | Whether to enable scheduled mail-to-task CronJob                                                                                              | `false`                   |
+| `mailReceiver.schedule`                              | Kubernetes CronJob schedule                                                                                                                   | `*/5 * * * *`             |
+| `mailReceiver.suspend`                               | Whether to create suspended CronJob                                                                                                           | `true`                    |
+| `mailReceiver.podAnnotations`                        | Additional pod annotations                                                                                                                    | `{}`                      |
+| `mailReceiver.podLabels`                             | Additional pod labels                                                                                                                         | `{}`                      |
+| `mailReceiver.priorityClassName`                     | Redmine pods' priority.                                                                                                                       | `""`                      |
+| `mailReceiver.mailProtocol`                          | Mail protocol to use for reading emails. Allowed values: `IMAP` and `POP3`                                                                    | `IMAP`                    |
+| `mailReceiver.host`                                  | Server to receive emails from                                                                                                                 | `""`                      |
+| `mailReceiver.port`                                  | TCP port on the `host`                                                                                                                        | `993`                     |
+| `mailReceiver.username`                              | Login to authenticate on the `host`                                                                                                           | `""`                      |
+| `mailReceiver.password`                              | Password to authenticate on the `host`                                                                                                        | `""`                      |
+| `mailReceiver.ssl`                                   | Whether use SSL/TLS to connect to the `host`                                                                                                  | `true`                    |
+| `mailReceiver.startTLS`                              | Whether use StartTLS to connect to the `host`                                                                                                 | `false`                   |
+| `mailReceiver.imapFolder`                            | IMAP only. Folder to read emails from                                                                                                         | `INBOX`                   |
+| `mailReceiver.moveOnSuccess`                         | IMAP only. Folder to move processed emails to                                                                                                 | `""`                      |
+| `mailReceiver.moveOnFailure`                         | IMAP only. Folder to move emails with processing errors to                                                                                    | `""`                      |
+| `mailReceiver.unknownUserAction`                     | Action to perform is an email received from unregistered user                                                                                 | `ignore`                  |
+| `mailReceiver.noPermissionCheck`                     | Whether skip permission check during creating a new task                                                                                      | `0`                       |
+| `mailReceiver.noAccountNotice`                       | Whether send an email to an unregistered user created during a new task creation                                                              | `1`                       |
+| `mailReceiver.defaultGroup`                          | Defines a group list to add created user to                                                                                                   | `""`                      |
+| `mailReceiver.project`                               | Defines identifier of the target project for a new task                                                                                       | `""`                      |
+| `mailReceiver.projectFromSubaddress`                 | Defines email address to select project from subaddress                                                                                       | `""`                      |
+| `mailReceiver.status`                                | Defines a new task status                                                                                                                     | `""`                      |
+| `mailReceiver.tracker`                               | Defines a new task tracker                                                                                                                    | `""`                      |
+| `mailReceiver.category`                              | Defines a new task category                                                                                                                   | `""`                      |
+| `mailReceiver.priority`                              | Defines a new task priority                                                                                                                   | `""`                      |
+| `mailReceiver.assignedTo`                            | Defines a new task assignee                                                                                                                   | `""`                      |
+| `mailReceiver.allowOverride`                         | Defines if email content is allowed to set attributes values. Values is a comma separated list of attributes or `all` to allow all attributes | `""`                      |
+| `mailReceiver.extraEnvVars`                          | Extra environment variables to be set on mailReceiver container                                                                               | `[]`                      |
+| `mailReceiver.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars                                                                                          | `""`                      |
+| `mailReceiver.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars                                                                                             | `""`                      |
+| `mailReceiver.extraVolumes`                          | Optionally specify extra list of additional volumes for mailReceiver container                                                                | `[]`                      |
+| `mailReceiver.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for mailReceiver container                                                           | `[]`                      |
+| `mailReceiver.command`                               | Override default container command (useful when using custom images)                                                                          | `["bash"]`                |
+| `mailReceiver.args`                                  | Override default container args (useful when using custom images)                                                                             | `["-c","/cj/receive.sh"]` |
+| `mailReceiver.podSecurityContext.enabled`            | Enabled Redmine pods' Security Context                                                                                                        | `true`                    |
+| `mailReceiver.podSecurityContext.fsGroup`            | Set Redmine pod's Security Context fsGroup                                                                                                    | `1001`                    |
+| `mailReceiver.containerSecurityContext.enabled`      | mailReceiver Container securityContext                                                                                                        | `false`                   |
+| `mailReceiver.containerSecurityContext.runAsUser`    | User ID for the mailReceiver container                                                                                                        | `1001`                    |
+| `mailReceiver.containerSecurityContext.runAsNonRoot` | Whether to run the mailReceiver container as a non-root user                                                                                  | `true`                    |
+| `mailReceiver.initContainers`                        | Add additional init containers to the mailReceiver pods                                                                                       | `[]`                      |
+| `mailReceiver.sidecars`                              | Add additional sidecar containers to the mailReceiver pods                                                                                    | `[]`                      |
+| `mailReceiver.podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                           | `""`                      |
+| `mailReceiver.podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                      | `soft`                    |
+| `mailReceiver.nodeAffinityPreset.type`               | Node affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                          | `""`                      |
+| `mailReceiver.nodeAffinityPreset.key`                | Node label key to match. Ignored if `affinity` is set.                                                                                        | `""`                      |
+| `mailReceiver.nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set.                                                                                     | `[]`                      |
+| `mailReceiver.affinity`                              | Affinity for pod assignment                                                                                                                   | `{}`                      |
+| `mailReceiver.nodeSelector`                          | Node labels for pod assignment                                                                                                                | `{}`                      |
+| `mailReceiver.tolerations`                           | Tolerations for pod assignment                                                                                                                | `[]`                      |
+
 
 ### Custom Certificates parameters
-| Parameter                                            | Description                                                        | Default                                  |
-|------------------------------------------------------|--------------------------------------------------------------------|------------------------------------------|
+
+| Name                                                 | Description                                                        | Value                                    |
+| ---------------------------------------------------- | ------------------------------------------------------------------ | ---------------------------------------- |
 | `certificates.customCertificate.certificateSecret`   | Secret containing the certificate and key to add                   | `""`                                     |
-| `certificates.customCertificate.chainSecret.name`    | Name of the secret containing the certificate chain                | `""`                                     |
-| `certificates.customCertificate.chainSecret.key`     | Key of the certificate chain file inside the secret                | `""`                                     |
 | `certificates.customCertificate.certificateLocation` | Location in the container to store the certificate                 | `/etc/ssl/certs/ssl-cert-snakeoil.pem`   |
 | `certificates.customCertificate.keyLocation`         | Location in the container to store the private key                 | `/etc/ssl/private/ssl-cert-snakeoil.key` |
-| `certificates.customCertificate.chainLocation`       | Location in the container to store the certificate chain           | `/etc/ssl/certs/chain.pem`               |
+| `certificates.customCertificate.chainLocation`       | Location in the container to store the certificate chain           | `/etc/ssl/certs/mychain.pem`             |
+| `certificates.customCertificate.chainSecret.name`    | Name of the secret containing the certificate chain                | `""`                                     |
+| `certificates.customCertificate.chainSecret.key`     | Key of the certificate chain file inside the secret                | `""`                                     |
 | `certificates.customCA`                              | Defines a list of secrets to import into the container trust store | `[]`                                     |
-| `certificates.image.registry`                        | Container sidecar registry                                         | `docker.io`                              |
-| `certificates.image.repository`                      | Container sidecar image                                            | `bitnami/minideb`                        |
-| `certificates.image.tag`                             | Container sidecar image tag                                        | `buster`                                 |
-| `certificates.image.pullPolicy`                      | Container sidecar image pull policy                                | `IfNotPresent`                           |
-| `certificates.image.pullSecrets`                     | Container sidecar image pull secrets                               | `image.pullSecrets`                      |
-| `certificates.extraEnvVars`                          | Container sidecar extra environment variables (eg proxy)           | `[]`                                     |
+| `certificates.image.registry`                        | Redmine image registry                                             | `docker.io`                              |
+| `certificates.image.repository`                      | Redmine image repository                                           | `bitnami/bitnami-shell`                  |
+| `certificates.image.tag`                             | Redmine image tag (immutable tags are recommended)                 | `10-debian-10-r254`                      |
+| `certificates.image.pullPolicy`                      | Redmine image pull policy                                          | `IfNotPresent`                           |
+| `certificates.image.pullSecrets`                     | Redmine image pull secrets                                         | `[]`                                     |
+| `certificates.extraEnvVars`                          | Container sidecar extra environment variables (e.g. proxy)         | `[]`                                     |
 
-The above parameters map to the env variables defined in [bitnami/redmine](http://github.com/bitnami/bitnami-docker-redmine). For more information please refer to the [bitnami/redmine](http://github.com/bitnami/bitnami-docker-redmine) image documentation.
+
+### NetworkPolicy parameters
+
+| Name                                                          | Description                                                                                                                 | Value   |
+| ------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `networkPolicy.enabled`                                       | Enable network policies                                                                                                     | `false` |
+| `networkPolicy.ingress.enabled`                               | Enable network policy for Ingress Proxies                                                                                   | `false` |
+| `networkPolicy.ingress.namespaceSelector`                     | Ingress Proxy namespace selector labels. These labels will be used to identify the Ingress Proxy's namespace.               | `{}`    |
+| `networkPolicy.ingress.podSelector`                           | Ingress Proxy pods selector labels. These labels will be used to identify the Ingress Proxy pods.                           | `{}`    |
+| `networkPolicy.ingressRules.backendOnlyAccessibleByFrontend`  | Enable ingress rule that makes the backend (mariadb) only accessible by Redmine's pods.                                     | `false` |
+| `networkPolicy.ingressRules.customBackendSelector`            | Backend selector labels. These labels will be used to identify the backend pods.                                            | `{}`    |
+| `networkPolicy.ingressRules.accessOnlyFrom.enabled`           | Enable ingress rule that makes Redmine only accessible from a particular origin                                             | `false` |
+| `networkPolicy.ingressRules.accessOnlyFrom.namespaceSelector` | Namespace selector label that is allowed to access Redmine. This label will be used to identified the allowed namespace(s). | `{}`    |
+| `networkPolicy.ingressRules.accessOnlyFrom.podSelector`       | Pods selector label that is allowed to access Redmine. This label will be used to identified the allowed pod(s).            | `{}`    |
+| `networkPolicy.ingressRules.customRules`                      | Custom network policy ingress rule                                                                                          | `{}`    |
+| `networkPolicy.egressRules.denyConnectionsToExternal`         | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).                              | `false` |
+| `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                  | `{}`    |
+
+
+The above parameters map to the env variables defined in [bitnami/redmine](https://github.com/bitnami/bitnami-docker-redmine). For more information please refer to the [bitnami/redmine](https://github.com/bitnami/bitnami-docker-redmine) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -332,13 +384,21 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 Redmine writes uploaded files to a persistent volume. By default that volume cannot be shared between pods (RWO). In such a configuration the `replicas` option must be set to `1`. If the persistent volume supports more than one writer (RWX), ie NFS, `replicas` can be greater than `1`.
 
+> **Important**: When running more than one instance of Redmine they must share the same `secret_key_base` to have sessions working acreoss all instances.
+> This can be achieved by setting
+> ```
+>   extraEnvVars:
+>    - name: SECRET_KEY_BASE
+>      value: someredminesecretkeybase
+> ```
+
 ### Deploying to a sub-URI
 
 (adapted from https://github.com/bitnami/bitnami-docker-redmine)
 
 On certain occasions, you may need that Redmine is available under a specific sub-URI path rather than the root. A common scenario to this problem may arise if you plan to set up your Redmine container behind a reverse proxy. To deploy your Redmine container using a certain sub-URI you just need to follow these steps:
 
-#### Create a configmap containing an altered version of init.sh
+#### Create a configmap containing an altered version of post-init.sh
 
 ```yaml
 apiVersion: v1
@@ -350,18 +410,8 @@ metadata:
   ...
 data:
 
-  init.sh: |-
-
+  post-init.sh: |-
     #!/bin/bash
-
-    # Set default values depending on database variation
-    if [ -n "$REDMINE_DB_POSTGRES" ]; then
-        export REDMINE_DB_PORT_NUMBER=${REDMINE_DB_PORT_NUMBER:-5432}
-        export REDMINE_DB_USERNAME=${REDMINE_DB_USERNAME:-postgres}
-    elif [ -n "$REDMINE_DB_MYSQL" ]; then
-        export REDMINE_DB_PORT_NUMBER=${REDMINE_DB_PORT_NUMBER:-3306}
-        export REDMINE_DB_USERNAME=${REDMINE_DB_USERNAME:-root}
-    fi
 
     # REPLACE WITH YOUR OWN SUB-URI
     SUB_URI_PATH='/redmine'
@@ -370,13 +420,11 @@ data:
     config1=/opt/bitnami/redmine/config.ru
     config2=/opt/bitnami/redmine/config/environment.rb
 
-    if [[ ! -d /opt/bitnami/redmine/conf/ ]]; then
-        sed -i '$ d' ${config1}
-        echo 'map ActionController::Base.config.try(:relative_url_root) || "/" do' >> ${config1}
-        echo 'run Rails.application' >> ${config1}
-        echo 'end' >> ${config1}
-        echo 'Redmine::Utils::relative_url_root = "'${SUB_URI_PATH}'"' >> ${config2}
-    fi
+    sed -i '$ d' ${config1}
+    echo 'map ActionController::Base.config.try(:relative_url_root) || "/" do' >> ${config1}
+    echo 'run Rails.application' >> ${config1}
+    echo 'end' >> ${config1}
+    echo 'Redmine::Utils::relative_url_root = "'${SUB_URI_PATH}'"' >> ${config2}
 
     SUB_URI_PATH=$(echo ${SUB_URI_PATH} | sed -e 's|/|\\/|g')
     sed -i -e "s/\(relative_url_root\ \=\ \"\).*\(\"\)/\1${SUB_URI_PATH}\2/" ${config2}
@@ -396,8 +444,8 @@ extraVolumes:
 ##
 extraVolumeMounts:
   - name: "redmine-init-volume"
-    mountPath: "/init.sh"
-    subPath: init.sh
+    mountPath: "/post-init.sh"
+    subPath: post-init.sh
 ```
 
 #### Change the probes URI
@@ -498,7 +546,47 @@ Find more information about how to deal with common errors related to Bitnami’
 
 ## Upgrading
 
-### 15.0.0
+### To 17.0.0
+
+In this version, the `image` block is defined once and is used in the different templates, while in the previous version, the `image` block was duplicated for the main container and the mail receiver one
+
+```yaml
+image:
+  registry: docker.io
+  repository: bitnami/redmine
+  tag: 4.2.2
+```
+VS
+```yaml
+image:
+  registry: docker.io
+  repository: bitnami/redmine
+  tag: 4.2.2
+...
+mailReceiver:
+  image:
+    registry: docker.io
+    repository: bitnami/redmine
+    tag: 4.2.2
+```
+
+See [PR#7114](https://github.com/bitnami/charts/pull/7114) for more info about the implemented changes
+
+### To 16.0.0
+
+The [Bitnami Redmine](https://github.com/bitnami/bitnami-docker-redmine) image was refactored and now the source code is published in GitHub in the [`rootfs`](https://github.com/bitnami/bitnami-docker-redmine/tree/master/4/debian-10/rootfs) folder of the container image repository.
+
+Upgrades from previous versions require to specify `--set volumePermissions.enabled=true` in order for all features to work properly:
+
+```console
+$ helm upgrade example bitnami/redmine --set redminePassword=$REDMINE_PASSWORD --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set volumePermissions.enabled=true
+```
+
+In addition, the `replicas` parameter was renamed to `replicaCount`.
+
+Full compatibility is not guaranteed due to the amount of involved changes, however no breaking changes are expected aside from the ones mentioned above.
+
+### To 15.0.0
 
 [On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version includes all the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
 
@@ -615,3 +703,11 @@ $ kubectl patch deployment redmine-postgresql --type=json -p='[{"op": "remove", 
 # If using mariadb as database
 $ kubectl delete statefulset redmine-mariadb --cascade=false
 ```
+
+## Community supported solution
+
+Please, note this Helm chart is a community-supported solution. This means that the Bitnami team is not actively working on new features/improvements nor providing support through GitHub Issues for this Helm chart. Any new issue will stay open for 20 days to allow the community to contribute, after 15 days without activity the issue will be marked as stale being closed after 5 days.
+
+The Bitnami team will review any PR that is created, feel free to create a PR if you find any issue or want to implement a new feature.
+
+New versions are not going to be affected. Once a new version is released in the upstream project, the Bitnami container image will be updated to use the latest version.

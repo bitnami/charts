@@ -1,3 +1,7 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
 {{- if or .Values.mariadb.enabled .Values.externalDatabase.host -}}
 ** Please be patient while the chart is being deployed **
 {{- if and .Values.ingress.enabled (ne .Values.service.type "ClusterIP") }}
@@ -50,12 +54,14 @@ host. To configure OrangeHRM to use and external database host:
 
 1. Complete your OrangeHRM deployment by running:
 
-  helm upgrade {{ .Release.Name }} --set service.type={{ .Values.service.type }},mariadb.enabled=false,externalDatabase.host=YOUR_EXTERNAL_DATABASE_HOST bitnami/orangehrm
+  helm upgrade --namespace {{ .Release.Namespace }} {{ .Release.Name }} --set service.type={{ .Values.service.type }},mariadb.enabled=false,externalDatabase.host=YOUR_EXTERNAL_DATABASE_HOST bitnami/orangehrm
 
 {{- end }}
 
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- include "common.warnings.rollingTag" .Values.metrics.image }}
+{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
+{{- include "common.warnings.rollingTag" .Values.certificates.image }}
 
 {{- $passwordValidationErrors := list -}}
 {{- $databaseSecretName := include "orangehrm.databaseSecretName" . -}}

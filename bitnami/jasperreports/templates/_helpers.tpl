@@ -83,7 +83,7 @@ Return the MariaDB Secret Name
 {{- else if .Values.externalDatabase.existingSecret -}}
     {{- printf "%s" .Values.externalDatabase.existingSecret -}}
 {{- else -}}
-    {{- printf "%s-%s" .Release.Name "externaldb" -}}
+    {{- printf "%s-%s" (include "common.names.fullname" .) "externaldb" -}}
 {{- end -}}
 {{- end -}}
 

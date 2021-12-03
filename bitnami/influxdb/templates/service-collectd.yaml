@@ -1,0 +1,48 @@
+{{- if .Values.collectd.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "common.names.fullname" . }}-collectd
+  labels:
+    {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: influxdb
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if or .Values.collectd.service.annotations .Values.commonAnnotations }}
+  annotations:
+  {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.collectd.service.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.collectd.service.annotations "context" $) | nindent 4 }}
+  {{- end }}
+  {{- end }}
+spec:
+  type: {{ .Values.collectd.service.type }}
+  {{- if and .Values.collectd.service.loadBalancerIP (eq .Values.collectd.service.type "LoadBalancer") }}
+  loadBalancerIP: {{ .Values.collectd.service.loadBalancerIP }}
+  {{- end }}
+  {{- if and (eq .Values.collectd.service.type "LoadBalancer") .Values.collectd.service.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges:
+  {{- with .Values.collectd.service.loadBalancerSourceRanges }}
+{{ toYaml . | nindent 4 }}
+  {{- end }}
+  {{- end }}
+  {{- if and (eq .Values.collectd.service.type "ClusterIP") .Values.collectd.service.clusterIP }}
+  clusterIP: {{ .Values.collectd.service.clusterIP }}
+  {{- end }}
+  ports:
+    - port: {{ .Values.collectd.service.port }}
+      targetPort: {{ .Values.collectd.service.port }}
+      protocol: UDP
+      name: udp
+      {{- if (and (or (eq .Values.collectd.service.type "NodePort") (eq .Values.collectd.service.type "LoadBalancer")) (not (empty .Values.collectd.service.nodePort)))}}
+      nodePort: {{ .Values.collectd.service.nodePort }}
+      {{- else if eq .Values.collectd.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+  selector:
+    {{- include "common.labels.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/component: influxdb
+{{- end }}

@@ -1,0 +1,47 @@
+{{- if .Values.compactor.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "grafana-tempo.compactor.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: compactor
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if or .Values.commonAnnotations .Values.compactor.service.annotations }}
+  annotations:
+    {{- if .Values.compactor.service.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.compactor.service.annotations "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+spec:
+  type: {{ .Values.compactor.service.type }}
+  {{- if .Values.compactor.service.clusterIP }}
+  clusterIP: {{ .Values.compactor.service.clusterIP }}
+  {{- end }}
+  {{- if (or (eq .Values.compactor.service.type "LoadBalancer") (eq .Values.compactor.service.type "NodePort")) }}
+  externalTrafficPolicy: {{ .Values.compactor.service.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{ if eq .Values.compactor.service.type "LoadBalancer" }}
+  loadBalancerSourceRanges: {{ .Values.compactor.service.loadBalancerSourceRanges }}
+  {{ end }}
+  {{- if (and (eq .Values.compactor.service.type "LoadBalancer") (not (empty .Values.compactor.service.loadBalancerIP))) }}
+  loadBalancerIP: {{ .Values.compactor.service.loadBalancerIP }}
+  {{- end }}
+  ports:
+    - name: http
+      port: {{ .Values.compactor.service.port }}
+      targetPort: http
+      protocol: TCP
+      {{- if (and (or (eq .Values.compactor.service.type "NodePort") (eq .Values.compactor.service.type "LoadBalancer")) (not (empty .Values.compactor.service.nodePorts.http))) }}
+      nodePort: {{ .Values.compactor.service.nodePorts.http }}
+      {{- else if eq .Values.compactor.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/component: compactor
+{{- end }}
