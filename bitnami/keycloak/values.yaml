@@ -630,9 +630,11 @@ service:
   ##
   type: LoadBalancer
   ## @param service.port Service HTTP port
+  ## 0 will disable http-mapping
   ##
   port: 80
   ## @param service.httpsPort HTTPS Port
+  ## 0 will disable http-mapping
   ##
   httpsPort: 443
   ## @param service.nodePorts [object] Specify the nodePort values for the LoadBalancer and NodePort service types.
