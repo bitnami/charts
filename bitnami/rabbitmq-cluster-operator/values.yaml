@@ -396,7 +396,7 @@ clusterOperator:
       ##
       annotations:
         prometheus.io/scrape: "true"
-        prometheus.io/port: "{{ .Values.metrics.service.port }}"
+        prometheus.io/port: "{{ .Values.clusterOperator.metrics.service.ports.http }}"
     serviceMonitor:
       ## @param clusterOperator.metrics.serviceMonitor.enabled Specify if a servicemonitor will be deployed for prometheus-operator
       ##
@@ -722,9 +722,9 @@ msgTopologyOperator:
     ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
     externalTrafficPolicy: Cluster
-    ## @param msgTopologyOperator.service.annotations [object] Additional custom annotations for RabbitMQ Messaging Topology Operator webhook service
+    ## @param msgTopologyOperator.service.annotations Additional custom annotations for RabbitMQ Messaging Topology Operator webhook service
     ##
-    annotations:
+    annotations: {}
 
   ## RBAC configuration
   ##
@@ -799,7 +799,7 @@ msgTopologyOperator:
       ##
       annotations:
         prometheus.io/scrape: "true"
-        prometheus.io/port: "{{ .Values.metrics.service.port }}"
+        prometheus.io/port: "{{ .Values.msgTopologyOperator.metrics.service.ports.http }}"
     serviceMonitor:
       ## @param msgTopologyOperator.metrics.serviceMonitor.enabled Specify if a servicemonitor will be deployed for prometheus-operator
       ##
