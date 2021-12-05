@@ -127,7 +127,7 @@ Return the database name for Redmine
 {{- else if and (eq .Values.databaseType "postgresql") (.Values.postgresql.enabled) -}}
     {{- .Values.postgresql.postgresqlDatabase | quote }}
 {{- else }}
-    {{- .Values.externalDatabase.name | quote }}
+    {{- .Values.externalDatabase.database | quote }}
 {{- end -}}
 {{- end -}}
 
