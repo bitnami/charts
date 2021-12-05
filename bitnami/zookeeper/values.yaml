@@ -250,14 +250,22 @@ electionContainerPort: 3888
 ##
 minServerId: 1
 ## Zookeeper Pod Security Context
-## @param securityContext.enabled Enable security context (ZooKeeper master pod)
-## @param securityContext.fsGroup Group ID for the container (ZooKeeper master pod)
-## @param securityContext.runAsUser User ID for the container (ZooKeeper master pod)
+## @param podSecurityContext.enabled Enable security context (ZooKeeper master pod)
+## @param podSecurityContext.fsGroup Group ID for the container (ZooKeeper master pod)
 ##
-securityContext:
+podSecurityContext:
   enabled: true
   fsGroup: 1001
+## Zookeeper container Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+## @param containerSecurityContext.enabled Enable container Security Context
+## @param containerSecurityContext.runAsUser User ID for the container
+## @param containerSecurityContext.runAsNonRoot Avoid running as root User
+##
+containerSecurityContext:
+  enabled: true
   runAsUser: 1001
+  runAsNonRoot: true
 ## @param initContainers Extra init container to add to the statefulset
 ## Example:
 ## initContainers:
@@ -557,6 +565,13 @@ volumePermissions:
   ## @param volumePermissions.resources Init container resource requests/limit
   ##
   resources: {}
+  ## Init container' Security Context
+  ## Note: the chown of the data folder is done to containerSecurityContext.runAsUser
+  ## and not the below volumePermissions.containerSecurityContext.runAsUser
+  ## @param volumePermissions.containerSecurityContext.runAsUser User ID for the init container
+  ##
+  containerSecurityContext:
+    runAsUser: 0
 
 ## @section Metrics parameters
 ##
