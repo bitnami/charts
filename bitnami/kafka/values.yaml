@@ -517,11 +517,13 @@ podSecurityContext:
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ## Example:
 ##   containerSecurityContext:
+##     enabled: true
 ##     capabilities:
 ##       drop: ["NET_RAW"]
 ##     readOnlyRootFilesystem: true
 ##
-containerSecurityContext: {}
+containerSecurityContext:
+  enabled: false
 ## Kafka containers' resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -993,6 +995,17 @@ metrics:
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
     ##
     podAnnotations: {}
+    ## @param metrics.kafka.containerSecurityContext Prometheus Kafka Exporter' containers' Security Context
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+    ## Example:
+    ##   containerSecurityContext:
+    ##     enabled: true
+    ##     capabilities:
+    ##       drop: ["NET_RAW"]
+    ##     readOnlyRootFilesystem: true
+    ##
+    containerSecurityContext:
+      enabled: false
     ## Prometheus Kafka Exporter' resource requests and limits
     ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
     ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -1102,6 +1115,18 @@ metrics:
       ##   - myRegistryKeySecretName
       ##
       pullSecrets: []
+
+    ## @param metrics.jmx.containerSecurityContext Prometheus JMX Exporter' Security Context
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+    ## Example:
+    ##   containerSecurityContext:
+    ##     enabled: true
+    ##     capabilities:
+    ##       drop: ["NET_RAW"]
+    ##     readOnlyRootFilesystem: true
+    ##
+    containerSecurityContext:
+      enabled: false
     ## Prometheus JMX Exporter' resource requests and limits
     ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
     ## We usually recommend not to specify default resources and to leave this as a conscious
