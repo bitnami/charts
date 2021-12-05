@@ -887,9 +887,35 @@ backup:
   ## @param backup.enabled Enable InfluxDB&trade; backup
   ##
   enabled: false
-  ## @param backup.directory Directory where backups are stored
+  ## Bitnami rClone image
+  ## ref: https://github.com/bitnami/bitnami-docker-rclone
+  ## @param backup.image.registry rClone image registry
+  ## @param backup.image.repository rClone image name
+  ## @param backup.image.tag rClone image tag
+  ## @param backup.image.pullPolicy rClone image pull policy
+  ## @param backup.image.pullSecrets Specify docker-registry secret names as an array
+  image:
+    registry: docker.io
+    repository: bitnami/bitnami-docker-rclone
+    tag: 1.57.0-debian-10-r30
+    ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+  ## @param backup.directory.local Directory where backups are stored on the local container
+  ## @param backup.directory.remote Directory where backups are uploaded to the remote provider
   ##
-  directory: "/backups"
+  directory:
+    local: "/backups"
+    remote: "/backups"
   ## @param backup.retentionDays Retention time in days for backups (older backups are deleted)
   ##
   retentionDays: 10
@@ -960,77 +986,63 @@ backup:
   ## Storage providers where to upload backups
   ##
   uploadProviders:
-    ## Google Storage Bucket configuration
-    ## @param backup.uploadProviders.google.enabled enable upload to google storage bucket
-    ## @param backup.uploadProviders.google.secret json secret with serviceaccount data to access Google storage bucket
-    ## @param backup.uploadProviders.google.secretKey service account secret key name
-    ## @param backup.uploadProviders.google.existingSecret Name of existing secret object with Google serviceaccount json credentials
-    ## @param backup.uploadProviders.google.bucketName google storage bucket name name
-    ##
-    google:
+    ## ref: https://rclone.org/azureblob/
+    azureblob:
+      ## @param backup.uploadProviders.azureblob.enabled Enable Microsoft Azure Blob Storage
+      ## @param backup.uploadProviders.azureblob.account Storage account name
+      ## @param backup.uploadProviders.azureblob.blobKey Storage account key
+      ## @param backup.uploadProviders.azureblob.sasUrl SAS URL for container level access only
+      ## @param backup.uploadProviders.azureblob.endpoint Endpoint for the service
       enabled: false
-      secret: ""
-      secretKey: "key.json"
-      existingSecret: ""
-      bucketName: "gs://bucket/influxdb"
-      ## Bitnami Google Cloud SDK image
-      ## ref: https://hub.docker.com/r/bitnami/google-cloud-sdk/tags/
-      ## @param backup.uploadProviders.google.image.registry Google Cloud SDK image registry
-      ## @param backup.uploadProviders.google.image.repository Google Cloud SDK image name
-      ## @param backup.uploadProviders.google.image.tag Google Cloud SDK image tag
-      ## @param backup.uploadProviders.google.image.pullPolicy Google Cloud SDK image pull policy
-      ## @param backup.uploadProviders.google.image.pullSecrets Specify docker-registry secret names as an array
-      ##
-      image:
-        registry: docker.io
-        repository: bitnami/google-cloud-sdk
-        tag: 0.365.0-debian-10-r11
-        ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-        ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-        ##
-        pullPolicy: IfNotPresent
-        ## Optionally specify an array of imagePullSecrets.
-        ## Secrets must be manually created in the namespace.
-        ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-        ## e.g:
-        ## pullSecrets:
-        ##   - myRegistryKeySecretName
-        ##
-        pullSecrets: []
-    ## Azure Storage Container configuration
-    ##
-    azure:
-      ## @param backup.uploadProviders.azure.enabled Enable upload to azure storage container
-      ## @param backup.uploadProviders.azure.secret Secret with credentials to access Azure storage
-      ## @param backup.uploadProviders.azure.secretKey Service account secret key name
-      ## @param backup.uploadProviders.azure.existingSecret Name of existing secret object
-      ## @param backup.uploadProviders.azure.containerName Destination container
+      account: ""
+      blobKey: ""
+      sasUrl: ""
+      endpoint: ""
+    ## ref: https://rclone.org/googlecloudstorage/
+    googlecloudstorage:
+      ## @param backup.uploadProviders.googlecloudstorage.enabled Enable Google Cloud Storage
+      ## @param backup.uploadProviders.googlecloudstorage.clientId OAuth client ID
+      ## @param backup.uploadProviders.googlecloudstorage.clientSecret OAuth client secret
+      ## @param backup.uploadProviders.googlecloudstorage.projectNum Project number
+      ## @param backup.uploadProviders.googlecloudstorage.objectACL Access control list for new objects
+      ## @param backup.uploadProviders.googlecloudstorage.bucketACL Access control list for new buckets
+      ## @param backup.uploadProviders.googlecloudstorage.location Location for newly created buckets
+      ## @param backup.uploadProviders.googlecloudstorage.storageClass The storage class to use when storing in Googe Cloud Storage
+      ## @param backup.uploadProviders.googlecloudstorage.token OAuth access token as a JSON blob
+      ## @param backup.uploadProviders.googlecloudstorage.authUrl Auth server URL
+      ## @param backup.uploadProviders.googlecloudstorage.tokenUrl Token server URL
       enabled: false
-      secret: ""
-      secretKey: "connection-string"
-      existingSecret: ""
-      containerName: "influxdb-container"
-      ## Bitnami Azure CLI image
-      ## ref: https://hub.docker.com/r/bitnami/azure-cli/tags/
-      ## @param backup.uploadProviders.azure.image.registry Azure CLI image registry
-      ## @param backup.uploadProviders.azure.image.repository Azure CLI image repository
-      ## @param backup.uploadProviders.azure.image.tag Azure CLI image tag (immutable tags are recommended)
-      ## @param backup.uploadProviders.azure.image.pullPolicy Azure CLI image pull policy
-      ## @param backup.uploadProviders.azure.image.pullSecrets Specify docker-registry secret names as an array
-      ##
-      image:
-        registry: docker.io
-        repository: bitnami/azure-cli
-        tag: 2.30.0-debian-10-r25
-        ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-        ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-        ##
-        pullPolicy: IfNotPresent
-        ## Optionally specify an array of imagePullSecrets.
-        ## Secrets must be manually created in the namespace.
-        ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-        ## e.g:
-        ## pullSecrets:
-        ##   - myRegistryKeySecretName
-        ##
-        pullSecrets: []
+      clientId: ""
+      clientSecret: ""
+      projectNum: ""
+      objectACL: ""
+      bucketACL: ""
+      location: ""
+      storageClass: ""
+      token: ""
+      authUrl: ""
+      tokenUrl: ""
+    ## ref: https://rclone.org/mega/
+    mega:
+      ## @param backup.uploadProviders.mega.enabled Enable Mega.nz
+      ## @param backup.uploadProviders.mega.user Mega.nz username
+      ## @param backup.uploadProviders.mega.password Mega.nz password
+      enabled: false
+      user: ""
+      password: ""
+    ## ref: https://rclone.org/s3/
+    s3:
+      ## @param backup.uploadProviders.s3.enabled Enable S3 for minio
+      ## @param backup.uploadProviders.s3.provider S3 provider
+      ## @param backup.uploadProviders.s3.accessKey S3 access key
+      ## @param backup.uploadProviders.s3.secretKey S3 secret key
+      ## @param backup.uploadProviders.s3.region S3 region name to connect to
+      ## @param backup.uploadProviders.s3.endpoint S3 endpoint, leave blank if using AWS to use default endpoint for the region
+      ## @param backup.uploadProviders.s3.forcePathStyle Use virtual hosted style
+      enabled: false
+      provider: ""
+      accessKey: ""
+      secretkey: ""
+      region: ""
+      endpoint: ""
+      forcePathStyle: true

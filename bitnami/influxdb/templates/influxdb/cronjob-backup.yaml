@@ -36,15 +36,6 @@ spec:
               configMap:
                 name: {{ include "common.names.fullname" . }}-backup
                 defaultMode: 0755
-            {{- if .Values.backup.uploadProviders.google.enabled }}
-            - name: google-cloud-key
-              secret:
-            {{- if .Values.backup.uploadProviders.google.existingSecret }}
-                secretName: {{ .Values.backup.uploadProviders.google.existingSecret | quote }}
-            {{- else }}
-                secretName: {{ include "common.names.fullname" . }}-backup-gcloud
-            {{- end }}
-            {{- end }}
             - name: {{ include "common.names.fullname" . }}-backups
             {{- if .Values.persistence.enabled }}
               persistentVolumeClaim:
@@ -89,59 +80,19 @@ spec:
                   mountPath: /tmp/backup.sh
                   subPath: backup.sh
           containers:
-            - name: influxdb-backup-dummy-container
-              image: {{ include "influxdb.image" . | quote }}
+            - name: upload
+              image: {{ include "rclone.image" . }}
               {{- if .Values.diagnosticMode.enabled }}
               command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 16 }}
               args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 16 }}
               {{- else }}
               command:
-                - "/bin/true"
-              {{- end }}
-            {{- if .Values.backup.uploadProviders.google.enabled }}
-            - name: gsutil-cp
-              image: {{ include "gcloudSdk.image" . }}
-              {{- if .Values.diagnosticMode.enabled }}
-              command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 16 }}
-              args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 16 }}
-              {{- else }}
-              command:
-                - "/tmp/upload-google.sh"
+                - "/tmp/upload.sh"
               {{- end }}
               volumeMounts:
                 - name: {{ include "common.names.fullname" . }}-backups
                   mountPath: {{ .Values.backup.directory | quote }}
                 - name: backup-scripts
-                  mountPath: /tmp/upload-google.sh
-                  subPath: upload-google.sh
-                - name: google-cloud-key
-                  mountPath: /var/secrets/google/
-            {{- end }}
-            {{- if .Values.backup.uploadProviders.azure.enabled }}
-            - name: azure-cli
-              image: {{ include "azureCli.image" . }}
-              {{- if .Values.diagnosticMode.enabled }}
-              command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 16 }}
-              args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 16 }}
-              {{- else }}
-              command:
-              - "/tmp/upload-azure.sh"
-              {{- end }}
-              env:
-                - name: AZURE_STORAGE_CONNECTION_STRING
-                  valueFrom:
-                    secretKeyRef:
-                      {{- if .Values.backup.uploadProviders.azure.existingSecret }}
-                      name: {{ .Values.backup.uploadProviders.azure.existingSecret | quote }}
-                      {{- else }}
-                      name: {{ include "common.names.fullname" . }}-backup-azure
-                      {{- end }}
-                      key: {{ .Values.backup.uploadProviders.azure.secretKey }}
-              volumeMounts:
-                - name: {{ include "common.names.fullname" . }}-backups
-                  mountPath: {{ .Values.backup.directory | quote }}
-                - name: backup-scripts
-                  mountPath: /tmp/upload-azure.sh
-                  subPath: upload-azure.sh
-            {{- end }}
+                  mountPath: /tmp/upload.sh
+                  subPath: upload.sh
 {{- end }}

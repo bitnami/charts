@@ -23,17 +23,10 @@ Return the proper init container volume-permissions image name
 {{- end -}}
 
 {{/*
-Return the proper gcloud-sdk image name
+Return the proper rclone image name
 */}}
-{{- define "gcloudSdk.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.backup.uploadProviders.google.image "global" .Values.global) }}
-{{- end -}}
-
-{{/*
-Return the proper azure-cli image name
-*/}}
-{{- define "azureCli.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.backup.uploadProviders.azure.image "global" .Values.global) }}
+{{- define "rclone.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.backup.image "global" .Values.global) }}
 {{- end -}}
 
 {{/*

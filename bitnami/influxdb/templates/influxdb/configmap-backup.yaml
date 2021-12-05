@@ -40,18 +40,18 @@ data:
 
     if [[ "${BRANCH}" = "1" ]]; then
         for DATABASE in $(get_databases); do
-            echo "backuping ${DATABASE} db to {{ .Values.backup.directory }}/${DATABASE}"
-            mkdir -p {{ .Values.backup.directory }}/${DATABASE}
+            echo "backuping ${DATABASE} db to {{ .Values.backup.directory.local }}/${DATABASE}"
+            mkdir -p {{ .Values.backup.directory.local }}/${DATABASE}
 
-            influxd backup -host "${host}" -port {{ .Values.influxdb.service.port }} -portable -db ${DATABASE} {{ .Values.backup.directory }}/"${DATABASE}/${DATE}"
+            influxd backup -host "${host}" -port {{ .Values.influxdb.service.port }} -portable -db ${DATABASE} {{ .Values.backup.directory.local }}/"${DATABASE}/${DATE}"
         done
 
         echo "deleting old backups"
-        find {{ .Values.backup.directory }} -mindepth 2 -maxdepth 2 -not -name ".snapshot" -not -name "lost+found" -type d -mtime +{{ .Values.backup.retentionDays }} -exec rm -r {} \;
+        find {{ .Values.backup.directory.local }} -mindepth 2 -maxdepth 2 -not -name ".snapshot" -not -name "lost+found" -type d -mtime +{{ .Values.backup.retentionDays }} -exec rm -r {} \;
     else
         for ORG in $(get_orgs); do
             for BUCKET in $(get_databases "${ORG}"); do
-                backup_dir="{{ .Values.backup.directory }}/${ORG}/${BUCKET}"
+                backup_dir="{{ .Values.backup.directory.local }}/${ORG}/${BUCKET}"
                 echo "backuping ${BUCKET} bucket to ${backup_dir}"
                 mkdir -p "${backup_dir}"
 
@@ -60,19 +60,59 @@ data:
         done
 
         echo "deleting old backups"
-        find {{ .Values.backup.directory }} -mindepth 3 -maxdepth 3 -not -name ".snapshot" -not -name "lost+found" -type d -mtime +{{ .Values.backup.retentionDays }} -exec rm -r {} \;
+        find {{ .Values.backup.directory.local }} -mindepth 3 -maxdepth 3 -not -name ".snapshot" -not -name "lost+found" -type d -mtime +{{ .Values.backup.retentionDays }} -exec rm -r {} \;
     fi
-  upload-google.sh: |-
+  upload.sh: |-
     #!/bin/sh
 
     set -e
 
-    gcloud auth activate-service-account --key-file /var/secrets/google/{{ .Values.backup.uploadProviders.google.secretKey }}
-    gsutil -m rsync -r -d {{ .Values.backup.directory }}/ {{ .Values.backup.uploadProviders.google.bucketName }}
-  upload-azure.sh: |-
-    #!/bin/sh
+    # Google Cloud Storage
+    if [[ {{ .Values.backup.uploadProviders.googlecloudstorage.enabled }} == "true" ]]; then
+      rclone config create remote googlecloudstorage \
+        client_id {{ .Values.backup.uploadProviders.googlecloudstorage.clientId }} \
+        client_secret {{ .Values.backup.uploadProviders.googlecloudstorage.clientSecret }} \
+        project_number {{ .Values.backup.uploadProviders.googlecloudstorage.projectNum }} \
+        object_acl {{ .Values.backup.uploadProviders.googlecloudstorage.objectACL }} \
+        bucket_acl {{ .Values.backup.uploadProviders.googlecloudstorage.bucketACL }} \
+        location {{ .Values.backup.uploadProviders.googlecloudstorage.location }} \
+        storage_class {{ .Values.backup.uploadProviders.googlecloudstorage.storageClass }} \
+        token {{ .Values.backup.uploadProviders.googlecloudstorage.token }} \
+        token_url {{ .Values.backup.uploadProviders.googlecloudstorage.tokenUrl }} \
+        auth_url {{ .Values.backup.uploadProviders.googlecloudstorage.authUrl }}
+      rclone sync {{ .Values.backup.directory.local }} googlecloudstorage:{{ .Values.backup.directory.remote }} --progress
+    fi
 
-    set -e
+    # Mega.nz
+    if [[ {{ .Values.backup.uploadProviders.mega.enabled }} == "true" ]]; then
+      rclone config create remote mega \
+        user {{ .Values.backup.uploadProviders.mega.user }} \
+        pass {{ .Values.backup.uploadProviders.mega.password }} \
+        --obscure
+      rclone sync {{ .Values.backup.directory.local }} mega:{{ .Values.backup.directory.remote }} --progress
+    fi
 
-    az storage blob sync --source {{ .Values.backup.directory }} --container {{ .Values.backup.uploadProviders.azure.containerName }}
+    # Microsoft Azure
+    if [[ {{ .Values.backup.uploadProviders.azureblob.enabled }} == "true" ]]; then
+      rclone config create remote azureblob \
+        endpoint {{ .Values.backup.uploadProviders.azureblob.endpoint }} \
+        account {{ .Values.backup.uploadProviders.azureblob.account }} \
+        key {{ .Values.backup.uploadProviders.azureblob.blobKey }} \
+        sas_url {{ .Values.backup.uploadProviders.azureblob.sasUrl }}
+
+      rclone sync {{ .Values.backup.directory.local }} azureblob:{{ .Values.backup.directory.remote }} --progress
+    fi
+
+    # S3
+    if [[ {{ .Values.backup.uploadProviders.s3.enabled }} == "true" ]]; then
+      rclone config create remote s3 \
+        provider {{ .Values.backup.uploadProviders.s3.provider }} \
+        access_key_id {{ .Values.backup.uploadProviders.s3.accessKey }} \
+        secret_access_key {{ .Values.backup.uploadProviders.s3.secretkey }} \
+        region {{ .Values.backup.uploadProviders.s3.region }} \
+        endpoint {{ .Values.backup.uploadProviders.s3.endpoint }} \
+        force_path_style {{ .Values.backup.uploadProviders.s3.forcePathStyle }}
+
+      rclone sync {{ .Values.backup.directory.local }} s3:{{ .Values.backup.directory.remote }} --progress
+    fi
 {{ end }}
