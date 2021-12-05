@@ -1042,7 +1042,7 @@ backup:
       enabled: false
       provider: ""
       accessKey: ""
-      secretkey: ""
+      secretKey: ""
       region: ""
       endpoint: ""
       forcePathStyle: true
