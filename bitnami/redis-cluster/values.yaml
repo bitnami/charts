@@ -75,7 +75,7 @@ image:
   tag: 6.2.6-debian-10-r49
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -267,11 +267,11 @@ service:
   ##
   loadBalancerSourceRanges: []
   ## @param service.externalTrafficPolicy Service external traffic policy
-  ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+  ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
   externalTrafficPolicy: Cluster
 ## Enable persistence using Persistent Volume Claims
-## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
 ##
 persistence:
   ## @param persistence.enabled Use a PVC to persist data.
@@ -336,7 +336,7 @@ volumePermissions:
     ##
     pullSecrets: []
   ## Container resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param volumePermissions.resources.limits The resources limits for the container
   ## @param volumePermissions.resources.requests The requested resources for the container
   ##
@@ -453,7 +453,7 @@ redis:
   ##
   podAnnotations: {}
   ## Redis&trade; resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param redis.resources.limits The resources limits for the container
   ## @param redis.resources.requests The requested resources for the container
   ##
@@ -667,7 +667,7 @@ updateJob:
   ##
   priorityClassName: ""
   ## Container resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -772,7 +772,7 @@ metrics:
     ##
     pullSecrets: []
   ## @param metrics.resources Metrics exporter resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ##
   resources: {}
   ## @param metrics.extraArgs Extra arguments for the binary; possible values [here](https://github.com/oliver006/redis_exporter
@@ -835,7 +835,7 @@ metrics:
   ## @param metrics.prometheusRule.enabled Set this to true to create prometheusRules for Prometheus operator
   ## @param metrics.prometheusRule.additionalLabels Additional labels that can be used so prometheusRules will be discovered by Prometheus
   ## @param metrics.prometheusRule.namespace namespace where prometheusRules resource should be created
-  ## @param metrics.prometheusRule.rules [rules](https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/) to be created, check values for an example.
+  ## @param metrics.prometheusRule.rules Create specified [rules](https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/), check values for an example.
   ##
   prometheusRule:
     enabled: false
@@ -921,7 +921,7 @@ sysctlImage:
   ##
   mountHostSys: false
   ## Container resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param sysctlImage.resources.limits The resources limits for the container
   ## @param sysctlImage.resources.requests The requested resources for the container
   ##

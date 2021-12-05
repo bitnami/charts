@@ -11,7 +11,7 @@ $ helm install my-release bitnami/wordpress
 
 ## Introduction
 
-This chart bootstraps a [WordPress](https://github.com/bitnami/bitnami-docker-wordpress) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [WordPress](https://github.com/bitnami/bitnami-docker-wordpress) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) which is required for bootstrapping a MariaDB deployment for the database requirements of the WordPress application, and the [Bitnami Memcached chart](https://github.com/bitnami/charts/tree/master/bitnami/memcached) that can be used to cache database queries.
 
@@ -79,7 +79,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ---------------------------------------------------- | --------------------- |
 | `image.registry`    | WordPress image registry                             | `docker.io`           |
 | `image.repository`  | WordPress image repository                           | `bitnami/wordpress`   |
-| `image.tag`         | WordPress image tag (immutable tags are recommended) | `5.8.2-debian-10-r12` |
+| `image.tag`         | WordPress image tag (immutable tags are recommended) | `5.8.2-debian-10-r16` |
 | `image.pullPolicy`  | WordPress image pull policy                          | `IfNotPresent`        |
 | `image.pullSecrets` | WordPress image pull secrets                         | `[]`                  |
 | `image.debug`       | Enable image debug mode                              | `false`               |
@@ -229,7 +229,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                   | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`            | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`          | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r258`     |
+| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r263`     |
 | `volumePermissions.image.pullPolicy`          | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`         | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`          | The resources limits for the init container                                                     | `{}`                    |
@@ -258,7 +258,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                         | Start a sidecar prometheus exporter to expose metrics                        | `false`                   |
 | `metrics.image.registry`                  | Apache Exporter image registry                                               | `docker.io`               |
 | `metrics.image.repository`                | Apache Exporter image repository                                             | `bitnami/apache-exporter` |
-| `metrics.image.tag`                       | Apache Exporter image tag (immutable tags are recommended)                   | `0.10.1-debian-10-r60`    |
+| `metrics.image.tag`                       | Apache Exporter image tag (immutable tags are recommended)                   | `0.10.1-debian-10-r66`    |
 | `metrics.image.pullPolicy`                | Apache Exporter image pull policy                                            | `IfNotPresent`            |
 | `metrics.image.pullSecrets`               | Apache Exporter image pull secrets                                           | `[]`                      |
 | `metrics.resources.limits`                | The resources limits for the Prometheus exporter container                   | `{}`                      |
@@ -321,7 +321,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalCache.port`                       | External cache server port                                                | `11211`             |
 
 
-The above parameters map to the env variables defined in [bitnami/wordpress](http://github.com/bitnami/bitnami-docker-wordpress). For more information please refer to the [bitnami/wordpress](http://github.com/bitnami/bitnami-docker-wordpress) image documentation.
+The above parameters map to the env variables defined in [bitnami/wordpress](https://github.com/bitnami/bitnami-docker-wordpress). For more information please refer to the [bitnami/wordpress](https://github.com/bitnami/bitnami-docker-wordpress) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

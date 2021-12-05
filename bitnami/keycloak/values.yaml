@@ -61,7 +61,7 @@ image:
   tag: 15.0.2-debian-10-r94
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -164,7 +164,7 @@ auth:
     ##
     truststorePassword: ""
     ## Init containers' resource requests and limits
-    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
     ## We usually recommend not to specify default resources and to leave this as a conscious
     ## choice for the user. This also increases chances charts run on environments with little
     ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -293,7 +293,7 @@ keycloakConfigCli:
     tag: 4.3.0-debian-10-r54
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -304,7 +304,7 @@ keycloakConfigCli:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-  ## @param keycloakConfigCli.annotations [objects] Annotations for keycloak-config-cli job
+  ## @param keycloakConfigCli.annotations [object] Annotations for keycloak-config-cli job
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   annotations:
@@ -322,7 +322,7 @@ keycloakConfigCli:
   ##
   hostAliases: []
   ## Keycloak config CLI resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -439,7 +439,7 @@ containerSecurityContext:
   runAsUser: 1001
   runAsNonRoot: true
 ## Keycloak resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## ref: https://kubernetes.io/docs/user-guide/compute-resources/
 ## We usually recommend not to specify default resources and to leave this as a conscious
 ## choice for the user. This also increases chances charts run on environments with little
 ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -647,7 +647,7 @@ service:
   ##
   clusterIP: ""
   ## @param service.loadBalancerIP loadBalancerIP for the SuiteCRM Service (optional, cloud specific)
-  ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+  ## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
   ##
   loadBalancerIP: ""
   ## @param service.loadBalancerSourceRanges Address that are allowed when service is LoadBalancer
@@ -658,7 +658,7 @@ service:
   ##
   loadBalancerSourceRanges: []
   ## @param service.externalTrafficPolicy Enable client source IP preservation
-  ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+  ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
   externalTrafficPolicy: Cluster
   ## @param service.annotations Annotations for Keycloak service
@@ -912,7 +912,7 @@ postgresql:
   ##
   existingSecret: ""
   ## Enable persistence using Persistent Volume Claims
-  ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes
+  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes
   ##
   persistence:
     ## @param postgresql.persistence.enabled Enable PostgreSQL persistence using PVC

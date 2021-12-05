@@ -35,5 +35,5 @@ maintainers:
 name: redmine
 sources:
   - https://github.com/bitnami/bitnami-docker-redmine
-  - http://www.redmine.org/
-version: 17.1.0
+  - https://www.redmine.org/
+version: 17.1.1

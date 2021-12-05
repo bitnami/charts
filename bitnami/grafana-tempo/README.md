@@ -13,7 +13,7 @@ $ helm install my-release bitnami/grafana-tempo
 
 Bitnami charts for Helm are carefully engineered, actively maintained and are the quickest and easiest way to deploy containers on a Kubernetes cluster that are ready to handle production workloads.
 
-This chart bootstraps a [Grafana Tempo](https://github.com/grafana/tempo) Deployment in a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Grafana Tempo](https://github.com/grafana/tempo) Deployment in a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
@@ -606,7 +606,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 See https://github.com/bitnami-labs/readme-generator-for-helm to create the table
 
-The above parameters map to the env variables defined in [bitnami/grafana-tempo](http://github.com/bitnami/bitnami-docker-grafana-tempo). For more information please refer to the [bitnami/grafana-tempo](http://github.com/bitnami/bitnami-docker-grafana-tempo) image documentation.
+The above parameters map to the env variables defined in [bitnami/grafana-tempo](https://github.com/bitnami/bitnami-docker-grafana-tempo). For more information please refer to the [bitnami/grafana-tempo](https://github.com/bitnami/bitnami-docker-grafana-tempo) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
