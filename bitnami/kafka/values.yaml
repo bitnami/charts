@@ -522,7 +522,7 @@ podSecurityContext:
 ##       drop: ["NET_RAW"]
 ##     readOnlyRootFilesystem: true
 ##
-## @param containerSecurityContext.enable Enable Kafka containers' Security Context
+## @param containerSecurityContext.enabled Enable Kafka containers' Security Context
 containerSecurityContext:
   enabled: false
 ## Kafka containers' resource requests and limits
@@ -1005,7 +1005,7 @@ metrics:
     ##       drop: ["NET_RAW"]
     ##     readOnlyRootFilesystem: true
     ##
-    ## @param metrics.kafka.containerSecurityContext.enable Enable Kafka Exporter containers' Security Context
+    ## @param metrics.kafka.containerSecurityContext.enabled Enable Kafka Exporter containers' Security Context
     containerSecurityContext:
       enabled: false
     ## Prometheus Kafka Exporter' resource requests and limits
