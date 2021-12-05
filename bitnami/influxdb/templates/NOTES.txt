@@ -168,8 +168,7 @@ NOTE: When using "high-availability" it is recommended to configure 'influxdb.se
 
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- include "common.warnings.rollingTag" .Values.relay.image  }}
-{{- include "common.warnings.rollingTag" .Values.backup.uploadProviders.google.image }}
-{{- include "common.warnings.rollingTag" .Values.backup.uploadProviders.azure.image }}
+{{- include "common.warnings.rollingTag" .Values.backup.image }}
 {{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
 
 {{- $passwordValueConfigs := list -}}

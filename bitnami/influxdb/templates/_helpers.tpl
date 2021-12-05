@@ -33,7 +33,7 @@ Return the proper rclone image name
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "influxdb.imagePullSecrets" -}}
-{{ include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.relay.image .Values.volumePermissions.image .Values.backup.uploadProviders.google.image .Values.backup.uploadProviders.azure.image) "global" .Values.global) }}
+{{ include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.relay.image .Values.volumePermissions.image .Values.backup.image) "global" .Values.global) }}
 {{- end -}}
 
 {{/*
