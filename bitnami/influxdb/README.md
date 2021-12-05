@@ -281,45 +281,57 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### InfluxDB&trade; backup parameters
 
-| Name                                              | Description                                                                                             | Value                      |
-| ------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | -------------------------- |
-| `backup.enabled`                                  | Enable InfluxDB&trade; backup                                                                           | `false`                    |
-| `backup.directory`                                | Directory where backups are stored                                                                      | `/backups`                 |
-| `backup.retentionDays`                            | Retention time in days for backups (older backups are deleted)                                          | `10`                       |
-| `backup.cronjob.schedule`                         | Schedule in Cron format to save snapshots                                                               | `0 2 * * *`                |
-| `backup.cronjob.historyLimit`                     | Number of successful finished jobs to retain                                                            | `1`                        |
-| `backup.cronjob.podAnnotations`                   | Pod annotations                                                                                         | `{}`                       |
-| `backup.cronjob.securityContext.enabled`          | Enable security context for InfluxDB&trade;                                                             | `true`                     |
-| `backup.cronjob.securityContext.fsGroup`          | Group ID for the InfluxDB&trade; filesystem                                                             | `1001`                     |
-| `backup.cronjob.securityContext.runAsUser`        | Group ID for the InfluxDB&trade; filesystem                                                             | `1001`                     |
-| `backup.podAffinityPreset`                        | Backup &trade; Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`      | `""`                       |
-| `backup.podAntiAffinityPreset`                    | Backup&trade; Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`                     |
-| `backup.nodeAffinityPreset.type`                  | Backup&trade; Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                       |
-| `backup.nodeAffinityPreset.key`                   | Backup&trade; Node label key to match Ignored if `affinity` is set.                                     | `""`                       |
-| `backup.nodeAffinityPreset.values`                | Backup&trade; Node label values to match. Ignored if `affinity` is set.                                 | `[]`                       |
-| `backup.affinity`                                 | Backup&trade; Affinity for backup pod assignment                                                        | `{}`                       |
-| `backup.nodeSelector`                             | Backup&trade; Node labels for backup pod assignment                                                     | `{}`                       |
-| `backup.tolerations`                              | Backup&trade; Tolerations for backup pod assignment                                                     | `[]`                       |
-| `backup.uploadProviders.google.enabled`           | enable upload to google storage bucket                                                                  | `false`                    |
-| `backup.uploadProviders.google.secret`            | json secret with serviceaccount data to access Google storage bucket                                    | `""`                       |
-| `backup.uploadProviders.google.secretKey`         | service account secret key name                                                                         | `key.json`                 |
-| `backup.uploadProviders.google.existingSecret`    | Name of existing secret object with Google serviceaccount json credentials                              | `""`                       |
-| `backup.uploadProviders.google.bucketName`        | google storage bucket name name                                                                         | `gs://bucket/influxdb`     |
-| `backup.uploadProviders.google.image.registry`    | Google Cloud SDK image registry                                                                         | `docker.io`                |
-| `backup.uploadProviders.google.image.repository`  | Google Cloud SDK image name                                                                             | `bitnami/google-cloud-sdk` |
-| `backup.uploadProviders.google.image.tag`         | Google Cloud SDK image tag                                                                              | `0.365.0-debian-10-r11`    |
-| `backup.uploadProviders.google.image.pullPolicy`  | Google Cloud SDK image pull policy                                                                      | `IfNotPresent`             |
-| `backup.uploadProviders.google.image.pullSecrets` | Specify docker-registry secret names as an array                                                        | `[]`                       |
-| `backup.uploadProviders.azure.enabled`            | Enable upload to azure storage container                                                                | `false`                    |
-| `backup.uploadProviders.azure.secret`             | Secret with credentials to access Azure storage                                                         | `""`                       |
-| `backup.uploadProviders.azure.secretKey`          | Service account secret key name                                                                         | `connection-string`        |
-| `backup.uploadProviders.azure.existingSecret`     | Name of existing secret object                                                                          | `""`                       |
-| `backup.uploadProviders.azure.containerName`      | Destination container                                                                                   | `influxdb-container`       |
-| `backup.uploadProviders.azure.image.registry`     | Azure CLI image registry                                                                                | `docker.io`                |
-| `backup.uploadProviders.azure.image.repository`   | Azure CLI image repository                                                                              | `bitnami/azure-cli`        |
-| `backup.uploadProviders.azure.image.tag`          | Azure CLI image tag (immutable tags are recommended)                                                    | `2.30.0-debian-10-r25`     |
-| `backup.uploadProviders.azure.image.pullPolicy`   | Azure CLI image pull policy                                                                             | `IfNotPresent`             |
-| `backup.uploadProviders.azure.image.pullSecrets`  | Specify docker-registry secret names as an array                                                        | `[]`                       |
+| Name                                                     | Description                                                                                             | Value                           |
+| -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------- |
+| `backup.enabled`                                         | Enable InfluxDB&trade; backup                                                                           | `false`                         |
+| `backup.image.registry`                                  | rClone image registry                                                                                   | `docker.io`                     |
+| `backup.image.repository`                                | rClone image name                                                                                       | `bitnami/bitnami-docker-rclone` |
+| `backup.image.tag`                                       | rClone image tag                                                                                        | `1.57.0-debian-10-r30`          |
+| `backup.image.pullPolicy`                                | rClone image pull policy                                                                                | `IfNotPresent`                  |
+| `backup.image.pullSecrets`                               | Specify docker-registry secret names as an array                                                        | `[]`                            |
+| `backup.directory.local`                                 | Directory where backups are stored on the local container                                               | `/backups`                      |
+| `backup.directory.remote`                                | Directory where backups are uploaded to the remote provider                                             | `/backups`                      |
+| `backup.retentionDays`                                   | Retention time in days for backups (older backups are deleted)                                          | `10`                            |
+| `backup.cronjob.schedule`                                | Schedule in Cron format to save snapshots                                                               | `0 2 * * *`                     |
+| `backup.cronjob.historyLimit`                            | Number of successful finished jobs to retain                                                            | `1`                             |
+| `backup.cronjob.podAnnotations`                          | Pod annotations                                                                                         | `{}`                            |
+| `backup.cronjob.securityContext.enabled`                 | Enable security context for InfluxDB&trade;                                                             | `true`                          |
+| `backup.cronjob.securityContext.fsGroup`                 | Group ID for the InfluxDB&trade; filesystem                                                             | `1001`                          |
+| `backup.cronjob.securityContext.runAsUser`               | Group ID for the InfluxDB&trade; filesystem                                                             | `1001`                          |
+| `backup.podAffinityPreset`                               | Backup &trade; Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`      | `""`                            |
+| `backup.podAntiAffinityPreset`                           | Backup&trade; Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`                          |
+| `backup.nodeAffinityPreset.type`                         | Backup&trade; Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                            |
+| `backup.nodeAffinityPreset.key`                          | Backup&trade; Node label key to match Ignored if `affinity` is set.                                     | `""`                            |
+| `backup.nodeAffinityPreset.values`                       | Backup&trade; Node label values to match. Ignored if `affinity` is set.                                 | `[]`                            |
+| `backup.affinity`                                        | Backup&trade; Affinity for backup pod assignment                                                        | `{}`                            |
+| `backup.nodeSelector`                                    | Backup&trade; Node labels for backup pod assignment                                                     | `{}`                            |
+| `backup.tolerations`                                     | Backup&trade; Tolerations for backup pod assignment                                                     | `[]`                            |
+| `backup.uploadProviders.azureblob.enabled`               | Enable Microsoft Azure Blob Storage                                                                     | `false`                         |
+| `backup.uploadProviders.azureblob.account`               | Storage account name                                                                                    | `""`                            |
+| `backup.uploadProviders.azureblob.blobKey`               | Storage account key                                                                                     | `""`                            |
+| `backup.uploadProviders.azureblob.sasUrl`                | SAS URL for container level access only                                                                 | `""`                            |
+| `backup.uploadProviders.azureblob.endpoint`              | Endpoint for the service                                                                                | `""`                            |
+| `backup.uploadProviders.googlecloudstorage.enabled`      | Enable Google Cloud Storage                                                                             | `false`                         |
+| `backup.uploadProviders.googlecloudstorage.clientId`     | OAuth client ID                                                                                         | `""`                            |
+| `backup.uploadProviders.googlecloudstorage.clientSecret` | OAuth client secret                                                                                     | `""`                            |
+| `backup.uploadProviders.googlecloudstorage.projectNum`   | Project number                                                                                          | `""`                            |
+| `backup.uploadProviders.googlecloudstorage.objectACL`    | Access control list for new objects                                                                     | `""`                            |
+| `backup.uploadProviders.googlecloudstorage.bucketACL`    | Access control list for new buckets                                                                     | `""`                            |
+| `backup.uploadProviders.googlecloudstorage.location`     | Location for newly created buckets                                                                      | `""`                            |
+| `backup.uploadProviders.googlecloudstorage.storageClass` | The storage class to use when storing in Googe Cloud Storage                                            | `""`                            |
+| `backup.uploadProviders.googlecloudstorage.token`        | OAuth access token as a JSON blob                                                                       | `""`                            |
+| `backup.uploadProviders.googlecloudstorage.authUrl`      | Auth server URL                                                                                         | `""`                            |
+| `backup.uploadProviders.googlecloudstorage.tokenUrl`     | Token server URL                                                                                        | `""`                            |
+| `backup.uploadProviders.mega.enabled`                    | Enable Mega.nz                                                                                          | `false`                         |
+| `backup.uploadProviders.mega.user`                       | Mega.nz username                                                                                        | `""`                            |
+| `backup.uploadProviders.mega.password`                   | Mega.nz password                                                                                        | `""`                            |
+| `backup.uploadProviders.s3.enabled`                      | Enable S3 for minio                                                                                     | `false`                         |
+| `backup.uploadProviders.s3.provider`                     | S3 provider                                                                                             | `""`                            |
+| `backup.uploadProviders.s3.accessKey`                    | S3 access key                                                                                           | `""`                            |
+| `backup.uploadProviders.s3.secretKey`                    | S3 secret key                                                                                           | `""`                            |
+| `backup.uploadProviders.s3.region`                       | S3 region name to connect to                                                                            | `""`                            |
+| `backup.uploadProviders.s3.endpoint`                     | S3 endpoint, leave blank if using AWS to use default endpoint for the region                            | `""`                            |
+| `backup.uploadProviders.s3.forcePathStyle`               | Use virtual hosted style                                                                                | `true`                          |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
