@@ -1,7 +1,7 @@
 annotations:
   category: Infrastructure
 apiVersion: v2
-appVersion: 2.4.1
+appVersion: 2.4.2
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -33,4 +33,4 @@ maintainers:
 name: kubeapps
 sources:
   - https://github.com/kubeapps/kubeapps
-version: 7.5.11
+version: 7.6.2

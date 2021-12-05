@@ -11,7 +11,7 @@ $ helm install my-release bitnami/memcached
 
 ## Introduction
 
-This chart bootstraps a [Memcached](https://github.com/bitnami/bitnami-docker-memcached) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Memcached](https://github.com/bitnami/bitnami-docker-memcached) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
@@ -167,7 +167,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.resources.requests`        | Init container volume-permissions resource requests                                             | `{}`                         |
 
 
-The above parameters map to the environment variables defined in the [bitnami/memcached](http://github.com/bitnami/bitnami-docker-memcached) container image. For more information please refer to the [bitnami/memcached](http://github.com/bitnami/bitnami-docker-memcached) container image documentation.
+The above parameters map to the environment variables defined in the [bitnami/memcached](https://github.com/bitnami/bitnami-docker-memcached) container image. For more information please refer to the [bitnami/memcached](https://github.com/bitnami/bitnami-docker-memcached) container image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

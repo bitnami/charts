@@ -12,7 +12,7 @@ $ helm install my-release bitnami/metallb
 ## Introduction
 Bitnami charts for Helm are carefully engineered, actively maintained and are the quickest and easiest way to deploy containers on a Kubernetes cluster that are ready to handle production workloads.
 
-This chart bootstraps a [MetalLB Controller](https://metallb.universe.tf/community/) Controller Deployment and a [MetalLB Speaker](https://metallb.universe.tf/community/) Daemonset on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [MetalLB Controller](https://metallb.universe.tf/community/) Controller Deployment and a [MetalLB Speaker](https://metallb.universe.tf/community/) Daemonset on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
@@ -86,7 +86,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------- |
 | `controller.image.registry`                              | MetalLB Controller image registry                                                                                                           | `docker.io`                  |
 | `controller.image.repository`                            | MetalLB Controller image repository                                                                                                         | `bitnami/metallb-controller` |
-| `controller.image.tag`                                   | MetalLB Controller  image tag (immutable tags are recommended)                                                                              | `0.11.0-debian-10-r0`        |
+| `controller.image.tag`                                   | MetalLB Controller  image tag (immutable tags are recommended)                                                                              | `0.11.0-debian-10-r27`       |
 | `controller.image.pullPolicy`                            | MetalLB Controller image pull policy                                                                                                        | `IfNotPresent`               |
 | `controller.image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                                            | `[]`                         |
 | `controller.hostAliases`                                 | Deployment pod host aliases                                                                                                                 | `[]`                         |
@@ -142,7 +142,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
 | `speaker.image.registry`                              | MetalLB Speaker image registry                                                                                                              | `docker.io`               |
 | `speaker.image.repository`                            | MetalLB Speaker image repository                                                                                                            | `bitnami/metallb-speaker` |
-| `speaker.image.tag`                                   | MetalLB Speaker  image tag (immutable tags are recommended)                                                                                 | `0.11.0-debian-10-r0`     |
+| `speaker.image.tag`                                   | MetalLB Speaker  image tag (immutable tags are recommended)                                                                                 | `0.11.0-debian-10-r27`    |
 | `speaker.image.pullPolicy`                            | MetalLB Speaker image pull policy                                                                                                           | `IfNotPresent`            |
 | `speaker.image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                                            | `[]`                      |
 | `speaker.rbac.create`                                 | create specifies whether to install and use RBAC rules.                                                                                     | `true`                    |

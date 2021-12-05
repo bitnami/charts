@@ -26,4 +26,4 @@ name: wildfly
 sources:
   - https://github.com/bitnami/bitnami-docker-wildfly
   - http://wildfly.org
-version: 12.0.0
+version: 12.0.2
