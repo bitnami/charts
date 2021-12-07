@@ -161,6 +161,7 @@ Refer to the [chart documentation for more information on each of these architec
 | `nodeAffinityPreset.type`               | MongoDB&reg; Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`            |
 | `nodeAffinityPreset.key`                | MongoDB&reg; Node label key to match Ignored if `affinity` is set.                                     | `""`            |
 | `nodeAffinityPreset.values`             | MongoDB&reg; Node label values to match. Ignored if `affinity` is set.                                 | `[]`            |
+| `topologySpreadConstraints`             | MongoDB&reg; Spread Constraints for Pods.                                                              | `[]`            |
 | `affinity`                              | MongoDB&reg; Affinity for pod assignment                                                               | `{}`            |
 | `nodeSelector`                          | MongoDB&reg; Node labels for pod assignment                                                            | `{}`            |
 | `tolerations`                           | MongoDB&reg; Tolerations for pod assignment                                                            | `[]`            |

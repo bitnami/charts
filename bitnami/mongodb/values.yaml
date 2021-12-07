@@ -396,6 +396,10 @@ nodeSelector: {}
 ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
+## @param topologySpreadConstraints MongoDB&reg; Spread Constraints for Pods
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+##
+topologySpreadConstraints: []
 ## @param podLabels MongoDB&reg; pod labels
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
