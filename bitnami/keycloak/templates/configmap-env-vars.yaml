@@ -24,6 +24,12 @@ data:
   KEYCLOAK_DATABASE_NAME: {{ include "keycloak.databaseName" . | quote }}
   KEYCLOAK_DATABASE_USER: {{ include "keycloak.databaseUser" . | quote }}
   {{- end }}
+  {{- if (not .Values.postgresql.enabled) }}
+  KEYCLOAK_DATABASE_HOST: {{ .Values.externalDatabase.host | quote }}
+  KEYCLOAK_DATABASE_PORT: {{ .Values.externalDatabase.port | quote }}
+  KEYCLOAK_DATABASE_NAME: {{ .Values.externalDatabase.database | quote }}
+  KEYCLOAK_DATABASE_USER: {{ .Values.externalDatabase.user | quote }}
+  {{- end }}
   {{- if .Values.serviceDiscovery.enabled }}
   KEYCLOAK_JGROUPS_DISCOVERY_PROTOCOL: {{ .Values.serviceDiscovery.protocol | quote }}
   KEYCLOAK_JGROUPS_DISCOVERY_PROPERTIES: {{ (tpl (join "," .Values.serviceDiscovery.properties) $) | quote }}
