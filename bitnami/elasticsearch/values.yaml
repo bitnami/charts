@@ -270,6 +270,22 @@ master:
     enabled: true
     fsGroup: 1001
     runAsUser: 1001
+  ## Pod Security Context for master-eligible pods.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ## @param master.podSecurityContext.enabled Enable security context for master-eligible pods
+  ## @param master.podSecurityContext.fsGroup Group ID for the container for master-eligible pods
+  ##
+  podSecurityContext:
+    enabled: false
+    fsGroup: 1001
+  ## Container Security Context for master-eligible pods.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ## @param master.containerSecurityContext.enabled Enable security context for master-eligible pods
+  ## @param master.containerSecurityContext.runAsUser User ID for the container for master-eligible pods
+  ##
+  containerSecurityContext:
+    enabled: false
+    runAsUser: 1001
   ## @param master.podAffinityPreset Master-eligible Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
@@ -526,6 +542,22 @@ coordinating:
     enabled: true
     fsGroup: 1001
     runAsUser: 1001
+  ## Pod Security Context for coordinating-only pods.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ## @param coordinating.podSecurityContext.enabled Enable security context for coordinating-only pods
+  ## @param coordinating.podSecurityContext.fsGroup Group ID for the container for coordinating-only pods
+  ##
+  podSecurityContext:
+    enabled: false
+    fsGroup: 1001
+  ## Container Security Context for coordinating-only pods.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ## @param coordinating.containerSecurityContext.enabled Enable security context for coordinating-only pods
+  ## @param coordinating.containerSecurityContext.runAsUser User ID for the container for coordinating-only pods
+  ##
+  containerSecurityContext:
+    enabled: false
+    runAsUser: 1001
   ## @param coordinating.podAffinityPreset Coordinating Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
@@ -748,6 +780,22 @@ data:
   securityContext:
     enabled: true
     fsGroup: 1001
+    runAsUser: 1001
+  ## Pod Security Context for data pods.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ## @param data.podSecurityContext.enabled Enable security context for data pods
+  ## @param data.podSecurityContext.fsGroup Group ID for the container for data pods
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+  ## Container Security Context for data pods.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ## @param data.containerSecurityContext.enabled Enable security context for data pods
+  ## @param data.containerSecurityContext.runAsUser User ID for the container for data pods
+  ##
+  containerSecurityContext:
+    enabled: true
     runAsUser: 1001
   ## @param data.podAffinityPreset Data Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
@@ -990,6 +1038,22 @@ ingest:
   securityContext:
     enabled: true
     fsGroup: 1001
+    runAsUser: 1001
+  ## Pod Security Context for ingest pods.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ## @param ingest.podSecurityContext.enabled Enable security context for ingest pods
+  ## @param ingest.podSecurityContext.fsGroup Group ID for the container for ingest pods
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+  ## Container Security Context for ingest pods.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ## @param ingest.containerSecurityContext.enabled Enable security context for ingest pods
+  ## @param ingest.containerSecurityContext.runAsUser User ID for the container for ingest pods
+  ##
+  containerSecurityContext:
+    enabled: true
     runAsUser: 1001
   ## @param ingest.podAffinityPreset Ingest Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
