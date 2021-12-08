@@ -11,7 +11,7 @@ $ helm install my-release bitnami/contour
 
 Bitnami charts for Helm are carefully engineered, actively maintained and are the quickest and easiest way to deploy containers on a Kubernetes cluster that are ready to handle production workloads.
 
-This chart bootstraps a [Contour](https://projectcontour.io) Ingress Controller Deployment and a [Envoy Proxy](https://www.envoyproxy.io) Daemonset on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Contour](https://projectcontour.io) Ingress Controller Deployment and a [Envoy Proxy](https://www.envoyproxy.io) Daemonset on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
@@ -19,7 +19,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 - Kubernetes 1.12+
 - Helm 3.1.0
-- An Operator for `ServiceType: LoadBalancer` like [MetalLB](../metallb/README.md)
+- An Operator for `ServiceType: LoadBalancer` like [MetalLB](https://github.com/bitnami/charts/tree/master/bitnami/metallb)
 
 ## Installing the Chart
 
@@ -158,7 +158,7 @@ $ helm uninstall my-release
 | `contour.extraEnvVars`                          | Array containing extra env vars to be added to all Contour containers                                                              | `[]`                  |
 | `contour.extraEnvVarsCM`                        | ConfigMap containing extra env vars to be added to all Contour containers                                                          | `""`                  |
 | `contour.extraEnvVarsSecret`                    | Secret containing extra env vars to be added to all Contour containers                                                             | `""`                  |
-| `contour.ingressClass.name`                     | Name of the ingress class to route through this controller                                                                         | `contour`             |
+| `contour.ingressClass.name`                     | Name of the ingress class to route through this controller.                                                                        | `""`                  |
 | `contour.ingressClass.create`                   | Whether to create or not the IngressClass resource                                                                                 | `true`                |
 | `contour.ingressClass.default`                  | Mark IngressClass resource as default for cluster                                                                                  | `true`                |
 
@@ -255,8 +255,8 @@ $ helm uninstall my-release
 | `envoy.hostPorts.https`                             | Sets `hostPort` https port                                                                                            | `443`                  |
 | `envoy.hostIPs.http`                                | Sets `hostIP` http IP                                                                                                 | `127.0.0.1`            |
 | `envoy.hostIPs.https`                               | Sets `hostIP` https IP                                                                                                | `127.0.0.1`            |
-| `envoy.containerPorts.http`                         | Sets http port inside Envoy pod  (change this to >1024 to run envoy as a non-root user)                               | `80`                   |
-| `envoy.containerPorts.https`                        | Sets https port inside Envoy pod  (change this to >1024 to run envoy as a non-root user)                              | `443`                  |
+| `envoy.containerPorts.http`                         | Sets http port inside Envoy pod  (change this to >1024 to run envoy as a non-root user)                               | `8080`                 |
+| `envoy.containerPorts.https`                        | Sets https port inside Envoy pod  (change this to >1024 to run envoy as a non-root user)                              | `8443`                 |
 | `envoy.initContainers`                              | Attach additional init containers to Envoy pods                                                                       | `[]`                   |
 | `envoy.extraVolumes`                                | Array to add extra volumes                                                                                            | `[]`                   |
 | `envoy.extraVolumeMounts`                           | Array to add extra mounts (normally used with extraVolumes)                                                           | `[]`                   |

@@ -71,10 +71,10 @@ tempo:
   image:
     registry: docker.io
     repository: bitnami/grafana-tempo
-    tag: 1.1.0-debian-10-r54
+    tag: 1.2.1-debian-10-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -97,7 +97,7 @@ tempo:
   memBallastSizeMbs: 1024
   ## @param tempo.dataDir Tempo components data directory
   ##
-  dataDir: /bitnami/tempo-grafana/data
+  dataDir: /bitnami/grafana-tempo/data
   traces:
     jaeger:
       ## @param tempo.traces.jaeger.grpc Enable Tempo to ingest Jaeger GRPC traces
@@ -287,7 +287,7 @@ compactor:
   ##
   customReadinessProbe: {}
   ## compactor resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param compactor.resources.limits The resources limits for the compactor containers
   ## @param compactor.resources.requests The requested resources for the compactor containers
   ##
@@ -456,7 +456,7 @@ compactor:
     ##
     loadBalancerSourceRanges: []
     ## @param compactor.service.externalTrafficPolicy compactor service external traffic policy
-    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
     externalTrafficPolicy: Cluster
     ## @param compactor.service.annotations Additional custom annotations for compactor service
@@ -506,7 +506,7 @@ distributor:
   ##
   customReadinessProbe: {}
   ## distributor resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param distributor.resources.limits The resources limits for the distributor containers
   ## @param distributor.resources.requests The requested resources for the distributor containers
   ##
@@ -680,7 +680,7 @@ distributor:
     ##
     loadBalancerSourceRanges: []
     ## @param distributor.service.externalTrafficPolicy distributor service external traffic policy
-    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
     externalTrafficPolicy: Cluster
     ## @param distributor.service.annotations Additional custom annotations for distributor service
@@ -730,7 +730,7 @@ ingester:
   ##
   customReadinessProbe: {}
   ## ingester resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param ingester.resources.limits The resources limits for the ingester containers
   ## @param ingester.resources.requests The requested resources for the ingester containers
   ##
@@ -869,7 +869,7 @@ ingester:
   ##
 
   ## Enable persistence using Persistent Volume Claims
-  ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
   persistence:
     ## @param ingester.persistence.enabled Enable persistence in ingester instances
@@ -960,7 +960,7 @@ ingester:
     ##
     loadBalancerSourceRanges: []
     ## @param ingester.service.externalTrafficPolicy ingester service external traffic policy
-    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
     externalTrafficPolicy: Cluster
     ## @param ingester.service.annotations Additional custom annotations for ingester service
@@ -1010,7 +1010,7 @@ querier:
   ##
   customReadinessProbe: {}
   ## querier resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param querier.resources.limits The resources limits for the querier containers
   ## @param querier.resources.requests The requested resources for the querier containers
   ##
@@ -1184,7 +1184,7 @@ querier:
     ##
     loadBalancerSourceRanges: []
     ## @param querier.service.externalTrafficPolicy querier service external traffic policy
-    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
     externalTrafficPolicy: Cluster
     ## @param querier.service.annotations Additional custom annotations for querier service
@@ -1234,7 +1234,7 @@ queryFrontend:
   ##
   customReadinessProbe: {}
   ## queryFrontend resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param queryFrontend.resources.limits The resources limits for the queryFrontend containers
   ## @param queryFrontend.resources.requests The requested resources for the queryFrontend containers
   ##
@@ -1383,10 +1383,10 @@ queryFrontend:
     image:
       registry: docker.io
       repository: bitnami/grafana-tempo-query
-      tag: 1.1.0-debian-10-r58
+      tag: 1.2.1-debian-10-r8
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-      ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+      ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
       ##
       pullPolicy: IfNotPresent
       ## Optionally specify an array of imagePullSecrets.
@@ -1451,7 +1451,7 @@ queryFrontend:
       timeoutSeconds: 1
 
     ## query sidecar resource requests and limits
-    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
     ## @param queryFrontend.query.resources.limits The resources limits for the query sidecar containers
     ## @param queryFrontend.query.resources.requests The requested resources for the query sidecar containers
     ##
@@ -1533,7 +1533,7 @@ queryFrontend:
     ##
     loadBalancerSourceRanges: []
     ## @param queryFrontend.service.externalTrafficPolicy queryFrontend service external traffic policy
-    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
     externalTrafficPolicy: Cluster
     ## @param queryFrontend.service.annotations Additional custom annotations for queryFrontend service
@@ -1558,10 +1558,10 @@ vulture:
   image:
     registry: docker.io
     repository: bitnami/grafana-tempo-vulture
-    tag: 1.1.0-debian-10-r59
+    tag: 1.2.1-debian-10-r8
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1613,7 +1613,7 @@ vulture:
   ##
   customReadinessProbe: {}
   ## vulture resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param vulture.resources.limits The resources limits for the vulture containers
   ## @param vulture.resources.requests The requested resources for the vulture containers
   ##
@@ -1786,7 +1786,7 @@ vulture:
     ##
     loadBalancerSourceRanges: []
     ## @param vulture.service.externalTrafficPolicy vulture service external traffic policy
-    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
     externalTrafficPolicy: Cluster
     ## @param vulture.service.annotations Additional custom annotations for vulture service
@@ -1815,7 +1815,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r233
+    tag: 10-debian-10-r261
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1826,7 +1826,7 @@ volumePermissions:
     ##
     pullSecrets: []
   ## Init container's resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param volumePermissions.resources.limits The resources limits for the init container
   ## @param volumePermissions.resources.requests The requested resources for the init container
   ##

@@ -11,7 +11,7 @@ $ helm install my-release bitnami/sonarqube
 
 ## Introduction
 
-This chart bootstraps an [SonarQube](https://github.com/bitnami/bitnami-docker-sonarqube) cluster on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps an [SonarQube](https://github.com/bitnami/bitnami-docker-sonarqube) cluster on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
 
@@ -73,14 +73,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### SonarQube Image parameters
 
-| Name                | Description                                          | Value                 |
-| ------------------- | ---------------------------------------------------- | --------------------- |
-| `image.registry`    | SonarQube image registry                             | `docker.io`           |
-| `image.repository`  | SonarQube image repository                           | `bitnami/sonarqube`   |
-| `image.tag`         | SonarQube image tag (immutable tags are recommended) | `9.1.0-debian-10-r41` |
-| `image.pullPolicy`  | SonarQube image pull policy                          | `IfNotPresent`        |
-| `image.pullSecrets` | SonarQube image pull secrets                         | `[]`                  |
-| `image.debug`       | Enable SonarQube image debug mode                    | `false`               |
+| Name                | Description                                          | Value                |
+| ------------------- | ---------------------------------------------------- | -------------------- |
+| `image.registry`    | SonarQube image registry                             | `docker.io`          |
+| `image.repository`  | SonarQube image repository                           | `bitnami/sonarqube`  |
+| `image.tag`         | SonarQube image tag (immutable tags are recommended) | `9.2.1-debian-10-r0` |
+| `image.pullPolicy`  | SonarQube image pull policy                          | `IfNotPresent`       |
+| `image.pullSecrets` | SonarQube image pull secrets                         | `[]`                 |
+| `image.debug`       | Enable SonarQube image debug mode                    | `false`              |
 
 
 ### SonarQube Configuration parameters
@@ -208,7 +208,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r239`     |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r264`     |
 | `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                    |
@@ -223,7 +223,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sysctl.enabled`            | Enable kernel settings modifier image                    | `true`                  |
 | `sysctl.image.registry`     | Bitnami Shell image registry                             | `docker.io`             |
 | `sysctl.image.repository`   | Bitnami Shell image repository                           | `bitnami/bitnami-shell` |
-| `sysctl.image.tag`          | Bitnami Shell image tag (immutable tags are recommended) | `10-debian-10-r239`     |
+| `sysctl.image.tag`          | Bitnami Shell image tag (immutable tags are recommended) | `10-debian-10-r264`     |
 | `sysctl.image.pullPolicy`   | Bitnami Shell image pull policy                          | `IfNotPresent`          |
 | `sysctl.image.pullSecrets`  | Bitnami Shell image pull secrets                         | `[]`                    |
 | `sysctl.resources.limits`   | The resources limits for the init container              | `{}`                    |
@@ -252,7 +252,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.jmx.enabled`                               | Whether or not to expose JMX metrics to Prometheus                                                    | `false`                 |
 | `metrics.jmx.image.registry`                        | JMX exporter image registry                                                                           | `docker.io`             |
 | `metrics.jmx.image.repository`                      | JMX exporter image repository                                                                         | `bitnami/jmx-exporter`  |
-| `metrics.jmx.image.tag`                             | JMX exporter image tag (immutable tags are recommended)                                               | `0.16.1-debian-10-r108` |
+| `metrics.jmx.image.tag`                             | JMX exporter image tag (immutable tags are recommended)                                               | `0.16.1-debian-10-r134` |
 | `metrics.jmx.image.pullPolicy`                      | JMX exporter image pull policy                                                                        | `IfNotPresent`          |
 | `metrics.jmx.image.pullSecrets`                     | Specify docker-registry secret names as an array                                                      | `[]`                    |
 | `metrics.jmx.containerPorts.metrics`                | JMX Exporter metrics container port                                                                   | `10445`                 |
@@ -306,7 +306,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.port`           | Port of an external PostgreSQL to connect (only if postgresql.enabled=false)                                    | `5432`      |
 
 
-The above parameters map to the env variables defined in [bitnami/sonarqube](http://github.com/bitnami/bitnami-docker-sonarqube). For more information please refer to the [bitnami/sonarqube](http://github.com/bitnami/bitnami-docker-sonarqube) image documentation.
+The above parameters map to the env variables defined in [bitnami/sonarqube](https://github.com/bitnami/bitnami-docker-sonarqube). For more information please refer to the [bitnami/sonarqube](https://github.com/bitnami/bitnami-docker-sonarqube) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -357,11 +357,11 @@ Refer to the [chart documentation on using an external database](https://docs.bi
 
 This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/master/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/master/bitnami/contour) you can utilize the ingress controller to serve your application.
 
-To enable Ingress integration, set `ingress.enabled` to `true`. The `ingress.hostname` property can be used to set the host name. The `ingress.tls` parameter can be used to add the TLS configuration for this host. It is also possible to have more than one host, with a separate TLS configuration for each host. [Learn more about configuring and using Ingress](https://docs.bitnami.com/kubernetes/apps/sonarqube/configuration/configure-use-ingress/).
+To enable Ingress integration, set `ingress.enabled` to `true`. The `ingress.hostname` property can be used to set the host name. The `ingress.tls` parameter can be used to add the TLS configuration for this host. It is also possible to have more than one host, with a separate TLS configuration for each host. [Learn more about configuring and using Ingress](https://docs.bitnami.com/kubernetes/apps/sonarqube/configuration/configure-ingress/).
 
 ### TLS secrets
 
-The chart also facilitates the creation of TLS secrets for use with the Ingress controller, with different options for certificate management. [Learn more about TLS secrets](https://docs.bitnami.com/kubernetes/apps/sonarqube/administration/enable-tls/).
+The chart also facilitates the creation of TLS secrets for use with the Ingress controller, with different options for certificate management. [Learn more about TLS secrets](https://docs.bitnami.com/kubernetes/apps/sonarqube/administration/enable-tls-ingress/).
 
 ### Additional environment variables
 
@@ -378,7 +378,7 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 ### Sidecars
 
-If additional containers are needed in the same pod as SonarQube (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter. If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/apps/sonarqube/administration/configure-use-sidecars/).
+If additional containers are needed in the same pod as SonarQube (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter. If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/apps/sonarqube/configuration/configure-sidecar-init-containers/).
 
 ### Pod affinity
 
@@ -388,7 +388,7 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 
 ## Persistence
 
-The [Bitnami SonarQube](https://github.com/bitnami/bitnami-docker-sonarqube) image stores the SonarQube data and configurations at the `/bitnami/sonarqube` path of the container. Persistent Volume Claims are used to keep the data across deployments. [Learn more about persistence in the chart documentation](https://docs.bitnami.com/kubernetes/apps/sonarqube/configuration/chart-persistence/).
+The [Bitnami SonarQube](https://github.com/bitnami/bitnami-docker-sonarqube) image stores the SonarQube data and configurations at the `/bitnami/sonarqube` path of the container. Persistent Volume Claims are used to keep the data across deployments.
 
 ### Adjust permissions of persistent volume mountpoint
 

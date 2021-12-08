@@ -55,7 +55,7 @@ image:
   repository: bitnami/thanos
   tag: 0.23.1-scratch-r3
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -176,7 +176,7 @@ query:
     allowPrivilegeEscalation: false
     readOnlyRootFilesystem: false
   ## Thanos Query containers' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param query.resources.limits The resources limits for the Thanos Query container
   ## @param query.resources.requests The requested resources for the Thanos Query container
   ##
@@ -496,7 +496,7 @@ query:
     minAvailable: 1
     maxUnavailable: ""
   ## Configure the ingress resource that allows you to access Thanos Query
-  ## ref: http://kubernetes.io/docs/user-guide/ingress/
+  ## ref: https://kubernetes.io/docs/user-guide/ingress/
   ##
   ingress:
     ## @param query.ingress.enabled Enable ingress controller resource
@@ -729,7 +729,7 @@ queryFrontend:
     allowPrivilegeEscalation: false
     readOnlyRootFilesystem: false
   ## Thanos Query Frontend containers' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param queryFrontend.resources.limits The resources limits for the Thanos Query Frontend container
   ## @param queryFrontend.resources.requests The requested resources for the Thanos Query Frontend container
   ##
@@ -984,7 +984,7 @@ queryFrontend:
     minAvailable: 1
     maxUnavailable: ""
   ## Configure the ingress resource that allows you to access Thanos Query Frontend
-  ## ref: http://kubernetes.io/docs/user-guide/ingress/
+  ## ref: https://kubernetes.io/docs/user-guide/ingress/
   ##
   ingress:
     ## @param queryFrontend.ingress.enabled Enable ingress controller resource
@@ -1132,7 +1132,7 @@ bucketweb:
     allowPrivilegeEscalation: false
     readOnlyRootFilesystem: false
   ## Thanos Bucket Web containers' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param bucketweb.resources.limits The resources limits for the Thanos Bucket Web container
   ## @param bucketweb.resources.requests The requested resources for the Thanos Bucket Web container
   ##
@@ -1363,7 +1363,7 @@ bucketweb:
     minAvailable: 1
     maxUnavailable: ""
   ## Configure the ingress resource that allows you to access Thanos Bucketweb
-  ## ref: http://kubernetes.io/docs/user-guide/ingress/
+  ## ref: https://kubernetes.io/docs/user-guide/ingress/
   ##
   ingress:
     ## @param bucketweb.ingress.enabled Enable ingress controller resource
@@ -1513,7 +1513,7 @@ compactor:
     allowPrivilegeEscalation: false
     readOnlyRootFilesystem: false
   ## Thanos Compactor containers' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param compactor.resources.limits The resources limits for the Thanos Compactor container
   ## @param compactor.resources.requests The requested resources for the Thanos Compactor container
   ##
@@ -1722,7 +1722,7 @@ compactor:
     existingServiceAccount: ""
     automountServiceAccountToken: true
   ## Configure the ingress resource that allows you to access Thanos Query Frontend
-  ## ref: http://kubernetes.io/docs/user-guide/ingress/
+  ## ref: https://kubernetes.io/docs/user-guide/ingress/
   ##
   ingress:
     ## @param compactor.ingress.enabled Enable ingress controller resource
@@ -1932,7 +1932,7 @@ storegateway:
     allowPrivilegeEscalation: false
     readOnlyRootFilesystem: false
   ## Thanos Store Gateway containers' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param storegateway.resources.limits The resources limits for the Thanos Store Gateway container
   ## @param storegateway.resources.requests The requested resources for the Thanos Store Gateway container
   ##
@@ -2199,7 +2199,7 @@ storegateway:
     minAvailable: 1
     maxUnavailable: ""
   ## Configure the ingress resource that allows you to access Thanos Query Frontend
-  ## ref: http://kubernetes.io/docs/user-guide/ingress/
+  ## ref: https://kubernetes.io/docs/user-guide/ingress/
   ##
   ingress:
     ## @param storegateway.ingress.enabled Enable ingress controller resource
@@ -2276,7 +2276,89 @@ storegateway:
     ## @param storegateway.ingress.pathType Ingress path type
     ##
     pathType: ImplementationSpecific
-
+    ## Create an ingress object for the GRPC service. This requires an HTTP/2
+    ## capable Ingress controller (eg. traefik using AWS NLB). Example annotations
+    ## - ingress.kubernetes.io/protocol: h2c
+    ## - service.beta.kubernetes.io/aws-load-balancer-type: nlb
+    ## - service.beta.kubernetes.io/aws-load-balancer-backend-protocol: tcp
+    ## For more information see https://kubernetes.io/docs/concepts/cluster-administration/cloud-providers/
+    ## and also the documentation for your ingress controller.
+    ##
+    ## The options that are accepted are identical to the HTTP one listed above
+    ##
+    grpc:
+      ## @param storegateway.ingress.grpc.enabled Enable ingress controller resource (GRPC)
+      ##
+      enabled: false
+      ## @param storegateway.ingress.grpc.hostname Default host for the ingress resource (GRPC)
+      ##
+      hostname: thanos-grpc.local
+      ## @param storegateway.ingress.grpc.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+      ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+      ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+      ##
+      ingressClassName: ""
+      ## @param storegateway.ingress.grpc.annotations Additional annotations for the Ingress resource (GRPC). To enable certificate autogeneration, place here your cert-manager annotations.
+      ## For a full list of possible ingress annotations, please see
+      ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+      ## Use this parameter to set the required annotations for cert-manager, see
+      ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
+      ##
+      ## Examples:
+      ## kubernetes.io/ingress.class: nginx
+      ## cert-manager.io/cluster-issuer: cluster-issuer-name
+      ##
+      annotations: {}
+      ## @param storegateway.ingress.grpc.extraHosts The list of additional hostnames to be covered with this ingress record.
+      ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
+      ## extraHosts:
+      ## - name: thanos-grpc.local
+      ##   path: /
+      ##
+      extraHosts: []
+      ## @param storegateway.ingress.grpc.extraTls The tls configuration for additional hostnames to be covered with this ingress record.
+      ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+      ## extraTls:
+      ## - hosts:
+      ##     - thanos-grpc.local
+      ##   secretName: thanos-grpc.local-tls
+      ##
+      extraTls: []
+      ## @param storegateway.ingress.grpc.secrets If you're providing your own certificates, please use this to add the certificates as secrets
+      ## key and certificate should start with -----BEGIN CERTIFICATE----- or
+      ## -----BEGIN RSA PRIVATE KEY-----
+      ##
+      ## name should line up with a tlsSecret set further up
+      ## If you're using cert-manager, this is unneeded, as it will create the secret for you if it is not set
+      ##
+      ## It is also possible to create and manage the certificates outside of this helm chart
+      ## Please see README.md for more information
+      ## e.g:
+      ## - name: thanos-grpc.local-tls
+      ##   key:
+      ##   certificate:
+      ##
+      secrets: []
+      ## @param storegateway.ingress.grpc.tls Enable TLS configuration for the hostname defined at `storegateway.ingress.grpc.hostname` parameter
+      ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.storegateway.ingress.grpc.hostname }}`
+      ## You can:
+      ##   - Use the `storegateway.ingress.grpc.secrets` parameter to create this TLS secret
+      ##   - Relay on cert-manager to create it by setting the corresponding annotations
+      ##   - Relay on Helm to create self-signed certificates by setting `storegateway.ingress.grpc.selfSigned=true`
+      ##
+      tls: false
+      ## @param storegateway.ingress.grpc.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
+      ##
+      selfSigned: false
+      ## @param storegateway.ingress.grpc.apiVersion Override API Version (automatically detected if not set)
+      ##
+      apiVersion: ""
+      ## @param storegateway.ingress.grpc.path Ingress Path
+      ##
+      path: /
+      ## @param storegateway.ingress.grpc.pathType Ingress Path type
+      ##
+      pathType: ImplementationSpecific
   ## Sharded parameters
   ## @param storegateway.sharded.enabled Enable sharding for Thanos Store Gateway
   ## @param storegateway.sharded.hashPartitioning.shards Setting hashPartitioning will create multiple store statefulsets based on the number of shards specified using the hashmod of the blocks
@@ -2423,7 +2505,7 @@ ruler:
     allowPrivilegeEscalation: false
     readOnlyRootFilesystem: false
   ## Thanos Ruler containers' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param ruler.resources.limits The resources limits for the Thanos Ruler container
   ## @param ruler.resources.requests The requested resources for the Thanos Ruler container
   ##
@@ -2690,7 +2772,7 @@ ruler:
     minAvailable: 1
     maxUnavailable: ""
   ## Configure the ingress resource that allows you to access Thanos Ruler
-  ## ref: http://kubernetes.io/docs/user-guide/ingress/
+  ## ref: https://kubernetes.io/docs/user-guide/ingress/
   ##
   ingress:
     ## @param ruler.ingress.enabled Enable ingress controller resource
@@ -2881,7 +2963,7 @@ receive:
     allowPrivilegeEscalation: false
     readOnlyRootFilesystem: false
   ## Thanos Receive containers' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param receive.resources.limits The resources limits for the Thanos Receive container
   ## @param receive.resources.requests The requested resources for the Thanos Receive container
   ##
@@ -3152,7 +3234,7 @@ receive:
     ##
     existingClaim: ""
   ## Configure the ingress resource that allows you to access Thanos Receive
-  ## ref: http://kubernetes.io/docs/user-guide/ingress/
+  ## ref: https://kubernetes.io/docs/user-guide/ingress/
   ##
   ingress:
     ## @param receive.ingress.enabled Set to true to enable ingress record generation
@@ -3297,7 +3379,7 @@ receiveDistributor:
     allowPrivilegeEscalation: false
     readOnlyRootFilesystem: false
   ## Thanos Receive Distributor containers' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param receiveDistributor.resources.limits The resources limits for the Thanos Receive container
   ## @param receiveDistributor.resources.requests The requested resources for the Thanos Receive container
   ##
@@ -3580,7 +3662,7 @@ volumePermissions:
     repository: bitnami/bitnami-shell
     tag: 10-debian-10-r242
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -3611,3 +3693,31 @@ minio:
   ## @param minio.defaultBuckets Comma, semi-colon or space separated list of MinIO&reg; buckets to create
   ##
   defaultBuckets: 'thanos'
+
+## @section NetWorkPolicy parameters
+
+networkPolicy:
+  ## @param networkPolicy.enabled Enable creation of NetworkPolicy resources. Only Ingress traffic is filtered for now.
+  ##
+  enabled: false
+  ## @param networkPolicy.allowExternal Don't require client label for connections
+  ## The Policy model to apply. When set to false, only pods with the correct
+  ## client label will have network access to http and grpc thanos port.
+  ## When true, thanos will accept connections from any source
+  ## (with the correct destination port).
+  ##
+  allowExternal: true
+  ## @param networkPolicy.explicitNamespacesSelector A Kubernetes LabelSelector to explicitly select namespaces from which traffic could be allowed
+  ## If explicitNamespacesSelector is missing or set to {}, only client Pods that are in the networkPolicy's namespace
+  ## and that match other criteria, the ones that have the good label, can reach thanos.
+  ## But sometimes, we want thanos to be accessible to clients from other namespaces, in this case, we can use this
+  ## LabelSelector to select these namespaces, note that the networkPolicy's namespace should also be explicitly added.
+  ##
+  ## Example:
+  ## explicitNamespacesSelector:
+  ##   matchLabels:
+  ##     role: frontend
+  ##   matchExpressions:
+  ##    - {key: role, operator: In, values: [frontend]}
+  ##
+  explicitNamespacesSelector: {}

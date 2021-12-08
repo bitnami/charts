@@ -2,7 +2,7 @@
 
 This Helm chart has been developed based on [bitnami/postgresql](https://github.com/bitnami/charts/tree/master/bitnami/postgresql) chart but including some changes to guarantee high availability such as:
 
-- A new deployment, service have been added to deploy [Pgpool-II](Pgpool-II) to act as proxy for PostgreSQL backend. It helps to reduce connection overhead, acts as a load balancer for PostgreSQL, and ensures database node failover.
+- A new deployment, service have been added to deploy [Pgpool-II](https://pgpool.net/mediawiki/index.php/Main_Page) to act as proxy for PostgreSQL backend. It helps to reduce connection overhead, acts as a load balancer for PostgreSQL, and ensures database node failover.
 - Replacing `bitnami/postgresql` with `bitnami/postgresql-repmgr` which includes and configures [repmgr](https://repmgr.org/). Repmgr ensures standby nodes assume the primary role when the primary node is unhealthy.
 
 ## TL;DR
@@ -14,7 +14,7 @@ $ helm install my-release bitnami/postgresql-ha
 
 ## Introduction
 
-This [Helm](https://github.com/kubernetes/helm) chart installs [PostgreSQL](https://www.postgresql.org/) with HA architecture in a Kubernetes cluster. Welcome to [contribute](CONTRIBUTING.md) to Helm Chart for PostgreSQL HA.
+This [Helm](https://github.com/kubernetes/helm) chart installs [PostgreSQL](https://www.postgresql.org/) with HA architecture in a Kubernetes cluster. Welcome to [contribute](https://github.com/bitnami/charts/blob/master/CONTRIBUTING.md) to Helm Chart for PostgreSQL HA.
 
 ## Prerequisites
 
@@ -89,7 +89,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
 | `postgresqlImage.registry`                      | PostgreSQL with Repmgr image registry                                                                                                                                                                         | `docker.io`                 |
 | `postgresqlImage.repository`                    | PostgreSQL with Repmgr image repository                                                                                                                                                                       | `bitnami/postgresql-repmgr` |
-| `postgresqlImage.tag`                           | PostgreSQL with Repmgr image tag                                                                                                                                                                              | `11.14.0-debian-10-r0`      |
+| `postgresqlImage.tag`                           | PostgreSQL with Repmgr image tag                                                                                                                                                                              | `11.14.0-debian-10-r12`     |
 | `postgresqlImage.pullPolicy`                    | PostgreSQL with Repmgr image pull policy                                                                                                                                                                      | `IfNotPresent`              |
 | `postgresqlImage.pullSecrets`                   | Specify docker-registry secret names as an array                                                                                                                                                              | `[]`                        |
 | `postgresqlImage.debug`                         | Specify if debug logs should be enabled                                                                                                                                                                       | `false`                     |
@@ -97,6 +97,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `postgresql.podLabels`                          | Labels to add to the StatefulSet pods. Evaluated as template                                                                                                                                                  | `{}`                        |
 | `postgresql.replicaCount`                       | Number of replicas to deploy                                                                                                                                                                                  | `2`                         |
 | `postgresql.updateStrategyType`                 | Update strategy for PostgreSQL statefulset                                                                                                                                                                    | `RollingUpdate`             |
+| `postgresql.containerPort`                      | PostgreSQL port                                                                                                                                                                                               | `5432`                      |
 | `postgresql.hostAliases`                        | Deployment pod host aliases                                                                                                                                                                                   | `[]`                        |
 | `postgresql.podAnnotations`                     | Additional pod annotations                                                                                                                                                                                    | `{}`                        |
 | `postgresql.priorityClassName`                  | Pod priority class                                                                                                                                                                                            | `""`                        |
@@ -207,7 +208,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | --------------------- |
 | `pgpoolImage.registry`                      | Pgpool image registry                                                                                              | `docker.io`           |
 | `pgpoolImage.repository`                    | Pgpool image repository                                                                                            | `bitnami/pgpool`      |
-| `pgpoolImage.tag`                           | Pgpool image tag                                                                                                   | `4.2.5-debian-10-r60` |
+| `pgpoolImage.tag`                           | Pgpool image tag                                                                                                   | `4.2.6-debian-10-r11` |
 | `pgpoolImage.pullPolicy`                    | Pgpool image pull policy                                                                                           | `IfNotPresent`        |
 | `pgpoolImage.pullSecrets`                   | Specify docker-registry secret names as an array                                                                   | `[]`                  |
 | `pgpoolImage.debug`                         | Specify if debug logs should be enabled                                                                            | `false`               |
@@ -272,6 +273,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `pgpool.pdb.minAvailable`                   | Minimum number / percentage of pods that should remain scheduled                                                   | `1`                   |
 | `pgpool.pdb.maxUnavailable`                 | Maximum number / percentage of pods that may be made unavailable                                                   | `""`                  |
 | `pgpool.updateStrategy`                     | Strategy used to replace old Pods by new ones                                                                      | `{}`                  |
+| `pgpool.containerPort`                      | Pgpool port                                                                                                        | `5432`                |
 | `pgpool.minReadySeconds`                    | How many seconds a pod needs to be ready before killing the next, during update                                    | `""`                  |
 | `pgpool.adminUsername`                      | Pgpool Admin username                                                                                              | `admin`               |
 | `pgpool.adminPassword`                      | Pgpool Admin password                                                                                              | `""`                  |
@@ -324,7 +326,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | -------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
 | `metricsImage.registry`                      | PostgreSQL Prometheus exporter image registry                                                                                                             | `docker.io`                 |
 | `metricsImage.repository`                    | PostgreSQL Prometheus exporter image repository                                                                                                           | `bitnami/postgres-exporter` |
-| `metricsImage.tag`                           | PostgreSQL Prometheus exporter image tag                                                                                                                  | `0.10.0-debian-10-r120`     |
+| `metricsImage.tag`                           | PostgreSQL Prometheus exporter image tag                                                                                                                  | `0.10.0-debian-10-r133`     |
 | `metricsImage.pullPolicy`                    | PostgreSQL Prometheus exporter image pull policy                                                                                                          | `IfNotPresent`              |
 | `metricsImage.pullSecrets`                   | Specify docker-registry secret names as an array                                                                                                          | `[]`                        |
 | `metricsImage.debug`                         | Specify if debug logs should be enabled                                                                                                                   | `false`                     |
@@ -333,6 +335,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `metrics.securityContext.runAsUser`          | User ID for the PostgreSQL Prometheus exporter container                                                                                                  | `1001`                      |
 | `metrics.resources.limits`                   | The resources limits for the container                                                                                                                    | `{}`                        |
 | `metrics.resources.requests`                 | The requested resources for the container                                                                                                                 | `{}`                        |
+| `metrics.containerPort`                      | Prometheus metrics exporter port                                                                                                                          | `9187`                      |
 | `metrics.livenessProbe.enabled`              | Enable livenessProbe                                                                                                                                      | `true`                      |
 | `metrics.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                                                                   | `30`                        |
 | `metrics.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                                                                          | `10`                        |
@@ -376,7 +379,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | --------------------------------------------- | --------------------------------------------------- | ----------------------- |
 | `volumePermissionsImage.registry`             | Init container volume-permissions image registry    | `docker.io`             |
 | `volumePermissionsImage.repository`           | Init container volume-permissions image repository  | `bitnami/bitnami-shell` |
-| `volumePermissionsImage.tag`                  | Init container volume-permissions image tag         | `10-debian-10-r252`     |
+| `volumePermissionsImage.tag`                  | Init container volume-permissions image tag         | `10-debian-10-r265`     |
 | `volumePermissionsImage.pullPolicy`           | Init container volume-permissions image pull policy | `IfNotPresent`          |
 | `volumePermissionsImage.pullSecrets`          | Specify docker-registry secret names as an array    | `[]`                    |
 | `volumePermissions.enabled`                   | Enable init container to adapt volume permissions   | `false`                 |
@@ -482,7 +485,7 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 
 ### Securing traffic using TLS
 
-Learn how to [configure TLS authentication](/<%= platform_path %>/infrastructure/postgresql-ha/administration/enable-tls/)
+Learn how to [configure TLS authentication](/<%= platform_path %>/infrastructure/postgresql-ha/administration/enable-tls-ingress/)
 
 ### LDAP
 
@@ -514,7 +517,7 @@ ldap.tls_reqcert="demand"
 
 Next, login to the PostgreSQL server using the `psql` client and add the PAM authenticated LDAP users.
 
-> Note: Parameters including commas must be escaped as shown in the above example. More information at: https://github.com/helm/helm/blob/master/docs/using_helm.md#the-format-and-limitations-of---set
+> Note: Parameters including commas must be escaped as shown in the above example.
 
 ### repmgr.conf / postgresql.conf / pg_hba.conf / pgpool.conf files as configMap
 

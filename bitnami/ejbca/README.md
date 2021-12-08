@@ -11,7 +11,7 @@ $ helm install my-release bitnami/ejbca
 
 ## Introduction
 
-This chart bootstraps a [EJBCA](https://www.ejbca.org/) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [EJBCA](https://www.ejbca.org/) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 It also packages [Bitnami MariaDB](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) as the required databases for the EJBCA application.
 
@@ -77,7 +77,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------ | ----------------------------------------------------------------------------------------- | ----------------------- |
 | `image.registry`                     | EJBCA image registry                                                                      | `docker.io`             |
 | `image.repository`                   | EJBCA image name                                                                          | `bitnami/ejbca`         |
-| `image.tag`                          | EJBCA image tag                                                                           | `7.4.3-2-debian-10-r28` |
+| `image.tag`                          | EJBCA image tag                                                                           | `7.4.3-2-debian-10-r52` |
 | `image.pullPolicy`                   | EJBCA image pull policy                                                                   | `IfNotPresent`          |
 | `image.pullSecrets`                  | Specify docker-registry secret names as an array                                          | `[]`                    |
 | `image.debug`                        | Enable image debug mode                                                                   | `false`                 |
@@ -210,7 +210,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                | `{}`    |
 
 
-The above parameters map to the env variables defined in [bitnami/ejbca](http://github.com/bitnami/bitnami-docker-ejbca). For more information please refer to the [bitnami/ejbca](http://github.com/bitnami/bitnami-docker-ejbca) image documentation.
+The above parameters map to the env variables defined in [bitnami/ejbca](https://github.com/bitnami/bitnami-docker-ejbca). For more information please refer to the [bitnami/ejbca](https://github.com/bitnami/bitnami-docker-ejbca) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

@@ -12,7 +12,7 @@ $ helm install my-release bitnami/wavefront-hpa-adapter
 ## Introduction
 Bitnami charts for Helm are carefully engineered, actively maintained and are the quickest and easiest way to deploy containers on a Kubernetes cluster that are ready to handle production workloads.
 
-[Wavefront HPA Adapter for Kubernetes](https://github.com/wavefrontHQ/wavefront-kubernetes-adapter) Deployment in a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+[Wavefront HPA Adapter for Kubernetes](https://github.com/wavefrontHQ/wavefront-kubernetes-adapter) Deployment in a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
@@ -68,7 +68,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------ |
 | `image.registry`                        | Adapter image registry                                                                    | `docker.io`                          |
 | `image.repository`                      | Adapter image repository                                                                  | `bitnami/wavefront-hpa-adapter`      |
-| `image.tag`                             | Adapter image tag (immutabe tags are recommended)                                         | `0.9.8-scratch-r5`                   |
+| `image.tag`                             | Adapter image tag (immutabe tags are recommended)                                         | `0.9.8-scratch-r6`                   |
 | `image.pullPolicy`                      | Adapter image pull policy                                                                 | `IfNotPresent`                       |
 | `image.pullSecrets`                     | Adapter image pull secrets                                                                | `[]`                                 |
 | `image.debug`                           | Enable image debug mode                                                                   | `false`                              |
@@ -190,7 +190,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ### Connect to a Wavefront instance
 
-Wavefront HPA for Kubernetes only works when it configured to use a Wavefront SaaS instance with a proper API token. This is done by setting the `wavefront.url` and `wavefront.token` values. Obtain an instance and an API token by signing up for an account through the [official Wavefront sign-up page](https://www.wavefront.com/sign-up). Refer to the [chart documentation for a configuration example](https://docs.bitnami.com/kubernetes/apps/wavefront-hpa-adapter-for-kubernetes/get-started/configure-connection/).
+Wavefront HPA for Kubernetes only works when it configured to use a Wavefront SaaS instance with a proper API token. This is done by setting the `wavefront.url` and `wavefront.token` values. Obtain an instance and an API token by signing up for an account through the [official Wavefront sign-up page](https://www.wavefront.com/sign-up).
 
 ## Troubleshooting
 

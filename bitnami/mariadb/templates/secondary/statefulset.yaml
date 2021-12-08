@@ -189,9 +189,9 @@ spec:
                 - /bin/bash
                 - -ec
                 - |
-                  password_aux="${MARIADB_ROOT_PASSWORD:-}"
-                  if [[ -f "${MARIADB_ROOT_PASSWORD_FILE:-}" ]]; then
-                      password_aux=$(cat "$MARIADB_ROOT_PASSWORD_FILE")
+                  password_aux="${MARIADB_MASTER_ROOT_PASSWORD:-}"
+                  if [[ -f "${MARIADB_MASTER_ROOT_PASSWORD_FILE:-}" ]]; then
+                      password_aux=$(cat "$MARIADB_MASTER_ROOT_PASSWORD_FILE")
                   fi
                   mysqladmin status -uroot -p"${password_aux}"
           {{- else if .Values.secondary.customStartupProbe }}
@@ -253,6 +253,9 @@ spec:
         - name: metrics
           image: {{ include "mariadb.metrics.image" . }}
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
+          {{- if .Values.metrics.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.metrics.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
           env:
             {{- if .Values.auth.usePasswordFiles }}
             - name: MARIADB_ROOT_PASSWORD_FILE

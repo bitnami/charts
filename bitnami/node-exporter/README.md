@@ -11,7 +11,7 @@ $ helm install my-release bitnami/node-exporter
 
 ## Introduction
 
-This chart bootstraps [Node Exporter](https://github.com/bitnami/bitnami-docker-node-exporter) on [Kubernetes](http://kubernetes.io) using the [Helm](https://helm.sh) package manager.
+This chart bootstraps [Node Exporter](https://github.com/bitnami/bitnami-docker-node-exporter) on [Kubernetes](https://kubernetes.io) using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
 
@@ -79,7 +79,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.name`                         | The name of the ServiceAccount to create                                                                                                                           | `""`                    |
 | `image.registry`                              | Node Exporter image registry                                                                                                                                       | `docker.io`             |
 | `image.repository`                            | Node Exporter image repository                                                                                                                                     | `bitnami/node-exporter` |
-| `image.tag`                                   | Node Exporter Image tag (immutable tags are recommended)                                                                                                           | `1.2.2-debian-10-r78`   |
+| `image.tag`                                   | Node Exporter Image tag (immutable tags are recommended)                                                                                                           | `1.3.0-debian-10-r0`    |
 | `image.pullPolicy`                            | Node Exporter image pull policy                                                                                                                                    | `IfNotPresent`          |
 | `image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                                                                   | `[]`                    |
 | `extraArgs`                                   | Additional command line arguments to pass to node-exporter                                                                                                         | `{}`                    |

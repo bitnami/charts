@@ -12,7 +12,7 @@ $ helm install my-release bitnami/grafana-operator
 ## Introduction
 Bitnami charts for Helm are carefully engineered, actively maintained and are the quickest and easiest way to deploy containers on a Kubernetes cluster that are ready to handle production workloads.
 
-This chart bootstraps a [Grafana Operator](https://github.com/integr8ly/grafana-operator/blob/master/documentation/deploy_grafana.md) Deployment [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Grafana Operator](https://github.com/integr8ly/grafana-operator/blob/master/documentation/deploy_grafana.md) Deployment [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
@@ -86,7 +86,7 @@ For more information, refer to the [documentation on the differences between the
 | `operator.updateStrategy.type`                               | Set up update strategy for Grafana Operator installation.                                                                                 | `Recreate`                 |
 | `operator.image.registry`                                    | Grafana Operator image registry                                                                                                           | `docker.io`                |
 | `operator.image.repository`                                  | Grafana Operator image name                                                                                                               | `bitnami/grafana-operator` |
-| `operator.image.tag`                                         | Grafana Operator image tag                                                                                                                | `3.10.4-debian-10-r6`      |
+| `operator.image.tag`                                         | Grafana Operator image tag                                                                                                                | `3.10.4-debian-10-r34`     |
 | `operator.image.pullPolicy`                                  | Grafana Operator image pull policy                                                                                                        | `IfNotPresent`             |
 | `operator.image.pullSecrets`                                 | Grafana Operator image pull secrets                                                                                                       | `[]`                       |
 | `operator.args.scanAllNamespaces`                            | Specify if all namespace should be scanned for dashboards and datasources. (Creates ClusterRole)                                          | `false`                    |
@@ -150,7 +150,7 @@ For more information, refer to the [documentation on the differences between the
 | `grafana.enabled`                                           | Enabled the deployment of the Grafana CRD object into the cluster                             | `true`               |
 | `grafana.image.registry`                                    | Grafana image registry                                                                        | `docker.io`          |
 | `grafana.image.repository`                                  | Grafana image name                                                                            | `bitnami/grafana`    |
-| `grafana.image.tag`                                         | Grafana image tag                                                                             | `8.2.2-debian-10-r5` |
+| `grafana.image.tag`                                         | Grafana image tag                                                                             | `8.2.5-debian-10-r6` |
 | `grafana.image.pullSecrets`                                 | Grafana image pull secrets                                                                    | `[]`                 |
 | `grafana.serviceAccount`                                    | Additional service account configuration                                                      | `{}`                 |
 | `grafana.podSecurityContext.enabled`                        | Enable pods security context                                                                  | `true`               |
@@ -196,6 +196,7 @@ For more information, refer to the [documentation on the differences between the
 | `grafana.secrets`                                           | Extra secrets to mount into the grafana pod                                                   | `[]`                 |
 | `grafana.jsonnetLibrarySelector`                            | Configuring the read for jsonnetLibraries to pull in.                                         | `{}`                 |
 | `grafana.dashboardLabelSelectors`                           | This selects dashboards on the label.                                                         | `{}`                 |
+| `grafana.dashboardNamespaceSelector`                        | Watch for dashboards only in the Namespaces that have the specified namespace label           | `[]`                 |
 | `grafana.livenessProbe.enabled`                             | Enable livenessProbe                                                                          | `true`               |
 | `grafana.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                       | `120`                |
 | `grafana.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                              | `10`                 |

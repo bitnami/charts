@@ -11,7 +11,7 @@ $ helm install my-release bitnami/kube-prometheus
 
 ## Introduction
 
-This chart bootstraps [Prometheus Operator](https://github.com/bitnami/bitnami-docker-prometheus-operator) on [Kubernetes](http://kubernetes.io) using the [Helm](https://helm.sh) package manager.
+This chart bootstraps [Prometheus Operator](https://github.com/bitnami/bitnami-docker-prometheus-operator) on [Kubernetes](https://kubernetes.io) using the [Helm](https://helm.sh) package manager.
 
 In the default configuration the chart deploys the following components on the Kubernetes cluster:
 
@@ -89,6 +89,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `operator.image.tag`                                                                  | Prometheus Operator Image tag (immutable tags are recommended)                                                         | `0.52.1-debian-10-r0`         |
 | `operator.image.pullPolicy`                                                           | Prometheus Operator image pull policy                                                                                  | `IfNotPresent`                |
 | `operator.image.pullSecrets`                                                          | Specify docker-registry secret names as an array                                                                       | `[]`                          |
+| `operator.extraArgs`                                                                  | Additional arguments passed to Prometheus Operator                                                                     | `[]`                          |
 | `operator.hostAliases`                                                                | Add deployment host aliases                                                                                            | `[]`                          |
 | `operator.serviceAccount.create`                                                      | Specify whether to create a ServiceAccount for Prometheus Operator                                                     | `true`                        |
 | `operator.serviceAccount.name`                                                        | The name of the ServiceAccount to create                                                                               | `""`                          |
@@ -303,7 +304,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `prometheus.thanos.containerSecurityContext.allowPrivilegeEscalation` | Switch privilegeEscalation possibility on or off                                                                                 | `false`                  |
 | `prometheus.thanos.containerSecurityContext.runAsNonRoot`             | Force the container to run as a non root user                                                                                    | `true`                   |
 | `prometheus.thanos.containerSecurityContext.capabilities.drop`        | Linux Kernel capabilities which should be dropped                                                                                | `[]`                     |
-| `prometheus.thanos.prometheusUrl`                                     | Override default prometheus url "http://localhost:9090"                                                                          | `""`                     |
+| `prometheus.thanos.prometheusUrl`                                     | Override default prometheus url `http://localhost:9090`                                                                          | `""`                     |
 | `prometheus.thanos.extraArgs`                                         | Additional arguments passed to the thanos sidecar container                                                                      | `[]`                     |
 | `prometheus.thanos.objectStorageConfig`                               | Support mounting a Secret for the objectStorageConfig of the sideCar container.                                                  | `{}`                     |
 | `prometheus.thanos.extraVolumeMounts`                                 | Additional volumeMounts from `prometheus.volumes` for thanos sidecar container                                                   | `[]`                     |

@@ -13,7 +13,7 @@ $ helm install my-release bitnami/oauth2-proxy
 
 Bitnami charts for Helm are carefully engineered, actively maintained and are the quickest and easiest way to deploy containers on a Kubernetes cluster that are ready to handle production workloads.
 
-This chart bootstraps a [OAuth2 Proxy](https://github.com/oauth2-proxy/oauth2-proxy) Deployment in a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [OAuth2 Proxy](https://github.com/oauth2-proxy/oauth2-proxy) Deployment in a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
@@ -103,7 +103,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ------------------------------------------------------- | ---------------------- |
 | `image.registry`    | OAuth2 Proxy image registry                             | `docker.io`            |
 | `image.repository`  | OAuth2 Proxy image repository                           | `bitnami/oauth2-proxy` |
-| `image.tag`         | OAuth2 Proxy image tag (immutable tags are recommended) | `7.2.0-debian-10-r4`   |
+| `image.tag`         | OAuth2 Proxy image tag (immutable tags are recommended) | `7.2.0-debian-10-r32`  |
 | `image.pullPolicy`  | OAuth2 Proxy image pull policy                          | `IfNotPresent`         |
 | `image.pullSecrets` | OAuth2 Proxy image pull secrets                         | `[]`                   |
 
@@ -218,7 +218,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 See https://github.com/bitnami-labs/readmenator to create the table
 
-The above parameters map to the env variables defined in [bitnami/oauth2-proxy](http://github.com/bitnami/bitnami-docker-oauth2-proxy). For more information please refer to the [bitnami/oauth2-proxy](http://github.com/bitnami/bitnami-docker-oauth2-proxy) image documentation.
+The above parameters map to the env variables defined in [bitnami/oauth2-proxy](https://github.com/bitnami/bitnami-docker-oauth2-proxy). For more information please refer to the [bitnami/oauth2-proxy](https://github.com/bitnami/bitnami-docker-oauth2-proxy) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -252,15 +252,15 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 This chart provides support for Ingress resources. If an Ingress controller, such as [nginx-ingress](https://kubeapps.com/charts/stable/nginx-ingress) or [traefik](https://kubeapps.com/charts/stable/traefik), that Ingress controller can be used to serve OAuth2 Proxy.
 
-To enable Ingress integration, set `ingress.enabled` to `true`. The `ingress.hostname` property can be used to set the host name. The `ingress.tls` parameter can be used to add the TLS configuration for this host. It is also possible to have more than one host, with a separate TLS configuration for each host. [Learn more about configuring and using Ingress](https://docs.bitnami.com/kubernetes/apps/oauth2-proxy/configuration/configure-use-ingress/).
+To enable Ingress integration, set `ingress.enabled` to `true`. The `ingress.hostname` property can be used to set the host name. The `ingress.tls` parameter can be used to add the TLS configuration for this host. It is also possible to have more than one host, with a separate TLS configuration for each host.
 
 ### TLS secrets
 
-The chart also facilitates the creation of TLS secrets for use with the Ingress controller, with different options for certificate management. [Learn more about TLS secrets](https://docs.bitnami.com/kubernetes/apps/oauth2-proxy/administration/enable-tls/).
+The chart also facilitates the creation of TLS secrets for use with the Ingress controller, with different options for certificate management.
 
 ## Persistence
 
-The [Bitnami OAuth2 Proxy](https://github.com/bitnami/bitnami-docker-oauth2-proxy) image stores the OAuth2 Proxy data and configurations at the `/bitnami` path of the container. Persistent Volume Claims are used to keep the data across deployments. [Learn more about persistence in the chart documentation](https://docs.bitnami.com/kubernetes/apps/oauth2-proxy/configuration/chart-persistence/).
+The [Bitnami OAuth2 Proxy](https://github.com/bitnami/bitnami-docker-oauth2-proxy) image stores the OAuth2 Proxy data and configurations at the `/bitnami` path of the container. Persistent Volume Claims are used to keep the data across deployments.
 
 ### Additional environment variables
 
@@ -276,7 +276,7 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 ### Sidecars
 
-If additional containers are needed in the same pod as OAuth2 Proxy (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter. If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/apps/oauth2-proxy/administration/configure-use-sidecars/).
+If additional containers are needed in the same pod as OAuth2 Proxy (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter. If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/infrastructure/oauth2-proxy/configuration/configure-sidecar-init-containers/).
 
 ### Pod affinity
 

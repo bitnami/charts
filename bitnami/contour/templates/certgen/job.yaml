@@ -18,7 +18,6 @@ metadata:
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
 spec:
-  ttlSecondsAfterFinished: 0
   template:
     metadata:
       labels: {{- include "common.labels.standard" . | nindent 8 }}

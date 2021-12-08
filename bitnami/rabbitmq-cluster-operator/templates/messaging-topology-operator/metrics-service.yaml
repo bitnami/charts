@@ -36,7 +36,7 @@ spec:
   {{- end }}
   ports:
     - name: http
-      port: {{ .Values.msgTopologyOperator.metrics.service.port }}
+      port: {{ .Values.msgTopologyOperator.metrics.service.ports.http }}
       targetPort: http-metrics
       protocol: TCP
       {{- if (and (or (eq .Values.msgTopologyOperator.metrics.service.type "NodePort") (eq .Values.msgTopologyOperator.metrics.service.type "LoadBalancer")) (not (empty .Values.msgTopologyOperator.metrics.service.nodePorts.http))) }}

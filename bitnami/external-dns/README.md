@@ -11,13 +11,13 @@ $ helm install my-release bitnami/external-dns
 
 ## Introduction
 
-This chart bootstraps a [ExternalDNS](https://github.com/bitnami/bitnami-docker-external-dns) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [ExternalDNS](https://github.com/bitnami/bitnami-docker-external-dns) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This chart has been tested to work with NGINX Ingress, cert-manager, fluentd and Prometheus on top of the [BKPR](https://kubeprod.io/).
 
 ## Prerequisites
 
-- Kubernetes 1.12+
+- Kubernetes 1.19+
 - Helm 3.1.0
 
 ## Installing the Chart
@@ -68,7 +68,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
 | `image.registry`                              | ExternalDNS image registry                                                                                                                                                   | `docker.io`               |
 | `image.repository`                            | ExternalDNS image repository                                                                                                                                                 | `bitnami/external-dns`    |
-| `image.tag`                                   | ExternalDNS Image tag (immutable tags are recommended)                                                                                                                       | `0.10.1-debian-10-r5`     |
+| `image.tag`                                   | ExternalDNS Image tag (immutable tags are recommended)                                                                                                                       | `0.10.1-debian-10-r33`    |
 | `image.pullPolicy`                            | ExternalDNS image pull policy                                                                                                                                                | `IfNotPresent`            |
 | `image.pullSecrets`                           | ExternalDNS image pull secrets                                                                                                                                               | `[]`                      |
 | `hostAliases`                                 | Deployment pod host aliases                                                                                                                                                  | `[]`                      |
@@ -193,7 +193,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `zoneNameFilters`                             | Filter target zones by zone domain (optional)                                                                                                                                | `[]`                      |
 | `zoneIdFilters`                               | Limit possible target zones by zone id (optional)                                                                                                                            | `[]`                      |
 | `annotationFilter`                            | Filter sources managed by external-dns via annotation using label selector (optional)                                                                                        | `""`                      |
-| `labelFilter`                                 | Filter sources managed by external-dns using label selector (optional)                                                                                        | `""`                      |
+| `labelFilter`                                 | Select sources managed by external-dns using label selector (optional)                                                                                                       | `""`                      |
 | `dryRun`                                      | When enabled, prints DNS record changes rather than actually performing them (optional)                                                                                      | `false`                   |
 | `triggerLoopOnEvent`                          | When enabled, triggers run loop on create/update/delete events in addition to regular interval (optional)                                                                    | `false`                   |
 | `interval`                                    | Interval update period to use                                                                                                                                                | `1m`                      |

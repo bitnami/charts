@@ -11,7 +11,7 @@ $ helm install my-release bitnami/mxnet
 
 ## Introduction
 
-This chart bootstraps an [Apache MXNet (Incubating)](https://github.com/bitnami/bitnami-docker-mxnet) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps an [Apache MXNet (Incubating)](https://github.com/bitnami/bitnami-docker-mxnet) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
@@ -71,19 +71,19 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------- | ----------------------------------------------------------------------------------------------------- | ----------------------- |
 | `image.registry`                       | Apache MXNet (Incubating) image registry                                                              | `docker.io`             |
 | `image.repository`                     | Apache MXNet (Incubating) image repository                                                            | `bitnami/mxnet`         |
-| `image.tag`                            | Apache MXNet (Incubating) image tag (immutable tags are recommended)                                  | `1.8.0-debian-10-r221`  |
+| `image.tag`                            | Apache MXNet (Incubating) image tag (immutable tags are recommended)                                  | `1.8.0-debian-10-r233`  |
 | `image.pullPolicy`                     | Image pull policy                                                                                     | `IfNotPresent`          |
 | `image.pullSecrets`                    | Specify docker-registry secret names as an array                                                      | `[]`                    |
 | `image.debug`                          | Specify if debug logs should be enabled                                                               | `false`                 |
 | `git.registry`                         | Git image registry                                                                                    | `docker.io`             |
 | `git.repository`                       | Git image repository                                                                                  | `bitnami/git`           |
-| `git.tag`                              | Git image tag (immutable tags are recommended)                                                        | `2.33.0-debian-10-r88`  |
+| `git.tag`                              | Git image tag (immutable tags are recommended)                                                        | `2.34.1-debian-10-r5`   |
 | `git.pullPolicy`                       | Git image pull policy                                                                                 | `IfNotPresent`          |
 | `git.pullSecrets`                      | Specify docker-registry secret names as an array                                                      | `[]`                    |
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory                           | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                      | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image repository                                                    | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                          | `10-debian-10-r253`     |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                          | `10-debian-10-r266`     |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                   | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                      | `[]`                    |
 | `volumePermissions.resources.limits`   | The resources limits for the container                                                                | `{}`                    |
@@ -330,7 +330,7 @@ initContainers:
 
 The [Bitnami Apache MXNet (Incubating)](https://github.com/bitnami/bitnami-docker-mxnet) image can persist data. If enabled, the persisted path is `/bitnami/mxnet` by default.
 
-The chart mounts a [Persistent Volume](http://kubernetes.io/docs/user-guide/persistent-volumes/) at this location. The volume is created using dynamic volume provisioning.
+The chart mounts a [Persistent Volume](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) at this location. The volume is created using dynamic volume provisioning.
 
 ### Adjust permissions of persistent volume mountpoint
 

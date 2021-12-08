@@ -11,7 +11,7 @@ $ helm install my-release bitnami/elasticsearch
 
 ## Introduction
 
-This chart bootstraps a [Elasticsearch](https://github.com/bitnami/bitnami-docker-elasticsearch) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Elasticsearch](https://github.com/bitnami/bitnami-docker-elasticsearch) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
@@ -80,7 +80,7 @@ $ helm delete --purge my-release
 | ------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------ |
 | `image.registry`                           | Elasticsearch image registry                                                                                                                        | `docker.io`                    |
 | `image.repository`                         | Elasticsearch image repository                                                                                                                      | `bitnami/elasticsearch`        |
-| `image.tag`                                | Elasticsearch image tag (immutable tags are recommended)                                                                                            | `7.15.2-debian-10-r0`          |
+| `image.tag`                                | Elasticsearch image tag (immutable tags are recommended)                                                                                            | `7.15.2-debian-10-r10`         |
 | `image.pullPolicy`                         | Elasticsearch image pull policy                                                                                                                     | `IfNotPresent`                 |
 | `image.pullSecrets`                        | Elasticsearch image pull secrets                                                                                                                    | `[]`                           |
 | `image.debug`                              | Enable image debug mode                                                                                                                             | `false`                        |
@@ -132,6 +132,10 @@ $ helm delete --purge my-release
 | `master.securityContext.enabled`            | Enable security context for master-eligible pods                                                                                                                                                                                        | `true`              |
 | `master.securityContext.fsGroup`            | Group ID for the container for master-eligible pods                                                                                                                                                                                     | `1001`              |
 | `master.securityContext.runAsUser`          | User ID for the container for master-eligible pods                                                                                                                                                                                      | `1001`              |
+| `master.podSecurityContext.enabled`         | Enable security context for master-eligible pods                                                                                                                                                                                        | `false`             |
+| `master.podSecurityContext.fsGroup`         | Group ID for the container for master-eligible pods                                                                                                                                                                                     | `1001`              |
+| `master.containerSecurityContext.enabled`   | Enable security context for master-eligible pods                                                                                                                                                                                        | `false`             |
+| `master.containerSecurityContext.runAsUser` | User ID for the container for master-eligible pods                                                                                                                                                                                      | `1001`              |
 | `master.podAffinityPreset`                  | Master-eligible Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                                     | `""`                |
 | `master.podAntiAffinityPreset`              | Master-eligible Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                                | `""`                |
 | `master.nodeAffinityPreset.type`            | Master-eligible Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                               | `""`                |
@@ -204,6 +208,10 @@ $ helm delete --purge my-release
 | `coordinating.securityContext.enabled`            | Enable security context for coordinating-only pods                                                                        | `true`          |
 | `coordinating.securityContext.fsGroup`            | Group ID for the container for coordinating-only pods                                                                     | `1001`          |
 | `coordinating.securityContext.runAsUser`          | User ID for the container for coordinating-only pods                                                                      | `1001`          |
+| `coordinating.podSecurityContext.enabled`         | Enable security context for coordinating  pods                                                                            | `false`         |
+| `coordinating.podSecurityContext.fsGroup`         | Group ID for the container for coordinating  pods                                                                         | `1001`          |
+| `coordinating.containerSecurityContext.enabled`   | Enable security context for coordinating pods                                                                             | `false`         |
+| `coordinating.containerSecurityContext.runAsUser` | User ID for the container for coordinating pods                                                                           | `1001`          |
 | `coordinating.podAffinityPreset`                  | Coordinating Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                          | `""`            |
 | `coordinating.podAntiAffinityPreset`              | Coordinating Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                     | `""`            |
 | `coordinating.nodeAffinityPreset.type`            | Coordinating Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                    | `""`            |
@@ -270,6 +278,10 @@ $ helm delete --purge my-release
 | `data.securityContext.enabled`               | Enable security context for data pods                                                                                                             | `true`              |
 | `data.securityContext.fsGroup`               | Group ID for the container for data pods                                                                                                          | `1001`              |
 | `data.securityContext.runAsUser`             | User ID for the container for data pods                                                                                                           | `1001`              |
+| `data.podSecurityContext.enabled`            | Enable security context for data pods                                                                                                             | `false`             |
+| `data.podSecurityContext.fsGroup`            | Group ID for the container for data pods                                                                                                          | `1001`              |
+| `data.containerSecurityContext.enabled`      | Enable security context for data pods                                                                                                             | `false`             |
+| `data.containerSecurityContext.runAsUser`    | User ID for the container for data pods                                                                                                           | `1001`              |
 | `data.podAffinityPreset`                     | Data Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                          | `""`                |
 | `data.podAntiAffinityPreset`                 | Data Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                     | `""`                |
 | `data.nodeAffinityPreset.type`               | Data Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                    | `""`                |
@@ -339,6 +351,10 @@ $ helm delete --purge my-release
 | `ingest.securityContext.enabled`            | Enable security context for ingest pods                                                                                  | `true`          |
 | `ingest.securityContext.fsGroup`            | Group ID for the container for ingest pods                                                                               | `1001`          |
 | `ingest.securityContext.runAsUser`          | User ID for the container for ingest pods                                                                                | `1001`          |
+| `ingest.podSecurityContext.enabled`         | Enable security context for ingest pods                                                                                  | `false`         |
+| `ingest.podSecurityContext.fsGroup`         | Group ID for the container for ingest pods                                                                               | `1001`          |
+| `ingest.containerSecurityContext.enabled`   | Enable security context for data pods                                                                                    | `false`         |
+| `ingest.containerSecurityContext.runAsUser` | User ID for the container for data pods                                                                                  | `1001`          |
 | `ingest.podAffinityPreset`                  | Ingest Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                               | `""`            |
 | `ingest.podAntiAffinityPreset`              | Ingest Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                          | `""`            |
 | `ingest.nodeAffinityPreset.type`            | Ingest Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                         | `""`            |
@@ -391,7 +407,7 @@ $ helm delete --purge my-release
 | `curator.name`                               | Elasticsearch Curator pod name                                                                                                              | `curator`                       |
 | `curator.image.registry`                     | Elasticsearch Curator image registry                                                                                                        | `docker.io`                     |
 | `curator.image.repository`                   | Elasticsearch Curator image repository                                                                                                      | `bitnami/elasticsearch-curator` |
-| `curator.image.tag`                          | Elasticsearch Curator image tag                                                                                                             | `5.8.4-debian-10-r179`          |
+| `curator.image.tag`                          | Elasticsearch Curator image tag                                                                                                             | `5.8.4-debian-10-r190`          |
 | `curator.image.pullPolicy`                   | Elasticsearch Curator image pull policy                                                                                                     | `IfNotPresent`                  |
 | `curator.image.pullSecrets`                  | Elasticsearch Curator image pull secrets                                                                                                    | `[]`                            |
 | `curator.cronjob.schedule`                   | Schedule for the CronJob                                                                                                                    | `0 1 * * *`                     |
@@ -440,7 +456,7 @@ $ helm delete --purge my-release
 | `metrics.name`                               | Metrics pod name                                                                                                         | `metrics`                        |
 | `metrics.image.registry`                     | Metrics exporter image registry                                                                                          | `docker.io`                      |
 | `metrics.image.repository`                   | Metrics exporter image repository                                                                                        | `bitnami/elasticsearch-exporter` |
-| `metrics.image.tag`                          | Metrics exporter image tag                                                                                               | `1.3.0-debian-10-r19`            |
+| `metrics.image.tag`                          | Metrics exporter image tag                                                                                               | `1.3.0-debian-10-r31`            |
 | `metrics.image.pullPolicy`                   | Metrics exporter image pull policy                                                                                       | `IfNotPresent`                   |
 | `metrics.image.pullSecrets`                  | Metrics exporter image pull secrets                                                                                      | `[]`                             |
 | `metrics.extraArgs`                          | Extra arguments to add to the default exporter command                                                                   | `[]`                             |
@@ -487,7 +503,7 @@ $ helm delete --purge my-release
 | `sysctlImage.enabled`            | Enable kernel settings modifier image       | `true`                  |
 | `sysctlImage.registry`           | Kernel settings modifier image registry     | `docker.io`             |
 | `sysctlImage.repository`         | Kernel settings modifier image repository   | `bitnami/bitnami-shell` |
-| `sysctlImage.tag`                | Kernel settings modifier image tag          | `10-debian-10-r248`     |
+| `sysctlImage.tag`                | Kernel settings modifier image tag          | `10-debian-10-r259`     |
 | `sysctlImage.pullPolicy`         | Kernel settings modifier image pull policy  | `IfNotPresent`          |
 | `sysctlImage.pullSecrets`        | Kernel settings modifier image pull secrets | `[]`                    |
 | `sysctlImage.resources.limits`   | The resources limits for the container      | `{}`                    |
@@ -501,7 +517,7 @@ $ helm delete --purge my-release
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                                                              | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `10-debian-10-r248`     |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `10-debian-10-r259`     |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Init container volume-permissions image pull secrets                                                                                                      | `[]`                    |
 | `volumePermissions.resources.limits`   | The resources limits for the container                                                                                                                    | `{}`                    |
@@ -683,7 +699,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 
 The [Bitnami Elasticsearch](https://github.com/bitnami/bitnami-docker-elasticsearch) image stores the Elasticsearch data at the `/bitnami/elasticsearch/data` path of the container.
 
-By default, the chart mounts a [Persistent Volume](http://kubernetes.io/docs/user-guide/persistent-volumes/) at this location. The volume is created using dynamic volume provisioning. See the [Parameters](#parameters) section to configure the PVC.
+By default, the chart mounts a [Persistent Volume](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) at this location. The volume is created using dynamic volume provisioning. See the [Parameters](#parameters) section to configure the PVC.
 
 ### Adjust permissions of persistent volume mountpoint
 

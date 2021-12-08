@@ -75,6 +75,9 @@ spec:
       {{- if .Values.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.topologySpreadConstraints "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.priorityClassName }}
       priorityClassName: {{ .Values.priorityClassName }}
       {{- end }}
@@ -151,6 +154,11 @@ spec:
               DNS.3 = $my_hostname.$svc.$MY_POD_NAMESPACE.svc.{{ .Values.clusterDomain }}
               DNS.4 = localhost
               DNS.5 = 127.0.0.1
+              {{- if .Values.tls.extraDnsNames }}
+              {{- range $key, $dnsName := .Values.tls.extraDnsNames }}
+              {{ $key }} = {{ $dnsName }}
+              {{- end }}
+              {{- end }}
               {{- if .Values.externalAccess.service.loadBalancerIPs }}
               {{- range $key, $val := .Values.externalAccess.service.loadBalancerIPs }}
               IP.{{ $key }} = {{ $val | quote }}
@@ -299,7 +307,7 @@ spec:
               value: {{ ternary "yes" "no" .Values.directoryPerDB | quote }}
             {{- $extraFlags := .Values.extraFlags | join " " -}}
             {{- if .Values.tls.enabled }}
-              {{- $extraFlags = printf "%s %s" "--tlsMode=requireTLS --tlsCertificateKeyFile=/certs/mongodb.pem --tlsCAFile=/certs/mongodb-ca-cert" $extraFlags  }}
+              {{- $extraFlags = printf "--tlsMode=%s --tlsCertificateKeyFile=/certs/mongodb.pem --tlsCAFile=/certs/mongodb-ca-cert %s" .Values.tls.mode $extraFlags  }}
             {{- end }}
             {{- if ne $extraFlags ""}}
             - name: MONGODB_EXTRA_FLAGS
@@ -416,6 +424,11 @@ spec:
             - name: scripts
               mountPath: /scripts/setup.sh
               subPath: setup.sh
+            {{ if .Values.replicaSetConfigurationSettings.enabled }}
+            - name: scripts
+              mountPath: /scripts/replicaSetConfigurationSettings.sh
+              subPath: replicaSetConfigurationSettings.sh
+            {{- end }}
             {{- if and .Values.externalAccess.enabled .Values.externalAccess.autoDiscovery.enabled (eq .Values.externalAccess.service.type "LoadBalancer") }}
             - name: shared
               mountPath: /shared
@@ -545,7 +558,12 @@ spec:
         {{- end }}
   {{- if not .Values.persistence.enabled }}
         - name: datadir
+          {{- if .Values.persistence.medium }}
+          emptyDir:
+            medium: {{ .Values.persistence.medium | quote }}
+          {{- else }}
           emptyDir: {}
+          {{- end }}
   {{- else }}
   volumeClaimTemplates:
     - metadata:
