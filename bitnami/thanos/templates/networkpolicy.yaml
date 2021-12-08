@@ -17,7 +17,9 @@ spec:
     {{- include "common.labels.matchLabels" . | nindent 6 }}
   ingress:
     # Allow inbound connections
-    - ports: {{- include "tomcat.ports" . | nindent 8 }}
+    - ports:
+       - port: http
+       - port: grpc
       {{- if not .Values.networkPolicy.allowExternal }}
       from:
         - podSelector:
@@ -27,14 +29,9 @@ spec:
           namespaceSelector:
 {{ toYaml .Values.networkPolicy.explicitNamespacesSelector | indent 12 }}
           {{- end }}
-    # Allow communication between Tomcat's POD
         - podSelector:
             matchLabels:
             {{- include "common.labels.matchLabels" . | nindent 14 }}
+              role: read
       {{- end }}
-    {{- if .Values.metrics.jmx.enabled }}
-    # Allow prometheus scrapes
-    - ports:
-        - port: {{ .Values.metrics.jmx.ports.metrics }}
-    {{- end }}
 {{- end }}
