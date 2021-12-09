@@ -52,7 +52,7 @@ spec:
     - port: {{ if .Values.receive.service.remoteWrite }}{{ coalesce .Values.receive.service.ports.remote .Values.receive.service.remoteWrite.port }}{{ else }}{{ .Values.receive.service.ports.remote }}{{ end }}
       targetPort: remote-write
       protocol: TCP
-      name: remote
+      name: remote-write
       {{- if and (or (eq .Values.receive.service.type "NodePort") (eq .Values.receive.service.type "LoadBalancer")) .Values.receive.service.nodePorts.remote }}
       nodePort: {{ .Values.receive.service.nodePorts.remote }}
       {{- else if eq .Values.receive.service.type "ClusterIP" }}
