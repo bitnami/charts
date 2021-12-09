@@ -193,7 +193,7 @@ primary:
   ## @param primary.existingConfiguration Name of existing ConfigMap with MySQL Primary configuration.
   ## NOTE: When it's set the 'configuration' parameter is ignored
   ##
-  existingConfiguration: ""
+  existingConfigmap: ""
   ## @param primary.updateStrategy Update strategy type for the MySQL primary statefulset
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
@@ -507,7 +507,7 @@ secondary:
   ## @param secondary.existingConfiguration Name of existing ConfigMap with MySQL Secondary configuration.
   ## NOTE: When it's set the 'configuration' parameter is ignored
   ##
-  existingConfiguration: ""
+  existingConfigmap: ""
   ## @param secondary.updateStrategy Update strategy type for the MySQL secondary statefulset
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
