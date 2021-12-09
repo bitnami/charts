@@ -515,6 +515,7 @@ podSecurityContext:
   runAsUser: 1001
 ## Kafka containers' Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+## @param containerSecurityContext.enabled Enable Kafka containers' Security Context
 ## Example:
 ##   containerSecurityContext:
 ##     enabled: true
@@ -522,7 +523,6 @@ podSecurityContext:
 ##       drop: ["NET_RAW"]
 ##     readOnlyRootFilesystem: true
 ##
-## @param containerSecurityContext.enabled Enable Kafka containers' Security Context
 containerSecurityContext:
   enabled: false
 ## Kafka containers' resource requests and limits
@@ -997,6 +997,7 @@ metrics:
     ##
     podAnnotations: {}
     ## Prometheus Kafka Exporter containers' Security Context
+    ## @param metrics.kafka.containerSecurityContext.enabled Enable Prometheus Kafka Exporter containers' Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
     ## Example:
     ##   containerSecurityContext:
@@ -1005,7 +1006,6 @@ metrics:
     ##       drop: ["NET_RAW"]
     ##     readOnlyRootFilesystem: true
     ##
-    ## @param metrics.kafka.containerSecurityContext.enabled Enable Kafka Exporter containers' Security Context
     containerSecurityContext:
       enabled: false
     ## Prometheus Kafka Exporter' resource requests and limits
@@ -1118,7 +1118,8 @@ metrics:
       ##
       pullSecrets: []
 
-    ## Prometheus JMX Exporter' Security Context
+    ## Prometheus JMX Exporter Containers' Security Context
+    ## @param metrics.jmx.containerSecurityContext.enabled Enable Prometheus JMX Exporter Containers' Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
     ## Example:
     ##   containerSecurityContext:
@@ -1127,7 +1128,6 @@ metrics:
     ##       drop: ["NET_RAW"]
     ##     readOnlyRootFilesystem: true
     ##
-    ## @param metrics.jmx.containerSecurityContext.enabled Enable Prometheus JMX Exporter' Security Context
     containerSecurityContext:
       enabled: false
     ## Prometheus JMX Exporter' resource requests and limits
