@@ -188,6 +188,9 @@ spec:
             {{- if .Values.google.project }}
             - --google-project={{ .Values.google.project }}
             {{- end }}
+            {{- if .Values.google.zoneVisibility }}
+            - --google-zone-visibility={{ .Values.google.zoneVisibility }}
+            {{- end }}
             {{- end }}
             {{- if eq .Values.provider "infoblox" }}
             # Infloblox Arguments
