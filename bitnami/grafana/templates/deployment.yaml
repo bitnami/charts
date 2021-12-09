@@ -80,8 +80,8 @@ spec:
           imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
           command:
             - /bin/bash
-            - '-ec'
           args:
+            - -ec
             - |
               mkdir -p /bitnami/grafana
               find /bitnami/grafana -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs chown -R {{ .Values.grafana.containerSecurityContext.runAsUser}}:{{ .Values.grafana.podSecurityContext.fsGroup }}
