@@ -404,20 +404,22 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 
 ### Traffic Exposure parameters
 
-| Name                               | Description                                                         | Value       |
-| ---------------------------------- | ------------------------------------------------------------------- | ----------- |
-| `service.type`                     | Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`) | `ClusterIP` |
-| `service.port`                     | PostgreSQL port                                                     | `5432`      |
-| `service.nodePort`                 | Kubernetes service nodePort                                         | `""`        |
-| `service.loadBalancerIP`           | Load balancer IP if service type is `LoadBalancer`                  | `""`        |
-| `service.loadBalancerSourceRanges` | Addresses that are allowed when service is LoadBalancer             | `[]`        |
-| `service.clusterIP`                | Set the Cluster IP to use                                           | `""`        |
-| `service.externalTrafficPolicy`    | Enable client source IP preservation                                | `Cluster`   |
-| `service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin    | `None`      |
-| `service.annotations`              | Provide any additional annotations for PostgreSQL service           | `{}`        |
-| `service.serviceLabels`            | Labels for PostgreSQL service                                       | `{}`        |
-| `networkPolicy.enabled`            | Enable NetworkPolicy                                                | `false`     |
-| `networkPolicy.allowExternal`      | Don't require client label for connections                          | `true`      |
+| Name                                                  | Description                                                                                   | Value       |
+| ----------------------------------------------------- | --------------------------------------------------------------------------------------------- | ----------- |
+| `service.type`                                        | Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`)                           | `ClusterIP` |
+| `service.port`                                        | PostgreSQL port                                                                               | `5432`      |
+| `service.nodePort`                                    | Kubernetes service nodePort                                                                   | `""`        |
+| `service.loadBalancerIP`                              | Load balancer IP if service type is `LoadBalancer`                                            | `""`        |
+| `service.loadBalancerSourceRanges`                    | Addresses that are allowed when service is LoadBalancer                                       | `[]`        |
+| `service.clusterIP`                                   | Set the Cluster IP to use                                                                     | `""`        |
+| `service.externalTrafficPolicy`                       | Enable client source IP preservation                                                          | `Cluster`   |
+| `service.sessionAffinity`                             | Control where client requests go, to the same pod or round-robin                              | `None`      |
+| `service.annotations`                                 | Provide any additional annotations for PostgreSQL service                                     | `{}`        |
+| `service.serviceLabels`                               | Labels for PostgreSQL service                                                                 | `{}`        |
+| `networkPolicy.enabled`                               | Enable NetworkPolicy                                                                          | `false`     |
+| `networkPolicy.allowExternal`                         | Don't require client label for connections                                                    | `true`      |
+| `networkPolicy.egressRules.denyConnectionsToExternal` | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53) | `false`     |
+| `networkPolicy.egressRules.customRules`               | Custom network policy rule                                                                    | `{}`        |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
