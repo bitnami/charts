@@ -53,9 +53,8 @@ spec:
       {{- end }}
       {{- include "zookeeper.imagePullSecrets" . | nindent 6 }}
       serviceAccountName: {{ template "zookeeper.serviceAccountName" . }}
-      {{- if .Values.securityContext.enabled }}
-      securityContext:
-        fsGroup: {{ .Values.securityContext.fsGroup }}
+      {{- if .Values.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       {{- if .Values.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
@@ -93,13 +92,13 @@ spec:
             - chown
           args:
             - -R
-            - {{ .Values.securityContext.runAsUser }}:{{ .Values.securityContext.fsGroup }}
+            - {{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}
             - /bitnami/zookeeper
             {{- if .Values.dataLogDir }}
             - {{ .Values.dataLogDir }}
             {{- end }}
           securityContext:
-            runAsUser: 0
+            runAsUser: {{- .Values.volumePermissions.containerSecurityContext | toYaml | nindent 12 }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
           {{- end }}
@@ -241,9 +240,8 @@ spec:
         - name: zookeeper
           image: {{ template "zookeeper.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
-          {{- if .Values.securityContext.enabled }}
-          securityContext:
-            runAsUser: {{ .Values.securityContext.runAsUser }}
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
