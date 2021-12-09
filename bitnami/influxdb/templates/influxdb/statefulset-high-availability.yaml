@@ -215,7 +215,7 @@ spec:
                   branch=$(influxdb_branch)
 
                   if [[ "$branch" = "2" ]]; then
-                      timeout {{ $livenessTimeout }}s influx --host http://$POD_IP:{{ .Values.influxdb.containerPorts.http }} ping
+                      timeout {{ $livenessTimeout }}s influx ping --host http://$POD_IP:{{ .Values.influxdb.containerPorts.http }}
                   else
                       timeout {{ $livenessTimeout }}s influx -host $POD_IP -port {{ .Values.influxdb.containerPorts.http }} -execute "SHOW DATABASES"
                   fi
@@ -242,7 +242,7 @@ spec:
                   branch=$(influxdb_branch)
 
                   if [[ "$branch" = "2" ]]; then
-                      timeout {{ $readinessTimeout }}s influx --host http://$POD_IP:{{ .Values.influxdb.containerPorts.http }} ping
+                      timeout {{ $readinessTimeout }}s influx ping --host http://$POD_IP:{{ .Values.influxdb.containerPorts.http }}
                   else
                       timeout {{ $readinessTimeout }}s influx -host $POD_IP -port {{ .Values.influxdb.containerPorts.http }} -execute "SHOW DATABASES"
                   fi

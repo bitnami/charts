@@ -11,7 +11,7 @@ $ helm install my-release bitnami/kubewatch
 
 ## Introduction
 
-This chart bootstraps a kubewatch deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a kubewatch deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 ## Prerequisites
 
@@ -65,7 +65,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ---------------------------------------- | -------------------------------------------------------------------- | ---------------------- |
 | `image.registry`                         | Kubewatch image registry                                             | `docker.io`            |
 | `image.repository`                       | Kubewatch image repository                                           | `bitnami/kubewatch`    |
-| `image.tag`                              | Kubewatch image tag (immutable tags are recommended)                 | `0.1.0-debian-10-r429` |
+| `image.tag`                              | Kubewatch image tag (immutable tags are recommended)                 | `0.1.0-debian-10-r457` |
 | `image.pullPolicy`                       | Kubewatch image pull policy                                          | `IfNotPresent`         |
 | `image.pullSecrets`                      | Specify docker-registry secret names as an array                     | `[]`                   |
 | `hostAliases`                            | Add deployment host aliases                                          | `[]`                   |

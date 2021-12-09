@@ -11,7 +11,7 @@ $ helm install my-release bitnami/concourse
 
 ## Introduction
 
-This chart bootstraps a [Concourse](https://concourse-ci.org/) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Concourse](https://concourse-ci.org/) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 It also packages [Bitnami Postgresql](https://github.com/bitnami/charts/tree/master/bitnami/postgresql)
 
@@ -71,22 +71,22 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common Concourse Parameters
 
-| Name                            | Description                                                                                                                            | Value                |
-| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | -------------------- |
-| `image.registry`                | image registry                                                                                                                         | `docker.io`          |
-| `image.repository`              | image repository                                                                                                                       | `bitnami/concourse`  |
-| `image.tag`                     | image tag (immutable tags are recommended)                                                                                             | `7.6.0-debian-10-r0` |
-| `image.pullPolicy`              | image pull policy                                                                                                                      | `IfNotPresent`       |
-| `image.pullSecrets`             | image pull secrets                                                                                                                     | `[]`                 |
-| `secrets.localAuth.enabled`     | the use of local authentication (basic auth).                                                                                          | `true`               |
-| `secrets.teamAuthorizedKeys`    | Array of team names and public keys for team external workers. A single                                                                | `[]`                 |
-| `secrets.localUsers`            | List of `username:password` or `username:bcrypted_password` combinations for all your local concourse users. Auto-generated if not set | `""`                 |
-| `secrets.hostKey`               | Concourse Host Keys.                                                                                                                   | `""`                 |
-| `secrets.hostKeyPub`            | Concourse Host Keys.                                                                                                                   | `""`                 |
-| `secrets.sessionSigningKey`     | Concourse Session Signing Keys.                                                                                                        | `""`                 |
-| `secrets.workerKey`             | Concourse Worker Keys.                                                                                                                 | `""`                 |
-| `secrets.workerKeyPub`          | Concourse Worker Keys.                                                                                                                 | `""`                 |
-| `secrets.workerAdditionalCerts` | Additional certificates to add to the worker nodes                                                                                     | `""`                 |
+| Name                            | Description                                                                                                                            | Value                 |
+| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
+| `image.registry`                | image registry                                                                                                                         | `docker.io`           |
+| `image.repository`              | image repository                                                                                                                       | `bitnami/concourse`   |
+| `image.tag`                     | image tag (immutable tags are recommended)                                                                                             | `7.6.0-debian-10-r25` |
+| `image.pullPolicy`              | image pull policy                                                                                                                      | `IfNotPresent`        |
+| `image.pullSecrets`             | image pull secrets                                                                                                                     | `[]`                  |
+| `secrets.localAuth.enabled`     | the use of local authentication (basic auth).                                                                                          | `true`                |
+| `secrets.teamAuthorizedKeys`    | Array of team names and public keys for team external workers. A single                                                                | `[]`                  |
+| `secrets.localUsers`            | List of `username:password` or `username:bcrypted_password` combinations for all your local concourse users. Auto-generated if not set | `""`                  |
+| `secrets.hostKey`               | Concourse Host Keys.                                                                                                                   | `""`                  |
+| `secrets.hostKeyPub`            | Concourse Host Keys.                                                                                                                   | `""`                  |
+| `secrets.sessionSigningKey`     | Concourse Session Signing Keys.                                                                                                        | `""`                  |
+| `secrets.workerKey`             | Concourse Worker Keys.                                                                                                                 | `""`                  |
+| `secrets.workerKeyPub`          | Concourse Worker Keys.                                                                                                                 | `""`                  |
+| `secrets.workerAdditionalCerts` | Additional certificates to add to the worker nodes                                                                                     | `""`                  |
 
 
 ### Concourse Web parameters
@@ -301,7 +301,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r235`     |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r262`     |
 | `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                    |
@@ -336,7 +336,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 See https://github.com/bitnami-labs/readme-generator-for-helm to create the table
 
-The above parameters map to the env variables defined in [bitnami/concourse](http://github.com/bitnami/bitnami-docker-concourse). For more information please refer to the [bitnami/concourse](http://github.com/bitnami/bitnami-docker-concourse) image documentation.
+The above parameters map to the env variables defined in [bitnami/concourse](https://github.com/bitnami/bitnami-docker-concourse). For more information please refer to the [bitnami/concourse](https://github.com/bitnami/bitnami-docker-concourse) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

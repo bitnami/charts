@@ -11,7 +11,7 @@ $ helm install my-release bitnami/elasticsearch
 
 ## Introduction
 
-This chart bootstraps a [Elasticsearch](https://github.com/bitnami/bitnami-docker-elasticsearch) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Elasticsearch](https://github.com/bitnami/bitnami-docker-elasticsearch) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
@@ -132,6 +132,10 @@ $ helm delete --purge my-release
 | `master.securityContext.enabled`            | Enable security context for master-eligible pods                                                                                                                                                                                        | `true`              |
 | `master.securityContext.fsGroup`            | Group ID for the container for master-eligible pods                                                                                                                                                                                     | `1001`              |
 | `master.securityContext.runAsUser`          | User ID for the container for master-eligible pods                                                                                                                                                                                      | `1001`              |
+| `master.podSecurityContext.enabled`         | Enable security context for master-eligible pods                                                                                                                                                                                        | `false`             |
+| `master.podSecurityContext.fsGroup`         | Group ID for the container for master-eligible pods                                                                                                                                                                                     | `1001`              |
+| `master.containerSecurityContext.enabled`   | Enable security context for master-eligible pods                                                                                                                                                                                        | `false`             |
+| `master.containerSecurityContext.runAsUser` | User ID for the container for master-eligible pods                                                                                                                                                                                      | `1001`              |
 | `master.podAffinityPreset`                  | Master-eligible Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                                     | `""`                |
 | `master.podAntiAffinityPreset`              | Master-eligible Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                                | `""`                |
 | `master.nodeAffinityPreset.type`            | Master-eligible Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                               | `""`                |
@@ -204,6 +208,10 @@ $ helm delete --purge my-release
 | `coordinating.securityContext.enabled`            | Enable security context for coordinating-only pods                                                                        | `true`          |
 | `coordinating.securityContext.fsGroup`            | Group ID for the container for coordinating-only pods                                                                     | `1001`          |
 | `coordinating.securityContext.runAsUser`          | User ID for the container for coordinating-only pods                                                                      | `1001`          |
+| `coordinating.podSecurityContext.enabled`         | Enable security context for coordinating  pods                                                                            | `false`         |
+| `coordinating.podSecurityContext.fsGroup`         | Group ID for the container for coordinating  pods                                                                         | `1001`          |
+| `coordinating.containerSecurityContext.enabled`   | Enable security context for coordinating pods                                                                             | `false`         |
+| `coordinating.containerSecurityContext.runAsUser` | User ID for the container for coordinating pods                                                                           | `1001`          |
 | `coordinating.podAffinityPreset`                  | Coordinating Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                          | `""`            |
 | `coordinating.podAntiAffinityPreset`              | Coordinating Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                     | `""`            |
 | `coordinating.nodeAffinityPreset.type`            | Coordinating Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                    | `""`            |
@@ -244,6 +252,7 @@ $ helm delete --purge my-release
 | `coordinating.service.nodePort`                   | Kubernetes Service nodePort (coordinating-only nodes)                                                                     | `""`            |
 | `coordinating.service.annotations`                | Annotations for coordinating-only nodes service                                                                           | `{}`            |
 | `coordinating.service.loadBalancerIP`             | loadBalancerIP if coordinating-only nodes service type is `LoadBalancer`                                                  | `""`            |
+| `coordinating.service.externalTrafficPolicy`      | Set `externalTrafficPolicy` to `Local` to enable client source IP preservation                                            | `Cluster`       |
 | `coordinating.serviceAccount.create`              | Enable creation of ServiceAccount for the coordinating-only node                                                          | `false`         |
 | `coordinating.serviceAccount.name`                | Name of the created serviceAccount                                                                                        | `""`            |
 | `coordinating.autoscaling.enabled`                | Enable autoscaling for coordinating replicas                                                                              | `false`         |
@@ -270,6 +279,10 @@ $ helm delete --purge my-release
 | `data.securityContext.enabled`               | Enable security context for data pods                                                                                                             | `true`              |
 | `data.securityContext.fsGroup`               | Group ID for the container for data pods                                                                                                          | `1001`              |
 | `data.securityContext.runAsUser`             | User ID for the container for data pods                                                                                                           | `1001`              |
+| `data.podSecurityContext.enabled`            | Enable security context for data pods                                                                                                             | `false`             |
+| `data.podSecurityContext.fsGroup`            | Group ID for the container for data pods                                                                                                          | `1001`              |
+| `data.containerSecurityContext.enabled`      | Enable security context for data pods                                                                                                             | `false`             |
+| `data.containerSecurityContext.runAsUser`    | User ID for the container for data pods                                                                                                           | `1001`              |
 | `data.podAffinityPreset`                     | Data Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                          | `""`                |
 | `data.podAntiAffinityPreset`                 | Data Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                     | `""`                |
 | `data.nodeAffinityPreset.type`               | Data Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                    | `""`                |
@@ -339,6 +352,10 @@ $ helm delete --purge my-release
 | `ingest.securityContext.enabled`            | Enable security context for ingest pods                                                                                  | `true`          |
 | `ingest.securityContext.fsGroup`            | Group ID for the container for ingest pods                                                                               | `1001`          |
 | `ingest.securityContext.runAsUser`          | User ID for the container for ingest pods                                                                                | `1001`          |
+| `ingest.podSecurityContext.enabled`         | Enable security context for ingest pods                                                                                  | `false`         |
+| `ingest.podSecurityContext.fsGroup`         | Group ID for the container for ingest pods                                                                               | `1001`          |
+| `ingest.containerSecurityContext.enabled`   | Enable security context for data pods                                                                                    | `false`         |
+| `ingest.containerSecurityContext.runAsUser` | User ID for the container for data pods                                                                                  | `1001`          |
 | `ingest.podAffinityPreset`                  | Ingest Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                               | `""`            |
 | `ingest.podAntiAffinityPreset`              | Ingest Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                          | `""`            |
 | `ingest.nodeAffinityPreset.type`            | Ingest Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                         | `""`            |
