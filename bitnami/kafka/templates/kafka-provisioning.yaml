@@ -49,6 +49,9 @@ spec:
                 --timeout=120 \
                 {{ .Values.service.port | int64 }};
               echo "Kafka is available";
+          {{- if .Values.provisioning.resources }}
+          resources: {{- toYaml .Values.provisioning.resources | nindent 12 }}
+          {{- end }}
       containers:
         - name: kafka-provisioning
           image: {{ include "kafka.image" . }}

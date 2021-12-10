@@ -354,7 +354,7 @@ spec:
               readOnly: true
             {{- end }}
             {{- if .Values.readReplicas.extraVolumeMounts }}
-            {{- toYaml .Values.readReplicas.extraVolumeMounts | nindent 12 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.readReplicas.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
 {{- if .Values.readReplicas.sidecars }}
 {{- include "common.tplvalues.render" ( dict "value" .Values.readReplicas.sidecars "context" $ ) | nindent 8 }}
