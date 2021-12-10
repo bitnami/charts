@@ -31,4 +31,4 @@ $ helm delete --purge databunker-demo
 | Name                            | Description                                                                                                                      | Value                    |
 | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
 | `service.type`                  | Databunker Service Type                                                                                                 | `ClusterIP`              |
-| `service.nodePorts.http`        | Node port for HashiCorp Consul UI                                                                                                | `""`   
+| `service.nodePorts.http`        | Node port for HashiCorp Consul UI                                                                                                | `"30300"`   
