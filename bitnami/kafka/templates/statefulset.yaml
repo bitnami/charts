@@ -177,7 +177,7 @@ spec:
                   fieldPath: metadata.name
             - name: KAFKA_CFG_ZOOKEEPER_CONNECT
               {{- if .Values.zookeeper.enabled }}
-              value: "{{ printf "%s%s" (include "kafka.zookeeper.fullname" .) (tpl .Values.zookeeperChrootPath .) }}"
+              value: {{ printf "%s%s" (include "kafka.zookeeper.fullname" .) (tpl .Values.zookeeperChrootPath .) | quote }}
               {{- else }}
               value: {{ include "common.tplvalues.render" (dict "value" (join "," .Values.externalZookeeper.servers) "context" $) }}
               {{- end }}
