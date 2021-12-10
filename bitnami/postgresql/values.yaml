@@ -41,6 +41,9 @@ fullnameOverride: ""
 ## @param extraDeploy Array of extra objects to deploy with the release (evaluated as a template)
 ##
 extraDeploy: []
+## @param commonLabels Add labels to all the deployed resources
+##
+commonLabels: {}
 ## @param commonAnnotations Add annotations to all the deployed resources
 ##
 commonAnnotations: {}
@@ -74,10 +77,10 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/postgresql
-  tag: 11.13.0-debian-10-r40
+  tag: 11.14.0-debian-10-r17
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -108,12 +111,12 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r200
+    tag: 10-debian-10-r265
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
-    pullPolicy: Always
+    pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -172,7 +175,7 @@ serviceAccount:
   autoMount: false
 ## Pod Security Policy
 ## ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/
-## @param psp.create Create Pod Security Policy
+## @param psp.create Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later
 ##
 psp:
   create: false
@@ -435,7 +438,7 @@ service:
   ##
   loadBalancerIP: ""
   ## @param service.externalTrafficPolicy Enable client source IP preservation
-  ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+  ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
   externalTrafficPolicy: Cluster
   ## @param service.loadBalancerSourceRanges Addresses that are allowed when service is LoadBalancer
@@ -716,7 +719,7 @@ readReplicas:
   ##
   resources: {}
 ## Configure resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## ref: https://kubernetes.io/docs/user-guide/compute-resources/
 ## @param resources.requests [object] The requested resources for the container
 ##
 resources:
@@ -884,7 +887,7 @@ metrics:
     ## @param metrics.prometheusRule.namespace namespace where prometheusRules resource should be created
     ##
     namespace: ""
-    ## @param metrics.prometheusRule.rules [Rules](https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/) to be created
+    ## @param metrics.prometheusRule.rules Create specified [Rules](https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/)
     ## Make sure to constraint the rules to the current postgresql service.
     ## rules:
     ##   - alert: HugeReplicationLag
@@ -906,7 +909,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/postgres-exporter
-    tag: 0.10.0-debian-10-r68
+    tag: 0.10.0-debian-10-r133
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

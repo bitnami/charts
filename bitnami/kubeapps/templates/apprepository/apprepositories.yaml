@@ -60,5 +60,9 @@ spec:
         name: {{ printf "apprepo-%s-secrets" .name }}
     {{- end }}
   {{- end }}
+  {{- if .filterRule }}
+  filterRule:
+    {{- toYaml .filterRule | nindent 4 }}
+  {{- end }}
 ---
 {{ end -}}

@@ -11,7 +11,7 @@ $ helm install my-release bitnami/geode
 
 ## Introduction
 
-This chart bootstraps an [Apache Geode](https://github.com/bitnami/bitnami-docker-geode) cluster on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps an [Apache Geode](https://github.com/bitnami/bitnami-docker-geode) cluster on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
 
@@ -76,7 +76,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ---------------------------------------- | -------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
 | `image.registry`                         | Apache Geode image registry                                                            | `docker.io`                                                 |
 | `image.repository`                       | Apache Geode image repository                                                          | `bitnami/geode`                                             |
-| `image.tag`                              | Apache Geode image tag (immutable tags are recommended)                                | `1.14.0-debian-10-r3`                                       |
+| `image.tag`                              | Apache Geode image tag (immutable tags are recommended)                                | `1.14.0-debian-10-r48`                                      |
 | `image.pullPolicy`                       | Apache Geode image pull policy                                                         | `IfNotPresent`                                              |
 | `image.pullSecrets`                      | Apache Geode image pull secrets                                                        | `[]`                                                        |
 | `image.debug`                            | Enable Apache Geode image debug mode                                                   | `false`                                                     |
@@ -159,6 +159,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `locator.priorityClassName`                     | Locator pods' priorityClassName                                                                             | `""`                |
 | `locator.schedulerName`                         | Name of the k8s scheduler (other than default) for Locator pods                                             | `""`                |
 | `locator.lifecycleHooks`                        | for the Locator container(s) to automate configuration before or after startup                              | `{}`                |
+| `locator.extraFlags`                            | Additional command line flags to start Locator nodes                                                        | `[]`                |
 | `locator.extraEnvVars`                          | Array with extra environment variables to add to Locator nodes                                              | `[]`                |
 | `locator.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars for Locator nodes                                      | `""`                |
 | `locator.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for Locator nodes                                         | `""`                |
@@ -188,84 +189,86 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Apache Geode Cache Server parameters
 
-| Name                                           | Description                                                                                                      | Value               |
-| ---------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | ------------------- |
-| `server.logLevel`                              | Log level for Cache Server nodes                                                                                 | `info`              |
-| `server.initialHeapSize`                       | Initial size of the heap on Cache Server nodes                                                                   | `""`                |
-| `server.maxHeapSize`                           | Maximum size of the heap on Cache Server nodes                                                                   | `""`                |
-| `server.configuration`                         | Specify content for gemfire.properties on Cache server nodes (auto-generated based on other env. vars otherwise) | `""`                |
-| `server.existingConfigmap`                     | The name of an existing ConfigMap with your custom configuration for Cache server                                | `""`                |
-| `server.log4j`                                 | Specify content for log4j2.xml on Cache server nodes (optional)                                                  | `""`                |
-| `server.existingLog4jConfigMap`                | Name of existing ConfigMap containing a custom log4j2.xml configuration for Cache server                         | `""`                |
-| `server.replicaCount`                          | Number of Cache Server replicas to deploy                                                                        | `3`                 |
-| `server.podManagementPolicy`                   | Cache Server statefulset Pod Management Policy Type                                                              | `OrderedReady`      |
-| `server.containerPorts.server`                 | Cache Server container port                                                                                      | `40404`             |
-| `server.containerPorts.http`                   | Cache Server HTTP container port                                                                                 | `7070`              |
-| `server.containerPorts.rmi`                    | Cache Server RMI container port                                                                                  | `1099`              |
-| `server.containerPorts.metrics`                | Cache Server internal metrics container port                                                                     | `9915`              |
-| `server.livenessProbe.enabled`                 | Enable livenessProbe on Cache server containers                                                                  | `true`              |
-| `server.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                          | `40`                |
-| `server.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                                 | `10`                |
-| `server.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                                | `10`                |
-| `server.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                              | `3`                 |
-| `server.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                              | `1`                 |
-| `server.readinessProbe.enabled`                | Enable readinessProbe on Cache server containers                                                                 | `true`              |
-| `server.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                         | `40`                |
-| `server.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                                | `10`                |
-| `server.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                               | `10`                |
-| `server.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                             | `3`                 |
-| `server.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                             | `1`                 |
-| `server.startupProbe.enabled`                  | Enable startupProbe on Cache server containers                                                                   | `false`             |
-| `server.startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                           | `45`                |
-| `server.startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                                  | `10`                |
-| `server.startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                                 | `1`                 |
-| `server.startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                               | `15`                |
-| `server.startupProbe.successThreshold`         | Success threshold for startupProbe                                                                               | `1`                 |
-| `server.customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                                              | `{}`                |
-| `server.customReadinessProbe`                  | Custom readinessProbe that overrides the default one                                                             | `{}`                |
-| `server.customStartupProbe`                    | Custom startupProbe that overrides the default one                                                               | `{}`                |
-| `server.resources.limits`                      | The resources limits for the Cache server containers                                                             | `{}`                |
-| `server.resources.requests`                    | The requested resources for the Cache server containers                                                          | `{}`                |
-| `server.podSecurityContext.enabled`            | Enabled Cache server pods' Security Context                                                                      | `true`              |
-| `server.podSecurityContext.fsGroup`            | Set Cache server pod's Security Context fsGroup                                                                  | `1001`              |
-| `server.podSecurityContext.sysctls`            | List of namespaced sysctls used for the Cache server pods                                                        | `[]`                |
-| `server.containerSecurityContext.enabled`      | Enabled Cache server containers' Security Context                                                                | `true`              |
-| `server.containerSecurityContext.runAsUser`    | Set Cache server containers' Security Context runAsUser                                                          | `1001`              |
-| `server.containerSecurityContext.runAsNonRoot` | Set Cache server containers' Security Context runAsNonRoot                                                       | `true`              |
-| `server.command`                               | Override default container command (useful when using custom images)                                             | `[]`                |
-| `server.args`                                  | Override default container args (useful when using custom images)                                                | `[]`                |
-| `server.hostAliases`                           | Cache server pods host aliases                                                                                   | `[]`                |
-| `server.podLabels`                             | Extra labels for Cache server pods                                                                               | `{}`                |
-| `server.podAnnotations`                        | Annotations for Cache server pods                                                                                | `{}`                |
-| `server.podAffinityPreset`                     | Pod affinity preset. Ignored if `server.affinity` is set. Allowed values: `soft` or `hard`                       | `""`                |
-| `server.podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `server.affinity` is set. Allowed values: `soft` or `hard`                  | `soft`              |
-| `server.nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `server.affinity` is set. Allowed values: `soft` or `hard`                 | `""`                |
-| `server.nodeAffinityPreset.key`                | Node label key to match. Ignored if `server.affinity` is set                                                     | `""`                |
-| `server.nodeAffinityPreset.values`             | Node label values to match. Ignored if `server.affinity` is set                                                  | `[]`                |
-| `server.affinity`                              | Affinity for Cache server pods assignment                                                                        | `{}`                |
-| `server.nodeSelector`                          | Node labels for Cache server pods assignment                                                                     | `{}`                |
-| `server.tolerations`                           | Tolerations for Cache server pods assignment                                                                     | `[]`                |
-| `server.topologySpreadConstraints`             | Topology Spread Constraints for Cache server pods assignment spread across your cluster among failure-domains    | `[]`                |
-| `server.updateStrategy.type`                   | Cache server statefulset strategy type                                                                           | `RollingUpdate`     |
-| `server.priorityClassName`                     | Cache server pods' priorityClassName                                                                             | `""`                |
-| `server.schedulerName`                         | Name of the k8s scheduler (other than default) for Cache server pods                                             | `""`                |
-| `server.lifecycleHooks`                        | for the Cache server container(s) to automate configuration before or after startup                              | `{}`                |
-| `server.extraEnvVars`                          | Array with extra environment variables to add to Cache server nodes                                              | `[]`                |
-| `server.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars for Cache server nodes                                      | `""`                |
-| `server.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for Cache server nodes                                         | `""`                |
-| `server.extraVolumes`                          | Optionally specify extra list of additional volumes for the Cache server pod(s)                                  | `[]`                |
-| `server.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the Cache server container(s)                       | `[]`                |
-| `server.sidecars`                              | Add additional sidecar containers to the Cache server pod(s)                                                     | `[]`                |
-| `server.initContainers`                        | Add additional init containers to the Cache server pod(s)                                                        | `[]`                |
-| `server.service.ports.server`                  | Cache server multicast service port                                                                              | `40404`             |
-| `server.service.ports.http`                    | Cache server HTTP service port                                                                                   | `7070`              |
-| `server.service.ports.rmi`                     | Cache server RMI service port                                                                                    | `1099`              |
-| `server.service.annotations`                   | Additional custom annotations for Cache server service                                                           | `{}`                |
-| `server.persistence.enabled`                   | Enable persistence on Cache server replicas using a `PersistentVolumeClaim`                                      | `true`              |
-| `server.persistence.storageClass`              | MariaDB secondary persistent volume storage Class                                                                | `""`                |
-| `server.persistence.annotations`               | MariaDB secondary persistent volume claim annotations                                                            | `{}`                |
-| `server.persistence.accessModes`               | MariaDB secondary persistent volume access Modes                                                                 | `["ReadWriteOnce"]` |
-| `server.persistence.size`                      | MariaDB secondary persistent volume size                                                                         | `8Gi`               |
+| Name                                             | Description                                                                                                                                 | Value               |
+| ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
+| `server.logLevel`                                | Log level for Cache Server nodes                                                                                                            | `info`              |
+| `server.initialHeapSize`                         | Initial size of the heap on Cache Server nodes                                                                                              | `""`                |
+| `server.maxHeapSize`                             | Maximum size of the heap on Cache Server nodes                                                                                              | `""`                |
+| `server.configuration`                           | Specify content for gemfire.properties on Cache server nodes (auto-generated based on other env. vars otherwise)                            | `""`                |
+| `server.existingConfigmap`                       | The name of an existing ConfigMap with your custom configuration for Cache server                                                           | `""`                |
+| `server.log4j`                                   | Specify content for log4j2.xml on Cache server nodes (optional)                                                                             | `""`                |
+| `server.existingLog4jConfigMap`                  | Name of existing ConfigMap containing a custom log4j2.xml configuration for Cache server                                                    | `""`                |
+| `server.restoreRedundancyOnContainerTermination` | Use a PreStop hook on container termination to restore redundancy to partitioned regions and reassign which members host the primary copies | `true`              |
+| `server.replicaCount`                            | Number of Cache Server replicas to deploy                                                                                                   | `3`                 |
+| `server.podManagementPolicy`                     | Cache Server statefulset Pod Management Policy Type                                                                                         | `OrderedReady`      |
+| `server.containerPorts.server`                   | Cache Server container port                                                                                                                 | `40404`             |
+| `server.containerPorts.http`                     | Cache Server HTTP container port                                                                                                            | `7070`              |
+| `server.containerPorts.rmi`                      | Cache Server RMI container port                                                                                                             | `1099`              |
+| `server.containerPorts.metrics`                  | Cache Server internal metrics container port                                                                                                | `9915`              |
+| `server.livenessProbe.enabled`                   | Enable livenessProbe on Cache server containers                                                                                             | `true`              |
+| `server.livenessProbe.initialDelaySeconds`       | Initial delay seconds for livenessProbe                                                                                                     | `40`                |
+| `server.livenessProbe.periodSeconds`             | Period seconds for livenessProbe                                                                                                            | `10`                |
+| `server.livenessProbe.timeoutSeconds`            | Timeout seconds for livenessProbe                                                                                                           | `10`                |
+| `server.livenessProbe.failureThreshold`          | Failure threshold for livenessProbe                                                                                                         | `3`                 |
+| `server.livenessProbe.successThreshold`          | Success threshold for livenessProbe                                                                                                         | `1`                 |
+| `server.readinessProbe.enabled`                  | Enable readinessProbe on Cache server containers                                                                                            | `true`              |
+| `server.readinessProbe.initialDelaySeconds`      | Initial delay seconds for readinessProbe                                                                                                    | `40`                |
+| `server.readinessProbe.periodSeconds`            | Period seconds for readinessProbe                                                                                                           | `10`                |
+| `server.readinessProbe.timeoutSeconds`           | Timeout seconds for readinessProbe                                                                                                          | `10`                |
+| `server.readinessProbe.failureThreshold`         | Failure threshold for readinessProbe                                                                                                        | `3`                 |
+| `server.readinessProbe.successThreshold`         | Success threshold for readinessProbe                                                                                                        | `1`                 |
+| `server.startupProbe.enabled`                    | Enable startupProbe on Cache server containers                                                                                              | `false`             |
+| `server.startupProbe.initialDelaySeconds`        | Initial delay seconds for startupProbe                                                                                                      | `45`                |
+| `server.startupProbe.periodSeconds`              | Period seconds for startupProbe                                                                                                             | `10`                |
+| `server.startupProbe.timeoutSeconds`             | Timeout seconds for startupProbe                                                                                                            | `1`                 |
+| `server.startupProbe.failureThreshold`           | Failure threshold for startupProbe                                                                                                          | `15`                |
+| `server.startupProbe.successThreshold`           | Success threshold for startupProbe                                                                                                          | `1`                 |
+| `server.customLivenessProbe`                     | Custom livenessProbe that overrides the default one                                                                                         | `{}`                |
+| `server.customReadinessProbe`                    | Custom readinessProbe that overrides the default one                                                                                        | `{}`                |
+| `server.customStartupProbe`                      | Custom startupProbe that overrides the default one                                                                                          | `{}`                |
+| `server.resources.limits`                        | The resources limits for the Cache server containers                                                                                        | `{}`                |
+| `server.resources.requests`                      | The requested resources for the Cache server containers                                                                                     | `{}`                |
+| `server.podSecurityContext.enabled`              | Enabled Cache server pods' Security Context                                                                                                 | `true`              |
+| `server.podSecurityContext.fsGroup`              | Set Cache server pod's Security Context fsGroup                                                                                             | `1001`              |
+| `server.podSecurityContext.sysctls`              | List of namespaced sysctls used for the Cache server pods                                                                                   | `[]`                |
+| `server.containerSecurityContext.enabled`        | Enabled Cache server containers' Security Context                                                                                           | `true`              |
+| `server.containerSecurityContext.runAsUser`      | Set Cache server containers' Security Context runAsUser                                                                                     | `1001`              |
+| `server.containerSecurityContext.runAsNonRoot`   | Set Cache server containers' Security Context runAsNonRoot                                                                                  | `true`              |
+| `server.command`                                 | Override default container command (useful when using custom images)                                                                        | `[]`                |
+| `server.args`                                    | Override default container args (useful when using custom images)                                                                           | `[]`                |
+| `server.hostAliases`                             | Cache server pods host aliases                                                                                                              | `[]`                |
+| `server.podLabels`                               | Extra labels for Cache server pods                                                                                                          | `{}`                |
+| `server.podAnnotations`                          | Annotations for Cache server pods                                                                                                           | `{}`                |
+| `server.podAffinityPreset`                       | Pod affinity preset. Ignored if `server.affinity` is set. Allowed values: `soft` or `hard`                                                  | `""`                |
+| `server.podAntiAffinityPreset`                   | Pod anti-affinity preset. Ignored if `server.affinity` is set. Allowed values: `soft` or `hard`                                             | `soft`              |
+| `server.nodeAffinityPreset.type`                 | Node affinity preset type. Ignored if `server.affinity` is set. Allowed values: `soft` or `hard`                                            | `""`                |
+| `server.nodeAffinityPreset.key`                  | Node label key to match. Ignored if `server.affinity` is set                                                                                | `""`                |
+| `server.nodeAffinityPreset.values`               | Node label values to match. Ignored if `server.affinity` is set                                                                             | `[]`                |
+| `server.affinity`                                | Affinity for Cache server pods assignment                                                                                                   | `{}`                |
+| `server.nodeSelector`                            | Node labels for Cache server pods assignment                                                                                                | `{}`                |
+| `server.tolerations`                             | Tolerations for Cache server pods assignment                                                                                                | `[]`                |
+| `server.topologySpreadConstraints`               | Topology Spread Constraints for Cache server pods assignment spread across your cluster among failure-domains                               | `[]`                |
+| `server.updateStrategy.type`                     | Cache server statefulset strategy type                                                                                                      | `RollingUpdate`     |
+| `server.priorityClassName`                       | Cache server pods' priorityClassName                                                                                                        | `""`                |
+| `server.schedulerName`                           | Name of the k8s scheduler (other than default) for Cache server pods                                                                        | `""`                |
+| `server.lifecycleHooks`                          | for the Cache server container(s) to automate configuration before or after startup                                                         | `{}`                |
+| `server.extraFlags`                              | Additional command line flags to start Cache server nodes                                                                                   | `[]`                |
+| `server.extraEnvVars`                            | Array with extra environment variables to add to Cache server nodes                                                                         | `[]`                |
+| `server.extraEnvVarsCM`                          | Name of existing ConfigMap containing extra env vars for Cache server nodes                                                                 | `""`                |
+| `server.extraEnvVarsSecret`                      | Name of existing Secret containing extra env vars for Cache server nodes                                                                    | `""`                |
+| `server.extraVolumes`                            | Optionally specify extra list of additional volumes for the Cache server pod(s)                                                             | `[]`                |
+| `server.extraVolumeMounts`                       | Optionally specify extra list of additional volumeMounts for the Cache server container(s)                                                  | `[]`                |
+| `server.sidecars`                                | Add additional sidecar containers to the Cache server pod(s)                                                                                | `[]`                |
+| `server.initContainers`                          | Add additional init containers to the Cache server pod(s)                                                                                   | `[]`                |
+| `server.service.ports.server`                    | Cache server multicast service port                                                                                                         | `40404`             |
+| `server.service.ports.http`                      | Cache server HTTP service port                                                                                                              | `7070`              |
+| `server.service.ports.rmi`                       | Cache server RMI service port                                                                                                               | `1099`              |
+| `server.service.annotations`                     | Additional custom annotations for Cache server service                                                                                      | `{}`                |
+| `server.persistence.enabled`                     | Enable persistence on Cache server replicas using a `PersistentVolumeClaim`                                                                 | `true`              |
+| `server.persistence.storageClass`                | MariaDB secondary persistent volume storage Class                                                                                           | `""`                |
+| `server.persistence.annotations`                 | MariaDB secondary persistent volume claim annotations                                                                                       | `{}`                |
+| `server.persistence.accessModes`                 | MariaDB secondary persistent volume access Modes                                                                                            | `["ReadWriteOnce"]` |
+| `server.persistence.size`                        | MariaDB secondary persistent volume size                                                                                                    | `8Gi`               |
 
 
 ### Traffic Exposure Parameters
@@ -293,8 +296,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `10`                    |
-| `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `Always`                |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r261`     |
+| `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                    |
 | `volumePermissions.resources.requests`                 | The requested resources for the init container                                                  | `{}`                    |
@@ -303,43 +306,43 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Metrics parameters
 
-| Name                                            | Description                                                                      | Value                 |
-| ----------------------------------------------- | -------------------------------------------------------------------------------- | --------------------- |
-| `metrics.enabled`                               | Expose Apache Geode metrics                                                      | `false`               |
-| `metrics.image.registry`                        | Bitnami HAProxy image registry                                                   | `docker.io`           |
-| `metrics.image.repository`                      | Bitnami HAProxy image repository                                                 | `bitnami/haproxy`     |
-| `metrics.image.tag`                             | Bitnami HAProxy image tag (immutable tags are recommended)                       | `2.4.4-debian-10-r20` |
-| `metrics.image.pullPolicy`                      | Bitnami HAProxy image pull policy                                                | `IfNotPresent`        |
-| `metrics.image.pullSecrets`                     | Bitnami HAProxy image pull secrets                                               | `[]`                  |
-| `metrics.containerPort`                         | Metrics container port                                                           | `9914`                |
-| `metrics.livenessProbe.enabled`                 | Enable livenessProbe on Metrics containers                                       | `true`                |
-| `metrics.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                          | `15`                  |
-| `metrics.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                 | `10`                  |
-| `metrics.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                | `5`                   |
-| `metrics.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                              | `5`                   |
-| `metrics.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                              | `1`                   |
-| `metrics.readinessProbe.enabled`                | Enable readinessProbe on Metrics containers                                      | `true`                |
-| `metrics.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                         | `15`                  |
-| `metrics.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                | `10`                  |
-| `metrics.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                               | `5`                   |
-| `metrics.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                             | `5`                   |
-| `metrics.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                             | `1`                   |
-| `metrics.customLivenessProbe`                   | Custom livenessProbe that overrides the default one                              | `{}`                  |
-| `metrics.customReadinessProbe`                  | Custom readinessProbe that overrides the default one                             | `{}`                  |
-| `metrics.containerSecurityContext.enabled`      | Enabled Metrics containers' Security Context                                     | `true`                |
-| `metrics.containerSecurityContext.runAsUser`    | Set Metrics containers' Security Context runAsUser                               | `1001`                |
-| `metrics.containerSecurityContext.runAsNonRoot` | Set Metrics containers' Security Context runAsNonRoot                            | `true`                |
-| `metrics.service.port`                          | Service HTTP management port                                                     | `9914`                |
-| `metrics.service.annotations`                   | Annotations for enabling prometheus to access the metrics endpoints              | `{}`                  |
-| `metrics.serviceMonitor.enabled`                | Specify if a ServiceMonitor will be deployed for Prometheus Operator             | `false`               |
-| `metrics.serviceMonitor.namespace`              | Namespace in which Prometheus is running                                         | `""`                  |
-| `metrics.serviceMonitor.labels`                 | Extra labels for the ServiceMonitor                                              | `{}`                  |
-| `metrics.serviceMonitor.jobLabel`               | The name of the label on the target service to use as the job name in Prometheus | `""`                  |
-| `metrics.serviceMonitor.interval`               | How frequently to scrape metrics                                                 | `""`                  |
-| `metrics.serviceMonitor.scrapeTimeout`          | Timeout after which the scrape is ended                                          | `""`                  |
-| `metrics.serviceMonitor.metricRelabelings`      | Specify additional relabeling of metrics                                         | `[]`                  |
-| `metrics.serviceMonitor.relabelings`            | Specify general relabeling                                                       | `[]`                  |
-| `metrics.serviceMonitor.selector`               | Prometheus instance selector labels                                              | `{}`                  |
+| Name                                            | Description                                                                      | Value                |
+| ----------------------------------------------- | -------------------------------------------------------------------------------- | -------------------- |
+| `metrics.enabled`                               | Expose Apache Geode metrics                                                      | `false`              |
+| `metrics.image.registry`                        | Bitnami HAProxy image registry                                                   | `docker.io`          |
+| `metrics.image.repository`                      | Bitnami HAProxy image repository                                                 | `bitnami/haproxy`    |
+| `metrics.image.tag`                             | Bitnami HAProxy image tag (immutable tags are recommended)                       | `2.5.0-debian-10-r1` |
+| `metrics.image.pullPolicy`                      | Bitnami HAProxy image pull policy                                                | `IfNotPresent`       |
+| `metrics.image.pullSecrets`                     | Bitnami HAProxy image pull secrets                                               | `[]`                 |
+| `metrics.containerPort`                         | Metrics container port                                                           | `9914`               |
+| `metrics.livenessProbe.enabled`                 | Enable livenessProbe on Metrics containers                                       | `true`               |
+| `metrics.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                          | `15`                 |
+| `metrics.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                 | `10`                 |
+| `metrics.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                | `5`                  |
+| `metrics.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                              | `5`                  |
+| `metrics.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                              | `1`                  |
+| `metrics.readinessProbe.enabled`                | Enable readinessProbe on Metrics containers                                      | `true`               |
+| `metrics.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                         | `15`                 |
+| `metrics.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                | `10`                 |
+| `metrics.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                               | `5`                  |
+| `metrics.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                             | `5`                  |
+| `metrics.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                             | `1`                  |
+| `metrics.customLivenessProbe`                   | Custom livenessProbe that overrides the default one                              | `{}`                 |
+| `metrics.customReadinessProbe`                  | Custom readinessProbe that overrides the default one                             | `{}`                 |
+| `metrics.containerSecurityContext.enabled`      | Enabled Metrics containers' Security Context                                     | `true`               |
+| `metrics.containerSecurityContext.runAsUser`    | Set Metrics containers' Security Context runAsUser                               | `1001`               |
+| `metrics.containerSecurityContext.runAsNonRoot` | Set Metrics containers' Security Context runAsNonRoot                            | `true`               |
+| `metrics.service.port`                          | Service HTTP management port                                                     | `9914`               |
+| `metrics.service.annotations`                   | Annotations for enabling prometheus to access the metrics endpoints              | `{}`                 |
+| `metrics.serviceMonitor.enabled`                | Specify if a ServiceMonitor will be deployed for Prometheus Operator             | `false`              |
+| `metrics.serviceMonitor.namespace`              | Namespace in which Prometheus is running                                         | `""`                 |
+| `metrics.serviceMonitor.labels`                 | Extra labels for the ServiceMonitor                                              | `{}`                 |
+| `metrics.serviceMonitor.jobLabel`               | The name of the label on the target service to use as the job name in Prometheus | `""`                 |
+| `metrics.serviceMonitor.interval`               | How frequently to scrape metrics                                                 | `""`                 |
+| `metrics.serviceMonitor.scrapeTimeout`          | Timeout after which the scrape is ended                                          | `""`                 |
+| `metrics.serviceMonitor.metricRelabelings`      | Specify additional relabeling of metrics                                         | `[]`                 |
+| `metrics.serviceMonitor.relabelings`            | Specify general relabeling                                                       | `[]`                 |
+| `metrics.serviceMonitor.selector`               | Prometheus instance selector labels                                              | `{}`                 |
 
 
 ### Other Parameters
@@ -353,7 +356,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.allowExternal`                 | Don't require client label for connections                             | `true`  |
 
 
-The above parameters map to the env variables defined in [bitnami/geode](http://github.com/bitnami/bitnami-docker-geode). For more information please refer to the [bitnami/geode](http://github.com/bitnami/bitnami-docker-geode) image documentation.
+The above parameters map to the env variables defined in [bitnami/geode](https://github.com/bitnami/bitnami-docker-geode). For more information please refer to the [bitnami/geode](https://github.com/bitnami/bitnami-docker-geode) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -376,6 +379,48 @@ helm install my-release -f values.yaml bitnami/geode
 
 ## Configuration and installation details
 
+### Architecture
+
+This chart an Apache Geode cluster including a _locator_ statefulset with N _Locator_ nodes, and a _server_ statefulset with M Cache server nodes. The schema below represents the architecture when you used an Ingress controller to expose the Apache Geode Pulse dashboard:
+
+```
+      ┌──────────────────┐
+      │     Ingress      │
+      │    Controller    │
+      └────────┬─────────┘
+               │ / HTTP monitoring
+               │   dashboard
+               │
+        ┌──────┘
+        │                           ┌────────────────────┐
+        │ (port 7070)               │    Geode client    │
+        ▼                           │        pods        │─────┐
+  ┌───────────────────┐             └───┬────────────────┘     │
+  │     Locator       │                 │                      │
+  │       svc         │                 │                      │
+  └───┬───────────────┘                 │ / server             │ / write
+      │                                 │   discovery          |   read
+      ▼                                 │                      │
+┌──────────────┐                        │    ┌──────────────┐  │
+│   Locator    │                        │    │   Locator    │  │
+│              │◀───────────────────────└───▶│              │  │
+│     Pod      │                             │     Pod      │  │
+└──────────────┘                             └──────────────┘  │
+      ▲                                             ▲          │
+  ┌───└───────────────────────────────────┌─────────┘          │
+  │                                       │                    │
+  │ / configuration      ┌─────────────────────────────────────┘
+  │   service            │                │                    │
+  │                      │                │                    │
+┌─┴─────────────┐        │              ┌───────────────┐      │
+│ Cache server  │        │              │ Cache server  │      │
+│               │◀───────┘              │               │◀─────┘
+│     Pod       │                       │    Pod        │
+└───────────────┘                       └───────────────┘
+```
+
+> Note: when using several Locator nodes, it is recommended to configure sticky sessions using `--set locator.service.sessionAffinity="ClientIP"` or configuring the IngressController accordingly to access the Pulse monitoring dashboard.
+
 ### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
@@ -386,11 +431,11 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/master/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/master/bitnami/contour) you can utilize the ingress controller to serve your application.
 
-To enable Ingress integration, set `ingress.enabled` to `true`. The `ingress.hostname` property can be used to set the host name. The `ingress.tls` parameter can be used to add the TLS configuration for this host. It is also possible to have more than one host, with a separate TLS configuration for each host. [Learn more about configuring and using Ingress](https://docs.bitnami.com/kubernetes/infrastructure/geode/configuration/configure-use-ingress/).
+To enable Ingress integration, set `ingress.enabled` to `true`. The `ingress.hostname` property can be used to set the host name. The `ingress.tls` parameter can be used to add the TLS configuration for this host. It is also possible to have more than one host, with a separate TLS configuration for each host. [Learn more about configuring and using Ingress](https://docs.bitnami.com/kubernetes/infrastructure/geode/configuration/configure-ingress/).
 
 ### TLS secrets
 
-The chart also facilitates the creation of TLS secrets for use with the Ingress controller, with different options for certificate management. [Learn more about TLS secrets](https://docs.bitnami.com/kubernetes/infrastructure/geode/administration/enable-tls/).
+The chart also facilitates the creation of TLS secrets for use with the Ingress controller, with different options for certificate management. [Learn more about TLS secrets](https://docs.bitnami.com/kubernetes/infrastructure/geode/administration/enable-tls-ingress/).
 
 ### Additional environment variables
 
@@ -409,7 +454,7 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 ### Sidecars
 
-If additional containers are needed in the same pod as geode (such as additional metrics or logging exporters), they can be defined using the `XXX.sidecars` parameter(s). If these sidecars export extra ports, extra port definitions can be added using the `XXX.service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/infrastructure/geode/administration/configure-use-sidecars/).
+If additional containers are needed in the same pod as geode (such as additional metrics or logging exporters), they can be defined using the `XXX.sidecars` parameter(s). If these sidecars export extra ports, extra port definitions can be added using the `XXX.service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/infrastructure/geode/configuration/configure-sidecar-init-containers/).
 
 > Note: XXX is placeholder you need to replace with the actual component(s).
 
@@ -423,7 +468,7 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 
 ## Persistence
 
-The [Bitnami geode](https://github.com/bitnami/bitnami-docker-geode) image stores the geode data and configurations at the `/bitnami/geode` path of the container. Persistent Volume Claims are used to keep the data across deployments. [Learn more about persistence in the chart documentation](https://docs.bitnami.com/kubernetes/infrastructure/geode/configuration/chart-persistence/).
+The [Bitnami geode](https://github.com/bitnami/bitnami-docker-geode) image stores the geode data and configurations at the `/bitnami/geode` path of the container. Persistent Volume Claims are used to keep the data across deployments.
 
 ### Adjust permissions of persistent volume mountpoint
 

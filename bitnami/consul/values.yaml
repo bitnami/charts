@@ -2,6 +2,7 @@
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
 ## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
@@ -17,6 +18,7 @@ global:
   storageClass: ""
 
 ## @section Common parameters
+##
 
 ## @param kubeVersion Override Kubernetes version
 ##
@@ -56,6 +58,7 @@ diagnosticMode:
     - infinity
 
 ## @section HashiCorp Consul parameters
+##
 
 ## Bitnami HashiCorp Consul image
 ## ref: https://hub.docker.com/r/bitnami/consul/tags/
@@ -69,10 +72,10 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/consul
-  tag: 1.10.3-debian-10-r0
+  tag: 1.10.4-debian-10-r16
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -94,7 +97,7 @@ datacenterName: dc1
 domain: consul
 ## @param raftMultiplier Multiplier used to scale key Raft timing parameters
 ##
-raftMultiplier: '1'
+raftMultiplier: "1"
 ## @param gossipKey Gossip key for all members. The key must be 16-bytes, can be generated with $(consul keygen)
 ## Example:
 ## gossipKey: 887Syd/BOvbtvRAKviazMg==
@@ -146,6 +149,22 @@ existingConfigmap: ""
 ##   }
 ##
 localConfig: ""
+## @param podLabels Pod labels
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+##
+podLabels: {}
+## @param priorityClassName Priority class assigned to the Pods
+##
+priorityClassName: ""
+## @param schedulerName Alternative scheduler
+## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+##
+schedulerName: ""
+## @param topologySpreadConstraints Topology Spread Constraints for pod assignment
+## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+## The value is evaluated as a template
+##
+topologySpreadConstraints: []
 ## @param command Command for running the container (set to default if not set). Use array form
 ##
 command: []
@@ -178,19 +197,21 @@ containerPorts:
   rpcServer: 8300
   serfLAN: 8301
 
+## @param lifecycleHooks Add lifecycle hooks to the deployment
+##
+lifecycleHooks: {}
+
 ## @section Statefulset parameters
+##
 
 ## @param replicaCount Number of HashiCorp Consul replicas to deploy
 ##
 replicaCount: 3
-## @param updateStrategy Update strategy type for the HashiCorp Consul statefulset
+## @param updateStrategy.type Update strategy type for the HashiCorp Consul statefulset
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
 ##
-updateStrategy: RollingUpdate
-## @param rollingUpdatePartition Partition update strategy
-## https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#partitions
-##
-rollingUpdatePartition: ""
+updateStrategy:
+  type: RollingUpdate
 ## @param podManagementPolicy StatefulSet pod management policy
 ##
 podManagementPolicy: Parallel
@@ -250,12 +271,14 @@ podSecurityContext:
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ## @param containerSecurityContext.enabled HashiCorp Consul Container securityContext
 ## @param containerSecurityContext.runAsUser User ID for the HashiCorp Consul container
+## @param containerSecurityContext.runAsNonRoot Force the container to be run as non root
 ##
 containerSecurityContext:
   enabled: true
   runAsUser: 1001
+  runAsNonRoot: true
 ## Container's resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## ref: https://kubernetes.io/docs/user-guide/compute-resources/
 ## We usually recommend not to specify default resources and to leave this as a conscious
 ## choice for the user. This also increases chances charts run on environments with little
 ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -268,11 +291,13 @@ resources:
   ## limits:
   ##    cpu: 100m
   ##    memory: 128Mi
+  ##
   limits: {}
   ## Examples:
   ## requests:
   ##    cpu: 100m
   ##    memory: 128Mi
+  ##
   requests: {}
 ## Configure extra options for HashiCorp Consul containers' liveness and readiness probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
@@ -304,12 +329,31 @@ readinessProbe:
   timeoutSeconds: 5
   failureThreshold: 6
   successThreshold: 1
+## Configure extra options for startup probe
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
+## @param startupProbe.enabled Enable startupProbe
+## @param startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+## @param startupProbe.periodSeconds Period seconds for startupProbe
+## @param startupProbe.timeoutSeconds Timeout seconds for startupProbe
+## @param startupProbe.failureThreshold Failure threshold for startupProbe
+## @param startupProbe.successThreshold Success threshold for startupProbe
+##
+startupProbe:
+  enabled: false
+  initialDelaySeconds: 0
+  periodSeconds: 10
+  timeoutSeconds: 5
+  successThreshold: 1
+  failureThreshold: 60
 ## @param customLivenessProbe Override default liveness probe
 ##
 customLivenessProbe: {}
 ## @param customReadinessProbe Override default readiness probe
 ##
 customReadinessProbe: {}
+## @param customStartupProbe Override default startup probe
+##
+customStartupProbe: {}
 ## @param extraVolumeMounts Optionally specify extra list of additional volumeMounts for Hashicorp Consul container
 ##
 extraVolumeMounts: []
@@ -337,6 +381,7 @@ pdb:
   maxUnavailable: ""
 
 ## @section Exposure parameters
+##
 
 ## HashiCorp Consul UI service parameters
 ##
@@ -344,17 +389,19 @@ service:
   ## @param service.enabled Use a service to access HashiCorp Consul Ui
   ##
   enabled: true
-  ## @param service.port HashiCorp Consul UI svc port
+  ## @param service.ports.http HashiCorp Consul UI svc port
   ##
-  port: 80
+  ports:
+    http: 80
   ## @param service.type HashiCorp Consul UI Service Type
   ##
   type: ClusterIP
   ## Specify the nodePort value for the LoadBalancer and NodePort service types.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
-  ## @param service.nodePort Node port for HashiCorp Consul UI
+  ## @param service.nodePorts.http Node port for HashiCorp Consul UI
   ##
-  nodePort: ""
+  nodePorts:
+    http: ""
   ## @param service.loadBalancerIP HashiCorp Consul UI service Load Balancer IP
   ## Set the LoadBalancer service type to internal only.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
@@ -366,8 +413,12 @@ service:
   ## @param service.annotations Annotations for HashiCorp Consul UI service
   ##
   annotations: {}
+  ## @param service.externalTrafficPolicy Service external traffic policy
+  ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+  ##
+  externalTrafficPolicy: Cluster
 ## Configure the ingress resource that allows you to access the Consul UI
-## ref: http://kubernetes.io/docs/user-guide/ingress/
+## ref: https://kubernetes.io/docs/user-guide/ingress/
 ##
 ingress:
   ## @param ingress.enabled Enable ingress resource for Management console
@@ -416,6 +467,18 @@ ingress:
   ##   path: /
   ##
   extraHosts: []
+  ## @param ingress.extraPaths Any additional arbitrary paths that may need to be added to the ingress under the main host.
+  ## For example: The ALB ingress controller requires a special rule for handling SSL redirection.
+  ## extraPaths:
+  ## - path: /*
+  ##   backend:
+  ##     serviceName: ssl-redirect
+  ##     servicePort: use-annotation
+  ##
+  extraPaths: []
+  ## @param ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
+  ##
+  selfSigned: false
   ## @param ingress.extraTls TLS configuration for additional hostname(s) to be covered with this ingress record
   ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
   ## extraTls:
@@ -439,11 +502,14 @@ ingress:
   ##   certificate:
   ##
   secrets: []
+  ## @param ingress.existingSecret It is you own the certificate as secret.
+  existingSecret: ""
 
 ## @section Persistence parameters
+##
 
 ## Enable persistence using Persistent Volume Claims
-## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
 ##
 persistence:
   ## @param persistence.enabled Enable HashiCorp Consul data persistence using PVC, use a Persistent Volume Claim, If false, use emptyDir
@@ -469,6 +535,7 @@ persistence:
   size: 8Gi
 
 ## @section Volume Permissions parameters
+##
 
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the podSecurityContext section.
@@ -488,8 +555,8 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r205
-    pullPolicy: Always
+    tag: 10-debian-10-r264
+    pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -499,7 +566,7 @@ volumePermissions:
     ##
     pullSecrets: []
   ## Init container' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param volumePermissions.resources.limits The resources limits for the container
   ## @param volumePermissions.resources.requests The requested resources for the container
   ##
@@ -508,14 +575,17 @@ volumePermissions:
     ## limits:
     ##    cpu: 100m
     ##    memory: 128Mi
+    ##
     limits: {}
     ## Examples:
     ## requests:
     ##    cpu: 100m
     ##    memory: 128Mi
+    ##
     requests: {}
 
 ## @section Metrics parameters
+##
 
 ## Prometheus Exporter / Metrics
 ##
@@ -534,7 +604,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/consul-exporter
-    tag: 0.7.1-debian-10-r405
+    tag: 0.7.1-debian-10-r465
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -568,7 +638,7 @@ metrics:
     prometheus.io/scrape: "true"
     prometheus.io/port: "9107"
   ## HashiCorp Consul Prometheus exporter resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param metrics.resources.limits The resources limits for the container
   ## @param metrics.resources.requests The requested resources for the container
   ##
@@ -577,11 +647,13 @@ metrics:
     ## limits:
     ##    cpu: 100m
     ##    memory: 128Mi
+    ##
     limits: {}
     ## Examples:
     ## requests:
     ##    cpu: 100m
     ##    memory: 128Mi
+    ##
     requests: {}
   ## Prometheus Service Monitor
   ## ref: https://github.com/coreos/prometheus-operator
@@ -599,12 +671,22 @@ metrics:
     ## @param metrics.serviceMonitor.scrapeTimeout The timeout after which the scrape is ended
     ##
     scrapeTimeout: ""
-    ## @param metrics.serviceMonitor.relabellings Metrics relabellings to add to the scrape endpoint
+    ## @param metrics.serviceMonitor.metricRelabelings Metrics relabelings to add to the scrape endpoint
     ##
-    relabellings: []
+    metricRelabelings: []
     ## @param metrics.serviceMonitor.honorLabels Specify honorLabels parameter to add the scrape endpoint
     ##
     honorLabels: false
+    ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
+    ##
+    jobLabel: ""
+    ## @param metrics.serviceMonitor.selector ServiceMonitor selector labels
+    ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+    ##
+    ## selector:
+    ##   prometheus: my-prometheus
+    ##
+    selector: {}
     ## @param metrics.serviceMonitor.additionalLabels Used to pass Labels that are used by the Prometheus installed in your cluster to select Service Monitors to work with
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
     ##

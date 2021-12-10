@@ -13,7 +13,7 @@ $ helm install my-release bitnami/nginx
 
 Bitnami charts for Helm are carefully engineered, actively maintained and are the quickest and easiest way to deploy containers on a Kubernetes cluster that are ready to handle production workloads.
 
-This chart bootstraps a [NGINX Open Source](https://github.com/bitnami/bitnami-docker-nginx) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [NGINX Open Source](https://github.com/bitnami/bitnami-docker-nginx) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
@@ -74,7 +74,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------- | -------------------------------------------------------------------- | --------------------- |
 | `image.registry`     | NGINX image registry                                                 | `docker.io`           |
 | `image.repository`   | NGINX image repository                                               | `bitnami/nginx`       |
-| `image.tag`          | NGINX image tag (immutable tags are recommended)                     | `1.21.3-debian-10-r0` |
+| `image.tag`          | NGINX image tag (immutable tags are recommended)                     | `1.21.4-debian-10-r0` |
 | `image.pullPolicy`   | NGINX image pull policy                                              | `IfNotPresent`        |
 | `image.pullSecrets`  | Specify docker-registry secret names as an array                     | `[]`                  |
 | `image.debug`        | Set to true if you would like to see extra information on logs       | `false`               |
@@ -105,9 +105,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podSecurityContext.enabled`            | Enabled NGINX pods' Security Context                                                      | `false` |
 | `podSecurityContext.fsGroup`            | Set NGINX pod's Security Context fsGroup                                                  | `1001`  |
 | `podSecurityContext.sysctls`            | sysctl settings of the NGINX pods                                                         | `[]`    |
-| `containerSecurityContext.enabled`      | Enabled NGINX Core containers' Security Context                                           | `false` |
-| `containerSecurityContext.runAsUser`    | Set NGINX Core container's Security Context runAsUser                                     | `1001`  |
-| `containerSecurityContext.runAsNonRoot` | Set NGINX Core container's Security Context runAsNonRoot                                  | `true`  |
+| `containerSecurityContext.enabled`      | Enabled NGINX containers' Security Context                                                | `false` |
+| `containerSecurityContext.runAsUser`    | Set NGINX container's Security Context runAsUser                                          | `1001`  |
+| `containerSecurityContext.runAsNonRoot` | Set NGINX container's Security Context runAsNonRoot                                       | `true`  |
 | `containerPorts.http`                   | Sets http port inside NGINX container                                                     | `8080`  |
 | `containerPorts.https`                  | Sets https port inside NGINX container                                                    | `""`    |
 | `resources.limits`                      | The resources limits for the NGINX container                                              | `{}`    |
@@ -152,7 +152,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cloneStaticSiteFromGit.enabled`           | Get the server static content from a Git repository                                               | `false`                |
 | `cloneStaticSiteFromGit.image.registry`    | Git image registry                                                                                | `docker.io`            |
 | `cloneStaticSiteFromGit.image.repository`  | Git image repository                                                                              | `bitnami/git`          |
-| `cloneStaticSiteFromGit.image.tag`         | Git image tag (immutable tags are recommended)                                                    | `2.33.0-debian-10-r21` |
+| `cloneStaticSiteFromGit.image.tag`         | Git image tag (immutable tags are recommended)                                                    | `2.33.0-debian-10-r76` |
 | `cloneStaticSiteFromGit.image.pullPolicy`  | Git image pull policy                                                                             | `IfNotPresent`         |
 | `cloneStaticSiteFromGit.image.pullSecrets` | Specify docker-registry secret names as an array                                                  | `[]`                   |
 | `cloneStaticSiteFromGit.repository`        | Git Repository to clone static content from                                                       | `""`                   |
@@ -177,7 +177,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ldapDaemon.enabled`                            | Enable LDAP Auth Daemon proxy                                                            | `false`                          |
 | `ldapDaemon.image.registry`                     | LDAP AUth Daemon Image registry                                                          | `docker.io`                      |
 | `ldapDaemon.image.repository`                   | LDAP Auth Daemon Image repository                                                        | `bitnami/nginx-ldap-auth-daemon` |
-| `ldapDaemon.image.tag`                          | LDAP Auth Daemon Image tag (immutable tags are recommended)                              | `0.20200116.0-debian-10-r446`    |
+| `ldapDaemon.image.tag`                          | LDAP Auth Daemon Image tag (immutable tags are recommended)                              | `0.20200116.0-debian-10-r500`    |
 | `ldapDaemon.image.pullPolicy`                   | LDAP Auth Daemon Image pull policy                                                       | `IfNotPresent`                   |
 | `ldapDaemon.port`                               | LDAP Auth Daemon port                                                                    | `8888`                           |
 | `ldapDaemon.ldapConfig.uri`                     | LDAP Server URI, `ldap[s]:/<hostname>:<port>`                                            | `""`                             |
@@ -246,7 +246,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.port`                         | NGINX Container Status Port scraped by Prometheus Exporter                                  | `""`                     |
 | `metrics.image.registry`               | NGINX Prometheus exporter image registry                                                    | `docker.io`              |
 | `metrics.image.repository`             | NGINX Prometheus exporter image repository                                                  | `bitnami/nginx-exporter` |
-| `metrics.image.tag`                    | NGINX Prometheus exporter image tag (immutable tags are recommended)                        | `0.9.0-debian-10-r153`   |
+| `metrics.image.tag`                    | NGINX Prometheus exporter image tag (immutable tags are recommended)                        | `0.9.0-debian-10-r207`   |
 | `metrics.image.pullPolicy`             | NGINX Prometheus exporter image pull policy                                                 | `IfNotPresent`           |
 | `metrics.image.pullSecrets`            | Specify docker-registry secret names as an array                                            | `[]`                     |
 | `metrics.podAnnotations`               | Additional annotations for NGINX Prometheus exporter pod(s)                                 | `{}`                     |

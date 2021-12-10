@@ -74,37 +74,35 @@ data:
 
     validate_quorum() {
         if is_boolean_yes "$REDIS_TLS_ENABLED"; then
-            quorum_info_command="redis-cli {{- if and .Values.auth.enabled .Values.auth.sentinel }} -a $REDIS_PASSWORD {{- end }} -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} sentinel master {{ .Values.sentinel.masterSet }}"
+            quorum_info_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}REDISCLI_AUTH="\$REDIS_PASSWORD" {{ end }}redis-cli -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} sentinel master {{ .Values.sentinel.masterSet }}"
         else
-            quorum_info_command="redis-cli {{- if and .Values.auth.enabled .Values.auth.sentinel }} -a $REDIS_PASSWORD {{- end }} -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT sentinel master {{ .Values.sentinel.masterSet }}"
+            quorum_info_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}REDISCLI_AUTH="\$REDIS_PASSWORD" {{ end }}redis-cli -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT sentinel master {{ .Values.sentinel.masterSet }}"
         fi
 
         info "about to run the command: $quorum_info_command"
-
         eval $quorum_info_command | grep -Fq "s_down"
     }
-    
+
     trigger_manual_failover() {
         if is_boolean_yes "$REDIS_TLS_ENABLED"; then
-            failover_command="redis-cli {{- if and .Values.auth.enabled .Values.auth.sentinel }} -a $REDIS_PASSWORD {{- end }} -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} sentinel failover {{ .Values.sentinel.masterSet }}"
+            failover_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}REDISCLI_AUTH="\$REDIS_PASSWORD" {{ end }}redis-cli -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} sentinel failover {{ .Values.sentinel.masterSet }}"
         else
-            failover_command="redis-cli {{- if and .Values.auth.enabled .Values.auth.sentinel }} -a $REDIS_PASSWORD {{- end }} -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT sentinel failover {{ .Values.sentinel.masterSet }}"
+            failover_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}REDISCLI_AUTH="\$REDIS_PASSWORD" {{ end }}redis-cli -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT sentinel failover {{ .Values.sentinel.masterSet }}"
         fi
 
         info "about to run the command: $failover_command"
-
-        echo $($failover_command)
+        eval $failover_command
     }
 
     get_sentinel_master_info() {
         if is_boolean_yes "$REDIS_TLS_ENABLED"; then
-            sentinel_info_command="redis-cli {{- if and .Values.auth.enabled .Values.auth.sentinel }} -a $REDIS_PASSWORD {{- end }} -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
+            sentinel_info_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}REDISCLI_AUTH="\$REDIS_PASSWORD" {{ end }}redis-cli -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
         else
-            sentinel_info_command="redis-cli {{- if and .Values.auth.enabled .Values.auth.sentinel }} -a $REDIS_PASSWORD {{- end }} -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
+            sentinel_info_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}REDISCLI_AUTH="\$REDIS_PASSWORD" {{ end }}redis-cli -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
         fi
 
         info "about to run the command: $sentinel_info_command"
-        echo $($sentinel_info_command)
+        eval $sentinel_info_command
     }
 
     {{- if and .Values.replica.containerSecurityContext.runAsUser (eq (.Values.replica.containerSecurityContext.runAsUser | int) 0) }}
@@ -297,12 +295,13 @@ data:
     }
     get_sentinel_master_info() {
         if is_boolean_yes "$REDIS_TLS_ENABLED"; then
-            sentinel_info_command="redis-cli {{- if and .Values.auth.enabled .Values.auth.sentinel }} -a $REDIS_PASSWORD {{- end }} -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
+            sentinel_info_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}REDISCLI_AUTH="\$REDIS_PASSWORD" {{ end }}redis-cli -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
         else
-            sentinel_info_command="redis-cli {{- if and .Values.auth.enabled .Values.auth.sentinel }} -a $REDIS_PASSWORD {{- end }} -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
+            sentinel_info_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}REDISCLI_AUTH="\$REDIS_PASSWORD" {{ end }}redis-cli -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
         fi
+
         info "about to run the command: $sentinel_info_command"
-        echo $($sentinel_info_command)
+        eval $sentinel_info_command
     }
 
     # Waits for DNS to add this ip to the service DNS entry
@@ -390,9 +389,19 @@ data:
     . /opt/bitnami/scripts/libvalidations.sh
     . /opt/bitnami/scripts/libos.sh
 
+    HEADLESS_SERVICE="{{ template "common.names.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
     SENTINEL_SERVICE_ENV_NAME={{ printf "%s%s"  (upper (include "common.names.fullname" .)| replace "-" "_") "_SERVICE_PORT_TCP_SENTINEL" }}
     SENTINEL_SERVICE_PORT=${!SENTINEL_SERVICE_ENV_NAME}
 
+    get_full_hostname() {
+        hostname="$1"
+
+        {{- if eq .Values.sentinel.service.type "NodePort" }}
+        echo "${hostname}.{{- .Release.Namespace }}"
+        {{- else }}
+        echo "${hostname}.${HEADLESS_SERVICE}"
+        {{- end}}
+    }
     run_sentinel_command() {
         if is_boolean_yes "$REDIS_SENTINEL_TLS_ENABLED"; then
             redis-cli -h "$REDIS_SERVICE" -p "$SENTINEL_SERVICE_PORT" --tls --cert "$REDIS_SENTINEL_TLS_CERT_FILE" --key "$REDIS_SENTINEL_TLS_KEY_FILE" --cacert "$REDIS_SENTINEL_TLS_CA_FILE" sentinel "$@"
@@ -403,7 +412,7 @@ data:
     failover_finished() {
       REDIS_SENTINEL_INFO=($(run_sentinel_command get-master-addr-by-name "{{ .Values.sentinel.masterSet }}"))
       REDIS_MASTER_HOST="${REDIS_SENTINEL_INFO[0]}"
-      [[ "$REDIS_MASTER_HOST" != "${myip}" ]]
+      [[ "$REDIS_MASTER_HOST" != "$(get_full_hostname $HOSTNAME)" ]]
     }
 
     REDIS_SERVICE="{{ include "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"

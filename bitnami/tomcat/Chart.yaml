@@ -1,7 +1,7 @@
 annotations:
   category: ApplicationServer
 apiVersion: v2
-appVersion: 10.0.12
+appVersion: 10.0.14
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami

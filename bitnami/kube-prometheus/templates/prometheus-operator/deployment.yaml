@@ -81,6 +81,9 @@ spec:
             - --config-reloader-memory-limit={{ .Values.operator.configReloaderResources.limits.memory }}
               {{- end }}
             {{- end }}
+            {{- if .Values.operator.extraArgs }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.operator.extraArgs "context" $) | nindent 12 }}
+            {{- end }}
           ports:
             - name: http
               containerPort: 8080

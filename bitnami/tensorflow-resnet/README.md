@@ -11,7 +11,7 @@ $ helm install my-release bitnami/tensorflow-resnet
 
 ## Introduction
 
-This chart bootstraps a TensorFlow Serving ResNet deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a TensorFlow Serving ResNet deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
@@ -19,16 +19,6 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 - Kubernetes 1.12+
 - Helm 3.1.0
-
-## Get this chart
-
-Download the latest release of the chart from the [releases](../../../releases) page.
-
-Alternatively, clone the repo if you wish to use the development snapshot:
-
-```console
-$ git clone https://github.com/bitnami/charts.git
-```
 
 ## Installing the Chart
 
@@ -74,6 +64,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------ | -------------------------------------------------------------------------------------------- | ----- |
 | `nameOverride`     | String to partially override common.names.fullname template (will maintain the release name) | `""`  |
 | `fullnameOverride` | String to fully override common.names.fullname template                                      | `""`  |
+| `extraDeploy`      | Array of extra objects to deploy with the release                                            | `[]`  |
 
 
 ### TensorFlow parameters
@@ -82,12 +73,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------ | ----------------------------------------------------------------------------------------- | ---------------------------- |
 | `server.image.registry`              | TensorFlow Serving image registry                                                         | `docker.io`                  |
 | `server.image.repository`            | TensorFlow Serving image repository                                                       | `bitnami/tensorflow-serving` |
-| `server.image.tag`                   | TensorFlow Serving Image tag (immutable tags are recommended)                             | `2.5.1-debian-10-r115`       |
+| `server.image.tag`                   | TensorFlow Serving Image tag (immutable tags are recommended)                             | `2.6.0-debian-10-r32`        |
 | `server.image.pullPolicy`            | TensorFlow Serving image pull policy                                                      | `IfNotPresent`               |
 | `server.image.pullSecrets`           | Specify docker-registry secret names as an array                                          | `[]`                         |
 | `client.image.registry`              | TensorFlow ResNet image registry                                                          | `docker.io`                  |
 | `client.image.repository`            | TensorFlow ResNet image repository                                                        | `bitnami/tensorflow-resnet`  |
-| `client.image.tag`                   | TensorFlow ResNet Image tag (immutable tags are recommended)                              | `2.6.0-debian-10-r28`        |
+| `client.image.tag`                   | TensorFlow ResNet Image tag (immutable tags are recommended)                              | `2.6.1-debian-10-r0`         |
 | `client.image.pullPolicy`            | TensorFlow ResNet image pull policy                                                       | `IfNotPresent`               |
 | `client.image.pullSecrets`           | Specify docker-registry secret names as an array                                          | `[]`                         |
 | `hostAliases`                        | Deployment pod host aliases                                                               | `[]`                         |

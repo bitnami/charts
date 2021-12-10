@@ -129,6 +129,7 @@ spec:
               value: {{ printf "$s:%d/api" .Values.externalSkipper.host (int .Values.externalSkipper.port) | quote }}
               {{- end }}
             {{- end }}
+            {{- if .Values.server.configuration.defaultSpringApplicationJSON }}
             - name: SPRING_APPLICATION_JSON
               {{- if .Values.server.proxy }}
               {{- if .Values.server.proxy.user }}
@@ -139,6 +140,7 @@ spec:
               {{- else }}
               value: "{ \"maven\": { \"local-repository\": null, \"remote-repositories\": { \"repo1\": { \"url\": \"https://repo.spring.io/libs-snapshot\"} } } }"
               {{- end }}
+            {{- end }}
             - name: KUBERNETES_NAMESPACE
               valueFrom:
                 fieldRef:

@@ -54,10 +54,10 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/ghost
-  tag: 4.17.0-debian-10-r0
+  tag: 4.24.0-debian-10-r2
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -168,6 +168,15 @@ updateStrategy:
 ## @param priorityClassName Ghost pod priority class name
 ##
 priorityClassName: ""
+## @param schedulerName Name of the k8s scheduler (other than default)
+## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+##
+schedulerName: ""
+## @param topologySpreadConstraints Topology Spread Constraints for pod assignment
+## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+## The value is evaluated as a template
+##
+topologySpreadConstraints: []
 ## @param hostAliases Ghost pod host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
@@ -251,7 +260,7 @@ nodeSelector: {}
 ##
 tolerations: {}
 ## Ghost containers' resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## ref: https://kubernetes.io/docs/user-guide/compute-resources/
 ## @param resources.limits The resources limits for the Ghost container
 ## @param resources.requests The requested resources for the Ghost container
 ##
@@ -283,8 +292,22 @@ containerSecurityContext:
   enabled: true
   runAsUser: 1001
   runAsNonRoot: true
-## Configure extra options for Ghost containers' liveness and readiness probes
+## Configure extra options for Ghost containers' liveness, readiness and startup probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+## @param startupProbe.enabled Enable startupProbe
+## @param startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+## @param startupProbe.periodSeconds Period seconds for startupProbe
+## @param startupProbe.timeoutSeconds Timeout seconds for startupProbe
+## @param startupProbe.failureThreshold Failure threshold for startupProbe
+## @param startupProbe.successThreshold Success threshold for startupProbe
+##
+startupProbe:
+  enabled: false
+  initialDelaySeconds: 120
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
 ## @param livenessProbe.enabled Enable livenessProbe
 ## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
 ## @param livenessProbe.periodSeconds Period seconds for livenessProbe
@@ -328,12 +351,12 @@ service:
   ## @param service.type Ghost service type
   ##
   type: LoadBalancer
-  ## @param service.port Ghost service HTTP port
+  ## @param service.ports.http Ghost service HTTP port
+  ## @param service.ports.https Ghost service HTTPS port
   ##
-  port: 80
-  ## @param service.httpsPort Ghost service HTTPS port
-  ##
-  httpsPort: 443
+  ports:
+    http: 80
+    https: 443
   ## Node ports to expose
   ## @param service.nodePorts.http Node port for HTTP
   ## @param service.nodePorts.https Node port for HTTPS
@@ -359,7 +382,7 @@ service:
   ##
   loadBalancerSourceRanges: []
   ## @param service.externalTrafficPolicy Ghost service external traffic policy
-  ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+  ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
   externalTrafficPolicy: Cluster
   ## @param service.annotations Additional custom annotations for Ghost service
@@ -368,8 +391,18 @@ service:
   ## @param service.extraPorts Extra port to expose on Ghost service
   ##
   extraPorts: []
+  ## @param service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+  ## If "ClientIP", consecutive client requests will be directed to the same Pod
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+  ##
+  sessionAffinity: None
+  ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
+  ## sessionAffinityConfig:
+  ##   clientIP:
+  ##     timeoutSeconds: 300
+  sessionAffinityConfig: {}
 ## Configure the ingress resource that allows you to access the Ghost installation
-## ref: http://kubernetes.io/docs/user-guide/ingress/
+## ref: https://kubernetes.io/docs/user-guide/ingress/
 ##
 ingress:
   ## @param ingress.enabled Enable ingress record generation for Ghost
@@ -460,11 +493,15 @@ ingress:
   ##       -----END CERTIFICATE-----
   ##
   secrets: []
-
+  ## @param ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+  ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+  ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+  ##
+  ingressClassName: ""
 ## @section Persistence Parameters
 
 ## Persistence Parameters
-## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
 ##
 persistence:
   ## @param persistence.enabled Enable persistence using Persistent Volume Claims
@@ -508,7 +545,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r209
+    tag: 10-debian-10-r265
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -519,7 +556,7 @@ volumePermissions:
     ##
     pullSecrets: []
   ## Init container's resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param volumePermissions.resources.limits The resources limits for the init container
   ## @param volumePermissions.resources.requests The requested resources for the init container
   ##
@@ -568,7 +605,7 @@ mariadb:
   ##
   primary:
     ## MariaDB Primary Persistence parameters
-    ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+    ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
     ## @param mariadb.primary.persistence.enabled Enable persistence on MariaDB using PVC(s)
     ## @param mariadb.primary.persistence.storageClass Persistent Volume storage class
     ## @param mariadb.primary.persistence.accessModes [array] Persistent Volume access modes
@@ -604,3 +641,80 @@ externalDatabase:
   ## NOTE: When it's set, the `externalDatabase.password` parameter is ignored
   ##
   existingSecret: ""
+
+## @section NetworkPolicy parameters
+
+## Add networkpolicies
+##
+networkPolicy:
+  ## @param networkPolicy.enabled Enable network policies
+  ## If ingress.enabled or metrics.enabled are true, configure networkPolicy.ingress and networkPolicy.metrics selectors respectively to allow communication
+  ##
+  enabled: false
+  ## @param networkPolicy.ingress.enabled Enable network policy for Ingress Proxies
+  ## @param networkPolicy.ingress.namespaceSelector Ingress Proxy namespace selector labels. These labels will be used to identify the Ingress Proxy's namespace.
+  ## @param networkPolicy.ingress.podSelector Ingress Proxy pods selector labels. These labels will be used to identify the Ingress Proxy pods.
+  ##
+  ingress:
+    enabled: false
+    ## e.g:
+    ## podSelector:
+    ##   label: ingress
+    ##
+    podSelector: {}
+    ## e.g:
+    ## namespaceSelector:
+    ##   label: ingress
+    ##
+    namespaceSelector: {}
+  ## @param networkPolicy.ingressRules.backendOnlyAccessibleByFrontend Enable ingress rule that makes the backend (mariadb) only accessible by Ghost's pods.
+  ## @param networkPolicy.ingressRules.customBackendSelector Backend selector labels. These labels will be used to identify the backend pods.
+  ## @param networkPolicy.ingressRules.accessOnlyFrom.enabled Enable ingress rule that makes Ghost only accessible from a particular origin
+  ## @param networkPolicy.ingressRules.accessOnlyFrom.namespaceSelector Namespace selector label that is allowed to access Ghost. This label will be used to identified the allowed namespace(s).
+  ## @param networkPolicy.ingressRules.accessOnlyFrom.podSelector Pods selector label that is allowed to access Ghost. This label will be used to identified the allowed pod(s).
+  ## @param networkPolicy.ingressRules.customRules Custom network policy ingress rule
+  ##
+  ingressRules:
+    ## mariadb backend only can be accessed from Ghost
+    ##
+    backendOnlyAccessibleByFrontend: false
+    customBackendSelector: {}
+    ## Allow only from the indicated:
+    ##
+    accessOnlyFrom:
+      enabled: false
+      ## e.g:
+      ## namespaceSelector:
+      ##   label: ingress
+      ##
+      namespaceSelector: {}
+      ## e.g:
+      ## podSelector:
+      ##   label: access
+      ##
+      podSelector: {}
+    ## custom ingress rules
+    ## e.g:
+    ## customRules:
+    ##   - from:
+    ##       - namespaceSelector:
+    ##           matchLabels:
+    ##             label: example
+    ##
+    customRules: {}
+  ## @param networkPolicy.egressRules.denyConnectionsToExternal Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).
+  ## @param networkPolicy.egressRules.customRules Custom network policy rule
+  ##
+  egressRules:
+    ## Deny connections to external. This is not compatible with an external database.
+    ##
+    denyConnectionsToExternal: false
+    ## Additional custom egress rules
+    ## e.g:
+    ## customRules:
+    ##   - to:
+    ##       - namespaceSelector:
+    ##           matchLabels:
+    ##             label: example
+    ##
+    customRules: {}

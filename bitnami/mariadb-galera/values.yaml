@@ -64,10 +64,10 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mariadb-galera
-  tag: 10.6.4-debian-10-r14
+  tag: 10.6.5-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
@@ -257,7 +257,7 @@ galera:
     forcePassword: false
 ## LDAP configuration
 ## @param ldap.enabled Enable LDAP support
-## @param ldap.uri LDAP URL beginning in the form `ldap
+## @param ldap.uri LDAP URL beginning in the form `ldap`
 ## @param ldap.base LDAP base DN
 ## @param ldap.binddn LDAP bind DN
 ## @param ldap.bindpw LDAP bind password
@@ -518,7 +518,7 @@ tolerations: []
 ##
 topologySpreadConstraints: {}
 ## Enable persistence using Persistent Volume Claims
-## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
 ##
 persistence:
   ## @param persistence.enabled Enable persistence using PVC
@@ -699,7 +699,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mysqld-exporter
-    tag: 0.13.0-debian-10-r114
+    tag: 0.13.0-debian-10-r152
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -716,7 +716,7 @@ metrics:
   ##
   extraFlags: []
   ## MySQL Prometheus exporter containers' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following

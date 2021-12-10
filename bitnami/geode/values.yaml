@@ -65,10 +65,10 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/geode
-  tag: 1.14.0-debian-10-r7
+  tag: 1.14.0-debian-10-r48
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -251,7 +251,7 @@ locator:
   ##
   customStartupProbe: {}
   ## Locator resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param locator.resources.limits The resources limits for the Locator containers
   ## @param locator.resources.requests The requested resources for the Locator containers
   ##
@@ -359,6 +359,12 @@ locator:
   ## @param locator.lifecycleHooks for the Locator container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
+  ## @param locator.extraFlags Additional command line flags to start Locator nodes
+  ## e.g.
+  ## extraFlags:
+  ##   - "--J=-Dfoo.bar=true"
+  ##
+  extraFlags: []
   ## @param locator.extraEnvVars Array with extra environment variables to add to Locator nodes
   ## e.g:
   ## extraEnvVars:
@@ -443,7 +449,7 @@ locator:
     ##
     loadBalancerSourceRanges: []
     ## @param locator.service.externalTrafficPolicy Locator service external traffic policy
-    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
     externalTrafficPolicy: Cluster
     ## @param locator.service.annotations Additional custom annotations for Locator service
@@ -453,7 +459,7 @@ locator:
     ##
     extraPorts: []
   ## Apache Geode Locator persistence parameters
-  ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
   persistence:
     ## @param locator.persistence.enabled Enable persistence on Locator replicas using a `PersistentVolumeClaim`
@@ -512,6 +518,10 @@ server:
   ## NOTE: When it's set the server.log4j is ignored
   ##
   existingLog4jConfigMap: ""
+  ## @param server.restoreRedundancyOnContainerTermination Use a PreStop hook on container termination to restore redundancy to partitioned regions and reassign which members host the primary copies
+  ## NOTE: Ignored if server.lifecycleHooks is set or server.replicaCount=1
+  ##
+  restoreRedundancyOnContainerTermination: true
   ## @param server.replicaCount Number of Cache Server replicas to deploy
   ##
   replicaCount: 3
@@ -583,7 +593,7 @@ server:
   ##
   customStartupProbe: {}
   ## Cache server resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param server.resources.limits The resources limits for the Cache server containers
   ## @param server.resources.requests The requested resources for the Cache server containers
   ##
@@ -691,6 +701,12 @@ server:
   ## @param server.lifecycleHooks for the Cache server container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
+  ## @param server.extraFlags Additional command line flags to start Cache server nodes
+  ## e.g.
+  ## extraFlags:
+  ##   - "--J=-Dfoo.bar=true"
+  ##
+  extraFlags: []
   ## @param server.extraEnvVars Array with extra environment variables to add to Cache server nodes
   ## e.g:
   ## extraEnvVars:
@@ -746,7 +762,7 @@ server:
     ##
     annotations: {}
   ## Apache Geode Cache server persistence parameters
-  ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
   persistence:
     ## @param server.persistence.enabled Enable persistence on Cache server replicas using a `PersistentVolumeClaim`
@@ -775,7 +791,7 @@ server:
 
 
 ## Apache Geode ingress parameters
-## ref: http://kubernetes.io/docs/user-guide/ingress/
+## ref: https://kubernetes.io/docs/user-guide/ingress/
 ##
 ingress:
   ## @param ingress.enabled Enable ingress record generation for Apache Geode
@@ -883,8 +899,8 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r212
-    pullPolicy: Always
+    tag: 10-debian-10-r261
+    pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -894,7 +910,7 @@ volumePermissions:
     ##
     pullSecrets: []
   ## Init container's resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param volumePermissions.resources.limits The resources limits for the init container
   ## @param volumePermissions.resources.requests The requested resources for the init container
   ##
@@ -928,7 +944,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/haproxy
-    tag: 2.4.6-debian-10-r0
+    tag: 2.5.0-debian-10-r1
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

@@ -58,10 +58,10 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/spark
-  tag: 3.1.2-debian-10-r99
+  tag: 3.2.0-debian-10-r33
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -80,6 +80,27 @@ image:
 ## If hostNetwork is true, then  dnsPolicy is set to ClusterFirstWithHostNet
 ##
 hostNetwork: false
+
+## @section RBAC parameters
+##
+
+## Spark pods ServiceAccount
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+##
+serviceAccount:
+  ## @param serviceAccount.create Enable the creation of a ServiceAccount for Spark pods
+  ##
+  create: true
+  ## @param serviceAccount.name The name of the ServiceAccount to use.
+  ## If not set and create is true, a name is generated using the spark.fullname template
+  ##
+  name: ""
+  ## @param serviceAccount.annotations Annotations for Spark Service Account
+  ##
+  annotations: {}
+  ## @param serviceAccount.automountServiceAccountToken Automount API credentials for a service account.
+  ##
+  automountServiceAccountToken: true
 
 ## @section Spark master parameters
 
@@ -173,7 +194,7 @@ master:
   ##
   tolerations: []
   ## Container resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -354,7 +375,7 @@ worker:
   ##
   tolerations: []
   ## Container resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -486,7 +507,7 @@ security:
     ##
     truststorePassword: ""
     ## Container resource requests and limits
-    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
     ## We usually recommend not to specify default resources and to leave this as a conscious
     ## choice for the user. This also increases chances charts run on environments with little
     ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -540,7 +561,7 @@ service:
   annotations: {}
 ## Configure the ingress resource that allows you to access the
 ## Spark installation. Set up the URL
-## ref: http://kubernetes.io/docs/user-guide/ingress/
+## ref: https://kubernetes.io/docs/user-guide/ingress/
 ##
 ingress:
   ## @param ingress.enabled Enable ingress controller resource

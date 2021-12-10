@@ -13,7 +13,7 @@ $ helm install my-release bitnami/cert-manager
 
 Bitnami charts for Helm are carefully engineered, actively maintained and are the quickest and easiest way to deploy containers on a Kubernetes cluster that are ready to handle production workloads.
 
-This chart bootstraps a [cert-manager](https://cert-manager.io/) Deployment in a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [cert-manager](https://cert-manager.io/) Deployment in a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
@@ -78,13 +78,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.replicaCount`                          | Number of Controller replicas                                                                        | `1`                    |
 | `controller.image.registry`                        | Controller image registry                                                                            | `docker.io`            |
 | `controller.image.repository`                      | Controller image repository                                                                          | `bitnami/cert-manager` |
-| `controller.image.tag`                             | Controller image tag (immutable tags are recommended)                                                | `1.5.4-debian-10-r0`   |
+| `controller.image.tag`                             | Controller image tag (immutable tags are recommended)                                                | `1.6.1-debian-10-r25`  |
 | `controller.image.pullPolicy`                      | Controller image pull policy                                                                         | `IfNotPresent`         |
 | `controller.image.pullSecrets`                     | Controller image pull secrets                                                                        | `[]`                   |
 | `controller.image.debug`                           | Controller image debug mode                                                                          | `false`                |
 | `controller.acmesolver.image.registry`             | Controller image registry                                                                            | `docker.io`            |
 | `controller.acmesolver.image.repository`           | Controller image repository                                                                          | `bitnami/acmesolver`   |
-| `controller.acmesolver.image.tag`                  | Controller image tag (immutable tags are recommended)                                                | `1.5.3-debian-10-r36`  |
+| `controller.acmesolver.image.tag`                  | Controller image tag (immutable tags are recommended)                                                | `1.6.1-debian-10-r27`  |
 | `controller.acmesolver.image.pullPolicy`           | Controller image pull policy                                                                         | `IfNotPresent`         |
 | `controller.acmesolver.image.pullSecrets`          | Controller image pull secrets                                                                        | `[]`                   |
 | `controller.acmesolver.image.debug`                | Controller image debug mode                                                                          | `false`                |
@@ -132,7 +132,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `webhook.replicaCount`                          | Number of Webhook replicas                                                                        | `1`                            |
 | `webhook.image.registry`                        | Webhook image registry                                                                            | `docker.io`                    |
 | `webhook.image.repository`                      | Webhook image repository                                                                          | `bitnami/cert-manager-webhook` |
-| `webhook.image.tag`                             | Webhook image tag (immutable tags are recommended)                                                | `1.5.3-debian-10-r35`          |
+| `webhook.image.tag`                             | Webhook image tag (immutable tags are recommended)                                                | `1.6.1-debian-10-r27`          |
 | `webhook.image.pullPolicy`                      | Webhook image pull policy                                                                         | `IfNotPresent`                 |
 | `webhook.image.pullSecrets`                     | Webhook image pull secrets                                                                        | `[]`                           |
 | `webhook.image.debug`                           | Webhook image debug mode                                                                          | `false`                        |
@@ -198,7 +198,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cainjector.replicaCount`                          | Number of CAInjector replicas                                                                        | `1`                   |
 | `cainjector.image.registry`                        | CAInjector image registry                                                                            | `docker.io`           |
 | `cainjector.image.repository`                      | CAInjector image repository                                                                          | `bitnami/cainjector`  |
-| `cainjector.image.tag`                             | CAInjector image tag (immutable tags are recommended)                                                | `1.5.3-debian-10-r35` |
+| `cainjector.image.tag`                             | CAInjector image tag (immutable tags are recommended)                                                | `1.6.1-debian-10-r26` |
 | `cainjector.image.pullPolicy`                      | CAInjector image pull policy                                                                         | `IfNotPresent`        |
 | `cainjector.image.pullSecrets`                     | CAInjector image pull secrets                                                                        | `[]`                  |
 | `cainjector.image.debug`                           | CAInjector image debug mode                                                                          | `false`               |

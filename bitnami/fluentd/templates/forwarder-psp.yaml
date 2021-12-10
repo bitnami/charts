@@ -1,4 +1,5 @@
-{{- if and .Values.forwarder.enabled .Values.forwarder.rbac.create .Values.forwarder.rbac.pspEnabled }}
+{{- $pspAvailable := (semverCompare "<1.25-0" (include "common.capabilities.kubeVersion" .)) -}}
+{{- if and $pspAvailable .Values.forwarder.enabled .Values.forwarder.rbac.create .Values.forwarder.rbac.pspEnabled }}
 apiVersion: policy/v1beta1
 kind: PodSecurityPolicy
 metadata:

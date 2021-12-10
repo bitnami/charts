@@ -63,10 +63,10 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/fluentd
-  tag: 1.14.1-debian-10-r0
+  tag: 1.14.3-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -85,6 +85,13 @@ forwarder:
   ## @param forwarder.enabled Enable forwarder daemonset
   ##
   enabled: true
+  ## @param forwarder.image.registry Fluentd forwarder image registry override
+  ## @param forwarder.image.repository Fluentd forwarder image repository override
+  ## @param forwarder.image.tag Fluentd forwarder image tag override (immutable tags are recommended)
+  image:
+    registry: ""
+    repository: ""
+    tag: ""
   ## @param forwarder.daemonUser Forwarder daemon user and group (set to root by default because it reads from host paths)
   ##
   daemonUser: root
@@ -298,7 +305,7 @@ forwarder:
         targetPort: http
         protocol: TCP
     ## @param forwarder.service.loadBalancerIP loadBalancerIP if service type is `LoadBalancer` (optional, cloud specific)
-    ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+    ## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
     ##
     loadBalancerIP: ""
     ## @param forwarder.service.loadBalancerSourceRanges Addresses that are allowed when service is LoadBalancer
@@ -371,7 +378,7 @@ forwarder:
   updateStrategy:
     type: RollingUpdate
   ## Forwarder containers' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -457,7 +464,7 @@ forwarder:
   ## Role Based Access
   ## ref: https://kubernetes.io/docs/admin/authorization/rbac/
   ## @param forwarder.rbac.create Specify whether RBAC resources should be created and used, allowing the get, watch and list of pods/namespaces
-  ## @param forwarder.rbac.pspEnabled Specify whether the bundled Pod Security Policy should be created and bound with RBAC
+  ## @param forwarder.rbac.pspEnabled Whether to create a PodSecurityPolicy and bound it with RBAC. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later
   ##
   rbac:
     create: true
@@ -526,6 +533,13 @@ aggregator:
   ## @param aggregator.enabled Enable Fluentd aggregator statefulset
   ##
   enabled: true
+  ## @param aggregator.image.registry Fluentd aggregator image registry override
+  ## @param aggregator.image.repository Fluentd aggregator image repository override
+  ## @param aggregator.image.tag Fluentd aggregator image tag override (immutable tags are recommended)
+  image:
+    registry: ""
+    repository: ""
+    tag: ""
   ## @param aggregator.replicaCount Number of aggregator pods to deploy in the Stateful Set
   ##
   replicaCount: 1
@@ -686,7 +700,7 @@ aggregator:
         targetPort: tcp
         protocol: TCP
     ## @param aggregator.service.loadBalancerIP loadBalancerIP if service type is `LoadBalancer` (optional, cloud specific)
-    ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+    ## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
     ##
     loadBalancerIP: ""
     ## @param aggregator.service.loadBalancerSourceRanges Addresses that are allowed when service is LoadBalancer
@@ -706,7 +720,7 @@ aggregator:
     annotations: {}
   ## Configure the ingress resource that allows you to access the
   ## Fluentd aggregator. Set up the URL
-  ## ref: http://kubernetes.io/docs/user-guide/ingress/
+  ## ref: https://kubernetes.io/docs/user-guide/ingress/
   ##
   ingress:
     ## @param aggregator.ingress.enabled Set to true to enable ingress record generation
@@ -839,7 +853,7 @@ aggregator:
   updateStrategy:
     type: RollingUpdate
   ## Aggregator containers' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -999,6 +1013,9 @@ aggregator:
   ##     mountPath: /tmp
   ##
   extraVolumeMounts: []
+  ## @param aggregator.extraVolumeClaimTemplates Optionally specify extra list of additional volume claim templates for the Fluentd Aggregator pods in StatefulSet
+  ##
+  extraVolumeClaimTemplates: []
 ## @param serviceAccount Pods Service Account. This top-level global entry is DEPRECATED. Please use "forwarder.serviceAccount" instead.
 ## Only the forwarder was affected by the historical usage here.
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
@@ -1025,7 +1042,7 @@ metrics:
     ##
     port: 24231
     ## @param metrics.service.loadBalancerIP Load Balancer IP if the Prometheus metrics server type is `LoadBalancer`
-    ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+    ## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
     ##
     loadBalancerIP: ""
     ## @param metrics.service.annotations [object] Annotations for the Prometheus Exporter service service

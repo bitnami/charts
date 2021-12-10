@@ -15,7 +15,7 @@ $ helm install my-release bitnami/apache
 
 Bitnami charts for Helm are carefully engineered, actively maintained and are the quickest and easiest way to deploy containers on a Kubernetes cluster that are ready to handle production workloads.
 
-This chart bootstraps a [Apache](https://github.com/bitnami/bitnami-docker-apache) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Apache](https://github.com/bitnami/bitnami-docker-apache) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
@@ -75,13 +75,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ---------------------- |
 | `image.registry`                       | Apache image registry                                                                                                    | `docker.io`            |
 | `image.repository`                     | Apache image repository                                                                                                  | `bitnami/apache`       |
-| `image.tag`                            | Apache image tag (immutable tags are recommended)                                                                        | `2.4.49-debian-10-r0`  |
+| `image.tag`                            | Apache image tag (immutable tags are recommended)                                                                        | `2.4.51-debian-10-r43` |
 | `image.pullPolicy`                     | Apache image pull policy                                                                                                 | `IfNotPresent`         |
 | `image.pullSecrets`                    | Apache image pull secrets                                                                                                | `[]`                   |
 | `image.debug`                          | Enable image debug mode                                                                                                  | `false`                |
 | `git.registry`                         | Git image registry                                                                                                       | `docker.io`            |
 | `git.repository`                       | Git image name                                                                                                           | `bitnami/git`          |
-| `git.tag`                              | Git image tag                                                                                                            | `2.33.0-debian-10-r30` |
+| `git.tag`                              | Git image tag                                                                                                            | `2.34.0-debian-10-r3`  |
 | `git.pullPolicy`                       | Git image pull policy                                                                                                    | `IfNotPresent`         |
 | `git.pullSecrets`                      | Specify docker-registry secret names as an array                                                                         | `[]`                   |
 | `replicaCount`                         | Number of replicas of the Apache deployment                                                                              | `1`                    |
@@ -98,6 +98,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cloneHtdocsFromGit.enabled`           | Get the server static content from a git repository                                                                      | `false`                |
 | `cloneHtdocsFromGit.repository`        | Repository to clone static content from                                                                                  | `""`                   |
 | `cloneHtdocsFromGit.branch`            | Branch inside the git repository                                                                                         | `""`                   |
+| `cloneHtdocsFromGit.enableAutoRefresh` | Enables an automatic git pull with a sidecar container                                                                   | `true`                 |
 | `cloneHtdocsFromGit.interval`          | Interval for sidecar container pull from the repository                                                                  | `60`                   |
 | `cloneHtdocsFromGit.resources`         | Init container git resource requests                                                                                     | `{}`                   |
 | `cloneHtdocsFromGit.extraVolumeMounts` | Add extra volume mounts for the GIT containers                                                                           | `[]`                   |
@@ -133,6 +134,20 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sidecars`                             | Add additional sidecar containers to the Apache pods                                                                     | `[]`                   |
 
 
+### Other Parameters
+
+| Name                       | Description                                                    | Value   |
+| -------------------------- | -------------------------------------------------------------- | ------- |
+| `pdb.create`               | Enable a Pod Disruption Budget creation                        | `false` |
+| `pdb.minAvailable`         | Minimum number/percentage of pods that should remain scheduled | `1`     |
+| `pdb.maxUnavailable`       | Maximum number/percentage of pods that may be made unavailable | `""`    |
+| `autoscaling.enabled`      | Enable Horizontal POD autoscaling for Apache                   | `false` |
+| `autoscaling.minReplicas`  | Minimum number of Apache replicas                              | `1`     |
+| `autoscaling.maxReplicas`  | Maximum number of Apache replicas                              | `11`    |
+| `autoscaling.targetCPU`    | Target CPU utilization percentage                              | `50`    |
+| `autoscaling.targetMemory` | Target Memory utilization percentage                           | `50`    |
+
+
 ### Traffic Exposure Parameters
 
 | Name                            | Description                                                                                                                      | Value                    |
@@ -146,6 +161,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.annotations`           | Additional custom annotations for Apache service                                                                                 | `{}`                     |
 | `service.externalTrafficPolicy` | Apache service external traffic policy                                                                                           | `Cluster`                |
 | `ingress.enabled`               | Enable ingress record generation for Apache                                                                                      | `false`                  |
+| `ingress.selfSigned`            | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
 | `ingress.pathType`              | Ingress path type                                                                                                                | `ImplementationSpecific` |
 | `ingress.apiVersion`            | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
 | `ingress.ingressClassName`      | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
@@ -164,7 +180,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`            | Start a sidecar prometheus exporter to expose Apache metrics | `false`                   |
 | `metrics.image.registry`     | Apache Exporter image registry                               | `docker.io`               |
 | `metrics.image.repository`   | Apache Exporter image repository                             | `bitnami/apache-exporter` |
-| `metrics.image.tag`          | Apache Exporter image tag (immutable tags are recommended)   | `0.10.0-debian-10-r48`    |
+| `metrics.image.tag`          | Apache Exporter image tag (immutable tags are recommended)   | `0.10.1-debian-10-r59`    |
 | `metrics.image.pullPolicy`   | Apache Exporter image pull policy                            | `IfNotPresent`            |
 | `metrics.image.pullSecrets`  | Apache Exporter image pull secrets                           | `[]`                      |
 | `metrics.podAnnotations`     | Additional custom annotations for Apache exporter service    | `{}`                      |

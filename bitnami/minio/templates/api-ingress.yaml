@@ -9,9 +9,6 @@ metadata:
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
   annotations:
-    {{- if .Values.apiIngress.certManager }}
-    kubernetes.io/tls-acme: "true"
-    {{- end }}
     {{- if .Values.apiIngress.annotations }}
     {{- include "common.tplvalues.render" (dict "value" .Values.apiIngress.annotations "context" $) | nindent 4 }}
     {{- end }}
@@ -19,6 +16,9 @@ metadata:
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
     {{- end }}
 spec:
+  {{- if and .Values.apiIngress.ingressClassName (include "common.ingress.supportsIngressClassname" .) }}
+  ingressClassName: {{ .Values.apiIngress.ingressClassName | quote }}
+  {{- end }}
   rules:
     {{- if .Values.apiIngress.hostname }}
     - host: {{ .Values.apiIngress.hostname }}
@@ -43,9 +43,9 @@ spec:
             {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname" $) "servicePort" "minio-api" "context" $) | nindent 14 }}
     {{- end }}
-  {{- if or .Values.apiIngress.tls .Values.apiIngress.extraTls }}
+  {{- if or (and .Values.apiIngress.tls (or (include "minio.ingress.certManagerRequest" .Values.apiIngress.annotations) .Values.apiIngress.selfSigned)) .Values.apiIngress.extraTls }}
   tls:
-    {{- if .Values.apiIngress.tls }}
+    {{- if and .Values.apiIngress.tls (or (include "minio.ingress.certManagerRequest" .Values.apiIngress.annotations) .Values.apiIngress.selfSigned) }}
     - hosts:
         - {{ .Values.apiIngress.hostname }}
       secretName: {{ printf "%s-tls" .Values.apiIngress.hostname }}

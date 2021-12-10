@@ -27,6 +27,9 @@ fullnameOverride: ""
 ## @param commonLabels Add labels to all the deployed resources
 ##
 commonLabels: {}
+## @param extraDeploy Array of extra objects to deploy with the release
+##
+extraDeploy: []
 
 ## @section Node Exporter parameters
 
@@ -44,7 +47,7 @@ rbac:
   ## @param rbac.apiVersion Version of the RBAC API
   ##
   apiVersion: v1beta1
-  ## @param rbac.pspEnabled Enable Pod Security Policy
+  ## @param rbac.pspEnabled Whether to create a PodSecurityPolicy and bound it with RBAC. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later
   ##
   pspEnabled: true
 ## Service account for Node Exporter to use.
@@ -68,10 +71,10 @@ serviceAccount:
 image:
   registry: docker.io
   repository: bitnami/node-exporter
-  tag: 1.2.2-debian-10-r47
+  tag: 1.3.1-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -167,7 +170,7 @@ minReadySeconds: 0
 ##
 priorityClassName: ""
 ## Resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## ref: https://kubernetes.io/docs/user-guide/compute-resources/
 ## We usually recommend not to specify default resources and to leave this as a conscious
 ## choice for the user. This also increases chances charts run on environments with little
 ## resources, such as Minikube. If you do want to specify resources, uncomment the following

@@ -68,6 +68,27 @@ spec:
             {{- else if .Values.operator.args.scanNamespaces }}
             - --namespaces={{ include "grafana-operator.joinListWithComma" .Values.operator.args.scanNamespaces }}
             {{- end }}
+            {{- if .Values.operator.args.zapDevel }}
+            - --zap-devel={{ .Values.operator.args.zapDevel }}
+            {{- end }}
+            {{- if .Values.operator.args.zapEncoder }}
+            - --zap-encoder={{ .Values.operator.args.zapEncoder }}
+            {{- end }}
+            {{- if .Values.operator.args.zapLevel }}
+            - --zap-level=True
+            {{- end }}
+            {{- if .Values.operator.args.zapSample }}
+            - --zap-sample={{ .Values.operator.args.zapSample }}
+            {{- end }}
+            {{- if .Values.operator.args.zapStacktraceLevel }}
+            - --zap-stacktrace-level={{ .Values.operator.args.zapStacktraceLevel }}
+            {{- end }}
+            {{- if .Values.operator.args.zapTimeEncoding }}
+            - --zap-time-encoding={{ .Values.operator.args.zapTimeEncoding }}
+            {{- end }}
+            {{- if .Values.operator.args.extraArgs }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.operator.args.extraArgs "context" $) | nindent 12 }}
+            {{- end }}
         {{- if .Values.operator.resources }}
           resources: {{- toYaml .Values.operator.resources | nindent 12 }}
         {{- end }}

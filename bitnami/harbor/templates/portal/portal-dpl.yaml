@@ -38,6 +38,9 @@ spec:
     spec:
       {{- include "harbor.imagePullSecrets" . | nindent 6 }}
       automountServiceAccountToken: {{ .Values.portal.automountServiceAccountToken }}
+      {{- if .Values.portal.priorityClassName }}
+      priorityClassName: {{ .Values.portal.priorityClassName | quote }}
+      {{- end }}
       {{- if .Values.portal.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.portal.affinity "context" $) | nindent 8 }}
       {{- else }}

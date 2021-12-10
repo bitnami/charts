@@ -11,7 +11,7 @@ $ helm install my-release bitnami/mariadb-galera
 
 ## Introduction
 
-This chart bootstraps a [MariaDB Galera](https://github.com/bitnami/bitnami-docker-mariadb-galera) cluster on [Kubernetes](http://kubernetes.io) using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [MariaDB Galera](https://github.com/bitnami/bitnami-docker-mariadb-galera) cluster on [Kubernetes](https://kubernetes.io) using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This chart has been tested to work with fluentd and Prometheus on top of [BKPR](https://kubeprod.io/).
 
@@ -86,7 +86,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
 | `image.registry`                           | MariaDB Galera image registry                                                                                                                                                                 | `docker.io`               |
 | `image.repository`                         | MariaDB Galera image repository                                                                                                                                                               | `bitnami/mariadb-galera`  |
-| `image.tag`                                | MariaDB Galera image tag (immutable tags are recommended)                                                                                                                                     | `10.5.12-debian-10-r29`   |
+| `image.tag`                                | MariaDB Galera image tag (immutable tags are recommended)                                                                                                                                     | `10.6.5-debian-10-r0`     |
 | `image.pullPolicy`                         | MariaDB Galera image pull policy                                                                                                                                                              | `IfNotPresent`            |
 | `image.pullSecrets`                        | Specify docker-registry secret names as an array                                                                                                                                              | `[]`                      |
 | `image.debug`                              | Specify if debug logs should be enabled                                                                                                                                                       | `false`                   |
@@ -127,7 +127,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `galera.mariabackup.password`              | MariaBackup password. Password is ignored if existingSecret is specified.                                                                                                                     | `""`                      |
 | `galera.mariabackup.forcePassword`         | Option to force users to specify a password. That is required for 'helm upgrade' to work properly.                                                                                            | `false`                   |
 | `ldap.enabled`                             | Enable LDAP support                                                                                                                                                                           | `false`                   |
-| `ldap.uri`                                 | LDAP URL beginning in the form `ldap                                                                                                                                                          | `""`                      |
+| `ldap.uri`                                 | LDAP URL beginning in the form `ldap`                                                                                                                                                         | `""`                      |
 | `ldap.base`                                | LDAP base DN                                                                                                                                                                                  | `""`                      |
 | `ldap.binddn`                              | LDAP bind DN                                                                                                                                                                                  | `""`                      |
 | `ldap.bindpw`                              | LDAP bind password                                                                                                                                                                            | `""`                      |
@@ -201,7 +201,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                          | Start a side-car prometheus exporter                                                                                                                                                          | `false`                   |
 | `metrics.image.registry`                   | MariaDB Prometheus exporter image registry                                                                                                                                                    | `docker.io`               |
 | `metrics.image.repository`                 | MariaDB Prometheus exporter image repository                                                                                                                                                  | `bitnami/mysqld-exporter` |
-| `metrics.image.tag`                        | MariaDB Prometheus exporter image tag (immutable tags are recommended)                                                                                                                        | `0.13.0-debian-10-r104`   |
+| `metrics.image.tag`                        | MariaDB Prometheus exporter image tag (immutable tags are recommended)                                                                                                                        | `0.13.0-debian-10-r152`   |
 | `metrics.image.pullPolicy`                 | MariaDB Prometheus exporter image pull policy                                                                                                                                                 | `IfNotPresent`            |
 | `metrics.image.pullSecrets`                | MariaDB Prometheus exporter image pull secrets                                                                                                                                                | `[]`                      |
 | `metrics.extraFlags`                       | MariaDB Prometheus exporter additional command line flags                                                                                                                                     | `[]`                      |
@@ -222,7 +222,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.prometheusRules.rules`            | PrometheusRule rules to configure                                                                                                                                                             | `{}`                      |
 
 
-The above parameters map to the env variables defined in [bitnami/mariadb-galera](http://github.com/bitnami/bitnami-docker-mariadb-galera). For more information please refer to the [bitnami/mariadb-galera](http://github.com/bitnami/bitnami-docker-mariadb-galera) image documentation.
+The above parameters map to the env variables defined in [bitnami/mariadb-galera](https://github.com/bitnami/bitnami-docker-mariadb-galera). For more information please refer to the [bitnami/mariadb-galera](https://github.com/bitnami/bitnami-docker-mariadb-galera) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -500,7 +500,7 @@ helm install my-release bitnami/mariadb-galera \
 
 The [Bitnami MariaDB Galera](https://github.com/bitnami/bitnami-docker-mariadb-galera) image stores the MariaDB data and configurations at the `/bitnami/mariadb` path of the container.
 
-The chart mounts a [Persistent Volume](kubernetes.io/docs/user-guide/persistent-volumes/) volume at this location. The volume is created using dynamic volume provisioning, by default. An existing PersistentVolumeClaim can be defined.
+The chart mounts a [Persistent Volume](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) volume at this location. The volume is created using dynamic volume provisioning, by default. An existing PersistentVolumeClaim can be defined.
 
 ### Setting Pod's affinity
 

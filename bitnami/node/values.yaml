@@ -125,10 +125,10 @@ externaldb:
 image:
   registry: docker.io
   repository: bitnami/node
-  tag: 14.18.0-debian-10-r0
+  tag: 16.13.1-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -272,6 +272,24 @@ extraVolumes: []
 ## @param extraVolumeMounts Extra volume mounts to add to the container
 ##
 extraVolumeMounts: []
+## Pods Service Account
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+##
+serviceAccount:
+  ## @param serviceAccount.create Enable creation of ServiceAccount for node pod
+  ##
+  create: false
+  ## @param serviceAccount.name The name of the ServiceAccount to use.
+  ## If not set and create is true, a name is generated using the `common.names.fullname` template
+  name: ""
+  ## @param serviceAccount.annotations Annotations for service account. Evaluated as a template.
+  ## Only used if `create` is `true`.
+  ##
+  annotations: {}
+  ## @param serviceAccount.automountServiceAccountToken Whether to auto mount the service account token
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/#use-the-default-service-account-to-access-the-api-server
+  ##
+  automountServiceAccountToken: false
 ## SecurityContext configuration
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 ## @param containerSecurityContext.enabled Node Container securityContext
@@ -289,7 +307,7 @@ podSecurityContext:
   enabled: true
   fsGroup: 1001
 ## Node conatiners' resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## ref: https://kubernetes.io/docs/user-guide/compute-resources/
 ## We usually recommend not to specify default resources and to leave this as a conscious
 ## choice for the user. This also increases chances charts run on environments with little
 ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -326,10 +344,10 @@ git:
   image:
     registry: docker.io
     repository: bitnami/git
-    tag: 2.33.0-debian-10-r44
+    tag: 2.34.1-debian-10-r5
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -377,8 +395,8 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r206
-    pullPolicy: Always
+    tag: 10-debian-10-r266
+    pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -388,7 +406,7 @@ volumePermissions:
     ##
     pullSecrets: []
   ## Init container' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -411,7 +429,7 @@ volumePermissions:
 ## @section Persistence parameters
 
 ## Enable persistence using Persistent Volume Claims
-## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
 ##
 persistence:
   ## @param persistence.enabled Enable persistence using PVC
@@ -474,7 +492,7 @@ service:
   annotations: {}
 ## Configure the ingress resource that allows you to access the
 ## Node.js installation. Set up the URL
-## ref: http://kubernetes.io/docs/user-guide/ingress/
+## ref: https://kubernetes.io/docs/user-guide/ingress/
 ##
 ingress:
   ## @param ingress.enabled Set to true to enable ingress record generation

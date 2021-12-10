@@ -67,10 +67,10 @@ operator:
   image:
     registry: docker.io
     repository: bitnami/grafana-operator
-    tag: 3.10.3-debian-10-r61
+    tag: 3.10.4-debian-10-r45
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## Ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## Ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -83,6 +83,13 @@ operator:
     pullSecrets: []
   ## @param operator.args.scanAllNamespaces Specify if all namespace should be scanned for dashboards and datasources. (Creates ClusterRole)
   ## @param operator.args.scanNamespaces Specify the namespaces which should be scanned for dashboards and datasources (Creates ClusterRole)
+  ## @param operator.args.zapDevel Enable zap development mode (changes defaults to console encoder, debug log level, disables sampling and stacktrace from 'warning' level)
+  ## @param operator.args.zapEncoder Zap log encoding ('json' or 'console')
+  ## @param operator.args.zapLevel Zap log level (one of 'debug', 'info', 'error' or any integer value > 0) (default info)
+  ## @param operator.args.zapSample Enable zap log sampling. Sampling will be disabled for integer log levels > 1
+  ## @param operator.args.zapStacktraceLevel Set the minimum log level that triggers stacktrace generation (default error)
+  ## @param operator.args.zapTimeEncoding Sets the zap time format ('epoch', 'millis', 'nano', or 'iso8601') (default )
+  ## @param operator.args.extraArgs Extra arguments for the grafana operator (Evaluated as a template)
   ##
   args:
     ## If one of these options is set a clusterRole and clusterRoleBinding is created to
@@ -90,6 +97,14 @@ operator:
     ##
     scanAllNamespaces: false
     scanNamespaces: []
+    zapDevel: false
+    zapEncoder: ""
+    zapLevel: ""
+    zapSample: ""
+    zapStacktraceLevel: ""
+    zapTimeEncoding: ""
+    extraArgs: []
+
   ## @param operator.rbac.create Create specifies whether to install and use RBAC rules
   ##
   rbac:
@@ -261,7 +276,7 @@ grafana:
   image:
     registry: docker.io
     repository: bitnami/grafana
-    tag: 8.1.5-debian-10-r2
+    tag: 8.3.1-debian-10-r0
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -308,7 +323,7 @@ grafana:
     fsGroup: 1001
     allowPrivilegeEscalation: false
   ## Grafana containers' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -393,15 +408,23 @@ grafana:
   client:
     timeout: 5
     preferService: true
+  ## @param grafana.labels Add additional labels to the grafana deployment, service and ingress resources
+  ##
+  labels: {}
   ## Configure the ingress resource that allows you to access the
   ## Grafana web. Set up the URL
-  ## Ref: http://kubernetes.io/docs/user-guide/ingress/
+  ## Ref: https://kubernetes.io/docs/user-guide/ingress/
   ## Ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/deploy_grafana.md#configuring-the-ingress-or-route
   ##
   ingress:
     ## @param grafana.ingress.enabled If an ingress or OpenShift Route should be created
     ##
     enabled: false
+    ## @param grafana.ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+    ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster.
+    ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+    ##
+    ingressClassName: ""
     ## @param grafana.ingress.hostname The hostname under which the grafana instance should be reachable
     ##
     hostname: grafana.local
@@ -428,7 +451,7 @@ grafana:
     ##
     tlsSecret: grafana.local-tls
   ## Enable persistence using Persistent Volume Claims
-  ## Ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## Ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
   persistence:
     ## @param grafana.persistence.enabled Enable persistent storage for the grafana deployment
@@ -523,6 +546,14 @@ grafana:
   dashboardLabelSelectors:
     - matchLabels:
         app.kubernetes.io/instance: "{{ .Release.Name }}"
+  ## @param grafana.dashboardNamespaceSelector Watch for dashboards only in the Namespaces that have the specified namespace label
+  ## Ref: https://github.com/grafana-operator/grafana-operator/blob/master/documentation/multi_namespace_support.md#2-dashboardnamespaceselector
+  ## e.g:
+  ## dashboardNamespaceSelector:
+  ##   - matchLabels:
+  ##     key: value
+  ##
+  dashboardNamespaceSelector: []
   ## Grafana containers' liveness probe
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ## @param grafana.livenessProbe.enabled Enable livenessProbe
