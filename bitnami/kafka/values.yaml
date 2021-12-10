@@ -612,6 +612,7 @@ sidecars: []
 ##
 initContainers: []
 
+## @section Exposure parameters
 networkPolicy:
   ## @param networkPolicy.enabled Enable creation of NetworkPolicy resources.
   ##
@@ -646,7 +647,6 @@ networkPolicy:
   ##
   externalAccess:
     from: []
-## @section Exposure parameters
 
 ## Service parameters
 ##
