@@ -27,11 +27,13 @@ spec:
           namespaceSelector:
 {{ toYaml .Values.networkPolicy.explicitNamespacesSelector | indent 12 }}
           {{- end }}
+      {{- end }}
     # Allow communication inter-broker
+    - ports: {{ .Values.service.internalPort }}
+      from:
         - podSelector:
             matchLabels:
             {{- include "common.labels.matchLabels" . | nindent 14 }}
-      {{- end }}
     # Allow External connection
     {{- if .Values.externalAccess.enabled }}
     - ports: {{ .Values.service.externalPort }}
@@ -43,7 +45,7 @@ spec:
           namespaceSelector:
 {{ toYaml .Values.networkPolicy.explicitNamespacesSelector | indent 12 }}
           {{- end }}
-    {{- end }}      
+    {{- end }}
     {{- if .Values.metrics.kafka.enabled }}
     # Allow prometheus scrapes
     - ports:
