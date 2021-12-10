@@ -26,3 +26,9 @@ The command removes all the Kubernetes components associated with the chart and 
 $ helm delete --purge databunker-demo
 ```
  
+### Exposure parameters
+
+| Name                            | Description                                                                                                                      | Value                    |
+| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.type`                  | Databunker Service Type                                                                                                 | `ClusterIP`              |
+| `service.nodePorts.http`        | Node port for HashiCorp Consul UI                                                                                                | `""`   
