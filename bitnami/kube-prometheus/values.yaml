@@ -61,6 +61,12 @@ operator:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
+  ## @param operator.extraArgs Additional arguments passed to Prometheus Operator
+  ## Example:
+  ## extraArgs:
+  ##   - --namespaces={{ .Release.Namespace }}
+  ##
+  extraArgs: []
   ## @param operator.hostAliases Add deployment host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##

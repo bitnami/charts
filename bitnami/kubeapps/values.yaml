@@ -64,7 +64,7 @@ ingress:
   pathType: ImplementationSpecific
   ## @param ingress.annotations [object] Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
   ## For a full list of possible ingress annotations, please see
-  ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+  ## ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md
   ## Use this parameter to set the required annotations for cert-manager, see
   ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
   ##
@@ -153,7 +153,7 @@ frontend:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.21.4-debian-10-r21
+    tag: 1.21.4-debian-10-r26
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -386,7 +386,7 @@ frontend:
     ##
     loadBalancerIP: ""
     ## @param frontend.service.loadBalancerSourceRanges Frontend service Load Balancer sources
-    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## ref: https://v1-17.docs.kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## e.g:
     ## loadBalancerSourceRanges:
     ##   - 10.10.10.0/24
@@ -417,7 +417,7 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-dashboard
-    tag: 2.4.1-debian-10-r42
+    tag: 2.4.2-debian-10-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -457,6 +457,9 @@ dashboard:
   ## @param dashboard.remoteComponentsUrl Remote URL that can be used to load custom components vs loading from the local filesystem
   ##
   remoteComponentsUrl: ""
+  ## @param dashboard.skipAvailablePackageDetails Skip the package details view and go straight to the installation view of the latest version
+  ##
+  skipAvailablePackageDetails: false
   ## @param dashboard.customLocale Custom translations injected to the Dashboard to customize the strings used in Kubeapps
   ## ref: https://github.com/kubeapps/kubeapps/blob/master/docs/developer/translate-kubeapps.md
   ## e.g:
@@ -677,7 +680,7 @@ apprepository:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-apprepository-controller
-    tag: 2.4.1-scratch-r1
+    tag: 2.4.2-scratch-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -702,7 +705,7 @@ apprepository:
   syncImage:
     registry: docker.io
     repository: bitnami/kubeapps-asset-syncer
-    tag: 2.4.1-scratch-r1
+    tag: 2.4.2-scratch-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -874,6 +877,10 @@ apprepository:
 ## Kubeops parameters
 ##
 kubeops:
+  ## @param kubeops.enabled Specifies whether this component should be installed.
+  ## In a future release we will be setting this to default to false.
+  ##
+  enabled: true
   ## Bitnami Kubeops image
   ## ref: https://hub.docker.com/r/bitnami/kubeops/tags/
   ## @param kubeops.image.registry Kubeops image registry
@@ -885,7 +892,7 @@ kubeops:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-kubeops
-    tag: 2.4.1-scratch-r1
+    tag: 2.4.2-scratch-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1085,8 +1092,13 @@ kubeops:
 ## @section Assetsvc parameters
 
 ## Assetsvc parameters
-##
+## @deprecated
 assetsvc:
+  ## @param assetsvc.enabled Specifies whether this deprecated component should be installed.
+  ## As per Kubeapps v2.4.0 it is no longer used in the UI.
+  ## In future releases, this service will get entirely removed.
+  ##
+  enabled: false
   ## Bitnami Kubeapps Assetsvc image
   ## ref: https://hub.docker.com/r/bitnami/kubeapps-assetsvc/tags/
   ## @param assetsvc.image.registry Kubeapps Assetsvc image registry
@@ -1098,7 +1110,7 @@ assetsvc:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-assetsvc
-    tag: 2.4.1-scratch-r1
+    tag: 2.4.2-scratch-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1295,7 +1307,7 @@ authProxy:
   image:
     registry: docker.io
     repository: bitnami/oauth2-proxy
-    tag: 7.2.0-debian-10-r32
+    tag: 7.2.0-debian-10-r36
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1408,7 +1420,7 @@ pinnipedProxy:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-pinniped-proxy
-    tag: 2.4.1-debian-10-r47
+    tag: 2.4.2-debian-10-r1
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1495,7 +1507,7 @@ allowNamespaceDiscovery: true
 ##   serviceToken: ...
 ##   isKubeappsCluster: true
 ##   pinnipedConfig:
-##     enable: true
+##     enabled: true
 
 ##
 clusters:
@@ -1503,9 +1515,7 @@ clusters:
     domain: cluster.local
 ## @param featureFlags [object] Feature flags (used to switch on development features)
 ##
-featureFlags:
-  invalidateCache: true
-  kubeappsAPIsServer: true
+featureFlags: ""
 ## RBAC configuration
 ##
 rbac:
@@ -1524,7 +1534,7 @@ rbac:
 testImage:
   registry: docker.io
   repository: bitnami/nginx
-  tag: 1.21.4-debian-10-r21
+  tag: 1.21.4-debian-10-r26
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1586,17 +1596,28 @@ postgresql:
 
 ## @section kubeappsapis parameters
 kubeappsapis:
-  ## @param kubeappsapis.unsafeUseDemoSA If true, replace the user's credentials by a full-granted demo service account. Just intended for development purposes.
-  unsafeUseDemoSA: false
   ## @param kubeappsapis.enabledPlugins Enabled plugins for the Kubeapps-APIs service
   ## e.g:
   ## enabledPlugins:
   ## - helm
   ## - fluxv2
-  ## - kapp_controller
+  ## - kapp-controller
   ##
   enabledPlugins:
     - helm
+  pluginConfig:
+    core:
+      packages:
+        v1alpha1:
+          versionsInSummary:
+            ## @param kubeappsapis.pluginConfig.core.packages.v1alpha1.versionsInSummary.major Number of major versions to display in the summary
+            major: 3
+            ## @param kubeappsapis.pluginConfig.core.packages.v1alpha1.versionsInSummary.minor Number of minor versions to display in the summary
+            minor: 3
+            ## @param kubeappsapis.pluginConfig.core.packages.v1alpha1.versionsInSummary.patch Number of patch versions to display in the summary
+            patch: 3
+          ## @param kubeappsapis.pluginConfig.core.packages.v1alpha1.timeoutSeconds Value to wait for Kubernetes commands to complete
+          timeoutSeconds: 300
   ## Bitnami Kubeapps-APIs image
   ## ref: https://hub.docker.com/r/bitnami/kubeapps-apis/tags/
   ## @param kubeappsapis.image.registry Kubeapps-APIs image registry
@@ -1608,7 +1629,7 @@ kubeappsapis:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-apis
-    tag: 2.4.1-debian-10-r47
+    tag: 2.4.2-debian-10-r1
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1624,7 +1645,7 @@ kubeappsapis:
     pullSecrets: []
   ## @param kubeappsapis.replicaCount Number of frontend replicas to deploy
   ##
-  replicaCount: 1
+  replicaCount: 2
   ## @param kubeappsapis.terminationGracePeriodSeconds The grace time period for sig term
   ## ref: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/#hook-handler-execution
   ##
@@ -1804,6 +1825,36 @@ redis:
   ## to manually enable this in dev while ensuring it is false for releases (as it
   ## is a conditional dependency in the Chart.yaml).
   enabled: false
+  master:
+    ## @param redis.master.extraFlags Array with additional command line flags for Redis&trade; master
+    extraFlags:
+      ## The maxmemory configuration directive is used in order to configure Redis to use a specified
+      ## amount of memory for the data set. Setting maxmemory to zero results into no memory limits
+      ## see https://redis.io/topics/lru-cache for more details
+      - "--maxmemory 200mb"
+      ## The exact behavior Redis follows when the maxmemory limit is reached is configured using the
+      ## maxmemory-policy configuration directive
+      ## allkeys-lru: evict keys by trying to remove the less recently used (LRU) keys first, in order
+      ## to make space for the new data added
+      - "--maxmemory-policy allkeys-lru"
+      ## ref https://stackoverflow.com/questions/22815364/flushall-and-flushdb-commands-on-redis-return-unk-command
+      ## Redis official Helm chart by default disables FLUSHDB and FLUSHALL commands
+    ## @param redis.master.disableCommands Array with commands to disable on Redis&trade
+    disableCommands: []
   replica:
     ## @param redis.replica.replicaCount Number of Redis&trade; replicas to deploy
-    replicaCount: 0
+    replicaCount: 1
+    ## @param redis.replica.extraFlags Array with additional command line flags for Redis&trade; replicas
+    extraFlags:
+      ## The maxmemory configuration directive is used in order to configure Redis to use a specified
+      ## amount of memory for the data set. Setting maxmemory to zero results into no memory limits
+      - "--maxmemory 200mb"
+      ## The exact behavior Redis follows when the maxmemory limit is reached is configured using the
+      ## maxmemory-policy configuration directive
+      ## allkeys-lru: evict keys by trying to remove the less recently used (LRU) keys first, in order
+      ## to make space for the new data added
+      - "--maxmemory-policy allkeys-lru"
+    ## ref https://stackoverflow.com/questions/22815364/flushall-and-flushdb-commands-on-redis-return-unk-command
+    ## Redis official Helm chart by default disables FLUSHDB and FLUSHALL commands
+    ## @param redis.replica.disableCommands Array with commands to disable on Redis&trade
+    disableCommands: []
