@@ -190,7 +190,7 @@ primary:
     port=3306
     socket=/opt/bitnami/mysql/tmp/mysql.sock
     pid-file=/opt/bitnami/mysql/tmp/mysqld.pid
-  ## @param primary.existingConfiguration Name of existing ConfigMap with MySQL Primary configuration.
+  ## @param primary.existingConfigmap Name of existing ConfigMap with MySQL Primary configuration.
   ## NOTE: When it's set the 'configuration' parameter is ignored
   ##
   existingConfigmap: ""
@@ -504,7 +504,7 @@ secondary:
     port=3306
     socket=/opt/bitnami/mysql/tmp/mysql.sock
     pid-file=/opt/bitnami/mysql/tmp/mysqld.pid
-  ## @param secondary.existingConfiguration Name of existing ConfigMap with MySQL Secondary configuration.
+  ## @param secondary.existingConfigmap Name of existing ConfigMap with MySQL Secondary configuration.
   ## NOTE: When it's set the 'configuration' parameter is ignored
   ##
   existingConfigmap: ""
