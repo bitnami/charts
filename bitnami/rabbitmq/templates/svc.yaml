@@ -75,7 +75,7 @@ spec:
       targetPort: stats
       {{- if eq .Values.service.type "ClusterIP" }}
       nodePort: null
-            {{- else if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.managerNodePort)) }}
+      {{- else if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.managerNodePort)) }}
       nodePort: {{ .Values.service.managerNodePort }}
       {{- end }}
     {{- end }}
