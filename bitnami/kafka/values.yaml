@@ -637,6 +637,15 @@ networkPolicy:
   ##    - {key: role, operator: In, values: [frontend]}
   ##
   explicitNamespacesSelector: {}
+  ## @param networkPolicy.externalAccess.from customize the from section for External Access on tcp-external port
+  ## Example:
+  ## - ipBlock:
+  ##    cidr: 172.9.0.0/16
+  ##    except:
+  ##    - 172.9.1.0/24
+  ##
+  externalAccess:
+    from: []
 ## @section Exposure parameters
 
 ## Service parameters

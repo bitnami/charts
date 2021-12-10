@@ -17,7 +17,8 @@ spec:
     {{- include "common.labels.matchLabels" . | nindent 6 }}
   ingress:
     # Allow client connections
-    - ports: {{ .Values.service.port }}
+    - ports:
+        - port: {{ .Values.service.port }}
       {{- if not .Values.networkPolicy.allowExternal }}
       from:
         - podSelector:
@@ -29,22 +30,19 @@ spec:
           {{- end }}
       {{- end }}
     # Allow communication inter-broker
-    - ports: {{ .Values.service.internalPort }}
+    - ports:
+        - port: {{ .Values.service.internalPort }}
       from:
         - podSelector:
             matchLabels:
             {{- include "common.labels.matchLabels" . | nindent 14 }}
     # Allow External connection
     {{- if .Values.externalAccess.enabled }}
-    - ports: {{ .Values.service.externalPort }}
-      from:
-        - podSelector:
-            matchLabels:
-              {{ template "common.names.fullname" . }}-external: "true"
-          {{- if .Values.networkPolicy.explicitNamespacesSelector }}
-          namespaceSelector:
-{{ toYaml .Values.networkPolicy.explicitNamespacesSelector | indent 12 }}
-          {{- end }}
+    - ports:
+        - port: {{ .Values.service.externalPort }}
+    {{- if .Values.externalAccess.from }}
+      from: {{- include "common.tplvalues.render" ( dict "value" .Values.networkPolicy.externalAccess.from "context" $ ) | nindent 8 }}
+    {{- end }}
     {{- end }}
     {{- if .Values.metrics.kafka.enabled }}
     # Allow prometheus scrapes
@@ -52,3 +50,5 @@ spec:
         - port: {{ .Values.metrics.kafka.service.port }}
     {{- end }}
 {{- end }}
+
+
