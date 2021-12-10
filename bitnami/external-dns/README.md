@@ -11,13 +11,13 @@ $ helm install my-release bitnami/external-dns
 
 ## Introduction
 
-This chart bootstraps a [ExternalDNS](https://github.com/bitnami/bitnami-docker-external-dns) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [ExternalDNS](https://github.com/bitnami/bitnami-docker-external-dns) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This chart has been tested to work with NGINX Ingress, cert-manager, fluentd and Prometheus on top of the [BKPR](https://kubeprod.io/).
 
 ## Prerequisites
 
-- Kubernetes 1.12+
+- Kubernetes 1.19+
 - Helm 3.1.0
 
 ## Installing the Chart
@@ -64,14 +64,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraDeploy`       | Array of extra objects to deploy with the release (evaluated as a template).                 | `[]`            |
 | `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)                         | `""`            |
 
-
 ### external-dns parameters
 
 | Name                                          | Description                                                                                                                                                                  | Value                     |
 | --------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
 | `image.registry`                              | ExternalDNS image registry                                                                                                                                                   | `docker.io`               |
 | `image.repository`                            | ExternalDNS image repository                                                                                                                                                 | `bitnami/external-dns`    |
-| `image.tag`                                   | ExternalDNS Image tag (immutable tags are recommended)                                                                                                                       | `0.9.0-debian-10-r50`     |
+| `image.tag`                                   | ExternalDNS Image tag (immutable tags are recommended)                                                                                                                       | `0.10.1-debian-10-r33`    |
 | `image.pullPolicy`                            | ExternalDNS image pull policy                                                                                                                                                | `IfNotPresent`            |
 | `image.pullSecrets`                           | ExternalDNS image pull secrets                                                                                                                                               | `[]`                      |
 | `hostAliases`                                 | Deployment pod host aliases                                                                                                                                                  | `[]`                      |
@@ -149,6 +148,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `google.serviceAccountSecret`                 | When using the Google provider, specify the existing secret which contains credentials.json (optional)                                                                       | `""`                      |
 | `google.serviceAccountSecretKey`              | When using the Google provider with an existing secret, specify the key name (optional)                                                                                      | `credentials.json`        |
 | `google.serviceAccountKey`                    | When using the Google provider, specify the service account key JSON file. In this case a new secret will be created holding this service account (optional)                 | `""`                      |
+| `google.zoneVisibility`                       | When using the Google provider, fiter for zones of a specific visibility (private or public)                 | `""`                      |
 | `hetzner.token`                               | When using the Hetzner provider, specify your token here. (required when `hetzner.secretName` is not provided. In this case a new secret will be created holding the token.) | `""`                      |
 | `hetzner.secretName`                          | When using the Hetzner provider, specify the existing secret which contains your token. Disables the usage of `hetzner.token` (optional)                                     | `""`                      |
 | `hetzner.secretKey`                           | When using the Hetzner provider with an existing secret, specify the key name (optional)                                                                                     | `hetzner_token`           |
@@ -170,7 +170,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ovh.consumerKey`                             | When using the OVH provider, specify the existing consumer key. (required when provider=ovh and `ovh.secretName` is not provided.)                                           | `""`                      |
 | `ovh.applicationKey`                          | When using the OVH provider with an existing application, specify the application key. (required when provider=ovh and `ovh.secretName` is not provided.)                    | `""`                      |
 | `ovh.applicationSecret`                       | When using the OVH provider with an existing application, specify the application secret. (required when provider=ovh and `ovh.secretName` is not provided.)                 | `""`                      |
-| `ovh.secretName`                              | When using the OVH provider, it's the name of the secret containing `ovh_consumer_key`, `ovh_application_key` and `ovh_application_secret`. Disables usage of other `ovh.    | `""`                      |
+| `ovh.secretName`                              | When using the OVH provider, it's the name of the secret containing `ovh_consumer_key`, `ovh_application_key` and `ovh_application_secret`. Disables usage of other `ovh`.   | `""`                      |
 | `scaleway.scwAccessKey`                       | When using the Scaleway provider, specify an existing access key. (required when provider=scaleway)                                                                          | `""`                      |
 | `scaleway.scwSecretKey`                       | When using the Scaleway provider, specify an existing secret key. (required when provider=scaleway)                                                                          | `""`                      |
 | `scaleway.scwDefaultOrganizationId`           | When using the Scaleway provider, specify the existing organization id. (required when provider=scaleway)                                                                    | `""`                      |
@@ -204,6 +204,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `zoneNameFilters`                             | Filter target zones by zone domain (optional)                                                                                                                                | `[]`                      |
 | `zoneIdFilters`                               | Limit possible target zones by zone id (optional)                                                                                                                            | `[]`                      |
 | `annotationFilter`                            | Filter sources managed by external-dns via annotation using label selector (optional)                                                                                        | `""`                      |
+| `labelFilter`                                 | Select sources managed by external-dns using label selector (optional)                                                                                                       | `""`                      |
 | `dryRun`                                      | When enabled, prints DNS record changes rather than actually performing them (optional)                                                                                      | `false`                   |
 | `triggerLoopOnEvent`                          | When enabled, triggers run loop on create/update/delete events in addition to regular interval (optional)                                                                    | `false`                   |
 | `interval`                                    | Interval update period to use                                                                                                                                                | `1m`                      |

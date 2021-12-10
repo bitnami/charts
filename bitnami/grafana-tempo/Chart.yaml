@@ -1,7 +1,7 @@
 annotations:
   category: Infrastructure
 apiVersion: v2
-appVersion: 1.1.0
+appVersion: 1.2.1
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -27,4 +27,4 @@ name: grafana-tempo
 sources:
   - https://github.com/bitnami/bitnami-docker-grafana-tempo
   - https://github.com/grafana/tempo/
-version: 0.2.6
+version: 0.2.15

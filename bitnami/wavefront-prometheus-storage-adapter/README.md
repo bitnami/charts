@@ -11,7 +11,7 @@ $ helm install my-release bitnami/wavefront-prometheus-storage-adapter
 ## Introduction
 Bitnami charts for Helm are carefully engineered, actively maintained and are the quickest and easiest way to deploy containers on a Kubernetes cluster that are ready to handle production workloads.
 
-This chart bootstraps a [Wavefront Storage Adapter for Prometheus](https://github.com/wavefrontHQ/prometheus-storage-adapter) Deployment in a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Wavefront Storage Adapter for Prometheus](https://github.com/wavefrontHQ/prometheus-storage-adapter) Deployment in a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
@@ -67,7 +67,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | ----------------------------------------------------------------------------------------- | ---------------------------------------------- |
 | `image.registry`                        | Adapter image registry                                                                    | `docker.io`                                    |
 | `image.repository`                      | Adapter image repository                                                                  | `bitnami/wavefront-prometheus-storage-adapter` |
-| `image.tag`                             | Adapter image tag (immutabe tags are recommended)                                         | `1.0.3-debian-10-r173`                         |
+| `image.tag`                             | Adapter image tag (immutabe tags are recommended)                                         | `1.0.5-debian-10-r0`                           |
 | `image.pullPolicy`                      | Adapter image pull policy                                                                 | `IfNotPresent`                                 |
 | `image.pullSecrets`                     | Adapter image pull secrets                                                                | `[]`                                           |
 | `image.debug`                           | Enable image debug mode                                                                   | `false`                                        |
@@ -179,8 +179,6 @@ The Wavefront Prometheus Storage Adapter chart needs to be connected to a Wavefr
 - Deploying the Wavefront subchart, using only the Wavefront Proxy component (default behavior): This is done by setting `wavefront.enabled=true` and `wavefront.proxy.enabled=true`, but leaving the `externalProxy.host` value unset. We recommend disabling the rest of the Wavefront sub-chart resources as they would not be used by the Prometheus Storage Adapter. You also need to configure the Wavefront SaaS URL and token using the `wavefont.wavefront.url` and `wavefront.wavefront.token` parameters.
 
 - Using an external Wavefront Proxy instance: This is done by setting the `externalProxy.host` and `externalProxy.port` values. In this case, you should set the `wavefront.enabled` value to `false`. You also need to configure the Wavefront SaaS URL and token using the `wavefront.wavefront.url` and `wavefront.wavefront.token` parameters.
-
-Refer to the [chart documentation for more detailed configuration examples](https://docs.bitnami.com/kubernetes/apps/wavefront-storage-adapter-for-prometheus/get-started/configure-connection/).
 
 ### Configure Prometheus
 

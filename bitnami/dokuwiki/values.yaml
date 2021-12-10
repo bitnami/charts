@@ -54,10 +54,10 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/dokuwiki
-  tag: 20200729.0.0-debian-10-r370
+  tag: 20200729.0.0-debian-10-r420
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -118,7 +118,7 @@ updateStrategy: {}
 topologySpreadConstraints: []
 
 ## Enable persistence using Persistent Volume Claims
-## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
 ## @param persistence.enabled Enable persistence using PVC
 ## @param persistence.storageClass PVC Storage Class for DokuWiki volume
 ## @param persistence.accessModes [array] PVC Access Mode for DokuWiki volume
@@ -157,7 +157,7 @@ containerSecurityContext:
   runAsUser: 1001
   runAsNonRoot: true
 ## Configure resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## ref: https://kubernetes.io/docs/user-guide/compute-resources/
 ## @param resources.requests [object] The requested resources for the container
 ## @param resources.limits [object] The requested limits for the container
 ##
@@ -343,7 +343,7 @@ service:
     http: ""
     https: ""
   ## @param service.externalTrafficPolicy Enable client source IP preservation
-  ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+  ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
   externalTrafficPolicy: Cluster
   ## @param service.extraPorts Extra ports to expose in the service (normally used with the `sidecar` value)
@@ -355,15 +355,16 @@ service:
 
 ## Configure the ingress resource that allows you to access the
 ## Dokuwiki installation. Set up the URL
-## ref: http://kubernetes.io/docs/user-guide/ingress/
+## ref: https://kubernetes.io/docs/user-guide/ingress/
 ##
 ingress:
   ## @param ingress.enabled Set to true to enable ingress record generation
   ##
   enabled: false
-  ## @param ingress.certManager Set this to true in order to add the corresponding annotations for cert-manager
+  ## DEPRECATED: Use ingress.annotations instead of ingress.certManager
+  ## certManager: false
   ##
-  certManager: false
+
   ## @param ingress.pathType Ingress Path type
   ##
   pathType: ImplementationSpecific
@@ -377,11 +378,16 @@ ingress:
   ## with ALB ingress controllers.
   ##
   path: /
-  ## @param ingress.annotations Ingress annotations done as key:value pairs
+  ## @param ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
   ## For a full list of possible ingress annotations, please see
   ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+  ## Use this parameter to set the required annotations for cert-manager, see
+  ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
   ##
-  ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+  ## e.g:
+  ## annotations:
+  ##   kubernetes.io/ingress.class: nginx
+  ##   cert-manager.io/cluster-issuer: cluster-issuer-name
   ##
   annotations: {}
   ## @param ingress.tls Enable TLS configuration for the hostname defined at ingress.hostname parameter
@@ -454,8 +460,8 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r202
-    pullPolicy: Always
+    tag: 10-debian-10-r253
+    pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -463,7 +469,7 @@ volumePermissions:
     pullSecrets: []
     ##   - myRegistryKeySecretName
   ## Init containers' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -503,7 +509,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.10.1-debian-10-r4
+    tag: 0.10.1-debian-10-r55
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -519,7 +525,7 @@ metrics:
     prometheus.io/scrape: "true"
     prometheus.io/port: "9117"
   ## @param metrics.resources Exporter resource requests/limit
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ##
   resources: {}
 
@@ -574,10 +580,10 @@ certificates:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r202
+    tag: 10-debian-10-r253
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
     pullPolicy: IfNotPresent
     ## e.g:

@@ -37,7 +37,7 @@ spec:
       - {{ .Release.Namespace }}
   selector:
     matchLabels: {{ include "external-dns.matchLabels" . | nindent 6 }}
-    {{- if .Values.metrics.serviceMonitor.selector }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.metrics.serviceMonitor.selector "context" $) | nindent 6 }}
-    {{- end }}
+      {{- if .Values.metrics.serviceMonitor.selector }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.metrics.serviceMonitor.selector "context" $) | nindent 6 }}
+      {{- end }}
 {{- end }}

@@ -21,6 +21,9 @@ metadata:
     {{- end }}
 spec:
   rules:
+  {{- if and .Values.proxy.ingress.ingressClassName (include "common.ingress.supportsIngressClassname" .) }}
+  ingressClassName: {{ .Values.proxy.ingress.ingressClassName | quote }}
+  {{- end }}
     {{- if .Values.proxy.ingress.hostname }}
     - host: {{ .Values.proxy.ingress.hostname | quote }}
       http:
@@ -46,12 +49,9 @@ spec:
     {{- end }}
   {{- if or .Values.proxy.ingress.tls .Values.proxy.ingress.extraTls }}
   tls:
-    {{- if .Values.proxy.ingress.tls }}
+    {{- if and .Values.proxy.ingress.tls (or (include "jupyterhub.ingress.certManagerRequest" .Values.proxy.ingress.annotations) .Values.proxy.ingress.selfSigned) }}
     - hosts:
         - {{ .Values.proxy.ingress.hostname | quote }}
-        {{- range .Values.proxy.ingress.extraHosts }}
-        - {{ .name | quote }}
-        {{- end }}
       secretName: {{ printf "%s-tls" .Values.proxy.ingress.hostname }}
     {{- end }}
     {{- if .Values.proxy.ingress.extraTls }}

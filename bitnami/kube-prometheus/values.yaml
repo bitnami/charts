@@ -26,6 +26,9 @@ nameOverride: ""
 ## @param fullnameOverride String to fully override `kube-prometheus.fullname` template with a string
 ##
 fullnameOverride: ""
+## @param extraDeploy Array of extra objects to deploy with the release
+##
+extraDeploy: []
 
 ## @section Prometheus Operator Parameters
 
@@ -44,10 +47,10 @@ operator:
   image:
     registry: docker.io
     repository: bitnami/prometheus-operator
-    tag: 0.51.1-debian-10-r0
+    tag: 0.52.1-debian-10-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -58,6 +61,12 @@ operator:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
+  ## @param operator.extraArgs Additional arguments passed to Prometheus Operator
+  ## Example:
+  ## extraArgs:
+  ##   - --namespaces={{ .Release.Namespace }}
+  ##
+  extraArgs: []
   ## @param operator.hostAliases Add deployment host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -166,7 +175,7 @@ operator:
     ##
     relabelings: []
   ## @param operator.resources Configure resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ##
   resources: {}
   ## @param operator.podAffinityPreset Pod affinity preset
@@ -348,7 +357,7 @@ prometheus:
   image:
     registry: docker.io
     repository: bitnami/prometheus
-    tag: 2.30.0-debian-10-r13
+    tag: 2.31.1-debian-10-r10
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -474,15 +483,16 @@ prometheus:
     relabelings: []
   ## Configure the ingress resource that allows you to access the
   ## Alertmanager installation. Set up the URL
-  ## ref: http://kubernetes.io/docs/user-guide/ingress/
+  ## ref: https://kubernetes.io/docs/user-guide/ingress/
   ##
   ingress:
     ## @param prometheus.ingress.enabled Enable ingress controller resource
     ##
     enabled: false
-    ## @param prometheus.ingress.certManager Add annotations for cert-manager
+    ## DEPRECATED: Use prometheus.ingress.annotations instead of prometheus.ingress.certManager
+    ## certManager: false
     ##
-    certManager: false
+
     ## @param prometheus.ingress.pathType Ingress Path type
     ##
     pathType: ImplementationSpecific
@@ -495,17 +505,23 @@ prometheus:
     ## @param prometheus.ingress.path The Path to Prometheus. You may need to set this to '/*' in order to use this with ALB ingress controllers
     ##
     path: /
-    ## @param prometheus.ingress.annotations Ingress annotations
+    ## @param prometheus.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
     ## For a full list of possible ingress annotations, please see
     ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+    ## Use this parameter to set the required annotations for cert-manager, see
+    ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
     ##
-    ## If tls is set to true, annotation ingress.kubernetes.io/secure-backends: "true" will automatically be set
-    ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
     ## e.g:
     ## annotations:
-    ##  kubernetes.io/ingress.class: nginx
+    ##   kubernetes.io/ingress.class: nginx
+    ##   cert-manager.io/cluster-issuer: cluster-issuer-name
     ##
     annotations: {}
+    ## @param prometheus.ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+    ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+    ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+    ##
+    ingressClassName: ""
     ## @param prometheus.ingress.tls Enable TLS configuration for the hostname defined at prometheus.ingress.hostname parameter
     ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.prometheus.ingress.hostname }}
     ## You can use the prometheus.ingress.secrets parameter to create this TLS secret or relay on cert-manager to create it
@@ -558,7 +574,7 @@ prometheus:
   ##
   externalUrl: ""
   ## @param prometheus.resources CPU/Memory resource requests/limits for node
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ##
   resources: {}
   ## @param prometheus.podAffinityPreset Prometheus Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
@@ -650,6 +666,10 @@ prometheus:
   ## ref: https://prometheus.io/docs/prometheus/latest/querying/api/#tsdb-admin-apis
   ##
   enableAdminAPI: false
+  ## @param prometheus.enableFeatures Enable access to Prometheus disabled features.
+  ## ref: https://prometheus.io/docs/prometheus/latest/disabled_features/
+  ##
+  enableFeatures: []
   ## @param prometheus.alertingEndpoints Alertmanagers to which alerts will be sent
   ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#alertmanagerendpoints
   ##
@@ -901,9 +921,9 @@ prometheus:
     image:
       registry: docker.io
       repository: bitnami/thanos
-      tag: 0.23.0-scratch-r0
+      tag: 0.23.1-scratch-r3
       ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-      ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+      ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
       ##
       pullPolicy: IfNotPresent
       ## Optionally specify an array of imagePullSecrets.
@@ -930,7 +950,7 @@ prometheus:
       capabilities:
         drop:
           - ALL
-    ## @param prometheus.thanos.prometheusUrl Override default prometheus url "http://localhost:9090"
+    ## @param prometheus.thanos.prometheusUrl Override default prometheus url `http://localhost:9090`
     ##
     prometheusUrl: ""
     ## @param prometheus.thanos.extraArgs Additional arguments passed to the thanos sidecar container
@@ -946,8 +966,15 @@ prometheus:
     ##    secretKey: thanos.yaml
     ##
     objectStorageConfig: {}
+    ## ref: https://github.com/thanos-io/thanos/blob/main/docs/components/sidecar.md
+    ## @param prometheus.thanos.extraVolumeMounts Additional volumeMounts from `prometheus.volumes` for thanos sidecar container
+    ## extraVolumeMounts:
+    ## - name: my-secret-volume
+    ##   mountPath: /etc/thanos/secrets/my-secret
+    ##
+    extraVolumeMounts: []
     ## Thanos sidecar container resource requests and limits.
-    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
     ## We usually recommend not to specify default resources and to leave this as a conscious
     ## choice for the user. This also increases chances charts run on environments with little
     ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -1046,26 +1073,32 @@ prometheus:
       extraPorts: []
     ## Configure the ingress resource that allows you to access the
     ## Thanos Sidecar installation. Set up the URL
-    ## ref: http://kubernetes.io/docs/user-guide/ingress/
+    ## ref: https://kubernetes.io/docs/user-guide/ingress/
     ##
     ingress:
       ## @param prometheus.thanos.ingress.enabled Enable ingress controller resource
       ##
       enabled: false
-      ## @param prometheus.thanos.ingress.certManager Add annotations for cert-manager
+      ## DEPRECATED: Use prometheus.thanos.ingress.annotations instead of prometheus.thanos.ingress.certManager
+      ## certManager: false
       ##
-      certManager: false
-      ## @param prometheus.thanos.ingress.annotations Ingress annotations
+
+      ## @param prometheus.thanos.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
       ## For a full list of possible ingress annotations, please see
       ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+      ## Use this parameter to set the required annotations for cert-manager, see
+      ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
       ##
-      ## If tls is set to true, annotation ingress.kubernetes.io/secure-backends: "true" will automatically be set
-      ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
-      ## annotations:
-      ##    kubernetes.io/ingress.class: nginx
-      ##    nginx.ingress.kubernetes.io/backend-protocol: "GRPCS"
+      ## Examples:
+      ## kubernetes.io/ingress.class: nginx
+      ## cert-manager.io/cluster-issuer: cluster-issuer-name
       ##
       annotations: {}
+      ## @param prometheus.thanos.ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+      ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+      ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+      ##
+      ingressClassName: ""
       ## @param prometheus.thanos.ingress.hosts [array] The list of hostnames to be covered with this ingress record.
       ## Most likely this will be just one host, but in the event more hosts are needed, this is an array
       ##
@@ -1103,7 +1136,7 @@ alertmanager:
   image:
     registry: docker.io
     repository: bitnami/alertmanager
-    tag: 0.23.0-debian-10-r33
+    tag: 0.23.0-debian-10-r81
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -1225,15 +1258,16 @@ alertmanager:
     relabelings: []
   ## Configure the ingress resource that allows you to access the
   ## Alertmanager installation. Set up the URL
-  ## ref: http://kubernetes.io/docs/user-guide/ingress/
+  ## ref: https://kubernetes.io/docs/user-guide/ingress/
   ##
   ingress:
     ## @param alertmanager.ingress.enabled Enable ingress controller resource
     ##
     enabled: false
-    ## @param alertmanager.ingress.certManager Add annotations for cert-manager
+    ## DEPRECATED: Use alertmanager.ingress.annotations instead of alertmanager.ingress.certManager
+    ## certManager: false
     ##
-    certManager: false
+
     ## @param alertmanager.ingress.pathType Ingress Path type
     ##
     pathType: ImplementationSpecific
@@ -1246,16 +1280,23 @@ alertmanager:
     ## @param alertmanager.ingress.path The Path to Alert Manager. You may need to set this to '/*' in order to use this with ALB ingress controllers.
     ##
     path: /
-    ## @param alertmanager.ingress.annotations Ingress annotations
+    ## @param alertmanager.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
     ## For a full list of possible ingress annotations, please see
     ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+    ## Use this parameter to set the required annotations for cert-manager, see
+    ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
     ##
-    ## If tls is set to true, annotation ingress.kubernetes.io/secure-backends: "true" will automatically be set
-    ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+    ## e.g:
     ## annotations:
-    ##    kubernetes.io/ingress.class: nginx
+    ##   kubernetes.io/ingress.class: nginx
+    ##   cert-manager.io/cluster-issuer: cluster-issuer-name
     ##
     annotations: {}
+    ## @param alertmanager.ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+    ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+    ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+    ##
+    ingressClassName: ""
     ## @param alertmanager.ingress.tls Enable TLS configuration for the hostname defined at alertmanager.ingress.hostname parameter
     ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.alertmanager.ingress.hostname }}
     ## You can use the alertmanager.ingress.secrets parameter to create this TLS secret or relay on cert-manager to create it
@@ -1306,7 +1347,7 @@ alertmanager:
   ##
   externalUrl: ""
   ## @param alertmanager.resources CPU/Memory resource requests/limits for node
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ##
   resources: {}
   ## @param alertmanager.podAffinityPreset Alertmanager Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
@@ -1530,6 +1571,7 @@ node-exporter:
 kube-state-metrics:
   serviceMonitor:
     enabled: true
+    honorLabels: true
 ## Component scraping for kubelet and kubelet hosted cAdvisor
 ##
 kubelet:
@@ -1793,7 +1835,7 @@ kubeProxy:
 ## ref: https://kubernetes.io/docs/admin/authorization/rbac/
 ## @param rbac.create Whether to create and use RBAC resources or not
 ## @param rbac.apiVersion Version of the RBAC API
-## @param rbac.pspEnabled PodSecurityPolicy
+## @param rbac.pspEnabled Whether to create a PodSecurityPolicy and bound it with RBAC. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later
 ##
 rbac:
   create: true

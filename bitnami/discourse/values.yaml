@@ -33,7 +33,9 @@ commonLabels: {}
 ## @param commonAnnotations Annotations to be added to all deployed resources
 ##
 commonAnnotations: {}
-
+## @param extraDeploy Array of extra objects to deploy with the release
+##
+extraDeploy: []
 
 ## @section Service parameters
 
@@ -53,7 +55,7 @@ service:
   ##
   loadBalancerIP: ""
   ## @param service.externalTrafficPolicy Enable client source IP preservation
-  ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+  ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
   externalTrafficPolicy: Cluster
   ## @param service.annotations Service annotations
@@ -88,10 +90,10 @@ service:
 image:
   registry: docker.io
   repository: bitnami/discourse
-  tag: 2.7.8-debian-10-r22
+  tag: 2.7.11-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -150,7 +152,7 @@ discourse:
   ##
   containerSecurityContext: {}
   ## Discourse container's resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -315,7 +317,7 @@ podSecurityContext: {}
 ##
 hostAliases: []
 ## Enable persistence using Persistent Volume Claims
-## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
 ##
 persistence:
   ## @param persistence.enabled Whether to enable persistence based on Persistent Volume Claims
@@ -422,7 +424,7 @@ sidekiq:
   ##
   args: ['/opt/bitnami/scripts/discourse-sidekiq/run.sh']
   ## @param sidekiq.resources Sidekiq container resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -500,7 +502,7 @@ volumePermissions:
   ##
   enabled: false
   ## Init containers' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -528,9 +530,10 @@ ingress:
   ## @param ingress.enabled Enable ingress controller resource
   ##
   enabled: false
-  ## @param ingress.certManager Add annotations for cert-manager
+  ## DEPRECATED: Use ingress.annotations instead of ingress.certManager
+  ## certManager: false
   ##
-  certManager: false
+
   ## @param ingress.hostname Default host for the ingress resource
   ##
   hostname: discourse.local
@@ -543,11 +546,16 @@ ingress:
   ## @param ingress.pathType Ingress path type
   ##
   pathType: ImplementationSpecific
-  ## @param ingress.annotations Ingress annotations done as key:value pairs
+  ## @param ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
   ## For a full list of possible ingress annotations, please see
   ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+  ## Use this parameter to set the required annotations for cert-manager, see
+  ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
   ##
-  ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+  ## e.g:
+  ## annotations:
+  ##   kubernetes.io/ingress.class: nginx
+  ##   cert-manager.io/cluster-issuer: cluster-issuer-name
   ##
   annotations: {}
   ## @param ingress.tls Enable TLS configuration for the hostname defined at ingress.hostname parameter
@@ -700,3 +708,78 @@ externalRedis:
   password: ""
   existingSecret: ""
   existingSecretPasswordKey: 'redis-password'
+
+## @section NetworkPolicy parameters
+
+networkPolicy:
+  ## @param networkPolicy.enabled Enable network policies
+  ## If ingress.enabled is true, configure networkPolicy.ingress selectors to allow communication
+  ##
+  enabled: false
+  ## @param networkPolicy.ingress.enabled Enable network policy for Ingress Proxies
+  ## @param networkPolicy.ingress.namespaceSelector Ingress Proxy namespace selector labels. These labels will be used to identify the Ingress Proxy's namespace.
+  ## @param networkPolicy.ingress.podSelector Ingress Proxy pods selector labels. These labels will be used to identify the Ingress Proxy pods.
+  ##
+  ingress:
+    enabled: false
+    ## e.g:
+    ## podSelector:
+    ##   label: ingress
+    ##
+    podSelector: {}
+    ## e.g:
+    ## namespaceSelector:
+    ##   label: ingress
+    ##
+    namespaceSelector: {}
+  ## @param networkPolicy.ingressRules.backendOnlyAccessibleByFrontend Enable ingress rule that makes the backends (PostgreSQL and Redis) only accessible by Discourse's pods.
+  ## @param networkPolicy.ingressRules.customBackendSelector Backend selector labels. These labels will be used to identify the backend pods.
+  ## @param networkPolicy.ingressRules.accessOnlyFrom.enabled Enable ingress rule that makes Discourse only accessible from a particular origin
+  ## @param networkPolicy.ingressRules.accessOnlyFrom.namespaceSelector Namespace selector label that is allowed to access Discourse. This label will be used to identified the allowed namespace(s).
+  ## @param networkPolicy.ingressRules.accessOnlyFrom.podSelector Pods selector label that is allowed to access Discourse. This label will be used to identified the allowed pod(s).
+  ## @param networkPolicy.ingressRules.customRules Custom network policy ingress rule
+  ##
+  ingressRules:
+    ## PostgreSQL and Redis backends only can be accessed from Discourse
+    ##
+    backendOnlyAccessibleByFrontend: false
+    customBackendSelector: {}
+    ## Allow only from the indicated:
+    ##
+    accessOnlyFrom:
+      enabled: false
+      ## e.g:
+      ## namespaceSelector:
+      ##   label: ingress
+      ##
+      namespaceSelector: {}
+      ## e.g:
+      ## podSelector:
+      ##   label: access
+      ##
+      podSelector: {}
+    ## custom ingress rules
+    ## e.g:
+    ## customRules:
+    ##   - from:
+    ##       - namespaceSelector:
+    ##           matchLabels:
+    ##             label: example
+    ##
+    customRules: {}
+  ## @param networkPolicy.egressRules.denyConnectionsToExternal Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).
+  ## @param networkPolicy.egressRules.customRules Custom network policy rule
+  ##
+  egressRules:
+    ## Deny connections to external. This is not compatible with an external database.
+    ##
+    denyConnectionsToExternal: false
+    ## Additional custom egress rules
+    ## e.g:
+    ## customRules:
+    ##   - to:
+    ##       - namespaceSelector:
+    ##           matchLabels:
+    ##             label: example
+    ##
+    customRules: {}

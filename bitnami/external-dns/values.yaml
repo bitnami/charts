@@ -27,6 +27,9 @@ fullnameOverride: ""
 ## @param clusterDomain Kubernetes Cluster Domain
 ##
 clusterDomain: cluster.local
+## @param extraDeploy Array of extra objects to deploy with the release
+##
+extraDeploy: []
 
 ## @param commonLabels Labels to add to all deployed objects
 ##
@@ -56,10 +59,10 @@ kubeVersion: ""
 image:
   registry: docker.io
   repository: bitnami/external-dns
-  tag: 0.9.0-debian-10-r50
+  tag: 0.10.1-debian-10-r33
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -355,6 +358,9 @@ google:
   ## @param google.serviceAccountKey When using the Google provider, specify the service account key JSON file. In this case a new secret will be created holding this service account (optional)
   ##
   serviceAccountKey: ""
+  ## @param google.zoneVisibility When using the Google provider, fiter for zones of a specific visibility (private or public)
+  ##
+  zoneVisibility: ""
 ## Hetzner configuration to be set via arguments/env. variables
 ##
 hetzner:
@@ -437,7 +443,7 @@ ovh:
   ## @param ovh.applicationSecret When using the OVH provider with an existing application, specify the application secret. (required when provider=ovh and `ovh.secretName` is not provided.)
   ##
   applicationSecret: ""
-  ## @param ovh.secretName When using the OVH provider, it's the name of the secret containing `ovh_consumer_key`, `ovh_application_key` and `ovh_application_secret`. Disables usage of other `ovh.
+  ## @param ovh.secretName When using the OVH provider, it's the name of the secret containing `ovh_consumer_key`, `ovh_application_key` and `ovh_application_secret`. Disables usage of other `ovh`.
   ## with following keys:
   ##  - ovh_consumer_key
   ##  - ovh_application_key
@@ -562,6 +568,9 @@ zoneIdFilters: []
 ## @param annotationFilter Filter sources managed by external-dns via annotation using label selector (optional)
 ##
 annotationFilter: ""
+## @param labelFilter Select sources managed by external-dns using label selector (optional)
+##
+labelFilter: ""
 ## @param dryRun When enabled, prints DNS record changes rather than actually performing them (optional)
 ##
 dryRun: false
@@ -779,7 +788,7 @@ rbac:
   ## @param rbac.apiVersion Version of the RBAC API
   ##
   apiVersion: v1
-  ## @param rbac.pspEnabled PodSecurityPolicy
+  ## @param rbac.pspEnabled Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later
   ##
   pspEnabled: false
 ## @param containerSecurityContext Security context for the container
@@ -801,7 +810,7 @@ podSecurityContext:
   fsGroup: 1001
   runAsUser: 1001
 ## Container resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## ref: https://kubernetes.io/docs/user-guide/compute-resources/
 ## We usually recommend not to specify default resources and to leave this as a conscious
 ## choice for the user. This also increases chances charts run on environments with little
 ## resources, such as Minikube. If you do want to specify resources, uncomment the following

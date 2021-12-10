@@ -132,6 +132,7 @@ Return true if a secret object should be created for MySQL
 {{- define "mysql.checkRollingTags" -}}
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- include "common.warnings.rollingTag" .Values.metrics.image }}
+{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
 {{- end -}}
 
 {{/*
@@ -144,15 +145,5 @@ Compile all warnings into a single message, and call fail.
 
 {{- if $message -}}
 {{- printf "\nVALUES VALIDATION:\n%s" $message | fail -}}
-{{- end -}}
-{{- end -}}
-{{/*
-Return the appropriate apiVersion for networkpolicy.
-*/}}
-{{- define "mysql.networkPolicy.apiVersion" -}}
-{{- if semverCompare ">=1.4-0, <1.7-0" .Capabilities.KubeVersion.GitVersion -}}
-"extensions/v1beta1"
-{{- else if semverCompare "^1.7-0" .Capabilities.KubeVersion.GitVersion -}}
-"networking.k8s.io/v1"
 {{- end -}}
 {{- end -}}

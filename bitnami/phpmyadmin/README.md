@@ -11,7 +11,7 @@ $ helm install my-release bitnami/phpmyadmin
 
 ## Introduction
 
-This chart bootstraps a [phpMyAdmin](https://github.com/bitnami/bitnami-docker-phpmyadmin) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [phpMyAdmin](https://github.com/bitnami/bitnami-docker-phpmyadmin) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This chart has been tested to work with NGINX Ingress, cert-manager, fluentd and Prometheus on top of the [BKPR](https://kubeprod.io/).
 
@@ -67,18 +67,18 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### phpMyAdmin parameters
 
-| Name                 | Description                                                          | Value                 |
-| -------------------- | -------------------------------------------------------------------- | --------------------- |
-| `image.registry`     | phpMyAdmin image registry                                            | `docker.io`           |
-| `image.repository`   | phpMyAdmin image repository                                          | `bitnami/phpmyadmin`  |
-| `image.tag`          | phpMyAdmin image tag (immutable tags are recommended)                | `5.1.1-debian-10-r98` |
-| `image.pullPolicy`   | Image pull policy                                                    | `IfNotPresent`        |
-| `image.pullSecrets`  | Specify docker-registry secret names as an array                     | `[]`                  |
-| `command`            | Override default container command (useful when using custom images) | `[]`                  |
-| `args`               | Override default container args (useful when using custom images)    | `[]`                  |
-| `extraEnvVars`       | Extra environment variables to be set on PhpMyAdmin container        | `[]`                  |
-| `extraEnvVarsCM`     | Name of a existing ConfigMap containing extra env vars               | `""`                  |
-| `extraEnvVarsSecret` | Name of a existing Secret containing extra env vars                  | `""`                  |
+| Name                 | Description                                                          | Value                  |
+| -------------------- | -------------------------------------------------------------------- | ---------------------- |
+| `image.registry`     | phpMyAdmin image registry                                            | `docker.io`            |
+| `image.repository`   | phpMyAdmin image repository                                          | `bitnami/phpmyadmin`   |
+| `image.tag`          | phpMyAdmin image tag (immutable tags are recommended)                | `5.1.1-debian-10-r147` |
+| `image.pullPolicy`   | Image pull policy                                                    | `IfNotPresent`         |
+| `image.pullSecrets`  | Specify docker-registry secret names as an array                     | `[]`                   |
+| `command`            | Override default container command (useful when using custom images) | `[]`                   |
+| `args`               | Override default container args (useful when using custom images)    | `[]`                   |
+| `extraEnvVars`       | Extra environment variables to be set on PhpMyAdmin container        | `[]`                   |
+| `extraEnvVarsCM`     | Name of a existing ConfigMap containing extra env vars               | `""`                   |
+| `extraEnvVarsSecret` | Name of a existing Secret containing extra env vars                  | `""`                   |
 
 
 ### phpMyAdmin deployment parameters
@@ -131,27 +131,26 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Traffic Exposure parameters
 
-| Name                               | Description                                                                                   | Value                    |
-| ---------------------------------- | --------------------------------------------------------------------------------------------- | ------------------------ |
-| `service.type`                     | Kubernetes Service type                                                                       | `ClusterIP`              |
-| `service.port`                     | Service HTTP port                                                                             | `80`                     |
-| `service.httpsPort`                | Service HTTPS port                                                                            | `443`                    |
-| `service.nodePorts.http`           | Kubernetes http node port                                                                     | `""`                     |
-| `service.nodePorts.https`          | Kubernetes https node port                                                                    | `""`                     |
-| `service.clusterIP`                | PhpMyAdmin service clusterIP IP                                                               | `""`                     |
-| `service.loadBalancerIP`           | Load balancer IP for the phpMyAdmin Service (optional, cloud specific)                        | `""`                     |
-| `service.loadBalancerSourceRanges` | Addresses that are allowed when service is LoadBalancer                                       | `[]`                     |
-| `service.externalTrafficPolicy`    | Enable client source IP preservation                                                          | `Cluster`                |
-| `service.annotations`              | Provide any additional annotations that may be required for the PhpMyAdmin service            | `{}`                     |
-| `ingress.enabled`                  | Set to true to enable ingress record generation                                               | `false`                  |
-| `ingress.certManager`              | Set this to true in order to add the corresponding annotations for cert-manager               | `false`                  |
-| `ingress.hostname`                 | When the ingress is enabled, a host pointing to this will be created                          | `phpmyadmin.local`       |
-| `ingress.pathType`                 | Ingress path type                                                                             | `ImplementationSpecific` |
-| `ingress.annotations`              | Ingress annotations                                                                           | `{}`                     |
-| `ingress.tls`                      | Enable TLS configuration for the hostname defined at `ingress.hostname` parameter             | `false`                  |
-| `ingress.extraHosts`               | The list of additional hostnames to be covered with this ingress record.                      | `[]`                     |
-| `ingress.extraTls`                 | The tls configuration for additional hostnames to be covered with this ingress record.        | `[]`                     |
-| `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets | `[]`                     |
+| Name                               | Description                                                                                                                      | Value                    |
+| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.type`                     | Kubernetes Service type                                                                                                          | `ClusterIP`              |
+| `service.port`                     | Service HTTP port                                                                                                                | `80`                     |
+| `service.httpsPort`                | Service HTTPS port                                                                                                               | `443`                    |
+| `service.nodePorts.http`           | Kubernetes http node port                                                                                                        | `""`                     |
+| `service.nodePorts.https`          | Kubernetes https node port                                                                                                       | `""`                     |
+| `service.clusterIP`                | PhpMyAdmin service clusterIP IP                                                                                                  | `""`                     |
+| `service.loadBalancerIP`           | Load balancer IP for the phpMyAdmin Service (optional, cloud specific)                                                           | `""`                     |
+| `service.loadBalancerSourceRanges` | Addresses that are allowed when service is LoadBalancer                                                                          | `[]`                     |
+| `service.externalTrafficPolicy`    | Enable client source IP preservation                                                                                             | `Cluster`                |
+| `service.annotations`              | Provide any additional annotations that may be required for the PhpMyAdmin service                                               | `{}`                     |
+| `ingress.enabled`                  | Set to true to enable ingress record generation                                                                                  | `false`                  |
+| `ingress.hostname`                 | When the ingress is enabled, a host pointing to this will be created                                                             | `phpmyadmin.local`       |
+| `ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.tls`                      | Enable TLS configuration for the hostname defined at `ingress.hostname` parameter                                                | `false`                  |
+| `ingress.extraHosts`               | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
+| `ingress.extraTls`                 | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
+| `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
 
 
 ### Database parameters
@@ -179,7 +178,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                          | Start a side-car prometheus exporter                                              | `false`                   |
 | `metrics.image.registry`                   | Apache exporter image registry                                                    | `docker.io`               |
 | `metrics.image.repository`                 | Apache exporter image repository                                                  | `bitnami/apache-exporter` |
-| `metrics.image.tag`                        | Apache exporter image tag (immutable tags are recommended)                        | `0.10.1-debian-10-r3`     |
+| `metrics.image.tag`                        | Apache exporter image tag (immutable tags are recommended)                        | `0.10.1-debian-10-r54`    |
 | `metrics.image.pullPolicy`                 | Image pull policy                                                                 | `IfNotPresent`            |
 | `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                                  | `[]`                      |
 | `metrics.resources`                        | Metrics exporter resource requests and limits                                     | `{}`                      |
@@ -198,7 +197,28 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.additionalLabels`  | Used to pass Labels that are required by the installed Prometheus Operator        | `{}`                      |
 
 
-For more information please refer to the [bitnami/phpmyadmin](http://github.com/bitnami/bitnami-docker-Phpmyadmin) image documentation.
+### NetworkPolicy parameters
+
+| Name                                                          | Description                                                                                                                    | Value   |
+| ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ------- |
+| `networkPolicy.enabled`                                       | Enable network policies                                                                                                        | `false` |
+| `networkPolicy.metrics.enabled`                               | Enable network policy for metrics (prometheus)                                                                                 | `false` |
+| `networkPolicy.metrics.namespaceSelector`                     | Monitoring namespace selector labels. These labels will be used to identify the prometheus' namespace.                         | `{}`    |
+| `networkPolicy.metrics.podSelector`                           | Monitoring pod selector labels. These labels will be used to identify the Prometheus pods.                                     | `{}`    |
+| `networkPolicy.ingress.enabled`                               | Enable network policy for Ingress Proxies                                                                                      | `false` |
+| `networkPolicy.ingress.namespaceSelector`                     | Ingress Proxy namespace selector labels. These labels will be used to identify the Ingress Proxy's namespace.                  | `{}`    |
+| `networkPolicy.ingress.podSelector`                           | Ingress Proxy pods selector labels. These labels will be used to identify the Ingress Proxy pods.                              | `{}`    |
+| `networkPolicy.ingressRules.backendOnlyAccessibleByFrontend`  | Enable ingress rule that makes the backend (mariadb) only accessible by phpMyAdmin's pods.                                     | `false` |
+| `networkPolicy.ingressRules.customBackendSelector`            | Backend selector labels. These labels will be used to identify the backend pods.                                               | `{}`    |
+| `networkPolicy.ingressRules.accessOnlyFrom.enabled`           | Enable ingress rule that makes phpMyAdmin only accessible from a particular origin                                             | `false` |
+| `networkPolicy.ingressRules.accessOnlyFrom.namespaceSelector` | Namespace selector label that is allowed to access phpMyAdmin. This label will be used to identified the allowed namespace(s). | `{}`    |
+| `networkPolicy.ingressRules.accessOnlyFrom.podSelector`       | Pods selector label that is allowed to access phpMyAdmin. This label will be used to identified the allowed pod(s).            | `{}`    |
+| `networkPolicy.ingressRules.customRules`                      | Custom network policy ingress rule                                                                                             | `{}`    |
+| `networkPolicy.egressRules.denyConnectionsToExternal`         | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).                                 | `false` |
+| `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                     | `{}`    |
+
+
+For more information please refer to the [bitnami/phpmyadmin](https://github.com/bitnami/bitnami-docker-Phpmyadmin) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -440,3 +460,11 @@ Use the workaround below to upgrade from versions previous to `1.0.0`. The follo
 ```console
 $ kubectl patch deployment phpmyadmin-phpmyadmin --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
 ```
+
+## Community supported solution
+
+Please, note this Helm chart is a community-supported solution. This means that the Bitnami team is not actively working on new features/improvements nor providing support through GitHub Issues for this Helm chart. Any new issue will stay open for 20 days to allow the community to contribute, after 15 days without activity the issue will be marked as stale being closed after 5 days.
+
+The Bitnami team will review any PR that is created, feel free to create a PR if you find any issue or want to implement a new feature.
+
+New versions are not going to be affected. Once a new version is released in the upstream project, the Bitnami container image will be updated to use the latest version.

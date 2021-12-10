@@ -3,6 +3,9 @@ kind: Service
 metadata:
   name: {{ include "common.names.fullname" . }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
+{{- if .Values.service.labels }}
+{{- include "common.tplvalues.render" (dict "value" .Values.service.labels "context" $) | nindent 4 }}
+{{- end }}
 {{- if or (and .Values.metrics.enabled .Values.metrics.service.annotations) .Values.service.annotations }}
   annotations:
   {{- if and .Values.metrics.enabled .Values.metrics.service.annotations }}

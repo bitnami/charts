@@ -189,7 +189,7 @@ spec:
               value: {{ ternary "no" "yes" .Values.auth.enabled | quote }}
             {{- if and .Values.tls.enabled .Values.arbiter.enabled }}
             - name: MONGODB_EXTRA_FLAGS
-              value: --tlsMode=requireTLS --tlsCertificateKeyFile=/certs/mongodb.pem --tlsCAFile=/certs/mongodb-ca-cert
+              value: --tlsMode={{ .Values.tls.mode }} --tlsCertificateKeyFile=/certs/mongodb.pem --tlsCAFile=/certs/mongodb-ca-cert
             {{- end }}
             {{- if .Values.arbiter.extraFlags }}
             - name: MONGODB_EXTRA_FLAGS

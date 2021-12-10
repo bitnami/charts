@@ -25,7 +25,7 @@ spec:
   ports:
     - name: memcache
       port: {{ .Values.service.port }}
-      targetPort: memcache
+      targetPort: {{ .Values.portName }}
       {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePort)) }}
       nodePort: {{ .Values.service.nodePort }}
       {{- else if eq .Values.service.type "ClusterIP" }}

@@ -1,3 +1,9 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
+** Please be patient while the chart is being deployed **
+
 {{- if or .Values.mariadb.enabled .Values.externalDatabase.host -}}
 
 {{- if empty (include "suitecrm.host" .) -}}
@@ -70,8 +76,6 @@ host. To configure SuiteCRM with the URL of your service:
 
 This deployment will be incomplete until you configure SuiteCRM with a resolvable database
 host. To configure SuiteCRM to use and external database host:
-
-
 1. Complete your SuiteCRM deployment by running:
 
 {{- if eq .Values.service.type "NodePort" }}
@@ -96,6 +100,8 @@ host. To configure SuiteCRM to use and external database host:
 
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- include "common.warnings.rollingTag" .Values.metrics.image }}
+{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
+{{- include "common.warnings.rollingTag" .Values.certificates.image }}
 
 {{- $passwordValidationErrors := list -}}
 {{- if not .Values.existingSecret -}}
