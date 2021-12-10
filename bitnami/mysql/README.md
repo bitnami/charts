@@ -104,7 +104,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `primary.args`                               | Override default container args on MySQL Primary container(s) (useful when using custom images)                 | `[]`                |
 | `primary.hostAliases`                        | Deployment pod host aliases                                                                                     | `[]`                |
 | `primary.configuration`                      | Configure MySQL Primary with a custom my.cnf file                                                               | `""`                |
-| `primary.existingConfiguration`              | Name of existing ConfigMap with MySQL Primary configuration.                                                    | `""`                |
+| `primary.existingConfigmap`                  | Name of existing ConfigMap with MySQL Primary configuration.                                                    | `""`                |
 | `primary.updateStrategy`                     | Update strategy type for the MySQL primary statefulset                                                          | `RollingUpdate`     |
 | `primary.rollingUpdatePartition`             | Partition update strategy for MySQL Primary statefulset                                                         | `""`                |
 | `primary.podAnnotations`                     | Additional pod annotations for MySQL primary pods                                                               | `{}`                |
@@ -181,7 +181,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `secondary.command`                            | Override default container command on MySQL Secondary container(s) (useful when using custom images)                | `[]`                |
 | `secondary.args`                               | Override default container args on MySQL Secondary container(s) (useful when using custom images)                   | `[]`                |
 | `secondary.configuration`                      | Configure MySQL Secondary with a custom my.cnf file                                                                 | `""`                |
-| `secondary.existingConfiguration`              | Name of existing ConfigMap with MySQL Secondary configuration.                                                      | `""`                |
+| `secondary.existingConfigmap`                  | Name of existing ConfigMap with MySQL Secondary configuration.                                                      | `""`                |
 | `secondary.updateStrategy`                     | Update strategy type for the MySQL secondary statefulset                                                            | `RollingUpdate`     |
 | `secondary.rollingUpdatePartition`             | Partition update strategy for MySQL Secondary statefulset                                                           | `""`                |
 | `secondary.podAnnotations`                     | Additional pod annotations for MySQL secondary pods                                                                 | `{}`                |
