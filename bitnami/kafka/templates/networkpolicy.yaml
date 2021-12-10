@@ -32,6 +32,18 @@ spec:
             matchLabels:
             {{- include "common.labels.matchLabels" . | nindent 14 }}
       {{- end }}
+    # Allow External connection
+    {{- if .Values.externalAccess.enabled }}
+    - ports: {{ .Values.service.externalPort }}
+      from:
+        - podSelector:
+            matchLabels:
+              {{ template "common.names.fullname" . }}-external: "true"
+          {{- if .Values.networkPolicy.explicitNamespacesSelector }}
+          namespaceSelector:
+{{ toYaml .Values.networkPolicy.explicitNamespacesSelector | indent 12 }}
+          {{- end }}
+    {{- end }}      
     {{- if .Values.metrics.kafka.enabled }}
     # Allow prometheus scrapes
     - ports:
