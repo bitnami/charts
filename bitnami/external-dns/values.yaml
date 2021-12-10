@@ -2,6 +2,7 @@
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
 ## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
@@ -15,6 +16,7 @@ global:
   imagePullSecrets: []
 
 ## @section Common parameters
+##
 
 ## @param nameOverride String to partially override external-dns.fullname template (will maintain the release name)
 ##
@@ -29,7 +31,22 @@ clusterDomain: cluster.local
 ##
 extraDeploy: []
 
+## @param commonLabels Labels to add to all deployed objects
+##
+commonLabels: {}
+## @param commonAnnotations Annotations to add to all deployed objects
+##
+commonAnnotations: {}
+##
+## @param extraDeploy Array of extra objects to deploy with the release (evaluated as a template).
+##
+extraDeploy: []
+## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
+##
+kubeVersion: ""
+
 ## @section external-dns parameters
+##
 
 ## Bitnami external-dns image version
 ## ref: https://hub.docker.com/r/bitnami/external-dns/tags/
@@ -61,6 +78,19 @@ image:
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
 hostAliases: []
+
+## @param updateStrategy update strategy type
+## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#update-strategies
+##
+updateStrategy: {}
+
+## @param command Override kiam default command
+##
+command: []
+## @param args Override kiam default args
+##
+args: []
+
 ## @param sources [array] K8s resources type to be observed for new DNS entries by ExternalDNS
 ##
 sources:
@@ -73,6 +103,12 @@ sources:
 ## - alibabacloud, aws, azure, azure-private-dns, cloudflare, coredns, designate, digitalocean, google, hetzner, infoblox, linode, rfc2136, transip
 ##
 provider: aws
+## @param initContainers Attach additional init containers to the pod (evaluated as a template)
+##
+initContainers: []
+## @param sidecars Attach additional containers to the pod (evaluated as a template)
+##
+sidecars: []
 ## Flags related to processing sources
 ## ref: https://github.com/kubernetes-sigs/external-dns/blob/master/pkg/apis/externaldns/types.go#L272
 ## @param namespace Limit sources of endpoints to a specific namespace (default: all namespaces)
@@ -81,6 +117,10 @@ namespace: ""
 ## @param fqdnTemplates Templated strings that are used to generate DNS names from sources that don't define a hostname themselves
 ##
 fqdnTemplates: []
+## @param containerPorts.http HTTP Container port
+##
+containerPorts:
+  http: 7979
 ## @param combineFQDNAnnotation Combine FQDN template and annotations instead of overwriting
 ##
 combineFQDNAnnotation: false
@@ -146,6 +186,9 @@ aws:
   ## @param aws.assumeRoleArn When using the AWS provider, assume role by specifying --aws-assume-role to the external-dns daemon
   ##
   assumeRoleArn: ""
+  ## @param aws.roleArn Specify role ARN to the external-dns daemon
+  ##
+  roleArn: ""
   ## @param aws.apiRetries Maximum number of retries for AWS API calls before giving up
   ##
   apiRetries: 3
@@ -315,6 +358,9 @@ google:
   ## @param google.serviceAccountKey When using the Google provider, specify the service account key JSON file. In this case a new secret will be created holding this service account (optional)
   ##
   serviceAccountKey: ""
+  ## @param google.zoneVisibility When using the Google provider, fiter for zones of a specific visibility (private or public)
+  ##
+  zoneVisibility: ""
 ## Hetzner configuration to be set via arguments/env. variables
 ##
 hetzner:
@@ -345,8 +391,9 @@ infoblox:
   view: ""
   ## Optional keys
   ##
-  ## Existing secret name, when in place wapiUsername and wapiPassword are not required
-  ## secretName: ""
+  ## @param infoblox.secretName Existing secret name, when in place wapiUsername and wapiPassword are not required
+  ##
+  secretName: ""
   ##
   ## @param infoblox.domainFilter When using the Infoblox provider, specify the domain (optional)
   ##
@@ -570,25 +617,35 @@ txtOwnerId: ""
 ## NOTE: It is up to the end user to update AWS Service Discovery
 ## 'default' values in description fields to make it work with new
 ## value passed as txtOwnerId when forceTxtOwnerId=true
+##
 forceTxtOwnerId: false
 ## @param extraArgs Extra arguments to be passed to external-dns
 ##
 extraArgs: {}
-## @param extraEnv Extra environment variables to be passed to external-dns
+## @param extraEnvVars An array to add extra env vars
 ##
-## extraEnv:
-## - name: VARNAME1
-##   value: value1
-## - name: VARNAME2
-##   valueFrom:
-##     secretKeyRef:
-##       name: existing-secret
-##       key: varname2-key
+extraEnvVars: []
+## @param extraEnvVarsCM ConfigMap containing extra env vars
 ##
-extraEnv: []
-## @param replicas Desired number of ExternalDNS replicas
+extraEnvVarsCM: ""
+## @param extraEnvVarsSecret Secret containing extra env vars (in case of sensitive data)
 ##
-replicas: 1
+extraEnvVarsSecret: ""
+## @param lifecycleHooks [object] Override default etcd container hooks
+##
+lifecycleHooks: {}
+## @param schedulerName Alternative scheduler
+## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+##
+schedulerName: ""
+## @param topologySpreadConstraints Topology Spread Constraints for pod assignment
+## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+## The value is evaluated as a template
+##
+topologySpreadConstraints: []
+## @param replicaCount Desired number of ExternalDNS replicas
+##
+replicaCount: 1
 ## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ##
@@ -663,13 +720,15 @@ service:
   ## @param service.type Kubernetes Service type
   ##
   type: ClusterIP
-  ## @param service.port ExternalDNS client port
+  ## @param service.ports.http ExternalDNS client port
   ##
-  port: 7979
-  ## @param service.nodePort Port to bind to for NodePort service type (client port)
+  ports:
+    http: 7979
+  ## @param service.nodePorts.http Port to bind to for NodePort service type (client port)
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ##
-  nodePort: ""
+  nodePorts:
+    http: ""
   ## @param service.clusterIP IP address to assign to service
   ##
   clusterIP: ""
@@ -682,6 +741,13 @@ service:
   ## @param service.loadBalancerSourceRanges List of IP CIDRs allowed access to load balancer (if supported)
   ##
   loadBalancerSourceRanges: []
+  ## @param service.externalTrafficPolicy Enable client source IP preservation
+  ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+  ##
+  externalTrafficPolicy: Cluster
+  ## @param service.extraPorts Extra ports to expose in the service (normally used with the `sidecar` value)
+  ##
+  extraPorts: []
   ## @param service.annotations Annotations to add to service
   ## set the LoadBalancer service type to internal only.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
@@ -725,7 +791,7 @@ rbac:
   ## @param rbac.pspEnabled Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later
   ##
   pspEnabled: false
-## @param securityContext Security context for the container
+## @param containerSecurityContext Security context for the container
 ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 ## Example:
 ## securityContext:
@@ -734,11 +800,13 @@ rbac:
 ##   capabilities:
 ##     drop: ["ALL"]
 ##
-securityContext: {}
+containerSecurityContext: {}
+## @param podSecurityContext.enabled Enable pod security context
 ## @param podSecurityContext.fsGroup Group ID for the container
 ## @param podSecurityContext.runAsUser User ID for the container
 ##
 podSecurityContext:
+  enabled: true
   fsGroup: 1001
   runAsUser: 1001
 ## Container resource requests and limits
@@ -755,17 +823,17 @@ resources:
   ## limits:
   ##    cpu: 50m
   ##    memory: 50Mi
+  ##
   limits: {}
   ## Examples:
   ## requests:
   ##    cpu: 10m
   ##    memory: 50Mi
+  ##
   requests: {}
 ## Configure extra options for liveness probe
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param livenessProbe.enabled Enable livenessProbe
-## @param livenessProbe.httpGet.path Request path for livenessProbe
-## @param livenessProbe.httpGet.port Port for livenessProbe
 ## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
 ## @param livenessProbe.periodSeconds Period seconds for livenessProbe
 ## @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
@@ -774,9 +842,6 @@ resources:
 ##
 livenessProbe:
   enabled: true
-  httpGet:
-    path: /healthz
-    port: http
   initialDelaySeconds: 10
   periodSeconds: 10
   timeoutSeconds: 5
@@ -785,8 +850,6 @@ livenessProbe:
 ## Configure extra options for readiness probe
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param readinessProbe.enabled Enable readinessProbe
-## @param readinessProbe.httpGet.path Request path for readinessProbe
-## @param readinessProbe.httpGet.port Port for readinessProbe
 ## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
 ## @param readinessProbe.periodSeconds Period seconds for readinessProbe
 ## @param readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
@@ -795,14 +858,36 @@ livenessProbe:
 ##
 readinessProbe:
   enabled: true
-  httpGet:
-    path: /healthz
-    port: http
   initialDelaySeconds: 5
   periodSeconds: 10
   timeoutSeconds: 5
   failureThreshold: 6
   successThreshold: 1
+## Configure extra options for startup probe
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-startup-probes/#configure-probes
+## @param startupProbe.enabled Enable startupProbe
+## @param startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+## @param startupProbe.periodSeconds Period seconds for startupProbe
+## @param startupProbe.timeoutSeconds Timeout seconds for startupProbe
+## @param startupProbe.failureThreshold Failure threshold for startupProbe
+## @param startupProbe.successThreshold Success threshold for startupProbe
+##
+startupProbe:
+  enabled: false
+  initialDelaySeconds: 5
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+## @param customLivenessProbe Override default liveness probe
+##
+customLivenessProbe: {}
+## @param customReadinessProbe Override default readiness probe
+##
+customReadinessProbe: {}
+## @param customStartupProbe Override default startup probe
+##
+customStartupProbe: {}
 ## @param extraVolumes A list of volumes to be added to the pod
 ##
 extraVolumes: []
@@ -811,6 +896,8 @@ extraVolumes: []
 extraVolumeMounts: []
 ## @param podDisruptionBudget Configure PodDisruptionBudget
 ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+##
+
 podDisruptionBudget: {}
 ## Prometheus Exporter / Metrics
 ##
@@ -845,3 +932,20 @@ metrics:
     ##   prometheus: my-prometheus
     ##
     selector: {}
+    ## @param metrics.serviceMonitor.metricRelabelings Specify Metric Relabelings to add to the scrape endpoint
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+    ##
+    metricRelabelings: []
+    ## @param metrics.serviceMonitor.relabelings [array] Prometheus relabeling rules
+    ##
+    relabelings: []
+    ## @param metrics.serviceMonitor.honorLabels Specify honorLabels parameter to add the scrape endpoint
+    ##
+    honorLabels: false
+    ## @param metrics.serviceMonitor.additionalLabels Used to pass Labels that are required by the installed Prometheus Operator
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
+    ##
+    additionalLabels: {}
+    ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
+    ##
+    jobLabel: ""
