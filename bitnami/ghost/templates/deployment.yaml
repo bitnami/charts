@@ -200,7 +200,12 @@ spec:
             httpGet:
               path: /
               port: {{ ternary "https" "http" .Values.ghostEnableHttps | quote }}
-              scheme: {{ ternary "HTTPS" "HTTP" .Values.ghostEnableHttps | quote }}
+              scheme: HTTP
+              {{- if .Values.ghostEnableHttps }}
+              httpHeaders:
+                - name: x-forwarded-proto
+                  value: https
+              {{- end }}
             initialDelaySeconds: {{ .Values.startupProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.startupProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.startupProbe.timeoutSeconds }}
@@ -214,7 +219,12 @@ spec:
             httpGet:
               path: /
               port: {{ ternary "https" "http" .Values.ghostEnableHttps | quote }}
-              scheme: {{ ternary "HTTPS" "HTTP" .Values.ghostEnableHttps | quote }}
+              scheme: HTTP
+              {{- if .Values.ghostEnableHttps }}
+              httpHeaders:
+                - name: x-forwarded-proto
+                  value: https
+              {{- end }}
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
@@ -228,7 +238,12 @@ spec:
             httpGet:
               path: /
               port: {{ ternary "https" "http" .Values.ghostEnableHttps | quote }}
-              scheme: {{ ternary "HTTPS" "HTTP" .Values.ghostEnableHttps | quote }}
+              scheme: HTTP
+              {{- if .Values.ghostEnableHttps }}
+              httpHeaders:
+                - name: x-forwarded-proto
+                  value: https
+              {{- end }}
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}

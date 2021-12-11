@@ -1,6 +1,6 @@
 {{- if .Values.networkPolicy.enabled }}
 kind: NetworkPolicy
-apiVersion: {{ template "mysql.networkPolicy.apiVersion" . }}
+apiVersion: {{ template "common.capabilities.networkPolicy.apiVersion" . }}
 metadata:
   name: {{ template "common.names.fullname" . }}
   labels:

@@ -1053,6 +1053,15 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `minio.defaultBuckets`    | Comma, semi-colon or space separated list of MinIO&reg; buckets to create | `thanos` |
 
 
+### NetworkPolicy parameters
+
+| Name                      | Description                                                               | Value    |
+| ------------------------- | ------------------------------------------------------------------------- | -------- |
+| `networkPolicy.enabled`                    | Enable creation of NetworkPolicy resources.                                                                              | `false`             |
+| `networkPolicy.allowExternal`              | Don't require client label for connections                                                                               | `true`              |
+| `networkPolicy.explicitNamespacesSelector` | A Kubernetes LabelSelector to explicitly select namespaces from which traffic could be allowed                           | `{}`                |
+
+
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```bash
