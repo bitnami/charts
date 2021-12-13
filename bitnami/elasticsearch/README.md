@@ -252,6 +252,7 @@ $ helm delete --purge my-release
 | `coordinating.service.nodePort`                   | Kubernetes Service nodePort (coordinating-only nodes)                                                                     | `""`            |
 | `coordinating.service.annotations`                | Annotations for coordinating-only nodes service                                                                           | `{}`            |
 | `coordinating.service.loadBalancerIP`             | loadBalancerIP if coordinating-only nodes service type is `LoadBalancer`                                                  | `""`            |
+| `coordinating.service.externalTrafficPolicy`      | Set `externalTrafficPolicy` to `Local` to enable client source IP preservation                                            | `Cluster`       |
 | `coordinating.serviceAccount.create`              | Enable creation of ServiceAccount for the coordinating-only node                                                          | `false`         |
 | `coordinating.serviceAccount.name`                | Name of the created serviceAccount                                                                                        | `""`            |
 | `coordinating.autoscaling.enabled`                | Enable autoscaling for coordinating replicas                                                                              | `false`         |

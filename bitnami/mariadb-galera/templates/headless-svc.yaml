@@ -19,4 +19,5 @@ spec:
     - name: sst
       port: 4444
       targetPort: sst
+  publishNotReadyAddresses: true
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}

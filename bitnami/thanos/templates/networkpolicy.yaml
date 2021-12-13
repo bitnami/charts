@@ -1,8 +1,8 @@
 {{- if .Values.networkPolicy.enabled }}
 kind: NetworkPolicy
-apiVersion: {{ template "common.capabilities.networkPolicy.apiVersion" . }}
+apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
 metadata:
-  name: {{ include "common.names.fullname" . }}
+  name: {{ template "common.names.fullname" . }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -10,28 +10,28 @@ metadata:
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
+  namespace: {{ .Release.Namespace }}
 spec:
   podSelector:
-    matchLabels:  {{ include "common.labels.matchLabels" . | nindent 6 }}
-      app.kubernetes.io/component: influxdb
-  policyTypes:
-    - Ingress
+    matchLabels:
+    {{- include "common.labels.matchLabels" . | nindent 6 }}
   ingress:
     # Allow inbound connections
     - ports:
-        - port: {{ .Values.influxdb.containerPorts.http }}
-          protocol: TCP
-        - port: {{ .Values.influxdb.containerPorts.rpc }}
-          protocol: TCP
+       - port: http
+       - port: grpc
       {{- if not .Values.networkPolicy.allowExternal }}
       from:
         - podSelector:
             matchLabels:
               {{ template "common.names.fullname" . }}-client: "true"
-        {{- if eq .Values.architecture "high-availability" }}
+          {{- if .Values.networkPolicy.explicitNamespacesSelector }}
+          namespaceSelector:
+{{ toYaml .Values.networkPolicy.explicitNamespacesSelector | indent 12 }}
+          {{- end }}
         - podSelector:
-            matchLabels: {{- include "common.labels.matchLabels" . | nindent 14 }}
-              app.kubernetes.io/component: relay
-        {{- end }}
+            matchLabels:
+            {{- include "common.labels.matchLabels" . | nindent 14 }}
+              role: read
       {{- end }}
 {{- end }}
