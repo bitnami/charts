@@ -114,9 +114,9 @@ spec:
         - name: init-certs
           image: {{ include "zookeeper.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
-          {{- if .Values.securityContext.enabled }}
+          {{- if .Values.containerSecurityContext.enabled }}
           securityContext:
-            runAsUser: {{ .Values.securityContext.runAsUser }}
+            runAsUser: {{ .Values.containerSecurityContext.runAsUser }}
           {{- end }}
           command:
           - /bin/bash
