@@ -27,9 +27,6 @@ fullnameOverride: ""
 ## @param clusterDomain Kubernetes Cluster Domain
 ##
 clusterDomain: cluster.local
-## @param extraDeploy Array of extra objects to deploy with the release
-##
-extraDeploy: []
 
 ## @param commonLabels Labels to add to all deployed objects
 ##
