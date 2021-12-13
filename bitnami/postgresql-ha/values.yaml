@@ -901,7 +901,7 @@ pgpool:
   ##   port = '5432'
   ##   ...
   ##
-  configuration: {}
+  configuration: ""
   ## @param pgpool.configurationCM ConfigMap with Pgpool configuration
   ## NOTE: This will override pgpool.configuration parameter
   ## The file used must be named `pgpool.conf`
