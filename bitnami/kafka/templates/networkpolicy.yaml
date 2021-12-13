@@ -50,5 +50,3 @@ spec:
         - port: {{ .Values.metrics.kafka.service.port }}
     {{- end }}
 {{- end }}
-
-
