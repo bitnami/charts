@@ -14,36 +14,36 @@ metadata:
   {{- end }}
 rules:
 - apiGroups:
-  - ""
+    - ""
   resources:
-  - configmaps
+    - configmaps
   verbs:
-  - get
-  - list
-  - watch
-  - create
-  - update
-  - patch
-  - delete
+    - get
+    - list
+    - watch
+    - create
+    - update
+    - patch
+    - delete
 - apiGroups:
-  - coordination.k8s.io
+    - coordination.k8s.io
   resources:
-  - leases
+    - leases
   verbs:
-  - get
-  - list
-  - watch
-  - create
-  - update
-  - patch
-  - delete
+    - get
+    - list
+    - watch
+    - create
+    - update
+    - patch
+    - delete
 - apiGroups:
-  - ""
+    - ""
   resources:
-  - events
+    - events
   verbs:
-  - create
-  - patch
+    - create
+    - patch
 ---
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: RoleBinding
@@ -82,162 +82,162 @@ metadata:
   {{- end }}
 rules:
 - apiGroups:
-  - ""
+    - ""
   resources:
-  - configmaps
-  - persistentvolumeclaims
-  - secrets
-  - serviceaccounts
-  - services
+    - configmaps
+    - persistentvolumeclaims
+    - secrets
+    - serviceaccounts
+    - services
   verbs:
-  - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
-  - watch
+    - create
+    - delete
+    - get
+    - list
+    - patch
+    - update
+    - watch
 - apiGroups:
-  - ""
+    - ""
   resources:
-  - events
+    - events
   verbs:
-  - create
-  - get
-  - list
-  - watch
+    - create
+    - get
+    - list
+    - watch
 - apiGroups:
-  - ""
+    - ""
   resources:
-  - pods
+    - pods
   verbs:
-  - get
-  - list
-  - watch
+    - get
+    - list
+    - watch
 - apiGroups:
-  - apps
-  - extensions
+    - apps
+    - extensions
   resources:
-  - deployments
-  - deployments/finalizers
+    - deployments
+    - deployments/finalizers
   verbs:
-  - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
-  - watch
+    - create
+    - delete
+    - get
+    - list
+    - patch
+    - update
+    - watch
 - apiGroups:
-  - integreatly.org
+    - integreatly.org
   resources:
-  - grafanadashboards
+    - grafanadashboards
   verbs:
-  - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
-  - watch
+    - create
+    - delete
+    - get
+    - list
+    - patch
+    - update
+    - watch
 - apiGroups:
-  - integreatly.org
+    - integreatly.org
   resources:
-  - grafanadashboards/status
+    - grafanadashboards/status
   verbs:
-  - get
-  - patch
-  - update
+    - get
+    - patch
+    - update
 - apiGroups:
-  - integreatly.org
+    - integreatly.org
   resources:
-  - grafanadatasources
+    - grafanadatasources
   verbs:
-  - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
-  - watch
+    - create
+    - delete
+    - get
+    - list
+    - patch
+    - update
+    - watch
 - apiGroups:
-  - integreatly.org
+    - integreatly.org
   resources:
-  - grafanadatasources/status
+    - grafanadatasources/status
   verbs:
-  - get
-  - patch
-  - update
+    - get
+    - patch
+    - update
 - apiGroups:
-  - integreatly.org
+    - integreatly.org
   resources:
-  - grafananotificationchannels
+    - grafananotificationchannels
   verbs:
-  - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
-  - watch
+    - create
+    - delete
+    - get
+    - list
+    - patch
+    - update
+    - watch
 - apiGroups:
-  - integreatly.org
+    - integreatly.org
   resources:
-  - grafananotificationchannels/status
+    - grafananotificationchannels/status
   verbs:
-  - get
-  - patch
-  - update
+    - get
+    - patch
+    - update
 - apiGroups:
-  - integreatly.org
+    - integreatly.org
   resources:
-  - grafanas
-  - grafanas/finalizers
+    - grafanas
+    - grafanas/finalizers
   verbs:
-  - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
-  - watch
+    - create
+    - delete
+    - get
+    - list
+    - patch
+    - update
+    - watch
 - apiGroups:
-  - integreatly.org
+    - integreatly.org
   resources:
-  - grafanas/status
+    - grafanas/status
   verbs:
-  - get
-  - patch
-  - update
+    - get
+    - patch
+    - update
 - apiGroups:
-  - networking.k8s.io
+    - networking.k8s.io
   resources:
-  - ingresses
+    - ingresses
   verbs:
-  - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
-  - watch
+    - create
+    - delete
+    - get
+    - list
+    - patch
+    - update
+    - watch
 - apiGroups:
-  - route.openshift.io
+    - route.openshift.io
   resources:
-  - routes
+    - routes
   verbs:
-  - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
-  - watch
+    - create
+    - delete
+    - get
+    - list
+    - patch
+    - update
+    - watch
 {{- if or .Values.operator.args.scanAllNamespaces  .Values.operator.args.scanNamespaces }}
 - nonResourceURLs:
-  - /metrics
+    - /metrics
   verbs:
-  - get
+    - get
 {{- end }}
 ---
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
