@@ -82,7 +82,7 @@ spec:
             - name: HTTP_PORT
               value: "8080"
             - name: HTTP_HOST
-              value: "0.0.0.0"
+              value: "::"
             - name: ENABLE_METRICS
               value: {{ ternary "true" "false" .Values.imageRenderer.metrics.enabled | quote }}
           ports:
