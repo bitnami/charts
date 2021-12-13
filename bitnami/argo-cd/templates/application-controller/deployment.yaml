@@ -190,7 +190,7 @@ spec:
             successThreshold: {{ .Values.controller.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.controller.readinessProbe.failureThreshold }}
           {{- else if .Values.controller.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.controller.readinessProbe "enabled") "context" $) | nindent 12 }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.controller.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
             # Mounting into a path that will be read by Argo CD.

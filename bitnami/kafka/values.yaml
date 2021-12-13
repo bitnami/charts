@@ -198,6 +198,10 @@ socketSendBufferBytes: 102400
 ## @param zookeeperConnectionTimeoutMs Timeout in ms for connecting to Zookeeper
 ##
 zookeeperConnectionTimeoutMs: 6000
+## @param zookeeperChrootPath Path which puts data under some path in the global ZooKeeper namespace
+## ref: https://kafka.apache.org/documentation/#brokerconfigs_zookeeper.connect
+##
+zookeeperChrootPath: ""
 ## @param authorizerClassName The Authorizer is configured by setting authorizer.class.name=kafka.security.authorizer.AclAuthorizer in server.properties.
 ##
 authorizerClassName: ""
@@ -513,15 +517,18 @@ podSecurityContext:
   enabled: true
   fsGroup: 1001
   runAsUser: 1001
-## @param containerSecurityContext Kafka containers' Security Context
+## Kafka containers' Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+## @param containerSecurityContext.enabled Enable Kafka containers' Security Context
 ## Example:
 ##   containerSecurityContext:
+##     enabled: true
 ##     capabilities:
 ##       drop: ["NET_RAW"]
 ##     readOnlyRootFilesystem: true
 ##
-containerSecurityContext: {}
+containerSecurityContext:
+  enabled: false
 ## Kafka containers' resource requests and limits
 ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
 ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -993,6 +1000,18 @@ metrics:
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
     ##
     podAnnotations: {}
+    ## Prometheus Kafka Exporter containers' Security Context
+    ## @param metrics.kafka.containerSecurityContext.enabled Enable Prometheus Kafka Exporter containers' Security Context
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+    ## Example:
+    ##   containerSecurityContext:
+    ##     enabled: true
+    ##     capabilities:
+    ##       drop: ["NET_RAW"]
+    ##     readOnlyRootFilesystem: true
+    ##
+    containerSecurityContext:
+      enabled: false
     ## Prometheus Kafka Exporter' resource requests and limits
     ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
     ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -1102,6 +1121,19 @@ metrics:
       ##   - myRegistryKeySecretName
       ##
       pullSecrets: []
+
+    ## Prometheus JMX Exporter Containers' Security Context
+    ## @param metrics.jmx.containerSecurityContext.enabled Enable Prometheus JMX Exporter Containers' Security Context
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+    ## Example:
+    ##   containerSecurityContext:
+    ##     enabled: true
+    ##     capabilities:
+    ##       drop: ["NET_RAW"]
+    ##     readOnlyRootFilesystem: true
+    ##
+    containerSecurityContext:
+      enabled: false
     ## Prometheus JMX Exporter' resource requests and limits
     ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
     ## We usually recommend not to specify default resources and to leave this as a conscious
