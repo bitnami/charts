@@ -139,6 +139,7 @@ extraPodSpec: {}
 ## @param cloneHtdocsFromGit.enabled Get the server static content from a git repository
 ## @param cloneHtdocsFromGit.repository Repository to clone static content from
 ## @param cloneHtdocsFromGit.branch Branch inside the git repository
+## @param cloneHtdocsFromGit.enableAutoRefresh Enables an automatic git pull with a sidecar container
 ## @param cloneHtdocsFromGit.interval Interval for sidecar container pull from the repository
 ## @param cloneHtdocsFromGit.resources Init container git resource requests
 ## @param cloneHtdocsFromGit.extraVolumeMounts Add extra volume mounts for the GIT containers
@@ -147,6 +148,7 @@ cloneHtdocsFromGit:
   enabled: false
   repository: ""
   branch: ""
+  enableAutoRefresh: true
   interval: 60
   resources: {}
   ## Useful to mount keys to connect through ssh. (normally used with extraVolumes)

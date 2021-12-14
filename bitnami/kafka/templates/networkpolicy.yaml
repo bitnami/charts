@@ -3,11 +3,10 @@ kind: NetworkPolicy
 apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
 metadata:
   name: {{ template "common.names.fullname" . }}
-  labels:
-  {{- include "common.labels.standard" . | nindent 4 }}
-  {{- if .Values.commonLabels }}
-  {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-  {{- end }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -17,9 +16,9 @@ spec:
     matchLabels:
     {{- include "common.labels.matchLabels" . | nindent 6 }}
   ingress:
-    # Allow inbound connections
+    # Allow client connections
     - ports:
-        - port: {{ template "postgresql.port" . }}
+        - port: {{ .Values.service.port }}
       {{- if not .Values.networkPolicy.allowExternal }}
       from:
         - podSelector:
@@ -29,14 +28,25 @@ spec:
           namespaceSelector:
 {{ toYaml .Values.networkPolicy.explicitNamespacesSelector | indent 12 }}
           {{- end }}
+      {{- end }}
+    # Allow communication inter-broker
+    - ports:
+        - port: {{ .Values.service.internalPort }}
+      from:
         - podSelector:
             matchLabels:
             {{- include "common.labels.matchLabels" . | nindent 14 }}
-              role: read
-      {{- end }}
-    {{- if .Values.metrics.enabled }}
+    # Allow External connection
+    {{- if .Values.externalAccess.enabled }}
+    - ports:
+        - port: {{ .Values.service.externalPort }}
+    {{- if .Values.externalAccess.from }}
+      from: {{- include "common.tplvalues.render" ( dict "value" .Values.networkPolicy.externalAccess.from "context" $ ) | nindent 8 }}
+    {{- end }}
+    {{- end }}
+    {{- if .Values.metrics.kafka.enabled }}
     # Allow prometheus scrapes
     - ports:
-        - port: 9187
+        - port: {{ .Values.metrics.kafka.service.port }}
     {{- end }}
 {{- end }}
