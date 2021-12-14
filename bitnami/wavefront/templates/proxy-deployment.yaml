@@ -71,6 +71,8 @@ spec:
             runAsNonRoot: {{ .Values.proxy.containerSecurityContext.runAsNonRoot }}
           {{- end }}
           env:
+            - name: JAVA_ARGS
+              value: "-Dlog4j2.formatMsgNoLookups=true"
             - name: WAVEFRONT_URL
               value: {{ .Values.wavefront.url }}/api
             - name: WAVEFRONT_TOKEN
