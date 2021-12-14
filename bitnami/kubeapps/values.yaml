@@ -1515,7 +1515,7 @@ clusters:
     domain: cluster.local
 ## @param featureFlags [object] Feature flags (used to switch on development features)
 ##
-featureFlags: ""
+featureFlags: {}
 ## RBAC configuration
 ##
 rbac:
