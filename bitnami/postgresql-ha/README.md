@@ -290,7 +290,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `pgpool.connectionLifeTime`                 | The time in seconds to terminate the cached connections to the PostgreSQL backend (PGPOOL_CONNECTION_LIFE_TIME)    | `""`                  |
 | `pgpool.useLoadBalancing`                   | Use Pgpool Load-Balancing                                                                                          | `true`                |
 | `pgpool.loadBalancingOnWrite`               | LoadBalancer on write actions behavior                                                                             | `transaction`         |
-| `pgpool.configuration`                      | Pgpool configuration                                                                                               | `{}`                  |
+| `pgpool.configuration`                      | Pgpool configuration                                                                                               | `""`                  |
 | `pgpool.configurationCM`                    | ConfigMap with Pgpool configuration                                                                                | `""`                  |
 | `pgpool.initdbScripts`                      | Dictionary of initdb scripts                                                                                       | `{}`                  |
 | `pgpool.initdbScriptsCM`                    | ConfigMap with scripts to be run every time Pgpool container is initialized                                        | `""`                  |
