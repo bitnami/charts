@@ -1513,7 +1513,7 @@ allowNamespaceDiscovery: true
 clusters:
   - name: default
     domain: cluster.local
-## @param featureFlags [object] Feature flags (used to switch on development features)
+## @param featureFlags Feature flags (used to switch on development features)
 ##
 featureFlags: {}
 ## RBAC configuration
