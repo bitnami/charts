@@ -175,7 +175,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `master.persistence.path`                   | The path the volume will be mounted at on Redis&trade; master containers                          | `/data`                  |
 | `master.persistence.subPath`                | The subdirectory of the volume to mount on Redis&trade; master containers                         | `""`                     |
 | `master.persistence.storageClass`           | Persistent Volume storage class                                                                   | `""`                     |
-| `master.persistence.accessModes`            | Persistent Volume access modes                                                                    | `[]`                     |
+| `master.persistence.accessModes`            | Persistent Volume access modes                                                                    | `["ReadWriteOnce"]`      |
 | `master.persistence.size`                   | Persistent Volume size                                                                            | `8Gi`                    |
 | `master.persistence.annotations`            | Additional custom annotations for the PVC                                                         | `{}`                     |
 | `master.persistence.selector`               | Additional labels to match for the PVC                                                            | `{}`                     |
@@ -253,7 +253,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `replica.persistence.path`                   | The path the volume will be mounted at on Redis&trade; replicas containers                          | `/data`                  |
 | `replica.persistence.subPath`                | The subdirectory of the volume to mount on Redis&trade; replicas containers                         | `""`                     |
 | `replica.persistence.storageClass`           | Persistent Volume storage class                                                                     | `""`                     |
-| `replica.persistence.accessModes`            | Persistent Volume access modes                                                                      | `[]`                     |
+| `replica.persistence.accessModes`            | Persistent Volume access modes                                                                      | `["ReadWriteOnce"]`      |
 | `replica.persistence.size`                   | Persistent Volume size                                                                              | `8Gi`                    |
 | `replica.persistence.annotations`            | Additional custom annotations for the PVC                                                           | `{}`                     |
 | `replica.persistence.selector`               | Additional labels to match for the PVC                                                              | `{}`                     |
