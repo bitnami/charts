@@ -657,4 +657,4 @@ metrics:
     ##       description: Service {{ template "common.names.fullname" . }} Tomcat is down since 1m.
     ##       summary: Tomcat instance is down.
     ##
-    rules: []  
+    rules: []
