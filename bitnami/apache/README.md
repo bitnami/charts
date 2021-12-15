@@ -98,6 +98,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cloneHtdocsFromGit.enabled`           | Get the server static content from a git repository                                                                      | `false`                |
 | `cloneHtdocsFromGit.repository`        | Repository to clone static content from                                                                                  | `""`                   |
 | `cloneHtdocsFromGit.branch`            | Branch inside the git repository                                                                                         | `""`                   |
+| `cloneHtdocsFromGit.enableAutoRefresh` | Enables an automatic git pull with a sidecar container                                                                   | `true`                 |
 | `cloneHtdocsFromGit.interval`          | Interval for sidecar container pull from the repository                                                                  | `60`                   |
 | `cloneHtdocsFromGit.resources`         | Init container git resource requests                                                                                     | `{}`                   |
 | `cloneHtdocsFromGit.extraVolumeMounts` | Add extra volume mounts for the GIT containers                                                                           | `[]`                   |
