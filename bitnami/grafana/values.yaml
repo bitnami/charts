@@ -767,6 +767,13 @@ imageRenderer:
     ##   - e2e-az2
     ##
     values: []
+  ## @param imageRenderer.extraEnvVars Array containing extra env vars to configure Grafana
+  ## For example:
+  ## extraEnvVars:
+  ##  - name: GF_DEFAULT_INSTANCE_NAME
+  ##    value: my-instance
+  ##
+  extraEnvVars: {}
   ## @param imageRenderer.affinity Affinity for pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
