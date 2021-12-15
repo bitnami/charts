@@ -29,7 +29,7 @@ spec:
     matchNames:
       - {{ .Release.Namespace }}
   endpoints:
-    - port: http-metrics
+    - port: http
       {{- if .Values.msgTopologyOperator.metrics.serviceMonitor.interval }}
       interval: {{ .Values.msgTopologyOperator.metrics.serviceMonitor.interval }}
       {{- end }}
