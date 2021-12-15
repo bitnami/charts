@@ -145,7 +145,7 @@ master:
   ## ref: https://redis.io/topics/config
   ##
   configuration: ""
-  ## @param master.disableCommands [array] Array with Redis&trade; commands to disable on master nodes
+  ## @param master.disableCommands Array with Redis&trade; commands to disable on master nodes
   ## Commands will be completely disabled by renaming each to an empty string.
   ## ref: https://redis.io/topics/security#disabling-of-specific-commands
   ##
@@ -378,7 +378,7 @@ master:
     ## If undefined (the default) or set to null, no storageClassName spec is set, choosing the default provisioner
     ##
     storageClass: ""
-    ## @param master.persistence.accessModes [array] Persistent Volume access modes
+    ## @param master.persistence.accessModes Persistent Volume access modes
     ##
     accessModes:
       - ReadWriteOnce
@@ -451,7 +451,7 @@ replica:
   ## ref: https://redis.io/topics/config
   ##
   configuration: ""
-  ## @param replica.disableCommands [array] Array with Redis&trade; commands to disable on replicas nodes
+  ## @param replica.disableCommands Array with Redis&trade; commands to disable on replicas nodes
   ## Commands will be completely disabled by renaming each to an empty string.
   ## ref: https://redis.io/topics/security#disabling-of-specific-commands
   ##
@@ -692,7 +692,7 @@ replica:
     ## If undefined (the default) or set to null, no storageClassName spec is set, choosing the default provisioner
     ##
     storageClass: ""
-    ## @param replica.persistence.accessModes [array] Persistent Volume access modes
+    ## @param replica.persistence.accessModes Persistent Volume access modes
     ##
     accessModes:
       - ReadWriteOnce
