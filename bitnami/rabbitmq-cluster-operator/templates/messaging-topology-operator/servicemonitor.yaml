@@ -2,7 +2,7 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: {{ include "common.names.fullname" . }}-messaging-topology-operator
+  name: {{ template "rmqco.msgTopologyOperator.fullname" . }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.msgTopologyOperator.metrics.serviceMonitor.additionalLabels }}
     {{- include "common.tplvalues.render" (dict "value" .Values.msgTopologyOperator.metrics.serviceMonitor.additionalLabels "context" $) | nindent 4 }}
