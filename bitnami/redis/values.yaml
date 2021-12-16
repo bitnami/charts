@@ -315,7 +315,7 @@ master:
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-  ## @param master.spreadConstraints Spread Constraints for Redis&trade; master pod assignment
+  ## @param master.spreadConstraints [array] Spread Constraints for Redis&trade; master pod assignment
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
   ## E.g.
   ## spreadConstraints:
@@ -323,7 +323,7 @@ master:
   ##     topologyKey: node
   ##     whenUnsatisfiable: DoNotSchedule
   ##
-  spreadConstraints: {}
+  spreadConstraints: []
   ## @param master.lifecycleHooks for the Redis&trade; master container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -629,7 +629,7 @@ replica:
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-  ## @param replica.spreadConstraints Spread Constraints for Redis&trade; replicas pod assignment
+  ## @param replica.spreadConstraints [array] Spread Constraints for Redis&trade; replicas pod assignment
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
   ## E.g.
   ## spreadConstraints:
@@ -637,7 +637,7 @@ replica:
   ##     topologyKey: node
   ##     whenUnsatisfiable: DoNotSchedule
   ##
-  spreadConstraints: {}
+  spreadConstraints: []
   ## @param replica.lifecycleHooks for the Redis&trade; replica container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}

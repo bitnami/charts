@@ -164,7 +164,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `master.affinity`                           | Affinity for Redis&trade; master pods assignment                                                  | `{}`                     |
 | `master.nodeSelector`                       | Node labels for Redis&trade; master pods assignment                                               | `{}`                     |
 | `master.tolerations`                        | Tolerations for Redis&trade; master pods assignment                                               | `[]`                     |
-| `master.spreadConstraints`                  | Spread Constraints for Redis&trade; master pod assignment                                         | `{}`                     |
+| `master.spreadConstraints`                  | Spread Constraints for Redis&trade; master pod assignment                                         | `[]`                     |
 | `master.lifecycleHooks`                     | for the Redis&trade; master container(s) to automate configuration before or after startup        | `{}`                     |
 | `master.extraVolumes`                       | Optionally specify extra list of additional volumes for the Redis&trade; master pod(s)            | `[]`                     |
 | `master.extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for the Redis&trade; master container(s) | `[]`                     |
@@ -242,7 +242,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `replica.affinity`                           | Affinity for Redis&trade; replicas pods assignment                                                  | `{}`                     |
 | `replica.nodeSelector`                       | Node labels for Redis&trade; replicas pods assignment                                               | `{}`                     |
 | `replica.tolerations`                        | Tolerations for Redis&trade; replicas pods assignment                                               | `[]`                     |
-| `replica.spreadConstraints`                  | Spread Constraints for Redis&trade; replicas pod assignment                                         | `{}`                     |
+| `replica.spreadConstraints`                  | Spread Constraints for Redis&trade; replicas pod assignment                                         | `[]`                     |
 | `replica.lifecycleHooks`                     | for the Redis&trade; replica container(s) to automate configuration before or after startup         | `{}`                     |
 | `replica.extraVolumes`                       | Optionally specify extra list of additional volumes for the Redis&trade; replicas pod(s)            | `[]`                     |
 | `replica.extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for the Redis&trade; replicas container(s) | `[]`                     |
