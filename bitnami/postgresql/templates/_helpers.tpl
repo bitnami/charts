@@ -50,10 +50,10 @@ Return the proper Docker Image Registry Secret Names
 {{- end -}}
 
 {{/*
-Returns a secret if it already in Kubernetes, otherwise it creates
-it randomly.
+Returns the available value for certain key in an existing secret (if it exists),
+otherwise it generates a random value.
 */}}
-{{- define "getOrCreateSecret" }}
+{{- define "getValueFromSecret" }}
 {{- $len := (default 16 .Length) | int -}}
 {{- $obj := (lookup "v1" "Secret" .Namespace .Name).data -}}
 {{- if $obj }}
@@ -72,7 +72,7 @@ Return PostgreSQL postgres user password
 {{- else if .Values.postgresqlPostgresPassword -}}
     {{- .Values.postgresqlPostgresPassword -}}
 {{- else -}}
-    {{- include "getOrCreateSecret" (dict "Namespace" .Release.Namespace "Name" (include "common.names.fullname" .) "Length" 10 "Key" "postgresql-postgres-password")  -}}
+    {{- include "getValueFromSecret" (dict "Namespace" .Release.Namespace "Name" (include "common.names.fullname" .) "Length" 10 "Key" "postgresql-postgres-password")  -}}
 {{- end -}}
 {{- end -}}
 
@@ -85,7 +85,7 @@ Return PostgreSQL password
 {{- else if .Values.postgresqlPassword -}}
     {{- .Values.postgresqlPassword -}}
 {{- else -}}
-    {{- include "getOrCreateSecret" (dict "Namespace" .Release.Namespace "Name" (include "common.names.fullname" .) "Length" 10 "Key" "postgresql-password")  -}}
+    {{- include "getValueFromSecret" (dict "Namespace" .Release.Namespace "Name" (include "common.names.fullname" .) "Length" 10 "Key" "postgresql-password")  -}}
 {{- end -}}
 {{- end -}}
 
@@ -98,7 +98,7 @@ Return PostgreSQL replication password
 {{- else if .Values.replication.password -}}
     {{- .Values.replication.password -}}
 {{- else -}}
-    {{- include "getOrCreateSecret" (dict "Namespace" .Release.Namespace "Name" (include "common.names.fullname" .) "Length" 10 "Key" "postgresql-replication-password")  -}}
+    {{- include "getValueFromSecret" (dict "Namespace" .Release.Namespace "Name" (include "common.names.fullname" .) "Length" 10 "Key" "postgresql-replication-password")  -}}
 {{- end -}}
 {{- end -}}
 
