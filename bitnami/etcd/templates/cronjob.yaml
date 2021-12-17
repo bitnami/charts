@@ -104,7 +104,7 @@ spec:
                   valueFrom:
                     secretKeyRef:
                       name: {{ include "etcd.secretName" . }}
-                      key: etcd-root-password
+                      key: {{ include "etcd.secretPasswordKey" . }}
                 {{- end }}
               {{- if .Values.disasterRecovery.cronjob.resources }}
               resources: {{- toYaml .Values.disasterRecovery.cronjob.resources | nindent 16 }}
