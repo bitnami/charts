@@ -16,7 +16,7 @@ data:
   {{- if .Values.imageRenderer.enabled }}
   {{- $domain := .Values.clusterDomain }}
   {{- $namespace := .Release.Namespace }}
-  GF_RENDERING_SERVER_URL: "http://{{ include "common.names.fullname" . }}-image-renderer.{{ $namespace }}.svc.{{ $domain }}:{{ .Values.imageRenderer.service.ports.grafana }}/render"
+  GF_RENDERING_SERVER_URL: "http://{{ include "common.names.fullname" . }}-image-renderer.{{ $namespace }}.svc.{{ $domain }}:{{ .Values.imageRenderer.service.ports.imageRenderer }}/render"
   GF_RENDERING_CALLBACK_URL: "http://{{ include "common.names.fullname" . }}.{{ $namespace }}.svc.{{ $domain }}:{{ .Values.service.ports.grafana }}/"
   {{- end }}
   {{- if .Values.plugins }}

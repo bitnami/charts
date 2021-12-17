@@ -22,7 +22,5 @@ data:
 {{- with .Files.Glob "files/docker-entrypoint-initdb.d/*.{sh,sql}" }}
 {{ .AsConfig | indent 2 }}
 {{- end }}
-{{- with .Values.initdbScripts }}
-{{ toYaml . | indent 2 }}
-{{- end }}
+{{- include "common.tplvalues.render" (dict "value" .Values.initdbScripts "context" .) | nindent 2 }}
 {{- end }}

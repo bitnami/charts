@@ -32,6 +32,11 @@ spec:
       {{- end }}
       {{- if .Values.imageRenderer.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.imageRenderer.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.imageRenderer.podAffinityPreset "component" "image-renderer" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.imageRenderer.podAntiAffinityPreset "component" "image-renderer" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.imageRenderer.nodeAffinityPreset.type "key" .Values.imageRenderer.nodeAffinityPreset.key "values" .Values.imageRenderer.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.imageRenderer.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.imageRenderer.nodeSelector "context" $) | nindent 8 }}
