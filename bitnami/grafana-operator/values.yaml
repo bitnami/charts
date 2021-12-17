@@ -317,7 +317,7 @@ grafana:
   podSecurityContext:
     enabled: true
     runAsUser: 1001
-    runAsGroup: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     fsGroup: 1001
     supplementalGroups: []
@@ -331,7 +331,7 @@ grafana:
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
-    runAsGroup: 1001
+    runAsGroup: 0
     allowPrivilegeEscalation: false
   ## Grafana containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
