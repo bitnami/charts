@@ -66,7 +66,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/kafka
-  tag: 2.8.1-debian-10-r57
+  tag: 2.8.1-debian-10-r73
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -617,6 +617,40 @@ sidecars: []
 initContainers: []
 
 ## @section Exposure parameters
+networkPolicy:
+  ## @param networkPolicy.enabled Enable creation of NetworkPolicy resources.
+  ##
+  enabled: false
+  ## @param networkPolicy.allowExternal Don't require client label for connections
+  ## The Policy model to apply. When set to false, only pods with the correct
+  ## client label will have network access to Kafka port for client connections (service.port).
+  ## When true, kafka will accept connections from any source
+  ## (with the correct destination port).
+  ##
+  allowExternal: true
+  ## @param networkPolicy.explicitNamespacesSelector A Kubernetes LabelSelector to explicitly select namespaces from which traffic could be allowed
+  ## If explicitNamespacesSelector is missing or set to {}, only client Pods that are in the networkPolicy's namespace
+  ## and that match other criteria, the ones that have the good label, can reach the kafka.
+  ## But sometimes, we want the kafka to be accessible to clients from other namespaces, in this case, we can use this
+  ## LabelSelector to select these namespaces, note that the networkPolicy's namespace should also be explicitly added.
+  ##
+  ## Example:
+  ## explicitNamespacesSelector:
+  ##   matchLabels:
+  ##     role: frontend
+  ##   matchExpressions:
+  ##    - {key: role, operator: In, values: [frontend]}
+  ##
+  explicitNamespacesSelector: {}
+  ## @param networkPolicy.externalAccess.from customize the from section for External Access on tcp-external port
+  ## Example:
+  ## - ipBlock:
+  ##    cidr: 172.9.0.0/16
+  ##    except:
+  ##    - 172.9.1.0/24
+  ##
+  externalAccess:
+    from: []
 
 ## Service parameters
 ##
@@ -678,7 +712,7 @@ externalAccess:
     image:
       registry: docker.io
       repository: bitnami/kubectl
-      tag: 1.19.16-debian-10-r25
+      tag: 1.23.0-debian-10-r5
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -881,7 +915,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r260
+    tag: 10-debian-10-r279
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -937,7 +971,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/kafka-exporter
-      tag: 1.4.2-debian-10-r67
+      tag: 1.4.2-debian-10-r87
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1108,7 +1142,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/jmx-exporter
-      tag: 0.16.1-debian-10-r129
+      tag: 0.16.1-debian-10-r149
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images

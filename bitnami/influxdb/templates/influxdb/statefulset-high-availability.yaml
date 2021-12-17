@@ -65,9 +65,9 @@ spec:
               mkdir -p /bitnami/influxdb/{data,meta,wal}
               chmod 700 /bitnami/influxdb/{data,meta,wal}
               {{- if eq ( toString ( .Values.volumePermissions.securityContext.runAsUser )) "auto" }}
-                chown -R `id -u`:`id -G` /bitnami/influxdb/{data,meta,wal}
+                chown -R `id -u`:`id -G` /bitnami/influxdb
               {{- else }}
-                chown -R {{ .Values.influxdb.securityContext.runAsUser }}:{{ .Values.influxdb.securityContext.fsGroup }} /bitnami/influxdb/{data,meta,wal}
+                chown -R {{ .Values.influxdb.securityContext.runAsUser }}:{{ .Values.influxdb.securityContext.fsGroup }} /bitnami/influxdb
               {{- end }}
           {{- if eq ( toString ( .Values.volumePermissions.securityContext.runAsUser )) "auto" }}
           securityContext:

@@ -318,8 +318,8 @@ data:
     {{- end }}
     printf "\nsentinel myid %s" "$(host_id "$HOSTNAME")" >> /opt/bitnami/redis-sentinel/etc/sentinel.conf
 
-    if [[ -z "$(getent ahosts "$HEADLESS_SERVICE" | grep -v "^${myip}")" ]]; then
-        # Only node available on the network, master by default
+    if ! $(get_sentinel_master_info); then
+        # No master found, lets create a master node
         export REDIS_REPLICATION_MODE="master"
 
         REDIS_MASTER_HOST=$(get_full_hostname "$HOSTNAME")
