@@ -193,8 +193,8 @@ tls:
     pullPolicy: IfNotPresent
   ## e.g:
   ## extraDnsNames
-  ##   "DNS.5": "$my_host"
-  ##   "DNS.6": "$test"
+  ##   "DNS.6": "$my_host"
+  ##   "DNS.7": "$test"
   ##
   extraDnsNames: []
   ## @param tls.mode Allows to set the tls mode which should be used when tls is enabled (options: `allowTLS`, `preferTLS`, `requireTLS`)
