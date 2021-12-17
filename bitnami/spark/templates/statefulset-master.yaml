@@ -148,6 +148,7 @@ spec:
             {{- if .Values.security.ssl.enabled }}
             - name: https
               containerPort: {{ .Values.master.webPortHttps }}
+              protocol: TCP
             {{- end }}
             - name: cluster
               containerPort: {{ .Values.master.clusterPort }}
