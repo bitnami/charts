@@ -319,7 +319,7 @@ mariadbConfiguration: |-
   tmpdir=/opt/bitnami/mariadb/tmp
   socket=/opt/bitnami/mariadb/tmp/mysql.sock
   pid_file=/opt/bitnami/mariadb/tmp/mysqld.pid
-  bind_address=::
+  bind_address=0.0.0.0
 
   ## Character set
   ##
