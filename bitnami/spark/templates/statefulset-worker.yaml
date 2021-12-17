@@ -147,6 +147,11 @@ spec:
             - name: http
               containerPort: {{ .Values.worker.webPort }}
               protocol: TCP
+            {{- if .Values.security.ssl.enabled }}
+            - name: https
+              containerPort: {{ .Values.worker.webPortHttps }}
+              protocol: TCP
+            {{- end }}
           {{- if .Values.worker.clusterPort }}
             - name: cluster
               containerPort: {{ .Values.worker.clusterPort }}

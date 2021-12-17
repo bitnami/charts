@@ -145,6 +145,10 @@ spec:
             - name: http
               containerPort: {{ .Values.master.webPort }}
               protocol: TCP
+            {{- if .Values.security.ssl.enabled }}
+            - name: https
+              containerPort: {{ .Values.master.webPortHttps }}
+            {{- end }}
             - name: cluster
               containerPort: {{ .Values.master.clusterPort }}
           volumeMounts:
