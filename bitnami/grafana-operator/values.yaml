@@ -287,13 +287,9 @@ grafana:
   ## @param grafana.image.pullSecrets Grafana image pull secrets
   ##
   image:
-
-    registry: ghcr.io
-    repository: cellebyte/grafana
-    tag: 8.3.0-devdebian-10-r5
-    # registry: docker.io
-    # repository: bitnami/grafana
-    # tag: 8.3.3-debian-10-r1
+    registry: docker.io
+    repository: bitnami/grafana
+    tag: 8.3.3-debian-10-r1
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
