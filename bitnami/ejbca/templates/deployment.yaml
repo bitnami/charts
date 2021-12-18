@@ -160,8 +160,8 @@ spec:
           {{- end }}
           volumeMounts:
             - name: ejbca-data
-              mountPath: /bitnami/ejbca
-              subPath: ejbca
+              mountPath: /bitnami/wildfly
+              subPath: wildfly
             {{- if .Values.ejbcaKeystoreExistingSecret }}
             - name: ejbca-keystore
               mountPath: /opt/bitnami/ejbca/mounted-jks/keystore.jks
