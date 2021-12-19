@@ -516,19 +516,13 @@ metrics:
     ##
     additionalLabels: {}
     ## @param metrics.prometheusRule.rules Prometheus Rule definitions
-    ##  - alert: ZookeeperSyncedFollowers
-    ##    annotations:
-    ##      message: The number of synced followers for the leader node in Zookeeper deployment my-release is less than 2. This usually means that some of the Zookeeper nodes aren't communicating properly. If it doesn't resolve itself you can try killing the pods (one by one).
-    ##    expr: max(synced_followers{service="my-release-metrics"}) < 2
-    ##    for: 5m
-    ##    labels:
-    ##      severity: critical
-    ##  - alert: ZookeeperOutstandingRequests
-    ##    annotations:
-    ##      message: The number of outstanding requests for Zookeeper pod {{ $labels.pod }} is greater than 10. This can indicate a performance issue with the Pod or cluster a whole.
-    ##    expr: outstanding_requests{service="my-release-metrics"} > 10
-    ##    for: 5m
-    ##    labels:
-    ##      severity: critical
+    ##   - alert: LowInstance
+    ##     expr: up{service="{{ template "common.names.fullname" . }}"} < 1
+    ##     for: 1m
+    ##     labels:
+    ##       severity: critical
+    ##     annotations:
+    ##       description: Service {{ template "common.names.fullname" . }} Apache is down since 1m.
+    ##       summary: Apache instance is down.
     ##
     rules: []
