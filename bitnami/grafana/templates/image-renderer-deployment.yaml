@@ -90,6 +90,9 @@ spec:
               value: "::"
             - name: ENABLE_METRICS
               value: {{ ternary "true" "false" .Values.imageRenderer.metrics.enabled | quote }}
+            {{- if .Values.imageRenderer.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.imageRenderer.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
           ports:
             - name: http
               containerPort: 8080
