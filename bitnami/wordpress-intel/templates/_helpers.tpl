@@ -45,13 +45,6 @@ Return the proper Docker Image Registry Secret Names
 {{- end -}}
 
 {{/*
-Create chart name and version as used by the chart label.
-*/}}
-{{- define "wordpress.customHTAccessCM" -}}
-{{- printf "%s" .Values.customHTAccessCM -}}
-{{- end -}}
-
-{{/*
 Return the WordPress configuration secret
 */}}
 {{- define "wordpress.configSecretName" -}}
@@ -208,7 +201,6 @@ Compile all warnings into a single message.
 {{- define "wordpress.validateValues" -}}
 {{- $messages := list -}}
 {{- $messages := append $messages (include "wordpress.validateValues.configuration" .) -}}
-{{- $messages := append $messages (include "wordpress.validateValues.htaccess" .) -}}
 {{- $messages := append $messages (include "wordpress.validateValues.database" .) -}}
 {{- $messages := append $messages (include "wordpress.validateValues.cache" .) -}}
 {{- $messages := without $messages "" -}}
@@ -226,18 +218,6 @@ Validate values of WordPress - Custom wp-config.php
 wordpress: wordpressConfiguration
     You are trying to use a wp-config.php file. This setup is only supported
     when skipping wizard installation (--set wordpressSkipInstall=true).
-{{- end -}}
-{{- end -}}
-
-{{/*
-Validate values of WordPress - htaccess configuration
-*/}}
-{{- define "wordpress.validateValues.htaccess" -}}
-{{- if and .Values.customHTAccessCM .Values.allowOverrideNone -}}
-wordpress: customHTAccessCM
-    You are trying to use custom htaccess rules but Apache was configured
-    to prohibit overriding directives with htaccess files. To use this feature,
-    allow overriding Apache directives (--set allowOverrideNone=false).
 {{- end -}}
 {{- end -}}
 

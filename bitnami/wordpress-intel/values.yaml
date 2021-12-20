@@ -153,13 +153,27 @@ wordpressAutoUpdateLevel: none
 ## NOTE: If set to all, only plugins that are already installed will be activated, and if set to none, no plugins will be activated
 ##
 wordpressPlugins: none
-## @param apacheConfiguration The content for your custom httpd.conf file (advanced feature)
+## @param serverBlock Custom server block to be added to NGINX configuration
+## PHP-FPM example server block:
+## serverBlock: |-
+##   server {
+##     listen 0.0.0.0:8080;
+##     root /app;
+##     location / {
+##       index index.html index.php;
+##     }
+##     location ~ \.php$ {
+##       fastcgi_pass phpfpm-server:9000;
+##       fastcgi_index index.php;
+##       include fastcgi.conf;
+##     }
+##   }
 ##
-apacheConfiguration: ""
-## @param existingApacheConfigurationConfigMap The name of an existing secret with your custom httpd.conf file (advanced feature)
-## NOTE: When it's set the `apacheConfiguration` parameter is ignored
+serverBlock: ""
+## @param existingServerBlockConfigmap ConfigMap with custom server block to be added to NGINX configuration
+## NOTE: This will override serverBlock
 ##
-existingApacheConfigurationConfigMap: ""
+existingServerBlockConfigmap: ""
 ## @param customPostInitScripts Custom post-init.d user scripts
 ## ref: https://github.com/bitnami/bitnami-docker-wordpress/tree/master/5/debian-10/rootfs/post-init.d
 ## NOTE: supported formats are `.sh`, `.sql` or `.php`
@@ -199,19 +213,6 @@ smtpExistingSecret: ""
 ## @param allowEmptyPassword Allow the container to be started with blank passwords
 ##
 allowEmptyPassword: true
-## @param allowOverrideNone Configure Apache to prohibit overriding directives with htaccess files
-##
-allowOverrideNone: false
-## @param htaccessPersistenceEnabled Persist custom changes on htaccess files
-## If `allowOverrideNone` is `false`, it will persist `/opt/bitnami/wordpress/wordpress-htaccess.conf`
-## If `allowOverrideNone` is `true`, it will persist `/opt/bitnami/wordpress/.htaccess`
-##
-htaccessPersistenceEnabled: false
-## @param customHTAccessCM The name of an existing ConfigMap with custom htaccess rules
-## NOTE: Must contain key `wordpress-htaccess.conf` with the file content
-## NOTE: Requires setting `allowOverrideNone=false`
-##
-customHTAccessCM: ""
 ## @param command Override default container command (useful when using custom images)
 ##
 command: []
@@ -276,11 +277,7 @@ serviceAccountName: default
 ## @param hostAliases [array] WordPress pod host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
-hostAliases:
-  ## Required for apache-exporter to work
-  - ip: "127.0.0.1"
-    hostnames:
-      - "status.localhost"
+hostAliases: []
 ## @param extraVolumes Optionally specify extra list of additional volumes for WordPress pods
 ##
 extraVolumes: []
@@ -722,18 +719,20 @@ metrics:
   ## @param metrics.enabled Start a sidecar prometheus exporter to expose metrics
   ##
   enabled: false
-  ## Bitnami Apache Exporter image
-  ## ref: https://hub.docker.com/r/bitnami/apache-exporter/tags/
-  ## @param metrics.image.registry Apache Exporter image registry
-  ## @param metrics.image.repository Apache Exporter image repository
-  ## @param metrics.image.tag Apache Exporter image tag (immutable tags are recommended)
-  ## @param metrics.image.pullPolicy Apache Exporter image pull policy
-  ## @param metrics.image.pullSecrets Apache Exporter image pull secrets
+  ## @param metrics.port NGINX Container Status Port scraped by Prometheus Exporter
+  ## Defaults to specified http port
+  port: ""
+  ## ref: https://hub.docker.com/r/bitnami/nginx-exporter/tags/
+  ## @param metrics.image.registry NGINX Prometheus exporter image registry
+  ## @param metrics.image.repository NGINX Prometheus exporter image repository
+  ## @param metrics.image.tag NGINX Prometheus exporter image tag (immutable tags are recommended)
+  ## @param metrics.image.pullPolicy NGINX Prometheus exporter image pull policy
+  ## @param metrics.image.pullSecrets Specify docker-registry secret names as an array
   ##
   image:
     registry: docker.io
-    repository: bitnami/apache-exporter
-    tag: 0.10.1-debian-10-r83
+    repository: bitnami/nginx-exporter
+    tag: 0.9.0-debian-10-r235
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -756,7 +755,7 @@ metrics:
   service:
     ## @param metrics.service.port Metrics service port
     ##
-    port: 9117
+    port: 9113
     ## @param metrics.service.annotations [object] Additional custom annotations for Metrics service
     ##
     annotations:

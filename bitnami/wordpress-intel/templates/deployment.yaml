@@ -145,10 +145,6 @@ spec:
               value: {{ .Values.wordpressFirstName | quote }}
             - name: WORDPRESS_LAST_NAME
               value: {{ .Values.wordpressLastName | quote }}
-            - name: WORDPRESS_HTACCESS_OVERRIDE_NONE
-              value: {{ ternary "yes" "no" .Values.allowOverrideNone | quote }}
-            - name: WORDPRESS_ENABLE_HTACCESS_PERSISTENCE
-              value: {{ ternary "yes" "no" .Values.htaccessPersistenceEnabled | quote }}
             - name: WORDPRESS_BLOG_NAME
               value: {{ .Values.wordpressBlogName | quote }}
             - name: WORDPRESS_SKIP_BOOTSTRAP
@@ -248,15 +244,21 @@ spec:
               mountPath: /opt/bitnami/wordpress/wp-config.php
               subPath: wp-config.php
             {{- end }}
-            {{- if or .Values.apacheConfiguration .Values.existingApacheConfigurationConfigMap }}
-            - name: apache-config
-              mountPath: /opt/bitnami/apache/conf/httpd.conf
-              subPath: httpd.conf
+            {{- if or .Values.serverBlock .Values.existingServerBlockConfigmap}}
+            - name: nginx-server-block-paths
+              mountPath: /opt/bitnami/nginx/conf/server_blocks
             {{- end }}
-            {{- if and (not .Values.allowOverrideNone) .Values.customHTAccessCM }}
-            - mountPath: /opt/bitnami/apache/conf/vhosts/htaccess
-              name: custom-htaccess
+            {{- if or .Values.serverBlock .Values.existingServerBlockConfigmap }}
+            - name: nginx-server-block
+              mountPath: /opt/bitnami/nginx/conf/server_blocks/common
+            - name: nginx-server-block-paths
+              mountPath: /opt/bitnami/nginx/conf/server_blocks
             {{- end }}
+            {{- if or .Values.serverBlock .Values.existingServerBlockConfigmap }}
+            - name: nginx-server-block
+              mountPath: /opt/bitnami/nginx/conf/server_blocks/common
+            {{- end }}
+
             {{- if or .Values.customPostInitScripts .Values.wordpressConfigureCache }}
             - mountPath: /docker-entrypoint-init.d
               name: custom-postinit
@@ -310,20 +312,23 @@ spec:
             secretName: {{ include "wordpress.configSecretName" . }}
             defaultMode: 0644
         {{- end }}
-        {{- if or .Values.apacheConfiguration .Values.existingApacheConfigurationConfigMap }}
-        - name: apache-config
+        - name: nginx-server-block-paths
           configMap:
-            name: {{ include "wordpress.apache.configmapName" . }}
-            defaultMode: 0644
-        {{- end }}
-        {{- if and (not .Values.allowOverrideNone) .Values.customHTAccessCM }}
-        - name: custom-htaccess
-          configMap:
-            name: {{ template "wordpress.customHTAccessCM" . }}
+            name: {{ template "common.names.fullname" . }}-server-block
             items:
-              - key: wordpress-htaccess.conf
-                path: wordpress-htaccess.conf
+              - key: server-blocks-paths.conf
+                path: server-blocks-paths.conf
+        {{- if or .Values.serverBlock .Values.existingServerBlockConfigmap }}
+        - name: nginx-server-block
+          configMap:
+            name: {{ include "nginx.serverBlockConfigmapName" . }}
+            {{- if or .Values.serverBlock }}
+            items:
+              - key: server-block.conf
+                path: server-block.conf
+            {{- end }}
         {{- end }}
+
         {{- if or .Values.customPostInitScripts .Values.wordpressConfigureCache }}
         - name: custom-postinit
           configMap:
