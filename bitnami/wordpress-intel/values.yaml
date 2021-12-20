@@ -153,6 +153,27 @@ wordpressAutoUpdateLevel: none
 ## NOTE: If set to all, only plugins that are already installed will be activated, and if set to none, no plugins will be activated
 ##
 wordpressPlugins: none
+## @param serverBlock Custom server block to be added to NGINX configuration
+## PHP-FPM example server block:
+## serverBlock: |-
+##   server {
+##     listen 0.0.0.0:8080;
+##     root /app;
+##     location / {
+##       index index.html index.php;
+##     }
+##     location ~ \.php$ {
+##       fastcgi_pass phpfpm-server:9000;
+##       fastcgi_index index.php;
+##       include fastcgi.conf;
+##     }
+##   }
+##
+serverBlock: ""
+## @param existingServerBlockConfigmap ConfigMap with custom server block to be added to NGINX configuration
+## NOTE: This will override serverBlock
+##
+existingServerBlockConfigmap: ""
 ## @param customPostInitScripts Custom post-init.d user scripts
 ## ref: https://github.com/bitnami/bitnami-docker-wordpress/tree/master/5/debian-10/rootfs/post-init.d
 ## NOTE: supported formats are `.sh`, `.sql` or `.php`
@@ -686,18 +707,20 @@ metrics:
   ## @param metrics.enabled Start a sidecar prometheus exporter to expose metrics
   ##
   enabled: false
-  ## Bitnami Apache Exporter image
-  ## ref: https://hub.docker.com/r/bitnami/apache-exporter/tags/
-  ## @param metrics.image.registry Apache Exporter image registry
-  ## @param metrics.image.repository Apache Exporter image repository
-  ## @param metrics.image.tag Apache Exporter image tag (immutable tags are recommended)
-  ## @param metrics.image.pullPolicy Apache Exporter image pull policy
-  ## @param metrics.image.pullSecrets Apache Exporter image pull secrets
+  ## @param metrics.port NGINX Container Status Port scraped by Prometheus Exporter
+  ## Defaults to specified http port
+  port: ""
+  ## ref: https://hub.docker.com/r/bitnami/nginx-exporter/tags/
+  ## @param metrics.image.registry NGINX Prometheus exporter image registry
+  ## @param metrics.image.repository NGINX Prometheus exporter image repository
+  ## @param metrics.image.tag NGINX Prometheus exporter image tag (immutable tags are recommended)
+  ## @param metrics.image.pullPolicy NGINX Prometheus exporter image pull policy
+  ## @param metrics.image.pullSecrets Specify docker-registry secret names as an array
   ##
   image:
     registry: docker.io
-    repository: bitnami/apache-exporter
-    tag: 0.10.1-debian-10-r83
+    repository: bitnami/nginx-exporter
+    tag: 0.9.0-debian-10-r235
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

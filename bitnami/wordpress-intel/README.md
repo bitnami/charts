@@ -79,7 +79,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ---------------------------------------------------- | --------------------- |
 | `image.registry`    | WordPress image registry                             | `docker.io`           |
 | `image.repository`  | WordPress image repository                           | `bitnami/wordpress`   |
-| `image.tag`         | WordPress image tag (immutable tags are recommended) | `5.8.2-debian-10-r16` |
+| `image.tag`         | WordPress image tag (immutable tags are recommended) | `5.8.2-debian-10-r34` |
 | `image.pullPolicy`  | WordPress image pull policy                          | `IfNotPresent`        |
 | `image.pullSecrets` | WordPress image pull secrets                         | `[]`                  |
 | `image.debug`       | Enable image debug mode                              | `false`               |
@@ -105,6 +105,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `wordpressConfigureCache`              | Enable W3 Total Cache plugin and configure cache settings                             | `false`            |
 | `wordpressAutoUpdateLevel`             | Level of auto-updates to allow. Allowed values: `major`, `minor` or `none`.           | `none`             |
 | `wordpressPlugins`                     | Array of plugins to install and activate. Can be specified as `all` or `none`.        | `none`             |
+| `serverBlock`                          | Custom server block to be added to NGINX configuration                                | `""`               |
+| `existingServerBlockConfigmap`         | ConfigMap with custom server block to be added to NGINX configuration                 | `""`               |
 | `customPostInitScripts`                | Custom post-init.d user scripts                                                       | `{}`               |
 | `smtpHost`                             | SMTP server host                                                                      | `""`               |
 | `smtpPort`                             | SMTP server port                                                                      | `""`               |
@@ -224,7 +226,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                   | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`            | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`          | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r263`     |
+| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r280`     |
 | `volumePermissions.image.pullPolicy`          | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`         | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`          | The resources limits for the init container                                                     | `{}`                    |
@@ -248,25 +250,26 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Metrics Parameters
 
-| Name                                      | Description                                                                  | Value                     |
-| ----------------------------------------- | ---------------------------------------------------------------------------- | ------------------------- |
-| `metrics.enabled`                         | Start a sidecar prometheus exporter to expose metrics                        | `false`                   |
-| `metrics.image.registry`                  | Apache Exporter image registry                                               | `docker.io`               |
-| `metrics.image.repository`                | Apache Exporter image repository                                             | `bitnami/apache-exporter` |
-| `metrics.image.tag`                       | Apache Exporter image tag (immutable tags are recommended)                   | `0.10.1-debian-10-r66`    |
-| `metrics.image.pullPolicy`                | Apache Exporter image pull policy                                            | `IfNotPresent`            |
-| `metrics.image.pullSecrets`               | Apache Exporter image pull secrets                                           | `[]`                      |
-| `metrics.resources.limits`                | The resources limits for the Prometheus exporter container                   | `{}`                      |
-| `metrics.resources.requests`              | The requested resources for the Prometheus exporter container                | `{}`                      |
-| `metrics.service.port`                    | Metrics service port                                                         | `9117`                    |
-| `metrics.service.annotations`             | Additional custom annotations for Metrics service                            | `{}`                      |
-| `metrics.serviceMonitor.enabled`          | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator | `false`                   |
-| `metrics.serviceMonitor.namespace`        | The namespace in which the ServiceMonitor will be created                    | `""`                      |
-| `metrics.serviceMonitor.interval`         | The interval at which metrics should be scraped                              | `30s`                     |
-| `metrics.serviceMonitor.scrapeTimeout`    | The timeout after which the scrape is ended                                  | `""`                      |
-| `metrics.serviceMonitor.relabellings`     | Metrics relabellings to add to the scrape endpoint                           | `[]`                      |
-| `metrics.serviceMonitor.honorLabels`      | Labels to honor to add to the scrape endpoint                                | `false`                   |
-| `metrics.serviceMonitor.additionalLabels` | Additional custom labels for the ServiceMonitor                              | `{}`                      |
+| Name                                      | Description                                                                  | Value                    |
+| ----------------------------------------- | ---------------------------------------------------------------------------- | ------------------------ |
+| `metrics.enabled`                         | Start a sidecar prometheus exporter to expose metrics                        | `false`                  |
+| `metrics.port`                            | NGINX Container Status Port scraped by Prometheus Exporter                   | `""`                     |
+| `metrics.image.registry`                  | NGINX Prometheus exporter image registry                                     | `docker.io`              |
+| `metrics.image.repository`                | NGINX Prometheus exporter image repository                                   | `bitnami/nginx-exporter` |
+| `metrics.image.tag`                       | NGINX Prometheus exporter image tag (immutable tags are recommended)         | `0.9.0-debian-10-r235`   |
+| `metrics.image.pullPolicy`                | NGINX Prometheus exporter image pull policy                                  | `IfNotPresent`           |
+| `metrics.image.pullSecrets`               | Specify docker-registry secret names as an array                             | `[]`                     |
+| `metrics.resources.limits`                | The resources limits for the Prometheus exporter container                   | `{}`                     |
+| `metrics.resources.requests`              | The requested resources for the Prometheus exporter container                | `{}`                     |
+| `metrics.service.port`                    | Metrics service port                                                         | `9113`                   |
+| `metrics.service.annotations`             | Additional custom annotations for Metrics service                            | `{}`                     |
+| `metrics.serviceMonitor.enabled`          | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator | `false`                  |
+| `metrics.serviceMonitor.namespace`        | The namespace in which the ServiceMonitor will be created                    | `""`                     |
+| `metrics.serviceMonitor.interval`         | The interval at which metrics should be scraped                              | `30s`                    |
+| `metrics.serviceMonitor.scrapeTimeout`    | The timeout after which the scrape is ended                                  | `""`                     |
+| `metrics.serviceMonitor.relabellings`     | Metrics relabellings to add to the scrape endpoint                           | `[]`                     |
+| `metrics.serviceMonitor.honorLabels`      | Labels to honor to add to the scrape endpoint                                | `false`                  |
+| `metrics.serviceMonitor.additionalLabels` | Additional custom labels for the ServiceMonitor                              | `{}`                     |
 
 
 ### NetworkPolicy parameters
