@@ -7,15 +7,15 @@ dependencies:
   version: 5.7.13
 - name: elasticsearch
   repository: https://charts.bitnami.com/bitnami
-  version: 17.5.3
+  version: 17.5.4
 - name: logstash
   repository: https://charts.bitnami.com/bitnami
-  version: 3.6.21
+  version: 3.6.22
 - name: wavefront
   repository: https://charts.bitnami.com/bitnami
   version: 3.1.23
 - name: common
   repository: https://charts.bitnami.com/bitnami
   version: 1.10.3
-digest: sha256:f910a451c232061533b1b0b249a19fe98606b44b4769784681e53432f63e42bc
-generated: "2021-12-17T20:56:41.406309335Z"
+digest: sha256:388b5625c13635f26ef25bff93344b334914d83154002cc3c52a1e5bd4587f1a
+generated: "2021-12-20T10:10:36.49666452Z"
