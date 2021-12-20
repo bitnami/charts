@@ -349,6 +349,7 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `imageRenderer.nodeAffinityPreset.type`              | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`               | `""`                             |
 | `imageRenderer.nodeAffinityPreset.key`               | Node label key to match Ignored if `affinity` is set.                                                   | `""`                             |
 | `imageRenderer.nodeAffinityPreset.values`            | Node label values to match. Ignored if `affinity` is set.                                               | `[]`                             |
+| `imageRenderer.extraEnvVars`                         | Array containing extra env vars to configure Grafana                                                    | `{}`                             |
 | `imageRenderer.affinity`                             | Affinity for pod assignment                                                                             | `{}`                             |
 | `imageRenderer.resources.limits`                     | The resources limits for Grafana containers                                                             | `{}`                             |
 | `imageRenderer.resources.requests`                   | The requested resources for Grafana containers                                                          | `{}`                             |
