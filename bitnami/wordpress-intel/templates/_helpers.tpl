@@ -45,6 +45,13 @@ Return the proper Docker Image Registry Secret Names
 {{- end -}}
 
 {{/*
+Create chart name and version as used by the chart label.
+*/}}
+{{- define "wordpress.customHTAccessCM" -}}
+{{- printf "%s" .Values.customHTAccessCM -}}
+{{- end -}}
+
+{{/*
 Return the WordPress configuration secret
 */}}
 {{- define "wordpress.configSecretName" -}}
