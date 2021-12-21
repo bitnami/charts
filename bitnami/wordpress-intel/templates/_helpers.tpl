@@ -196,6 +196,17 @@ Return the SMTP Secret Name
 {{- end -}}
 
 {{/*
+Return the custom NGINX server block configmap.
+*/}}
+{{- define "nginx.serverBlockConfigmapName" -}}
+{{- if .Values.existingServerBlockConfigmap -}}
+    {{- printf "%s" (tpl .Values.existingServerBlockConfigmap $) -}}
+{{- else -}}
+    {{- printf "%s-server-block" (include "common.names.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Compile all warnings into a single message.
 */}}
 {{- define "wordpress.validateValues" -}}

@@ -155,21 +155,11 @@ wordpressAutoUpdateLevel: none
 wordpressPlugins: none
 ## @param serverBlock Custom server block to be added to NGINX configuration
 ## PHP-FPM example server block:
-## serverBlock: |-
-##   server {
-##     listen 0.0.0.0:8080;
-##     root /app;
-##     location / {
-##       index index.html index.php;
-##     }
-##     location ~ \.php$ {
-##       fastcgi_pass phpfpm-server:9000;
-##       fastcgi_index index.php;
-##       include fastcgi.conf;
-##     }
-##   }
+serverBlock: |-
+  #This is a update
+
 ##
-serverBlock: ""
+##serverBlock: ""
 ## @param existingServerBlockConfigmap ConfigMap with custom server block to be added to NGINX configuration
 ## NOTE: This will override serverBlock
 ##
