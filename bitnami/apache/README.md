@@ -75,13 +75,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ---------------------- |
 | `image.registry`                       | Apache image registry                                                                                                    | `docker.io`            |
 | `image.repository`                     | Apache image repository                                                                                                  | `bitnami/apache`       |
-| `image.tag`                            | Apache image tag (immutable tags are recommended)                                                                        | `2.4.51-debian-10-r43` |
+| `image.tag`                            | Apache image tag (immutable tags are recommended)                                                                        | `2.4.51-debian-10-r49` |
 | `image.pullPolicy`                     | Apache image pull policy                                                                                                 | `IfNotPresent`         |
 | `image.pullSecrets`                    | Apache image pull secrets                                                                                                | `[]`                   |
 | `image.debug`                          | Enable image debug mode                                                                                                  | `false`                |
 | `git.registry`                         | Git image registry                                                                                                       | `docker.io`            |
 | `git.repository`                       | Git image name                                                                                                           | `bitnami/git`          |
-| `git.tag`                              | Git image tag                                                                                                            | `2.34.0-debian-10-r3`  |
+| `git.tag`                              | Git image tag                                                                                                            | `2.34.1-debian-10-r17` |
 | `git.pullPolicy`                       | Git image pull policy                                                                                                    | `IfNotPresent`         |
 | `git.pullSecrets`                      | Specify docker-registry secret names as an array                                                                         | `[]`                   |
 | `replicaCount`                         | Number of replicas of the Apache deployment                                                                              | `1`                    |
@@ -175,17 +175,30 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Metrics Parameters
 
-| Name                         | Description                                                  | Value                     |
-| ---------------------------- | ------------------------------------------------------------ | ------------------------- |
-| `metrics.enabled`            | Start a sidecar prometheus exporter to expose Apache metrics | `false`                   |
-| `metrics.image.registry`     | Apache Exporter image registry                               | `docker.io`               |
-| `metrics.image.repository`   | Apache Exporter image repository                             | `bitnami/apache-exporter` |
-| `metrics.image.tag`          | Apache Exporter image tag (immutable tags are recommended)   | `0.10.1-debian-10-r59`    |
-| `metrics.image.pullPolicy`   | Apache Exporter image pull policy                            | `IfNotPresent`            |
-| `metrics.image.pullSecrets`  | Apache Exporter image pull secrets                           | `[]`                      |
-| `metrics.podAnnotations`     | Additional custom annotations for Apache exporter service    | `{}`                      |
-| `metrics.resources.limits`   | The resources limits for the container                       | `{}`                      |
-| `metrics.resources.requests` | The requested resources for the container                    | `{}`                      |
+| Name                                       | Description                                                                                                                               | Value                     |
+| ------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
+| `metrics.enabled`                          | Start a sidecar prometheus exporter to expose Apache metrics                                                                              | `false`                   |
+| `metrics.image.registry`                   | Apache Exporter image registry                                                                                                            | `docker.io`               |
+| `metrics.image.repository`                 | Apache Exporter image repository                                                                                                          | `bitnami/apache-exporter` |
+| `metrics.image.tag`                        | Apache Exporter image tag (immutable tags are recommended)                                                                                | `0.10.1-debian-10-r81`    |
+| `metrics.image.pullPolicy`                 | Apache Exporter image pull policy                                                                                                         | `IfNotPresent`            |
+| `metrics.image.pullSecrets`                | Apache Exporter image pull secrets                                                                                                        | `[]`                      |
+| `metrics.podAnnotations`                   | Additional custom annotations for Apache exporter service                                                                                 | `{}`                      |
+| `metrics.resources.limits`                 | The resources limits for the container                                                                                                    | `{}`                      |
+| `metrics.resources.requests`               | The requested resources for the container                                                                                                 | `{}`                      |
+| `metrics.service.port`                     | Metrics service port                                                                                                                      | `9117`                    |
+| `metrics.service.annotations`              | Additional custom annotations for Metrics service                                                                                         | `{}`                      |
+| `metrics.serviceMonitor.enabled`           | if `true`, creates a Prometheus Operator PodMonitor (also requires `metrics.enabled` to be `true`)                                        | `false`                   |
+| `metrics.serviceMonitor.namespace`         | Namespace for the PodMonitor Resource (defaults to the Release Namespace)                                                                 | `""`                      |
+| `metrics.serviceMonitor.interval`          | Interval at which metrics should be scraped.                                                                                              | `""`                      |
+| `metrics.serviceMonitor.scrapeTimeout`     | Timeout after which the scrape is ended                                                                                                   | `""`                      |
+| `metrics.serviceMonitor.additionalLabels`  | Additional labels that can be used so PodMonitor will be discovered by Prometheus                                                         | `{}`                      |
+| `metrics.serviceMonitor.relabelings`       | RelabelConfigs to apply to samples before scraping                                                                                        | `[]`                      |
+| `metrics.serviceMonitor.metricRelabelings` | MetricRelabelConfigs to apply to samples before ingestion                                                                                 | `[]`                      |
+| `metrics.prometheusRule.enabled`           | if `true`, creates a Prometheus Operator PrometheusRule (also requires `metrics.enabled` to be `true` and `metrics.prometheusRule.rules`) | `false`                   |
+| `metrics.prometheusRule.namespace`         | Namespace for the PrometheusRule Resource (defaults to the Release Namespace)                                                             | `""`                      |
+| `metrics.prometheusRule.additionalLabels`  | Additional labels that can be used so PrometheusRule will be discovered by Prometheus                                                     | `{}`                      |
+| `metrics.prometheusRule.rules`             | Prometheus Rule definitions                                                                                                               | `[]`                      |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
