@@ -117,10 +117,10 @@ phpfpm:
     enabled: true
     tcpSocket:
       port: 9000
-    initialDelaySeconds: 15
+    initialDelaySeconds: 30
     periodSeconds: 10
     timeoutSeconds: 5
-    failureThreshold: 3
+    failureThreshold: 5
     successThreshold: 1
   ## @param phpfpm.readinessProbe.enabled Enable readinessProbe on phpfpm containers
   ## @param phpfpm.readinessProbe.tcpSocket.port Liveness Probe TCP Socket
@@ -134,10 +134,10 @@ phpfpm:
     enabled: true
     tcpSocket:
       port: 9000
-    initialDelaySeconds: 15
+    initialDelaySeconds: 30
     periodSeconds: 10
     timeoutSeconds: 5
-    failureThreshold: 3
+    failureThreshold: 5
     successThreshold: 1
   ## @param phpfpm.customLivenessProbe Custom livenessProbe that overrides the default one
   ##
