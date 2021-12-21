@@ -71,7 +71,7 @@ phpfpm:
   image:
     registry: docker.io
     repository: bitnami/php-fpm
-    tag: 7.4.26-prod-debian-10-r26
+    tag: 8.1.1-debian-10-r6
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
