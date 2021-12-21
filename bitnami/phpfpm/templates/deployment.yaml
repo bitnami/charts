@@ -1,0 +1,165 @@
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: {{ template "common.names.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: phpfpm
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.phpfpm.replicaCount }}
+  {{- if .Values.phpfpm.updateStrategy }}
+  strategy: {{- toYaml .Values.phpfpm.updateStrategy | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: phpfpm
+  template:
+    metadata:
+      {{- if .Values.phpfpm.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.phpfpm.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        app.kubernetes.io/component: phpfpm
+        {{- if .Values.phpfpm.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.phpfpm.podLabels "context" $) | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- include "phpfpm.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.phpfpm.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.phpfpm.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.phpfpm.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.phpfpm.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.phpfpm.podAffinityPreset "component" "phpfpm" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.phpfpm.podAntiAffinityPreset "component" "phpfpm" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.phpfpm.nodeAffinityPreset.type "key" .Values.phpfpm.nodeAffinityPreset.key "values" .Values.phpfpm.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.phpfpm.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.phpfpm.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.phpfpm.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.phpfpm.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.phpfpm.priorityClassName }}
+      priorityClassName: {{ .Values.phpfpm.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.phpfpm.schedulerName }}
+      schedulerName: {{ .Values.phpfpm.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.phpfpm.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.phpfpm.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+        {{- if .Values.phpfpm.initContainers }}
+      initContainers:        
+          {{- include "common.tplvalues.render" (dict "value" .Values.phpfpm.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+      containers:
+        - name: phpfpm
+          image: {{ template "phpfpm.image" . }}
+          imagePullPolicy: {{ .Values.phpfpm.image.pullPolicy }}
+          {{- if .Values.phpfpm.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.phpfpm.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.phpfpm.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.phpfpm.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.phpfpm.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.phpfpm.args "context" $) | nindent 12 }}
+          {{- end }}
+          env:
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" (or .Values.phpfpm.image.debug .Values.diagnosticMode.enabled) | quote }}
+            {{- if .Values.phpfpm.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.phpfpm.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.phpfpm.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.phpfpm.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.phpfpm.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.phpfpm.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- if .Values.phpfpm.resources }}
+          resources: {{- toYaml .Values.phpfpm.resources | nindent 12 }}
+          {{- end }}
+          ports:
+            - name: tcp
+              containerPort: {{ .Values.phpfpm.containerPorts.tcp }}
+          {{- if .Values.containerExtraPorts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.containerExtraPorts "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.phpfpm.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.phpfpm.livenessProbe "enabled") "context" $) | nindent 12 }}
+          {{- else if .Values.phpfpm.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.phpfpm.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.phpfpm.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.phpfpm.readinessProbe "enabled") "context" $) | nindent 12 }}
+          {{- else if .Values.phpfpm.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.phpfpm.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- end }}
+          {{- if .Values.phpfpm.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.phpfpm.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+          {{- if or (.Files.Glob "files/conf.d/*.ini") .Values.phpfpmExtendedConfiguration .Values.phpfpmExtendedConfConfigMap }}  
+            - name: phpfpm-ini
+              mountPath: /opt/bitnami/php/etc/conf.d/
+          {{- end }}      
+          {{ if or (.Files.Glob "files/php-fpm.conf") .Values.phpfpmConfiguration  .Values.phpfpmExistingConfigmap }}  
+            - name: phpfpm-config
+              subPath: php-fpm.conf
+              mountPath: /opt/bitnami/php/etc/php-fpm.conf
+          {{- end }}       
+          {{- if .Values.phpfpm.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.phpfpm.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.phpfpm.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.phpfpm.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+      {{- if and (or (.Files.Glob "files/conf.d/*.ini") .Values.phpfpmExtendedConfiguration) (not .Values.phpfpmExtendedConfConfigMap)}}  
+        - name: phpfpm-ini
+          configMap:
+            name: {{ template "common.names.fullname" . }}-ini
+      {{- end }}      
+      {{- if .Values.phpfpmExtendedConfConfigMap }}
+        - name: phpfpm-ini
+          configMap:
+            name: {{ .Values.phpfpmExtendedConfConfigMap }}
+      {{- end }}
+      {{ if and (or (.Files.Glob "files/php-fpm.conf") .Values.phpfpmConfiguration ) (not .Values.phpfpmExistingConfigmap) }}  
+        - name: phpfpm-config
+          configMap:
+            items:
+              - key: php-fpm.conf
+                path: php-fpm.conf
+            name: {{ template "common.names.fullname" . }}-php-fpm
+      {{- end }}      
+      {{- if .Values.phpfpmExtendedConfConfigMap }}
+        - name: phpfpm-config
+          configMap:
+            items:
+              - key: php-fpm.conf
+                path: php-fpm.conf          
+            name: {{ .Values.phpfpmExistingConfigmap }}
+      {{- end }}                
+        {{- if .Values.phpfpm.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.phpfpm.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}

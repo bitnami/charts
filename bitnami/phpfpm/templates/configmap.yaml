@@ -1,0 +1,22 @@
+{{ if and (or (.Files.Glob "files/php-fpm.conf") .Values.phpfpmConfiguration ) (not .Values.phpfpmExistingConfigmap) }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "common.names.fullname" . }}-php-fpm
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: phpfpm
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+data:
+{{- if (.Files.Glob "files/php-fpm.conf") }}
+{{ (.Files.Glob "files/php-fpm.conf").AsConfig | indent 2 }}
+{{- else if .Values.phpfpmConfiguration }}  
+  php-fpm.conf: |
+    {{- include "common.tplvalues.render" ( dict "value" .Values.phpfpmConfiguration "context" $ ) | nindent 4 }}
+{{- end }}    
+{{- end }}  
