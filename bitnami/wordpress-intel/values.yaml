@@ -155,21 +155,11 @@ wordpressAutoUpdateLevel: none
 wordpressPlugins: none
 ## @param serverBlock Custom server block to be added to NGINX configuration
 ## PHP-FPM example server block:
-## serverBlock: |-
-##   server {
-##     listen 0.0.0.0:8080;
-##     root /app;
-##     location / {
-##       index index.html index.php;
-##     }
-##     location ~ \.php$ {
-##       fastcgi_pass phpfpm-server:9000;
-##       fastcgi_index index.php;
-##       include fastcgi.conf;
-##     }
-##   }
+serverBlock: |-
+  #This is a update
+
 ##
-serverBlock: ""
+##serverBlock: ""
 ## @param existingServerBlockConfigmap ConfigMap with custom server block to be added to NGINX configuration
 ## NOTE: This will override serverBlock
 ##
@@ -178,18 +168,6 @@ existingServerBlockConfigmap: ""
 ## ref: https://github.com/bitnami/bitnami-docker-wordpress/tree/master/5/debian-10/rootfs/post-init.d
 ## NOTE: supported formats are `.sh`, `.sql` or `.php`
 ## NOTE: scripts are exclusively executed during the 1st boot of the container
-## e.g:
-## customPostInitScripts:
-##   enable-multisite.sh: |
-##     #!/bin/bash
-##     chmod +w /bitnami/wordpress/wp-config.php
-##     wp core multisite-install --url=example.com --title="Welcome to the WordPress Multisite" --admin_user="doesntmatternotreallyused" --admin_password="doesntmatternotreallyused" --admin_email="user@example.com"
-##     cat /docker-entrypoint-init.d/.htaccess > /bitnami/wordpress/.htaccess
-##     chmod -w bitnami/wordpress/wp-config.php
-##   .htaccess: |
-##     RewriteEngine On
-##     RewriteBase /
-##     ...
 ##
 customPostInitScripts: {}
 ## SMTP mail delivery configuration
