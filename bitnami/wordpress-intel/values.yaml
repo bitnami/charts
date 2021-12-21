@@ -153,17 +153,6 @@ wordpressAutoUpdateLevel: none
 ## NOTE: If set to all, only plugins that are already installed will be activated, and if set to none, no plugins will be activated
 ##
 wordpressPlugins: none
-## @param serverBlock Custom server block to be added to NGINX configuration
-## PHP-FPM example server block:
-serverBlock: |-
-  #This is a update
-
-##
-##serverBlock: ""
-## @param existingServerBlockConfigmap ConfigMap with custom server block to be added to NGINX configuration
-## NOTE: This will override serverBlock
-##
-existingServerBlockConfigmap: ""
 ## @param customPostInitScripts Custom post-init.d user scripts
 ## ref: https://github.com/bitnami/bitnami-docker-wordpress/tree/master/5/debian-10/rootfs/post-init.d
 ## NOTE: supported formats are `.sh`, `.sql` or `.php`

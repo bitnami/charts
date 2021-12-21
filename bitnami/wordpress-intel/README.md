@@ -105,8 +105,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `wordpressConfigureCache`              | Enable W3 Total Cache plugin and configure cache settings                             | `false`            |
 | `wordpressAutoUpdateLevel`             | Level of auto-updates to allow. Allowed values: `major`, `minor` or `none`.           | `none`             |
 | `wordpressPlugins`                     | Array of plugins to install and activate. Can be specified as `all` or `none`.        | `none`             |
-| `serverBlock`                          | Custom server block to be added to NGINX configuration                                | `""`               |
-| `existingServerBlockConfigmap`         | ConfigMap with custom server block to be added to NGINX configuration                 | `""`               |
 | `customPostInitScripts`                | Custom post-init.d user scripts                                                       | `{}`               |
 | `smtpHost`                             | SMTP server host                                                                      | `""`               |
 | `smtpPort`                             | SMTP server port                                                                      | `""`               |

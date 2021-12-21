@@ -244,10 +244,6 @@ spec:
               mountPath: /opt/bitnami/wordpress/wp-config.php
               subPath: wp-config.php
             {{- end }}
-            {{- if or .Values.serverBlock .Values.existingServerBlockConfigmap }}
-            - name: nginx-server-block
-              mountPath: /opt/bitnami/nginx/conf/patata
-            {{- end }}
             {{- if or .Values.customPostInitScripts .Values.wordpressConfigureCache }}
             - mountPath: /docker-entrypoint-init.d
               name: custom-postinit
@@ -301,23 +297,6 @@ spec:
             secretName: {{ include "wordpress.configSecretName" . }}
             defaultMode: 0644
         {{- end }}
-        - name: nginx-server-block-paths
-          configMap:
-            name: {{ template "common.names.fullname" . }}-server-block
-            items:
-              - key: server-blocks-paths.conf
-                path: server-blocks-paths.conf
-        {{- if or .Values.serverBlock .Values.existingServerBlockConfigmap }}
-        - name: nginx-server-block
-          configMap:
-            name: {{ include "nginx.serverBlockConfigmapName" . }}
-            {{- if .Values.serverBlock }}
-            items:
-              - key: server-block.conf
-                path: server-block.conf
-            {{- end }}
-        {{- end }}
-
         {{- if or .Values.customPostInitScripts .Values.wordpressConfigureCache }}
         - name: custom-postinit
           configMap:
