@@ -19,14 +19,10 @@ metadata:
     {{- end }}
   {{- end }}
 spec:
-  type: {{ .Values.metrics.service.type }}
-  {{- if and (eq .Values.metrics.service.type "LoadBalancer") .Values.metrics.service.loadBalancerIP }}
-  loadBalancerIP: {{ .Values.metrics.service.loadBalancerIP }}
-  {{- end }}
+  type: ClusterIP
   ports:
     - name: metrics
       port: {{ .Values.metrics.service.port }}
       targetPort: metrics
-  selector:
-  {{- include "common.labels.matchLabels" . | nindent 4 }}
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
 {{- end }}
