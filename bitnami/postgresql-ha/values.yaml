@@ -863,6 +863,14 @@ pgpool:
   ## ref: https://github.com/bitnami/bitnami-docker-pgpool#configuration
   ##
   numInitChildren: ""
+  ## @param pgpool.reservedConnections Number of reserved connections. When zero, excess connection block. When non-zero, excess connections are refused with an error message.
+  ## When this parameter is set to 1 or greater, incoming connections from clients are not accepted with error message
+  ## "Sorry, too many clients already", rather than blocked if the number of current connections from clients is more than
+  ## (num_init_children - reserved_connections).
+  ## ref: https://github.com/bitnami/bitnami-docker-pgpool#configuration
+  ##
+  reservedConnections: 1
+
   ## @param pgpool.maxPool The maximum number of cached connections in each child process (PGPOOL_MAX_POOL)
   ## ref: https://github.com/bitnami/bitnami-docker-pgpool#configuration
   ##
