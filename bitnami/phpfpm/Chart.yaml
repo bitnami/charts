@@ -1,5 +1,5 @@
 annotations:
-  category: php-fpm
+  category: Infrastructure
 apiVersion: v2
 appVersion: 7.4.26
 dependencies:
