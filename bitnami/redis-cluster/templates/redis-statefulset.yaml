@@ -33,6 +33,7 @@ spec:
         {{- if not .Values.existingSecret }}
         checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
         {{- end }}
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
       {{- if .Values.redis.podAnnotations }}
       {{- toYaml .Values.redis.podAnnotations | nindent 8 }}
       {{- end }}
