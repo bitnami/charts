@@ -1,10 +1,6 @@
 {{- $replicaCount := int .Values.replicaCount }}
 {{- if and .Values.pdb.create (gt $replicaCount 1) }}
-{{- if .Capabilities.APIVersions.Has "policy/v1/PodDisruptionBudget" }}
-apiVersion: policy/v1
-{{- else }}
-apiVersion: policy/v1beta1
-{{- end }}
+apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 kind: PodDisruptionBudget
 metadata:
   name: {{ template "kafka.fullname" . }}
