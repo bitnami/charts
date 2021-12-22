@@ -2,7 +2,7 @@
 kind: NetworkPolicy
 apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
 metadata:
-  name: {{ template "common.names.fullname" . }}
+  name: {{ printf "%s-ingress" (include "common.names.fullname" .) }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -15,6 +15,8 @@ spec:
   podSelector:
     matchLabels:
     {{- include "common.labels.matchLabels" . | nindent 6 }}
+  policyTypes:
+    - Ingress
   ingress:
     # Allow client connections
     - ports:
