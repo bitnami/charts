@@ -651,7 +651,17 @@ networkPolicy:
   ##
   externalAccess:
     from: []
-
+  ## @param networkPolicy.egressRules.customRules [object] Custom network policy rule
+  ##
+  egressRules:
+    ## Additional custom egress rules
+    ## e.g:
+    ## customRules:
+    ##   - to:
+    ##       - namespaceSelector:
+    ##           matchLabels:
+    ##             label: example
+    customRules: []
 ## Service parameters
 ##
 service:
