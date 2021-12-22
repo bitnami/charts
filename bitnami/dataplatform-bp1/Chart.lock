@@ -1,13 +1,13 @@
 dependencies:
 - name: kafka
   repository: https://charts.bitnami.com/bitnami
-  version: 14.7.1
+  version: 14.8.1
 - name: spark
   repository: https://charts.bitnami.com/bitnami
   version: 5.7.13
 - name: solr
   repository: https://charts.bitnami.com/bitnami
-  version: 2.1.8
+  version: 2.1.9
 - name: zookeeper
   repository: https://charts.bitnami.com/bitnami
   version: 7.5.3
@@ -17,5 +17,5 @@ dependencies:
 - name: common
   repository: https://charts.bitnami.com/bitnami
   version: 1.10.3
-digest: sha256:9c149faf7a7d17efc67dbe63f18485273c315ccda8db526c33bf12ce75cdcd8e
-generated: "2021-12-17T21:05:18.371719088Z"
+digest: sha256:e603a0533ce4ba23167ff531aba8e769ccbd35a4c41a4b457cbaad77bf2be7a7
+generated: "2021-12-22T19:09:53.359445302Z"
