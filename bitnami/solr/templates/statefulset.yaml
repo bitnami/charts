@@ -186,8 +186,8 @@ spec:
             - name: SOLR_COLLECTION
               value: {{ .Values.collection | quote }}
             {{- else }}
-            - name: SOLR_CORE
-              value: {{ .Values.coreName | quote }}
+            - name: SOLR_CORES
+              value: {{ .Values.coreNames | join "," | quote }}
             {{- end }}
             - name: SOLR_COLLECTION_SHARDS
               value: {{ .Values.collectionShards | quote }}
