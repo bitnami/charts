@@ -223,6 +223,10 @@ spec:
             - name: PGPOOL_NUM_INIT_CHILDREN
               value: {{ .Values.pgpool.numInitChildren | quote }}
             {{- end }}
+            {{- if .Values.pgpool.reservedConnections }}
+            - name: PGPOOL_RESERVED_CONNECTIONS
+              value: '{{ .Values.pgpool.reservedConnections }}'
+            {{- end }}
             {{- if .Values.pgpool.maxPool }}
             - name: PGPOOL_MAX_POOL
               value: {{ .Values.pgpool.maxPool | quote }}

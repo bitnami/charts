@@ -50,6 +50,20 @@ Return the proper Docker Image Registry Secret Names
 {{- end -}}
 
 {{/*
+Returns the available value for certain key in an existing secret (if it exists),
+otherwise it generates a random value.
+*/}}
+{{- define "getValueFromSecret" }}
+{{- $len := (default 16 .Length) | int -}}
+{{- $obj := (lookup "v1" "Secret" .Namespace .Name).data -}}
+{{- if $obj }}
+{{- index $obj .Key | b64dec -}}
+{{- else -}}
+{{- randAlphaNum $len -}}
+{{- end -}}
+{{- end }}
+
+{{/*
 Return PostgreSQL postgres user password
 */}}
 {{- define "postgresql.postgres.password" -}}
@@ -58,7 +72,7 @@ Return PostgreSQL postgres user password
 {{- else if .Values.postgresqlPostgresPassword -}}
     {{- .Values.postgresqlPostgresPassword -}}
 {{- else -}}
-    {{- randAlphaNum 10 -}}
+    {{- include "getValueFromSecret" (dict "Namespace" .Release.Namespace "Name" (include "common.names.fullname" .) "Length" 10 "Key" "postgresql-postgres-password")  -}}
 {{- end -}}
 {{- end -}}
 
@@ -71,7 +85,7 @@ Return PostgreSQL password
 {{- else if .Values.postgresqlPassword -}}
     {{- .Values.postgresqlPassword -}}
 {{- else -}}
-    {{- randAlphaNum 10 -}}
+    {{- include "getValueFromSecret" (dict "Namespace" .Release.Namespace "Name" (include "common.names.fullname" .) "Length" 10 "Key" "postgresql-password")  -}}
 {{- end -}}
 {{- end -}}
 
@@ -84,7 +98,7 @@ Return PostgreSQL replication password
 {{- else if .Values.replication.password -}}
     {{- .Values.replication.password -}}
 {{- else -}}
-    {{- randAlphaNum 10 -}}
+    {{- include "getValueFromSecret" (dict "Namespace" .Release.Namespace "Name" (include "common.names.fullname" .) "Length" 10 "Key" "postgresql-replication-password")  -}}
 {{- end -}}
 {{- end -}}
 

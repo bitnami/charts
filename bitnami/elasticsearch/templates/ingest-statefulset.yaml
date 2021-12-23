@@ -102,7 +102,7 @@ spec:
           {{- if or .Values.ingest.containerSecurityContext.enabled .Values.ingest.securityContext.enabled }}
           securityContext:
             {{- if .Values.ingest.containerSecurityContext.enabled }}
-            {{- omit .Values.ingest.containerSecurityContext "enabled" | toYaml | nindent 8 }}
+            {{- omit .Values.ingest.containerSecurityContext "enabled" | toYaml | nindent 12 }}
             {{- else }}
             runAsUser: {{ .Values.ingest.securityContext.runAsUser }}
             {{- end }}
