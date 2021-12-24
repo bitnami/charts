@@ -814,9 +814,14 @@ deployer:
   ##
   volumes: {}
   ## @param deployer.environmentVariables Streaming applications environment variables
-  ## RabbitMQ/Kafka envs. Multiple values are comma separated.
+  ## RabbitMQ/Kafka envs.
+  ## Example:
+  ## environmentVariables:
+  ##   - JAVA_TOOL_OPTIONS=-Xmx1024m
+  ##   - SPRING_REDIS_HOST=redis
+  ##   - SPRING_REDIS_PORT=6379
   ##
-  environmentVariables: ""
+  environmentVariables: []
   ## Streams containers' Security Context. This security context will be use in every deployed stream.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param deployer.podSecurityContext.runAsUser Set Dataflow Streams container's Security Context runAsUser
