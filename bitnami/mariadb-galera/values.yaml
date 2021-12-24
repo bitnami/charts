@@ -132,9 +132,14 @@ service:
   ## Headless service properties
   ##
   headless:
-    ## @param service.headless.annotations Annotations for the headless service. May be useful for setting `service.alpha.kubernetes.io/tolerate-unready-endpoints="true"` when using peer-finder.
+    ## @param service.headless.annotations Annotations for the headless service.
+    ## Useful for setting `service.alpha.kubernetes.io/tolerate-unready-endpoints="true"` when using peer-finder.
     ##
     annotations: {}
+    ## @param service.headless.publishNotReadyAddresses Publish not Ready MariaDB Galera pods' IPs in the headless service.
+    ## Required for peer discovery during cluster bootstrap (1st chart installation), optional afterwards.
+    ##
+    publishNotReadyAddresses: true
 ## Pods Service Account
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 ##
