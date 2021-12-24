@@ -235,21 +235,21 @@ forwarder:
       <source>
         @type prometheus_monitor
         <labels>
-          host #{hostname}
+          host ${hostname}
         </labels>
       </source>
       # input plugin that collects metrics for output plugin
       <source>
         @type prometheus_output_monitor
         <labels>
-          host #{hostname}
+          host ${hostname}
         </labels>
       </source>
       # input plugin that collects metrics for in_tail plugin
       <source>
         @type prometheus_tail_monitor
         <labels>
-          host #{hostname}
+          host ${hostname}
         </labels>
       </source>
   ## @param forwarder.extraArgs Extra arguments for the Fluentd command line
@@ -647,7 +647,7 @@ aggregator:
       <source>
         @type prometheus_monitor
         <labels>
-          host #{hostname}
+          host ${hostname}
         </labels>
       </source>
 
@@ -655,7 +655,7 @@ aggregator:
       <source>
         @type prometheus_output_monitor
         <labels>
-          host #{hostname}
+          host ${hostname}
         </labels>
       </source>
 
