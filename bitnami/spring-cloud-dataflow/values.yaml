@@ -814,7 +814,7 @@ deployer:
   ##
   volumes: {}
   ## @param deployer.environmentVariables Streaming applications environment variables
-  ## RabbitMQ/Kafka envs. 
+  ## RabbitMQ/Kafka envs.
   ## Example:
   ## environmentVariables:
   ##   - JAVA_TOOL_OPTIONS=-Xmx1024m
