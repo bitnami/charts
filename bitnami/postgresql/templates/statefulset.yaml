@@ -462,7 +462,7 @@ spec:
               mountPath: /bitnami/postgresql/conf
             {{- end }}
             {{- if .Values.primary.extraVolumeMounts }}
-            {{- toYaml .Values.primary.extraVolumeMounts | nindent 12 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.primary.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
 {{- if .Values.primary.sidecars }}
 {{- include "common.tplvalues.render" ( dict "value" .Values.primary.sidecars "context" $ ) | nindent 8 }}

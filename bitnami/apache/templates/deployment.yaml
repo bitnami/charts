@@ -80,7 +80,7 @@ spec:
         {{- end }}
       {{- end }}
       containers:
-        {{- if .Values.cloneHtdocsFromGit.enabled }}
+        {{- if and .Values.cloneHtdocsFromGit.enabled .Values.cloneHtdocsFromGit.enableAutoRefresh }}
         - name: git-repo-syncer
           image: {{ include "git.image" . }}
           imagePullPolicy: {{ .Values.git.pullPolicy | quote }}

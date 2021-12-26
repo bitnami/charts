@@ -73,14 +73,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### SonarQube Image parameters
 
-| Name                | Description                                          | Value                 |
-| ------------------- | ---------------------------------------------------- | --------------------- |
-| `image.registry`    | SonarQube image registry                             | `docker.io`           |
-| `image.repository`  | SonarQube image repository                           | `bitnami/sonarqube`   |
-| `image.tag`         | SonarQube image tag (immutable tags are recommended) | `9.1.0-debian-10-r41` |
-| `image.pullPolicy`  | SonarQube image pull policy                          | `IfNotPresent`        |
-| `image.pullSecrets` | SonarQube image pull secrets                         | `[]`                  |
-| `image.debug`       | Enable SonarQube image debug mode                    | `false`               |
+| Name                | Description                                          | Value                |
+| ------------------- | ---------------------------------------------------- | -------------------- |
+| `image.registry`    | SonarQube image registry                             | `docker.io`          |
+| `image.repository`  | SonarQube image repository                           | `bitnami/sonarqube`  |
+| `image.tag`         | SonarQube image tag (immutable tags are recommended) | `9.2.1-debian-10-r0` |
+| `image.pullPolicy`  | SonarQube image pull policy                          | `IfNotPresent`       |
+| `image.pullSecrets` | SonarQube image pull secrets                         | `[]`                 |
+| `image.debug`       | Enable SonarQube image debug mode                    | `false`              |
 
 
 ### SonarQube Configuration parameters
@@ -208,7 +208,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r239`     |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r264`     |
 | `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                    |
@@ -223,7 +223,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sysctl.enabled`            | Enable kernel settings modifier image                    | `true`                  |
 | `sysctl.image.registry`     | Bitnami Shell image registry                             | `docker.io`             |
 | `sysctl.image.repository`   | Bitnami Shell image repository                           | `bitnami/bitnami-shell` |
-| `sysctl.image.tag`          | Bitnami Shell image tag (immutable tags are recommended) | `10-debian-10-r239`     |
+| `sysctl.image.tag`          | Bitnami Shell image tag (immutable tags are recommended) | `10-debian-10-r264`     |
 | `sysctl.image.pullPolicy`   | Bitnami Shell image pull policy                          | `IfNotPresent`          |
 | `sysctl.image.pullSecrets`  | Bitnami Shell image pull secrets                         | `[]`                    |
 | `sysctl.resources.limits`   | The resources limits for the init container              | `{}`                    |
@@ -252,7 +252,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.jmx.enabled`                               | Whether or not to expose JMX metrics to Prometheus                                                    | `false`                 |
 | `metrics.jmx.image.registry`                        | JMX exporter image registry                                                                           | `docker.io`             |
 | `metrics.jmx.image.repository`                      | JMX exporter image repository                                                                         | `bitnami/jmx-exporter`  |
-| `metrics.jmx.image.tag`                             | JMX exporter image tag (immutable tags are recommended)                                               | `0.16.1-debian-10-r108` |
+| `metrics.jmx.image.tag`                             | JMX exporter image tag (immutable tags are recommended)                                               | `0.16.1-debian-10-r134` |
 | `metrics.jmx.image.pullPolicy`                      | JMX exporter image pull policy                                                                        | `IfNotPresent`          |
 | `metrics.jmx.image.pullSecrets`                     | Specify docker-registry secret names as an array                                                      | `[]`                    |
 | `metrics.jmx.containerPorts.metrics`                | JMX Exporter metrics container port                                                                   | `10445`                 |

@@ -50,6 +50,20 @@ Return the proper Docker Image Registry Secret Names
 {{- end -}}
 
 {{/*
+Returns the available value for certain key in an existing secret (if it exists),
+otherwise it generates a random value.
+*/}}
+{{- define "getValueFromSecret" }}
+{{- $len := (default 16 .Length) | int -}}
+{{- $obj := (lookup "v1" "Secret" .Namespace .Name).data -}}
+{{- if $obj }}
+{{- index $obj .Key | b64dec -}}
+{{- else -}}
+{{- randAlphaNum $len -}}
+{{- end -}}
+{{- end }}
+
+{{/*
 Return PostgreSQL postgres user password
 */}}
 {{- define "postgresql.postgres.password" -}}
@@ -58,7 +72,7 @@ Return PostgreSQL postgres user password
 {{- else if .Values.postgresqlPostgresPassword -}}
     {{- .Values.postgresqlPostgresPassword -}}
 {{- else -}}
-    {{- randAlphaNum 10 -}}
+    {{- include "getValueFromSecret" (dict "Namespace" .Release.Namespace "Name" (include "common.names.fullname" .) "Length" 10 "Key" "postgresql-postgres-password")  -}}
 {{- end -}}
 {{- end -}}
 
@@ -71,7 +85,7 @@ Return PostgreSQL password
 {{- else if .Values.postgresqlPassword -}}
     {{- .Values.postgresqlPassword -}}
 {{- else -}}
-    {{- randAlphaNum 10 -}}
+    {{- include "getValueFromSecret" (dict "Namespace" .Release.Namespace "Name" (include "common.names.fullname" .) "Length" 10 "Key" "postgresql-password")  -}}
 {{- end -}}
 {{- end -}}
 
@@ -84,7 +98,7 @@ Return PostgreSQL replication password
 {{- else if .Values.replication.password -}}
     {{- .Values.replication.password -}}
 {{- else -}}
-    {{- randAlphaNum 10 -}}
+    {{- include "getValueFromSecret" (dict "Namespace" .Release.Namespace "Name" (include "common.names.fullname" .) "Length" 10 "Key" "postgresql-replication-password")  -}}
 {{- end -}}
 {{- end -}}
 
@@ -270,17 +284,6 @@ Validate values of Postgresql - If PSP is enabled RBAC should be enabled too
 postgresql: psp.create, rbac.create
     RBAC should be enabled if PSP is enabled in order for PSP to work.
     More info at https://kubernetes.io/docs/concepts/policy/pod-security-policy/#authorizing-policies
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return the appropriate apiVersion for networkpolicy.
-*/}}
-{{- define "postgresql.networkPolicy.apiVersion" -}}
-{{- if semverCompare ">=1.4-0, <1.7-0" .Capabilities.KubeVersion.GitVersion -}}
-"extensions/v1beta1"
-{{- else if semverCompare "^1.7-0" .Capabilities.KubeVersion.GitVersion -}}
-"networking.k8s.io/v1"
 {{- end -}}
 {{- end -}}
 

@@ -1,6 +1,6 @@
 {{- if .Values.networkPolicy.enabled }}
 kind: NetworkPolicy
-apiVersion: {{ template "tomcat.networkPolicy.apiVersion" . }}
+apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
 metadata:
   name: {{ template "common.names.fullname" . }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
@@ -27,10 +27,10 @@ spec:
           namespaceSelector:
 {{ toYaml .Values.networkPolicy.explicitNamespacesSelector | indent 12 }}
           {{- end }}
+    # Allow communication between Tomcat's POD
         - podSelector:
             matchLabels:
             {{- include "common.labels.matchLabels" . | nindent 14 }}
-              role: read
       {{- end }}
     {{- if .Values.metrics.jmx.enabled }}
     # Allow prometheus scrapes
