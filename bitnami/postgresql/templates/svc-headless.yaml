@@ -25,7 +25,7 @@ spec:
   publishNotReadyAddresses: true
   ports:
     - name: tcp-postgresql
-      port: {{ template "postgresql.port" . }}
+      port: {{ template "postgresql.servicePort" . }}
       targetPort: tcp-postgresql
   selector:
   {{- include "common.labels.matchLabels" . | nindent 4 }}
