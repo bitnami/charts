@@ -320,6 +320,7 @@ Find more information about how to deal with common errors related to Bitnami’
 ### To 11.0.0
 
 This version uses Joomla 4 as the container image. For upgrading from Joomla 3.x follow the [official upgrade guide](https://docs.joomla.org/Joomla_3.x_to_4.x_Step_by_Step_Migration). We recommend performing a backup prior to upgrading.
+
 ### To 10.0.0
 
 This version standardizes the way of defining Ingress rules. When configuring a single hostname for the Ingress rule, set the `ingress.hostname` value. When defining more than one, set the `ingress.extraHosts` array. Apart from this case, no issues are expected to appear when upgrading.
