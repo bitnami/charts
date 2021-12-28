@@ -2,6 +2,7 @@
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
 ## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
@@ -17,6 +18,7 @@ global:
   storageClass: ""
 
 ## @section Common parameters
+##
 
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
@@ -38,6 +40,7 @@ commonLabels: {}
 extraDeploy: []
 
 ## @section Joomla! parameters
+##
 
 ## Bitnami Joomla! image version
 ## ref: https://hub.docker.com/r/bitnami/joomla/tags/
@@ -51,7 +54,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/joomla
-  tag: 3.10.4-debian-10-r0
+  tag: 4.0.5-debian-10-r13
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -243,6 +246,7 @@ resources:
   ## limits:
   ##    cpu: 100m
   ##    memory: 128Mi
+  ##
   limits: {}
   requests:
     memory: 512Mi
@@ -318,6 +322,7 @@ podAnnotations: {}
 podLabels: {}
 
 ## @section Traffic Exposure Parameters
+##
 
 ## Kubernetes configuration
 ## For minikube, set this to NodePort, for ingress ClusterIP, elsewhere use LoadBalancer
@@ -432,6 +437,7 @@ ingress:
   secrets: []
 
 ## @section Database parameters
+##
 
 ## MariaDB chart configuration
 ## https://github.com/bitnami/charts/blob/master/bitnami/mariadb/values.yaml
@@ -495,6 +501,7 @@ mariadb:
 externalDatabase:
   ## @param externalDatabase.existingSecret Name of the database existing Secret Object
   ## NOTE: When it's set, the `externalDatabase.password` parameter is ignored
+  ##
   existingSecret: ""
   ## @param externalDatabase.host Host of the existing database
   ##
@@ -513,6 +520,7 @@ externalDatabase:
   database: bitnami_joomla
 
 ## @section Metrics parameters
+##
 
 metrics:
   ## @param metrics.enabled Start a side-car prometheus exporter
@@ -548,6 +556,7 @@ metrics:
     prometheus.io/port: "9117"
 
 ## @section NetworkPolicy parameters
+##
 
 ## Add networkpolicies
 ##
@@ -637,4 +646,5 @@ networkPolicy:
     ##       - namespaceSelector:
     ##           matchLabels:
     ##             label: example
+    ##
     customRules: {}

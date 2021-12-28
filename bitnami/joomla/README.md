@@ -56,7 +56,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                | Description                                                                                                | Value |
@@ -67,7 +66,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `commonAnnotations` | Common annotations to add to all Harbor resources (sub-charts are not considered). Evaluated as a template | `{}`  |
 | `commonLabels`      | Common labels to add to all Harbor resources (sub-charts are not considered). Evaluated as a template      | `{}`  |
 | `extraDeploy`       | Array of extra objects to deploy with the release (evaluated as a template).                               | `[]`  |
-
 
 ### Joomla! parameters
 
@@ -142,7 +140,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podAnnotations`                     | Pod annotations                                                                                                      | `{}`                   |
 | `podLabels`                          | Add additional labels to the pod (evaluated as a template)                                                           | `{}`                   |
 
-
 ### Traffic Exposure Parameters
 
 | Name                            | Description                                                                                                                      | Value                    |
@@ -165,7 +162,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.extraPaths`            | Any additional arbitrary paths that may need to be added to the ingress under the main host.                                     | `[]`                     |
 | `ingress.extraTls`              | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
 | `ingress.secrets`               | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
-
 
 ### Database parameters
 
@@ -190,7 +186,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.password`                 | Password for the above username                                                                                                                                                   | `""`             |
 | `externalDatabase.database`                 | Name of the existing database                                                                                                                                                     | `bitnami_joomla` |
 
-
 ### Metrics parameters
 
 | Name                        | Description                                      | Value                     |
@@ -203,7 +198,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.image.pullSecrets` | Specify docker-registry secret names as an array | `[]`                      |
 | `metrics.resources`         | Exporter resource requests/limit                 | `{}`                      |
 | `metrics.podAnnotations`    | Additional annotations for Metrics exporter pod  | `{}`                      |
-
 
 ### NetworkPolicy parameters
 
@@ -224,7 +218,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.ingressRules.customRules`                      | Custom network policy ingress rule                                                                                         | `{}`    |
 | `networkPolicy.egressRules.denyConnectionsToExternal`         | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).                             | `false` |
 | `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                 | `{}`    |
-
 
 The above parameters map to the env variables defined in [bitnami/joomla](https://github.com/bitnami/bitnami-docker-joomla). For more information please refer to the [bitnami/joomla](https://github.com/bitnami/bitnami-docker-joomla) image documentation.
 
@@ -324,6 +317,9 @@ Find more information about how to deal with common errors related to Bitnami’
 
 ## Upgrading
 
+### To 11.0.0
+
+This version uses Joomla 4 as the container image. For upgrading from Joomla 3.x follow the [official upgrade guide](https://docs.joomla.org/Joomla_3.x_to_4.x_Step_by_Step_Migration). We recommend performing a backup prior to upgrading.
 ### To 10.0.0
 
 This version standardizes the way of defining Ingress rules. When configuring a single hostname for the Ingress rule, set the `ingress.hostname` value. When defining more than one, set the `ingress.extraHosts` array. Apart from this case, no issues are expected to appear when upgrading.
