@@ -258,6 +258,7 @@ $ helm uninstall my-release
 | `envoy.containerPorts.http`                         | Sets http port inside Envoy pod  (change this to >1024 to run envoy as a non-root user)                               | `8080`                 |
 | `envoy.containerPorts.https`                        | Sets https port inside Envoy pod  (change this to >1024 to run envoy as a non-root user)                              | `8443`                 |
 | `envoy.initContainers`                              | Attach additional init containers to Envoy pods                                                                       | `[]`                   |
+| `envoy.sidecars`                                    | Add additional sidecar containers to the Envoy pods                                                                   | `[]`                   |
 | `envoy.extraVolumes`                                | Array to add extra volumes                                                                                            | `[]`                   |
 | `envoy.extraVolumeMounts`                           | Array to add extra mounts (normally used with extraVolumes)                                                           | `[]`                   |
 | `envoy.extraEnvVars`                                | Array containing extra env vars to be added to all Envoy containers                                                   | `[]`                   |
