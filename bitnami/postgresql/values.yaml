@@ -327,6 +327,8 @@ initdbUser: ""
 ##
 initdbPassword: ""
 
+## @param containerPorts.postgresql PostgreSQL container port
+##
 containerPorts:
   postgresql: 5432
 ## Audit settings
