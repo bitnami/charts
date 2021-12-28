@@ -88,6 +88,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.enabled`                  | Enable ingress record generation for OAuth2 Proxy                                                                                | `false`                  |
 | `ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
 | `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
+| `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
 | `ingress.hostname`                 | Default host for the ingress record                                                                                              | `oaut2-proxy.local`      |
 | `ingress.path`                     | Default path for the ingress record                                                                                              | `/`                      |
 | `ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |

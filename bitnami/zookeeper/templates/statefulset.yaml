@@ -114,9 +114,9 @@ spec:
         - name: init-certs
           image: {{ include "zookeeper.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
-          {{- if .Values.securityContext.enabled }}
+          {{- if .Values.containerSecurityContext.enabled }}
           securityContext:
-            runAsUser: {{ .Values.securityContext.runAsUser }}
+            runAsUser: {{ .Values.containerSecurityContext.runAsUser }}
           {{- end }}
           command:
           - /bin/bash
@@ -482,7 +482,7 @@ spec:
               readOnly: true
             {{- end }}
             {{- if .Values.extraVolumeMounts }}
-            {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.extraVolumeMounts "context" $ ) | nindent 12 }}
             {{- end }}
         {{- if .Values.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.sidecars "context" $ ) | nindent 8 }}
