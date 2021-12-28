@@ -193,7 +193,6 @@ operator:
   ## @param operator.podSecurityContext.runAsUser User ID for the pods
   ## @param operator.podSecurityContext.runAsGroup User ID for the pods
   ## @param operator.podSecurityContext.runAsNonRoot Grafana Operator must run as nonRoot
-  ## @param operator.podSecurityContext.privileged Decide if the pod runs privileged.
   ## @param operator.podSecurityContext.fsGroup Group ID for the pods
   ## @param operator.podSecurityContext.supplementalGroups Which group IDs containers add
   ##
@@ -202,7 +201,6 @@ operator:
     runAsUser: 1001
     runAsGroup: 1001
     runAsNonRoot: true
-    privileged: false
     fsGroup: 1001
     supplementalGroups: []
   ## Container securityContext
@@ -410,7 +408,6 @@ grafana:
   ## @param grafana.podSecurityContext.enabled Enable pods security context
   ## @param grafana.podSecurityContext.runAsUser User ID for the pods
   ## @param grafana.podSecurityContext.runAsGroup User ID for the pods
-  ## @param grafana.podSecurityContext.privileged Decide if the pod runs privileged.
   ## @param grafana.podSecurityContext.runAsNonRoot Grafana Operator must run as nonRoot
   ## @param grafana.podSecurityContext.fsGroup Group ID for the pods
   ## @param grafana.podSecurityContext.supplementalGroups Which group IDs containers add
@@ -419,7 +416,6 @@ grafana:
     enabled: true
     runAsUser: 1001
     runAsGroup: 0
-    privileged: false
     runAsNonRoot: true
     fsGroup: 1001
     supplementalGroups: []
