@@ -1,5 +1,5 @@
 {{- if and .Values.operator.rbac.create .Values.operator.enabled }}
-{{- if .Values.operator.args.leaderElect }}
+{{- if .Values.operator.leaderElect }}
 ---
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: Role
@@ -66,7 +66,7 @@ subjects:
 {{- end }}
 ---
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
-{{- if or .Values.operator.args.scanAllNamespaces .Values.operator.args.scanNamespaces }}
+{{- if or .Values.operator.scanAllNamespaces .Values.operator.scanNamespaces }}
 kind: ClusterRole
 {{- else }}
 kind: Role
@@ -233,7 +233,7 @@ rules:
       - patch
       - update
       - watch
-  {{- if or .Values.operator.args.scanAllNamespaces  .Values.operator.args.scanNamespaces }}
+  {{- if or .Values.operator.scanAllNamespaces  .Values.operator.scanNamespaces }}
   - nonResourceURLs:
       - /metrics
     verbs:
@@ -241,7 +241,7 @@ rules:
   {{- end }}
 ---
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
-{{- if or .Values.operator.args.scanAllNamespaces  .Values.operator.args.scanNamespaces }}
+{{- if or .Values.operator.scanAllNamespaces  .Values.operator.scanNamespaces }}
 kind: ClusterRoleBinding
 {{- else }}
 kind: RoleBinding
@@ -257,7 +257,7 @@ metadata:
   {{- end }}
 roleRef:
   name: {{ include "common.names.fullname" . }}
-  {{- if or .Values.operator.args.scanAllNamespaces  .Values.operator.args.scanNamespaces }}
+  {{- if or .Values.operator.scanAllNamespaces  .Values.operator.scanNamespaces }}
   kind: ClusterRole
   {{- else }}
   kind: Role
@@ -266,7 +266,7 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: {{ include "grafana-operator.serviceAccountName" . }}
-    {{- if or .Values.operator.args.scanAllNamespaces .Values.operator.args.scanNamespaces }}
+    {{- if or .Values.operator.scanAllNamespaces .Values.operator.scanNamespaces }}
     namespace: {{ .Release.Namespace }}
     {{- end }}
 {{- end }}

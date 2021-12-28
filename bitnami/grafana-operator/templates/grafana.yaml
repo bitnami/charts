@@ -21,10 +21,19 @@ spec:
       {{- if .Values.commonLabels }}
       {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 6 }}
       {{- end }}
-    {{- if .Values.commonAnnotations }}
-    annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 6 }}
+    {{- if or .Values.commonAnnotations .Values.grafana.persistence.annotations }}
+    annotations:
+      {{- if .Values.commonAnnotations }}
+      {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 6 }}
+      {{- end }}
+      {{- if .Values.grafana.persistence.annotations }}
+      {{- include "common.tplvalues.render" ( dict "value" .Values.grafana.persistence.annotations "context" $ ) | nindent 6 }}
+      {{- end }}
     {{- end }}
-    accessModes: [{{ .Values.grafana.persistence.accessMode }}]
+    accessModes:
+      {{- range .Values.grafana.persistence.accessModes }}
+        - {{ . | quote }}
+      {{- end }}
     size: {{ .Values.grafana.persistence.size }}
     {{- if .Values.grafana.persistence.storageClass }}
     class: {{ .Values.grafana.persistence.storageClass }}
