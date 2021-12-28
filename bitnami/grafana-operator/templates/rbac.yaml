@@ -61,8 +61,8 @@ roleRef:
   kind: Role
   name: {{ include "common.names.fullname" . }}-leader-election
 subjects:
-- kind: ServiceAccount
-  name: {{ include "grafana-operator.serviceAccountName" . }}
+  - kind: ServiceAccount
+    name: {{ include "grafana-operator.serviceAccountName" . }}
 {{- end }}
 ---
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
@@ -81,164 +81,164 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 rules:
-- apiGroups:
-    - ""
-  resources:
-    - configmaps
-    - persistentvolumeclaims
-    - secrets
-    - serviceaccounts
-    - services
-  verbs:
-    - create
-    - delete
-    - get
-    - list
-    - patch
-    - update
-    - watch
-- apiGroups:
-    - ""
-  resources:
-    - events
-  verbs:
-    - create
-    - get
-    - list
-    - watch
-- apiGroups:
-    - ""
-  resources:
-    - pods
-  verbs:
-    - get
-    - list
-    - watch
-- apiGroups:
-    - apps
-    - extensions
-  resources:
-    - deployments
-    - deployments/finalizers
-  verbs:
-    - create
-    - delete
-    - get
-    - list
-    - patch
-    - update
-    - watch
-- apiGroups:
-    - integreatly.org
-  resources:
-    - grafanadashboards
-  verbs:
-    - create
-    - delete
-    - get
-    - list
-    - patch
-    - update
-    - watch
-- apiGroups:
-    - integreatly.org
-  resources:
-    - grafanadashboards/status
-  verbs:
-    - get
-    - patch
-    - update
-- apiGroups:
-    - integreatly.org
-  resources:
-    - grafanadatasources
-  verbs:
-    - create
-    - delete
-    - get
-    - list
-    - patch
-    - update
-    - watch
-- apiGroups:
-    - integreatly.org
-  resources:
-    - grafanadatasources/status
-  verbs:
-    - get
-    - patch
-    - update
-- apiGroups:
-    - integreatly.org
-  resources:
-    - grafananotificationchannels
-  verbs:
-    - create
-    - delete
-    - get
-    - list
-    - patch
-    - update
-    - watch
-- apiGroups:
-    - integreatly.org
-  resources:
-    - grafananotificationchannels/status
-  verbs:
-    - get
-    - patch
-    - update
-- apiGroups:
-    - integreatly.org
-  resources:
-    - grafanas
-    - grafanas/finalizers
-  verbs:
-    - create
-    - delete
-    - get
-    - list
-    - patch
-    - update
-    - watch
-- apiGroups:
-    - integreatly.org
-  resources:
-    - grafanas/status
-  verbs:
-    - get
-    - patch
-    - update
-- apiGroups:
-    - networking.k8s.io
-  resources:
-    - ingresses
-  verbs:
-    - create
-    - delete
-    - get
-    - list
-    - patch
-    - update
-    - watch
-- apiGroups:
-    - route.openshift.io
-  resources:
-    - routes
-  verbs:
-    - create
-    - delete
-    - get
-    - list
-    - patch
-    - update
-    - watch
-{{- if or .Values.operator.args.scanAllNamespaces  .Values.operator.args.scanNamespaces }}
-- nonResourceURLs:
-    - /metrics
-  verbs:
-    - get
-{{- end }}
+  - apiGroups:
+      - ""
+    resources:
+      - configmaps
+      - persistentvolumeclaims
+      - secrets
+      - serviceaccounts
+      - services
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - ""
+    resources:
+      - events
+    verbs:
+      - create
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - ""
+    resources:
+      - pods
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - apps
+      - extensions
+    resources:
+      - deployments
+      - deployments/finalizers
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - integreatly.org
+    resources:
+      - grafanadashboards
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - integreatly.org
+    resources:
+      - grafanadashboards/status
+    verbs:
+      - get
+      - patch
+      - update
+  - apiGroups:
+      - integreatly.org
+    resources:
+      - grafanadatasources
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - integreatly.org
+    resources:
+      - grafanadatasources/status
+    verbs:
+      - get
+      - patch
+      - update
+  - apiGroups:
+      - integreatly.org
+    resources:
+      - grafananotificationchannels
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - integreatly.org
+    resources:
+      - grafananotificationchannels/status
+    verbs:
+      - get
+      - patch
+      - update
+  - apiGroups:
+      - integreatly.org
+    resources:
+      - grafanas
+      - grafanas/finalizers
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - integreatly.org
+    resources:
+      - grafanas/status
+    verbs:
+      - get
+      - patch
+      - update
+  - apiGroups:
+      - networking.k8s.io
+    resources:
+      - ingresses
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - route.openshift.io
+    resources:
+      - routes
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  {{- if or .Values.operator.args.scanAllNamespaces  .Values.operator.args.scanNamespaces }}
+  - nonResourceURLs:
+      - /metrics
+    verbs:
+      - get
+  {{- end }}
 ---
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 {{- if or .Values.operator.args.scanAllNamespaces  .Values.operator.args.scanNamespaces }}
