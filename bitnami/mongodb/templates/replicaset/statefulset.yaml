@@ -126,6 +126,10 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
+            - name: MY_POD_HOST_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
           volumeMounts:
           - name: certs-volume
             mountPath: /certs/CAs
@@ -163,6 +167,8 @@ spec:
               {{- range $key, $val := .Values.externalAccess.service.loadBalancerIPs }}
               IP.{{ $key }} = {{ $val | quote }}
               {{- end }}
+              {{- else }}
+              IP.0 = {{ "$MY_POD_HOST_IP" | quote }}
               {{- end }}
               EOL
 
@@ -239,6 +245,10 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
+            - name: MY_POD_HOST_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
             - name: K8S_SERVICE_NAME
               value: "{{ include "mongodb.service.nameOverride" . }}"
             - name: MONGODB_INITIAL_PRIMARY_HOST
