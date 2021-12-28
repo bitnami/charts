@@ -141,7 +141,7 @@ otherwise it generates a random value.
     {{- end -}}
 {{- end }}
 
-{{- define "mysql.password.root" -}}
+{{- define "mysql.root.password" -}}
     {{- if not (empty .Values.auth.rootPassword) }}
         {{- .Values.auth.rootPassword }}
     {{- else if (not .Values.auth.forcePassword) }}
@@ -161,7 +161,7 @@ otherwise it generates a random value.
     {{- end }}
 {{- end -}}
 
-{{- define "mysql.password.replication" -}}
+{{- define "mysql.replication.password" -}}
     {{- if not (empty .Values.auth.replicationPassword) }}
         {{ .Values.auth.replicationPassword }}
     {{- else if (not .Values.auth.forcePassword) }}
