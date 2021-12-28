@@ -85,3 +85,17 @@ To upgrade this helm chart:
 
 {{ include "mariadb-galera.validateValues" . }}
 {{ include "mariadb-galera.checkRollingTags" . }}
+{{- $requiredPasswords := list -}}
+{{- $secretName := include "mariadb-galera.secretName" . -}}
+{{- if not .Values.existingSecret -}}
+  {{- $requiredRootPassword := dict "valueKey" "rootUser.password" "secret" $secretName "field" "mariadb-root-password" -}}
+  {{- $requiredPasswords = append $requiredPasswords $requiredRootPassword -}}
+  {{- $requiredMariaBackupPassword := dict "valueKey" "galera.mariabackup.password" "secret" $secretName "field" "mariadb-galera-mariabackup-password" -}}
+  {{- $requiredPasswords = append $requiredPasswords $requiredMariaBackupPassword -}}
+  {{- if .Values.db.user }}
+    {{- $requiredUserPassword := dict "valueKey" "db.password" "secret" $secretName "field" "mariadb-password" -}}
+    {{- $requiredPasswords = append $requiredPasswords $requiredUserPassword -}}
+  {{- end -}}
+{{- end -}}
+{{- $requiredRedisPasswordErrors := include "common.validations.values.multiple.empty" (dict "required" $requiredPasswords "context" $) -}}
+{{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" (list $requiredRedisPasswordErrors) "context" $) -}}

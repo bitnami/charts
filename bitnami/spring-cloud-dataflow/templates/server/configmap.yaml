@@ -36,8 +36,9 @@ data:
               kubernetes:
                 accounts:
                   {{ .Values.server.configuration.accountName }}:
-                    {{- if .Values.deployer.environmentVariables }}
-                    environmentVariables: '{{ .Values.deployer.environmentVariables | trim }}'
+                    {{- $environmentVariables := include "scdf.deployer.environmentVariables" . }}
+                    {{- if $environmentVariables }}
+                    environmentVariables: {{- $environmentVariables | trim | nindent 22 }}
                     {{- end }}
                     {{- if .Values.deployer.resources.limits }}
                     limits: {{- toYaml .Values.deployer.resources.limits | trim | nindent 22 }}

@@ -63,7 +63,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/fluentd
-  tag: 1.14.3-debian-10-r0
+  tag: 1.14.3-debian-10-r27
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -235,21 +235,21 @@ forwarder:
       <source>
         @type prometheus_monitor
         <labels>
-          host #{hostname}
+          host ${hostname}
         </labels>
       </source>
       # input plugin that collects metrics for output plugin
       <source>
         @type prometheus_output_monitor
         <labels>
-          host #{hostname}
+          host ${hostname}
         </labels>
       </source>
       # input plugin that collects metrics for in_tail plugin
       <source>
         @type prometheus_tail_monitor
         <labels>
-          host #{hostname}
+          host ${hostname}
         </labels>
       </source>
   ## @param forwarder.extraArgs Extra arguments for the Fluentd command line
@@ -647,7 +647,7 @@ aggregator:
       <source>
         @type prometheus_monitor
         <labels>
-          host #{hostname}
+          host ${hostname}
         </labels>
       </source>
 
@@ -655,7 +655,7 @@ aggregator:
       <source>
         @type prometheus_output_monitor
         <labels>
-          host #{hostname}
+          host ${hostname}
         </labels>
       </source>
 
@@ -718,6 +718,9 @@ aggregator:
     ## @param aggregator.service.annotations Provide any additional annotations which may be required
     ##
     annotations: {}
+    ## @param aggregator.service.annotationsHeadless Provide any additional annotations which may be required on headless service
+    ##
+    annotationsHeadless: {}
   ## Configure the ingress resource that allows you to access the
   ## Fluentd aggregator. Set up the URL
   ## ref: https://kubernetes.io/docs/user-guide/ingress/
