@@ -740,7 +740,7 @@ envoy:
   ##     imagePullPolicy: Always
   ##
   initContainers: []
-  ## @param envoy.sidecars [array] Add additional sidecar containers to the Envoy pods
+  ## @param envoy.sidecars Add additional sidecar containers to the Envoy pods
   ## Example:
   ## sidecars:
   ##   - name: your-image-name
