@@ -65,7 +65,6 @@ For more information, refer to the [documentation on the differences between the
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 
-
 ### Common parameters
 
 | Name                | Description                                                                                               | Value |
@@ -76,31 +75,45 @@ For more information, refer to the [documentation on the differences between the
 | `commonLabels`      | Common Labels which are applied to every resource deployed                                                | `{}`  |
 | `commonAnnotations` | Common Annotations which are applied to every ressource deployed                                          | `{}`  |
 
-
 ### Grafana Operator parameters
 
 | Name                                                         | Description                                                                                                                               | Value                      |
 | ------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
 | `operator.enabled`                                           | Enable the deployment of the Grafana Operator                                                                                             | `true`                     |
+| `operator.command`                                           | Default container command (useful when using custom images)                                                                               | `[]`                       |
+| `operator.args`                                              | Default container args (useful when using custom images)                                                                                  | `[]`                       |
+| `operator.schedulerName`                                     | Alternative scheduler                                                                                                                     | `""`                       |
+| `operator.lifecycleHooks`                                    | for the grafana-operator container to automate configuration before or after startup                                                      | `{}`                       |
 | `operator.replicaCount`                                      | Number of grafana-operator Pod replicas                                                                                                   | `1`                        |
+| `operator.customLivenessProbe`                               | Override default liveness probe                                                                                                           | `{}`                       |
+| `operator.customReadinessProbe`                              | Override default readiness probe                                                                                                          | `{}`                       |
+| `operator.customStartupProbe`                                | Override default startup probe                                                                                                            | `{}`                       |
+| `operator.extraVolumes`                                      | Optionally specify extra list of additional volumes for etcd pods                                                                         | `[]`                       |
+| `operator.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for etcd container(s)                                                            | `[]`                       |
+| `operator.initContainers`                                    | Add additional init containers to the etcd pods                                                                                           | `[]`                       |
+| `operator.sidecars`                                          | Add additional sidecar containers to the etcd pods                                                                                        | `[]`                       |
+| `operator.watchNamespace`                                    | Override the namespace to watch                                                                                                           | `""`                       |
+| `operator.topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment                                                                                            | `[]`                       |
 | `operator.updateStrategy.type`                               | Set up update strategy for Grafana Operator installation.                                                                                 | `Recreate`                 |
 | `operator.image.registry`                                    | Grafana Operator image registry                                                                                                           | `docker.io`                |
 | `operator.image.repository`                                  | Grafana Operator image name                                                                                                               | `bitnami/grafana-operator` |
-| `operator.image.tag`                                         | Grafana Operator image tag                                                                                                                | `3.10.4-debian-10-r34`     |
+| `operator.image.tag`                                         | Grafana Operator image tag                                                                                                                | `3.10.4-debian-10-r58`     |
 | `operator.image.pullPolicy`                                  | Grafana Operator image pull policy                                                                                                        | `IfNotPresent`             |
 | `operator.image.pullSecrets`                                 | Grafana Operator image pull secrets                                                                                                       | `[]`                       |
-| `operator.args.scanAllNamespaces`                            | Specify if all namespace should be scanned for dashboards and datasources. (Creates ClusterRole)                                          | `false`                    |
-| `operator.args.scanNamespaces`                               | Specify the namespaces which should be scanned for dashboards and datasources (Creates ClusterRole)                                       | `[]`                       |
-| `operator.args.zapDevel`                                     | Enable zap development mode (changes defaults to console encoder, debug log level, disables sampling and stacktrace from 'warning' level) | `false`                    |
-| `operator.args.zapEncoder`                                   | Zap log encoding ('json' or 'console')                                                                                                    | `""`                       |
-| `operator.args.zapLevel`                                     | Zap log level (one of 'debug', 'info', 'error' or any integer value > 0) (default info)                                                   | `""`                       |
-| `operator.args.zapSample`                                    | Enable zap log sampling. Sampling will be disabled for integer log levels > 1                                                             | `""`                       |
-| `operator.args.zapStacktraceLevel`                           | Set the minimum log level that triggers stacktrace generation (default error)                                                             | `""`                       |
-| `operator.args.zapTimeEncoding`                              | Sets the zap time format ('epoch', 'millis', 'nano', or 'iso8601') (default )                                                             | `""`                       |
-| `operator.args.extraArgs`                                    | Extra arguments for the grafana operator (Evaluated as a template)                                                                        | `[]`                       |
+| `operator.scanAllNamespaces`                                 | Specify if all namespace should be scanned for dashboards and datasources. (Creates ClusterRole)                                          | `false`                    |
+| `operator.scanNamespaces`                                    | Specify the namespaces which should be scanned for dashboards and datasources (Creates ClusterRole)                                       | `[]`                       |
+| `operator.zapDevel`                                          | Enable zap development mode (changes defaults to console encoder, debug log level, disables sampling and stacktrace from 'warning' level) | `false`                    |
+| `operator.zapEncoder`                                        | Zap log encoding ('json' or 'console')                                                                                                    | `""`                       |
+| `operator.zapLevel`                                          | Zap log level (one of 'debug', 'info', 'error' or any integer value > 0) (default info)                                                   | `""`                       |
+| `operator.zapSample`                                         | Enable zap log sampling. Sampling will be disabled for integer log levels > 1                                                             | `""`                       |
+| `operator.zapStacktraceLevel`                                | Set the minimum log level that triggers stacktrace generation (default error)                                                             | `""`                       |
+| `operator.zapTimeEncoding`                                   | Sets the zap time format ('epoch', 'millis', 'nano', or 'iso8601') (default )                                                             | `""`                       |
+| `operator.extraArgs`                                         | Extra arguments for the grafana operator (Evaluated as a template)                                                                        | `[]`                       |
 | `operator.rbac.create`                                       | Create specifies whether to install and use RBAC rules                                                                                    | `true`                     |
 | `operator.serviceAccount.create`                             | Specifies whether a service account should be created                                                                                     | `true`                     |
 | `operator.serviceAccount.name`                               | The name of the service account to use. If not set and create is true, a name is generated using the fullname template                    | `""`                       |
+| `operator.serviceAccount.annotations`                        | Add annotations                                                                                                                           | `{}`                       |
+| `operator.serviceAccount.automountServiceAccountToken`       | Automount API credentials for a service account.                                                                                          | `true`                     |
 | `operator.podSecurityContext.enabled`                        | Enable pods security context                                                                                                              | `true`                     |
 | `operator.podSecurityContext.runAsUser`                      | User ID for the pods                                                                                                                      | `1001`                     |
 | `operator.podSecurityContext.runAsGroup`                     | User ID for the pods                                                                                                                      | `1001`                     |
@@ -110,10 +123,15 @@ For more information, refer to the [documentation on the differences between the
 | `operator.containerSecurityContext.enabled`                  | Enable container security context                                                                                                         | `true`                     |
 | `operator.containerSecurityContext.runAsUser`                | User ID for the operator container                                                                                                        | `1001`                     |
 | `operator.containerSecurityContext.runAsGroup`               | User ID for the operator container                                                                                                        | `1001`                     |
+| `operator.containerSecurityContext.runAsNonRoot`             | Force the container to be run as non-root                                                                                                 | `true`                     |
 | `operator.containerSecurityContext.readOnlyRootFilesystem`   | ReadOnlyRootFilesystem fot the operator container                                                                                         | `false`                    |
 | `operator.containerSecurityContext.allowPrivilegeEscalation` | Allow Privilege Escalation for the operator container                                                                                     | `false`                    |
 | `operator.resources`                                         | Container resource requests and limits                                                                                                    | `{}`                       |
+| `operator.containerPorts.metrics`                            | Grafana Operator container port (used for metrics)                                                                                        | `8080`                     |
 | `operator.hostAliases`                                       | Add deployment host aliases                                                                                                               | `[]`                       |
+| `operator.extraEnvVars`                                      | Array with extra environment variables to add to RabbitMQ Cluster Operator nodes                                                          | `[]`                       |
+| `operator.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars for RabbitMQ Cluster Operator nodes                                                  | `""`                       |
+| `operator.extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars for RabbitMQ Cluster Operator nodes                                                     | `""`                       |
 | `operator.podAffinityPreset`                                 | Pod affinity preset                                                                                                                       | `""`                       |
 | `operator.podAntiAffinityPreset`                             | Pod anti-affinity preset. Allowed values: `soft` or `hard`                                                                                | `soft`                     |
 | `operator.nodeAffinityPreset.type`                           | Node affinity preset type. Allowed values: `soft` or `hard`                                                                               | `""`                       |
@@ -141,7 +159,12 @@ For more information, refer to the [documentation on the differences between the
 | `operator.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                                                        | `1`                        |
 | `operator.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                                                      | `3`                        |
 | `operator.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                                                      | `1`                        |
-
+| `operator.startupProbe.enabled`                              | Enable startupProbe                                                                                                                       | `true`                     |
+| `operator.startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                                                                    | `10`                       |
+| `operator.startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                                                           | `10`                       |
+| `operator.startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                                                          | `1`                        |
+| `operator.startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                                                        | `3`                        |
+| `operator.startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                                                        | `1`                        |
 
 ### Grafana parameters
 
@@ -150,7 +173,7 @@ For more information, refer to the [documentation on the differences between the
 | `grafana.enabled`                                           | Enabled the deployment of the Grafana CRD object into the cluster                             | `true`               |
 | `grafana.image.registry`                                    | Grafana image registry                                                                        | `docker.io`          |
 | `grafana.image.repository`                                  | Grafana image name                                                                            | `bitnami/grafana`    |
-| `grafana.image.tag`                                         | Grafana image tag                                                                             | `8.2.5-debian-10-r6` |
+| `grafana.image.tag`                                         | Grafana image tag                                                                             | `8.3.3-debian-10-r6` |
 | `grafana.image.pullSecrets`                                 | Grafana image pull secrets                                                                    | `[]`                 |
 | `grafana.serviceAccount`                                    | Additional service account configuration                                                      | `{}`                 |
 | `grafana.podSecurityContext.enabled`                        | Enable pods security context                                                                  | `true`               |
@@ -162,6 +185,7 @@ For more information, refer to the [documentation on the differences between the
 | `grafana.containerSecurityContext.enabled`                  | Enable containers security context                                                            | `true`               |
 | `grafana.containerSecurityContext.runAsUser`                | User ID for the containers                                                                    | `1001`               |
 | `grafana.containerSecurityContext.runAsGroup`               | Group ID for the containers                                                                   | `1001`               |
+| `grafana.containerSecurityContext.runAsNonRoot`             | Force the container to run as non-root                                                        | `true`               |
 | `grafana.containerSecurityContext.fsGroup`                  | Filesystem Group ID for the containers                                                        | `1001`               |
 | `grafana.containerSecurityContext.allowPrivilegeEscalation` | Don't allow privilege escalation for the containers                                           | `false`              |
 | `grafana.resources.limits`                                  | The resources limits for the container                                                        | `{}`                 |
@@ -189,7 +213,8 @@ For more information, refer to the [documentation on the differences between the
 | `grafana.ingress.tlsSecret`                                 | The name for the secret to use for the tls termination                                        | `grafana.local-tls`  |
 | `grafana.persistence.enabled`                               | Enable persistent storage for the grafana deployment                                          | `false`              |
 | `grafana.persistence.storageClass`                          | Define the storageClass for the persistent storage if not defined default is used             | `""`                 |
-| `grafana.persistence.accessMode`                            | Define the accessMode for the persistent storage                                              | `ReadWriteOnce`      |
+| `grafana.persistence.accessModes`                           | Define the accessModes for the persistent storage                                             | `ReadWriteOnce`      |
+| `grafana.persistence.annotations`                           | Add annotations to the persistent volume                                                      | `{}`                 |
 | `grafana.persistence.size`                                  | Define the size of the PersistentVolumeClaim to request for                                   | `10Gi`               |
 | `grafana.config`                                            | grafana.ini configuration for the instance for this to configure please look at upstream docs | `{}`                 |
 | `grafana.configMaps`                                        | Extra configMaps to mount into the grafana pod                                                | `[]`                 |
@@ -213,7 +238,6 @@ For more information, refer to the [documentation on the differences between the
 | `grafana.extraVolumes`                                      | Optionally specify extra list of additional volumes for the grafana pod(s)                    | `[]`                 |
 | `grafana.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the grafana container(s)         | `[]`                 |
 | `grafana.sidecars`                                          | Add additional sidecar containers to the grafana pod(s)                                       | `[]`                 |
-
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -260,6 +284,16 @@ Find more information about how to deal with common errors related to Bitnami’
 ```bash
 $ helm upgrade my-release bitnami/grafana-operator
 ```
+### To 2.0.0
+
+### To 2.0.0
+
+Some of the chart values were changed to adapt to the latest Bitnami standards. More specifically:
+
+- `operator.args` was replaced with the standard value of overriding the container commands. The original `operator.args` contents were moved to `operator`.
+- Several standard values were added such as `sidecars`, `initContainers`, `extraEnvVars`, amongst others.
+
+No issues should be expected when upgrading.
 
 ### To 1.0.0
 

@@ -40,7 +40,7 @@ spec:
     matchNames:
       - {{ .Release.Namespace }}
   endpoints:
-    - port: metrics
+    - port: http
       {{- if .Values.operator.prometheus.serviceMonitor.interval }}
       interval: {{ .Values.operator.prometheus.serviceMonitor.interval }}
       {{- end }}
