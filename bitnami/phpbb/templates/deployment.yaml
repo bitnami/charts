@@ -77,7 +77,7 @@ spec:
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name: data
+            - name: phpbb-data
               mountPath: /bitnami/phpbb
         {{- end }}
         {{- if .Values.initContainers }}
