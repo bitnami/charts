@@ -151,7 +151,7 @@ operator:
   ## @param operator.zapStacktraceLevel Set the minimum log level that triggers stacktrace generation (default error)
   ## @param operator.zapTimeEncoding Sets the zap time format ('epoch', 'millis', 'nano', or 'iso8601') (default )
   ## @param operator.extraArgs Extra arguments for the grafana operator (Evaluated as a template)
-  ## 
+  ##
   ## This enabled leader election for the operator and creates a Role for the leader election.
   ##
   leaderElect: true
