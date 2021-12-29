@@ -53,10 +53,10 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/argo-cd
-  tag: 2.1.2-debian-10-r0
+  tag: 2.2.1-debian-10-r1
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -113,7 +113,7 @@ controller:
   ##
   customReadinessProbe: {}
   ## Argo CD resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param controller.resources.limits The resources limits for the Argo CD containers
   ## @param controller.resources.requests The requested resources for the Argo CD containers
   ##
@@ -204,7 +204,7 @@ controller:
     ##
     loadBalancerSourceRanges: []
     ## @param controller.service.externalTrafficPolicy Argo CD application controller service external traffic policy
-    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
     externalTrafficPolicy: Cluster
     ## @param controller.service.annotations Additional custom annotations for Argo CD application controller service
@@ -243,7 +243,7 @@ controller:
       ##
       loadBalancerSourceRanges: []
       ## @param controller.metrics.service.externalTrafficPolicy Argo CD application controller service external traffic policy
-      ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+      ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
       ##
       externalTrafficPolicy: Cluster
       ## @param controller.metrics.service.annotations Additional custom annotations for Argo CD application controller service
@@ -474,7 +474,7 @@ server:
   ##
   customReadinessProbe: {}
   ## Argo CD server resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param server.resources.limits The resources limits for the Argo CD server containers
   ## @param server.resources.requests The requested resources for the Argo CD server containers
   ##
@@ -536,7 +536,7 @@ server:
   url: ""
 
   ## Argo CD server config. This object will be directly rendered
-  ## @param server.config [string] Argo CD server configuration that will end on the argocd-cm Config Map
+  ## @param server.config [object] Argo CD server configuration that will end on the argocd-cm Config Map
   ## Ref: https://argoproj.github.io/argo-cd/operator-manual/user-management/
   ## E.g:
   ## repositories:
@@ -573,15 +573,12 @@ server:
   ##          clientSecret: $dex.github.clientSecret
   ##          orgs:
   ##          - name: your-github-org
-  config: |
-    {{- if .Values.config.styles }}
-    ui.cssurl: "./custom/custom.styles.css"
-    {{- end }}
+  config:
     ## Argo CD external base URL. Required when configuring SSO. Required when enabling dex.
     ## E.g:
     ## url: https://argocd.example.com
     ##
-    url: {{ .Values.server.url | quote }}
+    url: "{{ .Values.server.url }}"
     ## Argo CD instance label key
     ##
     application.instanceLabelKey: argocd.argoproj.io/instance
@@ -592,13 +589,12 @@ server:
     dex.config: ""
 
   ## Configure the ingress for the Argo CD server
-  ## Ref: http://kubernetes.io/docs/user-guide/ingress/
+  ## Ref: https://kubernetes.io/docs/user-guide/ingress/
   ## @param server.ingress.enabled Enable the creation of an ingress for the Argo CD server
-  ## @param server.ingress.certManager Set to true to add certmanager annotations for Argo CD server ingress
   ## @param server.ingress.pathType Path type for the Argo CD server ingress
   ## @param server.ingress.apiVersion Ingress API version for the Argo CD server ingress
   ## @param server.ingress.hostname Ingress hostname for the Argo CD server ingress
-  ## @param server.ingress.annotations Annotations for the Argo CD server ingress
+  ## @param server.ingress.annotations Annotations for the Argo CD server ingress. To enable certificate autogeneration, place here your cert-manager annotations.
   ## @param server.ingress.tls Enable TLS for the Argo CD server ingress
   ## @param server.ingress.extraHosts Extra hosts array for the Argo CD server ingress
   ## @param server.ingress.path Path array for the Argo CD server ingress
@@ -615,9 +611,9 @@ server:
     ##
     selfSigned: false
 
-    ## Set this to true in order to add the corresponding annotations for cert-manager
+    ## DEPRECATED: Use server.ingress.annotations instead of server.ingress.certManager
+    ## certManager: false
     ##
-    certManager: false
 
     ## Ingress Path type
     ##
@@ -636,11 +632,15 @@ server:
     ##
     path: /
 
-    ## Ingress annotations done as key:value pairs
     ## For a full list of possible ingress annotations, please see
     ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+    ## Use this parameter to set the required annotations for cert-manager, see
+    ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
     ##
-    ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+    ## e.g:
+    ## annotations:
+    ##   kubernetes.io/ingress.class: nginx
+    ##   cert-manager.io/cluster-issuer: cluster-issuer-name
     ##
     annotations: {}
 
@@ -723,7 +723,7 @@ server:
       ##
       loadBalancerSourceRanges: []
       ## @param server.metrics.service.externalTrafficPolicy Argo CD server service external traffic policy
-      ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+      ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
       ##
       externalTrafficPolicy: Cluster
       ## @param server.metrics.service.annotations Additional custom annotations for Argo CD server service
@@ -737,14 +737,13 @@ server:
       interval: 30s
 
   ## Configure the ingress resource that allows you to access the Argo CD gRPC API
-  ## Ref: http://kubernetes.io/docs/user-guide/ingress/
+  ## Ref: https://kubernetes.io/docs/user-guide/ingress/
   ## Ref: https://argoproj.github.io/argo-cd/operator-manual/ingress/
   ## @param server.ingressGrpc.enabled Enable the creation of an ingress for the Argo CD gRPC server
-  ## @param server.ingressGrpc.certManager Set to true to add certmanager annotations for Argo CD gRPC server ingress
   ## @param server.ingressGrpc.pathType Path type for the Argo CD gRPC server ingress
   ## @param server.ingressGrpc.apiVersion Ingress API version for the Argo CD gRPC server ingress
   ## @param server.ingressGrpc.hostname Ingress hostname for the Argo CD gRPC server ingress
-  ## @param server.ingressGrpc.annotations Annotations for the Argo CD gRPC server ingress
+  ## @param server.ingressGrpc.annotations Annotations for the Argo CD gRPC server ingress. To enable certificate autogeneration, place here your cert-manager annotations
   ## @param server.ingressGrpc.tls Enable TLS for the Argo CD server ingress
   ## @param server.ingressGrpc.extraHosts Extra hosts array for the Argo CD gRPC server ingress
   ## @param server.ingressGrpc.path Path array for the Argo CD gRPC server ingress
@@ -761,9 +760,9 @@ server:
     ##
     selfSigned: false
 
-    ## Set this to true in order to add the corresponding annotations for cert-manager
+    ## DEPRECATED: Use server.ingressGrpc.annotations instead of server.ingressGrpc.certManager
+    ## certManager: false
     ##
-    certManager: false
 
     ## Ingress Path type
     ##
@@ -782,11 +781,15 @@ server:
     ##
     path: /
 
-    ## Ingress annotations done as key:value pairs
     ## For a full list of possible ingress annotations, please see
     ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+    ## Use this parameter to set the required annotations for cert-manager, see
+    ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
     ##
-    ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+    ## e.g:
+    ## annotations:
+    ##   kubernetes.io/ingress.class: nginx
+    ##   cert-manager.io/cluster-issuer: cluster-issuer-name
     ##
     annotations: {}
 
@@ -879,7 +882,7 @@ server:
     ##
     loadBalancerSourceRanges: []
     ## @param server.service.externalTrafficPolicy Argo CD service external traffic policy
-    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
     externalTrafficPolicy: Cluster
     ## @param server.service.annotations Additional custom annotations for Argo CD service
@@ -1058,7 +1061,7 @@ repoServer:
   ##
   customReadinessProbe: {}
   ## Argo CD repo server resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param repoServer.resources.limits The resources limits for the Argo CD repo server containers
   ## @param repoServer.resources.requests The requested resources for the Argo CD repo server containers
   ##
@@ -1109,7 +1112,7 @@ repoServer:
     ##
     loadBalancerSourceRanges: []
     ## @param repoServer.service.externalTrafficPolicy Repo server service external traffic policy
-    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
     externalTrafficPolicy: Cluster
     ## @param repoServer.service.annotations Additional custom annotations for Repo server service
@@ -1166,7 +1169,7 @@ repoServer:
       ##
       loadBalancerSourceRanges: []
       ## @param repoServer.metrics.service.externalTrafficPolicy Argo CD repo server service external traffic policy
-      ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+      ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
       ##
       externalTrafficPolicy: Cluster
       ## @param repoServer.metrics.service.annotations Additional custom annotations for Argo CD repo server service
@@ -1336,10 +1339,10 @@ dex:
   image:
     registry: docker.io
     repository: bitnami/dex
-    tag: 2.30.0-debian-10-r39
+    tag: 2.30.2-debian-10-r28
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1395,7 +1398,7 @@ dex:
   ##
   customReadinessProbe: {}
   ## Dex resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param dex.resources.limits The resources limits for the Dex containers
   ## @param dex.resources.requests The requested resources for the Dex containers
   ##
@@ -1453,7 +1456,7 @@ dex:
     ##
     loadBalancerSourceRanges: []
     ## @param dex.service.externalTrafficPolicy Dex service external traffic policy
-    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
     externalTrafficPolicy: Cluster
     ## @param dex.service.annotations Additional custom annotations for Dex service
@@ -1503,7 +1506,7 @@ dex:
       ##
       loadBalancerSourceRanges: []
       ## @param dex.metrics.service.externalTrafficPolicy Dex service external traffic policy
-      ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+      ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
       ##
       externalTrafficPolicy: Cluster
       ## @param dex.metrics.service.annotations Additional custom annotations for Dex service
@@ -1816,8 +1819,8 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: "10"
-    pullPolicy: Always
+    tag: 10-debian-10-r281
+    pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -1827,7 +1830,7 @@ volumePermissions:
     ##
     pullSecrets: []
   ## Init container's resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param volumePermissions.resources.limits The resources limits for the init container
   ## @param volumePermissions.resources.requests The requested resources for the init container
   ##
@@ -1867,10 +1870,10 @@ redis:
   image:
     registry: docker.io
     repository: bitnami/redis
-    tag: 6.2.5-debian-10-r50
+    tag: 6.2.6-debian-10-r69
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

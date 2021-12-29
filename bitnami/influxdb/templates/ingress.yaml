@@ -47,6 +47,17 @@ spec:
     - host: {{ .name | quote }}
       http:
         paths:
+          {{- if $.Values.ingress.extraPaths }}
+          {{- toYaml $.Values.ingress.extraPaths | nindent 10 }}
+          {{- end }}
+          {{- if eq $architecture "high-availability" }}
+          - path: /write
+            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
+            pathType: {{ $.Values.ingress.pathType }}
+            {{- end }}
+            {{- $relayServiceName := printf "%s-%s" (include "common.names.fullname" $) "relay" }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" $relayServiceName  "servicePort" "http" "context" $)  | nindent 14 }}
+          {{- end }}
           - path: {{ default "/" .path }}
             {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
             pathType: {{ default "ImplementationSpecific" .pathType }}

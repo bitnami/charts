@@ -9,7 +9,7 @@ metadata:
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
   {{- if or .Values.service.annotations .Values.commonAnnotations }}
-  annotations: 
+  annotations:
     {{- if .Values.service.annotations }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.service.annotations "context" $) | nindent 4 }}
     {{- end }}
@@ -31,10 +31,16 @@ spec:
   {{- if (and (eq .Values.service.type "LoadBalancer") (not (empty .Values.service.loadBalancerIP))) }}
   loadBalancerIP: {{ .Values.service.loadBalancerIP }}
   {{- end }}
+  {{- if .Values.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
   ports:
     {{- if .Values.ghostEnableHttps }}
     - name: https
-      port: {{ .Values.service.httpsPort }}
+      port: {{ coalesce .Values.service.ports.https .Values.service.httpsPort }}
       protocol: TCP
       targetPort: https
       {{- if (and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.https))) }}
@@ -44,7 +50,7 @@ spec:
       {{- end }}
     {{- else }}
     - name: http
-      port: {{ .Values.service.port }}
+      port: {{ coalesce .Values.service.ports.http .Values.service.port }}
       protocol: TCP
       targetPort: http
       {{- if (and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.http))) }}

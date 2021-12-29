@@ -24,6 +24,9 @@ nameOverride: ""
 ## @param fullnameOverride String to fully override scdf.fullname template.
 ##
 fullnameOverride: ""
+## @param commonLabels Labels to add to all deployed objects
+##
+commonLabels: {}
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
 kubeVersion: ""
@@ -51,9 +54,9 @@ server:
   image:
     registry: docker.io
     repository: bitnami/spring-cloud-dataflow
-    tag: 2.8.2-debian-10-r22
+    tag: 2.9.1-debian-10-r51
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -81,7 +84,7 @@ server:
     image:
       registry: docker.io
       repository: bitnami/spring-cloud-dataflow-composed-task-runner
-      tag: 2.8.2-debian-10-r22
+      tag: 2.9.1-debian-10-r57
   ## Spring Cloud Dataflow Server configuration parameters
   ##
   configuration:
@@ -111,6 +114,19 @@ server:
     ## @param server.configuration.metricsDashboard Endpoint to the metricsDashboard instance
     ##
     metricsDashboard: ""
+    ## @param server.configuration.defaultSpringApplicationJSON Injects default values for environment variable SPRING_APPLICATION_JSON
+    ## {
+    ##   "maven": {
+    ##     "local-repository": null,
+    ##     "remote-repositories": {
+    ##       "repo1": {
+    ##         "url": "https://repo.spring.io/libs-snapshot"
+    ##       }
+    ##     }
+    ##   }
+    ## }
+    ##
+    defaultSpringApplicationJSON: true
   ## @param server.existingConfigmap ConfigMap with Spring Cloud Dataflow Server Configuration
   ## NOTE: When it's set the server.configuration.* and deployer.*
   ##  parameters are ignored,
@@ -199,7 +215,7 @@ server:
   containerSecurityContext:
     runAsUser: 1001
   ## Dataflow Server containers' resource requests and limits.
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -275,7 +291,7 @@ server:
     ##
     clusterIP: ""
     ## @param server.service.externalTrafficPolicy Enable client source IP preservation
-    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
     externalTrafficPolicy: Cluster
     ## @param server.service.loadBalancerIP Load balancer IP if service type is `LoadBalancer`
@@ -305,17 +321,23 @@ server:
     ## @param server.ingress.pathType Ingress path type
     ##
     pathType: ImplementationSpecific
-    ## @param server.ingress.certManager Set this to true in order to add the corresponding annotations for cert-manager
+    ## DEPRECATED: Use server.ingress.annotations instead of server.ingress.certManager
+    ## certManager: false
     ##
-    certManager: false
+
     ## @param server.ingress.hostname Default host for the ingress resource
     ##
     hostname: dataflow.local
-    ## @param server.ingress.annotations Ingress annotations
+    ## @param server.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
     ## For a full list of possible ingress annotations, please see
     ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+    ## Use this parameter to set the required annotations for cert-manager, see
+    ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
     ##
-    ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+    ## e.g:
+    ## annotations:
+    ##   kubernetes.io/ingress.class: nginx
+    ##   cert-manager.io/cluster-issuer: cluster-issuer-name
     ##
     annotations: {}
     ## @param server.ingress.tls Enable TLS configuration for the hostname defined at ingress.hostname parameter
@@ -460,9 +482,9 @@ skipper:
   image:
     registry: docker.io
     repository: bitnami/spring-cloud-skipper
-    tag: 2.7.2-debian-10-r22
+    tag: 2.8.1-debian-10-r56
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -570,7 +592,7 @@ skipper:
   containerSecurityContext:
     runAsUser: 1001
   ## Skipper containers' resource requests and limits.
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -646,7 +668,7 @@ skipper:
     ##
     clusterIP: ""
     ## @param skipper.service.externalTrafficPolicy Enable client source IP preservation
-    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
     externalTrafficPolicy: Cluster
     ## @param skipper.service.loadBalancerIP Load balancer IP if service type is `LoadBalancer`
@@ -753,7 +775,7 @@ externalSkipper:
 ##
 deployer:
   ## Streaming applications resource requests and limits.
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param deployer.resources.limits [object] Streaming applications resource limits
   ## @param deployer.resources.requests Streaming applications resource requests
   ##
@@ -792,9 +814,14 @@ deployer:
   ##
   volumes: {}
   ## @param deployer.environmentVariables Streaming applications environment variables
-  ## RabbitMQ/Kafka envs. Multiple values are comma separated.
+  ## RabbitMQ/Kafka envs.
+  ## Example:
+  ## environmentVariables:
+  ##   - JAVA_TOOL_OPTIONS=-Xmx1024m
+  ##   - SPRING_REDIS_HOST=redis
+  ##   - SPRING_REDIS_PORT=6379
   ##
-  environmentVariables: ""
+  environmentVariables: []
   ## Streams containers' Security Context. This security context will be use in every deployed stream.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param deployer.podSecurityContext.runAsUser Set Dataflow Streams container's Security Context runAsUser
@@ -844,9 +871,9 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/prometheus-rsocket-proxy
-    tag: 1.3.0-debian-10-r270
+    tag: 1.3.0-debian-10-r363
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -858,7 +885,7 @@ metrics:
     ##
     pullSecrets: []
   ## Prometheus Rsocket Proxy containers' resource requests and limits.
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -1011,10 +1038,10 @@ waitForBackends:
   image:
     registry: docker.io
     repository: bitnami/kubectl
-    tag: 1.19.15-debian-10-r4
+    tag: 1.23.1-debian-10-r10
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
@@ -1025,7 +1052,7 @@ waitForBackends:
     ##
     pullSecrets: []
   ## Init container resource requests and limits.
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following

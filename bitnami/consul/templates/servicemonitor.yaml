@@ -19,6 +19,9 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
+  {{- if .Values.metrics.serviceMonitor.jobLabel }}
+  jobLabel: {{ .Values.metrics.serviceMonitor.jobLabel }}
+  {{- end }}
   endpoints:
     - port: http-metrics
       {{- if .Values.metrics.serviceMonitor.interval }}
@@ -30,8 +33,8 @@ spec:
       {{- if .Values.metrics.serviceMonitor.honorLabels }}
       honorLabels: {{ .Values.metrics.serviceMonitor.honorLabels }}
       {{- end }}
-      {{- if .Values.metrics.serviceMonitor.relabellings }}
-      metricRelabelings: {{- toYaml .Values.metrics.serviceMonitor.relabellings | nindent 6 }}
+      {{- if .Values.metrics.serviceMonitor.metricRelabelings }}
+      metricRelabelings: {{- toYaml .Values.metrics.serviceMonitor.metricRelabelings | nindent 6 }}
       {{- end }}
   namespaceSelector:
     matchNames:
@@ -39,4 +42,7 @@ spec:
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: metrics
+    {{- if .Values.metrics.serviceMonitor.selector }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.metrics.serviceMonitor.selector "context" $) | nindent 4 }}
+    {{- end }}
 {{- end }}

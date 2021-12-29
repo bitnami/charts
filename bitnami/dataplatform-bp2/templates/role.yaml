@@ -18,6 +18,7 @@ rules:
       - statefulsets
       - pods
       - services
+      - secrets
     verbs:
       - get
       - list

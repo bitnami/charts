@@ -13,7 +13,7 @@ $ helm install my-release bitnami/jupyterhub
 
 Bitnami charts for Helm are carefully engineered, actively maintained and are the quickest and easiest way to deploy containers on a Kubernetes cluster that are ready to handle production workloads.
 
-This chart bootstraps a [JupyterHub](https://github.com/jupyterhub/jupyterhub) Deployment in a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [JupyterHub](https://github.com/jupyterhub/jupyterhub) Deployment in a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
@@ -73,74 +73,74 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Hub deployment parameters
 
-| Name                                        | Description                                                                               | Value                 |
-| ------------------------------------------- | ----------------------------------------------------------------------------------------- | --------------------- |
-| `hub.image.registry`                        | Hub image registry                                                                        | `docker.io`           |
-| `hub.image.repository`                      | Hub image repository                                                                      | `bitnami/jupyterhub`  |
-| `hub.image.tag`                             | Hub image tag (immutabe tags are recommended)                                             | `1.4.2-debian-10-r65` |
-| `hub.image.pullPolicy`                      | Hub image pull policy                                                                     | `IfNotPresent`        |
-| `hub.image.pullSecrets`                     | Hub image pull secrets                                                                    | `[]`                  |
-| `hub.startupProbe.enabled`                  | Enable startupProbe                                                                       | `true`                |
-| `hub.startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                    | `10`                  |
-| `hub.startupProbe.periodSeconds`            | Period seconds for startupProbe                                                           | `10`                  |
-| `hub.startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                          | `3`                   |
-| `hub.startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                        | `30`                  |
-| `hub.startupProbe.successThreshold`         | Success threshold for startupProbe                                                        | `1`                   |
-| `hub.livenessProbe.enabled`                 | Enable livenessProbe                                                                      | `true`                |
-| `hub.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                   | `10`                  |
-| `hub.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                          | `10`                  |
-| `hub.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                         | `3`                   |
-| `hub.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                       | `30`                  |
-| `hub.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                       | `1`                   |
-| `hub.readinessProbe.enabled`                | Enable readinessProbe                                                                     | `true`                |
-| `hub.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                  | `10`                  |
-| `hub.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                         | `10`                  |
-| `hub.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                        | `3`                   |
-| `hub.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                      | `30`                  |
-| `hub.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                      | `1`                   |
-| `hub.baseUrl`                               | Hub base URL                                                                              | `/`                   |
-| `hub.adminUser`                             | Hub Dummy authenticator admin user                                                        | `user`                |
-| `hub.password`                              | Hub Dummy authenticator password                                                          | `""`                  |
-| `hub.configuration`                         | Hub configuration file (to be used by jupyterhub_config.py)                               | `""`                  |
-| `hub.containerPort`                         | Hub container port                                                                        | `8081`                |
-| `hub.existingConfigmap`                     | Configmap with Hub init scripts (replaces the scripts in templates/hub/configmap.yml)     | `""`                  |
-| `hub.existingSecret`                        | Secret with hub configuration (replaces the hub.configuration value) and proxy token      | `""`                  |
-| `hub.command`                               | Override Hub default command                                                              | `[]`                  |
-| `hub.args`                                  | Override Hub default args                                                                 | `[]`                  |
-| `hub.pdb.create`                            | Deploy Hub PodDisruptionBudget                                                            | `false`               |
-| `hub.pdb.minAvailable`                      | Set minimum available hub instances                                                       | `""`                  |
-| `hub.pdb.maxUnavailable`                    | Set maximum available hub instances                                                       | `""`                  |
-| `hub.priorityClassName`                     | Hub pod priority class name                                                               | `""`                  |
-| `hub.hostAliases`                           | Add deployment host aliases                                                               | `[]`                  |
-| `hub.resources.limits`                      | The resources limits for the container                                                    | `{}`                  |
-| `hub.resources.requests`                    | The requested resources for the container                                                 | `{}`                  |
-| `hub.containerSecurityContext.enabled`      | Enabled Hub containers' Security Context                                                  | `true`                |
-| `hub.containerSecurityContext.runAsUser`    | Set Hub container's Security Context runAsUser                                            | `1000`                |
-| `hub.containerSecurityContext.runAsNonRoot` | Set Hub container's Security Context runAsNonRoot                                         | `true`                |
-| `hub.podSecurityContext.enabled`            | Enabled Hub pods' Security Context                                                        | `true`                |
-| `hub.podSecurityContext.fsGroup`            | Set Hub pod's Security Context fsGroup                                                    | `1001`                |
-| `hub.podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                  |
-| `hub.podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`                |
-| `hub.nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                  |
-| `hub.nodeAffinityPreset.key`                | Node label key to match. Ignored if `affinity` is set                                     | `""`                  |
-| `hub.nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set                                  | `[]`                  |
-| `hub.affinity`                              | Affinity for pod assignment.                                                              | `{}`                  |
-| `hub.nodeSelector`                          | Node labels for pod assignment.                                                           | `{}`                  |
-| `hub.tolerations`                           | Tolerations for pod assignment.                                                           | `[]`                  |
-| `hub.podLabels`                             | Pod extra labels                                                                          | `{}`                  |
-| `hub.podAnnotations`                        | Annotations for server pods.                                                              | `{}`                  |
-| `hub.lifecycleHooks`                        | LifecycleHooks for the hub container to automate configuration before or after startup    | `{}`                  |
-| `hub.customStartupProbe`                    | Override default startup probe                                                            | `{}`                  |
-| `hub.customLivenessProbe`                   | Override default liveness probe                                                           | `{}`                  |
-| `hub.customReadinessProbe`                  | Override default readiness probe                                                          | `{}`                  |
-| `hub.updateStrategy.type`                   | Update strategy - only really applicable for deployments with RWO PVs attached            | `RollingUpdate`       |
-| `hub.extraEnvVars`                          | Add extra environment variables to the Hub container                                      | `[]`                  |
-| `hub.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars                                      | `""`                  |
-| `hub.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars                                         | `""`                  |
-| `hub.extraVolumes`                          | Optionally specify extra list of additional volumes for Hub pods                          | `[]`                  |
-| `hub.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for Hub container(s)             | `[]`                  |
-| `hub.initContainers`                        | Add additional init containers to the Hub pods                                            | `[]`                  |
-| `hub.sidecars`                              | Add additional sidecar containers to the Hub pod                                          | `[]`                  |
+| Name                                        | Description                                                                               | Value                |
+| ------------------------------------------- | ----------------------------------------------------------------------------------------- | -------------------- |
+| `hub.image.registry`                        | Hub image registry                                                                        | `docker.io`          |
+| `hub.image.repository`                      | Hub image repository                                                                      | `bitnami/jupyterhub` |
+| `hub.image.tag`                             | Hub image tag (immutabe tags are recommended)                                             | `1.5.0-debian-10-r8` |
+| `hub.image.pullPolicy`                      | Hub image pull policy                                                                     | `IfNotPresent`       |
+| `hub.image.pullSecrets`                     | Hub image pull secrets                                                                    | `[]`                 |
+| `hub.startupProbe.enabled`                  | Enable startupProbe                                                                       | `true`               |
+| `hub.startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                    | `10`                 |
+| `hub.startupProbe.periodSeconds`            | Period seconds for startupProbe                                                           | `10`                 |
+| `hub.startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                          | `3`                  |
+| `hub.startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                        | `30`                 |
+| `hub.startupProbe.successThreshold`         | Success threshold for startupProbe                                                        | `1`                  |
+| `hub.livenessProbe.enabled`                 | Enable livenessProbe                                                                      | `true`               |
+| `hub.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                   | `10`                 |
+| `hub.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                          | `10`                 |
+| `hub.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                         | `3`                  |
+| `hub.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                       | `30`                 |
+| `hub.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                       | `1`                  |
+| `hub.readinessProbe.enabled`                | Enable readinessProbe                                                                     | `true`               |
+| `hub.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                  | `10`                 |
+| `hub.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                         | `10`                 |
+| `hub.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                        | `3`                  |
+| `hub.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                      | `30`                 |
+| `hub.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                      | `1`                  |
+| `hub.baseUrl`                               | Hub base URL                                                                              | `/`                  |
+| `hub.adminUser`                             | Hub Dummy authenticator admin user                                                        | `user`               |
+| `hub.password`                              | Hub Dummy authenticator password                                                          | `""`                 |
+| `hub.configuration`                         | Hub configuration file (to be used by jupyterhub_config.py)                               | `""`                 |
+| `hub.containerPort`                         | Hub container port                                                                        | `8081`               |
+| `hub.existingConfigmap`                     | Configmap with Hub init scripts (replaces the scripts in templates/hub/configmap.yml)     | `""`                 |
+| `hub.existingSecret`                        | Secret with hub configuration (replaces the hub.configuration value) and proxy token      | `""`                 |
+| `hub.command`                               | Override Hub default command                                                              | `[]`                 |
+| `hub.args`                                  | Override Hub default args                                                                 | `[]`                 |
+| `hub.pdb.create`                            | Deploy Hub PodDisruptionBudget                                                            | `false`              |
+| `hub.pdb.minAvailable`                      | Set minimum available hub instances                                                       | `""`                 |
+| `hub.pdb.maxUnavailable`                    | Set maximum available hub instances                                                       | `""`                 |
+| `hub.priorityClassName`                     | Hub pod priority class name                                                               | `""`                 |
+| `hub.hostAliases`                           | Add deployment host aliases                                                               | `[]`                 |
+| `hub.resources.limits`                      | The resources limits for the container                                                    | `{}`                 |
+| `hub.resources.requests`                    | The requested resources for the container                                                 | `{}`                 |
+| `hub.containerSecurityContext.enabled`      | Enabled Hub containers' Security Context                                                  | `true`               |
+| `hub.containerSecurityContext.runAsUser`    | Set Hub container's Security Context runAsUser                                            | `1000`               |
+| `hub.containerSecurityContext.runAsNonRoot` | Set Hub container's Security Context runAsNonRoot                                         | `true`               |
+| `hub.podSecurityContext.enabled`            | Enabled Hub pods' Security Context                                                        | `true`               |
+| `hub.podSecurityContext.fsGroup`            | Set Hub pod's Security Context fsGroup                                                    | `1001`               |
+| `hub.podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                 |
+| `hub.podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`               |
+| `hub.nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                 |
+| `hub.nodeAffinityPreset.key`                | Node label key to match. Ignored if `affinity` is set                                     | `""`                 |
+| `hub.nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set                                  | `[]`                 |
+| `hub.affinity`                              | Affinity for pod assignment.                                                              | `{}`                 |
+| `hub.nodeSelector`                          | Node labels for pod assignment.                                                           | `{}`                 |
+| `hub.tolerations`                           | Tolerations for pod assignment.                                                           | `[]`                 |
+| `hub.podLabels`                             | Pod extra labels                                                                          | `{}`                 |
+| `hub.podAnnotations`                        | Annotations for server pods.                                                              | `{}`                 |
+| `hub.lifecycleHooks`                        | LifecycleHooks for the hub container to automate configuration before or after startup    | `{}`                 |
+| `hub.customStartupProbe`                    | Override default startup probe                                                            | `{}`                 |
+| `hub.customLivenessProbe`                   | Override default liveness probe                                                           | `{}`                 |
+| `hub.customReadinessProbe`                  | Override default readiness probe                                                          | `{}`                 |
+| `hub.updateStrategy.type`                   | Update strategy - only really applicable for deployments with RWO PVs attached            | `RollingUpdate`      |
+| `hub.extraEnvVars`                          | Add extra environment variables to the Hub container                                      | `[]`                 |
+| `hub.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars                                      | `""`                 |
+| `hub.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars                                         | `""`                 |
+| `hub.extraVolumes`                          | Optionally specify extra list of additional volumes for Hub pods                          | `[]`                 |
+| `hub.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for Hub container(s)             | `[]`                 |
+| `hub.initContainers`                        | Add additional init containers to the Hub pods                                            | `[]`                 |
+| `hub.sidecars`                              | Add additional sidecar containers to the Hub pod                                          | `[]`                 |
 
 
 ### Hub RBAC parameters
@@ -168,13 +168,28 @@ The command removes all the Kubernetes components associated with the chart and 
 | `hub.service.externalTrafficPolicy`       | External traffic policy for the service                  | `Cluster`   |
 
 
+### Hub Metrics parameters
+
+| Name                                          | Description                                                                                 | Value          |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------- | -------------- |
+| `hub.metrics.authenticatePrometheus`          | Use authentication for Prometheus                                                           | `false`        |
+| `hub.metrics.serviceMonitor.enabled`          | If the operator is installed in your cluster, set to true to create a Service Monitor Entry | `false`        |
+| `hub.metrics.serviceMonitor.namespace`        | Namespace which Prometheus is running in                                                    | `""`           |
+| `hub.metrics.serviceMonitor.path`             | HTTP path to scrape for metrics                                                             | `/hub/metrics` |
+| `hub.metrics.serviceMonitor.interval`         | Interval at which metrics should be scraped                                                 | `30s`          |
+| `hub.metrics.serviceMonitor.scrapeTimeout`    | Specify the timeout after which the scrape is ended                                         | `""`           |
+| `hub.metrics.serviceMonitor.relabellings`     | Specify Metric Relabellings to add to the scrape endpoint                                   | `[]`           |
+| `hub.metrics.serviceMonitor.honorLabels`      | Specify honorLabels parameter to add the scrape endpoint                                    | `false`        |
+| `hub.metrics.serviceMonitor.additionalLabels` | Used to pass Labels that are required by the installed Prometheus Operator                  | `{}`           |
+
+
 ### Proxy deployment parameters
 
 | Name                                          | Description                                                                               | Value                             |
 | --------------------------------------------- | ----------------------------------------------------------------------------------------- | --------------------------------- |
 | `proxy.image.registry`                        | Proxy image registry                                                                      | `docker.io`                       |
 | `proxy.image.repository`                      | Proxy image repository                                                                    | `bitnami/configurable-http-proxy` |
-| `proxy.image.tag`                             | Proxy image tag (immutable tags are recommended)                                          | `4.5.0-debian-10-r65`             |
+| `proxy.image.tag`                             | Proxy image tag (immutable tags are recommended)                                          | `4.5.0-debian-10-r120`            |
 | `proxy.image.pullPolicy`                      | Proxy image pull policy                                                                   | `IfNotPresent`                    |
 | `proxy.image.pullSecrets`                     | Proxy image pull secrets                                                                  | `[]`                              |
 | `proxy.image.debug`                           | Activate verbose output                                                                   | `false`                           |
@@ -204,6 +219,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `proxy.pdb.minAvailable`                      | Set minimum available proxy instances                                                     | `""`                              |
 | `proxy.pdb.maxUnavailable`                    | Set maximum available proxy instances                                                     | `""`                              |
 | `proxy.containerPort.api`                     | Proxy api container port                                                                  | `8001`                            |
+| `proxy.containerPort.metrics`                 | Proxy metrics container port                                                              | `8002`                            |
 | `proxy.containerPort.http`                    | Proxy http container port                                                                 | `8000`                            |
 | `proxy.priorityClassName`                     | Proxy pod priority class name                                                             | `""`                              |
 | `proxy.resources.limits`                      | The resources limits for the container                                                    | `{}`                              |
@@ -239,35 +255,57 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Proxy Traffic Exposure Parameters
 
-| Name                                            | Description                                                                                  | Value                    |
-| ----------------------------------------------- | -------------------------------------------------------------------------------------------- | ------------------------ |
-| `proxy.networkPolicy.enabled`                   | Deploy Proxy network policies                                                                | `true`                   |
-| `proxy.networkPolicy.allowInterspaceAccess`     | Allow communication between pods in different namespaces                                     | `true`                   |
-| `proxy.networkPolicy.extraIngress`              | Add extra ingress rules to the NetworkPolicy                                                 | `""`                     |
-| `proxy.networkPolicy.extraEgress`               | Add extra egress rules to the NetworkPolicy                                                  | `""`                     |
-| `proxy.service.api.type`                        | API service type                                                                             | `ClusterIP`              |
-| `proxy.service.api.port`                        | API service port                                                                             | `8001`                   |
-| `proxy.service.api.loadBalancerIP`              | API service LoadBalancer IP (optional, cloud specific)                                       | `""`                     |
-| `proxy.service.api.loadBalancerSourceRanges`    | loadBalancerIP source ranges for the Service                                                 | `[]`                     |
-| `proxy.service.api.nodePorts.http`              | NodePort for the HTTP endpoint                                                               | `""`                     |
-| `proxy.service.api.externalTrafficPolicy`       | External traffic policy for the service                                                      | `Cluster`                |
-| `proxy.service.public.type`                     | Public service type                                                                          | `LoadBalancer`           |
-| `proxy.service.public.port`                     | Public service port                                                                          | `80`                     |
-| `proxy.service.public.loadBalancerIP`           | Public service LoadBalancer IP (optional, cloud specific)                                    | `""`                     |
-| `proxy.service.public.loadBalancerSourceRanges` | loadBalancerIP source ranges for the Service                                                 | `[]`                     |
-| `proxy.service.public.nodePorts.http`           | NodePort for the HTTP endpoint                                                               | `""`                     |
-| `proxy.service.public.externalTrafficPolicy`    | External traffic policy for the service                                                      | `Cluster`                |
-| `proxy.ingress.enabled`                         | Set to true to enable ingress record generation                                              | `false`                  |
-| `proxy.ingress.path`                            | Path to the Proxy pod.                                                                       | `/`                      |
-| `proxy.ingress.pathType`                        | Ingress path type                                                                            | `ImplementationSpecific` |
-| `proxy.ingress.certManager`                     | Add cert-manager annotations to the Ingress object                                           | `false`                  |
-| `proxy.ingress.hostname`                        | Set ingress rule hostname                                                                    | `jupyterhub.local`       |
-| `proxy.ingress.annotations`                     | Add annotations to the Ingress object                                                        | `{}`                     |
-| `proxy.ingress.tls`                             | Enable ingress tls configuration for the hostname defined at proxy.ingress.hostname          | `false`                  |
-| `proxy.ingress.extraHosts`                      | The list of additional hostnames to be covered with this ingress record.                     | `[]`                     |
-| `proxy.ingress.extraTls`                        | The tls configuration for additional hostnames to be covered with this ingress record.       | `[]`                     |
-| `proxy.ingress.extraPaths`                      | Any additional arbitrary paths that may need to be added to the ingress under the main host. | `[]`                     |
-| `proxy.ingress.secrets`                         | Add extra secrets for the tls configuration                                                  | `[]`                     |
+| Name                                             | Description                                                                                                                      | Value                    |
+| ------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `proxy.networkPolicy.enabled`                    | Deploy Proxy network policies                                                                                                    | `true`                   |
+| `proxy.networkPolicy.allowInterspaceAccess`      | Allow communication between pods in different namespaces                                                                         | `true`                   |
+| `proxy.networkPolicy.extraIngress`               | Add extra ingress rules to the NetworkPolicy                                                                                     | `""`                     |
+| `proxy.networkPolicy.extraEgress`                | Add extra egress rules to the NetworkPolicy                                                                                      | `""`                     |
+| `proxy.service.api.type`                         | API service type                                                                                                                 | `ClusterIP`              |
+| `proxy.service.api.port`                         | API service port                                                                                                                 | `8001`                   |
+| `proxy.service.api.loadBalancerIP`               | API service LoadBalancer IP (optional, cloud specific)                                                                           | `""`                     |
+| `proxy.service.api.loadBalancerSourceRanges`     | loadBalancerIP source ranges for the Service                                                                                     | `[]`                     |
+| `proxy.service.api.nodePorts.http`               | NodePort for the HTTP endpoint                                                                                                   | `""`                     |
+| `proxy.service.api.externalTrafficPolicy`        | External traffic policy for the service                                                                                          | `Cluster`                |
+| `proxy.service.metrics.type`                     | Metrics service type                                                                                                             | `ClusterIP`              |
+| `proxy.service.metrics.port`                     | Metrics service port                                                                                                             | `8002`                   |
+| `proxy.service.metrics.loadBalancerIP`           | Metrics service LoadBalancer IP (optional, cloud specific)                                                                       | `""`                     |
+| `proxy.service.metrics.loadBalancerSourceRanges` | loadBalancerIP source ranges for the Service                                                                                     | `[]`                     |
+| `proxy.service.metrics.nodePorts.http`           | NodePort for the HTTP endpoint                                                                                                   | `""`                     |
+| `proxy.service.metrics.externalTrafficPolicy`    | External traffic policy for the service                                                                                          | `Cluster`                |
+| `proxy.service.public.type`                      | Public service type                                                                                                              | `LoadBalancer`           |
+| `proxy.service.public.port`                      | Public service port                                                                                                              | `80`                     |
+| `proxy.service.public.loadBalancerIP`            | Public service LoadBalancer IP (optional, cloud specific)                                                                        | `""`                     |
+| `proxy.service.public.loadBalancerSourceRanges`  | loadBalancerIP source ranges for the Service                                                                                     | `[]`                     |
+| `proxy.service.public.nodePorts.http`            | NodePort for the HTTP endpoint                                                                                                   | `""`                     |
+| `proxy.service.public.externalTrafficPolicy`     | External traffic policy for the service                                                                                          | `Cluster`                |
+| `proxy.ingress.enabled`                          | Set to true to enable ingress record generation                                                                                  | `false`                  |
+| `proxy.ingress.apiVersion`                       | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
+| `proxy.ingress.ingressClassName`                 | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
+| `proxy.ingress.path`                             | Path to the Proxy pod.                                                                                                           | `/`                      |
+| `proxy.ingress.pathType`                         | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `proxy.ingress.hostname`                         | Set ingress rule hostname                                                                                                        | `jupyterhub.local`       |
+| `proxy.ingress.annotations`                      | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `proxy.ingress.tls`                              | Enable ingress tls configuration for the hostname defined at proxy.ingress.hostname                                              | `false`                  |
+| `proxy.ingress.selfSigned`                       | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
+| `proxy.ingress.extraHosts`                       | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
+| `proxy.ingress.extraTls`                         | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
+| `proxy.ingress.extraPaths`                       | Any additional arbitrary paths that may need to be added to the ingress under the main host.                                     | `[]`                     |
+| `proxy.ingress.secrets`                          | Add extra secrets for the tls configuration                                                                                      | `[]`                     |
+
+
+### Proxy Metrics parameters
+
+| Name                                            | Description                                                                                 | Value      |
+| ----------------------------------------------- | ------------------------------------------------------------------------------------------- | ---------- |
+| `proxy.metrics.serviceMonitor.enabled`          | If the operator is installed in your cluster, set to true to create a Service Monitor Entry | `false`    |
+| `proxy.metrics.serviceMonitor.namespace`        | Namespace which Prometheus is running in                                                    | `""`       |
+| `proxy.metrics.serviceMonitor.path`             | HTTP path to scrape for metrics                                                             | `/metrics` |
+| `proxy.metrics.serviceMonitor.interval`         | Interval at which metrics should be scraped                                                 | `30s`      |
+| `proxy.metrics.serviceMonitor.scrapeTimeout`    | Specify the timeout after which the scrape is ended                                         | `""`       |
+| `proxy.metrics.serviceMonitor.relabellings`     | Specify Metric Relabellings to add to the scrape endpoint                                   | `[]`       |
+| `proxy.metrics.serviceMonitor.honorLabels`      | Specify honorLabels parameter to add the scrape endpoint                                    | `false`    |
+| `proxy.metrics.serviceMonitor.additionalLabels` | Used to pass Labels that are required by the installed Prometheus Operator                  | `{}`       |
 
 
 ### Image puller deployment parameters
@@ -316,7 +354,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------------------------------- | --------------------------------------------------------------------------------------------------- | ------------------------------------ |
 | `singleuser.image.registry`                     | Single User image registry                                                                          | `docker.io`                          |
 | `singleuser.image.repository`                   | Single User image repository                                                                        | `bitnami/jupyter-base-notebook`      |
-| `singleuser.image.tag`                          | Single User image tag (immutabe tags are recommended)                                               | `1.4.2-debian-10-r33`                |
+| `singleuser.image.tag`                          | Single User image tag (immutabe tags are recommended)                                               | `1.5.0-debian-10-r8`                 |
 | `singleuser.image.pullPolicy`                   | Single User image pull policy                                                                       | `IfNotPresent`                       |
 | `singleuser.image.pullSecrets`                  | Single User image pull secrets                                                                      | `[]`                                 |
 | `singleuser.command`                            | Override Single User default command                                                                | `[]`                                 |
@@ -376,8 +414,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | ---------------------------- | --------------------------------------------------- | ----------------------- |
 | `auxiliaryImage.registry`    | Auxiliary image registry                            | `docker.io`             |
 | `auxiliaryImage.repository`  | Auxiliary image repository                          | `bitnami/bitnami-shell` |
-| `auxiliaryImage.tag`         | Auxiliary image tag (immutabe tags are recommended) | `10-debian-10-r202`     |
-| `auxiliaryImage.pullPolicy`  | Auxiliary image pull policy                         | `Always`                |
+| `auxiliaryImage.tag`         | Auxiliary image tag (immutabe tags are recommended) | `10-debian-10-r256`     |
+| `auxiliaryImage.pullPolicy`  | Auxiliary image pull policy                         | `IfNotPresent`          |
 | `auxiliaryImage.pullSecrets` | Auxiliary image pull secrets                        | `[]`                    |
 
 
@@ -477,7 +515,7 @@ This chart facilitates the creation of TLS secrets for use with the Ingress cont
 * Helm creates self-signed certificates and generates/manages certificate secrets.
 * An additional tool (like [cert-manager](https://github.com/jetstack/cert-manager/)) manages the secrets for the application.
 
-Refer to the [chart documentation for more information on working with TLS](https://docs.bitnami.com/kubernetes/infrastructure/jupyterhub/administration/enable-tls).
+Refer to the [chart documentation for more information on working with TLS](https://docs.bitnami.com/kubernetes/infrastructure/jupyterhub/administration/enable-tls-ingress/).
 
 ### Set pod affinity
 

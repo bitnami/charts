@@ -12,7 +12,7 @@ $ helm install my-release bitnami/wavefront-adapter-for-istio
 ## Introduction
 Bitnami charts for Helm are carefully engineered, actively maintained and are the quickest and easiest way to deploy containers on a Kubernetes cluster that are ready to handle production workloads.
 
-This will deploy a [Wavefront Adapter for Istio](https://github.com/vmware/wavefront-adapter-for-istio/) Deployment in a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This will deploy a [Wavefront Adapter for Istio](https://github.com/vmware/wavefront-adapter-for-istio/) Deployment in a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
@@ -81,7 +81,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------- |
 | `image.registry`                        | Adapter image registry                                                                    | `docker.io`                           |
 | `image.repository`                      | Adapter image repository                                                                  | `bitnami/wavefront-adapter-for-istio` |
-| `image.tag`                             | Adapter image tag (immutabe tags are recommended)                                         | `0.1.5-debian-10-r161`                |
+| `image.tag`                             | Adapter image tag (immutabe tags are recommended)                                         | `0.1.5-debian-10-r222`                |
 | `image.pullPolicy`                      | Adapter image pull policy                                                                 | `IfNotPresent`                        |
 | `image.pullSecrets`                     | Adapter image pull secrets                                                                | `[]`                                  |
 | `image.debug`                           | Enable image debug mode                                                                   | `false`                               |

@@ -45,10 +45,10 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/nginx-ingress-controller
-  tag: 1.0.2-debian-10-r0
+  tag: 1.1.0-debian-10-r34
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -96,9 +96,19 @@ reportNodeInternalIp: false
 ## @param watchIngressWithoutClass Process Ingress objects without ingressClass annotation/ingressClassName field
 ##
 watchIngressWithoutClass: false
-## @param ingressClass Name of the ingress class to route through this controller
+## Configuring this doesn't affect `kubernetes.io/ingress.class` annotation. See `extraArgs` below how to configure processing of custom annotation.
+## @param ingressClassResource.name Name of the IngressClass resource
+## @param ingressClassResource.enabled Create the IngressClass resource
+## @param ingressClassResource.default Set the created IngressClass resource as default class
+## @param ingressClassResource.controllerClass IngressClass identifier for the controller
+## @param ingressClassResource.parameters Optional parameters for the controller
 ##
-ingressClass: nginx
+ingressClassResource:
+  name: nginx
+  enabled: true
+  default: false
+  controllerClass: "k8s.io/ingress-nginx"
+  parameters: {}
 ## Allows customization of the external service
 ## the ingress will be bound to via DNS
 ##
@@ -157,6 +167,7 @@ args: []
 ## E.g. to specify the default SSL certificate you can use
 ## extraArgs:
 ##   default-ssl-certificate: "<namespace>/<secret_name>"
+##   ingress-class: nginx
 ##
 extraArgs: {}
 ## @param extraEnvVars Extra environment variables to be set on Nginx Ingress container
@@ -229,7 +240,7 @@ containerSecurityContext:
 ##
 minReadySeconds: 0
 ## Controller containers' resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources
+## ref: https://kubernetes.io/docs/user-guide/compute-resources
 ## We usually recommend not to specify default resources and to leave this as a conscious
 ## choice for the user. This also increases chances charts run on environments with little
 ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -413,7 +424,7 @@ customTemplate:
 ##         app.kubernetes.io/instance: ingress-nginx-internal
 ##
 topologySpreadConstraints: []
-## @param podSecurityPolicy.enabled If true, create & use Pod Security Policy resources
+## @param podSecurityPolicy.enabled Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later
 ## https://kubernetes.io/docs/concepts/policy/pod-security-policy/
 ##
 podSecurityPolicy:
@@ -442,10 +453,10 @@ defaultBackend:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.21.3-debian-10-r19
+    tag: 1.21.4-debian-10-r53
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -493,7 +504,7 @@ defaultBackend:
     enabled: true
     runAsUser: 1001
   ## Default backend containers' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -675,7 +686,7 @@ service:
   ##
   externalIPs: []
   ## @param service.loadBalancerIP Kubernetes LoadBalancerIP to request for Controller (optional, cloud specific)
-  ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+  ## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
   ##
   loadBalancerIP: ""
   ## @param service.loadBalancerSourceRanges List of IP CIDRs allowed access to load balancer (if supported)

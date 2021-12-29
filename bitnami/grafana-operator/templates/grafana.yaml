@@ -35,6 +35,9 @@ spec:
       {{- if .Values.commonLabels }}
       {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 6 }}
       {{- end }}
+      {{- if .Values.grafana.labels }}
+      {{- include "common.tplvalues.render" ( dict "value" .Values.grafana.labels "context" $ ) | nindent 6 }}
+      {{- end }}
     {{- if .Values.commonAnnotations }}
     annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 6 }}
     {{- end }}
@@ -54,6 +57,9 @@ spec:
     labels: {{- include "common.labels.standard" . | nindent 6 }}
       {{- if .Values.commonLabels }}
       {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 6 }}
+      {{- end }}
+      {{- if .Values.grafana.labels }}
+      {{- include "common.tplvalues.render" ( dict "value" .Values.grafana.labels "context" $ ) | nindent 6 }}
       {{- end }}
     {{- if .Values.commonAnnotations }}
     annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 6 }}
@@ -111,6 +117,9 @@ spec:
   {{- end }}
   ingress:
     enabled: {{ .Values.grafana.ingress.enabled }}
+    {{- if and .Values.grafana.ingress.ingressClassName (include "common.ingress.supportsIngressClassname" .) }}
+    ingressClassName: {{ .Values.grafana.ingress.ingressClassName | quote }}
+    {{- end }}
     hostname: {{ include "common.tplvalues.render" (dict "value" .Values.grafana.ingress.hostname "context" $) }}
     tlsEnabled: {{ .Values.grafana.ingress.tls }}
     tlsSecretName: {{ .Values.grafana.ingress.tlsSecret }}
@@ -118,6 +127,9 @@ spec:
     labels:
       {{- if .Values.commonLabels }}
       {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 6 }}
+      {{- end }}
+      {{- if .Values.grafana.labels }}
+      {{- include "common.tplvalues.render" ( dict "value" .Values.grafana.labels "context" $ ) | nindent 6 }}
       {{- end }}
       {{- if .Values.grafana.ingress.labels }}
       {{- include "common.tplvalues.render" ( dict "value" .Values.grafana.ingress.labels "context" $ ) | nindent 6 }}
@@ -141,6 +153,9 @@ spec:
   secrets: {{ toYaml .Values.grafana.secrets | nindent 4 }}
   {{- end }}
   dashboardLabelSelector: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.dashboardLabelSelectors "context" $ ) | nindent 4 }}
+  {{- if .Values.grafana.dashboardNamespaceSelector }}
+  dashboardNamespaceSelector: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.dashboardNamespaceSelector "context" $ ) | nindent 4 }}
+  {{- end }}
   jsonnet:
     libraryLabelSelector: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.jsonnetLibrarySelector "context" $ ) | nindent 6 }}
 {{- end }}

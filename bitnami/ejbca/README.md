@@ -11,7 +11,7 @@ $ helm install my-release bitnami/ejbca
 
 ## Introduction
 
-This chart bootstraps a [EJBCA](https://www.ejbca.org/) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [EJBCA](https://www.ejbca.org/) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 It also packages [Bitnami MariaDB](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) as the required databases for the EJBCA application.
 
@@ -65,7 +65,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `fullnameOverride`       | String to fully override ebjca.fullname template                                        | `""`           |
 | `commonLabels`           | Add labels to all the deployed resources                                                | `{}`           |
 | `commonAnnotations`      | Annotations to be added to all deployed resources                                       | `{}`           |
-| `extraDeploy`            | A list of extra kubernetes resources to be deployed                                     | `[]`           |
+| `extraDeploy`            | Array of extra objects to deploy with the release                                       | `[]`           |
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`        |
 | `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`    |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]` |
@@ -214,7 +214,25 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.port`                     | Database port number                                                                       | `3306`          |
 
 
-The above parameters map to the env variables defined in [bitnami/ejbca](http://github.com/bitnami/bitnami-docker-ejbca). For more information please refer to the [bitnami/ejbca](http://github.com/bitnami/bitnami-docker-ejbca) image documentation.
+### NetworkPolicy parameters
+
+| Name                                                          | Description                                                                                                               | Value   |
+| ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `networkPolicy.enabled`                                       | Enable network policies                                                                                                   | `false` |
+| `networkPolicy.ingress.enabled`                               | Enable network policy for Ingress Proxies                                                                                 | `false` |
+| `networkPolicy.ingress.namespaceSelector`                     | Ingress Proxy namespace selector labels. These labels will be used to identify the Ingress Proxy's namespace.             | `{}`    |
+| `networkPolicy.ingress.podSelector`                           | Ingress Proxy pods selector labels. These labels will be used to identify the Ingress Proxy pods.                         | `{}`    |
+| `networkPolicy.ingressRules.backendOnlyAccessibleByFrontend`  | Enable ingress rule that makes the backend (mariadb) only accessible by EJBCA's pods.                                     | `false` |
+| `networkPolicy.ingressRules.customBackendSelector`            | Backend selector labels. These labels will be used to identify the backend pods.                                          | `{}`    |
+| `networkPolicy.ingressRules.accessOnlyFrom.enabled`           | Enable ingress rule that makes EJBCA only accessible from a particular origin                                             | `false` |
+| `networkPolicy.ingressRules.accessOnlyFrom.namespaceSelector` | Namespace selector label that is allowed to access EJBCA. This label will be used to identified the allowed namespace(s). | `{}`    |
+| `networkPolicy.ingressRules.accessOnlyFrom.podSelector`       | Pods selector label that is allowed to access EJBCA. This label will be used to identified the allowed pod(s).            | `{}`    |
+| `networkPolicy.ingressRules.customRules`                      | Custom network policy ingress rule                                                                                        | `{}`    |
+| `networkPolicy.egressRules.denyConnectionsToExternal`         | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).                            | `false` |
+| `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                | `{}`    |
+
+
+The above parameters map to the env variables defined in [bitnami/ejbca](https://github.com/bitnami/bitnami-docker-ejbca). For more information please refer to the [bitnami/ejbca](https://github.com/bitnami/bitnami-docker-ejbca) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

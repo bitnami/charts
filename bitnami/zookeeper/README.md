@@ -11,7 +11,7 @@ $ helm install my-release bitnami/zookeeper
 
 ## Introduction
 
-This chart bootstraps a [ZooKeeper](https://github.com/bitnami/bitnami-docker-zookeeper) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [ZooKeeper](https://github.com/bitnami/bitnami-docker-zookeeper) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
@@ -59,6 +59,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                     | Description                                                                                  | Value           |
 | ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
+| `kubeVersion`            | Override Kubernetes version                                                                  | `""`            |
 | `nameOverride`           | String to partially override common.names.fullname template (will maintain the release name) | `""`            |
 | `fullnameOverride`       | String to fully override common.names.fullname template                                      | `""`            |
 | `clusterDomain`          | Kubernetes Cluster Domain                                                                    | `cluster.local` |
@@ -76,7 +77,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
 | `image.registry`            | ZooKeeper image registry                                                                                                                 | `docker.io`            |
 | `image.repository`          | ZooKeeper image repository                                                                                                               | `bitnami/zookeeper`    |
-| `image.tag`                 | ZooKeeper Image tag (immutable tags are recommended)                                                                                     | `3.7.0-debian-10-r157` |
+| `image.tag`                 | ZooKeeper Image tag (immutable tags are recommended)                                                                                     | `3.7.0-debian-10-r215` |
 | `image.pullPolicy`          | ZooKeeper image pull policy                                                                                                              | `IfNotPresent`         |
 | `image.pullSecrets`         | Specify docker-registry secret names as an array                                                                                         | `[]`                   |
 | `image.debug`               | Specify if debug values should be set                                                                                                    | `false`                |
@@ -109,54 +110,56 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Statefulset parameters
 
-| Name                                 | Description                                                                                                                                                                                       | Value           |
-| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
-| `extraVolumes`                       | Extra volumes                                                                                                                                                                                     | `[]`            |
-| `extraVolumeMounts`                  | Mount extra volume(s)                                                                                                                                                                             | `[]`            |
-| `updateStrategy`                     | StatefulSet controller supports automated updates. There are two valid update strategies: `RollingUpdate` and `OnDelete`                                                                          | `RollingUpdate` |
-| `podDisruptionBudget.maxUnavailable` | Max number of pods down simultaneously                                                                                                                                                            | `1`             |
-| `rollingUpdatePartition`             | Partition update strategy                                                                                                                                                                         | `""`            |
-| `podManagementPolicy`                | StatefulSet controller supports relax its ordering guarantees while preserving its uniqueness and identity guarantees. There are two valid pod management policies: `OrderedReady` and `Parallel` | `Parallel`      |
-| `replicaCount`                       | Number of ZooKeeper nodes                                                                                                                                                                         | `1`             |
-| `containerPort`                      | ZooKeeper port                                                                                                                                                                                    | `2181`          |
-| `tlsContainerPort`                   | ZooKeeper TLS port                                                                                                                                                                                | `3181`          |
-| `followerContainerPort`              | ZooKeeper follower port                                                                                                                                                                           | `2888`          |
-| `electionContainerPort`              | ZooKeeper election port                                                                                                                                                                           | `3888`          |
-| `minServerId`                        | Minimal SERVER_ID value, nodes increment their IDs respectively                                                                                                                                   | `1`             |
-| `securityContext.enabled`            | Enable security context (ZooKeeper master pod)                                                                                                                                                    | `true`          |
-| `securityContext.fsGroup`            | Group ID for the container (ZooKeeper master pod)                                                                                                                                                 | `1001`          |
-| `securityContext.runAsUser`          | User ID for the container (ZooKeeper master pod)                                                                                                                                                  | `1001`          |
-| `initContainers`                     | Extra init container to add to the statefulset                                                                                                                                                    | `[]`            |
-| `podAffinityPreset`                  | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                               | `""`            |
-| `podAntiAffinityPreset`              | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                          | `soft`          |
-| `nodeAffinityPreset.type`            | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                         | `""`            |
-| `nodeAffinityPreset.key`             | Node label key to match Ignored if `affinity` is set.                                                                                                                                             | `""`            |
-| `nodeAffinityPreset.values`          | Node label values to match. Ignored if `affinity` is set.                                                                                                                                         | `[]`            |
-| `affinity`                           | Affinity for pod assignment                                                                                                                                                                       | `{}`            |
-| `nodeSelector`                       | Node labels for pod assignment                                                                                                                                                                    | `{}`            |
-| `tolerations`                        | Tolerations for pod assignment                                                                                                                                                                    | `[]`            |
-| `topologySpreadConstraints`          | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template                                                                          | `{}`            |
-| `podLabels`                          | ZooKeeper pod labels                                                                                                                                                                              | `{}`            |
-| `podAnnotations`                     | ZooKeeper Pod annotations                                                                                                                                                                         | `{}`            |
-| `priorityClassName`                  | Name of the existing priority class to be used by ZooKeeper pods, priority class needs to be created beforehand                                                                                   | `""`            |
-| `schedulerName`                      | Kubernetes pod scheduler registry                                                                                                                                                                 | `""`            |
-| `resources.requests`                 | The requested resources for the container                                                                                                                                                         | `{}`            |
-| `livenessProbe.enabled`              | Enable livenessProbe                                                                                                                                                                              | `true`          |
-| `livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                                                                                                           | `30`            |
-| `livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                                                                                                                  | `10`            |
-| `livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                                                                                                                                 | `5`             |
-| `livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                                                                                                                               | `6`             |
-| `livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                                                                                                                               | `1`             |
-| `livenessProbe.probeCommandTimeout`  | Probe command timeout for livenessProbe                                                                                                                                                           | `2`             |
-| `readinessProbe.enabled`             | Enable readinessProbe                                                                                                                                                                             | `true`          |
-| `readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                                                                                                                          | `5`             |
-| `readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                                                                                                                                 | `10`            |
-| `readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                                                                                                                | `5`             |
-| `readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                                                                                                                              | `6`             |
-| `readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                                                                                                              | `1`             |
-| `readinessProbe.probeCommandTimeout` | Probe command timeout for readinessProbe                                                                                                                                                          | `2`             |
-| `customLivenessProbe`                | Override default liveness probe                                                                                                                                                                   | `{}`            |
-| `customReadinessProbe`               | Override default readiness probe                                                                                                                                                                  | `{}`            |
+| Name                                    | Description                                                                                                                                                                                       | Value           |
+| --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
+| `extraVolumes`                          | Extra volumes                                                                                                                                                                                     | `[]`            |
+| `extraVolumeMounts`                     | Mount extra volume(s)                                                                                                                                                                             | `[]`            |
+| `updateStrategy`                        | StatefulSet controller supports automated updates. There are two valid update strategies: `RollingUpdate` and `OnDelete`                                                                          | `RollingUpdate` |
+| `podDisruptionBudget.maxUnavailable`    | Max number of pods down simultaneously                                                                                                                                                            | `1`             |
+| `rollingUpdatePartition`                | Partition update strategy                                                                                                                                                                         | `""`            |
+| `podManagementPolicy`                   | StatefulSet controller supports relax its ordering guarantees while preserving its uniqueness and identity guarantees. There are two valid pod management policies: `OrderedReady` and `Parallel` | `Parallel`      |
+| `replicaCount`                          | Number of ZooKeeper nodes                                                                                                                                                                         | `1`             |
+| `containerPort`                         | ZooKeeper port                                                                                                                                                                                    | `2181`          |
+| `tlsContainerPort`                      | ZooKeeper TLS port                                                                                                                                                                                | `3181`          |
+| `followerContainerPort`                 | ZooKeeper follower port                                                                                                                                                                           | `2888`          |
+| `electionContainerPort`                 | ZooKeeper election port                                                                                                                                                                           | `3888`          |
+| `minServerId`                           | Minimal SERVER_ID value, nodes increment their IDs respectively                                                                                                                                   | `1`             |
+| `podSecurityContext.enabled`            | Enable security context (ZooKeeper master pod)                                                                                                                                                    | `true`          |
+| `podSecurityContext.fsGroup`            | Group ID for the container (ZooKeeper master pod)                                                                                                                                                 | `1001`          |
+| `containerSecurityContext.enabled`      | Enable container Security Context                                                                                                                                                                 | `true`          |
+| `containerSecurityContext.runAsUser`    | User ID for the container                                                                                                                                                                         | `1001`          |
+| `containerSecurityContext.runAsNonRoot` | Avoid running as root User                                                                                                                                                                        | `true`          |
+| `initContainers`                        | Extra init container to add to the statefulset                                                                                                                                                    | `[]`            |
+| `podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                               | `""`            |
+| `podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                          | `soft`          |
+| `nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                         | `""`            |
+| `nodeAffinityPreset.key`                | Node label key to match Ignored if `affinity` is set.                                                                                                                                             | `""`            |
+| `nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set.                                                                                                                                         | `[]`            |
+| `affinity`                              | Affinity for pod assignment                                                                                                                                                                       | `{}`            |
+| `nodeSelector`                          | Node labels for pod assignment                                                                                                                                                                    | `{}`            |
+| `tolerations`                           | Tolerations for pod assignment                                                                                                                                                                    | `[]`            |
+| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template                                                                          | `{}`            |
+| `podLabels`                             | ZooKeeper pod labels                                                                                                                                                                              | `{}`            |
+| `podAnnotations`                        | ZooKeeper Pod annotations                                                                                                                                                                         | `{}`            |
+| `priorityClassName`                     | Name of the existing priority class to be used by ZooKeeper pods, priority class needs to be created beforehand                                                                                   | `""`            |
+| `schedulerName`                         | Kubernetes pod scheduler registry                                                                                                                                                                 | `""`            |
+| `resources.requests`                    | The requested resources for the container                                                                                                                                                         | `{}`            |
+| `livenessProbe.enabled`                 | Enable livenessProbe                                                                                                                                                                              | `true`          |
+| `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                                                                                                           | `30`            |
+| `livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                                                                                                                  | `10`            |
+| `livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                                                                                                                 | `5`             |
+| `livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                                                                                                               | `6`             |
+| `livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                                                                                                               | `1`             |
+| `livenessProbe.probeCommandTimeout`     | Probe command timeout for livenessProbe                                                                                                                                                           | `2`             |
+| `readinessProbe.enabled`                | Enable readinessProbe                                                                                                                                                                             | `true`          |
+| `readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                                                                                                          | `5`             |
+| `readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                                                                                                                 | `10`            |
+| `readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                                                                                                                | `5`             |
+| `readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                                                                                                              | `6`             |
+| `readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                                                                                                              | `1`             |
+| `readinessProbe.probeCommandTimeout`    | Probe command timeout for readinessProbe                                                                                                                                                          | `2`             |
+| `customLivenessProbe`                   | Override default liveness probe                                                                                                                                                                   | `{}`            |
+| `customReadinessProbe`                  | Override default readiness probe                                                                                                                                                                  | `{}`            |
 
 
 ### Traffic Exposure parameters
@@ -200,35 +203,39 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Volume Permissions parameters
 
-| Name                                  | Description                                                                                                          | Value                   |
-| ------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| `volumePermissions.enabled`           | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`                 |
-| `volumePermissions.image.registry`    | Init container volume-permissions image registry                                                                     | `docker.io`             |
-| `volumePermissions.image.repository`  | Init container volume-permissions image repository                                                                   | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`         | Init container volume-permissions image tag (immutable tags are recommended)                                         | `10-debian-10-r202`     |
-| `volumePermissions.image.pullPolicy`  | Init container volume-permissions image pull policy                                                                  | `Always`                |
-| `volumePermissions.image.pullSecrets` | Init container volume-permissions image pull secrets                                                                 | `[]`                    |
-| `volumePermissions.resources`         | Init container resource requests/limit                                                                               | `{}`                    |
+| Name                                                   | Description                                                                                                          | Value                   |
+| ------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------- | ----------------------- |
+| `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`                 |
+| `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                                                     | `docker.io`             |
+| `volumePermissions.image.repository`                   | Init container volume-permissions image repository                                                                   | `bitnami/bitnami-shell` |
+| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)                                         | `10-debian-10-r261`     |
+| `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                                                                  | `IfNotPresent`          |
+| `volumePermissions.image.pullSecrets`                  | Init container volume-permissions image pull secrets                                                                 | `[]`                    |
+| `volumePermissions.resources`                          | Init container resource requests/limit                                                                               | `{}`                    |
+| `volumePermissions.containerSecurityContext.runAsUser` | User ID for the init container                                                                                       | `0`                     |
 
 
 ### Metrics parameters
 
-| Name                                   | Description                                                                                                                               | Value       |
-| -------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
-| `metrics.enabled`                      | Enable prometheus to access zookeeper metrics endpoint                                                                                    | `false`     |
-| `metrics.containerPort`                | Zookeeper Prometheus Exporter container port                                                                                              | `9141`      |
-| `metrics.service.type`                 | Zookeeper Prometheus Exporter service type                                                                                                | `ClusterIP` |
-| `metrics.service.port`                 | Prometheus metrics service port                                                                                                           | `9141`      |
-| `metrics.service.annotations`          | Annotations for the Zookeeper to auto-discover the metrics endpoint                                                                       | `{}`        |
-| `metrics.serviceMonitor.enabled`       | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)                                    | `false`     |
-| `metrics.serviceMonitor.namespace`     | Namespace for the ServiceMonitor Resource (defaults to the Release Namespace)                                                             | `""`        |
-| `metrics.serviceMonitor.interval`      | Interval at which metrics should be scraped.                                                                                              | `""`        |
-| `metrics.serviceMonitor.scrapeTimeout` | Timeout after which the scrape is ended                                                                                                   | `""`        |
-| `metrics.serviceMonitor.selector`      | Prometheus instance selector labels                                                                                                       | `{}`        |
-| `metrics.prometheusRule.enabled`       | if `true`, creates a Prometheus Operator PrometheusRule (also requires `metrics.enabled` to be `true` and `metrics.prometheusRule.rules`) | `false`     |
-| `metrics.prometheusRule.namespace`     | Namespace for the PrometheusRule Resource (defaults to the Release Namespace)                                                             | `""`        |
-| `metrics.prometheusRule.selector`      | Prometheus instance selector labels                                                                                                       | `{}`        |
-| `metrics.prometheusRule.rules`         | Prometheus Rule definitions                                                                                                               | `[]`        |
+| Name                                       | Description                                                                                                                               | Value       |
+| ------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| `metrics.enabled`                          | Enable prometheus to access zookeeper metrics endpoint                                                                                    | `false`     |
+| `metrics.containerPort`                    | Zookeeper Prometheus Exporter container port                                                                                              | `9141`      |
+| `metrics.service.type`                     | Zookeeper Prometheus Exporter service type                                                                                                | `ClusterIP` |
+| `metrics.service.port`                     | Prometheus metrics service port                                                                                                           | `9141`      |
+| `metrics.service.annotations`              | Annotations for the Zookeeper to auto-discover the metrics endpoint                                                                       | `{}`        |
+| `metrics.serviceMonitor.enabled`           | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)                                    | `false`     |
+| `metrics.serviceMonitor.namespace`         | Namespace for the ServiceMonitor Resource (defaults to the Release Namespace)                                                             | `""`        |
+| `metrics.serviceMonitor.interval`          | Interval at which metrics should be scraped.                                                                                              | `""`        |
+| `metrics.serviceMonitor.scrapeTimeout`     | Timeout after which the scrape is ended                                                                                                   | `""`        |
+| `metrics.serviceMonitor.additionalLabels`  | Additional labels that can be used so ServiceMonitor will be discovered by Prometheus                                                     | `{}`        |
+| `metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                                                                                       | `{}`        |
+| `metrics.serviceMonitor.relabelings`       | RelabelConfigs to apply to samples before scraping                                                                                        | `[]`        |
+| `metrics.serviceMonitor.metricRelabelings` | MetricRelabelConfigs to apply to samples before ingestion                                                                                 | `[]`        |
+| `metrics.prometheusRule.enabled`           | if `true`, creates a Prometheus Operator PrometheusRule (also requires `metrics.enabled` to be `true` and `metrics.prometheusRule.rules`) | `false`     |
+| `metrics.prometheusRule.namespace`         | Namespace for the PrometheusRule Resource (defaults to the Release Namespace)                                                             | `""`        |
+| `metrics.prometheusRule.selector`          | Prometheus instance selector labels                                                                                                       | `{}`        |
+| `metrics.prometheusRule.rules`             | Prometheus Rule definitions                                                                                                               | `[]`        |
 
 
 ### TLS/SSL parameters
@@ -321,9 +328,9 @@ You can also set the log4j logging level and what log appenders are turned on, b
 ```console
 zookeeper.root.logger=INFO, CONSOLE
 ```
-the available appender is 
+the available appender is
 
-- CONSOLE 
+- CONSOLE
 - ROLLINGFILE
 - RFAAUDIT
 - TRACEFILE

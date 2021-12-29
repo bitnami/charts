@@ -34,6 +34,12 @@ spec:
       {{- if .Values.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.schedulerName }}
+      schedulerName: {{ .Values.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.topologySpreadConstraints "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.affinity }}
       affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.affinity "context" $) | nindent 8 }}
       {{- else }}
@@ -83,7 +89,7 @@ spec:
             - --wavefront-metric-prefix={{ .Values.adapterMetricPrefix }}
             - --metrics-relist-interval={{ .Values.adapterMetricRelistInterval }}
             - --cert-dir={{ .Values.adapterSSLCertDir }}
-            - --secure-port={{ .Values.containerPort }}
+            - --secure-port={{ .Values.containerPorts.https }}
             - --api-client-timeout={{ .Values.adapterAPIClientTimeout }}
             {{- if .Values.adapterRules }}
             - --external-metrics-config=/bitnami/wavefront-hpa-adapter/conf/config.yaml
@@ -108,7 +114,7 @@ spec:
           resources: {{- toYaml .Values.resources | nindent 12 }}
           {{- end }}
           ports:
-            - containerPort: {{ .Values.containerPort }}
+            - containerPort: {{ .Values.containerPorts.https }}
               name: https
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
@@ -133,6 +139,18 @@ spec:
             failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
           {{- else if .Values.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.startupProbe.enabled }}
+          startupProbe:
+            tcpSocket:
+              port: https
+            initialDelaySeconds: {{ .Values.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.startupProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.startupProbe.successThreshold }}
+            failureThreshold: {{ .Values.startupProbe.failureThreshold }}
+          {{- else if .Values.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - mountPath: /tmp
