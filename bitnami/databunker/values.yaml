@@ -105,7 +105,7 @@ databunkerAdminEmail: "user@example.com"
 command: ["/bin/sh"]
 ## @param args Override default container args (useful when using custom images)
 ##
-args: ["-c", "/databunker/bin/databunker -init -db databunkerdb; /databunker/bin/databunker -db databunkerdb -conf /databunker/conf/databunker.yaml" ]
+args: ["-c", "/databunker/bin/databunker -init -db databunkerdb; /databunker/bin/databunker -db databunkerdb -conf /databunker/conf/databunker.yaml"]
 ## @param updateStrategy.type Update strategy - only really applicable for deployments with RWO PVs attached
 ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
 ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
@@ -154,7 +154,7 @@ existingSecret: ""
 ## @param containerPorts [object] Container ports
 ##
 containerPorts:
-  #http: 3000
+  ## http: 3000
   https: 3000
 ## @param sessionAffinity Control where client requests go, to the same pod or round-robin. Values: ClientIP or None
 ## ref: https://kubernetes.io/docs/user-guide/services/
@@ -404,7 +404,6 @@ networkPolicy:
     ##             label: example
     customRules: {}
 
-
 ## @section Database parameters
 
 ## MariaDB chart configuration
@@ -493,7 +492,6 @@ externalDatabase:
   ## @param externalDatabase.database Name of the existing database
   ##
   database: databunkerdb
-
 
 ## @section Traffic Exposure Parameters
 
@@ -701,7 +699,7 @@ certificates:
   ## @param certificates.customCAs Defines a list of secrets to import into the container trust store
   ##
   customCAs: []
-  #  - secret: "databunker"
+  ##  - secret: "databunker"
   ## @param certificates.command Override default container command (useful when using custom images)
   ## e.g:
   ## - secret: custom-CA
