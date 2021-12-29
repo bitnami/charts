@@ -1,0 +1,37 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
+** Please be patient while the chart is being deployed **
+
+1. Get the Databunker URL by running:
+
+  {{- if eq .Values.service.type "NodePort" }}
+
+  export APP_PORT=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} -o jsonpath="{.spec.ports[0].nodePort}")
+  export APP_HOST=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+
+  {{- else }}
+
+  {{- if eq .Values.service.type "LoadBalancer" }}
+  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ include "common.names.fullname" . }}'
+
+  export APP_HOST=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+
+  {{- end }}
+
+  export POD_NAME=$(kubectl get pods --namespace default -l "app.kubernetes.io/name=databunker,app.kubernetes.io/instance=databunker" -o jsonpath="{.items[0].metadata.name}")
+  export CONTAINER_PORT=$(kubectl get pod --namespace default $POD_NAME -o jsonpath="{.spec.containers[0].ports[0].containerPort}")
+  echo "Visit http://127.0.0.1:8080 to use your application"
+  kubectl --namespace default port-forward $POD_NAME 8080:$CONTAINER_PORT
+
+  {{- end }}
+
+2. Databunker secreets
+
+  echo DATABASE_ROOT_PASSWORD : $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "databunker.databaseSecretName" . }} -o jsonpath="{.data.mariadb-root-password}" | base64 --decode)
+  echo BUNKERUSER_DATABASE_PASSWORD : $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "databunker.databaseSecretName" . }} -o jsonpath="{.data.mariadb-password}" | base64 --decode)
+  echo MASTER_KEY : $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "databunker.secretName" . }} -o jsonpath="{.data.databunker-masterkey}" | base64 --decode)
+  echo ROOT_TOKEN : $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "databunker.secretName" . }} -o jsonpath="{.data.databunker-roottoken}" | base64 --decode)
+
