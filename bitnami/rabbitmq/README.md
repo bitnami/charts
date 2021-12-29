@@ -1,6 +1,6 @@
 # RabbitMQ
 
-[RabbitMQ](https://www.rabbitmq.com/) is an open source message broker software that implements the Advanced Message Queuing Protocol (AMQP).
+[RabbitMQ](https://www.rabbitmq.com/) is an open source multi-protocol message broker.
 
 ## TL;DR
 

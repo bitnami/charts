@@ -169,9 +169,9 @@ spec:
           readinessProbe:
             httpGet:
             {{- if .Values.configuration.server.rewriteBasePath }}
-              path: {{ .Values.configuration.server.basePath }}/login
+              path: {{ .Values.configuration.server.basePath }}/status
             {{- else }}
-              path: /login
+              path: /status
             {{- end }}
               port: http
               scheme: {{ ternary "HTTPS" "HTTP" .Values.tls.enabled }}

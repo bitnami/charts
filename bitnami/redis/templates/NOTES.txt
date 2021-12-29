@@ -90,7 +90,7 @@ To connect to your Redis&trade; server:
 
 1. Run a Redis&trade; pod that you can use as a client:
 
-   kubectl run --namespace {{ .Release.Namespace }} redis-client --restart='Never' {{ if .Values.auth.enabled }} --env REDISCLI_AUTH=$REDIS_PASSWORD {{ end }} --image {{ template "redis.image" . }} --command -- sleep infinity
+   kubectl run --namespace {{ .Release.Namespace }} redis-client --restart='Never' {{ if .Values.auth.enabled }} --env REDIS_PASSWORD=$REDIS_PASSWORD {{ end }} --image {{ template "redis.image" . }} --command -- sleep infinity
 
 {{- if .Values.tls.enabled }}
 
@@ -180,15 +180,6 @@ To connect to your database from outside the cluster execute the following comma
 {{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
 {{- include "common.warnings.rollingTag" .Values.sysctl.image }}
 {{- include "redis.validateValues" . }}
-{{- $requiredPassword := list -}}
-{{- $secretName := include "redis.secretName" . -}}
-{{- $secretPasswordKey := include "redis.secretPasswordKey" . -}}
-{{- if and .Values.auth.enabled (not .Values.auth.existingSecret) (not .Values.global.redis.password) -}}
-  {{- $requiredRedisPassword := dict "valueKey" "auth.password" "secret" $secretName "field" $secretPasswordKey -}}
-  {{- $requiredPassword = append $requiredPassword $requiredRedisPassword -}}
-{{- end -}}
-{{- $requiredRedisPasswordErrors := include "common.validations.values.multiple.empty" (dict "required" $requiredPassword "context" $) -}}
-{{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" (list $requiredRedisPasswordErrors) "context" $) -}}
 
 {{- if and (eq .Values.architecture "replication") .Values.sentinel.enabled (eq .Values.sentinel.service.type "NodePort") (not .Release.IsUpgrade ) }}
 {{- if $.Values.sentinel.service.nodePorts.sentinel  }}
