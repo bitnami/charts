@@ -76,7 +76,7 @@ containers:
         key: tomcat-password
   - name: TOMCAT_ALLOW_REMOTE_MANAGEMENT
     value: {{ .Values.tomcatAllowRemoteManagement | quote }}
-  {{- if or .Values.catalinaOpts .Values.metrics.jmx.enabled }}    
+  {{- if or .Values.catalinaOpts .Values.metrics.jmx.enabled }}
   - name: CATALINA_OPTS
     value: {{ include "tomcat.catalinaOpts" . | quote }}
   {{- end }}
@@ -92,6 +92,7 @@ containers:
   {{- if .Values.extraEnvVarsSecret }}
   - secretRef:
       name: {{ include "common.tplvalues.render" (dict "value" .Values.extraEnvVarsSecret "context" $) }}
+  {{- end }}
   {{- end }}
   {{- if .Values.initContainers }}
   {{ include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 2 }}
@@ -213,18 +214,18 @@ volumes:
     - -jar
     - jmx_prometheus_httpserver.jar
     - {{ .Values.metrics.jmx.ports.metrics | quote }}
-    - /etc/jmx-tomcat/jmx-tomcat-prometheus.yml  
+    - /etc/jmx-tomcat/jmx-tomcat-prometheus.yml
   ports:
   {{- range $key, $val := .Values.metrics.jmx.ports }}
     - name: {{ $key }}
       containerPort: {{ $val }}
-  {{- end }} 
+  {{- end }}
   {{- if .Values.metrics.jmx.resources }}
   resources: {{- toYaml .Values.metrics.jmx.resources | nindent 4 }}
-  {{- end }}      
+  {{- end }}
   volumeMounts:
     - name: jmx-config
-      mountPath: /etc/jmx-tomcat	  
+      mountPath: /etc/jmx-tomcat
 {{- end }}
 volumes:
 {{- if and .Values.persistence.enabled (eq .Values.deployment.type "deployment") }}
