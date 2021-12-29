@@ -465,7 +465,7 @@ readinessProbe:
 ## @param startupProbe.successThreshold Success threshold for startupProbe
 ##
 startupProbe:
-  enabled: true
+  enabled: false
   httpGet:
     path: /wp-login.php
     port: '{{ .Values.wordpressScheme }}'
