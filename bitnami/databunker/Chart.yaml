@@ -1,5 +1,5 @@
 annotations:
-  category: database
+  category: Database
 apiVersion: v2
 appVersion: 1.0.2
 dependencies:
