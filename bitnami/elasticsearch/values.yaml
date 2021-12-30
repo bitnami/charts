@@ -1651,6 +1651,9 @@ metrics:
     ## @param metrics.serviceMonitor.namespace Namespace in which Prometheus is running
     ##
     namespace: ""
+    ## @param metrics.serviceMonitor.labels Extra labels for the ServiceMonitor
+    ##
+    labels: {}
     ## @param metrics.serviceMonitor.interval Interval at which metrics should be scraped.
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ## e.g:

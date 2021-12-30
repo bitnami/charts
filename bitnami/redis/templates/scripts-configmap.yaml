@@ -295,9 +295,9 @@ data:
     }
     get_sentinel_master_info() {
         if is_boolean_yes "$REDIS_TLS_ENABLED"; then
-            sentinel_info_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}REDISCLI_AUTH="\$REDIS_PASSWORD" {{ end }}redis-cli -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
+            sentinel_info_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}REDISCLI_AUTH="\$REDIS_PASSWORD" {{ end }}timeout 5 redis-cli -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
         else
-            sentinel_info_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}REDISCLI_AUTH="\$REDIS_PASSWORD" {{ end }}redis-cli -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
+            sentinel_info_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}REDISCLI_AUTH="\$REDIS_PASSWORD" {{ end }}timeout 5 redis-cli -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
         fi
 
         info "about to run the command: $sentinel_info_command"
@@ -318,7 +318,7 @@ data:
     {{- end }}
     printf "\nsentinel myid %s" "$(host_id "$HOSTNAME")" >> /opt/bitnami/redis-sentinel/etc/sentinel.conf
 
-    if ! $(get_sentinel_master_info); then
+    if ! get_sentinel_master_info; then
         # No master found, lets create a master node
         export REDIS_REPLICATION_MODE="master"
 

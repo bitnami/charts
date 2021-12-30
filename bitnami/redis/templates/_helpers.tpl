@@ -180,6 +180,21 @@ Get the password key to be retrieved from Redis&trade; secret.
 {{- end -}}
 {{- end -}}
 
+
+{{/*
+Returns the available value for certain key in an existing secret (if it exists),
+otherwise it generates a random value.
+*/}}
+{{- define "getValueFromSecret" }}
+    {{- $len := (default 16 .Length) | int -}}
+    {{- $obj := (lookup "v1" "Secret" .Namespace .Name).data -}}
+    {{- if $obj }}
+        {{- index $obj .Key | b64dec -}}
+    {{- else -}}
+        {{- randAlphaNum $len -}}
+    {{- end -}}
+{{- end }}
+
 {{/*
 Return Redis&trade; password
 */}}
@@ -189,7 +204,7 @@ Return Redis&trade; password
 {{- else if not (empty .Values.auth.password) -}}
     {{- .Values.auth.password -}}
 {{- else -}}
-    {{- randAlphaNum 10 -}}
+    {{- include "getValueFromSecret" (dict "Namespace" .Release.Namespace "Name" (include "common.names.fullname" .) "Length" 10 "Key" "redis-password")  -}}
 {{- end -}}
 {{- end -}}
 
