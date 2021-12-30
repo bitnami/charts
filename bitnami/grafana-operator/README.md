@@ -212,6 +212,7 @@ For more information, refer to the [documentation on the differences between the
 | `grafana.ingress.ingressClassName`                          | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                 | `""`                  |
 | `grafana.ingress.hostname`                                  | The hostname under which the grafana instance should be reachable                             | `grafana.local`       |
 | `grafana.ingress.path`                                      | The path for the ingress instance to forward to the grafana app                               | `/`                   |
+| `grafana.ingress.pathType`                                      | The pathType for the ingress instance to forward to the grafana app                               | `Prefix`                   |
 | `grafana.ingress.labels`                                    | Additional Labels for the ingress resource                                                    | `{}`                  |
 | `grafana.ingress.annotations`                               | Additional Annotations for the ingress resource                                               | `{}`                  |
 | `grafana.ingress.tls`                                       | This enables tls support for the ingress resource                                             | `false`               |
