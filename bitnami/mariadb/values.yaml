@@ -1129,6 +1129,30 @@ metrics:
     ## @param metrics.serviceMonitor.labels Extra labels for the ServiceMonitor
     ##
     labels: {}
+  ## Prometheus Operator PrometheusRule configuration
+  ##
+  prometheusRule:
+    ## @param metrics.prometheusRule.enabled if `true`, creates a Prometheus Operator PrometheusRule (also requires `metrics.enabled` to be `true` and `metrics.prometheusRule.rules`)
+    ##
+    enabled: false
+    ## @param metrics.prometheusRule.namespace Namespace for the PrometheusRule Resource (defaults to the Release Namespace)
+    ##
+    namespace: ""
+    ## @param metrics.prometheusRule.additionalLabels Additional labels that can be used so PrometheusRule will be discovered by Prometheus
+    ##
+    additionalLabels: {}
+    ## @param metrics.prometheusRule.rules Prometheus Rule definitions
+    ##  - alert: MariaDB-Down
+    ##    expr: absent(up{job="mariadb"} == 1)
+    ##    for: 5m
+    ##    labels:
+    ##      severity: warning
+    ##      service: mariadb
+    ##    annotations:
+    ##      message: 'MariaDB instance {{ $labels.instance }} is down'
+    ##      summary: MariaDB instance is down
+    ##
+    rules: []
 
 ## @section NetworkPolicy parameters
 

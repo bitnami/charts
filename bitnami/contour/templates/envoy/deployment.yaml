@@ -245,6 +245,9 @@ spec:
                 path: /shutdown
                 port: 8090
                 scheme: HTTP
+        {{- if .Values.envoy.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.envoy.sidecars "cotext" $ ) | nindent 8 }}
+        {{- end }}
       initContainers:
         - command:
             - contour

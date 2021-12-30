@@ -242,7 +242,7 @@ helm uninstall my-release
 | `deployer.tolerations`                        | Streaming applications tolerations                                                          | `{}`   |
 | `deployer.volumeMounts`                       | Streaming applications extra volume mounts                                                  | `{}`   |
 | `deployer.volumes`                            | Streaming applications extra volumes                                                        | `{}`   |
-| `deployer.environmentVariables`               | Streaming applications environment variables                                                | `""`   |
+| `deployer.environmentVariables`               | Streaming applications environment variables. List of strings                               | `[]`   |
 | `deployer.podSecurityContext.runAsUser`       | Set Dataflow Streams container's Security Context runAsUser                                 | `1001` |
 
 

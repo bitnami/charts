@@ -2,6 +2,7 @@
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
 ## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
@@ -31,6 +32,7 @@ global:
     replicationPassword: ""
 
 ## @section Common parameters
+##
 
 ## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
 ##
@@ -64,6 +66,7 @@ diagnosticMode:
     - infinity
 
 ## @section PostgreSQL parameters
+##
 
 ## Bitnami PostgreSQL image version
 ## ref: https://hub.docker.com/r/bitnami/postgresql/tags/
@@ -211,6 +214,7 @@ replication:
   uniqueServices: false
 ## @param postgresqlPostgresPassword PostgreSQL admin password (used when `postgresqlUsername` is not `postgres`, in which case`postgres` is the admin username)
 ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#creating-a-database-user-on-first-run (see note!)
+##
 postgresqlPostgresPassword: ""
 ## @param postgresqlUsername PostgreSQL user (has superuser privileges if username is `postgres`)
 ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#setting-the-root-password-on-first-run
@@ -310,9 +314,11 @@ extendedConfConfigMap: ""
 initdbScripts: {}
 ## @param initdbScriptsConfigMap ConfigMap with scripts to be run at first boot
 ## NOTE: This will override initdbScripts
+##
 initdbScriptsConfigMap: ""
 ## @param initdbScriptsSecret Secret with scripts to be run at first boot (in case it contains sensitive information)
 ## NOTE: This can work along initdbScripts or initdbScriptsConfigMap
+##
 initdbScriptsSecret: ""
 ## @param initdbUser Specify the PostgreSQL username to execute the initdb scripts
 ##
@@ -320,6 +326,11 @@ initdbUser: ""
 ## @param initdbPassword Specify the PostgreSQL password to execute the initdb scripts
 ##
 initdbPassword: ""
+
+## @param containerPorts.postgresql PostgreSQL container port
+##
+containerPorts:
+  postgresql: 5432
 ## Audit settings
 ## https://github.com/bitnami/bitnami-docker-postgresql#auditing
 ##
@@ -508,6 +519,7 @@ persistence:
   ## selector:
   ##   matchLabels:
   ##     app: my-app
+  ##
   selector: {}
 ## @param updateStrategy.type updateStrategy for PostgreSQL StatefulSet and its reads StatefulSets
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
@@ -531,6 +543,7 @@ primary:
   ##
   nodeAffinityPreset:
     ## @param primary.nodeAffinityPreset.type PostgreSQL primary node affinity preset type. Ignored if `primary.affinity` is set. Allowed values: `soft` or `hard`
+    ##
     type: ""
     ## @param primary.nodeAffinityPreset.key PostgreSQL primary node label key to match Ignored if `primary.affinity` is set.
     ## E.g.
