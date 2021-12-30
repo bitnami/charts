@@ -10,9 +10,7 @@ metadata:
   {{- end }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: nginx
-    {{- range $key, $value := .Values.metrics.prometheusRule.selector }}
-    {{ $key }}: {{ $value | quote }}
-    {{- end }}
+    app.kubernetes.io/component: metrics
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
