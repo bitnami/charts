@@ -87,5 +87,3 @@ To connect to your database from outside the cluster execute the following comma
 {{- include "postgresql.validateValues" . -}}
 {{- include "common.warnings.rollingTag" .Values.image -}}
 {{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
-{{- $passwordValidationErrors := include "common.validations.values.postgresql.passwords" (dict "secret" (include "common.names.fullname" .) "context" $) -}}
-{{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" (list $passwordValidationErrors) "context" $) -}}
