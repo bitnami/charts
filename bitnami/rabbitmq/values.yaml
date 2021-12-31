@@ -971,13 +971,18 @@ networkPolicy:
   ## @param networkPolicy.additionalRules Additional NetworkPolicy Ingress "from" rules to set. Note that all rules are OR-ed.
   ## e.g:
   ## additionalRules:
-  ##  - matchLabels:
-  ##    - role: frontend
-  ##  - matchExpressions:
-  ##    - key: role
-  ##      operator: In
-  ##      values:
-  ##        - frontend
+  ##   - podSelector:
+  ##       matchLabels:
+  ##         role: frontend
+  ##     namespaceSelector:
+  ##       matchLabels:
+  ##         namespace: frontend
+  ##   - podSelector:
+  ##       matchExpressions:
+  ##         - key: role
+  ##           operator: In
+  ##           values:
+  ##             - frontend
   ##
   additionalRules: []
 
