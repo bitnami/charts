@@ -127,7 +127,7 @@ operator:
   image:
     registry: docker.io
     repository: bitnami/grafana-operator
-    tag: 4.1.1-debian-10-r16
+    tag: 4.1.1-debian-10-r18
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## Ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -386,7 +386,7 @@ grafana:
   image:
     registry: docker.io
     repository: bitnami/grafana
-    tag: 8.3.3-debian-10-r15
+    tag: 8.3.3-debian-10-r16
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -547,6 +547,9 @@ grafana:
     ## @param grafana.ingress.path The path for the ingress instance to forward to the grafana app
     ##
     path: /
+    ## @param grafana.ingress.pathType The pathType for the ingress instance to forward to the grafana app
+    ##
+    pathType: ImplementationSpecific
     ## @param grafana.ingress.labels Additional Labels for the ingress resource
     ##
     labels: {}
@@ -601,7 +604,7 @@ grafana:
     server:
       root_url: |-
         {{- if .Values.grafana.ingress.enabled }}
-        {{ if .Values.grafana.ingress.tls }}https{{ else }}http{{ end }}://{{ .Values.grafana.ingress.hostname }}
+        {{ if .Values.grafana.ingress.tls }}https{{ else }}http{{ end }}://{{ include "common.tplvalues.render" (dict "value" .Values.grafana.ingress.hostname "context" $) }}
         {{- else }}
         http://localhost:3000
         {{- end }}
