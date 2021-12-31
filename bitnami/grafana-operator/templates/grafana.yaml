@@ -160,6 +160,7 @@ spec:
       {{- end }}
     {{- end }}
     path: {{ include "common.tplvalues.render" (dict "value" .Values.grafana.ingress.path "context" $) }}
+    pathType: {{ include "common.tplvalues.render" (dict "value" .Values.grafana.ingress.pathType "context" $) }}
   config: {{- include "common.tplvalues.render" ( dict "value" .Values.grafana.config "context" $ ) | nindent 4 }}
   {{- if .Values.grafana.configMaps }}
   configMaps: {{ toYaml .Values.grafana.configMaps | nindent 4 }}
