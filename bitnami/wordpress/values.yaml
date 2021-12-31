@@ -491,7 +491,7 @@ customLivenessProbe: {}
 ## @param customReadinessProbe Custom readinessProbe that overrides the default one
 ##
 customReadinessProbe: {}
-## @param customReadinessProbe Custom startupProbe that overrides the default one
+## @param customStartupProbe Custom startupProbe that overrides the default one
 ##
 customStartupProbe: {}
 
