@@ -108,12 +108,14 @@ spec:
                 else
                     info "Connected to the Redis instance"
                 fi
+          {{- if include "argocd.redis.auth.enabled" . }}
           env:
             - name: REDISCLI_AUTH
               valueFrom:
                 secretKeyRef:
                   name: {{ include "argocd.redis.secretName" . }}
                   key: {{ include "argocd.redis.secretPasswordKey" . }}
+          {{- end }}
       containers:
         - name: argocd-server
           image: {{ include "argocd.image" . }}

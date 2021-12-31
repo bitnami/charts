@@ -87,12 +87,14 @@ spec:
                 else
                     info "Connected to the Redis instance"
                 fi
+          {{- if include "argocd.redis.auth.enabled" . }}
           env:
             - name: REDISCLI_AUTH
               valueFrom:
                 secretKeyRef:
                   name: {{ include "argocd.redis.secretName" . }}
                   key: {{ include "argocd.redis.secretPasswordKey" . }}
+          {{- end }}
         {{- if .Values.controller.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.controller.initContainers "context" $) | nindent 8 }}
         {{- end }}

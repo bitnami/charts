@@ -414,7 +414,7 @@ There are two different ways to load your custom DAG files into the Airflow char
 
 #### Option 1: Specify an existing config map
 
-You can manually create a config map containing all your DAG files and then pass the name when deploying Airflow chart. For that, you can pass the option `dagsConfigMap`.
+You can manually create a config map containing all your DAG files and then pass the name when deploying Airflow chart. For that, you can pass the option `dags.configMap`.
 
 #### Option 2: Get your DAG files from a git repository
 
