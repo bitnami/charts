@@ -120,6 +120,18 @@ Return the MariaDB Secret Name
 {{- end -}}
 {{- end -}}
 
+
+{{/*
+Return the MariaDB Secret Password Key
+*/}}
+{{- define "ghost.databaseSecretPasswordKey" -}}
+{{- if .Values.mariadb.enabled }}
+    {{- printf "%s" .Values.mariadb.auth.existingSecretPasswordKey -}}
+{{- else -}}
+    {{- printf "%s" .Values.externalDatabase.existingSecretPasswordKey -}}
+{{- end -}}
+{{- end -}}
+
 {{/*
 Compile all warnings into a single message.
 */}}

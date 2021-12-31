@@ -592,6 +592,7 @@ mariadb:
   ## @param mariadb.auth.username MariaDB custom user name
   ## @param mariadb.auth.password MariaDB custom user password
   ## @param mariadb.auth.existingSecret Existing secret with MariaDB credentials
+  ## @param mariadb.auth.existingSecretPasswordKey Password key to be retrieved from existing secret
   ## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-the-root-password-on-first-run
   ##      https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-on-first-run
   ##      https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-user-on-first-run
@@ -601,6 +602,7 @@ mariadb:
     username: bn_ghost
     password: ""
     existingSecret: ""
+    existingSecretPasswordKey: "mariadb-password"
   ## MariaDB Primary configuration
   ##
   primary:
@@ -637,10 +639,12 @@ externalDatabase:
   ##
   database: bitnami_ghost
   ## @param externalDatabase.existingSecret The name of an existing secret with database credentials
-  ## NOTE: Must contain key `mariadb-password`
   ## NOTE: When it's set, the `externalDatabase.password` parameter is ignored
   ##
   existingSecret: ""
+  ## @param externalDatabase.existingSecretPasswordKey Password key to be retrieved from existing secret
+  ##
+  existingSecretPasswordKey: "mariadb-password"
 
 ## @section NetworkPolicy parameters
 

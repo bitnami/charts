@@ -76,7 +76,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ------------------------------------------------ | --------------------- |
 | `image.registry`    | Ghost image registry                             | `docker.io`           |
 | `image.repository`  | Ghost image repository                           | `bitnami/ghost`       |
-| `image.tag`         | Ghost image tag (immutable tags are recommended) | `4.24.0-debian-10-r2` |
+| `image.tag`         | Ghost image tag (immutable tags are recommended) | `4.32.0-debian-10-r0` |
 | `image.pullPolicy`  | Ghost image pull policy                          | `IfNotPresent`        |
 | `image.pullSecrets` | Ghost image pull secrets                         | `[]`                  |
 | `image.debug`       | Enable image debug mode                          | `false`               |
@@ -210,7 +210,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                   | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`            | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`          | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r265`     |
+| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r282`     |
 | `volumePermissions.image.pullPolicy`          | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`         | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`          | The resources limits for the init container                                                     | `{}`                    |
@@ -220,25 +220,27 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Database Parameters
 
-| Name                                       | Description                                                               | Value           |
-| ------------------------------------------ | ------------------------------------------------------------------------- | --------------- |
-| `mariadb.enabled`                          | Deploy a MariaDB server to satisfy the applications database requirements | `true`          |
-| `mariadb.architecture`                     | MariaDB architecture. Allowed values: `standalone` or `replication`       | `standalone`    |
-| `mariadb.auth.rootPassword`                | MariaDB root password                                                     | `""`            |
-| `mariadb.auth.database`                    | MariaDB custom database                                                   | `bitnami_ghost` |
-| `mariadb.auth.username`                    | MariaDB custom user name                                                  | `bn_ghost`      |
-| `mariadb.auth.password`                    | MariaDB custom user password                                              | `""`            |
-| `mariadb.auth.existingSecret`              | Existing secret with MariaDB credentials                                  | `""`            |
-| `mariadb.primary.persistence.enabled`      | Enable persistence on MariaDB using PVC(s)                                | `true`          |
-| `mariadb.primary.persistence.storageClass` | Persistent Volume storage class                                           | `""`            |
-| `mariadb.primary.persistence.accessModes`  | Persistent Volume access modes                                            | `[]`            |
-| `mariadb.primary.persistence.size`         | Persistent Volume size                                                    | `8Gi`           |
-| `externalDatabase.host`                    | External Database server host                                             | `localhost`     |
-| `externalDatabase.port`                    | External Database server port                                             | `3306`          |
-| `externalDatabase.user`                    | External Database username                                                | `bn_ghost`      |
-| `externalDatabase.password`                | External Database user password                                           | `""`            |
-| `externalDatabase.database`                | External Database database name                                           | `bitnami_ghost` |
-| `externalDatabase.existingSecret`          | The name of an existing secret with database credentials                  | `""`            |
+| Name                                         | Description                                                               | Value              |
+| -------------------------------------------- | ------------------------------------------------------------------------- | ------------------ |
+| `mariadb.enabled`                            | Deploy a MariaDB server to satisfy the applications database requirements | `true`             |
+| `mariadb.architecture`                       | MariaDB architecture. Allowed values: `standalone` or `replication`       | `standalone`       |
+| `mariadb.auth.rootPassword`                  | MariaDB root password                                                     | `""`               |
+| `mariadb.auth.database`                      | MariaDB custom database                                                   | `bitnami_ghost`    |
+| `mariadb.auth.username`                      | MariaDB custom user name                                                  | `bn_ghost`         |
+| `mariadb.auth.password`                      | MariaDB custom user password                                              | `""`               |
+| `mariadb.auth.existingSecret`                | Existing secret with MariaDB credentials                                  | `""`               |
+| `mariadb.auth.existingSecretPasswordKey`     | Password key to be retrieved from existing secret                         | `mariadb-password` |
+| `mariadb.primary.persistence.enabled`        | Enable persistence on MariaDB using PVC(s)                                | `true`             |
+| `mariadb.primary.persistence.storageClass`   | Persistent Volume storage class                                           | `""`               |
+| `mariadb.primary.persistence.accessModes`    | Persistent Volume access modes                                            | `[]`               |
+| `mariadb.primary.persistence.size`           | Persistent Volume size                                                    | `8Gi`              |
+| `externalDatabase.host`                      | External Database server host                                             | `localhost`        |
+| `externalDatabase.port`                      | External Database server port                                             | `3306`             |
+| `externalDatabase.user`                      | External Database username                                                | `bn_ghost`         |
+| `externalDatabase.password`                  | External Database user password                                           | `""`               |
+| `externalDatabase.database`                  | External Database database name                                           | `bitnami_ghost`    |
+| `externalDatabase.existingSecret`            | The name of an existing secret with database credentials                  | `""`               |
+| `externalDatabase.existingSecretPasswordKey` | Password key to be retrieved from existing secret                         | `mariadb-password` |
 
 
 ### NetworkPolicy parameters
@@ -406,9 +408,9 @@ Please read the update notes carefully.
 **What changes were introduced in this major version?**
 
 - Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
-- Move dependency information from the *requirements.yaml* to the *Chart.yaml*
-- After running `helm dependency update`, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
-- The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
+- Move dependency information from the _requirements.yaml_ to the _Chart.yaml_
+- After running `helm dependency update`, a _Chart.lock_ file is generated containing the same structure used in the previous _requirements.lock_
+- The different fields present in the _Chart.yaml_ file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
 
 **Considerations when upgrading to this version**
 
@@ -442,11 +444,11 @@ $ export MARIADB_PVC=$(kubectl get pvc -l app=mariadb,component=master,release=g
 
 Delete the Ghost deployment and delete the MariaDB statefulset. Notice the option `--cascade=false` in the latter.
 
-  ```console
-  $ kubectl delete deployments.apps ghost
+```console
+$ kubectl delete deployments.apps ghost
 
-  $ kubectl delete statefulsets.apps ghost-mariadb --cascade=false
-  ```
+$ kubectl delete statefulsets.apps ghost-mariadb --cascade=false
+```
 
 Upgrade you release to 11.0.0 reusing the existing PVC, and enabling back MariaDB:
 

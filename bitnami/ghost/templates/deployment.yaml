@@ -124,7 +124,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ include "ghost.databaseSecretName" . }}
-                  key: mariadb-password
+                  key: {{ include "ghost.databaseSecretPasswordKey" . }}
             - name: GHOST_HOST
               value: {{ include "ghost.host" . | quote }}
             - name: GHOST_PORT_NUMBER
