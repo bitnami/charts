@@ -153,21 +153,21 @@ otherwise it generates a random value.
 
 {{- define "mysql.password" -}}
     {{- if and (not (empty .Values.auth.username)) (not (empty .Values.auth.password)) }}
-        {{ .Values.auth.password }}
+        {{- .Values.auth.password }}
     {{- else if (not .Values.auth.forcePassword) }}
         {{- include "getValueFromSecret" (dict "Namespace" .Release.Namespace "Name" (include "common.names.fullname" .) "Length" 10 "Key" "mysql-password") }}
     {{- else }}
-        {{ required "A MySQL Database Password is required!" .Values.auth.password }}
+        {{- required "A MySQL Database Password is required!" .Values.auth.password }}
     {{- end }}
 {{- end -}}
 
 {{- define "mysql.replication.password" -}}
     {{- if not (empty .Values.auth.replicationPassword) }}
-        {{ .Values.auth.replicationPassword }}
+        {{- .Values.auth.replicationPassword }}
     {{- else if (not .Values.auth.forcePassword) }}
         {{- include "getValueFromSecret" (dict "Namespace" .Release.Namespace "Name" (include "common.names.fullname" .) "Length" 10 "Key" "mysql-replication-password") }}
     {{- else }}
-        {{ required "A MySQL Replication Password is required!" .Values.auth.replicationPassword }}
+        {{- required "A MySQL Replication Password is required!" .Values.auth.replicationPassword }}
     {{- end }}
 {{- end -}}
 
