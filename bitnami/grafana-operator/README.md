@@ -219,7 +219,7 @@ For more information, refer to the [documentation on the differences between the
 | `grafana.ingress.tlsSecret`                                 | The name for the secret to use for the tls termination                                        | `grafana.local-tls`   |
 | `grafana.persistence.enabled`                               | Enable persistent storage for the grafana deployment                                          | `false`               |
 | `grafana.persistence.storageClass`                          | Define the storageClass for the persistent storage if not defined default is used             | `""`                  |
-| `grafana.persistence.accessModes`                           | Define the accessModes for the persistent storage                                             | `ReadWriteOnce`       |
+| `grafana.persistence.accessModes`                           | Define the accessModes for the persistent storage                                             | `[ReadWriteOnce]`       |
 | `grafana.persistence.annotations`                           | Add annotations to the persistent volume                                                      | `{}`                  |
 | `grafana.persistence.size`                                  | Define the size of the PersistentVolumeClaim to request for                                   | `10Gi`                |
 | `grafana.config`                                            | grafana.ini configuration for the instance for this to configure please look at upstream docs | `{}`                  |
