@@ -423,7 +423,7 @@ appFromExternalRepo:
       pullSecrets: []
     ## @param appFromExternalRepo.publish.subFolder Sub folder under the Git repository containing the ASP.NET Core app
     ##
-    subFolder: aspnetcore/fundamentals/servers/kestrel/samples/3.x/KestrelSample
+    subFolder: aspnetcore/fundamentals/servers/kestrel/samples/6.x/KestrelSample
     ## @param appFromExternalRepo.publish.extraFlags Extra flags to be appended to "dotnet publish" command
     ##
     extraFlags: []
