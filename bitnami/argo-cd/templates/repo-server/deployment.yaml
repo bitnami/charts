@@ -163,6 +163,8 @@ spec:
                   name: {{ include "argocd.redis.secretName" . }}
                   key: {{ include "argocd.redis.secretPasswordKey" . }}
             {{- end }}
+            - name: GNUPGHOME
+              value: /tmp
             {{- if .Values.repoServer.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.repoServer.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
