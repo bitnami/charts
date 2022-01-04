@@ -740,6 +740,17 @@ envoy:
   ##     imagePullPolicy: Always
   ##
   initContainers: []
+  ## @param envoy.sidecars Add additional sidecar containers to the Envoy pods
+  ## Example:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
   ## @param envoy.extraVolumes [array] Array to add extra volumes
   ##
   extraVolumes: []
