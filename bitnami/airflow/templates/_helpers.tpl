@@ -16,7 +16,7 @@ Create chart name and version as used by the chart label.
 {{/*
 Full path to CA Cert file
 */}}
-{{- define "airflow.ldapCAFilename"}}
+{{- define "airflow.ldapCAFilename" }}
 {{- printf "/opt/bitnami/airflow/certs/%s" .Values.ldap.tls.CAcertificateFilename -}}
 {{- end -}}
 

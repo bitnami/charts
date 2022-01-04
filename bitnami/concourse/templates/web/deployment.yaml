@@ -287,7 +287,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ include "concourse.postgresql.secretName" . }}
-                  key: {{ include "concourse.database.existingsecret.key" .}}
+                  key: {{ include "concourse.database.existingsecret.key" . }}
             - name: CONCOURSE_POSTGRES_DATABASE
               value: {{ ternary .Values.postgresql.postgresqlDatabase .Values.externalDatabase.database .Values.postgresql.enabled | quote }}
             - name: CONCOURSE_POSTGRES_HOST
@@ -368,7 +368,7 @@ spec:
             name: {{ include "concourse.web.configmapName" . }}
         - name: concourse-keys
           secret:
-            secretName: {{ include "concourse.web.secretName" .}}
+            secretName: {{ include "concourse.web.secretName" . }}
             defaultMode: 0400
         {{- if .Values.secrets.teamAuthorizedKeys }}
         - name: team-authorized-keys

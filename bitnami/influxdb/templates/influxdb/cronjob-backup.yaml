@@ -12,7 +12,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  schedule: {{.Values.backup.cronjob.schedule | quote }}
+  schedule: {{ .Values.backup.cronjob.schedule | quote }}
   concurrencyPolicy: Forbid
   successfulJobsHistoryLimit: {{ .Values.backup.cronjob.historyLimit }}
   failedJobsHistoryLimit: {{ .Values.backup.cronjob.historyLimit }}

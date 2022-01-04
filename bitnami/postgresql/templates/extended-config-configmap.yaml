@@ -1,4 +1,4 @@
-{{- if and (or (.Files.Glob "files/conf.d/*.conf") .Values.postgresqlExtendedConf) (not .Values.extendedConfConfigMap)}}
+{{- if and (or (.Files.Glob "files/conf.d/*.conf") .Values.postgresqlExtendedConf) (not .Values.extendedConfConfigMap) }}
 apiVersion: v1
 kind: ConfigMap
 metadata:

@@ -20,7 +20,7 @@ data:
   {{- end }}
   {{- if .Values.enableIPv6 }}
       listen [::]:{{ .Values.dashboard.containerPort }};
-  {{- end}}
+  {{- end }}
       server_name _;
 
       gzip on;

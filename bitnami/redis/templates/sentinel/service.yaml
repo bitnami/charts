@@ -2,15 +2,15 @@
 
 ---
 {{- if and (eq .Values.architecture "replication") .Values.sentinel.enabled }}
-{{ $portsmap := (lookup "v1" "ConfigMap" $.Release.Namespace (printf "%s-%s" ( include "common.names.fullname" . ) "ports-configmap")).data}}
+{{ $portsmap := (lookup "v1" "ConfigMap" $.Release.Namespace (printf "%s-%s" ( include "common.names.fullname" . ) "ports-configmap")).data }}
 
 {{ $sentinelport := 0}}
 {{ $redisport := 0}}
 {{- if $portsmap }}
-{{ $sentinelport = index $portsmap (printf "%s-%s" (include "common.names.fullname" $) "sentinel")}}
-{{ $redisport = index $portsmap (printf "%s-%s" (include "common.names.fullname" $) "redis")}}
+{{ $sentinelport = index $portsmap (printf "%s-%s" (include "common.names.fullname" $) "sentinel") }}
+{{ $redisport = index $portsmap (printf "%s-%s" (include "common.names.fullname" $) "redis") }}
 {{- else }}
-{{- end}}
+{{- end }}
 
 apiVersion: v1
 kind: Service
@@ -51,7 +51,7 @@ spec:
       port: {{ .Values.sentinel.service.nodePorts.redis }}
       {{- else if eq .Values.sentinel.service.type "NodePort" }}
       port: {{ $redisport }}
-      {{- else}}
+      {{- else }}
       port: {{ .Values.sentinel.service.port }}
       {{- end }}
       targetPort: {{ .Values.replica.containerPort }}
@@ -67,7 +67,7 @@ spec:
       port: {{ .Values.sentinel.service.nodePorts.sentinel }}
       {{- else if eq .Values.sentinel.service.type "NodePort" }}
       port:  {{ $sentinelport }}
-      {{- else}}
+      {{- else }}
       port: {{ .Values.sentinel.service.sentinelPort }}
       {{- end }}
       targetPort: {{ .Values.sentinel.containerPort }}

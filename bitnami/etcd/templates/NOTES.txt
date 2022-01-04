@@ -67,7 +67,7 @@ To connect to your etcd server from outside the cluster execute the following co
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
         Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "common.names.fullname" . }}'
 
-    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
     echo "etcd URL: http://$SERVICE_IP:{{ .Values.service.port }}/"
 
 {{- else if contains "ClusterIP" .Values.service.type }}
@@ -101,7 +101,7 @@ To connect to your etcd server from outside the cluster execute the following co
 {{- end }}
 {{- if .Values.auth.client.enableAuthentication }}
 
- * As TLS host authentication is enabled you should add the flag `--ca-file /opt/bitnami/etcd/certs/client/{{ .Values.auth.client.caFilename | default "ca.crt"}}` to the etcdctl commands.
+ * As TLS host authentication is enabled you should add the flag `--ca-file /opt/bitnami/etcd/certs/client/{{ .Values.auth.client.caFilename | default "ca.crt" }}` to the etcdctl commands.
 
 {{- end }}
 {{- end }}

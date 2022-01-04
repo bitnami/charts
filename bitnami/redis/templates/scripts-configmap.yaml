@@ -25,7 +25,7 @@ data:
 
         port_var=$(echo "${hostname^^}_SERVICE_PORT_$type" | sed "s/-/_/g")
         port=${!port_var}
-        
+
         if [ -z "$port" ]; then
             case $type in
                 "SENTINEL")
@@ -47,7 +47,7 @@ data:
         echo "${hostname}.{{- .Release.Namespace }}"
         {{- else }}
         echo "${hostname}.${HEADLESS_SERVICE}"
-        {{- end}}
+        {{- end }}
     }
 
     REDISPORT=$(get_port "$HOSTNAME" "REDIS")
@@ -131,15 +131,15 @@ data:
             if ! ((retry_count % 11)); then
                 info "Trying to manually failover"
                 failover_result=$(trigger_manual_failover)
-                
+
                 debug "Failover result: $failover_result"
             fi
-            
+
             ((retry_count+=1))
         done
         info "Redis master is up now"
         {{- end }}
-        
+
         # Fetches current master's host and port
         REDIS_SENTINEL_INFO=($(get_sentinel_master_info))
         info "printing REDIS_SENTINEL_INFO=(${REDIS_SENTINEL_INFO[0]},${REDIS_SENTINEL_INFO[1]})"
@@ -166,7 +166,7 @@ data:
     echo "" >> /opt/bitnami/redis/etc/replica.conf
     echo "replica-announce-port $REDISPORT" >> /opt/bitnami/redis/etc/replica.conf
     echo "replica-announce-ip $(get_full_hostname "$HOSTNAME")" >> /opt/bitnami/redis/etc/replica.conf
-    
+
     {{- if .Values.tls.enabled }}
     ARGS=("--port" "0")
     ARGS+=("--tls-port" "${REDIS_TLS_PORT}")
@@ -205,7 +205,7 @@ data:
     {{- end }}
 
     {{- if .Values.replica.preExecCmds }}
-    {{- .Values.replica.preExecCmds | nindent 4}}
+    {{- .Values.replica.preExecCmds | nindent 4 }}
     {{- end }}
 
     {{- if .Values.replica.command }}
@@ -230,7 +230,7 @@ data:
 
         port_var=$(echo "${hostname^^}_SERVICE_PORT_$type" | sed "s/-/_/g")
         port=${!port_var}
-        
+
         if [ -z "$port" ]; then
             case $type in
                 "SENTINEL")
@@ -244,7 +244,7 @@ data:
             echo $port
         fi
     }
-    
+
     get_full_hostname() {
         hostname="$1"
 
@@ -252,13 +252,13 @@ data:
         echo "${hostname}.{{- .Release.Namespace }}"
         {{- else }}
         echo "${hostname}.${HEADLESS_SERVICE}"
-        {{- end}}
+        {{- end }}
     }
 
     SERVPORT=$(get_port "$HOSTNAME" "SENTINEL")
     REDISPORT=$(get_port "$HOSTNAME" "REDIS")
     SENTINEL_SERVICE_PORT=$(get_port "{{ include "common.names.fullname" . }}" "TCP_SENTINEL")
-    
+
     myip=$(hostname -i)
 
     # If there are more than one IP, use the first IPv4 address
@@ -329,7 +329,7 @@ data:
 
         # Fetches current master's host and port
         REDIS_SENTINEL_INFO=($(get_sentinel_master_info))
-        info "printing REDIS_SENTINEL_INFO=(${REDIS_SENTINEL_INFO[0]},${REDIS_SENTINEL_INFO[1]})" 
+        info "printing REDIS_SENTINEL_INFO=(${REDIS_SENTINEL_INFO[0]},${REDIS_SENTINEL_INFO[1]})"
         REDIS_MASTER_HOST=${REDIS_SENTINEL_INFO[0]}
         REDIS_MASTER_PORT_NUMBER=${REDIS_SENTINEL_INFO[1]}
     fi
@@ -342,7 +342,7 @@ data:
 
         if [[ -n "$hostname" && -n "$ip" && "$hostname" != "$HOSTNAME" ]]; then
             sentinel_conf_add "sentinel known-sentinel {{ .Values.sentinel.masterSet }} $(get_full_hostname "$hostname") $(get_port "$hostname" "SENTINEL") $(host_id "$hostname")"
-        fi 
+        fi
     }
     add_known_replica() {
         hostname="$1"
@@ -360,7 +360,7 @@ data:
         add_known_sentinel "$hostname" "$ip"
         add_known_replica "$hostname" "$ip"
     done
-    
+
     echo "" >> /opt/bitnami/redis-sentinel/etc/sentinel.conf
     echo "sentinel announce-hostnames yes" >> /opt/bitnami/redis-sentinel/etc/sentinel.conf
     echo "sentinel resolve-hostnames yes" >> /opt/bitnami/redis-sentinel/etc/sentinel.conf
@@ -400,7 +400,7 @@ data:
         echo "${hostname}.{{- .Release.Namespace }}"
         {{- else }}
         echo "${hostname}.${HEADLESS_SERVICE}"
-        {{- end}}
+        {{- end }}
     }
     run_sentinel_command() {
         if is_boolean_yes "$REDIS_SENTINEL_TLS_ENABLED"; then
@@ -506,7 +506,7 @@ data:
     {{- end }}
     {{- end }}
     {{- if .Values.master.preExecCmds }}
-    {{ .Values.master.preExecCmds | nindent 4}}
+    {{ .Values.master.preExecCmds | nindent 4 }}
     {{- end }}
     {{- if .Values.master.command }}
     exec {{ .Values.master.command }} "${ARGS[@]}"
@@ -523,7 +523,7 @@ data:
 
         port_var=$(echo "${hostname^^}_SERVICE_PORT_$type" | sed "s/-/_/g")
         port=${!port_var}
-        
+
         if [ -z "$port" ]; then
             case $type in
                 "SENTINEL")
@@ -545,11 +545,11 @@ data:
         echo "${hostname}.{{- .Release.Namespace }}"
         {{- else }}
         echo "${hostname}.${HEADLESS_SERVICE}"
-        {{- end}}
+        {{- end }}
     }
 
     REDISPORT=$(get_port "$HOSTNAME" "REDIS")
-    
+
     [[ -f $REDIS_PASSWORD_FILE ]] && export REDIS_PASSWORD="$(< "${REDIS_PASSWORD_FILE}")"
     [[ -f $REDIS_MASTER_PASSWORD_FILE ]] && export REDIS_MASTER_PASSWORD="$(< "${REDIS_MASTER_PASSWORD_FILE}")"
     {{- if and .Values.replica.containerSecurityContext.runAsUser (eq (.Values.replica.containerSecurityContext.runAsUser | int) 0) }}
@@ -596,7 +596,7 @@ data:
     {{- end }}
     {{- end }}
     {{- if .Values.replica.preExecCmds }}
-    {{ .Values.replica.preExecCmds | nindent 4}}
+    {{ .Values.replica.preExecCmds | nindent 4 }}
     {{- end }}
     {{- if .Values.replica.command }}
     exec {{ .Values.replica.command }} "${ARGS[@]}"
