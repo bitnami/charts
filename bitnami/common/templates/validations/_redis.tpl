@@ -20,7 +20,7 @@ Params:
   {{- $valueKeyRedisPassword := ternary (printf "%s%s" $valueKeyPrefix "auth.password") (printf "%s%s" $valueKeyPrefix "password") (eq $standarizedVersion "true") }}
   {{- $valueKeyRedisUseAuth := ternary (printf "%s%s" $valueKeyPrefix "auth.enabled") (printf "%s%s" $valueKeyPrefix "usePassword") (eq $standarizedVersion "true") }}
 
-  {{- if and (not $existingSecretValue) (eq $enabled "true") -}}
+  {{- if and (or (not $existingSecret) (eq $existingSecret "\"\"")) (eq $enabled "true") -}}
     {{- $requiredPasswords := list -}}
 
     {{- $useAuth := include "common.utils.getValueFromKey" (dict "key" $valueKeyRedisUseAuth "context" .context) -}}

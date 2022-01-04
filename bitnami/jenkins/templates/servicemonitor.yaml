@@ -23,7 +23,7 @@ spec:
     matchLabels: {{ include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: metrics
   endpoints:
-    - port: http
+    - port: metrics
       path: /metrics
       {{- if .Values.metrics.serviceMonitor.interval }}
       interval: {{ .Values.metrics.serviceMonitor.interval }}

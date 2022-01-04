@@ -127,11 +127,55 @@ Return true if a secret object should be created for MySQL
 {{- end -}}
 {{- end -}}
 
+{{/*
+Returns the available value for certain key in an existing secret (if it exists),
+otherwise it generates a random value.
+*/}}
+{{- define "getValueFromSecret" }}
+    {{- $len := (default 16 .Length) | int -}}
+    {{- $obj := (lookup "v1" "Secret" .Namespace .Name).data -}}
+    {{- if $obj }}
+        {{- index $obj .Key | b64dec -}}
+    {{- else -}}
+        {{- randAlphaNum $len -}}
+    {{- end -}}
+{{- end }}
+
+{{- define "mysql.root.password" -}}
+    {{- if not (empty .Values.auth.rootPassword) }}
+        {{- .Values.auth.rootPassword }}
+    {{- else if (not .Values.auth.forcePassword) }}
+        {{- include "getValueFromSecret" (dict "Namespace" .Release.Namespace "Name" (include "common.names.fullname" .) "Length" 10 "Key" "mysql-root-password") }}
+    {{- else }}
+        {{- required "A MySQL Root Password is required!" .Values.auth.rootPassword }}
+    {{- end }}
+{{- end -}}
+
+{{- define "mysql.password" -}}
+    {{- if and (not (empty .Values.auth.username)) (not (empty .Values.auth.password)) }}
+        {{- .Values.auth.password }}
+    {{- else if (not .Values.auth.forcePassword) }}
+        {{- include "getValueFromSecret" (dict "Namespace" .Release.Namespace "Name" (include "common.names.fullname" .) "Length" 10 "Key" "mysql-password") }}
+    {{- else }}
+        {{- required "A MySQL Database Password is required!" .Values.auth.password }}
+    {{- end }}
+{{- end -}}
+
+{{- define "mysql.replication.password" -}}
+    {{- if not (empty .Values.auth.replicationPassword) }}
+        {{- .Values.auth.replicationPassword }}
+    {{- else if (not .Values.auth.forcePassword) }}
+        {{- include "getValueFromSecret" (dict "Namespace" .Release.Namespace "Name" (include "common.names.fullname" .) "Length" 10 "Key" "mysql-replication-password") }}
+    {{- else }}
+        {{- required "A MySQL Replication Password is required!" .Values.auth.replicationPassword }}
+    {{- end }}
+{{- end -}}
 
 {{/* Check if there are rolling tags in the images */}}
 {{- define "mysql.checkRollingTags" -}}
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- include "common.warnings.rollingTag" .Values.metrics.image }}
+{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
 {{- end -}}
 
 {{/*
@@ -144,15 +188,5 @@ Compile all warnings into a single message, and call fail.
 
 {{- if $message -}}
 {{- printf "\nVALUES VALIDATION:\n%s" $message | fail -}}
-{{- end -}}
-{{- end -}}
-{{/*
-Return the appropriate apiVersion for networkpolicy.
-*/}}
-{{- define "mysql.networkPolicy.apiVersion" -}}
-{{- if semverCompare ">=1.4-0, <1.7-0" .Capabilities.KubeVersion.GitVersion -}}
-"extensions/v1beta1"
-{{- else if semverCompare "^1.7-0" .Capabilities.KubeVersion.GitVersion -}}
-"networking.k8s.io/v1"
 {{- end -}}
 {{- end -}}

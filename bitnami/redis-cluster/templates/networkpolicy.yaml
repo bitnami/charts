@@ -25,16 +25,16 @@ spec:
         protocol: UDP
     # Allow outbound connections to other cluster pods
     - ports:
-        - port: {{ .Values.redis.port }}
-        - port: {{ .Values.redis.busPort }}
+        - port: {{ .Values.redis.containerPorts.redis }}
+        - port: {{ .Values.redis.containerPorts.bus }}
       to:
         - podSelector:
             matchLabels: {{- include "common.labels.matchLabels" . | nindent 14 }}
   ingress:
     # Allow inbound connections
     - ports:
-        - port: {{ .Values.redis.port }}
-        - port: {{ .Values.redis.busPort }}
+        - port: {{ .Values.redis.containerPorts.redis }}
+        - port: {{ .Values.redis.containerPorts.bus }}
       from:
         {{- if not .Values.networkPolicy.allowExternal }}
         - podSelector:

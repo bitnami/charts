@@ -87,7 +87,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ include "parse.mongodb.fullname" . }}
-                  key: mongodb-password
+                  key: mongodb-passwords
             {{- end }}
             {{- if .Values.server.extraEnvVars }}
               {{- include "common.tplvalues.render" ( dict "value" .Values.server.extraEnvVars "context" $ ) | nindent 12 }}

@@ -42,6 +42,9 @@ spec:
     spec:
       {{- include "harbor.imagePullSecrets" . | nindent 6 }}
       automountServiceAccountToken: {{ .Values.chartmuseum.automountServiceAccountToken }}
+      {{- if .Values.chartmuseum.priorityClassName }}
+      priorityClassName: {{ .Values.chartmuseum.priorityClassName | quote }}
+      {{- end }}
       {{- if .Values.chartmuseum.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.chartmuseum.affinity "context" $) | nindent 8 }}
       {{- else }}
