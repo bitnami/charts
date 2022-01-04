@@ -1,6 +1,5 @@
-{{- if .Values.worker.enabled }}
-{{- if .Values.worker.rbac.create }}
-{{- if .Values.worker.psp.create }}
+{{- $pspAvailable := (semverCompare "<1.25-0" (include "common.capabilities.kubeVersion" .)) -}}
+{{- if and $pspAvailable .Values.worker.enabled .Values.worker.rbac.create .Values.worker.psp.create }}
 ---
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
@@ -45,6 +44,4 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: {{ template "concourse.worker.serviceAccountName" . }}
-{{- end }}
-{{- end }}
 {{- end }}

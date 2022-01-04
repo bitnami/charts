@@ -24,9 +24,9 @@ spec:
     - name: {{ .Values.service.clientPortNameOverride }}
     {{- end }}
     {{- else}}
-    - name: "client"
+    - name: client
     {{- end }}
-      port: {{ .Values.service.port  }}
+      port: {{ .Values.containerPorts.client }}
       targetPort: client
     {{- if .Values.service.peerPortNameOverride }}
     {{- if .Values.auth.peer.secureTransport }}
@@ -35,8 +35,8 @@ spec:
     - name: {{ .Values.service.peerPortNameOverride }}
     {{- end }}
     {{- else}}
-    - name: "peer"
+    - name: peer
     {{- end }}
-      port: {{ .Values.service.peerPort  }}
+      port: {{ .Values.containerPorts.peer }}
       targetPort: peer
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}

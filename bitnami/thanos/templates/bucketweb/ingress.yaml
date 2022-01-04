@@ -3,20 +3,21 @@ apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
   name: {{ include "common.names.fullname" . }}-bucketweb
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: bucketweb
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
   annotations:
-    {{- if .Values.bucketweb.ingress.certManager }}
-    kubernetes.io/tls-acme: "true"
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
     {{- end }}
-    {{- range $key, $value := .Values.bucketweb.ingress.annotations }}
-    {{ $key }}: {{ $value | quote }}
+    {{- if .Values.bucketweb.ingress.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.bucketweb.ingress.annotations "context" $ ) | nindent 4 }}
     {{- end }}
 spec:
-  {{- if and .Values.bucketweb.ingress.ingressClassName (eq "true" (include "common.ingress.supportsIngressClassname" .)) }}
+  {{- if and .Values.bucketweb.ingress.ingressClassName (include "common.ingress.supportsIngressClassname" .) }}
   ingressClassName: {{ .Values.bucketweb.ingress.ingressClassName | quote }}
   {{- end }}
   rules:
@@ -40,9 +41,9 @@ spec:
             {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (printf "%s-%s"  (include "common.names.fullname" $) "bucketweb") "servicePort" "http" "context" $) | nindent 14 }}
     {{- end }}
-  {{- if or .Values.bucketweb.ingress.tls .Values.bucketweb.ingress.extraTls .Values.bucketweb.ingress.hosts }}
+  {{- if or (and .Values.bucketweb.ingress.tls (or (include "thanos.ingress.certManagerRequest" .Values.bucketweb.ingress.annotations) .Values.bucketweb.ingress.selfSigned)) .Values.bucketweb.ingress.extraTls }}
   tls:
-    {{- if or .Values.bucketweb.ingress.secrets .Values.bucketweb.ingress.tls }}
+    {{- if and .Values.bucketweb.ingress.tls (or (include "thanos.ingress.certManagerRequest" .Values.bucketweb.ingress.annotations) .Values.bucketweb.ingress.selfSigned) }}
     - hosts:
         - {{ .Values.bucketweb.ingress.hostname }}
       secretName: {{ printf "%s-tls" .Values.bucketweb.ingress.hostname }}

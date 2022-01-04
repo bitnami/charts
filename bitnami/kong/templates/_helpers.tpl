@@ -56,7 +56,7 @@ Get Cassandra contact points
 {{- define "kong.cassandra.contactPoints" -}}
 {{- $global := . -}}
 {{- if .Values.cassandra.enabled -}}
-  {{- $replicas := int .Values.cassandra.cluster.replicaCount -}}
+  {{- $replicas := int .Values.cassandra.replicaCount -}}
   {{- $domain := .Values.clusterDomain -}}
   {{- range $i, $e := until $replicas }}
     {{- include "kong.cassandra.fullname" $global }}-{{ $i }}.{{ include "kong.cassandra.fullname" $global }}-headless.{{ $global.Release.Namespace }}.svc.{{ $domain }}
@@ -168,6 +168,7 @@ Validate values for kong.
 {{- $messages := list -}}
 {{- $messages := append $messages (include "kong.validateValues.database" .) -}}
 {{- $messages := append $messages (include "kong.validateValues.rbac" .) -}}
+{{- $messages := append $messages (include "kong.validateValues.ingressController" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
@@ -204,7 +205,6 @@ NO DATABASE: You disabled the Cassandra sub-chart but did not specify external C
 NO DATABASE: You disabled the PostgreSQL sub-chart but did not specify an external PostgreSQL host. Either deploy the PostgreSQL sub-chart by setting postgresql.enabled=true or set a value for postgresql.external.host.
 {{- end }}
 
-
 {{- if and (eq .Values.database "postgresql") .Values.postgresql.enabled .Values.postgresql.external.host -}}
 CONFLICT: You specified to deploy the PostgreSQL sub-chart and also specified an external
 PostgreSQL instance. Only one of postgresql.enabled (deploy sub-chart) and postgresql.external.host can be set
@@ -214,4 +214,15 @@ PostgreSQL instance. Only one of postgresql.enabled (deploy sub-chart) and postg
 CONFLICT: You specified to deploy the Cassandra sub-chart and also specified external
 Cassandra hosts. Only one of cassandra.enabled (deploy sub-chart) and cassandra.external.hosts can be set
 {{- end }}
+{{- end -}}
+
+{{/*
+Function to validate the ingress controller
+*/}}
+{{- define "kong.validateValues.ingressController" -}}
+
+{{- if (and (eq .Values.database "cassandra") .Values.ingressController.enabled) -}}
+INGRESS AND CASANDRA: Cassandra-backed deployments of Kong managed by Kong Ingress Controller are no longer supported. You must migrate to a Postgres-backed deployment or disable Kong Ingress Controller.
+{{- end }}
+
 {{- end -}}

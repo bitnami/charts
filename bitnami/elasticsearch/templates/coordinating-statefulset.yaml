@@ -16,7 +16,9 @@ spec:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: coordinating-only
   podManagementPolicy: Parallel
+  {{- if not .Values.coordinating.autoscaling.enabled }}
   replicas: {{ .Values.coordinating.replicas }}
+  {{- end }}
   serviceName: {{ template "elasticsearch.coordinating.fullname" . }}
   template:
     metadata:
@@ -42,6 +44,9 @@ spec:
       {{- if .Values.coordinating.schedulerName }}
       schedulerName: {{ .Values.coordinating.schedulerName }}
       {{- end }}
+      {{- if .Values.coordinating.priorityClassName }}
+      priorityClassName: {{ .Values.coordinating.priorityClassName | quote }}
+      {{- end }}
       {{- if .Values.coordinating.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.coordinating.affinity "context" $) | nindent 8 }}
       {{- else }}
@@ -56,10 +61,17 @@ spec:
       {{- if .Values.coordinating.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.coordinating.tolerations "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.coordinating.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.coordinating.topologySpreadConstraints "context" $) | nindent 8 }}
+      {{- end }}
       serviceAccountName: {{ template "elasticsearch.coordinating.serviceAccountName" . }}
-      {{- if .Values.coordinating.securityContext.enabled }}
+      {{- if or .Values.coordinating.podSecurityContext.enabled .Values.coordinating.securityContext.enabled }}
       securityContext:
+        {{- if .Values.coordinating.podSecurityContext.enabled }}
+        {{- omit .Values.coordinating.podSecurityContext "enabled" | toYaml | nindent 8 }}
+        {{- else }}
         fsGroup: {{ .Values.coordinating.securityContext.fsGroup }}
+        {{- end }}
       {{- end }}
       {{- if or .Values.coordinating.initContainers .Values.sysctlImage.enabled }}
       initContainers:
@@ -88,9 +100,13 @@ spec:
         - name: elasticsearch
           image: {{ include "elasticsearch.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
-          {{- if .Values.coordinating.securityContext.enabled }}
+          {{- if or .Values.coordinating.containerSecurityContext.enabled .Values.coordinating.securityContext.enabled }}
           securityContext:
+            {{- if .Values.coordinating.containerSecurityContext.enabled }}
+            {{- omit .Values.coordinating.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+            {{- else }}
             runAsUser: {{ .Values.coordinating.securityContext.runAsUser }}
+            {{- end }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -108,13 +124,13 @@ spec:
             - name: ELASTICSEARCH_CLUSTER_HOSTS
               value: {{ include "elasticsearch.hosts" . | quote }}
             - name: ELASTICSEARCH_TOTAL_NODES
-              value: {{ add .Values.master.replicas .Values.data.replicas | quote }}
+              value: {{ add (ternary .Values.master.autoscaling.minReplicas .Values.master.replicas .Values.master.autoscaling.enabled) (ternary .Values.data.autoscaling.minReplicas .Values.data.replicas .Values.data.autoscaling.enabled) | quote }}
             - name: ELASTICSEARCH_CLUSTER_MASTER_HOSTS
               {{- $elasticsearchMasterFullname := include "elasticsearch.master.fullname" . }}
-              {{- $replicas := int .Values.master.replicas }}
+              {{- $replicas := int (ternary .Values.master.autoscaling.minReplicas .Values.master.replicas .Values.master.autoscaling.enabled) }}
               value: {{range $i, $e := until $replicas }}{{ $elasticsearchMasterFullname }}-{{ $e }} {{ end }}
             - name: ELASTICSEARCH_MINIMUM_MASTER_NODES
-              value: {{ add (div .Values.master.replicas 2) 1 | quote }}
+              value: {{ add (div (ternary .Values.master.autoscaling.minReplicas .Values.master.replicas .Values.master.autoscaling.enabled) 2) 1 | quote }}
             - name: ELASTICSEARCH_ADVERTISED_HOSTNAME
               value: "$(MY_POD_NAME).{{ include "elasticsearch.coordinating.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
             {{- if .Values.plugins }}
