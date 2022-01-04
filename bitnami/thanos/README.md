@@ -11,7 +11,7 @@ helm install my-release bitnami/thanos
 
 ## Introduction
 
-This chart bootstraps a [Thanos](https://github.com/bitnami/bitnami-docker-thanos) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Thanos](https://github.com/bitnami/bitnami-docker-thanos) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
 
@@ -88,13 +88,15 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 
 ### Common parameters
 
-| Name               | Description                                                                                  | Value           |
-| ------------------ | -------------------------------------------------------------------------------------------- | --------------- |
-| `kubeVersion`      | Force target Kubernetes version (using Helm capabilities if not set)                         | `""`            |
-| `nameOverride`     | String to partially override common.names.fullname template (will maintain the release name) | `""`            |
-| `fullnameOverride` | String to fully override common.names.fullname template                                      | `""`            |
-| `commonLabels`     | Add labels to all the deployed resources                                                     | `{}`            |
-| `clusterDomain`    | Kubernetes Cluster Domain                                                                    | `cluster.local` |
+| Name                | Description                                                                                  | Value           |
+| ------------------- | -------------------------------------------------------------------------------------------- | --------------- |
+| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)                         | `""`            |
+| `nameOverride`      | String to partially override common.names.fullname template (will maintain the release name) | `""`            |
+| `fullnameOverride`  | String to fully override common.names.fullname template                                      | `""`            |
+| `commonLabels`      | Add labels to all the deployed resources                                                     | `{}`            |
+| `commonAnnotations` | Add annotations to all the deployed resources                                                | `{}`            |
+| `clusterDomain`     | Kubernetes Cluster Domain                                                                    | `cluster.local` |
+| `extraDeploy`       | Array of extra objects to deploy with the release                                            | `[]`            |
 
 
 ### Thanos common parameters
@@ -103,12 +105,12 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | ----------------------------- | ----------------------------------------------------------------------------------------- | ------------------- |
 | `image.registry`              | Thanos image registry                                                                     | `docker.io`         |
 | `image.repository`            | Thanos image repository                                                                   | `bitnami/thanos`    |
-| `image.tag`                   | Thanos image tag (immutable tags are recommended)                                         | `0.22.0-scratch-r4` |
+| `image.tag`                   | Thanos image tag (immutable tags are recommended)                                         | `0.23.1-scratch-r3` |
 | `image.pullPolicy`            | Thanos image pull policy                                                                  | `IfNotPresent`      |
 | `image.pullSecrets`           | Specify docker-registry secret names as an array                                          | `[]`                |
-| `objstoreConfig`              | The [objstore configuration](https://thanos.io/tip/thanos/storage.md/)                               | `""`                |
-| `indexCacheConfig`            | The [index cache configuration](https://thanos.io/tip/components/store.md/)                   | `""`                |
-| `bucketCacheConfig`           | The [bucket cache configuration](https://thanos.io/tip/components/store.md/)                  | `""`                |
+| `objstoreConfig`              | The [objstore configuration](https://thanos.io/tip/thanos/storage.md/)                    | `""`                |
+| `indexCacheConfig`            | The [index cache configuration](https://thanos.io/tip/components/store.md/)               | `""`                |
+| `bucketCacheConfig`           | The [bucket cache configuration](https://thanos.io/tip/components/store.md/)              | `""`                |
 | `existingObjstoreSecret`      | Secret with Objstore Configuration                                                        | `""`                |
 | `existingObjstoreSecretItems` | Optional item list for specifying a custom Secret key. If so, path should be objstore.yml | `[]`                |
 | `existingServiceAccount`      | Provide a common service account to be shared with all components                         | `""`                |
@@ -116,359 +118,444 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 
 ### Thanos Query parameters
 
-| Name                                                      | Description                                                                                                               | Value                    |
-| --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `query.enabled`                                           | Set to true to enable Thanos Query component                                                                              | `true`                   |
-| `query.logLevel`                                          | Thanos Query log level                                                                                                    | `info`                   |
-| `query.logFormat`                                         | Thanos Query log format                                                                                                   | `logfmt`                 |
-| `query.serviceAccount.annotations`                        | Annotations for Thanos Query Service Account                                                                              | `{}`                     |
-| `query.serviceAccount.existingServiceAccount`             | Provide an existing service account for query                                                                             | `""`                     |
-| `query.hostAliases`                                       | Deployment pod host aliases                                                                                               | `[]`                     |
-| `query.replicaLabel`                                      | Replica indicator(s) along which data is deduplicated                                                                     | `[]`                     |
-| `query.dnsDiscovery.enabled`                              | Enable store APIs discovery via DNS                                                                                       | `true`                   |
-| `query.dnsDiscovery.sidecarsService`                      | Sidecars service name to discover them using DNS discovery                                                                | `""`                     |
-| `query.dnsDiscovery.sidecarsNamespace`                    | Sidecars namespace to discover them using DNS discovery                                                                   | `""`                     |
-| `query.stores`                                            | Statically configure store APIs to connect with Thanos Query                                                              | `[]`                     |
-| `query.sdConfig`                                          | Query Service Discovery Configuration                                                                                     | `""`                     |
-| `query.existingSDConfigmap`                               | Name of existing ConfigMap with Ruler configuration                                                                       | `""`                     |
-| `query.extraContainers`                                   | Extra containers running as sidecars to Thanos query                                                                      | `[]`                     |
-| `query.extraEnv`                                          | Extra environment variables for Thanos query container                                                                    | `[]`                     |
-| `query.extraVolumes`                                      | Extra volumes to add to Thanos Query                                                                                      | `[]`                     |
-| `query.extraVolumeMounts`                                 | Extra volume mounts to add to the query container                                                                         | `[]`                     |
-| `query.extraFlags`                                        | Extra Flags to passed to Thanos Query                                                                                     | `[]`                     |
-| `query.replicaCount`                                      | Number of Thanos Query replicas to deploy                                                                                 | `1`                      |
-| `query.strategyType`                                      | Deployment Strategy Type, can be set to RollingUpdate or Recreate by default                                              | `RollingUpdate`          |
-| `query.podAffinityPreset`                                 | Thanos Query pod affinity preset                                                                                          | `""`                     |
-| `query.podAntiAffinityPreset`                             | Thanos Query pod anti-affinity preset. Ignored if `query.affinity` is set. Allowed values: `soft` or `hard`               | `soft`                   |
-| `query.nodeAffinityPreset.type`                           | Thanos Query node affinity preset type. Ignored if `query.affinity` is set. Allowed values: `soft` or `hard`              | `""`                     |
-| `query.nodeAffinityPreset.key`                            | Thanos Query node label key to match Ignored if `query.affinity` is set.                                                  | `""`                     |
-| `query.nodeAffinityPreset.values`                         | Thanos Query node label values to match. Ignored if `query.affinity` is set.                                              | `[]`                     |
-| `query.affinity`                                          | Thanos Query affinity for pod assignment                                                                                  | `{}`                     |
-| `query.nodeSelector`                                      | Thanos Query node labels for pod assignment                                                                               | `{}`                     |
-| `query.tolerations`                                       | Thanos Query tolerations for pod assignment                                                                               | `[]`                     |
-| `query.podLabels`                                         | Thanos Query pod labels                                                                                                   | `{}`                     |
-| `query.podAnnotations`                                    | Annotations for Thanos Query pods                                                                                         | `{}`                     |
-| `query.priorityClassName`                                 | Controller priorityClassName                                                                                              | `""`                     |
-| `query.podSecurityContext.enabled`                        | Enable security context for the Thanos Query pod                                                                          | `true`                   |
-| `query.podSecurityContext.fsGroup`                        | Group ID for the filesystem used by Query container                                                                       | `1001`                   |
-| `query.podSecurityContext.runAsUser`                      | User ID for the service user running the Query pod                                                                        | `1001`                   |
-| `query.containerSecurityContext.enabled`                  | Enable container security context for Query container                                                                     | `true`                   |
-| `query.containerSecurityContext.runAsNonRoot`             | Force the container Query to run as a non root user                                                                       | `true`                   |
-| `query.containerSecurityContext.allowPrivilegeEscalation` | Switch privilegeEscalation possiblity on or off for Query                                                                 | `false`                  |
-| `query.containerSecurityContext.readOnlyRootFilesystem`   | mount / (root) as a readonly filesystem of Query container                                                                | `false`                  |
-| `query.rbac.create`                                       | Create ClusterRole and ClusterRolebing for the Service account                                                            | `false`                  |
-| `query.pspEnabled`                                        | Create PodSecurity Policy                                                                                                 | `false`                  |
-| `query.resources.limits`                                  | The resources limits for the Thanos Query container                                                                       | `{}`                     |
-| `query.resources.requests`                                | The requested resources for the Thanos Query container                                                                    | `{}`                     |
-| `query.livenessProbe.enabled`                             | Enable livenessProbe                                                                                                      | `true`                   |
-| `query.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                   | `30`                     |
-| `query.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                          | `10`                     |
-| `query.livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                         | `30`                     |
-| `query.livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                                       | `6`                      |
-| `query.livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                                       | `1`                      |
-| `query.readinessProbe.enabled`                            | Enable readinessProbe                                                                                                     | `true`                   |
-| `query.readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                                  | `30`                     |
-| `query.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                                         | `10`                     |
-| `query.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                                        | `30`                     |
-| `query.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                                      | `6`                      |
-| `query.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                                      | `1`                      |
-| `query.grpcTLS.server.secure`                             | Enable TLS for GRPC server                                                                                                | `false`                  |
-| `query.grpcTLS.server.autoGenerated`                      | Create self-signed TLS certificates. Currently only supports PEM certificates.                                            | `false`                  |
-| `query.grpcTLS.server.cert`                               | TLS Certificate for gRPC server, leave blank to disable TLS - ignored if existingSecret is provided                       | `""`                     |
-| `query.grpcTLS.server.key`                                | TLS Key for the gRPC server, leave blank to disable TLS - ignored if existingSecret is provided                           | `""`                     |
-| `query.grpcTLS.server.ca`                                 | TLS CA to verify clients against                                                                                          | `""`                     |
-| `query.grpcTLS.server.existingSecret`                     | Existing secret containing your own TLS certificates.                                                                     | `{}`                     |
-| `query.grpcTLS.client.secure`                             | Use TLS when talking to the gRPC server                                                                                   | `false`                  |
-| `query.grpcTLS.client.autoGenerated`                      | Create self-signed TLS certificates. Currently only supports PEM certificates.                                            | `false`                  |
-| `query.grpcTLS.client.cert`                               | TLS Certificates to use to identify this client to the server - ignored if existingSecret is provided                     | `""`                     |
-| `query.grpcTLS.client.key`                                | TLS Key for the client's certificate - ignored if existingSecret is provided                                              | `""`                     |
-| `query.grpcTLS.client.ca`                                 | TLS CA Certificates to use to verify gRPC servers - ignored if existingSecret is provided                                 | `""`                     |
-| `query.grpcTLS.client.servername`                         | Server name to verify the hostname on the returned gRPC certificates. See https://tools.ietf.org/html/rfc4366#section-3.1 | `""`                     |
-| `query.grpcTLS.client.existingSecret`                     | Existing secret containing your own TLS certificates.                                                                     | `{}`                     |
-| `query.service.type`                                      | Kubernetes service type                                                                                                   | `ClusterIP`              |
-| `query.service.clusterIP`                                 | Thanos Query service clusterIP IP                                                                                         | `""`                     |
-| `query.service.http.port`                                 | Service HTTP port                                                                                                         | `9090`                   |
-| `query.service.http.nodePort`                             | Service HTTP node port                                                                                                    | `""`                     |
-| `query.service.targetPort`                                | Service targetPort override                                                                                               | `http`                   |
-| `query.service.grpc.port`                                 | Service GRPC port                                                                                                         | `10901`                  |
-| `query.service.grpc.nodePort`                             | Service GRPC node port                                                                                                    | `""`                     |
-| `query.service.loadBalancerIP`                            | Load balancer IP if service type is `LoadBalancer`                                                                        | `""`                     |
-| `query.service.loadBalancerSourceRanges`                  | Address that are allowed when service is LoadBalancer                                                                     | `[]`                     |
-| `query.service.externalTrafficPolicy`                     | Thanos Query service externalTrafficPolicy                                                                                | `Cluster`                |
-| `query.service.annotations`                               | Annotations for Thanos Query service                                                                                      | `{}`                     |
-| `query.service.labelSelectorsOverride`                    | Selector for Thanos query service                                                                                         | `{}`                     |
-| `query.autoscaling.enabled`                               | Enable autoscaling for Thanos Query                                                                                       | `false`                  |
-| `query.autoscaling.minReplicas`                           | Minimum number of Thanos Query replicas                                                                                   | `""`                     |
-| `query.autoscaling.maxReplicas`                           | Maximum number of Thanos Query replicas                                                                                   | `""`                     |
-| `query.autoscaling.targetCPU`                             | Target CPU utilization percentage                                                                                         | `""`                     |
-| `query.autoscaling.targetMemory`                          | Target Memory utilization percentage                                                                                      | `""`                     |
-| `query.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                           | `false`                  |
-| `query.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                            | `1`                      |
-| `query.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable                                                            | `""`                     |
-| `query.ingress.enabled`                                   | Enable ingress controller resource                                                                                        | `false`                  |
-| `query.ingress.certManager`                               | Set this to true in order to add the corresponding annotations for cert-manager                                           | `false`                  |
-| `query.ingress.hostname`                                  | Default host for the ingress resource                                                                                     | `thanos.local`           |
-| `query.ingress.ingressClassName`                          | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                             | `""`                     |
-| `query.ingress.annotations`                               | Ingress annotations                                                                                                       | `{}`                     |
-| `query.ingress.extraHosts`                                | The list of additional hostnames to be covered with this ingress record.                                                  | `[]`                     |
-| `query.ingress.extraTls`                                  | The tls configuration for additional hostnames to be covered with this ingress record.                                    | `[]`                     |
-| `query.ingress.secrets`                                   | If you're providing your own certificates, please use this to add the certificates as secrets                             | `[]`                     |
-| `query.ingress.tls`                                       | Create ingress TLS section                                                                                                | `false`                  |
-| `query.ingress.apiVersion`                                | Force Ingress API version (automatically detected if not set)                                                             | `""`                     |
-| `query.ingress.path`                                      | Ingress path                                                                                                              | `/`                      |
-| `query.ingress.pathType`                                  | Ingress path type                                                                                                         | `ImplementationSpecific` |
-| `query.ingress.grpc.enabled`                              | Enable ingress controller resource (GRPC)                                                                                 | `false`                  |
-| `query.ingress.grpc.certManager`                          | Add annotations for cert-manager (GRPC)                                                                                   | `false`                  |
-| `query.ingress.grpc.hostname`                             | Default host for the ingress resource (GRPC)                                                                              | `thanos-grpc.local`      |
-| `query.ingress.grpc.annotations`                          | Ingress annotations (GRPC)                                                                                                | `{}`                     |
-| `query.ingress.grpc.extraHosts`                           | The list of additional hostnames to be covered with this ingress record.                                                  | `[]`                     |
-| `query.ingress.grpc.extraTls`                             | The tls configuration for additional hostnames to be covered with this ingress record.                                    | `[]`                     |
-| `query.ingress.grpc.secrets`                              | If you're providing your own certificates, please use this to add the certificates as secrets                             | `[]`                     |
-| `query.ingress.grpc.apiVersion`                           | Override API Version (automatically detected if not set)                                                                  | `""`                     |
-| `query.ingress.grpc.path`                                 | Ingress Path                                                                                                              | `/`                      |
-| `query.ingress.grpc.pathType`                             | Ingress Path type                                                                                                         | `ImplementationSpecific` |
+| Name                                                      | Description                                                                                                                             | Value                    |
+| --------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `query.enabled`                                           | Set to true to enable Thanos Query component                                                                                            | `true`                   |
+| `query.logLevel`                                          | Thanos Query log level                                                                                                                  | `info`                   |
+| `query.logFormat`                                         | Thanos Query log format                                                                                                                 | `logfmt`                 |
+| `query.replicaLabel`                                      | Replica indicator(s) along which data is de-duplicated                                                                                  | `["replica"]`            |
+| `query.dnsDiscovery.enabled`                              | Enable store APIs discovery via DNS                                                                                                     | `true`                   |
+| `query.dnsDiscovery.sidecarsService`                      | Sidecars service name to discover them using DNS discovery                                                                              | `""`                     |
+| `query.dnsDiscovery.sidecarsNamespace`                    | Sidecars namespace to discover them using DNS discovery                                                                                 | `""`                     |
+| `query.stores`                                            | Statically configure store APIs to connect with Thanos Query                                                                            | `[]`                     |
+| `query.sdConfig`                                          | Query Service Discovery Configuration                                                                                                   | `""`                     |
+| `query.existingSDConfigmap`                               | Name of existing ConfigMap with Ruler configuration                                                                                     | `""`                     |
+| `query.extraEnvVars`                                      | Extra environment variables for Thanos Query container                                                                                  | `[]`                     |
+| `query.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars for Thanos Query nodes                                                             | `""`                     |
+| `query.extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars for Thanos Query nodes                                                                | `""`                     |
+| `query.extraFlags`                                        | Extra Flags to passed to Thanos Query                                                                                                   | `[]`                     |
+| `query.command`                                           | Override default container command (useful when using custom images)                                                                    | `[]`                     |
+| `query.args`                                              | Override default container args (useful when using custom images)                                                                       | `[]`                     |
+| `query.replicaCount`                                      | Number of Thanos Query replicas to deploy                                                                                               | `1`                      |
+| `query.updateStrategy.type`                               | Update strategy type for Thanos Query replicas                                                                                          | `RollingUpdate`          |
+| `query.podSecurityContext.enabled`                        | Enable security context for the Thanos Query pods                                                                                       | `true`                   |
+| `query.podSecurityContext.fsGroup`                        | Group ID for the filesystem used by Thanos Query pods                                                                                   | `1001`                   |
+| `query.containerSecurityContext.enabled`                  | Enable container security context for the Thanos Query containers                                                                       | `true`                   |
+| `query.containerSecurityContext.runAsUser`                | User ID for the service user running the Thanos Query containers                                                                        | `1001`                   |
+| `query.containerSecurityContext.runAsNonRoot`             | Force the Thanos Query containers to run as a non root user                                                                             | `true`                   |
+| `query.containerSecurityContext.allowPrivilegeEscalation` | Switch privilegeEscalation possibility on or off for Thanos Query containers                                                            | `false`                  |
+| `query.containerSecurityContext.readOnlyRootFilesystem`   | mount / (root) as a readonly filesystem on Thanos Query containers                                                                      | `false`                  |
+| `query.resources.limits`                                  | The resources limits for the Thanos Query container                                                                                     | `{}`                     |
+| `query.resources.requests`                                | The requested resources for the Thanos Query container                                                                                  | `{}`                     |
+| `query.livenessProbe.enabled`                             | Enable livenessProbe on Thanos Query containers                                                                                         | `true`                   |
+| `query.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                                 | `30`                     |
+| `query.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                                        | `10`                     |
+| `query.livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                                       | `30`                     |
+| `query.livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                                                     | `6`                      |
+| `query.livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                                                     | `1`                      |
+| `query.readinessProbe.enabled`                            | Enable readinessProbe on Thanos Query containers                                                                                        | `true`                   |
+| `query.readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                                                | `30`                     |
+| `query.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                                                       | `10`                     |
+| `query.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                                                      | `30`                     |
+| `query.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                                                    | `6`                      |
+| `query.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                                                    | `1`                      |
+| `query.startupProbe.enabled`                              | Enable startupProbe on Thanos Query containers                                                                                          | `false`                  |
+| `query.startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                                                                  | `5`                      |
+| `query.startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                                                         | `5`                      |
+| `query.startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                                                        | `1`                      |
+| `query.startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                                                      | `15`                     |
+| `query.startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                                                      | `1`                      |
+| `query.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                                     | `{}`                     |
+| `query.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                                    | `{}`                     |
+| `query.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                                      | `{}`                     |
+| `query.initContainers`                                    | Add additional init containers to the Thanos Query pods                                                                                 | `[]`                     |
+| `query.sidecars`                                          | Extra containers running as sidecars to Thanos Query pods                                                                               | `[]`                     |
+| `query.extraVolumes`                                      | Extra volumes to add to Thanos Query                                                                                                    | `[]`                     |
+| `query.extraVolumeMounts`                                 | Extra volume mounts to add to the query container                                                                                       | `[]`                     |
+| `query.podAffinityPreset`                                 | Thanos Query pod affinity preset                                                                                                        | `""`                     |
+| `query.podAntiAffinityPreset`                             | Thanos Query pod anti-affinity preset. Ignored if `query.affinity` is set. Allowed values: `soft` or `hard`                             | `soft`                   |
+| `query.nodeAffinityPreset.type`                           | Thanos Query node affinity preset type. Ignored if `query.affinity` is set. Allowed values: `soft` or `hard`                            | `""`                     |
+| `query.nodeAffinityPreset.key`                            | Thanos Query node label key to match Ignored if `query.affinity` is set.                                                                | `""`                     |
+| `query.nodeAffinityPreset.values`                         | Thanos Query node label values to match. Ignored if `query.affinity` is set.                                                            | `[]`                     |
+| `query.affinity`                                          | Thanos Query affinity for pod assignment                                                                                                | `{}`                     |
+| `query.nodeSelector`                                      | Thanos Query node labels for pod assignment                                                                                             | `{}`                     |
+| `query.tolerations`                                       | Thanos Query tolerations for pod assignment                                                                                             | `[]`                     |
+| `query.podLabels`                                         | Thanos Query pod labels                                                                                                                 | `{}`                     |
+| `query.podAnnotations`                                    | Annotations for Thanos Query pods                                                                                                       | `{}`                     |
+| `query.hostAliases`                                       | Deployment pod host aliases                                                                                                             | `[]`                     |
+| `query.lifecycleHooks`                                    | for the Thanos Query container(s) to automate configuration before or after startup                                                     | `{}`                     |
+| `query.priorityClassName`                                 | Thanos Query priorityClassName                                                                                                          | `""`                     |
+| `query.schedulerName`                                     | Name of the k8s scheduler (other than default) for Thanos Query pods                                                                    | `""`                     |
+| `query.topologySpreadConstraints`                         | Topology Spread Constraints for Thanos Query pods assignment spread across your cluster among failure-domains                           | `[]`                     |
+| `query.grpc.server.tls.enabled`                           | Enable TLS encryption in the GRPC server                                                                                                | `false`                  |
+| `query.grpc.server.tls.autoGenerated`                     | Create self-signed TLS certificates. Currently only supports PEM certificates                                                           | `false`                  |
+| `query.grpc.server.tls.cert`                              | TLS Certificate for GRPC server - ignored if existingSecret is provided                                                                 | `""`                     |
+| `query.grpc.server.tls.key`                               | TLS Key for GRPC server - ignored if existingSecret is provided                                                                         | `""`                     |
+| `query.grpc.server.tls.ca`                                | TLS CA to verify clients against - ignored if existingSecret is provided                                                                | `""`                     |
+| `query.grpc.server.tls.existingSecret`                    | Existing secret containing your own TLS certificates                                                                                    | `{}`                     |
+| `query.grpc.client.serverName`                            | Server name to verify the hostname on the returned GRPC certificates                                                                    | `""`                     |
+| `query.grpc.client.tls.enabled`                           | Enable TLS encryption in the GRPC server                                                                                                | `false`                  |
+| `query.grpc.client.tls.autoGenerated`                     | Create self-signed TLS certificates. Currently only supports PEM certificates                                                           | `false`                  |
+| `query.grpc.client.tls.cert`                              | TLS Certificate for GRPC server - ignored if existingSecret is provided                                                                 | `""`                     |
+| `query.grpc.client.tls.key`                               | TLS Key for GRPC server - ignored if existingSecret is provided                                                                         | `""`                     |
+| `query.grpc.client.tls.ca`                                | TLS CA to verify clients against - ignored if existingSecret is provided                                                                | `""`                     |
+| `query.grpc.client.tls.existingSecret`                    | Existing secret containing your own TLS certificates                                                                                    | `{}`                     |
+| `query.service.type`                                      | Kubernetes service type                                                                                                                 | `ClusterIP`              |
+| `query.service.ports.http`                                | Thanos Query service HTTP port                                                                                                          | `9090`                   |
+| `query.service.ports.grpc`                                | Thanos Query service GRPC port                                                                                                          | `10901`                  |
+| `query.service.nodePorts.http`                            | Specify the Thanos Query HTTP nodePort value for the LoadBalancer and NodePort service types                                            | `""`                     |
+| `query.service.nodePorts.grpc`                            | Specify the Thanos Query GRPC nodePort value for the LoadBalancer and NodePort service types                                            | `""`                     |
+| `query.service.clusterIP`                                 | Thanos Query service clusterIP IP                                                                                                       | `""`                     |
+| `query.service.loadBalancerIP`                            | Load balancer IP if service type is `LoadBalancer`                                                                                      | `""`                     |
+| `query.service.loadBalancerSourceRanges`                  | Address that are allowed when service is LoadBalancer                                                                                   | `[]`                     |
+| `query.service.externalTrafficPolicy`                     | Thanos Query service externalTrafficPolicy                                                                                              | `Cluster`                |
+| `query.service.annotations`                               | Annotations for Thanos Query service                                                                                                    | `{}`                     |
+| `query.service.extraPorts`                                | Extra ports to expose in the Thanos Query service                                                                                       | `[]`                     |
+| `query.service.labelSelectorsOverride`                    | Selector for Thanos Query service                                                                                                       | `{}`                     |
+| `query.service.additionalHeadless`                        | Additional Headless service                                                                                                             | `false`                  |
+| `query.serviceAccount.annotations`                        | Annotations for Thanos Query Service Account                                                                                            | `{}`                     |
+| `query.serviceAccount.existingServiceAccount`             | Name for an existing Thanos Query Service Account                                                                                       | `""`                     |
+| `query.serviceAccount.automountServiceAccountToken`       | Enable/disable auto mounting of the service account token                                                                               | `true`                   |
+| `query.rbac.create`                                       | Create a ClusterRole and ClusterRoleBinding for the Thanos Query Service Account                                                        | `false`                  |
+| `query.rbac.rules`                                        | Custom RBAC rules to set                                                                                                                | `[]`                     |
+| `query.pspEnabled`                                        | Whether to create a PodSecurityPolicy for Thanos Query                                                                                  | `false`                  |
+| `query.autoscaling.enabled`                               | Enable autoscaling for Thanos Query                                                                                                     | `false`                  |
+| `query.autoscaling.minReplicas`                           | Minimum number of Thanos Query replicas                                                                                                 | `""`                     |
+| `query.autoscaling.maxReplicas`                           | Maximum number of Thanos Query replicas                                                                                                 | `""`                     |
+| `query.autoscaling.targetCPU`                             | Target CPU utilization percentage                                                                                                       | `""`                     |
+| `query.autoscaling.targetMemory`                          | Target Memory utilization percentage                                                                                                    | `""`                     |
+| `query.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation for Thanos Query                                                                        | `false`                  |
+| `query.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                          | `1`                      |
+| `query.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable                                                                          | `""`                     |
+| `query.ingress.enabled`                                   | Enable ingress controller resource                                                                                                      | `false`                  |
+| `query.ingress.hostname`                                  | Default host for the ingress resource                                                                                                   | `thanos.local`           |
+| `query.ingress.ingressClassName`                          | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                           | `""`                     |
+| `query.ingress.annotations`                               | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.        | `{}`                     |
+| `query.ingress.extraHosts`                                | The list of additional hostnames to be covered with this ingress record.                                                                | `[]`                     |
+| `query.ingress.extraTls`                                  | The tls configuration for additional hostnames to be covered with this ingress record.                                                  | `[]`                     |
+| `query.ingress.secrets`                                   | If you're providing your own certificates, please use this to add the certificates as secrets                                           | `[]`                     |
+| `query.ingress.tls`                                       | Enable TLS configuration for the hostname defined at `query.ingress.hostname` parameter                                                 | `false`                  |
+| `query.ingress.selfSigned`                                | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                            | `false`                  |
+| `query.ingress.apiVersion`                                | Force Ingress API version (automatically detected if not set)                                                                           | `""`                     |
+| `query.ingress.path`                                      | Ingress path                                                                                                                            | `/`                      |
+| `query.ingress.pathType`                                  | Ingress path type                                                                                                                       | `ImplementationSpecific` |
+| `query.ingress.grpc.enabled`                              | Enable ingress controller resource (GRPC)                                                                                               | `false`                  |
+| `query.ingress.grpc.hostname`                             | Default host for the ingress resource (GRPC)                                                                                            | `thanos-grpc.local`      |
+| `query.ingress.grpc.ingressClassName`                     | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                           | `""`                     |
+| `query.ingress.grpc.annotations`                          | Additional annotations for the Ingress resource (GRPC). To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `query.ingress.grpc.extraHosts`                           | The list of additional hostnames to be covered with this ingress record.                                                                | `[]`                     |
+| `query.ingress.grpc.extraTls`                             | The tls configuration for additional hostnames to be covered with this ingress record.                                                  | `[]`                     |
+| `query.ingress.grpc.secrets`                              | If you're providing your own certificates, please use this to add the certificates as secrets                                           | `[]`                     |
+| `query.ingress.grpc.tls`                                  | Enable TLS configuration for the hostname defined at `query.ingress.grpc.hostname` parameter                                            | `false`                  |
+| `query.ingress.grpc.selfSigned`                           | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                            | `false`                  |
+| `query.ingress.grpc.apiVersion`                           | Override API Version (automatically detected if not set)                                                                                | `""`                     |
+| `query.ingress.grpc.path`                                 | Ingress Path                                                                                                                            | `/`                      |
+| `query.ingress.grpc.pathType`                             | Ingress Path type                                                                                                                       | `ImplementationSpecific` |
 
 
 ### Thanos Query Frontend parameters
 
-| Name                                                              | Description                                                                                                                   | Value                    |
-| ----------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `queryFrontend.enabled`                                           | Enable/disable Thanos Query Frontend component                                                                                | `true`                   |
-| `queryFrontend.logLevel`                                          | Thanos Query Frontend log level                                                                                               | `info`                   |
-| `queryFrontend.logFormat`                                         | Thanos Query Frontend log format                                                                                              | `logfmt`                 |
-| `queryFrontend.serviceAccount.annotations`                        | Annotations for Thanos Query Frontend Service Account                                                                         | `{}`                     |
-| `queryFrontend.serviceAccount.existingServiceAccount`             | Provide an existing service account for Query Frontend                                                                        | `""`                     |
-| `queryFrontend.hostAliases`                                       | Deployment pod host aliases                                                                                                   | `[]`                     |
-| `queryFrontend.extraContainers`                                   | Extra containers running as sidecars to Thanos Query Frontend container                                                       | `[]`                     |
-| `queryFrontend.extraEnv`                                          | Extra environment variables for Thanos Query Frontend container                                                               | `[]`                     |
-| `queryFrontend.extraVolumes`                                      | Extra volumes to add to Thanos Query Frontend                                                                                 | `[]`                     |
-| `queryFrontend.extraVolumeMounts`                                 | Extra volume mounts to add to the query-frontend container                                                                    | `[]`                     |
-| `queryFrontend.extraFlags`                                        | Extra Flags to passed to Thanos Query Frontend                                                                                | `[]`                     |
-| `queryFrontend.config`                                            | Thanos Query Frontend cache configuration                                                                                     | `""`                     |
-| `queryFrontend.existingConfigmap`                                 | Name of existing ConfigMap with Thanos Query Frontend cache configuration                                                     | `""`                     |
-| `queryFrontend.replicaCount`                                      | Number of Thanos Query Frontend replicas to deploy                                                                            | `1`                      |
-| `queryFrontend.strategyType`                                      | Deployment Strategy Type, can be set to RollingUpdate or Recreate by default                                                  | `RollingUpdate`          |
-| `queryFrontend.podAffinityPreset`                                 | Thanos Query Frontend pod affinity preset                                                                                     | `""`                     |
-| `queryFrontend.podAntiAffinityPreset`                             | Thanos Query Frontend pod anti-affinity preset. Ignored if `queryFrontend.affinity` is set. Allowed values: `soft` or `hard`  | `soft`                   |
-| `queryFrontend.nodeAffinityPreset.type`                           | Thanos Query Frontend node affinity preset type. Ignored if `queryFrontend.affinity` is set. Allowed values: `soft` or `hard` | `""`                     |
-| `queryFrontend.nodeAffinityPreset.key`                            | Thanos Query Frontend node label key to match Ignored if `queryFrontend.affinity` is set.                                     | `""`                     |
-| `queryFrontend.nodeAffinityPreset.values`                         | Thanos Query Frontend node label values to match. Ignored if `queryFrontend.affinity` is set.                                 | `[]`                     |
-| `queryFrontend.affinity`                                          | Thanos Query Frontend affinity for pod assignment                                                                             | `{}`                     |
-| `queryFrontend.nodeSelector`                                      | Thanos Query Frontend node labels for pod assignment                                                                          | `{}`                     |
-| `queryFrontend.tolerations`                                       | Thanos Query Frontend tolerations for pod assignment                                                                          | `[]`                     |
-| `queryFrontend.podLabels`                                         | Thanos Query Frontend pod labels                                                                                              | `{}`                     |
-| `queryFrontend.podAnnotations`                                    | Annotations for Thanos Query Frontend pods                                                                                    | `{}`                     |
-| `queryFrontend.priorityClassName`                                 | Controller priorityClassName                                                                                                  | `""`                     |
-| `queryFrontend.podSecurityContext.enabled`                        | Enable security context for the Thanos Queryfrontend pod                                                                      | `true`                   |
-| `queryFrontend.podSecurityContext.fsGroup`                        | Group ID for the filesystem used by Queryfrontend container                                                                   | `1001`                   |
-| `queryFrontend.podSecurityContext.runAsUser`                      | User ID for the service user running the Queryfrontend pod                                                                    | `1001`                   |
-| `queryFrontend.containerSecurityContext.enabled`                  | Enable container security context for Queryfrontend container                                                                 | `true`                   |
-| `queryFrontend.containerSecurityContext.runAsNonRoot`             | Force the container Queryfrontend to run as a non root user                                                                   | `true`                   |
-| `queryFrontend.containerSecurityContext.allowPrivilegeEscalation` | Switch privilegeEscalation possiblity on or off for Queryfrontend                                                             | `false`                  |
-| `queryFrontend.containerSecurityContext.readOnlyRootFilesystem`   | mount / (root) as a readonly filesystem of Queryfrontend container                                                            | `false`                  |
-| `queryFrontend.rbac.create`                                       | Create ClusterRole and ClusterRolebing for the Service account                                                                | `false`                  |
-| `queryFrontend.pspEnabled`                                        | Create PodSecurity Policy                                                                                                     | `false`                  |
-| `queryFrontend.resources.limits`                                  | The resources limits for the Thanos Query Frontend container                                                                  | `{}`                     |
-| `queryFrontend.resources.requests`                                | The requested resources for the Thanos Query Frontend container                                                               | `{}`                     |
-| `queryFrontend.livenessProbe.enabled`                             | Enable livenessProbe                                                                                                          | `true`                   |
-| `queryFrontend.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                       | `30`                     |
-| `queryFrontend.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                              | `10`                     |
-| `queryFrontend.livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                             | `30`                     |
-| `queryFrontend.livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                                           | `6`                      |
-| `queryFrontend.livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                                           | `1`                      |
-| `queryFrontend.readinessProbe.enabled`                            | Enable readinessProbe                                                                                                         | `true`                   |
-| `queryFrontend.readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                                      | `30`                     |
-| `queryFrontend.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                                             | `10`                     |
-| `queryFrontend.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                                            | `30`                     |
-| `queryFrontend.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                                          | `6`                      |
-| `queryFrontend.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                                          | `1`                      |
-| `queryFrontend.service.type`                                      | Kubernetes service type                                                                                                       | `ClusterIP`              |
-| `queryFrontend.service.clusterIP`                                 | Thanos Query Frontend service clusterIP IP                                                                                    | `""`                     |
-| `queryFrontend.service.http.port`                                 | Service HTTP port                                                                                                             | `9090`                   |
-| `queryFrontend.service.http.nodePort`                             | Service HTTP node port                                                                                                        | `""`                     |
-| `queryFrontend.service.targetPort`                                | Service targetPort override                                                                                                   | `http`                   |
-| `queryFrontend.service.loadBalancerIP`                            | Load balancer IP if service type is `LoadBalancer`                                                                            | `""`                     |
-| `queryFrontend.service.loadBalancerSourceRanges`                  | Address that are allowed when service is LoadBalancer                                                                         | `[]`                     |
-| `queryFrontend.service.externalTrafficPolicy`                     | Thanos Query Frontend service externalTrafficPolicy                                                                           | `Cluster`                |
-| `queryFrontend.service.annotations`                               | Annotations for Thanos Query Frontend service                                                                                 | `{}`                     |
-| `queryFrontend.service.labelSelectorsOverride`                    | Selector for Thanos query service                                                                                             | `{}`                     |
-| `queryFrontend.autoscaling.enabled`                               | Enable autoscaling for Thanos Query Frontend                                                                                  | `false`                  |
-| `queryFrontend.autoscaling.minReplicas`                           | Minimum number of Thanos Query Frontend replicas                                                                              | `""`                     |
-| `queryFrontend.autoscaling.maxReplicas`                           | Maximum number of Thanos Query Frontend replicas                                                                              | `""`                     |
-| `queryFrontend.autoscaling.targetCPU`                             | Target CPU utilization percentage                                                                                             | `""`                     |
-| `queryFrontend.autoscaling.targetMemory`                          | Target Memory utilization percentage                                                                                          | `""`                     |
-| `queryFrontend.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                               | `false`                  |
-| `queryFrontend.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                | `1`                      |
-| `queryFrontend.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable                                                                | `""`                     |
-| `queryFrontend.ingress.enabled`                                   | Enable ingress controller resource                                                                                            | `false`                  |
-| `queryFrontend.ingress.certManager`                               | Set this to true in order to add the corresponding annotations for cert-manager                                               | `false`                  |
-| `queryFrontend.ingress.hostname`                                  | Default host for the ingress resource                                                                                         | `thanos.local`           |
-| `queryFrontend.ingress.ingressClassName`                          | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                 | `""`                     |
-| `queryFrontend.ingress.annotations`                               | Ingress annotations                                                                                                           | `{}`                     |
-| `queryFrontend.ingress.extraHosts`                                | The list of additional hostnames to be covered with this ingress record.                                                      | `[]`                     |
-| `queryFrontend.ingress.extraTls`                                  | The tls configuration for additional hostnames to be covered with this ingress record.                                        | `[]`                     |
-| `queryFrontend.ingress.secrets`                                   | If you're providing your own certificates, please use this to add the certificates as secrets                                 | `[]`                     |
-| `queryFrontend.ingress.tls`                                       | Create ingress TLS section                                                                                                    | `false`                  |
-| `queryFrontend.ingress.apiVersion`                                | Force Ingress API version (automatically detected if not set)                                                                 | `""`                     |
-| `queryFrontend.ingress.path`                                      | Ingress path                                                                                                                  | `/`                      |
-| `queryFrontend.ingress.pathType`                                  | Ingress path type                                                                                                             | `ImplementationSpecific` |
+| Name                                                              | Description                                                                                                                      | Value                    |
+| ----------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `queryFrontend.enabled`                                           | Enable/disable Thanos Query Frontend component                                                                                   | `true`                   |
+| `queryFrontend.logLevel`                                          | Thanos Query Frontend log level                                                                                                  | `info`                   |
+| `queryFrontend.logFormat`                                         | Thanos Query Frontend log format                                                                                                 | `logfmt`                 |
+| `queryFrontend.config`                                            | Thanos Query Frontend configuration                                                                                              | `""`                     |
+| `queryFrontend.existingConfigmap`                                 | Name of existing ConfigMap with Thanos Query Frontend configuration                                                              | `""`                     |
+| `queryFrontend.extraEnvVars`                                      | Extra environment variables for Thanos Query Frontend container                                                                  | `[]`                     |
+| `queryFrontend.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars for Thanos Query Frontend nodes                                             | `""`                     |
+| `queryFrontend.extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars for Thanos Query Frontend nodes                                                | `""`                     |
+| `queryFrontend.extraFlags`                                        | Extra Flags to passed to Thanos Query Frontend                                                                                   | `[]`                     |
+| `queryFrontend.command`                                           | Override default container command (useful when using custom images)                                                             | `[]`                     |
+| `queryFrontend.args`                                              | Override default container args (useful when using custom images)                                                                | `[]`                     |
+| `queryFrontend.replicaCount`                                      | Number of Thanos Query Frontend replicas to deploy                                                                               | `1`                      |
+| `queryFrontend.updateStrategy.type`                               | Update strategy type for Thanos Query Frontend replicas                                                                          | `RollingUpdate`          |
+| `queryFrontend.podSecurityContext.enabled`                        | Enable security context for the Thanos Query Frontend pods                                                                       | `true`                   |
+| `queryFrontend.podSecurityContext.fsGroup`                        | Group ID for the filesystem used by Thanos Query Frontend pods                                                                   | `1001`                   |
+| `queryFrontend.containerSecurityContext.enabled`                  | Enable container security context for the Thanos Query Frontend containers                                                       | `true`                   |
+| `queryFrontend.containerSecurityContext.runAsUser`                | User ID for the service user running the Thanos Query Frontend containers                                                        | `1001`                   |
+| `queryFrontend.containerSecurityContext.runAsNonRoot`             | Force the Thanos Query Frontend containers to run as a non root user                                                             | `true`                   |
+| `queryFrontend.containerSecurityContext.allowPrivilegeEscalation` | Switch privilegeEscalation possibility on or off for Thanos Query Frontend containers                                            | `false`                  |
+| `queryFrontend.containerSecurityContext.readOnlyRootFilesystem`   | mount / (root) as a readonly filesystem on Thanos Query Frontend containers                                                      | `false`                  |
+| `queryFrontend.resources.limits`                                  | The resources limits for the Thanos Query Frontend container                                                                     | `{}`                     |
+| `queryFrontend.resources.requests`                                | The requested resources for the Thanos Query Frontend container                                                                  | `{}`                     |
+| `queryFrontend.livenessProbe.enabled`                             | Enable livenessProbe on Thanos Query Frontend containers                                                                         | `true`                   |
+| `queryFrontend.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                          | `30`                     |
+| `queryFrontend.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                                 | `10`                     |
+| `queryFrontend.livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                                | `30`                     |
+| `queryFrontend.livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                                              | `6`                      |
+| `queryFrontend.livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                                              | `1`                      |
+| `queryFrontend.readinessProbe.enabled`                            | Enable readinessProbe on Thanos Query Frontend containers                                                                        | `true`                   |
+| `queryFrontend.readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                                         | `30`                     |
+| `queryFrontend.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                                                | `10`                     |
+| `queryFrontend.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                                               | `30`                     |
+| `queryFrontend.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                                             | `6`                      |
+| `queryFrontend.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                                             | `1`                      |
+| `queryFrontend.startupProbe.enabled`                              | Enable startupProbe on Thanos Query Frontend containers                                                                          | `false`                  |
+| `queryFrontend.startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                                                           | `5`                      |
+| `queryFrontend.startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                                                  | `5`                      |
+| `queryFrontend.startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                                                 | `1`                      |
+| `queryFrontend.startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                                               | `15`                     |
+| `queryFrontend.startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                                               | `1`                      |
+| `queryFrontend.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                              | `{}`                     |
+| `queryFrontend.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                             | `{}`                     |
+| `queryFrontend.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                               | `{}`                     |
+| `queryFrontend.initContainers`                                    | Add additional init containers to the Thanos Query Frontend pods                                                                 | `[]`                     |
+| `queryFrontend.sidecars`                                          | Extra containers running as sidecars to Thanos Query Frontend pods                                                               | `[]`                     |
+| `queryFrontend.extraVolumes`                                      | Extra volumes to add to Thanos Query Frontend                                                                                    | `[]`                     |
+| `queryFrontend.extraVolumeMounts`                                 | Extra volume mounts to add to the query-frontend container                                                                       | `[]`                     |
+| `queryFrontend.podAffinityPreset`                                 | Thanos Query Frontend pod affinity preset                                                                                        | `""`                     |
+| `queryFrontend.podAntiAffinityPreset`                             | Thanos Query Frontend pod anti-affinity preset. Ignored if `queryFrontend.affinity` is set. Allowed values: `soft` or `hard`     | `soft`                   |
+| `queryFrontend.nodeAffinityPreset.type`                           | Thanos Query Frontend node affinity preset type. Ignored if `queryFrontend.affinity` is set. Allowed values: `soft` or `hard`    | `""`                     |
+| `queryFrontend.nodeAffinityPreset.key`                            | Thanos Query Frontend node label key to match. Ignored if `queryFrontend.affinity` is set.                                       | `""`                     |
+| `queryFrontend.nodeAffinityPreset.values`                         | Thanos Query Frontend node label values to match. Ignored if `queryFrontend.affinity` is set.                                    | `[]`                     |
+| `queryFrontend.affinity`                                          | Thanos Query Frontend affinity for pod assignment                                                                                | `{}`                     |
+| `queryFrontend.nodeSelector`                                      | Thanos Query Frontend node labels for pod assignment                                                                             | `{}`                     |
+| `queryFrontend.tolerations`                                       | Thanos Query Frontend tolerations for pod assignment                                                                             | `[]`                     |
+| `queryFrontend.podLabels`                                         | Thanos Query Frontend pod labels                                                                                                 | `{}`                     |
+| `queryFrontend.podAnnotations`                                    | Annotations for Thanos Query Frontend pods                                                                                       | `{}`                     |
+| `queryFrontend.hostAliases`                                       | Deployment pod host aliases                                                                                                      | `[]`                     |
+| `queryFrontend.lifecycleHooks`                                    | for the Thanos Query Frontend container(s) to automate configuration before or after startup                                     | `{}`                     |
+| `queryFrontend.priorityClassName`                                 | Thanos Query Frontend priorityClassName                                                                                          | `""`                     |
+| `queryFrontend.schedulerName`                                     | Name of the k8s scheduler (other than default) for Thanos Query Frontend pods                                                    | `""`                     |
+| `queryFrontend.topologySpreadConstraints`                         | Topology Spread Constraints for Thanos Query Frontend pods assignment spread across your cluster among failure-domains           | `[]`                     |
+| `queryFrontend.service.type`                                      | Kubernetes service type                                                                                                          | `ClusterIP`              |
+| `queryFrontend.service.ports.http`                                | Thanos Query Frontend service HTTP port                                                                                          | `9090`                   |
+| `queryFrontend.service.nodePorts.http`                            | Specify the Thanos Query Frontend HTTP nodePort value for the LoadBalancer and NodePort service types                            | `""`                     |
+| `queryFrontend.service.clusterIP`                                 | Thanos Query Frontend service clusterIP IP                                                                                       | `""`                     |
+| `queryFrontend.service.loadBalancerIP`                            | Load balancer IP if service type is `LoadBalancer`                                                                               | `""`                     |
+| `queryFrontend.service.loadBalancerSourceRanges`                  | Address that are allowed when service is LoadBalancer                                                                            | `[]`                     |
+| `queryFrontend.service.externalTrafficPolicy`                     | Thanos Query Frontend service externalTrafficPolicy                                                                              | `Cluster`                |
+| `queryFrontend.service.annotations`                               | Annotations for Thanos Query Frontend service                                                                                    | `{}`                     |
+| `queryFrontend.service.extraPorts`                                | Extra ports to expose in the Thanos Query Frontend service                                                                       | `[]`                     |
+| `queryFrontend.service.labelSelectorsOverride`                    | Selector for Thanos Query service                                                                                                | `{}`                     |
+| `queryFrontend.serviceAccount.annotations`                        | Annotations for Thanos Query Frontend Service Account                                                                            | `{}`                     |
+| `queryFrontend.serviceAccount.existingServiceAccount`             | Name for an existing Thanos Query Frontend Service Account                                                                       | `""`                     |
+| `queryFrontend.serviceAccount.automountServiceAccountToken`       | Enable/disable auto mounting of the service account token                                                                        | `true`                   |
+| `queryFrontend.rbac.create`                                       | Create a ClusterRole and ClusterRoleBinding for the Thanos Query Frontend Service Account                                        | `false`                  |
+| `queryFrontend.rbac.rules`                                        | Custom RBAC rules to set                                                                                                         | `[]`                     |
+| `queryFrontend.pspEnabled`                                        | Whether to create a PodSecurityPolicy for Thanos Query Frontend                                                                  | `false`                  |
+| `queryFrontend.autoscaling.enabled`                               | Enable autoscaling for Thanos Query Frontend                                                                                     | `false`                  |
+| `queryFrontend.autoscaling.minReplicas`                           | Minimum number of Thanos Query Frontend replicas                                                                                 | `""`                     |
+| `queryFrontend.autoscaling.maxReplicas`                           | Maximum number of Thanos Query Frontend replicas                                                                                 | `""`                     |
+| `queryFrontend.autoscaling.targetCPU`                             | Target CPU utilization percentage                                                                                                | `""`                     |
+| `queryFrontend.autoscaling.targetMemory`                          | Target Memory utilization percentage                                                                                             | `""`                     |
+| `queryFrontend.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation for Thanos Query Frontend                                                        | `false`                  |
+| `queryFrontend.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                   | `1`                      |
+| `queryFrontend.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable                                                                   | `""`                     |
+| `queryFrontend.ingress.enabled`                                   | Enable ingress controller resource                                                                                               | `false`                  |
+| `queryFrontend.ingress.hostname`                                  | Default host for the ingress resource                                                                                            | `thanos.local`           |
+| `queryFrontend.ingress.ingressClassName`                          | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
+| `queryFrontend.ingress.annotations`                               | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `queryFrontend.ingress.extraHosts`                                | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
+| `queryFrontend.ingress.extraTls`                                  | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
+| `queryFrontend.ingress.secrets`                                   | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
+| `queryFrontend.ingress.tls`                                       | Enable TLS configuration for the hostname defined at `queryFrontend.ingress.hostname` parameter                                  | `false`                  |
+| `queryFrontend.ingress.selfSigned`                                | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
+| `queryFrontend.ingress.apiVersion`                                | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
+| `queryFrontend.ingress.path`                                      | Ingress path                                                                                                                     | `/`                      |
+| `queryFrontend.ingress.pathType`                                  | Ingress path type                                                                                                                | `ImplementationSpecific` |
 
 
 ### Thanos Bucket Web parameters
 
-| Name                                                          | Description                                                                                                           | Value                    |
-| ------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `bucketweb.enabled`                                           | Enable/disable Thanos Bucket Web component                                                                            | `false`                  |
-| `bucketweb.logLevel`                                          | Thanos Bucket Web log level                                                                                           | `info`                   |
-| `bucketweb.logFormat`                                         | Thanos Bucket Web log format                                                                                          | `logfmt`                 |
-| `bucketweb.serviceAccount.annotations`                        | Annotations for Thanos Bucket Web Service Account                                                                     | `{}`                     |
-| `bucketweb.serviceAccount.existingServiceAccount`             | Name for an existing Thanos Bucket Web Service Account                                                                | `""`                     |
-| `bucketweb.refresh`                                           | Refresh interval to download metadata from remote storage                                                             | `30m`                    |
-| `bucketweb.hostAliases`                                       | Deployment pod host aliases                                                                                           | `[]`                     |
-| `bucketweb.timeout`                                           | Timeout to download metadata from remote storage                                                                      | `5m`                     |
-| `bucketweb.extraContainers`                                   | Extra containers running as sidecars to Thanos Bucket Web container                                                   | `[]`                     |
-| `bucketweb.extraEnv`                                          | Extra environment variables for Thanos Bucket Web container                                                           | `[]`                     |
-| `bucketweb.extraVolumes`                                      | Extra volumes to add to Bucket Web                                                                                    | `[]`                     |
-| `bucketweb.extraVolumeMounts`                                 | Extra volume mounts to add to the bucketweb container                                                                 | `[]`                     |
-| `bucketweb.extraFlags`                                        | Extra Flags to passed to Thanos Bucket Web                                                                            | `[]`                     |
-| `bucketweb.replicaCount`                                      | Number of Thanos Bucket Web replicas to deploy                                                                        | `1`                      |
-| `bucketweb.strategyType`                                      | Deployment Strategy Type, can be set to RollingUpdate or Recreate by default                                          | `RollingUpdate`          |
-| `bucketweb.podAffinityPreset`                                 | Thanos Bucket Web pod affinity preset                                                                                 | `""`                     |
-| `bucketweb.podAntiAffinityPreset`                             | Thanos Bucket Web pod anti-affinity preset. Ignored if `bucketweb.affinity` is set. Allowed values: `soft` or `hard`  | `soft`                   |
-| `bucketweb.nodeAffinityPreset.type`                           | Thanos Bucket Web node affinity preset type. Ignored if `bucketweb.affinity` is set. Allowed values: `soft` or `hard` | `""`                     |
-| `bucketweb.nodeAffinityPreset.key`                            | Thanos Bucket Web node label key to match Ignored if `bucketweb.affinity` is set.                                     | `""`                     |
-| `bucketweb.nodeAffinityPreset.values`                         | Thanos Bucket Web node label values to match. Ignored if `bucketweb.affinity` is set.                                 | `[]`                     |
-| `bucketweb.affinity`                                          | Thanos Bucket Web affinity for pod assignment                                                                         | `{}`                     |
-| `bucketweb.nodeSelector`                                      | Thanos Bucket Web node labels for pod assignment                                                                      | `{}`                     |
-| `bucketweb.tolerations`                                       | Thanos Bucket Web tolerations for pod assignment                                                                      | `[]`                     |
-| `bucketweb.podLabels`                                         | Thanos Bucket Web pod labels                                                                                          | `{}`                     |
-| `bucketweb.podAnnotations`                                    | Annotations for Thanos Bucket Web pods                                                                                | `{}`                     |
-| `bucketweb.priorityClassName`                                 | Controller priorityClassName                                                                                          | `""`                     |
-| `bucketweb.podSecurityContext.enabled`                        | Enable security context for the Thanos Bucketweb pod                                                                  | `true`                   |
-| `bucketweb.podSecurityContext.fsGroup`                        | Group ID for the filesystem used by Bucketweb container                                                               | `1001`                   |
-| `bucketweb.podSecurityContext.runAsUser`                      | User ID for the service user running the Bucketweb pod                                                                | `1001`                   |
-| `bucketweb.containerSecurityContext.enabled`                  | Enable container security context for Bucketweb container                                                             | `true`                   |
-| `bucketweb.containerSecurityContext.runAsNonRoot`             | Force the container Bucketweb to run as a non root user                                                               | `true`                   |
-| `bucketweb.containerSecurityContext.allowPrivilegeEscalation` | Switch privilegeEscalation possiblity on or off for Bucketweb                                                         | `false`                  |
-| `bucketweb.containerSecurityContext.readOnlyRootFilesystem`   | mount / (root) as a readonly filesystem of Bucketweb container                                                        | `false`                  |
-| `bucketweb.resources.limits`                                  | The resources limits for the Thanos Bucket Web container                                                              | `{}`                     |
-| `bucketweb.resources.requests`                                | The requested resources for the Thanos Bucket Web container                                                           | `{}`                     |
-| `bucketweb.livenessProbe.enabled`                             | Enable livenessProbe                                                                                                  | `true`                   |
-| `bucketweb.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                               | `30`                     |
-| `bucketweb.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                      | `10`                     |
-| `bucketweb.livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                     | `30`                     |
-| `bucketweb.livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                                   | `6`                      |
-| `bucketweb.livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                                   | `1`                      |
-| `bucketweb.readinessProbe.enabled`                            | Enable readinessProbe                                                                                                 | `true`                   |
-| `bucketweb.readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                              | `30`                     |
-| `bucketweb.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                                     | `10`                     |
-| `bucketweb.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                                    | `30`                     |
-| `bucketweb.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                                  | `6`                      |
-| `bucketweb.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                                  | `1`                      |
-| `bucketweb.service.type`                                      | Kubernetes service type                                                                                               | `ClusterIP`              |
-| `bucketweb.service.clusterIP`                                 | Thanos Bucket Web service clusterIP IP                                                                                | `""`                     |
-| `bucketweb.service.http.port`                                 | Service HTTP port                                                                                                     | `8080`                   |
-| `bucketweb.service.http.nodePort`                             | Service HTTP node port                                                                                                | `""`                     |
-| `bucketweb.service.targetPort`                                | Service targetPort override                                                                                           | `http`                   |
-| `bucketweb.service.loadBalancerIP`                            | Load balancer IP if service type is `LoadBalancer`                                                                    | `""`                     |
-| `bucketweb.service.loadBalancerSourceRanges`                  | Address that are allowed when service is LoadBalancer                                                                 | `[]`                     |
-| `bucketweb.service.externalTrafficPolicy`                     | Thanos Bucket Web service externalTrafficPolicy                                                                       | `Cluster`                |
-| `bucketweb.service.annotations`                               | Annotations for Thanos Bucket Web service                                                                             | `{}`                     |
-| `bucketweb.service.labelSelectorsOverride`                    | Selector for Thanos query service                                                                                     | `{}`                     |
-| `bucketweb.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                       | `false`                  |
-| `bucketweb.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                        | `1`                      |
-| `bucketweb.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable                                                        | `""`                     |
-| `bucketweb.ingress.enabled`                                   | Enable ingress controller resource                                                                                    | `false`                  |
-| `bucketweb.ingress.certManager`                               | Add annotations for cert-manager                                                                                      | `false`                  |
-| `bucketweb.ingress.hostname`                                  | Default host for the ingress resource                                                                                 | `thanos-bucketweb.local` |
-| `bucketweb.ingress.ingressClassName`                          | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                         | `""`                     |
-| `bucketweb.ingress.annotations`                               | Ingress annotations                                                                                                   | `{}`                     |
-| `bucketweb.ingress.extraHosts`                                | The list of additional hostnames to be covered with this ingress record.                                              | `[]`                     |
-| `bucketweb.ingress.extraTls`                                  | The tls configuration for additional hostnames to be covered with this ingress record.                                | `[]`                     |
-| `bucketweb.ingress.secrets`                                   | If you're providing your own certificates, please use this to add the certificates as secrets                         | `[]`                     |
-| `bucketweb.ingress.tls`                                       | Create ingress TLS section                                                                                            | `false`                  |
-| `bucketweb.ingress.apiVersion`                                | Force Ingress API version (automatically detected if not set)                                                         | `""`                     |
-| `bucketweb.ingress.path`                                      | Ingress path                                                                                                          | `/`                      |
-| `bucketweb.ingress.pathType`                                  | Ingress path type                                                                                                     | `ImplementationSpecific` |
+| Name                                                          | Description                                                                                                                      | Value                    |
+| ------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `bucketweb.enabled`                                           | Enable/disable Thanos Bucket Web component                                                                                       | `false`                  |
+| `bucketweb.logLevel`                                          | Thanos Bucket Web log level                                                                                                      | `info`                   |
+| `bucketweb.logFormat`                                         | Thanos Bucket Web log format                                                                                                     | `logfmt`                 |
+| `bucketweb.refresh`                                           | Refresh interval to download metadata from remote storage                                                                        | `30m`                    |
+| `bucketweb.timeout`                                           | Timeout to download metadata from remote storage                                                                                 | `5m`                     |
+| `bucketweb.extraEnvVars`                                      | Extra environment variables for Thanos Bucket Web container                                                                      | `[]`                     |
+| `bucketweb.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars for Thanos Bucket Web nodes                                                 | `""`                     |
+| `bucketweb.extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars for Thanos Bucket Web nodes                                                    | `""`                     |
+| `bucketweb.extraFlags`                                        | Extra Flags to passed to Thanos Bucket Web                                                                                       | `[]`                     |
+| `bucketweb.command`                                           | Override default container command (useful when using custom images)                                                             | `[]`                     |
+| `bucketweb.args`                                              | Override default container args (useful when using custom images)                                                                | `[]`                     |
+| `bucketweb.replicaCount`                                      | Number of Thanos Bucket Web replicas to deploy                                                                                   | `1`                      |
+| `bucketweb.updateStrategy.type`                               | Update strategy type for Thanos Bucket Web replicas                                                                              | `RollingUpdate`          |
+| `bucketweb.podSecurityContext.enabled`                        | Enable security context for the Thanos Bucket Web pods                                                                           | `true`                   |
+| `bucketweb.podSecurityContext.fsGroup`                        | Group ID for the filesystem used by Thanos Bucket Web pods                                                                       | `1001`                   |
+| `bucketweb.containerSecurityContext.enabled`                  | Enable container security context for the Thanos Bucket Web containers                                                           | `true`                   |
+| `bucketweb.containerSecurityContext.runAsUser`                | User ID for the service user running the Thanos Bucket Web containers                                                            | `1001`                   |
+| `bucketweb.containerSecurityContext.runAsNonRoot`             | Force the Thanos Bucket Web containers to run as a non root user                                                                 | `true`                   |
+| `bucketweb.containerSecurityContext.allowPrivilegeEscalation` | Switch privilegeEscalation possibility on or off for Thanos Bucket Web containers                                                | `false`                  |
+| `bucketweb.containerSecurityContext.readOnlyRootFilesystem`   | mount / (root) as a readonly filesystem on Thanos Bucket Web containers                                                          | `false`                  |
+| `bucketweb.resources.limits`                                  | The resources limits for the Thanos Bucket Web container                                                                         | `{}`                     |
+| `bucketweb.resources.requests`                                | The requested resources for the Thanos Bucket Web container                                                                      | `{}`                     |
+| `bucketweb.livenessProbe.enabled`                             | Enable livenessProbe on Thanos Bucket Web containers                                                                             | `true`                   |
+| `bucketweb.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                          | `30`                     |
+| `bucketweb.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                                 | `10`                     |
+| `bucketweb.livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                                | `30`                     |
+| `bucketweb.livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                                              | `6`                      |
+| `bucketweb.livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                                              | `1`                      |
+| `bucketweb.readinessProbe.enabled`                            | Enable readinessProbe on Thanos Bucket Web containers                                                                            | `true`                   |
+| `bucketweb.readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                                         | `30`                     |
+| `bucketweb.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                                                | `10`                     |
+| `bucketweb.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                                               | `30`                     |
+| `bucketweb.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                                             | `6`                      |
+| `bucketweb.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                                             | `1`                      |
+| `bucketweb.startupProbe.enabled`                              | Enable startupProbe on Thanos Bucket Web containers                                                                              | `false`                  |
+| `bucketweb.startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                                                           | `5`                      |
+| `bucketweb.startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                                                  | `5`                      |
+| `bucketweb.startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                                                 | `1`                      |
+| `bucketweb.startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                                               | `15`                     |
+| `bucketweb.startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                                               | `1`                      |
+| `bucketweb.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                              | `{}`                     |
+| `bucketweb.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                             | `{}`                     |
+| `bucketweb.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                               | `{}`                     |
+| `bucketweb.initContainers`                                    | Add additional init containers to the Thanos Bucket Web pods                                                                     | `[]`                     |
+| `bucketweb.sidecars`                                          | Extra containers running as sidecars to Thanos Bucket Web pods                                                                   | `[]`                     |
+| `bucketweb.extraVolumes`                                      | Extra volumes to add to Bucket Web                                                                                               | `[]`                     |
+| `bucketweb.extraVolumeMounts`                                 | Extra volume mounts to add to the bucketweb container                                                                            | `[]`                     |
+| `bucketweb.podAffinityPreset`                                 | Thanos Bucket Web pod affinity preset                                                                                            | `""`                     |
+| `bucketweb.podAntiAffinityPreset`                             | Thanos Bucket Web pod anti-affinity preset. Ignored if `bucketweb.affinity` is set. Allowed values: `soft` or `hard`             | `soft`                   |
+| `bucketweb.nodeAffinityPreset.type`                           | Thanos Bucket Web node affinity preset type. Ignored if `bucketweb.affinity` is set. Allowed values: `soft` or `hard`            | `""`                     |
+| `bucketweb.nodeAffinityPreset.key`                            | Thanos Bucket Web node label key to match. Ignored if `bucketweb.affinity` is set.                                               | `""`                     |
+| `bucketweb.nodeAffinityPreset.values`                         | Thanos Bucket Web node label values to match. Ignored if `bucketweb.affinity` is set.                                            | `[]`                     |
+| `bucketweb.affinity`                                          | Thanos Bucket Web affinity for pod assignment                                                                                    | `{}`                     |
+| `bucketweb.nodeSelector`                                      | Thanos Bucket Web node labels for pod assignment                                                                                 | `{}`                     |
+| `bucketweb.tolerations`                                       | Thanos Bucket Web tolerations for pod assignment                                                                                 | `[]`                     |
+| `bucketweb.podLabels`                                         | Thanos Bucket Web pod labels                                                                                                     | `{}`                     |
+| `bucketweb.podAnnotations`                                    | Annotations for Thanos Bucket Web pods                                                                                           | `{}`                     |
+| `bucketweb.hostAliases`                                       | Deployment pod host aliases                                                                                                      | `[]`                     |
+| `bucketweb.lifecycleHooks`                                    | for the Thanos Bucket Web container(s) to automate configuration before or after startup                                         | `{}`                     |
+| `bucketweb.priorityClassName`                                 | Thanos Bucket Web priorityClassName                                                                                              | `""`                     |
+| `bucketweb.schedulerName`                                     | Name of the k8s scheduler (other than default) for Thanos Bucket Web pods                                                        | `""`                     |
+| `bucketweb.topologySpreadConstraints`                         | Topology Spread Constraints for Thanos Bucket Web pods assignment spread across your cluster among failure-domains               | `[]`                     |
+| `bucketweb.service.type`                                      | Kubernetes service type                                                                                                          | `ClusterIP`              |
+| `bucketweb.service.ports.http`                                | Thanos Bucket Web service HTTP port                                                                                              | `8080`                   |
+| `bucketweb.service.nodePorts.http`                            | Specify the Thanos Bucket Web HTTP nodePort value for the LoadBalancer and NodePort service types                                | `""`                     |
+| `bucketweb.service.clusterIP`                                 | Thanos Bucket Web service clusterIP IP                                                                                           | `""`                     |
+| `bucketweb.service.loadBalancerIP`                            | Load balancer IP if service type is `LoadBalancer`                                                                               | `""`                     |
+| `bucketweb.service.loadBalancerSourceRanges`                  | Address that are allowed when service is LoadBalancer                                                                            | `[]`                     |
+| `bucketweb.service.externalTrafficPolicy`                     | Thanos Bucket Web service externalTrafficPolicy                                                                                  | `Cluster`                |
+| `bucketweb.service.annotations`                               | Annotations for Thanos Bucket Web service                                                                                        | `{}`                     |
+| `bucketweb.service.extraPorts`                                | Extra ports to expose in the Thanos Bucket Web service                                                                           | `[]`                     |
+| `bucketweb.service.labelSelectorsOverride`                    | Selector for Thanos Query service                                                                                                | `{}`                     |
+| `bucketweb.serviceAccount.annotations`                        | Annotations for Thanos Bucket Web Service Account                                                                                | `{}`                     |
+| `bucketweb.serviceAccount.existingServiceAccount`             | Name for an existing Thanos Bucket Web Service Account                                                                           | `""`                     |
+| `bucketweb.serviceAccount.automountServiceAccountToken`       | Enable/disable auto mounting of the service account token                                                                        | `true`                   |
+| `bucketweb.autoscaling.enabled`                               | Enable autoscaling for Thanos Bucket Web                                                                                         | `false`                  |
+| `bucketweb.autoscaling.minReplicas`                           | Minimum number of Thanos Bucket Web replicas                                                                                     | `""`                     |
+| `bucketweb.autoscaling.maxReplicas`                           | Maximum number of Thanos Bucket Web replicas                                                                                     | `""`                     |
+| `bucketweb.autoscaling.targetCPU`                             | Target CPU utilization percentage                                                                                                | `""`                     |
+| `bucketweb.autoscaling.targetMemory`                          | Target Memory utilization percentage                                                                                             | `""`                     |
+| `bucketweb.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation for Thanos Bucket Web                                                            | `false`                  |
+| `bucketweb.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                   | `1`                      |
+| `bucketweb.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable                                                                   | `""`                     |
+| `bucketweb.ingress.enabled`                                   | Enable ingress controller resource                                                                                               | `false`                  |
+| `bucketweb.ingress.hostname`                                  | Default host for the ingress resource                                                                                            | `thanos-bucketweb.local` |
+| `bucketweb.ingress.ingressClassName`                          | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
+| `bucketweb.ingress.annotations`                               | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `bucketweb.ingress.extraHosts`                                | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
+| `bucketweb.ingress.extraTls`                                  | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
+| `bucketweb.ingress.secrets`                                   | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
+| `bucketweb.ingress.tls`                                       | Enable TLS configuration for the hostname defined at `bucketweb.ingress.hostname` parameter                                      | `false`                  |
+| `bucketweb.ingress.selfSigned`                                | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
+| `bucketweb.ingress.apiVersion`                                | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
+| `bucketweb.ingress.path`                                      | Ingress path                                                                                                                     | `/`                      |
+| `bucketweb.ingress.pathType`                                  | Ingress path type                                                                                                                | `ImplementationSpecific` |
 
 
 ### Thanos Compactor parameters
 
-| Name                                                          | Description                                                                                                          | Value                    |
-| ------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `compactor.enabled`                                           | Enable/disable Thanos Compactor component                                                                            | `false`                  |
-| `compactor.logLevel`                                          | Thanos Compactor log level                                                                                           | `info`                   |
-| `compactor.logFormat`                                         | Thanos Compactor log format                                                                                          | `logfmt`                 |
-| `compactor.serviceAccount.annotations`                        | Annotations for Thanos Compactor Service Account                                                                     | `{}`                     |
-| `compactor.serviceAccount.existingServiceAccount`             | Name for an existing Thanos Compactor Service Account                                                                | `""`                     |
-| `compactor.hostAliases`                                       | Deployment pod host aliases                                                                                          | `[]`                     |
-| `compactor.retentionResolutionRaw`                            | Resolution and Retention flag                                                                                        | `30d`                    |
-| `compactor.retentionResolution5m`                             | Resolution and Retention flag                                                                                        | `30d`                    |
-| `compactor.retentionResolution1h`                             | Resolution and Retention flag                                                                                        | `10y`                    |
-| `compactor.consistencyDelay`                                  | Minimum age of fresh (non-compacted) blocks before they are being processed                                          | `30m`                    |
-| `compactor.extraEnv`                                          | Extra environment variables for Thanos Compactor container                                                           | `[]`                     |
-| `compactor.extraVolumes`                                      | Extra volumes to add to Thanos Compactor                                                                             | `[]`                     |
-| `compactor.extraVolumeMounts`                                 | Extra volume mounts to add to the compactor container                                                                | `[]`                     |
-| `compactor.extraFlags`                                        | Extra Flags to passed to Thanos Compactor                                                                            | `[]`                     |
-| `compactor.strategyType`                                      | Deployment Strategy Type, can be set to RollingUpdate or Recreate by default                                         | `RollingUpdate`          |
-| `compactor.podAffinityPreset`                                 | Thanos Compactor pod affinity preset                                                                                 | `""`                     |
-| `compactor.podAntiAffinityPreset`                             | Thanos Compactor pod anti-affinity preset. Ignored if `compactor.affinity` is set. Allowed values: `soft` or `hard`  | `soft`                   |
-| `compactor.nodeAffinityPreset.type`                           | Thanos Compactor node affinity preset type. Ignored if `compactor.affinity` is set. Allowed values: `soft` or `hard` | `""`                     |
-| `compactor.nodeAffinityPreset.key`                            | Thanos Compactor node label key to match Ignored if `compactor.affinity` is set.                                     | `""`                     |
-| `compactor.nodeAffinityPreset.values`                         | Thanos Compactor node label values to match. Ignored if `compactor.affinity` is set.                                 | `[]`                     |
-| `compactor.affinity`                                          | Thanos Compactor affinity for pod assignment                                                                         | `{}`                     |
-| `compactor.nodeSelector`                                      | Thanos Compactor node labels for pod assignment                                                                      | `{}`                     |
-| `compactor.tolerations`                                       | Thanos Compactor tolerations for pod assignment                                                                      | `[]`                     |
-| `compactor.podLabels`                                         | Thanos Compactor pod labels                                                                                          | `{}`                     |
-| `compactor.podAnnotations`                                    | Annotations for Thanos Compactor pods                                                                                | `{}`                     |
-| `compactor.priorityClassName`                                 | Controller priorityClassName                                                                                         | `""`                     |
-| `compactor.podSecurityContext.enabled`                        | Enable security context for the Thanos Compactor pod                                                                 | `true`                   |
-| `compactor.podSecurityContext.fsGroup`                        | Group ID for the filesystem used by Compactor container                                                              | `1001`                   |
-| `compactor.podSecurityContext.runAsUser`                      | User ID for the service user running the Compactor pod                                                               | `1001`                   |
-| `compactor.containerSecurityContext.enabled`                  | Enable container security context for Compactor container                                                            | `true`                   |
-| `compactor.containerSecurityContext.runAsNonRoot`             | Force the container Compactor to run as a non root user                                                              | `true`                   |
-| `compactor.containerSecurityContext.allowPrivilegeEscalation` | Switch privilegeEscalation possiblity on or off for Compactor                                                        | `false`                  |
-| `compactor.containerSecurityContext.readOnlyRootFilesystem`   | mount / (root) as a readonly filesystem of Compactor container                                                       | `false`                  |
-| `compactor.resources.limits`                                  | The resources limits for the Thanos Compactor container                                                              | `{}`                     |
-| `compactor.resources.requests`                                | The requested resources for the Thanos Compactor container                                                           | `{}`                     |
-| `compactor.livenessProbe.enabled`                             | Enable livenessProbe                                                                                                 | `true`                   |
-| `compactor.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                              | `30`                     |
-| `compactor.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                     | `10`                     |
-| `compactor.livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                    | `30`                     |
-| `compactor.livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                                  | `6`                      |
-| `compactor.livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                                  | `1`                      |
-| `compactor.readinessProbe.enabled`                            | Enable readinessProbe                                                                                                | `true`                   |
-| `compactor.readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                             | `30`                     |
-| `compactor.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                                    | `10`                     |
-| `compactor.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                                   | `30`                     |
-| `compactor.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                                 | `6`                      |
-| `compactor.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                                 | `1`                      |
-| `compactor.service.type`                                      | Kubernetes service type                                                                                              | `ClusterIP`              |
-| `compactor.service.clusterIP`                                 | Thanos Compactor service clusterIP IP                                                                                | `""`                     |
-| `compactor.service.http.port`                                 | Service HTTP port                                                                                                    | `9090`                   |
-| `compactor.service.http.nodePort`                             | Service HTTP node port                                                                                               | `""`                     |
-| `compactor.service.loadBalancerIP`                            | Load balancer IP if service type is `LoadBalancer`                                                                   | `""`                     |
-| `compactor.service.loadBalancerSourceRanges`                  | Addresses that are allowed when service is LoadBalancer                                                              | `[]`                     |
-| `compactor.service.externalTrafficPolicy`                     | Thanos Compactor service externalTrafficPolicy                                                                       | `Cluster`                |
-| `compactor.service.annotations`                               | Annotations for Thanos Compactor service                                                                             | `{}`                     |
-| `compactor.service.labelSelectorsOverride`                    | Selector for Thanos query service                                                                                    | `{}`                     |
-| `compactor.ingress.enabled`                                   | Enable ingress controller resource                                                                                   | `false`                  |
-| `compactor.ingress.certManager`                               | Set this to true in order to add the corresponding annotations for cert-manager                                      | `false`                  |
-| `compactor.ingress.hostname`                                  | Default host for the ingress resource                                                                                | `thanos-compactor.local` |
-| `compactor.ingress.ingressClassName`                          | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                        | `""`                     |
-| `compactor.ingress.annotations`                               | Ingress annotations                                                                                                  | `{}`                     |
-| `compactor.ingress.extraHosts`                                | The list of additional hostnames to be covered with this ingress record.                                             | `[]`                     |
-| `compactor.ingress.extraTls`                                  | The tls configuration for additional hostnames to be covered with this ingress record.                               | `[]`                     |
-| `compactor.ingress.secrets`                                   | If you're providing your own certificates, please use this to add the certificates as secrets                        | `[]`                     |
-| `compactor.ingress.tls`                                       | Create ingress TLS section                                                                                           | `false`                  |
-| `compactor.ingress.apiVersion`                                | Force Ingress API version (automatically detected if not set)                                                        | `""`                     |
-| `compactor.ingress.path`                                      | Ingress path                                                                                                         | `/`                      |
-| `compactor.ingress.pathType`                                  | Ingress path type                                                                                                    | `ImplementationSpecific` |
-| `compactor.persistence.enabled`                               | Enable data persistence                                                                                              | `true`                   |
-| `compactor.persistence.existingClaim`                         | Use a existing PVC which must be created manually before bound                                                       | `""`                     |
-| `compactor.persistence.storageClass`                          | Specify the `storageClass` used to provision the volume                                                              | `""`                     |
-| `compactor.persistence.accessModes`                           | Access modes of data volume                                                                                          | `[]`                     |
-| `compactor.persistence.size`                                  | Size of data volume                                                                                                  | `8Gi`                    |
+| Name                                                          | Description                                                                                                                      | Value                    |
+| ------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `compactor.enabled`                                           | Enable/disable Thanos Compactor component                                                                                        | `false`                  |
+| `compactor.logLevel`                                          | Thanos Compactor log level                                                                                                       | `info`                   |
+| `compactor.logFormat`                                         | Thanos Compactor log format                                                                                                      | `logfmt`                 |
+| `compactor.retentionResolutionRaw`                            | Resolution and Retention flag                                                                                                    | `30d`                    |
+| `compactor.retentionResolution5m`                             | Resolution and Retention flag                                                                                                    | `30d`                    |
+| `compactor.retentionResolution1h`                             | Resolution and Retention flag                                                                                                    | `10y`                    |
+| `compactor.consistencyDelay`                                  | Minimum age of fresh (non-compacted) blocks before they are being processed                                                      | `30m`                    |
+| `compactor.extraEnvVars`                                      | Extra environment variables for Thanos Compactor container                                                                       | `[]`                     |
+| `compactor.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars for Thanos Compactor nodes                                                  | `""`                     |
+| `compactor.extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars for Thanos Compactor nodes                                                     | `""`                     |
+| `compactor.extraFlags`                                        | Extra Flags to passed to Thanos Compactor                                                                                        | `[]`                     |
+| `compactor.command`                                           | Override default container command (useful when using custom images)                                                             | `[]`                     |
+| `compactor.args`                                              | Override default container args (useful when using custom images)                                                                | `[]`                     |
+| `compactor.updateStrategy.type`                               | Update strategy type for Thanos Compactor replicas                                                                               | `Recreate`               |
+| `compactor.podSecurityContext.enabled`                        | Enable security context for the Thanos Compactor pods                                                                            | `true`                   |
+| `compactor.podSecurityContext.fsGroup`                        | Group ID for the filesystem used by Thanos Compactor pods                                                                        | `1001`                   |
+| `compactor.containerSecurityContext.enabled`                  | Enable container security context for the Thanos Compactor containers                                                            | `true`                   |
+| `compactor.containerSecurityContext.runAsUser`                | User ID for the service user running the Thanos Compactor containers                                                             | `1001`                   |
+| `compactor.containerSecurityContext.runAsNonRoot`             | Force the Thanos Compactor containers to run as a non root user                                                                  | `true`                   |
+| `compactor.containerSecurityContext.allowPrivilegeEscalation` | Switch privilegeEscalation possibility on or off for Thanos Compactor containers                                                 | `false`                  |
+| `compactor.containerSecurityContext.readOnlyRootFilesystem`   | mount / (root) as a readonly filesystem on Thanos Compactor containers                                                           | `false`                  |
+| `compactor.resources.limits`                                  | The resources limits for the Thanos Compactor container                                                                          | `{}`                     |
+| `compactor.resources.requests`                                | The requested resources for the Thanos Compactor container                                                                       | `{}`                     |
+| `compactor.livenessProbe.enabled`                             | Enable livenessProbe on Thanos Compactor containers                                                                              | `true`                   |
+| `compactor.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                          | `30`                     |
+| `compactor.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                                 | `10`                     |
+| `compactor.livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                                | `30`                     |
+| `compactor.livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                                              | `6`                      |
+| `compactor.livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                                              | `1`                      |
+| `compactor.readinessProbe.enabled`                            | Enable readinessProbe on Thanos Compactor containers                                                                             | `true`                   |
+| `compactor.readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                                         | `30`                     |
+| `compactor.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                                                | `10`                     |
+| `compactor.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                                               | `30`                     |
+| `compactor.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                                             | `6`                      |
+| `compactor.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                                             | `1`                      |
+| `compactor.startupProbe.enabled`                              | Enable startupProbe on Thanos Compactor containers                                                                               | `false`                  |
+| `compactor.startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                                                           | `5`                      |
+| `compactor.startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                                                  | `5`                      |
+| `compactor.startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                                                 | `1`                      |
+| `compactor.startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                                               | `15`                     |
+| `compactor.startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                                               | `1`                      |
+| `compactor.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                              | `{}`                     |
+| `compactor.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                             | `{}`                     |
+| `compactor.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                               | `{}`                     |
+| `compactor.initContainers`                                    | Add additional init containers to the Thanos Compactor pods                                                                      | `[]`                     |
+| `compactor.sidecars`                                          | Extra containers running as sidecars to Thanos Compactor pods                                                                    | `[]`                     |
+| `compactor.extraVolumes`                                      | Extra volumes to add to Thanos Compactor                                                                                         | `[]`                     |
+| `compactor.extraVolumeMounts`                                 | Extra volume mounts to add to the compactor container                                                                            | `[]`                     |
+| `compactor.podAffinityPreset`                                 | Thanos Compactor pod affinity preset                                                                                             | `""`                     |
+| `compactor.podAntiAffinityPreset`                             | Thanos Compactor pod anti-affinity preset. Ignored if `compactor.affinity` is set. Allowed values: `soft` or `hard`              | `soft`                   |
+| `compactor.nodeAffinityPreset.type`                           | Thanos Compactor node affinity preset type. Ignored if `compactor.affinity` is set. Allowed values: `soft` or `hard`             | `""`                     |
+| `compactor.nodeAffinityPreset.key`                            | Thanos Compactor node label key to match. Ignored if `compactor.affinity` is set.                                                | `""`                     |
+| `compactor.nodeAffinityPreset.values`                         | Thanos Compactor node label values to match. Ignored if `compactor.affinity` is set.                                             | `[]`                     |
+| `compactor.affinity`                                          | Thanos Compactor affinity for pod assignment                                                                                     | `{}`                     |
+| `compactor.nodeSelector`                                      | Thanos Compactor node labels for pod assignment                                                                                  | `{}`                     |
+| `compactor.tolerations`                                       | Thanos Compactor tolerations for pod assignment                                                                                  | `[]`                     |
+| `compactor.podLabels`                                         | Thanos Compactor pod labels                                                                                                      | `{}`                     |
+| `compactor.podAnnotations`                                    | Annotations for Thanos Compactor pods                                                                                            | `{}`                     |
+| `compactor.hostAliases`                                       | Deployment pod host aliases                                                                                                      | `[]`                     |
+| `compactor.lifecycleHooks`                                    | for the Thanos Compactor container(s) to automate configuration before or after startup                                          | `{}`                     |
+| `compactor.priorityClassName`                                 | Thanos Compactor priorityClassName                                                                                               | `""`                     |
+| `compactor.schedulerName`                                     | Name of the k8s scheduler (other than default) for Thanos Compactor pods                                                         | `""`                     |
+| `compactor.topologySpreadConstraints`                         | Topology Spread Constraints for Thanos Compactor pods assignment spread across your cluster among failure-domains                | `[]`                     |
+| `compactor.service.type`                                      | Kubernetes service type                                                                                                          | `ClusterIP`              |
+| `compactor.service.ports.http`                                | Thanos Compactor service HTTP port                                                                                               | `9090`                   |
+| `compactor.service.nodePorts.http`                            | Specify the Thanos Compactor HTTP nodePort value for the LoadBalancer and NodePort service types                                 | `""`                     |
+| `compactor.service.clusterIP`                                 | Thanos Compactor service clusterIP IP                                                                                            | `""`                     |
+| `compactor.service.loadBalancerIP`                            | Load balancer IP if service type is `LoadBalancer`                                                                               | `""`                     |
+| `compactor.service.loadBalancerSourceRanges`                  | Addresses that are allowed when service is LoadBalancer                                                                          | `[]`                     |
+| `compactor.service.externalTrafficPolicy`                     | Thanos Compactor service externalTrafficPolicy                                                                                   | `Cluster`                |
+| `compactor.service.annotations`                               | Annotations for Thanos Compactor service                                                                                         | `{}`                     |
+| `compactor.service.extraPorts`                                | Extra ports to expose in the Thanos Compactor service                                                                            | `[]`                     |
+| `compactor.service.labelSelectorsOverride`                    | Selector for Thanos Query service                                                                                                | `{}`                     |
+| `compactor.serviceAccount.annotations`                        | Annotations for Thanos Compactor Service Account                                                                                 | `{}`                     |
+| `compactor.serviceAccount.existingServiceAccount`             | Name for an existing Thanos Compactor Service Account                                                                            | `""`                     |
+| `compactor.serviceAccount.automountServiceAccountToken`       | Enable/disable auto mounting of the service account token                                                                        | `true`                   |
+| `compactor.ingress.enabled`                                   | Enable ingress controller resource                                                                                               | `false`                  |
+| `compactor.ingress.hostname`                                  | Default host for the ingress resource                                                                                            | `thanos-compactor.local` |
+| `compactor.ingress.ingressClassName`                          | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
+| `compactor.ingress.annotations`                               | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `compactor.ingress.extraHosts`                                | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
+| `compactor.ingress.extraTls`                                  | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
+| `compactor.ingress.secrets`                                   | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
+| `compactor.ingress.tls`                                       | Enable TLS configuration for the hostname defined at `compactor.ingress.hostname` parameter                                      | `false`                  |
+| `compactor.ingress.selfSigned`                                | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
+| `compactor.ingress.apiVersion`                                | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
+| `compactor.ingress.path`                                      | Ingress path                                                                                                                     | `/`                      |
+| `compactor.ingress.pathType`                                  | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `compactor.persistence.enabled`                               | Enable data persistence using PVC(s) on Thanos Compactor pods                                                                    | `true`                   |
+| `compactor.persistence.storageClass`                          | Specify the `storageClass` used to provision the volume                                                                          | `""`                     |
+| `compactor.persistence.accessModes`                           | PVC Access Modes for data volume                                                                                                 | `["ReadWriteOnce"]`      |
+| `compactor.persistence.size`                                  | PVC Storage Request for data volume                                                                                              | `8Gi`                    |
+| `compactor.persistence.annotations`                           | Annotations for the PVC                                                                                                          | `{}`                     |
+| `compactor.persistence.existingClaim`                         | Name of an existing PVC to use                                                                                                   | `""`                     |
 
 
 ### Thanos Store Gateway parameters
@@ -478,93 +565,126 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `storegateway.enabled`                                           | Enable/disable Thanos Store Gateway component                                                                                            | `false`                     |
 | `storegateway.logLevel`                                          | Thanos Store Gateway log level                                                                                                           | `info`                      |
 | `storegateway.logFormat`                                         | Thanos Store Gateway log format                                                                                                          | `logfmt`                    |
-| `storegateway.serviceAccount.annotations`                        | Annotations for Thanos Store Gateway Service Account                                                                                     | `{}`                        |
-| `storegateway.serviceAccount.existingServiceAccount`             | Name for an existing Thanos Store Gateway Service Account                                                                                | `""`                        |
-| `storegateway.hostAliases`                                       | Deployment pod host aliases                                                                                                              | `[]`                        |
-| `storegateway.extraEnv`                                          | Extra environment variables for Thanos Store Gateway container                                                                           | `[]`                        |
+| `storegateway.config`                                            | Thanos Store Gateway configuration                                                                                                       | `""`                        |
+| `storegateway.existingConfigmap`                                 | Name of existing ConfigMap with Thanos Store Gateway configuration                                                                       | `""`                        |
+| `storegateway.grpc.server.tls.enabled`                           | Enable TLS encryption in the GRPC server                                                                                                 | `false`                     |
+| `storegateway.grpc.server.tls.autoGenerated`                     | Create self-signed TLS certificates. Currently only supports PEM certificates                                                            | `false`                     |
+| `storegateway.grpc.server.tls.cert`                              | TLS Certificate for GRPC server - ignored if existingSecret is provided                                                                  | `""`                        |
+| `storegateway.grpc.server.tls.key`                               | TLS Key for GRPC server - ignored if existingSecret is provided                                                                          | `""`                        |
+| `storegateway.grpc.server.tls.ca`                                | TLS CA to verify clients against - ignored if existingSecret is provided                                                                 | `""`                        |
+| `storegateway.grpc.server.tls.existingSecret`                    | Existing secret containing your own TLS certificates                                                                                     | `{}`                        |
+| `storegateway.extraEnvVars`                                      | Extra environment variables for Thanos Store Gateway container                                                                           | `[]`                        |
+| `storegateway.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars for Thanos Store Gateway nodes                                                      | `""`                        |
+| `storegateway.extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars for Thanos Store Gateway nodes                                                         | `""`                        |
+| `storegateway.extraFlags`                                        | Extra Flags to passed to Thanos Store Gateway                                                                                            | `[]`                        |
+| `storegateway.command`                                           | Override default container command (useful when using custom images)                                                                     | `[]`                        |
+| `storegateway.args`                                              | Override default container args (useful when using custom images)                                                                        | `[]`                        |
+| `storegateway.replicaCount`                                      | Number of Thanos Store Gateway replicas to deploy                                                                                        | `1`                         |
+| `storegateway.updateStrategy.type`                               | Update strategy type for Thanos Store Gateway replicas                                                                                   | `RollingUpdate`             |
+| `storegateway.podManagementPolicy`                               | Statefulset Pod management policy: OrderedReady (default) or Parallel                                                                    | `OrderedReady`              |
+| `storegateway.podSecurityContext.enabled`                        | Enable security context for the Thanos Store Gateway pods                                                                                | `true`                      |
+| `storegateway.podSecurityContext.fsGroup`                        | Group ID for the filesystem used by Thanos Store Gateway pods                                                                            | `1001`                      |
+| `storegateway.containerSecurityContext.enabled`                  | Enable container security context for the Thanos Store Gateway containers                                                                | `true`                      |
+| `storegateway.containerSecurityContext.runAsUser`                | User ID for the service user running the Thanos Store Gateway containers                                                                 | `1001`                      |
+| `storegateway.containerSecurityContext.runAsNonRoot`             | Force the Thanos Store Gateway containers to run as a non root user                                                                      | `true`                      |
+| `storegateway.containerSecurityContext.allowPrivilegeEscalation` | Switch privilegeEscalation possibility on or off for Thanos Store Gateway containers                                                     | `false`                     |
+| `storegateway.containerSecurityContext.readOnlyRootFilesystem`   | mount / (root) as a readonly filesystem on Thanos Store Gateway containers                                                               | `false`                     |
+| `storegateway.resources.limits`                                  | The resources limits for the Thanos Store Gateway container                                                                              | `{}`                        |
+| `storegateway.resources.requests`                                | The requested resources for the Thanos Store Gateway container                                                                           | `{}`                        |
+| `storegateway.livenessProbe.enabled`                             | Enable livenessProbe on Thanos Store Gateway containers                                                                                  | `true`                      |
+| `storegateway.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                                  | `30`                        |
+| `storegateway.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                                         | `10`                        |
+| `storegateway.livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                                        | `30`                        |
+| `storegateway.livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                                                      | `6`                         |
+| `storegateway.livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                                                      | `1`                         |
+| `storegateway.readinessProbe.enabled`                            | Enable readinessProbe on Thanos Store Gateway containers                                                                                 | `true`                      |
+| `storegateway.readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                                                 | `30`                        |
+| `storegateway.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                                                        | `10`                        |
+| `storegateway.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                                                       | `30`                        |
+| `storegateway.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                                                     | `6`                         |
+| `storegateway.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                                                     | `1`                         |
+| `storegateway.startupProbe.enabled`                              | Enable startupProbe on Thanos Store Gateway containers                                                                                   | `false`                     |
+| `storegateway.startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                                                                   | `5`                         |
+| `storegateway.startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                                                          | `5`                         |
+| `storegateway.startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                                                         | `1`                         |
+| `storegateway.startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                                                       | `15`                        |
+| `storegateway.startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                                                       | `1`                         |
+| `storegateway.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                                      | `{}`                        |
+| `storegateway.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                                     | `{}`                        |
+| `storegateway.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                                       | `{}`                        |
+| `storegateway.initContainers`                                    | Add additional init containers to the Thanos Store Gateway pods                                                                          | `[]`                        |
+| `storegateway.sidecars`                                          | Extra containers running as sidecars to Thanos Store Gateway pods                                                                        | `[]`                        |
 | `storegateway.extraVolumes`                                      | Extra volumes to add to Thanos Store Gateway                                                                                             | `[]`                        |
 | `storegateway.extraVolumeMounts`                                 | Extra volume mounts to add to the storegateway container                                                                                 | `[]`                        |
-| `storegateway.extraFlags`                                        | Extra Flags to passed to Thanos Store Gateway                                                                                            | `[]`                        |
-| `storegateway.config`                                            | Thanos Store Gateway cache configuration                                                                                                 | `""`                        |
-| `storegateway.existingConfigmap`                                 | Name of existing ConfigMap with Thanos Store Gateway cache configuration                                                                 | `""`                        |
-| `storegateway.grpc.tls.enabled`                                  | Enable TLS encryption in the GRPC server                                                                                                 | `false`                     |
-| `storegateway.grpc.tls.autoGenerated`                            | Create self-signed TLS certificates. Currently only supports PEM certificates.                                                           | `false`                     |
-| `storegateway.grpc.tls.cert`                                     | TLS Certificate for gRPC server, leave blank to disable TLS - ignored if existingSecret is provided                                      | `""`                        |
-| `storegateway.grpc.tls.key`                                      | TLS Key for gRPC server, leave blank to disable TLS - ignored if existingSecret is provided                                              | `""`                        |
-| `storegateway.grpc.tls.ca`                                       | TLS CA to verify clients against - ignored if existingSecret is provided                                                                 | `""`                        |
-| `storegateway.grpc.tls.existingSecret`                           | Existing secret containing your own TLS certificates.                                                                                    | `{}`                        |
-| `storegateway.replicaCount`                                      | Number of Thanos Store Gateway replicas to deploy                                                                                        | `1`                         |
-| `storegateway.updateStrategyType`                                | Statefulset Update Strategy Type, can be set to RollingUpdate or OnDelete by default                                                     | `RollingUpdate`             |
-| `storegateway.podManagementPolicy`                               | Statefulset Pod management policy: OrderedReady (default) or Parallel                                                                    | `OrderedReady`              |
 | `storegateway.podAffinityPreset`                                 | Thanos Store Gateway pod affinity preset                                                                                                 | `""`                        |
 | `storegateway.podAntiAffinityPreset`                             | Thanos Store Gateway pod anti-affinity preset. Ignored if `storegateway.affinity` is set. Allowed values: `soft` or `hard`               | `soft`                      |
 | `storegateway.nodeAffinityPreset.type`                           | Thanos Store Gateway node affinity preset type. Ignored if `storegateway.affinity` is set. Allowed values: `soft` or `hard`              | `""`                        |
-| `storegateway.nodeAffinityPreset.key`                            | Thanos Store Gateway node label key to match Ignored if `storegateway.affinity` is set.                                                  | `""`                        |
+| `storegateway.nodeAffinityPreset.key`                            | Thanos Store Gateway node label key to match. Ignored if `storegateway.affinity` is set.                                                 | `""`                        |
 | `storegateway.nodeAffinityPreset.values`                         | Thanos Store Gateway node label values to match. Ignored if `storegateway.affinity` is set.                                              | `[]`                        |
 | `storegateway.affinity`                                          | Thanos Store Gateway affinity for pod assignment                                                                                         | `{}`                        |
 | `storegateway.nodeSelector`                                      | Thanos Store Gateway node labels for pod assignment                                                                                      | `{}`                        |
 | `storegateway.tolerations`                                       | Thanos Store Gateway tolerations for pod assignment                                                                                      | `[]`                        |
 | `storegateway.podLabels`                                         | Thanos Store Gateway pod labels                                                                                                          | `{}`                        |
 | `storegateway.podAnnotations`                                    | Annotations for Thanos Store Gateway pods                                                                                                | `{}`                        |
-| `storegateway.priorityClassName`                                 | Controller priorityClassName                                                                                                             | `""`                        |
-| `storegateway.podSecurityContext.enabled`                        | Enable security context for the Thanos Storegateway pod                                                                                  | `true`                      |
-| `storegateway.podSecurityContext.fsGroup`                        | Group ID for the filesystem used by Storegateway container                                                                               | `1001`                      |
-| `storegateway.podSecurityContext.runAsUser`                      | User ID for the service user running the Storegateway pod                                                                                | `1001`                      |
-| `storegateway.containerSecurityContext.enabled`                  | Enable container security context for Storegateway container                                                                             | `true`                      |
-| `storegateway.containerSecurityContext.runAsNonRoot`             | Force the container Storegateway to run as a non root user                                                                               | `true`                      |
-| `storegateway.containerSecurityContext.allowPrivilegeEscalation` | Switch privilegeEscalation possiblity on or off for Storegateway                                                                         | `false`                     |
-| `storegateway.containerSecurityContext.readOnlyRootFilesystem`   | mount / (root) as a readonly filesystem of Storegateway container                                                                        | `false`                     |
-| `storegateway.resources.limits`                                  | The resources limits for the Thanos Store Gateway container                                                                              | `{}`                        |
-| `storegateway.resources.requests`                                | The requested resources for the Thanos Store Gateway container                                                                           | `{}`                        |
-| `storegateway.livenessProbe.enabled`                             | Enable livenessProbe                                                                                                                     | `true`                      |
-| `storegateway.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                                  | `30`                        |
-| `storegateway.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                                         | `10`                        |
-| `storegateway.livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                                        | `30`                        |
-| `storegateway.livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                                                      | `6`                         |
-| `storegateway.livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                                                      | `1`                         |
-| `storegateway.readinessProbe.enabled`                            | Enable readinessProbe                                                                                                                    | `true`                      |
-| `storegateway.readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                                                 | `30`                        |
-| `storegateway.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                                                        | `10`                        |
-| `storegateway.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                                                       | `30`                        |
-| `storegateway.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                                                     | `6`                         |
-| `storegateway.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                                                     | `1`                         |
+| `storegateway.hostAliases`                                       | Deployment pod host aliases                                                                                                              | `[]`                        |
+| `storegateway.lifecycleHooks`                                    | for the Thanos Store Gateway container(s) to automate configuration before or after startup                                              | `{}`                        |
+| `storegateway.priorityClassName`                                 | Thanos Store Gateway priorityClassName                                                                                                   | `""`                        |
+| `storegateway.topologySpreadConstraints`                         | Topology Spread Constraints for Thanos Store Gateway pods assignment spread across your cluster among failure-domains                    | `[]`                        |
+| `storegateway.schedulerName`                                     | Name of the k8s scheduler (other than default) for Thanos Store Gateway pods                                                             | `""`                        |
 | `storegateway.service.type`                                      | Kubernetes service type                                                                                                                  | `ClusterIP`                 |
+| `storegateway.service.ports.http`                                | Thanos Store Gateway service HTTP port                                                                                                   | `9090`                      |
+| `storegateway.service.ports.grpc`                                | Thanos Store Gateway service GRPC port                                                                                                   | `10901`                     |
+| `storegateway.service.nodePorts.http`                            | Specify the Thanos Store Gateway HTTP nodePort value for the LoadBalancer and NodePort service types                                     | `""`                        |
+| `storegateway.service.nodePorts.grpc`                            | Specify the Thanos Store Gateway GRPC nodePort value for the LoadBalancer and NodePort service types                                     | `""`                        |
 | `storegateway.service.clusterIP`                                 | Thanos Store Gateway service clusterIP IP                                                                                                | `""`                        |
-| `storegateway.service.http.port`                                 | Service HTTP port                                                                                                                        | `9090`                      |
-| `storegateway.service.http.nodePort`                             | Service HTTP node port                                                                                                                   | `""`                        |
-| `storegateway.service.grpc.port`                                 | Service GRPC port                                                                                                                        | `10901`                     |
-| `storegateway.service.grpc.nodePort`                             | Service GRPC node port                                                                                                                   | `""`                        |
 | `storegateway.service.loadBalancerIP`                            | Load balancer IP if service type is `LoadBalancer`                                                                                       | `""`                        |
 | `storegateway.service.loadBalancerSourceRanges`                  | Addresses that are allowed when service is LoadBalancer                                                                                  | `[]`                        |
 | `storegateway.service.externalTrafficPolicy`                     | Thanos Store Gateway service externalTrafficPolicy                                                                                       | `Cluster`                   |
 | `storegateway.service.annotations`                               | Annotations for Thanos Store Gateway service                                                                                             | `{}`                        |
-| `storegateway.service.labelSelectorsOverride`                    | Selector for Thanos query service                                                                                                        | `{}`                        |
+| `storegateway.service.extraPorts`                                | Extra ports to expose in the Thanos Store Gateway service                                                                                | `[]`                        |
+| `storegateway.service.labelSelectorsOverride`                    | Selector for Thanos Query service                                                                                                        | `{}`                        |
 | `storegateway.service.additionalHeadless`                        | Additional Headless service                                                                                                              | `false`                     |
-| `storegateway.persistence.enabled`                               | Enable data persistence                                                                                                                  | `true`                      |
-| `storegateway.persistence.existingClaim`                         | Use a existing PVC which must be created manually before bound                                                                           | `""`                        |
+| `storegateway.persistence.enabled`                               | Enable data persistence using PVC(s) on Thanos Store Gateway pods                                                                        | `true`                      |
 | `storegateway.persistence.storageClass`                          | Specify the `storageClass` used to provision the volume                                                                                  | `""`                        |
-| `storegateway.persistence.accessModes`                           | Access modes of data volume                                                                                                              | `[]`                        |
-| `storegateway.persistence.size`                                  | Size of data volume                                                                                                                      | `8Gi`                       |
+| `storegateway.persistence.accessModes`                           | PVC Access Modes for data volume                                                                                                         | `["ReadWriteOnce"]`         |
+| `storegateway.persistence.size`                                  | PVC Storage Request for data volume                                                                                                      | `8Gi`                       |
+| `storegateway.persistence.annotations`                           | Annotations for the PVC                                                                                                                  | `{}`                        |
+| `storegateway.persistence.existingClaim`                         | Name of an existing PVC to use                                                                                                           | `""`                        |
+| `storegateway.serviceAccount.annotations`                        | Annotations for Thanos Store Gateway Service Account                                                                                     | `{}`                        |
+| `storegateway.serviceAccount.existingServiceAccount`             | Name for an existing Thanos Store Gateway Service Account                                                                                | `""`                        |
+| `storegateway.serviceAccount.automountServiceAccountToken`       | Enable/disable auto mounting of the service account token                                                                                | `true`                      |
 | `storegateway.autoscaling.enabled`                               | Enable autoscaling for Thanos Store Gateway                                                                                              | `false`                     |
 | `storegateway.autoscaling.minReplicas`                           | Minimum number of Thanos Store Gateway replicas                                                                                          | `""`                        |
 | `storegateway.autoscaling.maxReplicas`                           | Maximum number of Thanos Store Gateway replicas                                                                                          | `""`                        |
 | `storegateway.autoscaling.targetCPU`                             | Target CPU utilization percentage                                                                                                        | `""`                        |
 | `storegateway.autoscaling.targetMemory`                          | Target Memory utilization percentage                                                                                                     | `""`                        |
-| `storegateway.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                          | `false`                     |
+| `storegateway.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation for Thanos Store Gateway                                                                 | `false`                     |
 | `storegateway.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                           | `1`                         |
 | `storegateway.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable                                                                           | `""`                        |
 | `storegateway.ingress.enabled`                                   | Enable ingress controller resource                                                                                                       | `false`                     |
-| `storegateway.ingress.certManager`                               | Set this to true in order to add the corresponding annotations for cert-manager                                                          | `false`                     |
 | `storegateway.ingress.hostname`                                  | Default host for the ingress resource                                                                                                    | `thanos-storegateway.local` |
 | `storegateway.ingress.ingressClassName`                          | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                            | `""`                        |
-| `storegateway.ingress.annotations`                               | Ingress annotations                                                                                                                      | `{}`                        |
+| `storegateway.ingress.annotations`                               | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.         | `{}`                        |
 | `storegateway.ingress.extraHosts`                                | The list of additional hostnames to be covered with this ingress record.                                                                 | `[]`                        |
 | `storegateway.ingress.extraTls`                                  | The tls configuration for additional hostnames to be covered with this ingress record.                                                   | `[]`                        |
 | `storegateway.ingress.secrets`                                   | If you're providing your own certificates, please use this to add the certificates as secrets                                            | `[]`                        |
-| `storegateway.ingress.tls`                                       | Create ingress TLS section                                                                                                               | `false`                     |
+| `storegateway.ingress.tls`                                       | Enable TLS configuration for the hostname defined at `storegateway.ingress.hostname` parameter                                           | `false`                     |
+| `storegateway.ingress.selfSigned`                                | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                             | `false`                     |
 | `storegateway.ingress.apiVersion`                                | Force Ingress API version (automatically detected if not set)                                                                            | `""`                        |
 | `storegateway.ingress.path`                                      | Ingress path                                                                                                                             | `/`                         |
 | `storegateway.ingress.pathType`                                  | Ingress path type                                                                                                                        | `ImplementationSpecific`    |
+| `storegateway.ingress.grpc.enabled`                              | Enable ingress controller resource (GRPC)                                                                                                | `false`                     |
+| `storegateway.ingress.grpc.hostname`                             | Default host for the ingress resource (GRPC)                                                                                             | `thanos-grpc.local`         |
+| `storegateway.ingress.grpc.ingressClassName`                     | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                            | `""`                        |
+| `storegateway.ingress.grpc.annotations`                          | Additional annotations for the Ingress resource (GRPC). To enable certificate autogeneration, place here your cert-manager annotations.  | `{}`                        |
+| `storegateway.ingress.grpc.extraHosts`                           | The list of additional hostnames to be covered with this ingress record.                                                                 | `[]`                        |
+| `storegateway.ingress.grpc.extraTls`                             | The tls configuration for additional hostnames to be covered with this ingress record.                                                   | `[]`                        |
+| `storegateway.ingress.grpc.secrets`                              | If you're providing your own certificates, please use this to add the certificates as secrets                                            | `[]`                        |
+| `storegateway.ingress.grpc.tls`                                  | Enable TLS configuration for the hostname defined at `storegateway.ingress.grpc.hostname` parameter                                      | `false`                     |
+| `storegateway.ingress.grpc.selfSigned`                           | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                             | `false`                     |
+| `storegateway.ingress.grpc.apiVersion`                           | Override API Version (automatically detected if not set)                                                                                 | `""`                        |
+| `storegateway.ingress.grpc.path`                                 | Ingress Path                                                                                                                             | `/`                         |
+| `storegateway.ingress.grpc.pathType`                             | Ingress Path type                                                                                                                        | `ImplementationSpecific`    |
 | `storegateway.sharded.enabled`                                   | Enable sharding for Thanos Store Gateway                                                                                                 | `false`                     |
 | `storegateway.sharded.hashPartitioning.shards`                   | Setting hashPartitioning will create multiple store statefulsets based on the number of shards specified using the hashmod of the blocks | `""`                        |
 | `storegateway.sharded.timePartitioning`                          | Setting time timePartitioning will create multiple store deployments based on the number of partitions                                   | `[]`                        |
@@ -576,248 +696,370 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 
 ### Thanos Ruler parameters
 
-| Name                                                      | Description                                                                                                  | Value                    |
-| --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ | ------------------------ |
-| `ruler.enabled`                                           | Enable/disable Thanos Ruler component                                                                        | `false`                  |
-| `ruler.logLevel`                                          | Thanos Ruler log level                                                                                       | `info`                   |
-| `ruler.logFormat`                                         | Thanos Ruler log format                                                                                      | `logfmt`                 |
-| `ruler.replicaLabel`                                      | Label to treat as a replica indicator along which data is deduplicated                                       | `replica`                |
-| `ruler.serviceAccount.annotations`                        | Annotations for Thanos Ruler Service Account                                                                 | `{}`                     |
-| `ruler.serviceAccount.existingServiceAccount`             | Name for an existing Thanos Ruler Service Account                                                            | `""`                     |
-| `ruler.hostAliases`                                       | Add deployment host aliases                                                                                  | `[]`                     |
-| `ruler.dnsDiscovery.enabled`                              | Dynamically configure Query APIs using DNS discovery                                                         | `true`                   |
-| `ruler.alertmanagers`                                     | Alermanager URLs array                                                                                       | `[]`                     |
-| `ruler.alertmanagersConfig`                               | Alertmanagers Configuration                                                                                  | `""`                     |
-| `ruler.evalInterval`                                      | The default evaluation interval to use                                                                       | `1m`                     |
-| `ruler.clusterName`                                       | Used to set the 'ruler_cluster' label                                                                        | `""`                     |
-| `ruler.extraContainers`                                   | Extra containers running as sidecars to Thanos Ruler container                                               | `[]`                     |
-| `ruler.extraEnv`                                          | Extra environment variables for Thanos Ruler container                                                       | `[]`                     |
-| `ruler.extraVolumes`                                      | Extra volumes to add to Thanos Ruler                                                                         | `[]`                     |
-| `ruler.extraVolumeMounts`                                 | Extra volume mounts to add to the ruler container                                                            | `[]`                     |
-| `ruler.extraFlags`                                        | Extra Flags to passed to Thanos Ruler                                                                        | `[]`                     |
-| `ruler.config`                                            | Ruler configuration                                                                                          | `""`                     |
-| `ruler.existingConfigmap`                                 | Name of existing ConfigMap with Ruler configuration                                                          | `""`                     |
-| `ruler.replicaCount`                                      | Number of Thanos Ruler replicas to deploy                                                                    | `1`                      |
-| `ruler.updateStrategyType`                                | Statefulset Update Strategy Type                                                                             | `RollingUpdate`          |
-| `ruler.podManagementPolicy`                               | Statefulset Pod Management Policy Type                                                                       | `OrderedReady`           |
-| `ruler.podAffinityPreset`                                 | Thanos Ruler pod affinity preset                                                                             | `""`                     |
-| `ruler.podAntiAffinityPreset`                             | Thanos Ruler pod anti-affinity preset. Ignored if `ruler.affinity` is set. Allowed values: `soft` or `hard`  | `soft`                   |
-| `ruler.nodeAffinityPreset.type`                           | Thanos Ruler node affinity preset type. Ignored if `ruler.affinity` is set. Allowed values: `soft` or `hard` | `""`                     |
-| `ruler.nodeAffinityPreset.key`                            | Thanos Ruler node label key to match Ignored if `ruler.affinity` is set.                                     | `""`                     |
-| `ruler.nodeAffinityPreset.values`                         | Thanos Ruler node label values to match. Ignored if `ruler.affinity` is set.                                 | `[]`                     |
-| `ruler.affinity`                                          | Thanos Ruler affinity for pod assignment                                                                     | `{}`                     |
-| `ruler.nodeSelector`                                      | Thanos Ruler node labels for pod assignment                                                                  | `{}`                     |
-| `ruler.tolerations`                                       | Thanos Ruler tolerations for pod assignment                                                                  | `[]`                     |
-| `ruler.podLabels`                                         | Thanos Ruler pod labels                                                                                      | `{}`                     |
-| `ruler.podAnnotations`                                    | Annotations for Thanos Ruler pods                                                                            | `{}`                     |
-| `ruler.priorityClassName`                                 | Controller priorityClassName                                                                                 | `""`                     |
-| `ruler.podSecurityContext.enabled`                        | Enable security context for the Thanos Ruler pod                                                             | `true`                   |
-| `ruler.podSecurityContext.fsGroup`                        | Group ID for the filesystem used by Ruler container                                                          | `1001`                   |
-| `ruler.podSecurityContext.runAsUser`                      | User ID for the service user running the Ruler pod                                                           | `1001`                   |
-| `ruler.containerSecurityContext.enabled`                  | Enable container security context for Ruler container                                                        | `true`                   |
-| `ruler.containerSecurityContext.runAsNonRoot`             | Force the container Ruler to run as a non root user                                                          | `true`                   |
-| `ruler.containerSecurityContext.allowPrivilegeEscalation` | Switch privilegeEscalation possiblity on or off for Ruler                                                    | `false`                  |
-| `ruler.containerSecurityContext.readOnlyRootFilesystem`   | mount / (root) as a readonly filesystem of Ruler container                                                   | `false`                  |
-| `ruler.resources.limits`                                  | The resources limits for the Thanos Ruler container                                                          | `{}`                     |
-| `ruler.resources.requests`                                | The requested resources for the Thanos Ruler container                                                       | `{}`                     |
-| `ruler.livenessProbe.enabled`                             | Enable livenessProbe                                                                                         | `true`                   |
-| `ruler.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                      | `30`                     |
-| `ruler.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                             | `10`                     |
-| `ruler.livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                            | `30`                     |
-| `ruler.livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                          | `6`                      |
-| `ruler.livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                          | `1`                      |
-| `ruler.readinessProbe.enabled`                            | Enable readinessProbe                                                                                        | `true`                   |
-| `ruler.readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                     | `30`                     |
-| `ruler.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                            | `10`                     |
-| `ruler.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                           | `30`                     |
-| `ruler.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                         | `6`                      |
-| `ruler.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                         | `1`                      |
-| `ruler.service.type`                                      | Kubernetes service type                                                                                      | `ClusterIP`              |
-| `ruler.service.clusterIP`                                 | Thanos Ruler service clusterIP IP                                                                            | `""`                     |
-| `ruler.service.http.port`                                 | Service HTTP port                                                                                            | `9090`                   |
-| `ruler.service.http.nodePort`                             | Service HTTP node port                                                                                       | `""`                     |
-| `ruler.service.targetPort`                                | Service targetPort override                                                                                  | `http`                   |
-| `ruler.service.grpc.port`                                 | Service GRPC port                                                                                            | `10901`                  |
-| `ruler.service.grpc.nodePort`                             | Service GRPC node port                                                                                       | `""`                     |
-| `ruler.service.loadBalancerIP`                            | Load balancer IP if service type is `LoadBalancer`                                                           | `""`                     |
-| `ruler.service.loadBalancerSourceRanges`                  | Address that are allowed when service is LoadBalancer                                                        | `[]`                     |
-| `ruler.service.externalTrafficPolicy`                     | Thanos Ruler service externalTrafficPolicy                                                                   | `Cluster`                |
-| `ruler.service.annotations`                               | Annotations for Thanos Ruler service                                                                         | `{}`                     |
-| `ruler.service.labelSelectorsOverride`                    | Selector for Thanos query service                                                                            | `{}`                     |
-| `ruler.service.additionalHeadless`                        | Additional Headless service                                                                                  | `false`                  |
-| `ruler.persistence.enabled`                               | Enable data persistence                                                                                      | `true`                   |
-| `ruler.persistence.existingClaim`                         | Use a existing PVC which must be created manually before bound                                               | `""`                     |
-| `ruler.persistence.storageClass`                          | Specify the `storageClass` used to provision the volume                                                      | `""`                     |
-| `ruler.persistence.accessModes`                           | Access modes of data volume                                                                                  | `[]`                     |
-| `ruler.persistence.size`                                  | Size of data volume                                                                                          | `8Gi`                    |
-| `ruler.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                              | `false`                  |
-| `ruler.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                               | `1`                      |
-| `ruler.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable                                               | `""`                     |
-| `ruler.ingress.enabled`                                   | Enable ingress controller resource                                                                           | `false`                  |
-| `ruler.ingress.certManager`                               | Add annotations for cert-manager                                                                             | `false`                  |
-| `ruler.ingress.hostname`                                  | Default host for the ingress resource                                                                        | `thanos-ruler.local`     |
-| `ruler.ingress.ingressClassName`                          | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                | `""`                     |
-| `ruler.ingress.annotations`                               | Ingress annotations                                                                                          | `{}`                     |
-| `ruler.ingress.extraHosts`                                | The list of additional hostnames to be covered with this ingress record.                                     | `[]`                     |
-| `ruler.ingress.extraTls`                                  | The tls configuration for additional hostnames to be covered with this ingress record.                       | `[]`                     |
-| `ruler.ingress.secrets`                                   | If you're providing your own certificates, please use this to add the certificates as secrets                | `[]`                     |
-| `ruler.ingress.apiVersion`                                | Force Ingress API version (automatically detected if not set)                                                | `""`                     |
-| `ruler.ingress.path`                                      | Ingress path                                                                                                 | `/`                      |
-| `ruler.ingress.pathType`                                  | Ingress path type                                                                                            | `ImplementationSpecific` |
+| Name                                                      | Description                                                                                                                      | Value                    |
+| --------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `ruler.enabled`                                           | Enable/disable Thanos Ruler component                                                                                            | `false`                  |
+| `ruler.logLevel`                                          | Thanos Ruler log level                                                                                                           | `info`                   |
+| `ruler.logFormat`                                         | Thanos Ruler log format                                                                                                          | `logfmt`                 |
+| `ruler.replicaLabel`                                      | Label to treat as a replica indicator along which data is de-duplicated                                                          | `replica`                |
+| `ruler.dnsDiscovery.enabled`                              | Dynamically configure Query APIs using DNS discovery                                                                             | `true`                   |
+| `ruler.alertmanagers`                                     | Alert managers URLs array                                                                                                        | `[]`                     |
+| `ruler.alertmanagersConfig`                               | Alert managers configuration                                                                                                     | `""`                     |
+| `ruler.evalInterval`                                      | The default evaluation interval to use                                                                                           | `1m`                     |
+| `ruler.clusterName`                                       | Used to set the 'ruler_cluster' label                                                                                            | `""`                     |
+| `ruler.config`                                            | Ruler configuration                                                                                                              | `""`                     |
+| `ruler.existingConfigmap`                                 | Name of existing ConfigMap with Ruler configuration                                                                              | `""`                     |
+| `ruler.extraEnvVars`                                      | Extra environment variables for Thanos Ruler container                                                                           | `[]`                     |
+| `ruler.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars for Thanos Ruler nodes                                                      | `""`                     |
+| `ruler.extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars for Thanos Ruler nodes                                                         | `""`                     |
+| `ruler.extraFlags`                                        | Extra Flags to passed to Thanos Ruler                                                                                            | `[]`                     |
+| `ruler.command`                                           | Override default container command (useful when using custom images)                                                             | `[]`                     |
+| `ruler.args`                                              | Override default container args (useful when using custom images)                                                                | `[]`                     |
+| `ruler.replicaCount`                                      | Number of Thanos Ruler replicas to deploy                                                                                        | `1`                      |
+| `ruler.updateStrategy.type`                               | Update strategy type for Thanos Ruler replicas                                                                                   | `RollingUpdate`          |
+| `ruler.podManagementPolicy`                               | Statefulset Pod Management Policy Type                                                                                           | `OrderedReady`           |
+| `ruler.podSecurityContext.enabled`                        | Enable security context for the Thanos Ruler pods                                                                                | `true`                   |
+| `ruler.podSecurityContext.fsGroup`                        | Group ID for the filesystem used by Thanos Ruler pods                                                                            | `1001`                   |
+| `ruler.containerSecurityContext.enabled`                  | Enable container security context for the Thanos Ruler containers                                                                | `true`                   |
+| `ruler.containerSecurityContext.runAsUser`                | User ID for the service user running the Thanos Ruler containers                                                                 | `1001`                   |
+| `ruler.containerSecurityContext.runAsNonRoot`             | Force the Thanos Ruler containers to run as a non root user                                                                      | `true`                   |
+| `ruler.containerSecurityContext.allowPrivilegeEscalation` | Switch privilegeEscalation possibility on or off for Thanos Ruler containers                                                     | `false`                  |
+| `ruler.containerSecurityContext.readOnlyRootFilesystem`   | mount / (root) as a readonly filesystem on Thanos Ruler containers                                                               | `false`                  |
+| `ruler.resources.limits`                                  | The resources limits for the Thanos Ruler container                                                                              | `{}`                     |
+| `ruler.resources.requests`                                | The requested resources for the Thanos Ruler container                                                                           | `{}`                     |
+| `ruler.livenessProbe.enabled`                             | Enable livenessProbe on Thanos Ruler containers                                                                                  | `true`                   |
+| `ruler.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                          | `30`                     |
+| `ruler.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                                 | `10`                     |
+| `ruler.livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                                | `30`                     |
+| `ruler.livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                                              | `6`                      |
+| `ruler.livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                                              | `1`                      |
+| `ruler.readinessProbe.enabled`                            | Enable readinessProbe on Thanos Ruler containers                                                                                 | `true`                   |
+| `ruler.readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                                         | `30`                     |
+| `ruler.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                                                | `10`                     |
+| `ruler.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                                               | `30`                     |
+| `ruler.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                                             | `6`                      |
+| `ruler.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                                             | `1`                      |
+| `ruler.startupProbe.enabled`                              | Enable startupProbe on Thanos Ruler containers                                                                                   | `false`                  |
+| `ruler.startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                                                           | `5`                      |
+| `ruler.startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                                                  | `5`                      |
+| `ruler.startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                                                 | `1`                      |
+| `ruler.startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                                               | `15`                     |
+| `ruler.startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                                               | `1`                      |
+| `ruler.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                              | `{}`                     |
+| `ruler.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                             | `{}`                     |
+| `ruler.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                               | `{}`                     |
+| `ruler.initContainers`                                    | Add additional init containers to the Thanos Ruler pods                                                                          | `[]`                     |
+| `ruler.sidecars`                                          | Extra containers running as sidecars to Thanos Ruler pods                                                                        | `[]`                     |
+| `ruler.extraVolumes`                                      | Extra volumes to add to Thanos Ruler                                                                                             | `[]`                     |
+| `ruler.extraVolumeMounts`                                 | Extra volume mounts to add to the ruler container                                                                                | `[]`                     |
+| `ruler.podAffinityPreset`                                 | Thanos Ruler pod affinity preset                                                                                                 | `""`                     |
+| `ruler.podAntiAffinityPreset`                             | Thanos Ruler pod anti-affinity preset. Ignored if `ruler.affinity` is set. Allowed values: `soft` or `hard`                      | `soft`                   |
+| `ruler.nodeAffinityPreset.type`                           | Thanos Ruler node affinity preset type. Ignored if `ruler.affinity` is set. Allowed values: `soft` or `hard`                     | `""`                     |
+| `ruler.nodeAffinityPreset.key`                            | Thanos Ruler node label key to match. Ignored if `ruler.affinity` is set.                                                        | `""`                     |
+| `ruler.nodeAffinityPreset.values`                         | Thanos Ruler node label values to match. Ignored if `ruler.affinity` is set.                                                     | `[]`                     |
+| `ruler.affinity`                                          | Thanos Ruler affinity for pod assignment                                                                                         | `{}`                     |
+| `ruler.nodeSelector`                                      | Thanos Ruler node labels for pod assignment                                                                                      | `{}`                     |
+| `ruler.tolerations`                                       | Thanos Ruler tolerations for pod assignment                                                                                      | `[]`                     |
+| `ruler.podLabels`                                         | Thanos Ruler pod labels                                                                                                          | `{}`                     |
+| `ruler.podAnnotations`                                    | Annotations for Thanos Ruler pods                                                                                                | `{}`                     |
+| `ruler.hostAliases`                                       | Deployment pod host aliases                                                                                                      | `[]`                     |
+| `ruler.lifecycleHooks`                                    | for the Thanos Ruler container(s) to automate configuration before or after startup                                              | `{}`                     |
+| `ruler.priorityClassName`                                 | Thanos Ruler priorityClassName                                                                                                   | `""`                     |
+| `ruler.schedulerName`                                     | Name of the k8s scheduler (other than default) for Thanos Ruler pods                                                             | `""`                     |
+| `ruler.topologySpreadConstraints`                         | Topology Spread Constraints for Thanos Ruler pods assignment spread across your cluster among failure-domains                    | `[]`                     |
+| `ruler.service.type`                                      | Kubernetes service type                                                                                                          | `ClusterIP`              |
+| `ruler.service.ports.http`                                | Thanos Ruler service HTTP port                                                                                                   | `9090`                   |
+| `ruler.service.ports.grpc`                                | Thanos Ruler service GRPC port                                                                                                   | `10901`                  |
+| `ruler.service.nodePorts.http`                            | Specify the Thanos Ruler HTTP nodePort value for the LoadBalancer and NodePort service types                                     | `""`                     |
+| `ruler.service.nodePorts.grpc`                            | Specify the Thanos Ruler GRPC nodePort value for the LoadBalancer and NodePort service types                                     | `""`                     |
+| `ruler.service.clusterIP`                                 | Thanos Ruler service clusterIP IP                                                                                                | `""`                     |
+| `ruler.service.loadBalancerIP`                            | Load balancer IP if service type is `LoadBalancer`                                                                               | `""`                     |
+| `ruler.service.loadBalancerSourceRanges`                  | Address that are allowed when service is LoadBalancer                                                                            | `[]`                     |
+| `ruler.service.externalTrafficPolicy`                     | Thanos Ruler service externalTrafficPolicy                                                                                       | `Cluster`                |
+| `ruler.service.annotations`                               | Annotations for Thanos Ruler service                                                                                             | `{}`                     |
+| `ruler.service.extraPorts`                                | Extra ports to expose in the Thanos Ruler service                                                                                | `[]`                     |
+| `ruler.service.labelSelectorsOverride`                    | Selector for Thanos Query service                                                                                                | `{}`                     |
+| `ruler.service.additionalHeadless`                        | Additional Headless service                                                                                                      | `false`                  |
+| `ruler.persistence.enabled`                               | Enable data persistence using PVC(s) on Thanos Ruler pods                                                                        | `true`                   |
+| `ruler.persistence.storageClass`                          | Specify the `storageClass` used to provision the volume                                                                          | `""`                     |
+| `ruler.persistence.accessModes`                           | PVC Access Modes for data volume                                                                                                 | `["ReadWriteOnce"]`      |
+| `ruler.persistence.size`                                  | PVC Storage Request for data volume                                                                                              | `8Gi`                    |
+| `ruler.persistence.annotations`                           | Annotations for the PVC                                                                                                          | `{}`                     |
+| `ruler.persistence.existingClaim`                         | Name of an existing PVC to use                                                                                                   | `""`                     |
+| `ruler.serviceAccount.annotations`                        | Annotations for Thanos Ruler Service Account                                                                                     | `{}`                     |
+| `ruler.serviceAccount.existingServiceAccount`             | Name for an existing Thanos Ruler Service Account                                                                                | `""`                     |
+| `ruler.serviceAccount.automountServiceAccountToken`       | Enable/disable auto mounting of the service account token                                                                        | `true`                   |
+| `ruler.autoscaling.enabled`                               | Enable autoscaling for Thanos Ruler                                                                                              | `false`                  |
+| `ruler.autoscaling.minReplicas`                           | Minimum number of Thanos Ruler replicas                                                                                          | `""`                     |
+| `ruler.autoscaling.maxReplicas`                           | Maximum number of Thanos Ruler replicas                                                                                          | `""`                     |
+| `ruler.autoscaling.targetCPU`                             | Target CPU utilization percentage                                                                                                | `""`                     |
+| `ruler.autoscaling.targetMemory`                          | Target Memory utilization percentage                                                                                             | `""`                     |
+| `ruler.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation for Thanos Ruler                                                                 | `false`                  |
+| `ruler.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                   | `1`                      |
+| `ruler.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable                                                                   | `""`                     |
+| `ruler.ingress.enabled`                                   | Enable ingress controller resource                                                                                               | `false`                  |
+| `ruler.ingress.hostname`                                  | Default host for the ingress resource                                                                                            | `thanos-ruler.local`     |
+| `ruler.ingress.ingressClassName`                          | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
+| `ruler.ingress.annotations`                               | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ruler.ingress.extraHosts`                                | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
+| `ruler.ingress.extraTls`                                  | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
+| `ruler.ingress.secrets`                                   | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
+| `ruler.ingress.apiVersion`                                | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
+| `ruler.ingress.path`                                      | Ingress path                                                                                                                     | `/`                      |
+| `ruler.ingress.pathType`                                  | Ingress path type                                                                                                                | `ImplementationSpecific` |
 
 
 ### Thanos Receive parameters
 
-| Name                                                        | Description                                                                                                                        | Value                    |
-| ----------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `receive.enabled`                                           | Enable/disable Thanos Receive component                                                                                            | `false`                  |
-| `receive.mode`                                              | Mode to run receiver in. Valid options are "standalone" or "dual-mode"                                                             | `standalone`             |
-| `receive.distributor.resources.limits`                      | The resources limits for the Thanos Receive container                                                                              | `{}`                     |
-| `receive.distributor.resources.requests`                    | The requested resources for the Thanos Receive container                                                                           | `{}`                     |
-| `receive.distributor.extraContainers`                       | Extra containers running as sidecars to Thanos Receive Distributor container                                                       | `[]`                     |
-| `receive.distributor.extraEnv`                              | Extra environment variables for Thanos Receive Distributor container                                                               | `[]`                     |
-| `receive.distributor.extraVolumes`                          | Extra volumes to add to Thanos Receive Distributor                                                                                 | `[]`                     |
-| `receive.distributor.extraVolumeMounts`                     | Extra volume mounts to add to the receive distributor container                                                                    | `[]`                     |
-| `receive.distributor.extraFlags`                            | Extra Flags to passed to Thanos Receive Distributor                                                                                | `[]`                     |
-| `receive.distributor.replicaCount`                          | Number of Thanos Receive Distributor replicas to deploy                                                                            | `1`                      |
-| `receive.distributor.strategyType`                          | StrategyType, can be set to RollingUpdate or Recreate by default.                                                                  | `RollingUpdate`          |
-| `receive.distributor.affinity`                              | Thanos Receive Distributor affinity for pod assignment                                                                             | `{}`                     |
-| `receive.distributor.nodeSelector`                          | Thanos Receive Distributor node labels for pod assignment                                                                          | `{}`                     |
-| `receive.distributor.tolerations`                           | Thanos Receive Distributor tolerations for pod assignment                                                                          | `[]`                     |
-| `receive.logLevel`                                          | Thanos Receive log level                                                                                                           | `info`                   |
-| `receive.logFormat`                                         | Thanos Receive log format                                                                                                          | `logfmt`                 |
-| `receive.tsdbRetention`                                     | Thanos Receive TSDB retention period                                                                                               | `15d`                    |
-| `receive.replicationFactor`                                 | Thanos Receive replication-factor                                                                                                  | `1`                      |
-| `receive.replicaLabel`                                      | Label to treat as a replica indicator along which data is deduplicated                                                             | `replica`                |
-| `receive.serviceAccount.annotations`                        | Annotations for Thanos Receive Service Account                                                                                     | `{}`                     |
-| `receive.serviceAccount.existingServiceAccount`             | Name for an existing Thanos Receive Service Account                                                                                | `""`                     |
-| `receive.hostAliases`                                       | Deployment pod host aliases                                                                                                        | `[]`                     |
-| `receive.config`                                            | Receive Hashring configuration                                                                                                     | `[]`                     |
-| `receive.extraContainers`                                   | Extra containers running as sidecars to Thanos Receive container                                                                   | `[]`                     |
-| `receive.extraEnv`                                          | Extra environment variables for Thanos Receive container                                                                           | `[]`                     |
-| `receive.extraVolumes`                                      | Extra volumes to add to Thanos Receive                                                                                             | `[]`                     |
-| `receive.extraVolumeMounts`                                 | Extra volume mounts to add to the receive container                                                                                | `[]`                     |
-| `receive.extraFlags`                                        | Extra Flags to passed to Thanos Receive                                                                                            | `[]`                     |
-| `receive.updateStrategyType`                                | Statefulset Update Strategy Type, can be set to RollingUpdate or OnDelete by default                                               | `RollingUpdate`          |
-| `receive.replicaCount`                                      | Number of Thanos Receive replicas to deploy                                                                                        | `1`                      |
-| `receive.strategyType`                                      | StrategyType, can be set to RollingUpdate or Recreate by default.                                                                  | `RollingUpdate`          |
-| `receive.podAffinityPreset`                                 | Thanos Receive pod affinity preset                                                                                                 | `""`                     |
-| `receive.podAntiAffinityPreset`                             | Thanos Receive pod anti-affinity preset. Ignored if `ruler.affinity` is set. Allowed values: `soft` or `hard`                      | `soft`                   |
-| `receive.nodeAffinityPreset.type`                           | Thanos Receive node affinity preset type. Ignored if `ruler.affinity` is set. Allowed values: `soft` or `hard`                     | `""`                     |
-| `receive.nodeAffinityPreset.key`                            | Thanos Receive node label key to match Ignored if `ruler.affinity` is set.                                                         | `""`                     |
-| `receive.nodeAffinityPreset.values`                         | Thanos Receive node label values to match. Ignored if `ruler.affinity` is set.                                                     | `[]`                     |
-| `receive.affinity`                                          | Thanos Receive affinity for pod assignment                                                                                         | `{}`                     |
-| `receive.nodeSelector`                                      | Thanos Receive node labels for pod assignment                                                                                      | `{}`                     |
-| `receive.tolerations`                                       | Thanos Receive tolerations for pod assignment                                                                                      | `[]`                     |
-| `receive.podLabels`                                         | Thanos Receive pod labels                                                                                                          | `{}`                     |
-| `receive.podAnnotations`                                    | Annotations for Thanos Ruler pods                                                                                                  | `{}`                     |
-| `receive.priorityClassName`                                 | Controller priorityClassName                                                                                                       | `""`                     |
-| `receive.rbac.create`                                       | Create ClusterRole and ClusterRolebing for the Service account                                                                     | `false`                  |
-| `receive.pspEnabled`                                        | Create PodSecurity Policy                                                                                                          | `false`                  |
-| `receive.resources.limits`                                  | The resources limits for the Thanos Receive container                                                                              | `{}`                     |
-| `receive.resources.requests`                                | The requested resources for the Thanos Receive container                                                                           | `{}`                     |
-| `receive.livenessProbe.enabled`                             | Enable livenessProbe                                                                                                               | `true`                   |
-| `receive.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                            | `30`                     |
-| `receive.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                                   | `10`                     |
-| `receive.livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                                  | `30`                     |
-| `receive.livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                                                | `6`                      |
-| `receive.livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                                                | `1`                      |
-| `receive.readinessProbe.enabled`                            | Enable readinessProbe                                                                                                              | `true`                   |
-| `receive.readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                                           | `30`                     |
-| `receive.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                                                  | `10`                     |
-| `receive.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                                                 | `30`                     |
-| `receive.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                                               | `6`                      |
-| `receive.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                                               | `1`                      |
-| `receive.podSecurityContext.enabled`                        | Enable security context for the Thanos Receive pod                                                                                 | `true`                   |
-| `receive.podSecurityContext.fsGroup`                        | Group ID for the filesystem used by Receive container                                                                              | `1001`                   |
-| `receive.podSecurityContext.runAsUser`                      | User ID for the service user running the Receive pod                                                                               | `1001`                   |
-| `receive.containerSecurityContext.enabled`                  | Enable container security context for Receive container                                                                            | `true`                   |
-| `receive.containerSecurityContext.runAsNonRoot`             | Force the container Receive to run as a non root user                                                                              | `true`                   |
-| `receive.containerSecurityContext.allowPrivilegeEscalation` | Switch privilegeEscalation possiblity on or off for Receive                                                                        | `false`                  |
-| `receive.containerSecurityContext.readOnlyRootFilesystem`   | mount / (root) as a readonly filesystem of Receive container                                                                       | `false`                  |
-| `receive.grpc.gracePeriod`                                  | Time to wait after an interrupt received for GRPC Server.                                                                          | `2m`                     |
-| `receive.grpc.server.secure`                                | enable TLS for GRPC server                                                                                                         | `false`                  |
-| `receive.grpc.server.cert`                                  | TLS Certificate for gRPC server, leave blank to disable TLS                                                                        | `""`                     |
-| `receive.grpc.server.key`                                   | TLS Key for the gRPC server, leave blank to disable TLS                                                                            | `""`                     |
-| `receive.grpc.server.ca`                                    | TLS CA to verify clients against. If no client CA is specified, there is no client verification on server side. (tls.NoClientCert) | `""`                     |
-| `receive.service.type`                                      | Kubernetes service type                                                                                                            | `ClusterIP`              |
-| `receive.service.clusterIP`                                 | Thanos Ruler service clusterIP IP                                                                                                  | `""`                     |
-| `receive.service.http.port`                                 | Service HTTP port                                                                                                                  | `10902`                  |
-| `receive.service.http.nodePort`                             | Service HTTP node port                                                                                                             | `""`                     |
-| `receive.service.targetPort`                                | Service targetPort override                                                                                                        | `http`                   |
-| `receive.service.grpc.port`                                 | Service GRPC port                                                                                                                  | `10901`                  |
-| `receive.service.grpc.nodePort`                             | Service GRPC node port                                                                                                             | `""`                     |
-| `receive.service.remoteWrite.port`                          | Service remote write port                                                                                                          | `19291`                  |
-| `receive.service.remoteWrite.nodePort`                      | Service remote write node port                                                                                                     | `""`                     |
-| `receive.service.loadBalancerIP`                            | Load balancer IP if service type is `LoadBalancer`                                                                                 | `""`                     |
-| `receive.service.loadBalancerSourceRanges`                  | Addresses that are allowed when service is LoadBalancer                                                                            | `[]`                     |
-| `receive.service.externalTrafficPolicy`                     | Thanos Ruler service externalTrafficPolicy                                                                                         | `Cluster`                |
-| `receive.service.annotations`                               | Annotations for Thanos Receive service                                                                                             | `{}`                     |
-| `receive.service.labelSelectorsOverride`                    | Selector for Thanos receive service                                                                                                | `{}`                     |
-| `receive.service.additionalHeadless`                        | Additional Headless service                                                                                                        | `false`                  |
-| `receive.autoscaling.enabled`                               | Enable autoscaling for Thanos Receive                                                                                              | `false`                  |
-| `receive.autoscaling.minReplicas`                           | Minimum number of Thanos Receive replicas                                                                                          | `""`                     |
-| `receive.autoscaling.maxReplicas`                           | Maximum number of Thanos Receive replicas                                                                                          | `""`                     |
-| `receive.autoscaling.targetCPU`                             | Target CPU utilization percentage                                                                                                  | `""`                     |
-| `receive.autoscaling.targetMemory`                          | Target Memory utilization percentage                                                                                               | `""`                     |
-| `receive.persistence.enabled`                               | Enable data persistence                                                                                                            | `true`                   |
-| `receive.persistence.existingClaim`                         | Use a existing PVC which must be created manually before bound                                                                     | `""`                     |
-| `receive.persistence.storageClass`                          | Specify the `storageClass` used to provision the volume                                                                            | `""`                     |
-| `receive.persistence.accessModes`                           | Access modes of data volume                                                                                                        | `[]`                     |
-| `receive.persistence.size`                                  | Size of data volume                                                                                                                | `8Gi`                    |
-| `receive.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                    | `false`                  |
-| `receive.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                     | `1`                      |
-| `receive.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable                                                                     | `""`                     |
-| `receive.ingress.enabled`                                   | Set to true to enable ingress record generation                                                                                    | `false`                  |
-| `receive.ingress.certManager`                               | Set this to true in order to add the corresponding annotations for cert-manager                                                    | `false`                  |
-| `receive.ingress.hostname`                                  | When the ingress is enabled, a host pointing to this will be created                                                               | `thanos-receive.local`   |
-| `receive.ingress.ingressClassName`                          | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                      | `""`                     |
-| `receive.ingress.annotations`                               | Ingress annotations done as key:value pairs                                                                                        | `{}`                     |
-| `receive.ingress.extraHosts`                                | The list of additional hostnames to be covered with this ingress record.                                                           | `[]`                     |
-| `receive.ingress.extraTls`                                  | The tls configuration for additional hostnames to be covered with this ingress record.                                             | `[]`                     |
-| `receive.ingress.secrets`                                   | If you're providing your own certificates, please use this to add the certificates as secrets                                      | `[]`                     |
-| `receive.ingress.tls`                                       | When specifying cert-manager.io/cluster-issuer: nameOfClusterIssuer annotation, enable tls for ingress                             | `false`                  |
-| `receive.ingress.apiVersion`                                | Override API Version (automatically detected if not set)                                                                           | `""`                     |
-| `receive.ingress.path`                                      | Ingress Path                                                                                                                       | `/`                      |
-| `receive.ingress.pathType`                                  | Ingress Path type                                                                                                                  | `ImplementationSpecific` |
+| Name                                                        | Description                                                                                                                      | Value                    |
+| ----------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `receive.enabled`                                           | Enable/disable Thanos Receive component                                                                                          | `false`                  |
+| `receive.mode`                                              | Mode to run receiver in. Valid options are "standalone" or "dual-mode"                                                           | `standalone`             |
+| `receive.logLevel`                                          | Thanos Receive log level                                                                                                         | `info`                   |
+| `receive.logFormat`                                         | Thanos Receive log format                                                                                                        | `logfmt`                 |
+| `receive.tsdbRetention`                                     | Thanos Receive TSDB retention period                                                                                             | `15d`                    |
+| `receive.replicationFactor`                                 | Thanos Receive replication-factor                                                                                                | `1`                      |
+| `receive.config`                                            | Receive Hashring configuration                                                                                                   | `[]`                     |
+| `receive.existingConfigmap`                                 | Name of existing ConfigMap with Thanos Receive Hashring configuration                                                            | `""`                     |
+| `receive.replicaLabel`                                      | Label to treat as a replica indicator along which data is de-duplicated                                                          | `replica`                |
+| `receive.grpc.server.tls.enabled`                           | Enable TLS encryption in the GRPC server                                                                                         | `false`                  |
+| `receive.grpc.server.tls.autoGenerated`                     | Create self-signed TLS certificates. Currently only supports PEM certificates                                                    | `false`                  |
+| `receive.grpc.server.tls.cert`                              | TLS Certificate for GRPC server - ignored if existingSecret is provided                                                          | `""`                     |
+| `receive.grpc.server.tls.key`                               | TLS Key for GRPC server - ignored if existingSecret is provided                                                                  | `""`                     |
+| `receive.grpc.server.tls.ca`                                | TLS CA to verify clients against - ignored if existingSecret is provided                                                         | `""`                     |
+| `receive.grpc.server.tls.existingSecret`                    | Existing secret containing your own TLS certificates                                                                             | `{}`                     |
+| `receive.extraEnvVars`                                      | Extra environment variables for Thanos Receive container                                                                         | `[]`                     |
+| `receive.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars for Thanos Receive nodes                                                    | `""`                     |
+| `receive.extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars for Thanos Receive nodes                                                       | `""`                     |
+| `receive.extraFlags`                                        | Extra Flags to passed to Thanos Receive                                                                                          | `[]`                     |
+| `receive.command`                                           | Override default container command (useful when using custom images)                                                             | `[]`                     |
+| `receive.args`                                              | Override default container args (useful when using custom images)                                                                | `[]`                     |
+| `receive.replicaCount`                                      | Number of Thanos Receive replicas to deploy                                                                                      | `1`                      |
+| `receive.updateStrategy.type`                               | Update strategy type for Thanos Receive replicas                                                                                 | `RollingUpdate`          |
+| `receive.podManagementPolicy`                               |                                                                                                                                  | `OrderedReady`           |
+| `receive.podManagementPolicy`                               | Statefulset Pod management policy: OrderedReady (default) or Parallel                                                            | `OrderedReady`           |
+| `receive.podSecurityContext.enabled`                        | Enable security context for the Thanos Receive pods                                                                              | `true`                   |
+| `receive.podSecurityContext.fsGroup`                        | Group ID for the filesystem used by Thanos Receive pods                                                                          | `1001`                   |
+| `receive.containerSecurityContext.enabled`                  | Enable container security context for the Thanos Receive containers                                                              | `true`                   |
+| `receive.containerSecurityContext.runAsUser`                | User ID for the service user running the Thanos Receive containers                                                               | `1001`                   |
+| `receive.containerSecurityContext.runAsNonRoot`             | Force the Thanos Receive containers to run as a non root user                                                                    | `true`                   |
+| `receive.containerSecurityContext.allowPrivilegeEscalation` | Switch privilegeEscalation possibility on or off for Thanos Receive containers                                                   | `false`                  |
+| `receive.containerSecurityContext.readOnlyRootFilesystem`   | mount / (root) as a readonly filesystem on Thanos Receive containers                                                             | `false`                  |
+| `receive.resources.limits`                                  | The resources limits for the Thanos Receive container                                                                            | `{}`                     |
+| `receive.resources.requests`                                | The requested resources for the Thanos Receive container                                                                         | `{}`                     |
+| `receive.livenessProbe.enabled`                             | Enable livenessProbe on Thanos Receive containers                                                                                | `true`                   |
+| `receive.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                          | `30`                     |
+| `receive.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                                 | `10`                     |
+| `receive.livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                                | `30`                     |
+| `receive.livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                                              | `6`                      |
+| `receive.livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                                              | `1`                      |
+| `receive.readinessProbe.enabled`                            | Enable readinessProbe on Thanos Receive containers                                                                               | `true`                   |
+| `receive.readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                                         | `30`                     |
+| `receive.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                                                | `10`                     |
+| `receive.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                                               | `30`                     |
+| `receive.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                                             | `6`                      |
+| `receive.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                                             | `1`                      |
+| `receive.startupProbe.enabled`                              | Enable startupProbe on Thanos Receive containers                                                                                 | `false`                  |
+| `receive.startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                                                           | `5`                      |
+| `receive.startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                                                  | `5`                      |
+| `receive.startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                                                 | `1`                      |
+| `receive.startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                                               | `15`                     |
+| `receive.startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                                               | `1`                      |
+| `receive.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                              | `{}`                     |
+| `receive.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                             | `{}`                     |
+| `receive.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                               | `{}`                     |
+| `receive.initContainers`                                    | Add additional init containers to the Thanos Receive pods                                                                        | `[]`                     |
+| `receive.sidecars`                                          | Extra containers running as sidecars to Thanos Receive pods                                                                      | `[]`                     |
+| `receive.extraVolumes`                                      | Extra volumes to add to Thanos Receive                                                                                           | `[]`                     |
+| `receive.extraVolumeMounts`                                 | Extra volume mounts to add to the receive container                                                                              | `[]`                     |
+| `receive.podAffinityPreset`                                 | Thanos Receive pod affinity preset                                                                                               | `""`                     |
+| `receive.podAntiAffinityPreset`                             | Thanos Receive pod anti-affinity preset. Ignored if `ruler.affinity` is set. Allowed values: `soft` or `hard`                    | `soft`                   |
+| `receive.nodeAffinityPreset.type`                           | Thanos Receive node affinity preset type. Ignored if `receive.affinity` is set. Allowed values: `soft` or `hard`                 | `""`                     |
+| `receive.nodeAffinityPreset.key`                            | Thanos Receive node label key to match. Ignored if `receive.affinity` is set.                                                    | `""`                     |
+| `receive.nodeAffinityPreset.values`                         | Thanos Receive node label values to match. Ignored if `receive.affinity` is set.                                                 | `[]`                     |
+| `receive.affinity`                                          | Thanos Receive affinity for pod assignment                                                                                       | `{}`                     |
+| `receive.nodeSelector`                                      | Thanos Receive node labels for pod assignment                                                                                    | `{}`                     |
+| `receive.tolerations`                                       | Thanos Receive tolerations for pod assignment                                                                                    | `[]`                     |
+| `receive.podLabels`                                         | Thanos Receive pod labels                                                                                                        | `{}`                     |
+| `receive.podAnnotations`                                    | Annotations for Thanos Receive pods                                                                                              | `{}`                     |
+| `receive.hostAliases`                                       | Deployment pod host aliases                                                                                                      | `[]`                     |
+| `receive.lifecycleHooks`                                    | for the Thanos Receive container(s) to automate configuration before or after startup                                            | `{}`                     |
+| `receive.priorityClassName`                                 | Thanos Receive priorityClassName                                                                                                 | `""`                     |
+| `receive.schedulerName`                                     | Name of the k8s scheduler (other than default) for Thanos Receive pods                                                           | `""`                     |
+| `receive.topologySpreadConstraints`                         | Topology Spread Constraints for Thanos Receive pods assignment spread across your cluster among failure-domains                  | `[]`                     |
+| `receive.service.type`                                      | Kubernetes service type                                                                                                          | `ClusterIP`              |
+| `receive.service.ports.http`                                | Thanos Ruler service HTTP port                                                                                                   | `10902`                  |
+| `receive.service.ports.grpc`                                | Thanos Ruler service GRPC port                                                                                                   | `10901`                  |
+| `receive.service.ports.remote`                              | Thanos Ruler service remote port                                                                                                 | `19291`                  |
+| `receive.service.nodePorts.http`                            | Specify the Thanos Ruler HTTP nodePort value for the LoadBalancer and NodePort service types                                     | `""`                     |
+| `receive.service.nodePorts.grpc`                            | Specify the Thanos Ruler GRPC nodePort value for the LoadBalancer and NodePort service types                                     | `""`                     |
+| `receive.service.nodePorts.remote`                          | Specify the Thanos Ruler remote nodePort value for the LoadBalancer and NodePort service types                                   | `""`                     |
+| `receive.service.clusterIP`                                 | Thanos Ruler service clusterIP IP                                                                                                | `""`                     |
+| `receive.service.loadBalancerIP`                            | Load balancer IP if service type is `LoadBalancer`                                                                               | `""`                     |
+| `receive.service.loadBalancerSourceRanges`                  | Addresses that are allowed when service is LoadBalancer                                                                          | `[]`                     |
+| `receive.service.externalTrafficPolicy`                     | Thanos Ruler service externalTrafficPolicy                                                                                       | `Cluster`                |
+| `receive.service.annotations`                               | Annotations for Thanos Receive service                                                                                           | `{}`                     |
+| `receive.service.extraPorts`                                | Extra ports to expose in the Thanos Receive service                                                                              | `[]`                     |
+| `receive.service.labelSelectorsOverride`                    | Selector for Thanos receive service                                                                                              | `{}`                     |
+| `receive.service.additionalHeadless`                        | Additional Headless service                                                                                                      | `false`                  |
+| `receive.serviceAccount.annotations`                        | Annotations for Thanos Receive Service Account                                                                                   | `{}`                     |
+| `receive.serviceAccount.existingServiceAccount`             | Name for an existing Thanos Receive Service Account                                                                              | `""`                     |
+| `receive.serviceAccount.automountServiceAccountToken`       | Enable/disable auto mounting of the service account token                                                                        | `true`                   |
+| `receive.autoscaling.enabled`                               | Enable autoscaling for Thanos Receive                                                                                            | `false`                  |
+| `receive.autoscaling.minReplicas`                           | Minimum number of Thanos Receive replicas                                                                                        | `""`                     |
+| `receive.autoscaling.maxReplicas`                           | Maximum number of Thanos Receive replicas                                                                                        | `""`                     |
+| `receive.autoscaling.targetCPU`                             | Target CPU utilization percentage                                                                                                | `""`                     |
+| `receive.autoscaling.targetMemory`                          | Target Memory utilization percentage                                                                                             | `""`                     |
+| `receive.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation for Thanos Receive                                                               | `false`                  |
+| `receive.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                   | `1`                      |
+| `receive.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable                                                                   | `""`                     |
+| `receive.persistence.enabled`                               | Enable data persistence using PVC(s) on Thanos Receive pods                                                                      | `true`                   |
+| `receive.persistence.storageClass`                          | Specify the `storageClass` used to provision the volume                                                                          | `""`                     |
+| `receive.persistence.accessModes`                           | PVC Access Modes for data volume                                                                                                 | `["ReadWriteOnce"]`      |
+| `receive.persistence.size`                                  | PVC Storage Request for data volume                                                                                              | `8Gi`                    |
+| `receive.persistence.annotations`                           | Annotations for the PVC                                                                                                          | `{}`                     |
+| `receive.persistence.existingClaim`                         | Name of an existing PVC to use                                                                                                   | `""`                     |
+| `receive.ingress.enabled`                                   | Set to true to enable ingress record generation                                                                                  | `false`                  |
+| `receive.ingress.hostname`                                  | When the ingress is enabled, a host pointing to this will be created                                                             | `thanos-receive.local`   |
+| `receive.ingress.ingressClassName`                          | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
+| `receive.ingress.annotations`                               | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `receive.ingress.extraHosts`                                | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
+| `receive.ingress.extraTls`                                  | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
+| `receive.ingress.secrets`                                   | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
+| `receive.ingress.tls`                                       | Enable TLS configuration for the hostname defined at `receive.ingress.hostname` parameter                                        | `false`                  |
+| `receive.ingress.selfSigned`                                | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
+| `receive.ingress.apiVersion`                                | Override API Version (automatically detected if not set)                                                                         | `""`                     |
+| `receive.ingress.path`                                      | Ingress Path                                                                                                                     | `/`                      |
+| `receive.ingress.pathType`                                  | Ingress Path type                                                                                                                | `ImplementationSpecific` |
+
+
+### Thanos Receive Distributor parameters
+
+| Name                                                                   | Description                                                                                                                 | Value           |
+| ---------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- | --------------- |
+| `receiveDistributor.enabled`                                           | Enable/disable Thanos Receive Distributor component                                                                         | `false`         |
+| `receiveDistributor.logLevel`                                          | Thanos Receive Distributor log level                                                                                        | `info`          |
+| `receiveDistributor.logFormat`                                         | Thanos Receive Distributor log format                                                                                       | `logfmt`        |
+| `receiveDistributor.replicaLabel`                                      | Label to treat as a replica indicator along which data is de-duplicated                                                     | `replica`       |
+| `receiveDistributor.extraEnvVars`                                      | Extra environment variables for Thanos Receive Distributor container                                                        | `[]`            |
+| `receiveDistributor.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars for Thanos Receive Distributor nodes                                   | `""`            |
+| `receiveDistributor.extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars for Thanos Receive Distributor nodes                                      | `""`            |
+| `receiveDistributor.extraFlags`                                        | Extra Flags to passed to Thanos Receive Distributor                                                                         | `[]`            |
+| `receiveDistributor.command`                                           | Override default container command (useful when using custom images)                                                        | `[]`            |
+| `receiveDistributor.args`                                              | Override default container args (useful when using custom images)                                                           | `[]`            |
+| `receiveDistributor.replicaCount`                                      | Number of Thanos Receive Distributor replicas to deploy                                                                     | `1`             |
+| `receiveDistributor.updateStrategy.type`                               | Update strategy type for Thanos Receive Distributor replicas                                                                | `RollingUpdate` |
+| `receiveDistributor.podSecurityContext.enabled`                        | Enable security context for the Thanos Receive Distributor pods                                                             | `true`          |
+| `receiveDistributor.podSecurityContext.fsGroup`                        | Group ID for the filesystem used by Thanos Receive Distributor pods                                                         | `1001`          |
+| `receiveDistributor.containerSecurityContext.enabled`                  | Enable container security context for the Thanos Receive Distributor containers                                             | `true`          |
+| `receiveDistributor.containerSecurityContext.runAsUser`                | User ID for the service user running the Thanos Receive Distributor containers                                              | `1001`          |
+| `receiveDistributor.containerSecurityContext.runAsNonRoot`             | Force the Thanos Receive Distributor containers to run as a non root user                                                   | `true`          |
+| `receiveDistributor.containerSecurityContext.allowPrivilegeEscalation` | Switch privilegeEscalation possibility on or off for Thanos Receive Distributor containers                                  | `false`         |
+| `receiveDistributor.containerSecurityContext.readOnlyRootFilesystem`   | mount / (root) as a readonly filesystem on Thanos Receive Distributor containers                                            | `false`         |
+| `receiveDistributor.resources.limits`                                  | The resources limits for the Thanos Receive container                                                                       | `{}`            |
+| `receiveDistributor.resources.requests`                                | The requested resources for the Thanos Receive container                                                                    | `{}`            |
+| `receiveDistributor.livenessProbe.enabled`                             | Enable livenessProbe on Thanos Receive Distributor containers                                                               | `true`          |
+| `receiveDistributor.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                     | `30`            |
+| `receiveDistributor.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                            | `10`            |
+| `receiveDistributor.livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                           | `30`            |
+| `receiveDistributor.livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                                         | `6`             |
+| `receiveDistributor.livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                                         | `1`             |
+| `receiveDistributor.readinessProbe.enabled`                            | Enable readinessProbe on Thanos Receive Distributor containers                                                              | `true`          |
+| `receiveDistributor.readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                                    | `30`            |
+| `receiveDistributor.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                                           | `10`            |
+| `receiveDistributor.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                                          | `30`            |
+| `receiveDistributor.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                                        | `6`             |
+| `receiveDistributor.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                                        | `1`             |
+| `receiveDistributor.startupProbe.enabled`                              | Enable startupProbe on Thanos Receive Distributor containers                                                                | `false`         |
+| `receiveDistributor.startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                                                      | `5`             |
+| `receiveDistributor.startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                                             | `5`             |
+| `receiveDistributor.startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                                            | `1`             |
+| `receiveDistributor.startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                                          | `15`            |
+| `receiveDistributor.startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                                          | `1`             |
+| `receiveDistributor.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                         | `{}`            |
+| `receiveDistributor.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                        | `{}`            |
+| `receiveDistributor.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                          | `{}`            |
+| `receiveDistributor.initContainers`                                    | Add additional init containers to the Thanos Receive Distributor pods                                                       | `[]`            |
+| `receiveDistributor.sidecars`                                          | Extra containers running as sidecars to Thanos Receive Distributor pods                                                     | `[]`            |
+| `receiveDistributor.extraVolumes`                                      | Extra volumes to add to Thanos Receive Distributor                                                                          | `[]`            |
+| `receiveDistributor.extraVolumeMounts`                                 | Extra volume mounts to add to the receive distributor container                                                             | `[]`            |
+| `receiveDistributor.podAffinityPreset`                                 | Thanos Receive pod affinity preset                                                                                          | `""`            |
+| `receiveDistributor.podAntiAffinityPreset`                             | Thanos Receive pod anti-affinity preset. Ignored if `receiveDistributor.affinity` is set. Allowed values: `soft` or `hard`  | `soft`          |
+| `receiveDistributor.nodeAffinityPreset.type`                           | Thanos Receive node affinity preset type. Ignored if `receiveDistributor.affinity` is set. Allowed values: `soft` or `hard` | `""`            |
+| `receiveDistributor.nodeAffinityPreset.key`                            | Thanos Receive node label key to match. Ignored if `receiveDistributor.affinity` is set.                                    | `""`            |
+| `receiveDistributor.nodeAffinityPreset.values`                         | Thanos Receive node label values to match. Ignored if `receiveDistributor.affinity` is set.                                 | `[]`            |
+| `receiveDistributor.affinity`                                          | Thanos Receive Distributor affinity for pod assignment                                                                      | `{}`            |
+| `receiveDistributor.nodeSelector`                                      | Thanos Receive Distributor node labels for pod assignment                                                                   | `{}`            |
+| `receiveDistributor.tolerations`                                       | Thanos Receive Distributor tolerations for pod assignment                                                                   | `[]`            |
+| `receiveDistributor.podLabels`                                         | Thanos Receive Distributor pod labels                                                                                       | `{}`            |
+| `receiveDistributor.podAnnotations`                                    | Annotations for Thanos Receive Distributor pods                                                                             | `{}`            |
+| `receiveDistributor.hostAliases`                                       | Deployment pod host aliases                                                                                                 | `[]`            |
+| `receiveDistributor.lifecycleHooks`                                    | for the Thanos Receive Distributor container(s) to automate configuration before or after startup                           | `{}`            |
+| `receiveDistributor.priorityClassName`                                 | Thanos Receive Distributor priorityClassName                                                                                | `""`            |
+| `receiveDistributor.schedulerName`                                     | Name of the k8s scheduler (other than default) for Thanos Receive Distributor pods                                          | `""`            |
+| `receiveDistributor.topologySpreadConstraints`                         | Topology Spread Constraints for Thanos Receive Distributor pods assignment spread across your cluster among failure-domains | `[]`            |
+| `receiveDistributor.serviceAccount.annotations`                        | Annotations for Thanos Receive Distributor Service Account                                                                  | `{}`            |
+| `receiveDistributor.serviceAccount.existingServiceAccount`             | Name for an existing Thanos Receive Distributor Service Account                                                             | `""`            |
+| `receiveDistributor.serviceAccount.automountServiceAccountToken`       | Enable/disable auto mounting of the service account token                                                                   | `true`          |
+| `receiveDistributor.autoscaling.enabled`                               | Enable autoscaling for Thanos Receive Distributor                                                                           | `false`         |
+| `receiveDistributor.autoscaling.minReplicas`                           | Minimum number of Thanos Receive Distributor replicas                                                                       | `""`            |
+| `receiveDistributor.autoscaling.maxReplicas`                           | Maximum number of Thanos Receive Distributor replicas                                                                       | `""`            |
+| `receiveDistributor.autoscaling.targetCPU`                             | Target CPU utilization percentage                                                                                           | `""`            |
+| `receiveDistributor.autoscaling.targetMemory`                          | Target Memory utilization percentage                                                                                        | `""`            |
+| `receiveDistributor.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation for Thanos Receive Distributor                                              | `false`         |
+| `receiveDistributor.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                              | `1`             |
+| `receiveDistributor.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable                                                              | `""`            |
 
 
 ### Metrics parameters
 
-| Name                                      | Description                                                                                            | Value   |
-| ----------------------------------------- | ------------------------------------------------------------------------------------------------------ | ------- |
-| `metrics.enabled`                         | Enable the export of Prometheus metrics                                                                | `false` |
-| `metrics.serviceMonitor.enabled`          | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`) | `false` |
-| `metrics.serviceMonitor.namespace`        | Namespace in which Prometheus is running                                                               | `""`    |
-| `metrics.serviceMonitor.labels`           | Additional labels for ServiceMonitor object                                                            | `{}`    |
-| `metrics.serviceMonitor.interval`         | Interval at which metrics should be scraped.                                                           | `""`    |
-| `metrics.serviceMonitor.scrapeTimeout`    | Timeout after which the scrape is ended                                                                | `""`    |
-| `metrics.prometheusRule.enabled`          | If `true`, creates a Prometheus Operator PrometheusRule (also requires `metrics.enabled` to be `true`) | `false` |
-| `metrics.prometheusRule.namespace`        | Namespace in which the PrometheusRule CRD is created                                                   | `""`    |
-| `metrics.prometheusRule.additionalLabels` | Additional labels for the prometheusRule                                                               | `{}`    |
-| `metrics.prometheusRule.rules`            | Prometheus Rules for Thanos components                                                                 | `[]`    |
+| Name                                       | Description                                                                                            | Value   |
+| ------------------------------------------ | ------------------------------------------------------------------------------------------------------ | ------- |
+| `metrics.enabled`                          | Enable the export of Prometheus metrics                                                                | `false` |
+| `metrics.serviceMonitor.enabled`           | Specify if a ServiceMonitor will be deployed for Prometheus Operator                                   | `false` |
+| `metrics.serviceMonitor.namespace`         | Namespace in which Prometheus is running                                                               | `""`    |
+| `metrics.serviceMonitor.labels`            | Extra labels for the ServiceMonitor                                                                    | `{}`    |
+| `metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in Prometheus                       | `""`    |
+| `metrics.serviceMonitor.interval`          | How frequently to scrape metrics                                                                       | `""`    |
+| `metrics.serviceMonitor.scrapeTimeout`     | Timeout after which the scrape is ended                                                                | `""`    |
+| `metrics.serviceMonitor.metricRelabelings` | Specify additional relabeling of metrics                                                               | `[]`    |
+| `metrics.serviceMonitor.relabelings`       | Specify general relabeling                                                                             | `[]`    |
+| `metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                                                    | `{}`    |
+| `metrics.prometheusRule.enabled`           | If `true`, creates a Prometheus Operator PrometheusRule (also requires `metrics.enabled` to be `true`) | `false` |
+| `metrics.prometheusRule.namespace`         | Namespace in which the PrometheusRule CRD is created                                                   | `""`    |
+| `metrics.prometheusRule.additionalLabels`  | Additional labels for the prometheusRule                                                               | `{}`    |
+| `metrics.prometheusRule.rules`             | Prometheus Rules for Thanos components                                                                 | `[]`    |
 
 
 ### Volume Permissions parameters
 
-| Name                                  | Description                                                                                                          | Value                   |
-| ------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| `volumePermissions.enabled`           | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`                 |
-| `volumePermissions.image.registry`    | Init container volume-permissions image registry                                                                     | `docker.io`             |
-| `volumePermissions.image.repository`  | Init container volume-permissions image repository                                                                   | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                                          | `10-debian-10-r194`     |
-| `volumePermissions.image.pullPolicy`  | Init container volume-permissions image pull policy                                                                  | `Always`                |
-| `volumePermissions.image.pullSecrets` | Specify docker-registry secret names as an array                                                                     | `[]`                    |
+| Name                                  | Description                                                                                     | Value                   |
+| ------------------------------------- | ----------------------------------------------------------------------------------------------- | ----------------------- |
+| `volumePermissions.enabled`           | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
+| `volumePermissions.image.registry`    | Init container volume-permissions image registry                                                | `docker.io`             |
+| `volumePermissions.image.repository`  | Init container volume-permissions image repository                                              | `bitnami/bitnami-shell` |
+| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                     | `10-debian-10-r242`     |
+| `volumePermissions.image.pullPolicy`  | Init container volume-permissions image pull policy                                             | `IfNotPresent`          |
+| `volumePermissions.image.pullSecrets` | Specify docker-registry secret names as an array                                                | `[]`                    |
 
 
 ### MinIO&reg; chart parameters
 
-| Name                       | Description                                                               | Value    |
-| -------------------------- | ------------------------------------------------------------------------- | -------- |
-| `minio.enabled`            | Enable/disable MinIO&reg; chart installation                              | `false`  |
-| `minio.accessKey.password` | MinIO&reg; Access Key                                                     | `""`     |
-| `minio.secretKey.password` | MinIO&reg; Secret Key                                                     | `""`     |
-| `minio.defaultBuckets`     | Comma, semi-colon or space separated list of MinIO&reg; buckets to create | `thanos` |
+| Name                      | Description                                                               | Value    |
+| ------------------------- | ------------------------------------------------------------------------- | -------- |
+| `minio.enabled`           | Enable/disable MinIO&reg; chart installation                              | `false`  |
+| `minio.auth.rootUser`     | MinIO&reg; root username                                                  | `admin`  |
+| `minio.auth.rootPassword` | Password for MinIO&reg; root user                                         | `""`     |
+| `minio.defaultBuckets`    | Comma, semi-colon or space separated list of MinIO&reg; buckets to create | `thanos` |
+
+
+### NetworkPolicy parameters
+
+| Name                      | Description                                                               | Value    |
+| ------------------------- | ------------------------------------------------------------------------- | -------- |
+| `networkPolicy.enabled`                    | Enable creation of NetworkPolicy resources.                                                                              | `false`             |
+| `networkPolicy.allowExternal`              | Don't require client label for connections                                                                               | `true`              |
+| `networkPolicy.explicitNamespacesSelector` | A Kubernetes LabelSelector to explicitly select namespaces from which traffic could be allowed                           | `{}`                |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
@@ -925,7 +1167,7 @@ timePartitioning:
 
 ### Integrate Thanos with Prometheus and Alertmanager
 
-You can intregrate Thanos with Prometheus & Alertmanager using this chart and the [Bitnami kube-prometheus chart](https://github.com/bitnami/charts/tree/master/bitnami/kube-prometheus) following the steps below:
+You can integrate Thanos with Prometheus & Alertmanager using this chart and the [Bitnami kube-prometheus chart](https://github.com/bitnami/charts/tree/master/bitnami/kube-prometheus) following the steps below:
 
 > Note: in this example we will use MinIO&reg; (subchart) as the Objstore. Every component will be deployed in the "monitoring" namespace.
 
@@ -966,10 +1208,9 @@ metrics:
     enabled: true
 minio:
   enabled: true
-  accessKey:
-    password: "minio"
-  secretKey:
-    password: "minio123"
+  auth:
+    rootUser: "admin"
+    rootPassword: "minio123"
   defaultBuckets: "thanos"
 ```
 
@@ -1006,6 +1247,10 @@ As an alternative, this chart supports using an initContainer to change the owne
 
 You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
 
+### Deploy extra resources
+
+There are cases where you may want to deploy extra objects, such a ConfigMap containing your app's configuration or some extra deployment with a micro service used by your app. For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter.
+
 ### Setting Pod's affinity
 
 This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
@@ -1017,6 +1262,24 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 8.0.0
+
+The chart was changed to adapt to the common Bitnami chart standards. Now it includes common elements such as sidecar and init container support, custom commands, custom liveness/readiness probes, extra environment variables support, extra pod annotations and labels, among others. In addition, other remarkable changes were to harmonize the values structure:
+
+- The `receive.distributor.*` parameters have been renamed to `receiveDistributor.*`, and the associated manifests have been moved into its own folder. This way, Thanos Receive Distributor is treated as any other component.
+- The parameter to configure TLS in the GRPC server have been restructured so they follow the `XXX.grpc.server.tls` and `XXX.grpc.client.tls` format. Previous to this change, we had different structures depending on the component.
+
+### To 7.0.0
+
+This major updates the MinIO&reg; subchart to its newest major, 9.0.0, which updates authentication parameters. Check [MinIO&reg; Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/minio#to-900) for more information.
+This major release renames several values in this chart and adds missing features, in order to be inline with the rest of assets in the Bitnami charts repositor. Some of the affected values are:
+
+- `XXX.extraEnv` parameters were renamed to `XXX.extraEnvVars`.
+- `XXX.extraContainers` parameters were renamed to `XXX.sidecars`.
+- `XXX.service.PROTOCOL.port` parameters were renamed to `XXX.service.ports.PROTOCOL` (e.g. `query.service.http.port` is now `query.service.ports.http`).
+- `XXX.service.PROTOCOL.nodePort`parameters were renamed to `XXX.service.nodePorts.PROTOCOL` (e.g. `query.service.http.nodePort` is now `query.service.nodePorts.http`).
+- `XXX.ingress.certManager` parameters were deprecated, use `XXX.ingress.annotations` to set the required annotations for CertManager instead.
 
 ### To 6.0.0
 
@@ -1155,40 +1418,13 @@ querier.ingress.grpc.secrets[0].key           -> query.ingress.grpc.secrets[0].k
 
 [On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
 
-**What changes were introduced in this major version?**
-
-- Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
-- Move dependency information from the *requirements.yaml* to the *Chart.yaml*
-- After running `helm dependency update`, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
-- The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
-
-**Considerations when upgrading to this version**
-
-- If you want to upgrade to this version from a previous one installed with Helm v3, you shouldn't face any issues
-- If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
-- If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3
-
-**Useful links**
-
-- https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
-- https://helm.sh/docs/topics/v2_v3_migration/
-- https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
+[Learn more about this change and related upgrade considerations](https://docs.bitnami.com/kubernetes/infrastructure/mariadb/administration/upgrade-helm3/).
 
 ### To 2.4.0
 
-The Ingress API object name for Querier changes from:
-
-```yaml
-{{ include "common.names.fullname" . }}
-```
+The Ingress API object name for Querier changes from `{{ include "common.names.fullname" . }}` to `{{ include "common.names.fullname" . }}-querier`.
 
 > **NOTE**: Which in most cases (depending on any set values in `fullnameOverride` or `nameOverride`) resolves to the used Helm release name (`.Release.Name`).
-
-To:
-
-```yaml
-{{ include "common.names.fullname" . }}-querier
-```
 
 ### To 2.0.0
 
@@ -1213,6 +1449,7 @@ To specify the values via CLI::
 ### To 1.0.0
 
 If you are upgrading from a `<1.0.0` release you need to move your Querier Ingress information to the new values settings:
+
 ```
 ingress.enabled -> querier.ingress.enabled
 ingress.certManager -> querier.ingress.certManager
@@ -1225,5 +1462,20 @@ ingress.extraHosts[0].secretName -> querier.ingress.extraHosts[0].secretName
 ingress.secrets[0].name -> querier.ingress.secrets[0].name
 ingress.secrets[0].certificate -> querier.ingress.secrets[0].certificate
 ingress.secrets[0].key -> querier.ingress.secrets[0].key
-
 ```
+
+## License
+
+Copyright &copy; 2022 Bitnami
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

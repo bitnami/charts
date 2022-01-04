@@ -1,33 +1,48 @@
-{{- if and .Values.prometheus.serviceMonitor.enabled .Values.contour.enabled }}
+{{- if and .Values.metrics.serviceMonitor.enabled .Values.contour.enabled }}
 ---
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: {{ include "common.names.fullname" . }}-contour
-  {{- if .Values.prometheus.serviceMonitor.namespace }}
-  namespace: {{ .Values.prometheus.serviceMonitor.namespace }}
+  {{- if .Values.metrics.serviceMonitor.namespace }}
+  namespace: {{ .Values.metrics.serviceMonitor.namespace }}
   {{- else }}
   namespace: {{ .Release.Namespace }}
   {{- end }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: contour
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
-  jobLabel: {{ .Values.prometheus.serviceMonitor.jobLabel | quote }}
+  jobLabel: {{ .Values.metrics.serviceMonitor.jobLabel | quote }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: contour
+    {{- if .Values.metrics.serviceMonitor.selector }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.metrics.serviceMonitor.selector "context" $) | nindent 4 }}
+    {{- end }}
   namespaceSelector:
     matchNames:
       - {{ .Release.Namespace }}
   endpoints:
     - port: metrics
-      {{- if .Values.prometheus.serviceMonitor.interval }}
-      interval: {{ .Values.prometheus.serviceMonitor.interval }}
+      {{- if .Values.metrics.serviceMonitor.interval }}
+      interval: {{ .Values.metrics.serviceMonitor.interval }}
       {{- end }}
-      {{- if .Values.prometheus.serviceMonitor.metricRelabelings }}
-      metricRelabelings: {{ toYaml .Values.prometheus.serviceMonitor.metricRelabelings | nindent 6 }}
+      {{- if .Values.metrics.serviceMonitor.scrapeTimeout }}
+      scrapeTimeout: {{ .Values.metrics.serviceMonitor.scrapeTimeout }}
       {{- end }}
-      {{- if .Values.prometheus.serviceMonitor.relabelings }}
-      relabelings: {{ toYaml .Values.prometheus.serviceMonitor.relabelings | nindent 6 }}
+      {{- if .Values.metrics.serviceMonitor.honorLabels }}
+      honorLabels: {{ .Values.metrics.serviceMonitor.honorLabels }}
+      {{- end }}
+      {{- if .Values.metrics.serviceMonitor.metricRelabelings }}
+      metricRelabelings: {{ toYaml .Values.metrics.serviceMonitor.metricRelabelings | nindent 6 }}
+      {{- end }}
+      {{- if .Values.metrics.serviceMonitor.relabelings }}
+      relabelings: {{ toYaml .Values.metrics.serviceMonitor.relabelings | nindent 6 }}
       {{- end }}
 {{- end }}

@@ -60,3 +60,13 @@ Return true if a configmap object should be created for Consul
 {{- else -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Return true if cert-manager required annotations for TLS signed certificates are set in the Ingress annotations
+Ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
+*/}}
+{{- define "consul.ingress.certManagerRequest" -}}
+{{ if or (hasKey . "cert-manager.io/cluster-issuer") (hasKey . "cert-manager.io/issuer") }}
+    {{- true -}}
+{{- end -}}
+{{- end -}}

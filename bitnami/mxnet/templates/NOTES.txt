@@ -1,3 +1,9 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
+** Please be patient while the chart is being deployed **
+
 {{- if or .Values.configMap (.Files.Glob "files/*") .Values.cloneFilesFromGit.enabled }}
 {{- if .Values.entrypoint.file }}
 The provided file {{ .Values.entrypoint.file }} is being executed. You can see the logs of each running node with:

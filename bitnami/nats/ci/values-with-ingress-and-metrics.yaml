@@ -1,0 +1,16 @@
+# Test values file for generating all of the yaml and check that
+# the rendering is correct
+replicaCount: 3
+service:
+  type: ClusterIP
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: nginx
+  hostname: nats.local
+  tls: true
+  selfSigned: true
+metrics:
+  enabled: true
+  serviceMonitor:
+    enabled: true

@@ -44,6 +44,7 @@ Return the proper Docker Image Registry Secret Names
 {{- define "node.checkRollingTags" -}}
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- include "common.warnings.rollingTag" .Values.git.image }}
+{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
 {{- end -}}
 
 {{/*
@@ -81,5 +82,16 @@ node: Database
     You can only use one database.
     Please choose installing a MongoDB&reg; chart (--set mongodb.enabled=true) or
     using an external database (--set externaldb.enabled=true)
+{{- end -}}
+{{- end -}}
+
+{{/*
+ Create the name of the service account to use
+ */}}
+{{- define "node.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create -}}
+    {{ default (include "common.names.fullname" .) .Values.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.serviceAccount.name }}
 {{- end -}}
 {{- end -}}
