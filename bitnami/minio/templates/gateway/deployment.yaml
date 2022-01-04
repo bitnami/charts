@@ -70,7 +70,7 @@ spec:
       securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       {{- if .Values.gateway.priorityClassName }}
-      priorityClassName: {{ .Values.gateway.priorityClassName | quote}}
+      priorityClassName: {{ .Values.gateway.priorityClassName | quote }}
       {{- end }}
       {{- if .Values.initContainers }}
       initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
