@@ -218,7 +218,7 @@ spec:
           imagePullPolicy: {{ .Values.ldapDaemon.image.pullPolicy | quote }}
           env:
             - name: NGINXLDAP_PORT_NUMBER
-              value: {{ .Values.ldapDaemon.port | quote}}
+              value: {{ .Values.ldapDaemon.port | quote }}
             - name: NGINXLDAP_LDAP_URI
               value: {{ .Values.ldapDaemon.ldapConfig.uri | quote }}
             - name: NGINXLDAP_LDAP_BASE_DN
