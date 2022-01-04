@@ -116,8 +116,11 @@ data:
     # Waits for DNS to add this ip to the service DNS entry
     retry_while not_exists_dns_entry
 
-    if [[ -z "$(getent ahosts "$HEADLESS_SERVICE" | grep -v "^${myip}")" ]]; then
-        # Only node available on the network, master by default
+    # check if there is a master
+    get_sentinel_master_info
+    redisRetVal=$?
+    if [[ $redisRetVal -ne 0 ]]; then
+        # there is no master yet, master by default
         export REDIS_REPLICATION_MODE="master"
     else
         export REDIS_REPLICATION_MODE="slave"
