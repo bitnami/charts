@@ -98,7 +98,7 @@ spec:
               name: mongodb
           env:
             - name: MONGODB_ENABLE_NUMACTL
-              value: {{ ternary "yes" "no" $.Values.common.mongodbEnableNumactl | quote}}
+              value: {{ ternary "yes" "no" $.Values.common.mongodbEnableNumactl | quote }}
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" (or $.Values.image.debug $.Values.diagnosticMode.enabled) | quote }}
             - name: MONGODB_SYSTEM_LOG_VERBOSITY

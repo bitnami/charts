@@ -150,7 +150,7 @@ spec:
             {{- end }}
             - name: ETCD_AUTH_TOKEN
               {{- if eq .Values.auth.token.type "jwt" }}
-              value: {{ printf "jwt,priv-key=/opt/bitnami/etcd/certs/token/%s,sign-method=%s,ttl=%s" .Values.auth.token.privateKey.filename .Values.auth.token.signMethod .Values.auth.token.ttl | quote}}
+              value: {{ printf "jwt,priv-key=/opt/bitnami/etcd/certs/token/%s,sign-method=%s,ttl=%s" .Values.auth.token.privateKey.filename .Values.auth.token.signMethod .Values.auth.token.ttl | quote }}
               {{- else if eq .Values.auth.token.type "simple" }}
               value: "simple"
               {{- end }}
