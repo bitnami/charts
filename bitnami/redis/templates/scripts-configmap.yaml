@@ -43,7 +43,9 @@ data:
     get_full_hostname() {
         hostname="$1"
 
-        {{- if eq .Values.sentinel.service.type "NodePort" }}
+        {{- if .Values.externalDNS.enabled }}
+        echo "${hostname}.{{- printf "%s.%s" (include "common.names.fullname" .) .Values.externalDNS.suffix }}"
+        {{- else if eq .Values.sentinel.service.type "NodePort" }}
         echo "${hostname}.{{- .Release.Namespace }}"
         {{- else }}
         echo "${hostname}.${HEADLESS_SERVICE}"
@@ -232,7 +234,9 @@ data:
     get_full_hostname() {
         hostname="$1"
 
-        {{- if eq .Values.sentinel.service.type "NodePort" }}
+        {{- if .Values.externalDNS.enabled }}
+        echo "${hostname}.{{- printf "%s.%s" (include "common.names.fullname" .) .Values.externalDNS.suffix }}"
+        {{- else if eq .Values.sentinel.service.type "NodePort" }}
         echo "${hostname}.{{- .Release.Namespace }}"
         {{- else }}
         echo "${hostname}.${HEADLESS_SERVICE}"
@@ -361,7 +365,9 @@ data:
     get_full_hostname() {
         hostname="$1"
 
-        {{- if eq .Values.sentinel.service.type "NodePort" }}
+        {{- if .Values.externalDNS.enabled }}
+        echo "${hostname}.{{- printf "%s.%s" (include "common.names.fullname" .) .Values.externalDNS.suffix }}"
+        {{- else if eq .Values.sentinel.service.type "NodePort" }}
         echo "${hostname}.{{- .Release.Namespace }}"
         {{- else }}
         echo "${hostname}.${HEADLESS_SERVICE}"
@@ -506,7 +512,9 @@ data:
     get_full_hostname() {
         hostname="$1"
 
-        {{- if eq .Values.sentinel.service.type "NodePort" }}
+        {{- if .Values.externalDNS.enabled }}
+        echo "${hostname}.{{- printf "%s.%s" (include "common.names.fullname" .) .Values.externalDNS.suffix }}"
+        {{- else if eq .Values.sentinel.service.type "NodePort" }}
         echo "${hostname}.{{- .Release.Namespace }}"
         {{- else }}
         echo "${hostname}.${HEADLESS_SERVICE}"

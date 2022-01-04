@@ -23,6 +23,12 @@ global:
 ## @section Common parameters
 ##
 
+## @param externalDNS Boolean to indicate the desire to utilize `external-dns`
+##
+externalDNS:
+  enabled: false
+  # suffix: ""
+
 ## @param kubeVersion Override Kubernetes version
 ##
 kubeVersion: ""
