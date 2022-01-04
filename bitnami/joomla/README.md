@@ -56,6 +56,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
+
 ### Common parameters
 
 | Name                | Description                                                                                                | Value |
@@ -67,13 +68,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `commonLabels`      | Common labels to add to all Harbor resources (sub-charts are not considered). Evaluated as a template      | `{}`  |
 | `extraDeploy`       | Array of extra objects to deploy with the release (evaluated as a template).                               | `[]`  |
 
+
 ### Joomla! parameters
 
 | Name                                    | Description                                                                                                          | Value                 |
 | --------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`                        | Joomla! image registry                                                                                               | `docker.io`           |
 | `image.repository`                      | Joomla! Image name                                                                                                   | `bitnami/joomla`      |
-| `image.tag`                             | Joomla! Image tag                                                                                                    | `3.10.2-debian-10-r0` |
+| `image.tag`                             | Joomla! Image tag                                                                                                    | `4.0.5-debian-10-r14` |
 | `image.pullPolicy`                      | Joomla! image pull policy                                                                                            | `IfNotPresent`        |
 | `image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                     | `[]`                  |
 | `image.debug`                           | Specify if debug logs should be enabled                                                                              | `false`               |
@@ -103,7 +105,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `containerPorts`                        | Container ports                                                                                                      | `{}`                  |
 | `persistence.enabled`                   | Enable persistence using PVC                                                                                         | `true`                |
 | `persistence.storageClass`              | PVC Storage Class for Joomla! volume                                                                                 | `""`                  |
-| `persistence.accessModes`               | PVC Access Mode for Joomla! volume                                                                                   | `[]`                  |
+| `persistence.accessModes`               | PVC Access Mode for Joomla! volume                                                                                   | `["ReadWriteOnce"]`   |
 | `persistence.size`                      | PVC Storage Request for Joomla! volume                                                                               | `8Gi`                 |
 | `persistence.existingClaim`             | An Existing PVC name                                                                                                 | `""`                  |
 | `persistence.hostPath`                  | Host mount path for Joomla! volume                                                                                   | `""`                  |
@@ -154,34 +156,33 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Traffic Exposure Parameters
 
-| Name                               | Description                                                                                   | Value                    |
-| ---------------------------------- | --------------------------------------------------------------------------------------------- | ------------------------ |
-| `service.type`                     | Kubernetes Service type                                                                       | `LoadBalancer`           |
-| `service.ports.http`               | Service HTTP port                                                                             | `80`                     |
-| `service.ports.https`              | Service HTTPS port                                                                            | `443`                    |
-| `service.nodePorts.http`           | Node port for HTTP                                                                            | `""`                     |
-| `service.nodePorts.https`          | Node port for HTTPS                                                                           | `""`                     |
-| `service.clusterIP`                | Joomla! service Cluster IP                                                                    | `""`                     |
-| `service.loadBalancerIP`           | loadBalancerIP for the Joomla Service (optional, cloud specific)                              | `""`                     |
-| `service.loadBalancerSourceRanges` | Joomla! service Load Balancer sources                                                         | `[]`                     |
-| `service.externalTrafficPolicy`    | Enable client source IP preservation                                                          | `Cluster`                |
-| `service.extraPorts`               | Extra ports to expose (normally used with the `sidecar` value)                                | `[]`                     |
-| `service.annotations`              | Additional custom annotations for Joomla! service                                             | `{}`                     |
-| `service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                          | `None`                   |
-| `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                   | `{}`                     |
-| `ingress.enabled`                  | Enable ingress controller resource                                                            | `false`                  |
-| `ingress.certManager`              | Add annotations for cert-manager                                                              | `false`                  |
-| `ingress.pathType`                 | Ingress Path type                                                                             | `ImplementationSpecific` |
-| `ingress.apiVersion`               | Override API Version (automatically detected if not set)                                      | `""`                     |
-| `ingress.hostname`                 | Default host for the ingress resource                                                         | `joomla.local`           |
-| `ingress.path`                     | Default path for the ingress resource                                                         | `/`                      |
-| `ingress.annotations`              | Ingress annotations                                                                           | `{}`                     |
-| `ingress.tls`                      | Enable TLS configuration for the hostname defined at ingress.hostname parameter               | `false`                  |
-| `ingress.extraHosts`               | The list of additional hostnames to be covered with this ingress record.                      | `[]`                     |
-| `ingress.extraPaths`               | Any additional arbitrary paths that may need to be added to the ingress under the main host.  | `[]`                     |
-| `ingress.extraTls`                 | The tls configuration for additional hostnames to be covered with this ingress record.        | `[]`                     |
-| `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets | `[]`                     |
-| `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                 | `""`                     |
+| Name                               | Description                                                                                                                      | Value                    |
+| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.type`                     | Kubernetes Service type                                                                                                          | `LoadBalancer`           |
+| `service.ports.http`               | Service HTTP port                                                                                                                | `80`                     |
+| `service.ports.https`              | Service HTTPS port                                                                                                               | `443`                    |
+| `service.nodePorts.http`           | Node port for HTTP                                                                                                               | `""`                     |
+| `service.nodePorts.https`          | Node port for HTTPS                                                                                                              | `""`                     |
+| `service.clusterIP`                | Joomla! service Cluster IP                                                                                                       | `""`                     |
+| `service.loadBalancerIP`           | loadBalancerIP for the Joomla Service (optional, cloud specific)                                                                 | `""`                     |
+| `service.loadBalancerSourceRanges` | Joomla! service Load Balancer sources                                                                                            | `[]`                     |
+| `service.externalTrafficPolicy`    | Enable client source IP preservation                                                                                             | `Cluster`                |
+| `service.extraPorts`               | Extra ports to expose (normally used with the `sidecar` value)                                                                   | `[]`                     |
+| `service.annotations`              | Additional custom annotations for Joomla! service                                                                                | `{}`                     |
+| `service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                             | `None`                   |
+| `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
+| `ingress.enabled`                  | Enable ingress controller resource                                                                                               | `false`                  |
+| `ingress.pathType`                 | Ingress Path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.apiVersion`               | Override API Version (automatically detected if not set)                                                                         | `""`                     |
+| `ingress.hostname`                 | Default host for the ingress resource                                                                                            | `joomla.local`           |
+| `ingress.path`                     | Default path for the ingress resource                                                                                            | `/`                      |
+| `ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.tls`                      | Enable TLS configuration for the hostname defined at ingress.hostname parameter                                                  | `false`                  |
+| `ingress.extraHosts`               | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
+| `ingress.extraPaths`               | Any additional arbitrary paths that may need to be added to the ingress under the main host.                                     | `[]`                     |
+| `ingress.extraTls`                 | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
+| `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
+| `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
 
 
 ### Database parameters
@@ -207,6 +208,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.password`                 | Password for the above username                                                                                                                                                   | `""`             |
 | `externalDatabase.database`                 | Name of the existing database                                                                                                                                                     | `bitnami_joomla` |
 
+
 ### Metrics parameters
 
 | Name                        | Description                                      | Value                     |
@@ -214,11 +216,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`           | Start a side-car prometheus exporter             | `false`                   |
 | `metrics.image.registry`    | Apache exporter image registry                   | `docker.io`               |
 | `metrics.image.repository`  | Apache exporter image name                       | `bitnami/apache-exporter` |
-| `metrics.image.tag`         | Apache exporter image tag                        | `0.10.1-debian-10-r54`    |
+| `metrics.image.tag`         | Apache exporter image tag                        | `0.11.0-debian-10-r10`    |
 | `metrics.image.pullPolicy`  | Image pull policy                                | `IfNotPresent`            |
 | `metrics.image.pullSecrets` | Specify docker-registry secret names as an array | `[]`                      |
 | `metrics.resources`         | Exporter resource requests/limit                 | `{}`                      |
 | `metrics.podAnnotations`    | Additional annotations for Metrics exporter pod  | `{}`                      |
+
 
 ### NetworkPolicy parameters
 
@@ -239,6 +242,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.ingressRules.customRules`                      | Custom network policy ingress rule                                                                                         | `{}`    |
 | `networkPolicy.egressRules.denyConnectionsToExternal`         | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).                             | `false` |
 | `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                 | `{}`    |
+
 
 The above parameters map to the env variables defined in [bitnami/joomla](https://github.com/bitnami/bitnami-docker-joomla). For more information please refer to the [bitnami/joomla](https://github.com/bitnami/bitnami-docker-joomla) image documentation.
 
