@@ -228,7 +228,7 @@ persistence:
   ##   GKE, AWS & OpenStack)
   ##
   storageClass: ""
-  ## @param persistence.accessModes [array] PVC Access Mode for phpBB volume
+  ## @param persistence.accessModes PVC Access Mode for phpBB volume
   ##
   accessModes:
     - ReadWriteOnce
