@@ -117,7 +117,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sessionAffinity`                       | Control where client requests go, to the same pod or round-robin                          | `None`                 |
 | `persistence.enabled`                   | Enable persistence using PVC                                                              | `true`                 |
 | `persistence.storageClass`              | PrestaShop Data Persistent Volume Storage Class                                           | `""`                   |
-| `persistence.accessModes`               | PVC Access Mode for PrestaShop volume                                                     | `[]`                   |
+| `persistence.accessModes`               | PVC Access Mode for PrestaShop volume                                                     | `["ReadWriteOnce"]`    |
 | `persistence.size`                      | PVC Storage Request for PrestaShop volume                                                 | `8Gi`                  |
 | `persistence.existingClaim`             | An Existing PVC name                                                                      | `""`                   |
 | `persistence.hostPath`                  | If defined, the prestashop-data volume will mount to the specified hostPath               | `""`                   |

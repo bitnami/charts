@@ -221,7 +221,7 @@ persistence:
   ##   GKE, AWS & OpenStack)
   ##
   storageClass: ""
-  ## @param persistence.accessModes [array] PVC Access Mode for PrestaShop volume
+  ## @param persistence.accessModes PVC Access Mode for PrestaShop volume
   ##
   accessModes:
     - ReadWriteOnce
