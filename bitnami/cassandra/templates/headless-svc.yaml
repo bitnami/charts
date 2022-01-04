@@ -30,6 +30,6 @@ spec:
       port: 7199
       targetPort: jmx
     - name: cql
-      port: {{ .Values.service.port }}
+      port: {{ .Values.service.ports.cql }}
       targetPort: cql
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}

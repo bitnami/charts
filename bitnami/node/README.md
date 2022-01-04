@@ -11,7 +11,7 @@ $ helm install my-release bitnami/node
 
 ## Introduction
 
-This chart bootstraps a [Node](https://github.com/bitnami/bitnami-docker-node) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Node](https://github.com/bitnami/bitnami-docker-node) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 It clones and deploys a Node.js application from a Git repository. Optionally, you can set up an Ingress resource to access your application and provision an external database using the Kubernetes service catalog and the Open Service Broker for Azure.
 
@@ -96,55 +96,59 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Node deployment parameters
 
-| Name                                    | Description                                                                               | Value                  |
-| --------------------------------------- | ----------------------------------------------------------------------------------------- | ---------------------- |
-| `image.registry`                        | NodeJS image registry                                                                     | `docker.io`            |
-| `image.repository`                      | NodeJS image repository                                                                   | `bitnami/node`         |
-| `image.tag`                             | NodeJS image tag (immutable tags are recommended)                                         | `14.17.6-debian-10-r0` |
-| `image.pullPolicy`                      | NodeJS image pull policy                                                                  | `IfNotPresent`         |
-| `image.pullSecrets`                     | Specify docker-registry secret names as an array                                          | `[]`                   |
-| `replicaCount`                          | Specify the number of replicas for the application                                        | `1`                    |
-| `applicationPort`                       | Specify the port where your application will be running                                   | `3000`                 |
-| `podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                   |
-| `podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`                 |
-| `nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                   |
-| `nodeAffinityPreset.key`                | Node label key to match Ignored if `affinity` is set.                                     | `""`                   |
-| `nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set.                                 | `[]`                   |
-| `affinity`                              | Affinity for pod assignment. Evaluated as a template.                                     | `{}`                   |
-| `nodeSelector`                          | Node labels for pod assignment. Evaluated as a template.                                  | `{}`                   |
-| `tolerations`                           | Tolerations for pod assignment. Evaluated as a template.                                  | `{}`                   |
-| `podAnnotations`                        | Additional pod annotations                                                                | `{}`                   |
-| `podLabels`                             | Additional labels for Node pods                                                           | `{}`                   |
-| `extraDeploy`                           | Array of extra objects to deploy with the release (evaluated as a template)               | `[]`                   |
-| `livenessProbe.enabled`                 | Enable livenessProbe                                                                      | `true`                 |
-| `livenessProbe.path`                    | Request path for livenessProbe                                                            | `/`                    |
-| `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                   | `60`                   |
-| `livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                          | `10`                   |
-| `livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                         | `5`                    |
-| `livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                       | `6`                    |
-| `livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                       | `1`                    |
-| `readinessProbe.enabled`                | Enable readinessProbe                                                                     | `true`                 |
-| `readinessProbe.path`                   | Request path for readinessProbe                                                           | `/`                    |
-| `readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                  | `10`                   |
-| `readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                         | `5`                    |
-| `readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                        | `3`                    |
-| `readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                      | `3`                    |
-| `readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                      | `1`                    |
-| `customLivenessProbe`                   | Override default liveness probe                                                           | `{}`                   |
-| `customReadinessProbe`                  | Override default readiness probe                                                          | `{}`                   |
-| `priorityClassName`                     | Node priorityClassName                                                                    | `""`                   |
-| `lifecycleHooks`                        | lifecycleHooks for the Node container to automate configuration before or after startup.  | `{}`                   |
-| `sidecars`                              | Add sidecars to the Node pods                                                             | `[]`                   |
-| `initContainers`                        | Add init containers to the Node pods                                                      | `[]`                   |
-| `extraVolumes`                          | Extra volumes to add to the deployment                                                    | `[]`                   |
-| `extraVolumeMounts`                     | Extra volume mounts to add to the container                                               | `[]`                   |
-| `containerSecurityContext.enabled`      | Node Container securityContext                                                            | `true`                 |
-| `containerSecurityContext.runAsUser`    | User ID for the Node container                                                            | `1001`                 |
-| `containerSecurityContext.runAsNonRoot` | Set container's Security Context runAsNonRoot                                             | `true`                 |
-| `podSecurityContext.enabled`            | Enable security context for Node pods                                                     | `true`                 |
-| `podSecurityContext.fsGroup`            | Group ID for the volumes of the pod                                                       | `1001`                 |
-| `resources.limits`                      | The resources limits for the Node container                                               | `{}`                   |
-| `resources.requests`                    | The requested resources for the Node container                                            | `{}`                   |
+| Name                                          | Description                                                                               | Value                  |
+| --------------------------------------------- | ----------------------------------------------------------------------------------------- | ---------------------- |
+| `image.registry`                              | NodeJS image registry                                                                     | `docker.io`            |
+| `image.repository`                            | NodeJS image repository                                                                   | `bitnami/node`         |
+| `image.tag`                                   | NodeJS image tag (immutable tags are recommended)                                         | `16.13.1-debian-10-r0` |
+| `image.pullPolicy`                            | NodeJS image pull policy                                                                  | `IfNotPresent`         |
+| `image.pullSecrets`                           | Specify docker-registry secret names as an array                                          | `[]`                   |
+| `replicaCount`                                | Specify the number of replicas for the application                                        | `1`                    |
+| `applicationPort`                             | Specify the port where your application will be running                                   | `3000`                 |
+| `podAffinityPreset`                           | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                   |
+| `podAntiAffinityPreset`                       | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`                 |
+| `nodeAffinityPreset.type`                     | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                   |
+| `nodeAffinityPreset.key`                      | Node label key to match Ignored if `affinity` is set.                                     | `""`                   |
+| `nodeAffinityPreset.values`                   | Node label values to match. Ignored if `affinity` is set.                                 | `[]`                   |
+| `affinity`                                    | Affinity for pod assignment. Evaluated as a template.                                     | `{}`                   |
+| `nodeSelector`                                | Node labels for pod assignment. Evaluated as a template.                                  | `{}`                   |
+| `tolerations`                                 | Tolerations for pod assignment. Evaluated as a template.                                  | `{}`                   |
+| `podAnnotations`                              | Additional pod annotations                                                                | `{}`                   |
+| `podLabels`                                   | Additional labels for Node pods                                                           | `{}`                   |
+| `extraDeploy`                                 | Array of extra objects to deploy with the release (evaluated as a template)               | `[]`                   |
+| `livenessProbe.enabled`                       | Enable livenessProbe                                                                      | `true`                 |
+| `livenessProbe.path`                          | Request path for livenessProbe                                                            | `/`                    |
+| `livenessProbe.initialDelaySeconds`           | Initial delay seconds for livenessProbe                                                   | `60`                   |
+| `livenessProbe.periodSeconds`                 | Period seconds for livenessProbe                                                          | `10`                   |
+| `livenessProbe.timeoutSeconds`                | Timeout seconds for livenessProbe                                                         | `5`                    |
+| `livenessProbe.failureThreshold`              | Failure threshold for livenessProbe                                                       | `6`                    |
+| `livenessProbe.successThreshold`              | Success threshold for livenessProbe                                                       | `1`                    |
+| `readinessProbe.enabled`                      | Enable readinessProbe                                                                     | `true`                 |
+| `readinessProbe.path`                         | Request path for readinessProbe                                                           | `/`                    |
+| `readinessProbe.initialDelaySeconds`          | Initial delay seconds for readinessProbe                                                  | `10`                   |
+| `readinessProbe.periodSeconds`                | Period seconds for readinessProbe                                                         | `5`                    |
+| `readinessProbe.timeoutSeconds`               | Timeout seconds for readinessProbe                                                        | `3`                    |
+| `readinessProbe.failureThreshold`             | Failure threshold for readinessProbe                                                      | `3`                    |
+| `readinessProbe.successThreshold`             | Success threshold for readinessProbe                                                      | `1`                    |
+| `customLivenessProbe`                         | Override default liveness probe                                                           | `{}`                   |
+| `customReadinessProbe`                        | Override default readiness probe                                                          | `{}`                   |
+| `priorityClassName`                           | Node priorityClassName                                                                    | `""`                   |
+| `lifecycleHooks`                              | lifecycleHooks for the Node container to automate configuration before or after startup.  | `{}`                   |
+| `sidecars`                                    | Add sidecars to the Node pods                                                             | `[]`                   |
+| `initContainers`                              | Add init containers to the Node pods                                                      | `[]`                   |
+| `extraVolumes`                                | Extra volumes to add to the deployment                                                    | `[]`                   |
+| `extraVolumeMounts`                           | Extra volume mounts to add to the container                                               | `[]`                   |
+| `serviceAccount.create`                       | Enable creation of ServiceAccount for node pod                                            | `false`                |
+| `serviceAccount.name`                         | The name of the ServiceAccount to use.                                                    | `""`                   |
+| `serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template.                                 | `{}`                   |
+| `serviceAccount.automountServiceAccountToken` | Whether to auto mount the service account token                                           | `false`                |
+| `containerSecurityContext.enabled`            | Node Container securityContext                                                            | `true`                 |
+| `containerSecurityContext.runAsUser`          | User ID for the Node container                                                            | `1001`                 |
+| `containerSecurityContext.runAsNonRoot`       | Set container's Security Context runAsNonRoot                                             | `true`                 |
+| `podSecurityContext.enabled`                  | Enable security context for Node pods                                                     | `true`                 |
+| `podSecurityContext.fsGroup`                  | Group ID for the volumes of the pod                                                       | `1001`                 |
+| `resources.limits`                            | The resources limits for the Node container                                               | `{}`                   |
+| `resources.requests`                          | The requested resources for the Node container                                            | `{}`                   |
 
 
 ### Node application parameters
@@ -153,7 +157,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------ | --------------------------------------------------- | -------------------------------------------- |
 | `git.image.registry`           | Git image registry                                  | `docker.io`                                  |
 | `git.image.repository`         | Git image repository                                | `bitnami/git`                                |
-| `git.image.tag`                | Git image tag (immutable tags are recommended)      | `2.33.0-debian-10-r14`                       |
+| `git.image.tag`                | Git image tag (immutable tags are recommended)      | `2.34.1-debian-10-r5`                        |
 | `git.image.pullPolicy`         | Git image pull policy                               | `IfNotPresent`                               |
 | `git.image.pullSecrets`        | Specify docker-registry secret names as an array    | `[]`                                         |
 | `git.extraVolumeMounts`        | Add extra volume mounts for the Git container       | `[]`                                         |
@@ -169,8 +173,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory  | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                             | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image repository                           | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended) | `10-debian-10-r178`     |
-| `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                          | `Always`                |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended) | `10-debian-10-r266`     |
+| `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                          | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                             | `[]`                    |
 | `volumePermissions.resources.limits`   | The resources limits for the container                                       | `{}`                    |
 | `volumePermissions.resources.requests` | The requested resources for the container                                    | `{}`                    |
@@ -189,31 +193,30 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Traffic exposure parameters
 
-| Name                               | Description                                                                                                | Value                    |
-| ---------------------------------- | ---------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `service.type`                     | Kubernetes Service type                                                                                    | `ClusterIP`              |
-| `service.port`                     | Kubernetes Service port                                                                                    | `80`                     |
-| `service.clusterIP`                | Service Cluster IP                                                                                         | `""`                     |
-| `service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin                                           | `None`                   |
-| `service.nodePort`                 | NodePort if Service type is `LoadBalancer` or `NodePort`                                                   | `""`                     |
-| `service.loadBalancerIP`           | LoadBalancer IP if Service type is `LoadBalancer`                                                          | `""`                     |
-| `service.loadBalancerSourceRanges` | In order to limit which client IP's can access the Network Load Balancer, specify loadBalancerSourceRanges | `[]`                     |
-| `service.annotations`              | Annotations for the Service                                                                                | `{}`                     |
-| `ingress.enabled`                  | Set to true to enable ingress record generation                                                            | `false`                  |
-| `ingress.certManager`              | Set this to true in order to add the corresponding annotations for cert-manager                            | `false`                  |
-| `ingress.pathType`                 | Ingress path type                                                                                          | `ImplementationSpecific` |
-| `ingress.apiVersion`               | Override API Version (automatically detected if not set)                                                   | `""`                     |
-| `ingress.hostname`                 | When the ingress is enabled, a host pointing to this will be created                                       | `node.local`             |
-| `ingress.path`                     | The Path to Node.js. You may need to set this to '/*' in order to use this with ALB ingress controllers.   | `/`                      |
-| `ingress.annotations`              | Ingress annotations                                                                                        | `{}`                     |
-| `ingress.tls`                      | Enable TLS configuration for the hostname defined at ingress.hostname parameter                            | `false`                  |
-| `ingress.extraHosts`               | The list of additional hostnames to be covered with this ingress record.                                   | `[]`                     |
-| `ingress.extraPaths`               | Any additional arbitrary paths that may need to be added to the ingress under the main host.               | `[]`                     |
-| `ingress.extraTls`                 | The tls configuration for additional hostnames to be covered with this ingress record.                     | `[]`                     |
-| `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets              | `[]`                     |
+| Name                               | Description                                                                                                                      | Value                    |
+| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.type`                     | Kubernetes Service type                                                                                                          | `ClusterIP`              |
+| `service.port`                     | Kubernetes Service port                                                                                                          | `80`                     |
+| `service.clusterIP`                | Service Cluster IP                                                                                                               | `""`                     |
+| `service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin                                                                 | `None`                   |
+| `service.nodePort`                 | NodePort if Service type is `LoadBalancer` or `NodePort`                                                                         | `""`                     |
+| `service.loadBalancerIP`           | LoadBalancer IP if Service type is `LoadBalancer`                                                                                | `""`                     |
+| `service.loadBalancerSourceRanges` | In order to limit which client IP's can access the Network Load Balancer, specify loadBalancerSourceRanges                       | `[]`                     |
+| `service.annotations`              | Annotations for the Service                                                                                                      | `{}`                     |
+| `ingress.enabled`                  | Set to true to enable ingress record generation                                                                                  | `false`                  |
+| `ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.apiVersion`               | Override API Version (automatically detected if not set)                                                                         | `""`                     |
+| `ingress.hostname`                 | When the ingress is enabled, a host pointing to this will be created                                                             | `node.local`             |
+| `ingress.path`                     | The Path to Node.js. You may need to set this to '/*' in order to use this with ALB ingress controllers.                         | `/`                      |
+| `ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.tls`                      | Enable TLS configuration for the hostname defined at ingress.hostname parameter                                                  | `false`                  |
+| `ingress.extraHosts`               | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
+| `ingress.extraPaths`               | Any additional arbitrary paths that may need to be added to the ingress under the main host.                                     | `[]`                     |
+| `ingress.extraTls`                 | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
+| `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
 
 
-The above parameters map to the env variables defined in [bitnami/node](http://github.com/bitnami/bitnami-docker-node). For more information please refer to the [bitnami/node](http://github.com/bitnami/bitnami-docker-node) image documentation.
+The above parameters map to the env variables defined in [bitnami/node](https://github.com/bitnami/bitnami-docker-node). For more information please refer to the [bitnami/node](https://github.com/bitnami/bitnami-docker-node) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -344,8 +347,6 @@ Deploying the helm chart enabling the Azure external database makes the followin
 - You would want an Azure CosmosDB MongoDB&reg; database
 - Your application uses DATABASE_HOST, DATABASE_PORT, DATABASE_USER, DATABASE_PASSWORD, and DATABASE_NAME environment variables to connect to the database.
 
-You can read more about the kubernetes service catalog at https://github.com/kubernetes-bitnami/service-catalog
-
 ## Persistence
 
 The [Bitnami Node](https://github.com/bitnami/bitnami-docker-node) image stores the Node application and configurations at the `/app`  path of the container.
@@ -424,3 +425,27 @@ Use the workaround below to upgrade from versions previous to 6.0.0. The followi
 $ kubectl patch deployment node --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
 $ kubectl patch deployment node-mongodb --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
 ```
+
+## Community supported solution
+
+Please, note this Helm chart is a community-supported solution. This means that the Bitnami team is not actively working on new features/improvements nor providing support through GitHub Issues for this Helm chart. Any new issue will stay open for 20 days to allow the community to contribute, after 15 days without activity the issue will be marked as stale being closed after 5 days.
+
+The Bitnami team will review any PR that is created, feel free to create a PR if you find any issue or want to implement a new feature.
+
+New versions are not going to be affected. Once a new version is released in the upstream project, the Bitnami container image will be updated to use the latest version.
+
+## License
+
+Copyright &copy; 2022 Bitnami
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
