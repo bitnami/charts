@@ -71,14 +71,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Osclass Image parameters
 
-| Name                | Description                                        | Value                |
-| ------------------- | -------------------------------------------------- | -------------------- |
-| `image.registry`    | Osclass image registry                             | `docker.io`          |
-| `image.repository`  | Osclass image repository                           | `bitnami/osclass`    |
-| `image.tag`         | Osclass image tag (immutable tags are recommended) | `8.0.0-debian-10-r0` |
-| `image.pullPolicy`  | Osclass image pull policy                          | `IfNotPresent`       |
-| `image.pullSecrets` | Osclass image pull secrets                         | `[]`                 |
-| `image.debug`       | Enable Bitnami debug mode in Osclass image         | `false`              |
+| Name                | Description                                        | Value                 |
+| ------------------- | -------------------------------------------------- | --------------------- |
+| `image.registry`    | Osclass image registry                             | `docker.io`           |
+| `image.repository`  | Osclass image repository                           | `bitnami/osclass`     |
+| `image.tag`         | Osclass image tag (immutable tags are recommended) | `8.0.0-debian-10-r25` |
+| `image.pullPolicy`  | Osclass image pull policy                          | `IfNotPresent`        |
+| `image.pullSecrets` | Osclass image pull secrets                         | `[]`                  |
+| `image.debug`       | Enable Bitnami debug mode in Osclass image         | `false`               |
 
 
 ### Osclass Configuration parameters
@@ -109,6 +109,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `containerSecurityContext.enabled`                   | Enabled Osclass containers' Security Context                                              | `true`                                   |
 | `containerSecurityContext.runAsUser`                 | Set Osclass container's Security Context runAsUser                                        | `1001`                                   |
 | `containerSecurityContext.runAsNonRoot`              | Set Osclass container's Security Context runAsNonRoot                                     | `true`                                   |
+| `startupProbe.enabled`                               | Enable startupProbe                                                                       | `false`                                  |
+| `startupProbe.path`                                  | Path for the HTTP probe                                                                   | `/oc-admin`                              |
+| `startupProbe.initialDelaySeconds`                   | Initial delay seconds for startupProbe                                                    | `600`                                    |
+| `startupProbe.periodSeconds`                         | Period seconds for startupProbe                                                           | `10`                                     |
+| `startupProbe.timeoutSeconds`                        | Timeout seconds for startupProbe                                                          | `5`                                      |
+| `startupProbe.failureThreshold`                      | Failure threshold for startupProbe                                                        | `5`                                      |
+| `startupProbe.successThreshold`                      | Success threshold for startupProbe                                                        | `1`                                      |
 | `livenessProbe.enabled`                              | Enable livenessProbe                                                                      | `true`                                   |
 | `livenessProbe.path`                                 | Path for the HTTP probe                                                                   | `/oc-admin`                              |
 | `livenessProbe.initialDelaySeconds`                  | Initial delay seconds for livenessProbe                                                   | `600`                                    |
@@ -123,6 +130,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `readinessProbe.timeoutSeconds`                      | Timeout seconds for readinessProbe                                                        | `1`                                      |
 | `readinessProbe.failureThreshold`                    | Failure threshold for readinessProbe                                                      | `5`                                      |
 | `readinessProbe.successThreshold`                    | Success threshold for readinessProbe                                                      | `1`                                      |
+| `customStartupProbe`                                 | Custom livenessProbe that overrides the default one                                       | `{}`                                     |
 | `customLivenessProbe`                                | Custom livenessProbe that overrides the default one                                       | `{}`                                     |
 | `customReadinessProbe`                               | Custom readinessProbe that overrides the default one                                      | `{}`                                     |
 | `certificates.customCertificate.certificateSecret`   | name of the secret with custom certificates                                               | `""`                                     |
@@ -139,15 +147,15 @@ The command removes all the Kubernetes components associated with the chart and 
 | `certificates.extraEnvVarsSecret`                    | Secret with extra environment variables                                                   | `""`                                     |
 | `certificates.image.registry`                        | Apache Exporter image registry                                                            | `docker.io`                              |
 | `certificates.image.repository`                      | Apache Exporter image repository                                                          | `bitnami/bitnami-shell`                  |
-| `certificates.image.tag`                             | Apache Exporter image tag (immutable tags are recommended)                                | `10-debian-10-r255`                      |
+| `certificates.image.tag`                             | Apache Exporter image tag (immutable tags are recommended)                                | `10-debian-10-r282`                      |
 | `certificates.image.pullPolicy`                      | Apache Exporter image pull policy                                                         | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Apache Exporter image pull secrets                                                        | `[]`                                     |
 | `lifecycleHooks`                                     | lifecycleHooks for the container to automate configuration before or after startup.       | `{}`                                     |
 | `podAnnotations`                                     | Annotations for Osclass pods                                                              | `{}`                                     |
 | `podLabels`                                          | Extra labels for Osclass pods                                                             | `{}`                                     |
 | `replicaCount`                                       | Number of Osclass replicas to deploy                                                      | `1`                                      |
-| `containerPorts.http`                                | WordPress HTTP container port                                                             | `8080`                                   |
-| `containerPorts.https`                               | WordPress HTTPS container port                                                            | `8443`                                   |
+| `containerPorts.http`                                | Osclass HTTP container port                                                               | `8080`                                   |
+| `containerPorts.https`                               | Osclass HTTPS container port                                                              | `8443`                                   |
 | `command`                                            | Override default container command (useful when using custom images)                      | `[]`                                     |
 | `args`                                               | Override default container args (useful when using custom images)                         | `[]`                                     |
 | `updateStrategy.type`                                | Osclass deployment strategy type                                                          | `RollingUpdate`                          |
@@ -169,19 +177,25 @@ The command removes all the Kubernetes components associated with the chart and 
 | `resources.limits`                                   | The resources limits for the Osclass container                                            | `{}`                                     |
 | `resources.requests`                                 | The requested resources for the Osclass container                                         | `{}`                                     |
 | `tolerations`                                        | Tolerations for pod assignment                                                            | `[]`                                     |
+| `priorityClassName`                                  | Osclass pods' priorityClassName                                                           | `""`                                     |
+| `schedulerName`                                      | Name of the k8s scheduler (other than default)                                            | `""`                                     |
+| `topologySpreadConstraints`                          | Topology Spread Constraints for pod assignment                                            | `[]`                                     |
 
 
 ### Traffic Exposure Parameters
 
 | Name                               | Description                                                                                                                      | Value                    |
 | ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `service.type`                     | WordPress service type                                                                                                           | `LoadBalancer`           |
-| `service.port`                     | WordPress service HTTP port                                                                                                      | `80`                     |
-| `service.httpsPort`                | WordPress service HTTPS port                                                                                                     | `443`                    |
-| `service.clusterIP`                | WordPress service Cluster IP                                                                                                     | `""`                     |
+| `service.type`                     | Osclass service type                                                                                                             | `LoadBalancer`           |
+| `service.ports.http`               | Osclass service HTTP port                                                                                                        | `80`                     |
+| `service.ports.https`              | Osclass service HTTPS port                                                                                                       | `443`                    |
+| `service.clusterIP`                | Osclass service Cluster IP                                                                                                       | `""`                     |
 | `service.loadBalancerIP`           | Osclass service Load Balancer IP                                                                                                 | `""`                     |
 | `service.loadBalancerSourceRanges` | Osclass service Load Balancer sources                                                                                            | `[]`                     |
+| `service.extraPorts`               | Extra ports to expose (normally used with the `sidecar` value)                                                                   | `[]`                     |
+| `service.annotations`              | Additional custom annotations for Osclass service                                                                                | `{}`                     |
 | `service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin                                                                 | `None`                   |
+| `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
 | `service.nodePorts.http`           | Node port for HTTP                                                                                                               | `""`                     |
 | `service.nodePorts.https`          | Node port for HTTPS                                                                                                              | `""`                     |
 | `service.externalTrafficPolicy`    | Osclass service external traffic policy                                                                                          | `Cluster`                |
@@ -196,6 +210,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.extraPaths`               | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |
 | `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
 | `ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
+| `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
 
 
 ### Database Parameters
@@ -207,6 +222,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.user`                    | External Database username                                                                      | `bn_osclass`            |
 | `externalDatabase.password`                | External Database user password                                                                 | `""`                    |
 | `externalDatabase.database`                | External Database database name                                                                 | `bitnami_osclass`       |
+| `externalDatabase.existingSecret`          | Name of an existing secret resource containing the DB password                                  | `""`                    |
 | `mariadb.enabled`                          | Deploy a MariaDB server to satisfy the applications database requirements                       | `true`                  |
 | `mariadb.architecture`                     | MariaDB architecture. Allowed values: `standalone` or `replication`                             | `standalone`            |
 | `mariadb.auth.rootPassword`                | MariaDB root password                                                                           | `""`                    |
@@ -223,10 +239,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.size`                         | Persistent Volume size                                                                          | `8Gi`                   |
 | `persistence.existingClaim`                | The name of an existing PVC to use for persistence                                              | `""`                    |
 | `persistence.hostPath`                     | If defined, the osclass-data volume will mount to the specified hostPath.                       | `""`                    |
+| `persistence.annotations`                  | Persistent Volume Claim annotations                                                             | `{}`                    |
 | `volumePermissions.enabled`                | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`         | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`       | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`              | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r255`     |
+| `volumePermissions.image.tag`              | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r282`     |
 | `volumePermissions.image.pullPolicy`       | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`      | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`       | The resources limits for the init container                                                     | `{}`                    |
@@ -249,27 +266,30 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Metrics Parameters
 
-| Name                                      | Description                                                                  | Value                     |
-| ----------------------------------------- | ---------------------------------------------------------------------------- | ------------------------- |
-| `metrics.enabled`                         | Start a sidecar prometheus exporter to expose metrics                        | `false`                   |
-| `metrics.image.registry`                  | Apache Exporter image registry                                               | `docker.io`               |
-| `metrics.image.repository`                | Apache Exporter image repository                                             | `bitnami/apache-exporter` |
-| `metrics.image.tag`                       | Apache Exporter image tag (immutable tags are recommended)                   | `0.10.1-debian-10-r57`    |
-| `metrics.image.pullPolicy`                | Apache Exporter image pull policy                                            | `IfNotPresent`            |
-| `metrics.image.pullSecrets`               | Apache Exporter image pull secrets                                           | `[]`                      |
-| `metrics.resources.limits`                | The resources limits for the Prometheus exporter container                   | `{}`                      |
-| `metrics.resources.requests`              | The requested resources for the Prometheus exporter container                | `{}`                      |
-| `metrics.podAnnotations`                  | Annotations to add                                                           | `{}`                      |
-| `metrics.service.type`                    | Metrics service type                                                         | `ClusterIP`               |
-| `metrics.service.port`                    | Metrics service port                                                         | `9117`                    |
-| `metrics.service.annotations`             | Additional custom annotations for Metrics service                            | `{}`                      |
-| `metrics.serviceMonitor.enabled`          | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator | `false`                   |
-| `metrics.serviceMonitor.namespace`        | The namespace in which the ServiceMonitor will be created                    | `""`                      |
-| `metrics.serviceMonitor.interval`         | The interval at which metrics should be scraped                              | `30s`                     |
-| `metrics.serviceMonitor.scrapeTimeout`    | The timeout after which the scrape is ended                                  | `""`                      |
-| `metrics.serviceMonitor.relabellings`     | Metrics relabellings to add to the scrape endpoint                           | `[]`                      |
-| `metrics.serviceMonitor.honorLabels`      | Labels to honor to add to the scrape endpoint                                | `false`                   |
-| `metrics.serviceMonitor.additionalLabels` | Additional custom labels for the ServiceMonitor                              | `{}`                      |
+| Name                                       | Description                                                                       | Value                     |
+| ------------------------------------------ | --------------------------------------------------------------------------------- | ------------------------- |
+| `metrics.enabled`                          | Start a sidecar prometheus exporter to expose metrics                             | `false`                   |
+| `metrics.image.registry`                   | Apache Exporter image registry                                                    | `docker.io`               |
+| `metrics.image.repository`                 | Apache Exporter image repository                                                  | `bitnami/apache-exporter` |
+| `metrics.image.tag`                        | Apache Exporter image tag (immutable tags are recommended)                        | `0.10.1-debian-10-r84`    |
+| `metrics.image.pullPolicy`                 | Apache Exporter image pull policy                                                 | `IfNotPresent`            |
+| `metrics.image.pullSecrets`                | Apache Exporter image pull secrets                                                | `[]`                      |
+| `metrics.resources.limits`                 | The resources limits for the Prometheus exporter container                        | `{}`                      |
+| `metrics.resources.requests`               | The requested resources for the Prometheus exporter container                     | `{}`                      |
+| `metrics.podAnnotations`                   | Annotations to add                                                                | `{}`                      |
+| `metrics.service.type`                     | Metrics service type                                                              | `ClusterIP`               |
+| `metrics.service.port`                     | Metrics service port                                                              | `9117`                    |
+| `metrics.service.annotations`              | Additional custom annotations for Metrics service                                 | `{}`                      |
+| `metrics.serviceMonitor.enabled`           | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator      | `false`                   |
+| `metrics.serviceMonitor.namespace`         | The namespace in which the ServiceMonitor will be created                         | `""`                      |
+| `metrics.serviceMonitor.interval`          | The interval at which metrics should be scraped                                   | `30s`                     |
+| `metrics.serviceMonitor.scrapeTimeout`     | The timeout after which the scrape is ended                                       | `""`                      |
+| `metrics.serviceMonitor.relabelings`       | RelabelConfigs to apply to samples before scraping                                | `[]`                      |
+| `metrics.serviceMonitor.metricRelabelings` | MetricRelabelConfigs to apply to samples before ingestion                         | `[]`                      |
+| `metrics.serviceMonitor.honorLabels`       | Labels to honor to add to the scrape endpoint                                     | `false`                   |
+| `metrics.serviceMonitor.selector`          | ServiceMonitor selector labels                                                    | `{}`                      |
+| `metrics.serviceMonitor.labels`            | Extra labels for the ServiceMonitor                                               | `{}`                      |
+| `metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in prometheus. | `""`                      |
 
 
 ### NetworkPolicy parameters
@@ -389,7 +409,7 @@ Find more information about how to deal with common errors related to Bitnami’
 
 ## Upgrading
 
-### To 12.0.0
+### To 13.0.0
 
 This major release renames several values in this chart and adds missing features, in order to be inline with the rest of assets in the Bitnami charts repository.
 
@@ -397,9 +417,9 @@ Affected values:
 
 - `service.port` was deprecated. We recommend using `service.ports.http` instead.
 - `service.httpsPort` was deprecated. We recommend using `service.ports.https` instead.
-- `metrics.serviceMonitor.additionalLabels` renamed as `metrics.serviceMonitor.selector`.
+- `metrics.serviceMonitor.additionalLabels` renamed as `metrics.serviceMonitor.labels`.
 
-Additionally updates the MariaDB subchart to it newest major, 10.0.0, which contains similar changes.
+Additionally updates the MariaDB subchart to it newest major, 10.0.0, which contains similar changes. Check [MariaDB Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#to-1000) for more information.
 
 ### To 10.0.0
 
