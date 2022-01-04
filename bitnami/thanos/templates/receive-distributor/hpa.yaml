@@ -1,0 +1,35 @@
+{{- if and .Values.receiveDistributor.enabled .Values.receiveDistributor.autoscaling.enabled }}
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "common.names.fullname" . }}-receive-distributor
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: receive
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  scaleTargetRef:
+    apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
+    kind: Deployment
+    name: {{ include "common.capabilities.deployment.apiVersion" . }}
+  minReplicas: {{ .Values.receiveDistributor.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.receiveDistributor.autoscaling.maxReplicas }}
+  metrics:
+    {{- if .Values.receiveDistributor.autoscaling.targetMemory }}
+    - type: Resource
+      resource:
+        name: memory
+        targetAverageUtilization: {{ .Values.receiveDistributor.autoscaling.targetMemory  }}
+    {{- end }}
+    {{- if .Values.receiveDistributor.autoscaling.targetCPU }}
+    - type: Resource
+      resource:
+        name: cpu
+        targetAverageUtilization: {{ .Values.receiveDistributor.autoscaling.targetCPU }}
+    {{- end }}
+{{- end }}

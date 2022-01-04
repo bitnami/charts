@@ -2,9 +2,11 @@
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
 ## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
+## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
 global:
   imageRegistry: ""
@@ -13,8 +15,10 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  storageClass: ""
 
 ## @section Common parameters
+##
 
 ## @param kubeVersion Override Kubernetes version
 ##
@@ -39,6 +43,7 @@ clusterDomain: cluster.local
 extraDeploy: []
 
 ## @section ASP.NET Core parameters
+##
 
 ## Bitnami ASP.NET Core image
 ## ref: https://hub.docker.com/r/bitnami/aspnet-core/tags/
@@ -47,14 +52,15 @@ extraDeploy: []
 ## @param image.tag ASP.NET Core image tag (immutable tags are recommended)
 ## @param image.pullPolicy ASP.NET Core image pull policy
 ## @param image.pullSecrets ASP.NET Core image pull secrets
+## @param image.debug Enable image debug mode
 ##
 image:
   registry: docker.io
   repository: bitnami/aspnet-core
-  tag: 3.1.19-debian-10-r0
+  tag: 3.1.22-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -65,6 +71,7 @@ image:
   ##   - myRegistryKeySecretName
   ##
   pullSecrets: []
+  debug: false
 ## @param command Override default container command (useful when using custom images)
 ##
 command: []
@@ -89,18 +96,24 @@ extraEnvVarsCM: ""
 extraEnvVarsSecret: ""
 
 ## @section ASP.NET Core deployment parameters
+##
 
 ## @param replicaCount Number of ASP.NET Core replicas to deploy
 ##
 replicaCount: 1
-## @param strategyType ASP.NET Core deployment strategy type. Set it to `RollingUpdate` or `Recreate`
-## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+## @param schedulerName Name of the k8s scheduler (other than default)
+## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
 ##
-strategyType: RollingUpdate
+schedulerName: ""
 ## @param priorityClassName ASP.NET Core pod priority class name
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/
 ##
 priorityClassName: ""
+## @param topologySpreadConstraints Topology Spread Constraints for pod assignment
+## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+## The value is evaluated as a template
+##
+topologySpreadConstraints: []
 ## @param hostAliases ASP.NET Core pod host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
@@ -150,6 +163,20 @@ lifecycleHooks: {}
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
 podAnnotations: {}
+## @param podLabels Extra labels for ASP.NET Core pods
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+##
+podLabels: {}
+
+## @param updateStrategy.type Deployment strategy type
+## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+##
+updateStrategy:
+  ## StrategyType
+  ## Can be set to RollingUpdate or OnDelete
+  ##
+  type: RollingUpdate
+
 ## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ##
@@ -189,7 +216,7 @@ nodeSelector: {}
 ##
 tolerations: []
 ## ASP.NET Core containers' resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## ref: https://kubernetes.io/docs/user-guide/compute-resources/
 ## We usually recommend not to specify default resources and to leave this as a conscious
 ## choice for the user. This also increases chances charts run on environments with little
 ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -202,19 +229,23 @@ resources:
   ## limits:
   ##    cpu: 100m
   ##    memory: 128Mi
+  ##
   limits: {}
   ## Examples:
   ## requests:
   ##    cpu: 100m
   ##    memory: 128Mi
+  ##
   requests: {}
-## @param containerPort Port to expose at ASP.NET Core container level
+## @param containerPorts.http Port to expose at ASP.NET Core container level
 ##
-containerPort: 8080
+containerPorts:
+  http: 8080
 ## Configure Pods Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param podSecurityContext.enabled Enabled ASP.NET Core pods' Security Context
 ## @param podSecurityContext.sysctls Set namespaced sysctls for the ASP.NET Core pods
+## @param podSecurityContext.fsGroup Set Security Context fsGroup
 ##
 podSecurityContext:
   enabled: false
@@ -224,14 +255,17 @@ podSecurityContext:
   ##     value: "10000"
   ##
   sysctls: []
+  fsGroup: 0
 ## Configure Container Security Context (only main container)
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ## @param containerSecurityContext.enabled Enabled ASP.NET Core containers' Security Context
 ## @param containerSecurityContext.runAsUser Set ASP.NET Core container's Security Context runAsUser
+## @param containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
 ##
 containerSecurityContext:
   enabled: false
   runAsUser: 0
+  runAsNonRoot: false
 ## Configure extra options for ASP.NET Core containers' liveness and readiness probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param livenessProbe.enabled Enable livenessProbe
@@ -262,9 +296,28 @@ readinessProbe:
   periodSeconds: 20
   failureThreshold: 6
   successThreshold: 1
+## Configure extra options for ASP.NET Core containers' startup and readiness probes
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-startup-readiness-probes/#configure-probes
+## @param startupProbe.enabled Enable startupProbe
+## @param startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+## @param startupProbe.periodSeconds Period seconds for startupProbe
+## @param startupProbe.timeoutSeconds Timeout seconds for startupProbe
+## @param startupProbe.failureThreshold Failure threshold for startupProbe
+## @param startupProbe.successThreshold Success threshold for startupProbe
+##
+startupProbe:
+  enabled: false
+  initialDelaySeconds: 10
+  timeoutSeconds: 1
+  periodSeconds: 20
+  failureThreshold: 6
+  successThreshold: 1
 ## @param customLivenessProbe Custom livenessProbe that overrides the default one
 ##
 customLivenessProbe: {}
+## @param customStartupProbe Custom startupProbe that overrides the default one
+##
+customStartupProbe: {}
 ## @param customReadinessProbe Custom readinessProbe that overrides the default one
 ##
 customReadinessProbe: {}
@@ -293,6 +346,7 @@ autoscaling:
   targetMemory: ""
 
 ## @section Custom ASP.NET Core application parameters
+##
 
 ## Enable to download/build ASP.NET Core app from external git repository.
 ## Do not enable it if your docker image already includes your application
@@ -313,10 +367,10 @@ appFromExternalRepo:
     image:
       registry: docker.io
       repository: bitnami/git
-      tag: 2.33.0-debian-10-r28
+      tag: 2.34.1-debian-10-r18
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-      ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+      ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
       ##
       pullPolicy: IfNotPresent
       ## Optionally specify an array of imagePullSecrets.
@@ -353,10 +407,10 @@ appFromExternalRepo:
     image:
       registry: docker.io
       repository: bitnami/dotnet-sdk
-      tag: 3.1.412-debian-10-r33
+      tag: 3.1.416-debian-10-r0
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-      ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+      ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
       ##
       pullPolicy: IfNotPresent
       ## Optionally specify an array of imagePullSecrets.
@@ -388,6 +442,7 @@ appFromExistingPVC:
   existingClaim: ""
 
 ## @section Traffic Exposure Parameters
+##
 
 ## ASP.NET Core Service parameters.
 ##
@@ -395,18 +450,23 @@ service:
   ## @param service.type ASP.NET Core service type
   ##
   type: ClusterIP
-  ## @param service.port ASP.NET Core service HTTP port
+  ## @param service.ports.http ASP.NET Core service HTTP port
   ##
-  port: 80
-  ## @param service.nodePort Node ports to expose
+  ports:
+    http: 80
+  ## @param service.nodePorts.http Node ports to expose
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ##
-  nodePort: ""
+  nodePorts:
+    http: ""
   ## @param service.clusterIP ASP.NET Core service Cluster IP
   ## e.g.:
   ## clusterIP: None
   ##
   clusterIP: ""
+  ## @param service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
+  ##
+  extraPorts: []
   ## @param service.loadBalancerIP ASP.NET Core service Load Balancer IP
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
   ##
@@ -419,14 +479,14 @@ service:
   ##
   loadBalancerSourceRanges: []
   ## @param service.externalTrafficPolicy ASP.NET Core service external traffic policy
-  ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+  ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
   externalTrafficPolicy: Cluster
   ## @param service.annotations Additional custom annotations for ASP.NET Core service
   ##
   annotations: {}
 ## Configure the ingress resource that allows you to access the ASP.NET Core app
-## ref: http://kubernetes.io/docs/user-guide/ingress/
+## ref: https://kubernetes.io/docs/user-guide/ingress/
 ##
 ingress:
   ## @param ingress.enabled Enable ingress record generation for ASP.NET Core
@@ -444,20 +504,43 @@ ingress:
   ## @param ingress.path Default path for the ingress record
   ##
   path: /
-  ## @param ingress.annotations Additional custom annotations for the ingress record
-  ## NOTE: If `ingress.certManager=true`, annotation `kubernetes.io/tls-acme: "true"` will automatically be added
+  ## @param ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
+  ## For a full list of possible ingress annotations, please see
+  ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+  ## Use this parameter to set the required annotations for cert-manager, see
+  ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
+  ##
+  ## e.g:
+  ## annotations:
+  ##   kubernetes.io/ingress.class: nginx
+  ##   cert-manager.io/cluster-issuer: cluster-issuer-name
   ##
   annotations: {}
   ## @param ingress.tls Enable TLS configuration for the host defined at `ingress.hostname` parameter
   ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.ingress.hostname }}`
   ## You can:
   ##   - Use the `ingress.secrets` parameter to create this TLS secret
-  ##   - Relay on cert-manager to create it by setting `ingress.certManager=true`
+  ##   - Relay on cert-manager to create it by setting the corresponding annotations
   ##
   tls: false
-  ## @param ingress.certManager Add the corresponding annotations for cert-manager integration
+  ## @param ingress.extraPaths Any additional arbitrary paths that may need to be added to the ingress under the main host.
+  ## For example: The ALB ingress controller requires a special rule for handling SSL redirection.
+  ## extraPaths:
+  ## - path: /*
+  ##   backend:
+  ##     serviceName: ssl-redirect
+  ##     servicePort: use-annotation
   ##
-  certManager: false
+  extraPaths: []
+  ## @param ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
+  ##
+  selfSigned: false
+  ## @param ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+  ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+  ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+  ##
+  ingressClassName: ""
+
   ## @param ingress.extraHosts An array with additional hostname(s) to be covered with the ingress record
   ## e.g:
   ## extraHosts:
@@ -500,24 +583,39 @@ healthIngress:
   ## @param healthIngress.enabled Enable healthIngress record generation for ASP.NET Core
   ##
   enabled: false
+  ## @param healthIngress.pathType Ingress path type
+  ##
+  pathType: ImplementationSpecific
+  ## @param healthIngress.path Default path for the ingress record
+  ##
+  path: /
   ## @param healthIngress.hostname When the health ingress is enabled, a host pointing to this will be created
   ##
   hostname: aspnet-core.local
-  ## @param healthIngress.annotations Additional custom annotations for the ingress record
-  ## NOTE: If `ingress.certManager=true`, annotation `kubernetes.io/tls-acme: "true"` will automatically be added
+  ## @param healthIngress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
+  ## For a full list of possible ingress annotations, please see
+  ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+  ## Use this parameter to set the required annotations for cert-manager, see
+  ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
+  ##
+  ## e.g:
+  ## annotations:
+  ##   kubernetes.io/ingress.class: nginx
+  ##   cert-manager.io/cluster-issuer: cluster-issuer-name
   ##
   annotations: {}
   ## @param healthIngress.tls Enable TLS configuration for the host defined at `ingress.hostname` parameter
   ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.ingress.hostname }}`
   ## You can:
   ##   - Use the `ingress.secrets` parameter to create this TLS secret
-  ##   - Relay on cert-manager to create it by setting `ingress.certManager=true`
+  ##   - Relay on cert-manager to create it by setting the corresponding annotations
   ##   - Relay on Helm to create self-signed certificates
   ##
   tls: false
-  ## @param healthIngress.certManager Set this to true in order to add the corresponding annotations for cert-manager
+  ## DEPRECATED: Use healthIngress.annotations instead of healthIngress.certManager
+  ## certManager: false
   ##
-  certManager: false
+
   ## @param healthIngress.extraHosts n array with additional hostname(s) to be covered with the ingress record
   ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
   ## extraHosts:
@@ -555,6 +653,7 @@ healthIngress:
   secrets: []
 
 ## @section RBAC parameters
+##
 
 ## K8s Service Account.
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
@@ -570,3 +669,6 @@ serviceAccount:
   ## @param serviceAccount.annotations Additional custom annotations for the ServiceAccount
   ##
   annotations: {}
+  ## @param serviceAccount.automountServiceAccountToken Automount service account token
+  ##
+  automountServiceAccountToken: true

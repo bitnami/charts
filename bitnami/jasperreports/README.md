@@ -11,9 +11,9 @@ $ helm install my-release bitnami/jasperreports
 
 ## Introduction
 
-This chart bootstraps a [JasperReports](https://github.com/bitnami/bitnami-docker-jasperreports) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [JasperReports](https://github.com/bitnami/bitnami-docker-jasperreports) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-It also packages the [Bitnami MariaDB chart](https://github.com/kubernetes/charts/tree/master/bitnami/mariadb) which bootstraps a MariaDB deployment required by the JasperReports application.
+It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) which bootstraps a MariaDB deployment required by the JasperReports application.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This chart has been tested to work with NGINX Ingress, cert-manager, fluentd and Prometheus on top of the [BKPR](https://kubeprod.io/).
 
@@ -76,7 +76,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------- | ---------------------------------------------------------------------- | ----------------------- |
 | `image.registry`        | JasperReports image registry                                           | `docker.io`             |
 | `image.repository`      | JasperReports image repository                                         | `bitnami/jasperreports` |
-| `image.tag`             | JasperReports image tag (immutable tags are recommended)               | `7.8.0-debian-10-r310`  |
+| `image.tag`             | JasperReports image tag (immutable tags are recommended)               | `7.8.1-debian-10-r0`    |
 | `image.pullPolicy`      | JasperReports image pull policy                                        | `IfNotPresent`          |
 | `image.pullSecrets`     | Specify docker-registry secret names as an array                       | `[]`                    |
 | `jasperreportsUsername` | JasperReports user                                                     | `jasperadmin`           |
@@ -142,33 +142,32 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sidecars`                           | Add additional sidecar containers to the Jasperreports pods                               | `[]`                       |
 | `persistence.enabled`                | Enable persistence using PVC                                                              | `true`                     |
 | `persistence.storageClass`           | PVC Storage Class for Jasperreports volume                                                | `""`                       |
-| `persistence.accessModes`            | Persistent Volume Access Mode                                                             | `[]`                       |
+| `persistence.accessModes`            | Persistent Volume Access Mode                                                             | `["ReadWriteOnce"]`        |
 | `persistence.size`                   | PVC Storage Request for Jasperreports volume                                              | `8Gi`                      |
 | `persistence.existingClaim`          | An Existing PVC name for Jasperreports volume                                             | `""`                       |
 
 
 ### Exposure parameters
 
-| Name                            | Description                                                                                   | Value                    |
-| ------------------------------- | --------------------------------------------------------------------------------------------- | ------------------------ |
-| `service.type`                  | Kubernetes Service type                                                                       | `LoadBalancer`           |
-| `service.port`                  | Service HTTP port                                                                             | `80`                     |
-| `service.nodePort`              | Kubernetes http node port                                                                     | `""`                     |
-| `service.loadBalancerIP`        | Kubernetes LoadBalancerIP to request                                                          | `""`                     |
-| `service.externalTrafficPolicy` | Enable client source IP preservation                                                          | `Cluster`                |
-| `service.annotations`           | Annotations for Jasperreports service                                                         | `{}`                     |
-| `ingress.enabled`               | Enable ingress controller resource                                                            | `false`                  |
-| `ingress.certManager`           | Add annotations for cert-manager                                                              | `false`                  |
-| `ingress.pathType`              | Ingress path type                                                                             | `ImplementationSpecific` |
-| `ingress.apiVersion`            | Force Ingress API version (automatically detected if not set)                                 | `""`                     |
-| `ingress.hostname`              | Default host for the ingress resource                                                         | `jasperreports.local`    |
-| `ingress.path`                  | Ingress path                                                                                  | `/`                      |
-| `ingress.annotations`           | Ingress annotations                                                                           | `{}`                     |
-| `ingress.tls`                   | Enable TLS configuration for the hostname defined at ingress.hostname parameter               | `false`                  |
-| `ingress.extraHosts`            | The list of additional hostnames to be covered with this ingress record.                      | `[]`                     |
-| `ingress.extraPaths`            | Any additional arbitrary paths that may need to be added to the ingress under the main host.  | `[]`                     |
-| `ingress.extraTls`              | The tls configuration for additional hostnames to be covered with this ingress record.        | `[]`                     |
-| `ingress.secrets`               | If you're providing your own certificates, please use this to add the certificates as secrets | `[]`                     |
+| Name                            | Description                                                                                                                      | Value                    |
+| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.type`                  | Kubernetes Service type                                                                                                          | `LoadBalancer`           |
+| `service.port`                  | Service HTTP port                                                                                                                | `80`                     |
+| `service.nodePort`              | Kubernetes http node port                                                                                                        | `""`                     |
+| `service.loadBalancerIP`        | Kubernetes LoadBalancerIP to request                                                                                             | `""`                     |
+| `service.externalTrafficPolicy` | Enable client source IP preservation                                                                                             | `Cluster`                |
+| `service.annotations`           | Annotations for Jasperreports service                                                                                            | `{}`                     |
+| `ingress.enabled`               | Enable ingress controller resource                                                                                               | `false`                  |
+| `ingress.pathType`              | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.apiVersion`            | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
+| `ingress.hostname`              | Default host for the ingress resource                                                                                            | `jasperreports.local`    |
+| `ingress.path`                  | Ingress path                                                                                                                     | `/`                      |
+| `ingress.annotations`           | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.tls`                   | Enable TLS configuration for the hostname defined at ingress.hostname parameter                                                  | `false`                  |
+| `ingress.extraHosts`            | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
+| `ingress.extraPaths`            | Any additional arbitrary paths that may need to be added to the ingress under the main host.                                     | `[]`                     |
+| `ingress.extraTls`              | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
+| `ingress.secrets`               | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
 
 
 ### Database parameters
@@ -183,7 +182,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `mariadb.auth.password`                     | Password for the database                            | `""`                    |
 | `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                | `true`                  |
 | `mariadb.primary.persistence.storageClass`  | PVC Storage Class                                    | `""`                    |
-| `mariadb.primary.persistence.accessModes`   | Access mode of persistent volume                     | `[]`                    |
+| `mariadb.primary.persistence.accessModes`   | Access mode of persistent volume                     | `["ReadWriteOnce"]`     |
 | `mariadb.primary.persistence.size`          | Database Persistent Volume Size                      | `8Gi`                   |
 | `mariadb.primary.persistence.hostPath`      | Host mount path for MariaDB volume                   | `""`                    |
 | `mariadb.primary.persistence.existingClaim` | Enable persistence using an existing PVC             | `""`                    |
@@ -195,7 +194,25 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.database`                 | Name of the existing database                        | `bitnami_jasperreports` |
 
 
-The above parameters map to the env variables defined in [bitnami/jasperreports](http://github.com/bitnami/bitnami-docker-jasperreports). For more information please refer to the [bitnami/jasperreports](http://github.com/bitnami/bitnami-docker-jasperreports) image documentation.
+### NetworkPolicy parameters
+
+| Name                                                          | Description                                                                                                                       | Value   |
+| ------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `networkPolicy.enabled`                                       | Enable network policies                                                                                                           | `false` |
+| `networkPolicy.ingress.enabled`                               | Enable network policy for Ingress Proxies                                                                                         | `false` |
+| `networkPolicy.ingress.namespaceSelector`                     | Ingress Proxy namespace selector labels. These labels will be used to identify the Ingress Proxy's namespace.                     | `{}`    |
+| `networkPolicy.ingress.podSelector`                           | Ingress Proxy pods selector labels. These labels will be used to identify the Ingress Proxy pods.                                 | `{}`    |
+| `networkPolicy.ingressRules.backendOnlyAccessibleByFrontend`  | Enable ingress rule that makes the backend (mariadb) only accessible by Jasperreports' pods.                                      | `false` |
+| `networkPolicy.ingressRules.customBackendSelector`            | Backend selector labels. These labels will be used to identify the backend pods.                                                  | `{}`    |
+| `networkPolicy.ingressRules.accessOnlyFrom.enabled`           | Enable ingress rule that makes Jasperreports only accessible from a particular origin                                             | `false` |
+| `networkPolicy.ingressRules.accessOnlyFrom.namespaceSelector` | Namespace selector label that is allowed to access Jasperreports. This label will be used to identified the allowed namespace(s). | `{}`    |
+| `networkPolicy.ingressRules.accessOnlyFrom.podSelector`       | Pods selector label that is allowed to access Jasperreports. This label will be used to identified the allowed pod(s).            | `{}`    |
+| `networkPolicy.ingressRules.customRules`                      | Custom network policy ingress rule                                                                                                | `{}`    |
+| `networkPolicy.egressRules.denyConnectionsToExternal`         | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).                                    | `false` |
+| `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                        | `{}`    |
+
+
+The above parameters map to the env variables defined in [bitnami/jasperreports](https://github.com/bitnami/bitnami-docker-jasperreports). For more information please refer to the [bitnami/jasperreports](https://github.com/bitnami/bitnami-docker-jasperreports) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -413,3 +430,28 @@ Use the workaround below to upgrade from versions previous to 3.0.0. The followi
 ```console
 $ kubectl patch deployment jasperreports-jasperreports --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
 $ kubectl delete statefulset jasperreports-mariadb --cascade=false
+```
+
+## Community supported solution
+
+Please, note this Helm chart is a community-supported solution. This means that the Bitnami team is not actively working on new features/improvements nor providing support through GitHub Issues for this Helm chart. Any new issue will stay open for 20 days to allow the community to contribute, after 15 days without activity the issue will be marked as stale being closed after 5 days.
+
+The Bitnami team will review any PR that is created, feel free to create a PR if you find any issue or want to implement a new feature.
+
+New versions are not going to be affected. Once a new version is released in the upstream project, the Bitnami container image will be updated to use the latest version.
+
+## License
+
+Copyright &copy; 2022 Bitnami
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

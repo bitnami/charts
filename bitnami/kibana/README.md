@@ -1,6 +1,6 @@
 # Kibana
 
-[Kibana](https://kibana.com/) is an open source, browser based analytics and search dashboard for Elasticsearch.
+[Kibana](https://www.elastic.co/kibana/) is an open source, browser based analytics and search dashboard for Elasticsearch.
 
 ## TL;DR
 
@@ -11,7 +11,7 @@ $ helm install my-release bitnami/kibana --set elasticsearch.hosts[0]=<Hostname 
 
 ## Introduction
 
-This chart bootstraps a [Kibana](https://github.com/bitnami/bitnami-docker-kibana) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Kibana](https://github.com/bitnami/bitnami-docker-kibana) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
 
@@ -68,6 +68,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `kubeVersion`      | Force target Kubernetes version (using Helm capabilities if not set)                                      | `""`  |
 | `nameOverride`     | String to partially override common.names.fullname template with a string (will prepend the release name) | `""`  |
 | `fullnameOverride` | String to fully override common.names.fullname template with a string                                     | `""`  |
+| `extraDeploy`      | Array of extra objects to deploy with the release                                                         | `[]`  |
 
 
 ### Kibana parameters
@@ -76,7 +77,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
 | `image.registry`                       | Kibana image registry                                                                                                                                     | `docker.io`              |
 | `image.repository`                     | Kibana image repository                                                                                                                                   | `bitnami/kibana`         |
-| `image.tag`                            | Kibana image tag (immutable tags are recommended)                                                                                                         | `7.14.1-debian-10-r1`    |
+| `image.tag`                            | Kibana image tag (immutable tags are recommended)                                                                                                         | `7.16.2-debian-10-r0`    |
 | `image.pullPolicy`                     | Kibana image pull policy                                                                                                                                  | `IfNotPresent`           |
 | `image.pullSecrets`                    | Specify docker-registry secret names as an array                                                                                                          | `[]`                     |
 | `replicaCount`                         | Number of replicas of the Kibana Pod                                                                                                                      | `1`                      |
@@ -96,8 +97,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                  |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `docker.io`              |
 | `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                                                              | `bitnami/bitnami-shell`  |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `10-debian-10-r187`      |
-| `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `Always`                 |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `10-debian-10-r284`      |
+| `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`           |
 | `volumePermissions.image.pullSecrets`  | Init container volume-permissions image pull secrets                                                                                                      | `[]`                     |
 | `volumePermissions.resources`          | Volume Permissions resources                                                                                                                              | `{}`                     |
 | `persistence.enabled`                  | Enable persistence                                                                                                                                        | `true`                   |
@@ -125,20 +126,22 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.nodePort`                     | Specify the nodePort value for the LoadBalancer and NodePort service types                                                                                | `""`                     |
 | `service.externalTrafficPolicy`        | Enable client source IP preservation                                                                                                                      | `Cluster`                |
 | `service.annotations`                  | Annotations for Kibana service (evaluated as a template)                                                                                                  | `{}`                     |
+| `service.labels`                       | Extra labels for Kibana service                                                                                                                           | `{}`                     |
 | `service.loadBalancerIP`               | loadBalancerIP if Kibana service type is `LoadBalancer`                                                                                                   | `""`                     |
 | `service.extraPorts`                   | Extra ports to expose in the service (normally used with the `sidecar` value)                                                                             | `[]`                     |
 | `ingress.enabled`                      | Enable ingress controller resource                                                                                                                        | `false`                  |
-| `ingress.certManager`                  | Add annotations for cert-manager                                                                                                                          | `false`                  |
 | `ingress.pathType`                     | Ingress Path type                                                                                                                                         | `ImplementationSpecific` |
 | `ingress.apiVersion`                   | Override API Version (automatically detected if not set)                                                                                                  | `""`                     |
 | `ingress.hostname`                     | Default host for the ingress resource. If specified as "*" no host rule is configured                                                                     | `kibana.local`           |
 | `ingress.path`                         | The Path to Kibana. You may need to set this to '/*' in order to use this with ALB ingress controllers.                                                   | `/`                      |
-| `ingress.annotations`                  | Ingress annotations                                                                                                                                       | `{}`                     |
+| `ingress.annotations`                  | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.                          | `{}`                     |
 | `ingress.tls`                          | Enable TLS configuration for the hostname defined at ingress.hostname parameter                                                                           | `false`                  |
+| `ingress.selfSigned`                   | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                                              | `false`                  |
 | `ingress.extraHosts`                   | The list of additional hostnames to be covered with this ingress record.                                                                                  | `[]`                     |
 | `ingress.extraPaths`                   | Additional arbitrary path/backend objects                                                                                                                 | `[]`                     |
 | `ingress.extraTls`                     | The tls configuration for additional hostnames to be covered with this ingress record.                                                                    | `[]`                     |
 | `ingress.secrets`                      | If you're providing your own certificates, please use this to add the certificates as secrets                                                             | `[]`                     |
+| `ingress.ingressClassName`             | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                                             | `""`                     |
 | `serviceAccount.create`                | Enable creation of ServiceAccount for Kibana                                                                                                              | `true`                   |
 | `serviceAccount.name`                  | Name of serviceAccount                                                                                                                                    | `""`                     |
 | `serviceAccount.annotations`           | Additional custom annotations for the ServiceAccount                                                                                                      | `{}`                     |
@@ -321,7 +324,7 @@ As an alternative, you can use one of the preset configurations for pod affinity
 
 The [Bitnami Kibana](https://github.com/bitnami/bitnami-docker-kibana) image can persist data. If enabled, the persisted path is `/bitnami/kibana` by default.
 
-The chart mounts a [Persistent Volume](http://kubernetes.io/docs/user-guide/persistent-volumes/) at this location. The volume is created using dynamic volume provisioning.
+The chart mounts a [Persistent Volume](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) at this location. The volume is created using dynamic volume provisioning.
 
 ### Add extra volumes
 
@@ -392,3 +395,19 @@ Currently, Elasticsearch requires some changes in the kernel of the host machine
 - [Virtual memory requirements](https://www.elastic.co/guide/en/elasticsearch/reference/current/vm-max-map-count.html)
 
 You can disable the initContainer using the `elasticsearch.sysctlImage.enabled=false` parameter.
+
+## License
+
+Copyright &copy; 2022 Bitnami
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

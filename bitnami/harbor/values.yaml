@@ -55,8 +55,8 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r173
-    pullPolicy: Always
+    tag: 10-debian-10-r281
+    pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -64,7 +64,7 @@ volumePermissions:
     pullSecrets: []
     ##   - myRegistryKeySecretName
   ## Init containers' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -202,9 +202,9 @@ service:
   ## @param service.nodePorts [object] Service parameters when type is "nodePort"
   ##
   nodePorts:
-    http:
-    https:
-    notary:
+    http: ""
+    https: ""
+    notary: ""
   ## @param service.loadBalancerIP Load Balancer IP
   ##
   loadBalancerIP: ""
@@ -229,9 +229,10 @@ ingress:
   ## @param ingress.apiVersion Override ingress api version
   ##
   apiVersion: ""
-  ## @param ingress.certManager Add annotations for cert-manager
+  ## DEPRECATED: Use ingress.annotations instead of ingress.certManager
+  ## certManager: false
   ##
-  certManager: false
+
   ## @param ingress.hosts [object] The list of hostnames to be covered with this ingress record
   ##
   hosts:
@@ -243,9 +244,11 @@ ingress:
   ## set to `ncp` if using the NCP (NSX-T Container Plugin) ingress controller
   ##
   controller: default
-  ## @param ingress.annotations [object] Ingress annotations done as key:value pairs
+  ## @param ingress.annotations [object] Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
   ## For a full list of possible ingress annotations, please see
   ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+  ## Use this parameter to set the required annotations for cert-manager, see
+  ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
   ##
   annotations:
     ingress.kubernetes.io/ssl-redirect: 'true'
@@ -480,10 +483,10 @@ nginxImage:
   ##
   registry: docker.io
   repository: bitnami/nginx
-  tag: 1.21.1-debian-10-r46
+  tag: 1.21.4-debian-10-r41
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -551,7 +554,7 @@ nginx:
   ##
   sidecars: []
   ## NGINX containers' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -603,6 +606,10 @@ nginx:
   ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
   ##
   affinity: {}
+  ## @param nginx.priorityClassName NGINX pods Priority Class Name
+  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+  ##
+  priorityClassName: ""
   ## @param nginx.nodeSelector NGINX Node labels for pod assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
@@ -675,10 +682,10 @@ portalImage:
   ##
   registry: docker.io
   repository: bitnami/harbor-portal
-  tag: 2.3.2-debian-10-r2
+  tag: 2.4.1-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -756,7 +763,7 @@ portal:
   ##
   sidecars: []
   ## Harbor Portal containers' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -807,6 +814,10 @@ portal:
   ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
   ##
   affinity: {}
+  ## @param portal.priorityClassName Portal pods Priority Class Name
+  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+  ##
+  priorityClassName: ""
   ## @param portal.nodeSelector Harbor Portal Node labels for pod assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
@@ -874,10 +885,10 @@ coreImage:
   ##
   registry: docker.io
   repository: bitnami/harbor-core
-  tag: 2.3.2-debian-10-r2
+  tag: 2.4.0-debian-10-r46
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -963,7 +974,7 @@ core:
   ##
   sidecars: []
   ## Harbor Core containers' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -1014,6 +1025,10 @@ core:
   ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
   ##
   affinity: {}
+  ## @param core.priorityClassName Core pods Priority Class Name
+  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+  ##
+  priorityClassName: ""
   ## @param core.nodeSelector Harbor core Node labels for pod assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
@@ -1109,10 +1124,10 @@ jobserviceImage:
   ##
   registry: docker.io
   repository: bitnami/harbor-jobservice
-  tag: 2.3.2-debian-10-r2
+  tag: 2.4.0-debian-10-r47
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -1195,7 +1210,7 @@ jobservice:
   ##
   sidecars: []
   ## Harbor Jobservice containers' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -1246,6 +1261,10 @@ jobservice:
   ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
   ##
   affinity: {}
+  ## @param jobservice.priorityClassName Jobservice pods Priority Class Name
+  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+  ##
+  priorityClassName: ""
   ## @param jobservice.nodeSelector Harbor Jobservice Node labels for pod assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
@@ -1318,10 +1337,10 @@ registryImage:
   ##
   registry: docker.io
   repository: bitnami/harbor-registry
-  tag: 2.3.2-debian-10-r2
+  tag: 2.4.1-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -1349,10 +1368,10 @@ registryctlImage:
   ##
   registry: docker.io
   repository: bitnami/harbor-registryctl
-  tag: 2.3.2-debian-10-r2
+  tag: 2.4.1-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -1411,7 +1430,7 @@ registry:
     ##
     lifecycleHooks: {}
     ## Harbor Registry containers' resource requests and limits
-    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
     ## We usually recommend not to specify default resources and to leave this as a conscious
     ## choice for the user. This also increases chances charts run on environments with little
     ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -1493,7 +1512,7 @@ registry:
     ##
     lifecycleHooks: {}
     ## Harbor Registryctl containers' resource requests and limits
-    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
     ## We usually recommend not to specify default resources and to leave this as a conscious
     ## choice for the user. This also increases chances charts run on environments with little
     ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -1594,6 +1613,10 @@ registry:
   ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
   ##
   affinity: {}
+  ## @param registry.priorityClassName Registry pods Priority Class Name
+  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+  ##
+  priorityClassName: ""
   ## @param registry.nodeSelector Harbor Registry Node labels for pod assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
@@ -1672,10 +1695,10 @@ chartMuseumImage:
   ##
   registry: docker.io
   repository: bitnami/chartmuseum
-  tag: 0.13.1-debian-10-r149
+  tag: 0.13.1-debian-10-r257
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -1802,7 +1825,7 @@ chartmuseum:
   ##
   sidecars: []
   ## Chartmuseum containers' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -1853,6 +1876,10 @@ chartmuseum:
   ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
   ##
   affinity: {}
+  ## @param chartmuseum.priorityClassName Chartmuseum pods Priority Class Name
+  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+  ##
+  priorityClassName: ""
   ## @param chartmuseum.nodeSelector ChartMuseum Node labels for pod assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
@@ -1920,10 +1947,10 @@ clairImage:
   ##
   registry: docker.io
   repository: bitnami/harbor-clair
-  tag: 2.3.2-debian-10-r2
+  tag: 2.4.1-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -1950,10 +1977,10 @@ clairAdapterImage:
   ##
   registry: docker.io
   repository: bitnami/harbor-adapter-clair
-  tag: 2.3.2-debian-10-r2
+  tag: 2.4.1-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -2064,7 +2091,7 @@ clair:
     ##
     customReadinessProbe: {}
     ## Clair containers' resource requests and limits
-    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
     ## We usually recommend not to specify default resources and to leave this as a conscious
     ## choice for the user. This also increases chances charts run on environments with little
     ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -2146,7 +2173,7 @@ clair:
     ##
     extraVolumeMounts: []
     ## Clair containers' resource requests and limits
-    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
     ## We usually recommend not to specify default resources and to leave this as a conscious
     ## choice for the user. This also increases chances charts run on environments with little
     ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -2209,6 +2236,10 @@ clair:
   ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
   ##
   affinity: {}
+  ## @param clair.priorityClassName Clair pods Priority Class Name
+  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+  ##
+  priorityClassName: ""
   ## @param clair.nodeSelector Harbor Clair Node labels for pod assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
@@ -2244,10 +2275,10 @@ notaryServerImage:
   ##
   registry: docker.io
   repository: bitnami/harbor-notary-server
-  tag: 2.3.2-debian-10-r2
+  tag: 2.4.1-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -2275,10 +2306,10 @@ notarySignerImage:
   ##
   registry: docker.io
   repository: bitnami/harbor-notary-signer
-  tag: 2.3.2-debian-10-r2
+  tag: 2.4.1-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -2338,7 +2369,7 @@ notary:
     ##
     lifecycleHooks: {}
     ## Notary server containers' resource requests and limits
-    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
     ## We usually recommend not to specify default resources and to leave this as a conscious
     ## choice for the user. This also increases chances charts run on environments with little
     ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -2436,6 +2467,10 @@ notary:
     ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
     ##
     affinity: {}
+    ## @param notary.server.priorityClassName Notary server pods Priority Class Name
+    ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+    ##
+    priorityClassName: ""
     ## @param notary.server.nodeSelector Notary server Node labels for pod assignment
     ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
     ##
@@ -2489,7 +2524,7 @@ notary:
     ##
     extraVolumeMounts: []
     ## Notary signer containers' resource requests and limits
-    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
     ## We usually recommend not to specify default resources and to leave this as a conscious
     ## choice for the user. This also increases chances charts run on environments with little
     ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -2556,6 +2591,10 @@ notary:
     ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
     ##
     affinity: {}
+    ## @param notary.signer.priorityClassName Notary signer pods Priority Class Name
+    ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+    ##
+    priorityClassName: ""
     ## @param notary.signer.nodeSelector Notary signer Node labels for pod assignment
     ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
     ##
@@ -2640,10 +2679,10 @@ trivyImage:
   ##
   registry: docker.io
   repository: bitnami/harbor-adapter-trivy
-  tag: 2.3.2-debian-10-r2
+  tag: 2.4.1-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -2836,6 +2875,10 @@ trivy:
   ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
   ##
   affinity: {}
+  ## @param trivy.priorityClassName Trivy pods Priority Class Name
+  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+  ##
+  priorityClassName: ""
   ## @param trivy.nodeSelector Trivy Node labels for pod assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
@@ -2991,6 +3034,10 @@ redis:
   master:
     persistence:
       enabled: true
+    ## @param redis.master.priorityClassName Redis pods Priority Class Name
+    ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+    ##
+    priorityClassName: ""
   ## Redis&trade; Replica parameters
   ## @param redis.replica.persistence.enabled Enable persistence for replica Redis
   ##

@@ -1,3 +1,9 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
+** Please be patient while the chart is being deployed **
+
 {{- $airflowSecretName := include "airflow.secretName" . -}}
 {{- $postgresqlSecretName := include "airflow.postgresql.secretName" . -}}
 {{- $redisSecretName := include "airflow.redis.secretName" . -}}
@@ -43,6 +49,7 @@ host. To configure Airflow with the URL of your service:
 {{- end }}
   {{ include "common.utils.secret.getvalue" (dict "secret" $airflowSecretName "field" "airflow-password" "context" $) }}
   {{ include "common.utils.secret.getvalue" (dict "secret" $airflowSecretName "field" "airflow-fernetKey" "context" $) }}
+  {{ include "common.utils.secret.getvalue" (dict "secret" $airflowSecretName "field" "airflow-secretKey" "context" $) }}
   {{ include "common.utils.secret.getvalue" (dict "secret" $postgresqlSecretName "field" "postgresql-password" "context" $) }}
   {{ include "common.utils.secret.getvalue" (dict "secret" $redisSecretName "field" "redis-password" "context" $) }}
 
@@ -53,6 +60,7 @@ host. To configure Airflow with the URL of your service:
     --set web.baseUrl=http://$AIRFLOW_HOST:$AIRFLOW_PORT \
     --set auth.password=$AIRFLOW_PASSWORD \
     --set auth.fernetKey=$AIRFLOW_FERNETKEY \
+    --set auth.secretKey=$AIRFLOW_SECRETKEY \
     --set postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD \
     --set redis.auth.password=$REDIS_PASSWORD
 
@@ -99,6 +107,11 @@ host. To configure Airflow with the URL of your service:
     {{- $requiredFernetKeyPassword := dict "valueKey" "auth.fernetKey" "secret" $airflowSecretName "field" "airflow-fernetKey" "context" $ -}}
     {{- $requiredFernetKeyPasswordError := include "common.validations.values.single.empty" $requiredFernetKeyPassword -}}
     {{- $passwordValidationErrors = append $passwordValidationErrors $requiredFernetKeyPasswordError -}}
+
+    {{- $requiredSecretKeyPassword := dict "valueKey" "auth.secretKey" "secret" $airflowSecretName "field" "airflow-secretKey" "context" $ -}}
+    {{- $requiredSecretKeyPasswordError := include "common.validations.values.single.empty" $requiredSecretKeyPassword -}}
+    {{- $passwordValidationErrors = append $passwordValidationErrors $requiredSecretKeyPasswordError -}}
+
 {{- end -}}
 
 {{- $postgresqlPasswordValidationErrors := include "common.validations.values.postgresql.passwords" (dict "secret" $postgresqlSecretName "subchart" true "context" $) -}}
