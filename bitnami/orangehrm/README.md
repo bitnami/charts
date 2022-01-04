@@ -75,7 +75,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | -------------------------------------------------------------------------------------------- | ------------------------ |
 | `image.registry`                        | OrangeHRM image registry                                                                     | `docker.io`              |
 | `image.repository`                      | OrangeHRM image repository                                                                   | `bitnami/orangehrm`      |
-| `image.tag`                             | OrangeHRM Image tag (immutable tags are recommended)                                         | `4.8.0-0-debian-10-r138` |
+| `image.tag`                             | OrangeHRM Image tag (immutable tags are recommended)                                         | `4.9.0-0-debian-10-r25`  |
 | `image.pullPolicy`                      | OrangeHRM image pull policy                                                                  | `IfNotPresent`           |
 | `image.pullSecrets`                     | Specify docker-registry secret names as an array                                             | `[]`                     |
 | `image.debug`                           | Specify if debug logs should be enabled                                                      | `false`                  |
@@ -162,35 +162,34 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Traffic Exposure Parameters
 
-| Name                               | Description                                                                                                | Value                    |
-| ---------------------------------- | ---------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `service.type`                     | Kubernetes Service type                                                                                    | `LoadBalancer`           |
-| `service.ports.http`               | Service HTTP port                                                                                          | `80`                     |
-| `service.ports.https`              | Service HTTPS port                                                                                         | `443`                    |
-| `service.httpsTargetPort`          | Service Target HTTPS port                                                                                  | `https`                  |
-| `service.clusterIP`                | OrangeHRM service cluster IP                                                                               | `""`                     |
-| `service.loadBalancerSourceRanges` | Control hosts connecting to "LoadBalancer" only                                                            | `[]`                     |
-| `service.loadBalancerIP`           | Load balancer IP for the OrangeHRM Service (optional, cloud specific)                                      | `""`                     |
-| `service.nodePorts.http`           | Kubernetes HTTP node port                                                                                  | `""`                     |
-| `service.nodePorts.https`          | Kubernetes HTTPS node port                                                                                 | `""`                     |
-| `service.externalTrafficPolicy`    | Enable client source IP preservation                                                                       | `Cluster`                |
-| `service.annotations`              | Provide any additional annotations that may be required (evaluated as a template)                          | `{}`                     |
-| `service.extraPorts`               | Extra ports to expose in the service (normally used with the `sidecar` value)                              | `[]`                     |
-| `service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                       | `None`                   |
-| `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                | `{}`                     |
-| `ingress.enabled`                  | Set to true to enable ingress record generation                                                            | `false`                  |
-| `ingress.certManager`              | Set this to true in order to add the corresponding annotations for cert-manager                            | `false`                  |
-| `ingress.pathType`                 | Ingress path type                                                                                          | `ImplementationSpecific` |
-| `ingress.apiVersion`               | Override API Version (automatically detected if not set)                                                   | `""`                     |
-| `ingress.hostname`                 | Default host for the ingress resource                                                                      | `orangehrm.local`        |
-| `ingress.path`                     | The Path to OrangeHRM. You may need to set this to '/*' in order to use this with ALB ingress controllers. | `/`                      |
-| `ingress.annotations`              | Ingress annotations                                                                                        | `{}`                     |
-| `ingress.tls`                      | Enable TLS configuration for the hostname defined at ingress.hostname parameter                            | `false`                  |
-| `ingress.extraHosts`               | The list of additional hostnames to be covered with this ingress record.                                   | `[]`                     |
-| `ingress.extraPaths`               | Any additional arbitrary paths that may need to be added to the ingress under the main host.               | `[]`                     |
-| `ingress.extraTls`                 | The tls configuration for additional hostnames to be covered with this ingress record.                     | `[]`                     |
-| `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets              | `[]`                     |
-| `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                              | `""`                     |
+| Name                               | Description                                                                                                                      | Value                    |
+| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.type`                     | Kubernetes Service type                                                                                                          | `LoadBalancer`           |
+| `service.ports.http`               | Service HTTP port                                                                                                                | `80`                     |
+| `service.ports.https`              | Service HTTPS port                                                                                                               | `443`                    |
+| `service.httpsTargetPort`          | Service Target HTTPS port                                                                                                        | `https`                  |
+| `service.clusterIP`                | OrangeHRM service cluster IP                                                                                                     | `""`                     |
+| `service.loadBalancerSourceRanges` | Control hosts connecting to "LoadBalancer" only                                                                                  | `[]`                     |
+| `service.loadBalancerIP`           | Load balancer IP for the OrangeHRM Service (optional, cloud specific)                                                            | `""`                     |
+| `service.nodePorts.http`           | Kubernetes HTTP node port                                                                                                        | `""`                     |
+| `service.nodePorts.https`          | Kubernetes HTTPS node port                                                                                                       | `""`                     |
+| `service.externalTrafficPolicy`    | Enable client source IP preservation                                                                                             | `Cluster`                |
+| `service.annotations`              | Provide any additional annotations that may be required (evaluated as a template)                                                | `{}`                     |
+| `service.extraPorts`               | Extra ports to expose in the service (normally used with the `sidecar` value)                                                    | `[]`                     |
+| `service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                             | `None`                   |
+| `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
+| `ingress.enabled`                  | Set to true to enable ingress record generation                                                                                  | `false`                  |
+| `ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.apiVersion`               | Override API Version (automatically detected if not set)                                                                         | `""`                     |
+| `ingress.hostname`                 | Default host for the ingress resource                                                                                            | `orangehrm.local`        |
+| `ingress.path`                     | The Path to OrangeHRM. You may need to set this to '/*' in order to use this with ALB ingress controllers.                       | `/`                      |
+| `ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.tls`                      | Enable TLS configuration for the hostname defined at ingress.hostname parameter                                                  | `false`                  |
+| `ingress.extraHosts`               | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
+| `ingress.extraPaths`               | Any additional arbitrary paths that may need to be added to the ingress under the main host.                                     | `[]`                     |
+| `ingress.extraTls`                 | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
+| `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
+| `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
 
 
 ### Database parameters
@@ -224,7 +223,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image repository                                                                                                        | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                                                                              | `10-debian-10-r252`     |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                                                                              | `10-debian-10-r278`     |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                                          | `[]`                    |
 | `volumePermissions.resources.limits`   | The resources limits for the container                                                                                                                    | `{}`                    |
@@ -238,7 +237,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`           | Start a side-car prometheus exporter                       | `false`                   |
 | `metrics.image.registry`    | Apache exporter image registry                             | `docker.io`               |
 | `metrics.image.repository`  | Apache exporter image repository                           | `bitnami/apache-exporter` |
-| `metrics.image.tag`         | Apache exporter image tag (immutable tags are recommended) | `0.10.1-debian-10-r54`    |
+| `metrics.image.tag`         | Apache exporter image tag (immutable tags are recommended) | `0.10.1-debian-10-r81`    |
 | `metrics.image.pullPolicy`  | Apache exporter image pull policy                          | `IfNotPresent`            |
 | `metrics.image.pullSecrets` | Specify docker-registry secret names as an array           | `[]`                      |
 | `metrics.resources`         | Metrics exporter resource requests and limits              | `{}`                      |
@@ -263,7 +262,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `certificates.extraEnvVarsSecret`                    | Secret with extra environment variables                              | `""`                                     |
 | `certificates.image.registry`                        | Container sidecar registry                                           | `docker.io`                              |
 | `certificates.image.repository`                      | Container sidecar image repository                                   | `bitnami/bitnami-shell`                  |
-| `certificates.image.tag`                             | Container sidecar image tag (immutable tags are recommended)         | `10-debian-10-r252`                      |
+| `certificates.image.tag`                             | Container sidecar image tag (immutable tags are recommended)         | `10-debian-10-r278`                      |
 | `certificates.image.pullPolicy`                      | Container sidecar image pull policy                                  | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Container sidecar image pull secrets                                 | `[]`                                     |
 
@@ -446,7 +445,7 @@ Affected values:
 - `service.httpsPort` was deprecated. We recommend using `service.ports.https` instead.
 - `persistence.accessMode` was deprecated. We recommend using `persistence.accessModes`.
 
-Additionally updates the MariaDB subchart to it newest major, 10.0.0, which contains similar changes.
+Additionally updates the MariaDB subchart to it newest major, 10.0.0, which contains similar changes. Check [MariaDB Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#to-1000) for more information.
 
 ### To 10.0.0
 
