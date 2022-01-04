@@ -126,7 +126,7 @@ spec:
                   key: mariadb-password
             - name: OWNCLOUD_SKIP_BOOTSTRAP
               value: {{ ternary "yes" "no" .Values.owncloudSkipInstall | quote }}
-            {{- $port:=(coalesce .Values.service.ports.http.Values.service.port) | toString }}
+            {{- $port:=(coalesce .Values.service.ports.http .Values.service.port) | toString }}
             - name: OWNCLOUD_HOST
               value: {{ include "owncloud.host" . }}
             - name: OWNCLOUD_USERNAME
