@@ -423,7 +423,7 @@ persistence:
   ##   GKE, AWS & OpenStack)
   ##
   storageClass: ""
-  ## @param persistence.accessModes [array] PVC Access Mode for ownCloud volume
+  ## @param persistence.accessModes PVC Access Mode for ownCloud volume
   ##
   accessModes:
     - ReadWriteOnce
@@ -560,13 +560,9 @@ ingress:
   ## @param ingress.enabled Set to true to enable ingress record generation
   ##
   enabled: false
-  ## @param ingress.pathType Ingress path type
-  ##
-  pathType: ImplementationSpecific
   ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
   ##
-  apiVersion:
-  ## @param ingress.certManager Set this to true in order to add the corresponding annotations for cert-manager
+  apiVersion: ""
   ## DEPRECATED: Use ingress.annotations instead of ingress.certManager
   ## certManager: false
   ##
