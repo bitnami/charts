@@ -83,6 +83,10 @@ spec:
             - --default-target=http://{{ template "common.names.fullname" . }}-hub:{{ .Values.hub.service.port }}
             - --error-target=http://{{ template "common.names.fullname" . }}-hub:{{ .Values.hub.service.port }}/hub/error
             - --port={{ .Values.proxy.containerPort.http }}
+            {{- if .Values.proxy.metrics.serviceMonitor.enabled }}
+            - "--metrics-ip=::"
+            - --metrics-port={{ .Values.proxy.containerPort.metrics }}
+            {{- end }}
             {{- if .Values.proxy.image.debug }}
             - --log-level=debug
             {{- end }}
@@ -94,6 +98,11 @@ spec:
             - name: api
               containerPort: {{ .Values.proxy.containerPort.api }}
               protocol: TCP
+            {{- if .Values.proxy.metrics.serviceMonitor.enabled }}
+            - name: metrics
+              containerPort: {{ .Values.proxy.containerPort.metrics }}
+              protocol: TCP
+            {{- end }}
           env:
             - name: CONFIGPROXY_AUTH_TOKEN
               valueFrom:

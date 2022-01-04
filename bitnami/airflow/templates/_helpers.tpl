@@ -95,6 +95,13 @@ Return the proper Airflow Metrics image name
 {{- end -}}
 
 {{/*
+Return the proper load Airflow DAGs image name
+*/}}
+{{- define "airflow.dags.image" -}}
+{{- include "common.images.image" (dict "imageRoot" .Values.dags.image "global" .Values.global) -}}
+{{- end -}}
+
+{{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "airflow.imagePullSecrets" -}}
@@ -184,6 +191,29 @@ Should use config from the configmap
 {{- if or .Values.config .Values.configurationConfigMap -}}
   true
 {{- else -}}{{- end -}}
+{{- end -}}
+
+{{/*
+Load DAGs init-container
+*/}}
+{{- define "airflow.loadDAGsInitContainer" -}}
+- name: load-dags
+  image: {{ include "airflow.dags.image" . }}
+  imagePullPolicy: {{ .Values.dags.image.pullPolicy }}
+  {{- if .Values.containerSecurityContext.enabled }}
+  securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+  {{- end }}
+  command:
+    - /bin/bash
+  args:
+    - -ec
+    - |
+      cp /configmap/* /dags
+  volumeMounts:
+    - name: load-external-dag-files
+      mountPath: /configmap
+    - name: external-dag-files
+      mountPath: /dags
 {{- end -}}
 
 {{/*

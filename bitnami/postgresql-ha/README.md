@@ -2,7 +2,7 @@
 
 This Helm chart has been developed based on [bitnami/postgresql](https://github.com/bitnami/charts/tree/master/bitnami/postgresql) chart but including some changes to guarantee high availability such as:
 
-- A new deployment, service have been added to deploy [Pgpool-II](Pgpool-II) to act as proxy for PostgreSQL backend. It helps to reduce connection overhead, acts as a load balancer for PostgreSQL, and ensures database node failover.
+- A new deployment, service have been added to deploy [Pgpool-II](https://pgpool.net/mediawiki/index.php/Main_Page) to act as proxy for PostgreSQL backend. It helps to reduce connection overhead, acts as a load balancer for PostgreSQL, and ensures database node failover.
 - Replacing `bitnami/postgresql` with `bitnami/postgresql-repmgr` which includes and configures [repmgr](https://repmgr.org/). Repmgr ensures standby nodes assume the primary role when the primary node is unhealthy.
 
 ## TL;DR
@@ -14,7 +14,7 @@ $ helm install my-release bitnami/postgresql-ha
 
 ## Introduction
 
-This [Helm](https://github.com/kubernetes/helm) chart installs [PostgreSQL](https://www.postgresql.org/) with HA architecture in a Kubernetes cluster. Welcome to [contribute](CONTRIBUTING.md) to Helm Chart for PostgreSQL HA.
+This [Helm](https://github.com/kubernetes/helm) chart installs [PostgreSQL](https://www.postgresql.org/) with HA architecture in a Kubernetes cluster. Welcome to [contribute](https://github.com/bitnami/charts/blob/master/CONTRIBUTING.md) to Helm Chart for PostgreSQL HA.
 
 ## Prerequisites
 
@@ -65,19 +65,22 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 
 ### General parameters
 
-| Name                     | Description                                                                                                           | Value           |
-| ------------------------ | --------------------------------------------------------------------------------------------------------------------- | --------------- |
-| `nameOverride`           | String to partially override common.names.fullname template (will maintain the release name)                          | `""`            |
-| `fullnameOverride`       | String to fully override common.names.fullname template                                                               | `""`            |
-| `clusterDomain`          | Kubernetes Cluster Domain                                                                                             | `cluster.local` |
-| `commonAnnotations`      | Common annotations to add to all resources (sub-charts are not considered). Evaluated as a template                   | `{}`            |
-| `commonLabels`           | Common labels to add to all resources (sub-charts are not considered). Evaluated as a template                        | `{}`            |
-| `extraDeploy`            | Array of extra objects to deploy with the release (evaluated as a template)                                           | `[]`            |
-| `serviceAccount.enabled` | Enable service account (Note: Service Account will only be automatically created if `serviceAccount.name` is not set) | `false`         |
-| `serviceAccount.name`    | Name of an already existing service account. Setting this value disables the automatic service account creation       | `""`            |
-| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                               | `false`         |
-| `diagnosticMode.command` | Command to override all containers in the deployment                                                                  | `[]`            |
-| `diagnosticMode.args`    | Args to override all containers in the deployment                                                                     | `[]`            |
+| Name                        | Description                                                                                                                                 | Value           |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
+| `nameOverride`              | String to partially override common.names.fullname template (will maintain the release name)                                                | `""`            |
+| `fullnameOverride`          | String to fully override common.names.fullname template                                                                                     | `""`            |
+| `clusterDomain`             | Kubernetes Cluster Domain                                                                                                                   | `cluster.local` |
+| `commonAnnotations`         | Common annotations to add to all resources (sub-charts are not considered). Evaluated as a template                                         | `{}`            |
+| `commonLabels`              | Common labels to add to all resources (sub-charts are not considered). Evaluated as a template                                              | `{}`            |
+| `extraDeploy`               | Array of extra objects to deploy with the release (evaluated as a template)                                                                 | `[]`            |
+| `serviceAccount.enabled`    | Enable service account (Note: Service Account will only be automatically created if `serviceAccount.name` is not set)                       | `false`         |
+| `serviceAccount.name`       | Name of an already existing service account. Setting this value disables the automatic service account creation                             | `""`            |
+| `psp.create`                | Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later | `false`         |
+| `rbac.create`               | Create Role and RoleBinding (required for PSP to work)                                                                                      | `false`         |
+| `topologySpreadConstraints` | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template                    | `{}`            |
+| `diagnosticMode.enabled`    | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                                                     | `false`         |
+| `diagnosticMode.command`    | Command to override all containers in the deployment                                                                                        | `[]`            |
+| `diagnosticMode.args`       | Args to override all containers in the deployment                                                                                           | `[]`            |
 
 
 ### PostgreSQL with Repmgr parameters
@@ -86,7 +89,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
 | `postgresqlImage.registry`                      | PostgreSQL with Repmgr image registry                                                                                                                                                                         | `docker.io`                 |
 | `postgresqlImage.repository`                    | PostgreSQL with Repmgr image repository                                                                                                                                                                       | `bitnami/postgresql-repmgr` |
-| `postgresqlImage.tag`                           | PostgreSQL with Repmgr image tag                                                                                                                                                                              | `11.13.0-debian-10-r40`     |
+| `postgresqlImage.tag`                           | PostgreSQL with Repmgr image tag                                                                                                                                                                              | `11.14.0-debian-10-r12`     |
 | `postgresqlImage.pullPolicy`                    | PostgreSQL with Repmgr image pull policy                                                                                                                                                                      | `IfNotPresent`              |
 | `postgresqlImage.pullSecrets`                   | Specify docker-registry secret names as an array                                                                                                                                                              | `[]`                        |
 | `postgresqlImage.debug`                         | Specify if debug logs should be enabled                                                                                                                                                                       | `false`                     |
@@ -94,6 +97,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `postgresql.podLabels`                          | Labels to add to the StatefulSet pods. Evaluated as template                                                                                                                                                  | `{}`                        |
 | `postgresql.replicaCount`                       | Number of replicas to deploy                                                                                                                                                                                  | `2`                         |
 | `postgresql.updateStrategyType`                 | Update strategy for PostgreSQL statefulset                                                                                                                                                                    | `RollingUpdate`             |
+| `postgresql.containerPort`                      | PostgreSQL port                                                                                                                                                                                               | `5432`                      |
 | `postgresql.hostAliases`                        | Deployment pod host aliases                                                                                                                                                                                   | `[]`                        |
 | `postgresql.podAnnotations`                     | Additional pod annotations                                                                                                                                                                                    | `{}`                        |
 | `postgresql.priorityClassName`                  | Pod priority class                                                                                                                                                                                            | `""`                        |
@@ -200,103 +204,105 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 
 ### Pgpool parameters
 
-| Name                                        | Description                                                                                                        | Value                |
-| ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | -------------------- |
-| `pgpoolImage.registry`                      | Pgpool image registry                                                                                              | `docker.io`          |
-| `pgpoolImage.repository`                    | Pgpool image repository                                                                                            | `bitnami/pgpool`     |
-| `pgpoolImage.tag`                           | Pgpool image tag                                                                                                   | `4.2.5-debian-10-r8` |
-| `pgpoolImage.pullPolicy`                    | Pgpool image pull policy                                                                                           | `IfNotPresent`       |
-| `pgpoolImage.pullSecrets`                   | Specify docker-registry secret names as an array                                                                   | `[]`                 |
-| `pgpoolImage.debug`                         | Specify if debug logs should be enabled                                                                            | `false`              |
-| `pgpool.customUsers`                        | Additional users that will be performing connections to the database using                                         | `{}`                 |
-| `pgpool.usernames`                          | Comma or semicolon separated list of postgres usernames                                                            | `""`                 |
-| `pgpool.passwords`                          | Comma or semicolon separated list of the associated passwords for the users above                                  | `""`                 |
-| `pgpool.hostAliases`                        | Deployment pod host aliases                                                                                        | `[]`                 |
-| `pgpool.customUsersSecret`                  | Name of a secret containing the usernames and passwords of accounts that will be added to pgpool_passwd            | `""`                 |
-| `pgpool.srCheckDatabase`                    | Name of the database to perform streaming replication checks                                                       | `postgres`           |
-| `pgpool.labels`                             | Labels to add to the Deployment. Evaluated as template                                                             | `{}`                 |
-| `pgpool.podLabels`                          | Labels to add to the pods. Evaluated as template                                                                   | `{}`                 |
-| `pgpool.serviceLabels`                      | Labels to add to the service. Evaluated as template                                                                | `{}`                 |
-| `pgpool.customLivenessProbe`                | Override default liveness probe                                                                                    | `{}`                 |
-| `pgpool.customReadinessProbe`               | Override default readiness probe                                                                                   | `{}`                 |
-| `pgpool.customStartupProbe`                 | Override default startup probe                                                                                     | `{}`                 |
-| `pgpool.command`                            | Override default container command (useful when using custom images)                                               | `[]`                 |
-| `pgpool.args`                               | Override default container args (useful when using custom images)                                                  | `[]`                 |
-| `pgpool.lifecycleHooks`                     | LifecycleHook to set additional configuration at startup, e.g. LDAP settings via REST API. Evaluated as a template | `{}`                 |
-| `pgpool.extraEnvVars`                       | Array containing extra environment variables                                                                       | `[]`                 |
-| `pgpool.extraEnvVarsCM`                     | ConfigMap with extra environment variables                                                                         | `""`                 |
-| `pgpool.extraEnvVarsSecret`                 | Secret with extra environment variables                                                                            | `""`                 |
-| `pgpool.extraVolumes`                       | Extra volumes to add to the deployment                                                                             | `[]`                 |
-| `pgpool.extraVolumeMounts`                  | Extra volume mounts to add to the container. Normally used with `extraVolumes`                                     | `[]`                 |
-| `pgpool.initContainers`                     | Extra init containers to add to the deployment                                                                     | `[]`                 |
-| `pgpool.sidecars`                           | Extra sidecar containers to add to the deployment                                                                  | `[]`                 |
-| `pgpool.replicaCount`                       | The number of replicas to deploy                                                                                   | `1`                  |
-| `pgpool.podAnnotations`                     | Additional pod annotations                                                                                         | `{}`                 |
-| `pgpool.priorityClassName`                  | Pod priority class                                                                                                 | `""`                 |
-| `pgpool.podAffinityPreset`                  | Pgpool pod affinity preset. Ignored if `pgpool.affinity` is set. Allowed values: `soft` or `hard`                  | `""`                 |
-| `pgpool.podAntiAffinityPreset`              | Pgpool pod anti-affinity preset. Ignored if `pgpool.affinity` is set. Allowed values: `soft` or `hard`             | `soft`               |
-| `pgpool.nodeAffinityPreset.type`            | Pgpool node affinity preset type. Ignored if `pgpool.affinity` is set. Allowed values: `soft` or `hard`            | `""`                 |
-| `pgpool.nodeAffinityPreset.key`             | Pgpool node label key to match Ignored if `pgpool.affinity` is set.                                                | `""`                 |
-| `pgpool.nodeAffinityPreset.values`          | Pgpool node label values to match. Ignored if `pgpool.affinity` is set.                                            | `[]`                 |
-| `pgpool.affinity`                           | Affinity for Pgpool pods assignment                                                                                | `{}`                 |
-| `pgpool.nodeSelector`                       | Node labels for Pgpool pods assignment                                                                             | `{}`                 |
-| `pgpool.tolerations`                        | Tolerations for Pgpool pods assignment                                                                             | `[]`                 |
-| `pgpool.securityContext.enabled`            | Enable security context for Pgpool                                                                                 | `true`               |
-| `pgpool.securityContext.fsGroup`            | Group ID for the Pgpool filesystem                                                                                 | `1001`               |
-| `pgpool.containerSecurityContext.enabled`   | Enable container security context                                                                                  | `true`               |
-| `pgpool.containerSecurityContext.runAsUser` | User ID for the Pgpool container                                                                                   | `1001`               |
-| `pgpool.resources.limits`                   | The resources limits for the container                                                                             | `{}`                 |
-| `pgpool.resources.requests`                 | The requested resources for the container                                                                          | `{}`                 |
-| `pgpool.livenessProbe.enabled`              | Enable livenessProbe                                                                                               | `true`               |
-| `pgpool.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                            | `30`                 |
-| `pgpool.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                                   | `10`                 |
-| `pgpool.livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                                                  | `5`                  |
-| `pgpool.livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                                                | `5`                  |
-| `pgpool.livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                                                | `1`                  |
-| `pgpool.readinessProbe.enabled`             | Enable readinessProbe                                                                                              | `true`               |
-| `pgpool.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                                           | `5`                  |
-| `pgpool.readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                                                  | `5`                  |
-| `pgpool.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                                 | `5`                  |
-| `pgpool.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                                               | `5`                  |
-| `pgpool.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                               | `1`                  |
-| `pgpool.startupProbe.enabled`               | Enable startupProbe                                                                                                | `false`              |
-| `pgpool.startupProbe.initialDelaySeconds`   | Initial delay seconds for startupProbe                                                                             | `5`                  |
-| `pgpool.startupProbe.periodSeconds`         | Period seconds for startupProbe                                                                                    | `10`                 |
-| `pgpool.startupProbe.timeoutSeconds`        | Timeout seconds for startupProbe                                                                                   | `5`                  |
-| `pgpool.startupProbe.failureThreshold`      | Failure threshold for startupProbe                                                                                 | `10`                 |
-| `pgpool.startupProbe.successThreshold`      | Success threshold for startupProbe                                                                                 | `1`                  |
-| `pgpool.pdb.create`                         | Specifies whether a Pod disruption budget should be created for Pgpool pods                                        | `false`              |
-| `pgpool.pdb.minAvailable`                   | Minimum number / percentage of pods that should remain scheduled                                                   | `1`                  |
-| `pgpool.pdb.maxUnavailable`                 | Maximum number / percentage of pods that may be made unavailable                                                   | `""`                 |
-| `pgpool.updateStrategy`                     | Strategy used to replace old Pods by new ones                                                                      | `{}`                 |
-| `pgpool.minReadySeconds`                    | How many seconds a pod needs to be ready before killing the next, during update                                    | `""`                 |
-| `pgpool.adminUsername`                      | Pgpool Admin username                                                                                              | `admin`              |
-| `pgpool.adminPassword`                      | Pgpool Admin password                                                                                              | `""`                 |
-| `pgpool.logConnections`                     | Log all client connections (PGPOOL_ENABLE_LOG_CONNECTIONS)                                                         | `false`              |
-| `pgpool.logHostname`                        | Log the client hostname instead of IP address (PGPOOL_ENABLE_LOG_HOSTNAME)                                         | `true`               |
-| `pgpool.logPerNodeStatement`                | Log every SQL statement for each DB node separately (PGPOOL_ENABLE_LOG_PER_NODE_STATEMENT)                         | `false`              |
-| `pgpool.logLinePrefix`                      | Format of the log entry lines (PGPOOL_LOG_LINE_PREFIX)                                                             | `""`                 |
-| `pgpool.clientMinMessages`                  | Log level for clients                                                                                              | `error`              |
-| `pgpool.numInitChildren`                    | The number of preforked Pgpool-II server processes. It is also the concurrent                                      | `""`                 |
-| `pgpool.maxPool`                            | The maximum number of cached connections in each child process (PGPOOL_MAX_POOL)                                   | `""`                 |
-| `pgpool.childMaxConnections`                | The maximum number of client connections in each child process (PGPOOL_CHILD_MAX_CONNECTIONS)                      | `""`                 |
-| `pgpool.childLifeTime`                      | The time in seconds to terminate a Pgpool-II child process if it remains idle (PGPOOL_CHILD_LIFE_TIME)             | `""`                 |
-| `pgpool.clientIdleLimit`                    | The time in seconds to disconnect a client if it remains idle since the last query (PGPOOL_CLIENT_IDLE_LIMIT)      | `""`                 |
-| `pgpool.connectionLifeTime`                 | The time in seconds to terminate the cached connections to the PostgreSQL backend (PGPOOL_CONNECTION_LIFE_TIME)    | `""`                 |
-| `pgpool.useLoadBalancing`                   | Use Pgpool Load-Balancing                                                                                          | `true`               |
-| `pgpool.loadBalancingOnWrite`               | LoadBalancer on write actions behavior                                                                             | `transaction`        |
-| `pgpool.configuration`                      | Pgpool configuration                                                                                               | `{}`                 |
-| `pgpool.configurationCM`                    | ConfigMap with Pgpool configuration                                                                                | `""`                 |
-| `pgpool.initdbScripts`                      | Dictionary of initdb scripts                                                                                       | `{}`                 |
-| `pgpool.initdbScriptsCM`                    | ConfigMap with scripts to be run every time Pgpool container is initialized                                        | `""`                 |
-| `pgpool.initdbScriptsSecret`                | Secret with scripts to be run every time Pgpool container is initialized                                           | `""`                 |
-| `pgpool.tls.enabled`                        | Enable TLS traffic support for end-client connections                                                              | `false`              |
-| `pgpool.tls.autoGenerated`                  | Create self-signed TLS certificates. Currently only supports PEM certificates                                      | `false`              |
-| `pgpool.tls.preferServerCiphers`            | Whether to use the server's TLS cipher preferences rather than the client's                                        | `true`               |
-| `pgpool.tls.certificatesSecret`             | Name of an existing secret that contains the certificates                                                          | `""`                 |
-| `pgpool.tls.certFilename`                   | Certificate filename                                                                                               | `""`                 |
-| `pgpool.tls.certKeyFilename`                | Certificate key filename                                                                                           | `""`                 |
-| `pgpool.tls.certCAFilename`                 | CA Certificate filename                                                                                            | `""`                 |
+| Name                                        | Description                                                                                                                              | Value                 |
+| ------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
+| `pgpoolImage.registry`                      | Pgpool image registry                                                                                                                    | `docker.io`           |
+| `pgpoolImage.repository`                    | Pgpool image repository                                                                                                                  | `bitnami/pgpool`      |
+| `pgpoolImage.tag`                           | Pgpool image tag                                                                                                                         | `4.2.6-debian-10-r11` |
+| `pgpoolImage.pullPolicy`                    | Pgpool image pull policy                                                                                                                 | `IfNotPresent`        |
+| `pgpoolImage.pullSecrets`                   | Specify docker-registry secret names as an array                                                                                         | `[]`                  |
+| `pgpoolImage.debug`                         | Specify if debug logs should be enabled                                                                                                  | `false`               |
+| `pgpool.customUsers`                        | Additional users that will be performing connections to the database using                                                               | `{}`                  |
+| `pgpool.usernames`                          | Comma or semicolon separated list of postgres usernames                                                                                  | `""`                  |
+| `pgpool.passwords`                          | Comma or semicolon separated list of the associated passwords for the users above                                                        | `""`                  |
+| `pgpool.hostAliases`                        | Deployment pod host aliases                                                                                                              | `[]`                  |
+| `pgpool.customUsersSecret`                  | Name of a secret containing the usernames and passwords of accounts that will be added to pgpool_passwd                                  | `""`                  |
+| `pgpool.srCheckDatabase`                    | Name of the database to perform streaming replication checks                                                                             | `postgres`            |
+| `pgpool.labels`                             | Labels to add to the Deployment. Evaluated as template                                                                                   | `{}`                  |
+| `pgpool.podLabels`                          | Labels to add to the pods. Evaluated as template                                                                                         | `{}`                  |
+| `pgpool.serviceLabels`                      | Labels to add to the service. Evaluated as template                                                                                      | `{}`                  |
+| `pgpool.customLivenessProbe`                | Override default liveness probe                                                                                                          | `{}`                  |
+| `pgpool.customReadinessProbe`               | Override default readiness probe                                                                                                         | `{}`                  |
+| `pgpool.customStartupProbe`                 | Override default startup probe                                                                                                           | `{}`                  |
+| `pgpool.command`                            | Override default container command (useful when using custom images)                                                                     | `[]`                  |
+| `pgpool.args`                               | Override default container args (useful when using custom images)                                                                        | `[]`                  |
+| `pgpool.lifecycleHooks`                     | LifecycleHook to set additional configuration at startup, e.g. LDAP settings via REST API. Evaluated as a template                       | `{}`                  |
+| `pgpool.extraEnvVars`                       | Array containing extra environment variables                                                                                             | `[]`                  |
+| `pgpool.extraEnvVarsCM`                     | ConfigMap with extra environment variables                                                                                               | `""`                  |
+| `pgpool.extraEnvVarsSecret`                 | Secret with extra environment variables                                                                                                  | `""`                  |
+| `pgpool.extraVolumes`                       | Extra volumes to add to the deployment                                                                                                   | `[]`                  |
+| `pgpool.extraVolumeMounts`                  | Extra volume mounts to add to the container. Normally used with `extraVolumes`                                                           | `[]`                  |
+| `pgpool.initContainers`                     | Extra init containers to add to the deployment                                                                                           | `[]`                  |
+| `pgpool.sidecars`                           | Extra sidecar containers to add to the deployment                                                                                        | `[]`                  |
+| `pgpool.replicaCount`                       | The number of replicas to deploy                                                                                                         | `1`                   |
+| `pgpool.podAnnotations`                     | Additional pod annotations                                                                                                               | `{}`                  |
+| `pgpool.priorityClassName`                  | Pod priority class                                                                                                                       | `""`                  |
+| `pgpool.podAffinityPreset`                  | Pgpool pod affinity preset. Ignored if `pgpool.affinity` is set. Allowed values: `soft` or `hard`                                        | `""`                  |
+| `pgpool.podAntiAffinityPreset`              | Pgpool pod anti-affinity preset. Ignored if `pgpool.affinity` is set. Allowed values: `soft` or `hard`                                   | `soft`                |
+| `pgpool.nodeAffinityPreset.type`            | Pgpool node affinity preset type. Ignored if `pgpool.affinity` is set. Allowed values: `soft` or `hard`                                  | `""`                  |
+| `pgpool.nodeAffinityPreset.key`             | Pgpool node label key to match Ignored if `pgpool.affinity` is set.                                                                      | `""`                  |
+| `pgpool.nodeAffinityPreset.values`          | Pgpool node label values to match. Ignored if `pgpool.affinity` is set.                                                                  | `[]`                  |
+| `pgpool.affinity`                           | Affinity for Pgpool pods assignment                                                                                                      | `{}`                  |
+| `pgpool.nodeSelector`                       | Node labels for Pgpool pods assignment                                                                                                   | `{}`                  |
+| `pgpool.tolerations`                        | Tolerations for Pgpool pods assignment                                                                                                   | `[]`                  |
+| `pgpool.securityContext.enabled`            | Enable security context for Pgpool                                                                                                       | `true`                |
+| `pgpool.securityContext.fsGroup`            | Group ID for the Pgpool filesystem                                                                                                       | `1001`                |
+| `pgpool.containerSecurityContext.enabled`   | Enable container security context                                                                                                        | `true`                |
+| `pgpool.containerSecurityContext.runAsUser` | User ID for the Pgpool container                                                                                                         | `1001`                |
+| `pgpool.resources.limits`                   | The resources limits for the container                                                                                                   | `{}`                  |
+| `pgpool.resources.requests`                 | The requested resources for the container                                                                                                | `{}`                  |
+| `pgpool.livenessProbe.enabled`              | Enable livenessProbe                                                                                                                     | `true`                |
+| `pgpool.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                                                  | `30`                  |
+| `pgpool.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                                                         | `10`                  |
+| `pgpool.livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                                                                        | `5`                   |
+| `pgpool.livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                                                                      | `5`                   |
+| `pgpool.livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                                                                      | `1`                   |
+| `pgpool.readinessProbe.enabled`             | Enable readinessProbe                                                                                                                    | `true`                |
+| `pgpool.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                                                                 | `5`                   |
+| `pgpool.readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                                                                        | `5`                   |
+| `pgpool.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                                                       | `5`                   |
+| `pgpool.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                                                                     | `5`                   |
+| `pgpool.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                                                     | `1`                   |
+| `pgpool.startupProbe.enabled`               | Enable startupProbe                                                                                                                      | `false`               |
+| `pgpool.startupProbe.initialDelaySeconds`   | Initial delay seconds for startupProbe                                                                                                   | `5`                   |
+| `pgpool.startupProbe.periodSeconds`         | Period seconds for startupProbe                                                                                                          | `10`                  |
+| `pgpool.startupProbe.timeoutSeconds`        | Timeout seconds for startupProbe                                                                                                         | `5`                   |
+| `pgpool.startupProbe.failureThreshold`      | Failure threshold for startupProbe                                                                                                       | `10`                  |
+| `pgpool.startupProbe.successThreshold`      | Success threshold for startupProbe                                                                                                       | `1`                   |
+| `pgpool.pdb.create`                         | Specifies whether a Pod disruption budget should be created for Pgpool pods                                                              | `false`               |
+| `pgpool.pdb.minAvailable`                   | Minimum number / percentage of pods that should remain scheduled                                                                         | `1`                   |
+| `pgpool.pdb.maxUnavailable`                 | Maximum number / percentage of pods that may be made unavailable                                                                         | `""`                  |
+| `pgpool.updateStrategy`                     | Strategy used to replace old Pods by new ones                                                                                            | `{}`                  |
+| `pgpool.containerPort`                      | Pgpool port                                                                                                                              | `5432`                |
+| `pgpool.minReadySeconds`                    | How many seconds a pod needs to be ready before killing the next, during update                                                          | `""`                  |
+| `pgpool.adminUsername`                      | Pgpool Admin username                                                                                                                    | `admin`               |
+| `pgpool.adminPassword`                      | Pgpool Admin password                                                                                                                    | `""`                  |
+| `pgpool.logConnections`                     | Log all client connections (PGPOOL_ENABLE_LOG_CONNECTIONS)                                                                               | `false`               |
+| `pgpool.logHostname`                        | Log the client hostname instead of IP address (PGPOOL_ENABLE_LOG_HOSTNAME)                                                               | `true`                |
+| `pgpool.logPerNodeStatement`                | Log every SQL statement for each DB node separately (PGPOOL_ENABLE_LOG_PER_NODE_STATEMENT)                                               | `false`               |
+| `pgpool.logLinePrefix`                      | Format of the log entry lines (PGPOOL_LOG_LINE_PREFIX)                                                                                   | `""`                  |
+| `pgpool.clientMinMessages`                  | Log level for clients                                                                                                                    | `error`               |
+| `pgpool.numInitChildren`                    | The number of preforked Pgpool-II server processes. It is also the concurrent                                                            | `""`                  |
+| `pgpool.reservedConnections`                | Number of reserved connections. When zero, excess connection block. When non-zero, excess connections are refused with an error message. | `1`                   |
+| `pgpool.maxPool`                            | The maximum number of cached connections in each child process (PGPOOL_MAX_POOL)                                                         | `""`                  |
+| `pgpool.childMaxConnections`                | The maximum number of client connections in each child process (PGPOOL_CHILD_MAX_CONNECTIONS)                                            | `""`                  |
+| `pgpool.childLifeTime`                      | The time in seconds to terminate a Pgpool-II child process if it remains idle (PGPOOL_CHILD_LIFE_TIME)                                   | `""`                  |
+| `pgpool.clientIdleLimit`                    | The time in seconds to disconnect a client if it remains idle since the last query (PGPOOL_CLIENT_IDLE_LIMIT)                            | `""`                  |
+| `pgpool.connectionLifeTime`                 | The time in seconds to terminate the cached connections to the PostgreSQL backend (PGPOOL_CONNECTION_LIFE_TIME)                          | `""`                  |
+| `pgpool.useLoadBalancing`                   | Use Pgpool Load-Balancing                                                                                                                | `true`                |
+| `pgpool.loadBalancingOnWrite`               | LoadBalancer on write actions behavior                                                                                                   | `transaction`         |
+| `pgpool.configuration`                      | Pgpool configuration                                                                                                                     | `""`                  |
+| `pgpool.configurationCM`                    | ConfigMap with Pgpool configuration                                                                                                      | `""`                  |
+| `pgpool.initdbScripts`                      | Dictionary of initdb scripts                                                                                                             | `{}`                  |
+| `pgpool.initdbScriptsCM`                    | ConfigMap with scripts to be run every time Pgpool container is initialized                                                              | `""`                  |
+| `pgpool.initdbScriptsSecret`                | Secret with scripts to be run every time Pgpool container is initialized                                                                 | `""`                  |
+| `pgpool.tls.enabled`                        | Enable TLS traffic support for end-client connections                                                                                    | `false`               |
+| `pgpool.tls.autoGenerated`                  | Create self-signed TLS certificates. Currently only supports PEM certificates                                                            | `false`               |
+| `pgpool.tls.preferServerCiphers`            | Whether to use the server's TLS cipher preferences rather than the client's                                                              | `true`                |
+| `pgpool.tls.certificatesSecret`             | Name of an existing secret that contains the certificates                                                                                | `""`                  |
+| `pgpool.tls.certFilename`                   | Certificate filename                                                                                                                     | `""`                  |
+| `pgpool.tls.certKeyFilename`                | Certificate key filename                                                                                                                 | `""`                  |
+| `pgpool.tls.certCAFilename`                 | CA Certificate filename                                                                                                                  | `""`                  |
 
 
 ### LDAP parameters
@@ -321,7 +327,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | -------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
 | `metricsImage.registry`                      | PostgreSQL Prometheus exporter image registry                                                                                                             | `docker.io`                 |
 | `metricsImage.repository`                    | PostgreSQL Prometheus exporter image repository                                                                                                           | `bitnami/postgres-exporter` |
-| `metricsImage.tag`                           | PostgreSQL Prometheus exporter image tag                                                                                                                  | `0.10.0-debian-10-r68`      |
+| `metricsImage.tag`                           | PostgreSQL Prometheus exporter image tag                                                                                                                  | `0.10.0-debian-10-r133`     |
 | `metricsImage.pullPolicy`                    | PostgreSQL Prometheus exporter image pull policy                                                                                                          | `IfNotPresent`              |
 | `metricsImage.pullSecrets`                   | Specify docker-registry secret names as an array                                                                                                          | `[]`                        |
 | `metricsImage.debug`                         | Specify if debug logs should be enabled                                                                                                                   | `false`                     |
@@ -330,6 +336,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `metrics.securityContext.runAsUser`          | User ID for the PostgreSQL Prometheus exporter container                                                                                                  | `1001`                      |
 | `metrics.resources.limits`                   | The resources limits for the container                                                                                                                    | `{}`                        |
 | `metrics.resources.requests`                 | The requested resources for the container                                                                                                                 | `{}`                        |
+| `metrics.containerPort`                      | Prometheus metrics exporter port                                                                                                                          | `9187`                      |
 | `metrics.livenessProbe.enabled`              | Enable livenessProbe                                                                                                                                      | `true`                      |
 | `metrics.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                                                                   | `30`                        |
 | `metrics.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                                                                          | `10`                        |
@@ -348,8 +355,15 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `metrics.startupProbe.timeoutSeconds`        | Timeout seconds for startupProbe                                                                                                                          | `5`                         |
 | `metrics.startupProbe.failureThreshold`      | Failure threshold for startupProbe                                                                                                                        | `10`                        |
 | `metrics.startupProbe.successThreshold`      | Success threshold for startupProbe                                                                                                                        | `1`                         |
+| `metrics.service.type`                       | PostgreSQL Prometheus exporter metrics service type                                                                                                       | `ClusterIP`                 |
+| `metrics.service.port`                       | PostgreSQL Prometheus exporter metrics service port                                                                                                       | `9187`                      |
+| `metrics.service.nodePort`                   | PostgreSQL Prometheus exporter Node Port                                                                                                                  | `""`                        |
+| `metrics.service.clusterIP`                  | PostgreSQL Prometheus exporter metrics service Cluster IP                                                                                                 | `""`                        |
+| `metrics.service.loadBalancerIP`             | PostgreSQL Prometheus exporter service Load Balancer IP                                                                                                   | `""`                        |
+| `metrics.service.loadBalancerSourceRanges`   | PostgreSQL Prometheus exporter service Load Balancer sources                                                                                              | `[]`                        |
+| `metrics.service.externalTrafficPolicy`      | PostgreSQL Prometheus exporter service external traffic policy                                                                                            | `Cluster`                   |
 | `metrics.annotations`                        | Annotations for PostgreSQL Prometheus exporter service                                                                                                    | `{}`                        |
-| `metrics.customMetrics`                      | Additional custom metrics                                                                                                                                 | `""`                        |
+| `metrics.customMetrics`                      | Additional custom metrics                                                                                                                                 | `{}`                        |
 | `metrics.extraEnvVars`                       | An array to add extra environment variables to configure postgres-exporter                                                                                | `{}`                        |
 | `metrics.serviceMonitor.enabled`             | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)                                                    | `false`                     |
 | `metrics.serviceMonitor.namespace`           | Optional namespace which Prometheus is running in                                                                                                         | `""`                        |
@@ -366,8 +380,8 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | --------------------------------------------- | --------------------------------------------------- | ----------------------- |
 | `volumePermissionsImage.registry`             | Init container volume-permissions image registry    | `docker.io`             |
 | `volumePermissionsImage.repository`           | Init container volume-permissions image repository  | `bitnami/bitnami-shell` |
-| `volumePermissionsImage.tag`                  | Init container volume-permissions image tag         | `10-debian-10-r200`     |
-| `volumePermissionsImage.pullPolicy`           | Init container volume-permissions image pull policy | `Always`                |
+| `volumePermissionsImage.tag`                  | Init container volume-permissions image tag         | `10-debian-10-r265`     |
+| `volumePermissionsImage.pullPolicy`           | Init container volume-permissions image pull policy | `IfNotPresent`          |
 | `volumePermissionsImage.pullSecrets`          | Specify docker-registry secret names as an array    | `[]`                    |
 | `volumePermissions.enabled`                   | Enable init container to adapt volume permissions   | `false`                 |
 | `volumePermissions.securityContext.runAsUser` | Init container volume-permissions User ID           | `0`                     |
@@ -383,7 +397,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `persistence.existingClaim` | A manually managed Persistent Volume and Claim                                          | `""`                  |
 | `persistence.storageClass`  | Persistent Volume Storage Class                                                         | `""`                  |
 | `persistence.mountPath`     | The path the volume will be mounted at, useful when using different PostgreSQL images.  | `/bitnami/postgresql` |
-| `persistence.accessModes`   | List of access modes of data volume                                                     | `[]`                  |
+| `persistence.accessModes`   | List of access modes of data volume                                                     | `["ReadWriteOnce"]`   |
 | `persistence.size`          | Persistent Volume Claim size                                                            | `8Gi`                 |
 | `persistence.annotations`   | Persistent Volume Claim annotations                                                     | `{}`                  |
 | `persistence.selector`      | Selector to match an existing Persistent Volume (this value is evaluated as a template) | `{}`                  |
@@ -391,20 +405,22 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 
 ### Traffic Exposure parameters
 
-| Name                               | Description                                                         | Value       |
-| ---------------------------------- | ------------------------------------------------------------------- | ----------- |
-| `service.type`                     | Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`) | `ClusterIP` |
-| `service.port`                     | PostgreSQL port                                                     | `5432`      |
-| `service.nodePort`                 | Kubernetes service nodePort                                         | `""`        |
-| `service.loadBalancerIP`           | Load balancer IP if service type is `LoadBalancer`                  | `""`        |
-| `service.loadBalancerSourceRanges` | Addresses that are allowed when service is LoadBalancer             | `[]`        |
-| `service.clusterIP`                | Set the Cluster IP to use                                           | `""`        |
-| `service.externalTrafficPolicy`    | Enable client source IP preservation                                | `Cluster`   |
-| `service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin    | `None`      |
-| `service.annotations`              | Provide any additional annotations for PostgreSQL service           | `{}`        |
-| `service.serviceLabels`            | Labels for PostgreSQL service                                       | `{}`        |
-| `networkPolicy.enabled`            | Enable NetworkPolicy                                                | `false`     |
-| `networkPolicy.allowExternal`      | Don't require client label for connections                          | `true`      |
+| Name                                                  | Description                                                                                   | Value       |
+| ----------------------------------------------------- | --------------------------------------------------------------------------------------------- | ----------- |
+| `service.type`                                        | Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`)                           | `ClusterIP` |
+| `service.port`                                        | PostgreSQL port                                                                               | `5432`      |
+| `service.nodePort`                                    | Kubernetes service nodePort                                                                   | `""`        |
+| `service.loadBalancerIP`                              | Load balancer IP if service type is `LoadBalancer`                                            | `""`        |
+| `service.loadBalancerSourceRanges`                    | Addresses that are allowed when service is LoadBalancer                                       | `[]`        |
+| `service.clusterIP`                                   | Set the Cluster IP to use                                                                     | `""`        |
+| `service.externalTrafficPolicy`                       | Enable client source IP preservation                                                          | `Cluster`   |
+| `service.sessionAffinity`                             | Control where client requests go, to the same pod or round-robin                              | `None`      |
+| `service.annotations`                                 | Provide any additional annotations for PostgreSQL service                                     | `{}`        |
+| `service.serviceLabels`                               | Labels for PostgreSQL service                                                                 | `{}`        |
+| `networkPolicy.enabled`                               | Enable NetworkPolicy                                                                          | `false`     |
+| `networkPolicy.allowExternal`                         | Don't require client label for connections                                                    | `true`      |
+| `networkPolicy.egressRules.denyConnectionsToExternal` | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53) | `false`     |
+| `networkPolicy.egressRules.customRules`               | Custom network policy rule                                                                    | `{}`        |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
@@ -472,7 +488,7 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 
 ### Securing traffic using TLS
 
-Learn how to [configure TLS authentication](/<%= platform_path %>/infrastructure/postgresql-ha/administration/enable-tls/)
+Learn how to [configure TLS authentication](/<%= platform_path %>/infrastructure/postgresql-ha/administration/enable-tls-ingress/)
 
 ### LDAP
 
@@ -504,7 +520,7 @@ ldap.tls_reqcert="demand"
 
 Next, login to the PostgreSQL server using the `psql` client and add the PAM authenticated LDAP users.
 
-> Note: Parameters including commas must be escaped as shown in the above example. More information at: https://github.com/helm/helm/blob/master/docs/using_helm.md#the-format-and-limitations-of---set
+> Note: Parameters including commas must be escaped as shown in the above example.
 
 ### repmgr.conf / postgresql.conf / pg_hba.conf / pgpool.conf files as configMap
 
@@ -602,6 +618,31 @@ $ helm upgrade my-release bitnami/postgresql-ha \
 > Note: you need to substitute the placeholders _[POSTGRESQL_PASSWORD]_, and _[REPMGR_PASSWORD]_ with the values obtained from instructions in the installation notes.
 
 > Note: As general rule, it is always wise to do a backup before the upgrading procedures.
+
+### To 8.0.0
+
+A new major version of repmgr (5.3) was included. To upgrade to this major version, it's necessary to upgrade the repmgr extension installed on the database. To do so, follow the steps below:
+
+- Reduce your PostgreSQL setup to one replica (primary node) and upgrade to `8.0.0`, enabling the repmgr extension upgrade:
+
+```bash
+$ helm upgrade my-release --version 8.0.0 bitnami/postgresql-ha \
+    --set postgresql.password=[POSTGRESQL_PASSWORD] \
+    --set postgresql.repmgrPassword=[REPMGR_PASSWORD] \
+    --set postgresql.replicaCount=1 \
+    --set postgresql.upgradeRepmgrExtension=true
+```
+
+- Scale your PostgreSQL setup to the original number of replicas:
+
+```bash
+$ helm upgrade my-release --version 8.0.0 bitnami/postgresql-ha \
+    --set postgresql.password=[POSTGRESQL_PASSWORD] \
+    --set postgresql.repmgrPassword=[REPMGR_PASSWORD] \
+    --set postgresql.replicaCount=[NUMBER_OF_REPLICAS]
+```
+
+> Note: you need to substitute the placeholders _[POSTGRESQL_PASSWORD]_, and _[REPMGR_PASSWORD]_ with the values obtained from instructions in the installation notes.
 
 ### To 6.4.0
 
@@ -764,3 +805,19 @@ Bitnami Kubernetes documentation is available at [https://docs.bitnami.com/](htt
 - [Bitnami Helm charts documentation](https://docs.bitnami.com/kubernetes/apps/)
 - [Kubernetes FAQs](https://docs.bitnami.com/kubernetes/faq/)
 - [Kubernetes Developer guides](https://docs.bitnami.com/tutorials/)
+
+## License
+
+Copyright &copy; 2022 Bitnami
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

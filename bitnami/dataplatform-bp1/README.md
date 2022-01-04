@@ -9,7 +9,7 @@ This Helm chart enables the fully automated Kubernetes deployment of such multi-
 -   Apache Kafka – Data distribution bus with buffering capabilities
 -   Apache Spark – In-memory data analytics
 -   Solr – Data persistence and search
--   Data Platform Prometheus Exporter - Prometheus exporter that emits the health metrics of the data platform
+-   Data Platform Signature State Controller – Kubernetes controller that emits data platform health and state metrics in Prometheus format.
 
 These containerized stateful software stacks are deployed in multi-node cluster configurations, which is defined by the
 Helm chart blueprint for this data platform deployment, covering:
@@ -21,9 +21,7 @@ Helm chart blueprint for this data platform deployment, covering:
 
 In addition to the Pod resource optimizations, this blueprint is validated and tested to provide Kubernetes node count and sizing recommendations [(see Kubernetes Cluster Requirements)](#kubernetes-cluster-requirements) to facilitate cloud platform capacity planning. The goal is optimize the number of required Kubernetes nodes in order to optimize server resource usage and, at the same time, ensuring runtime and resource diversity.
 
-The first release of this blueprint defines a small size data platform deployment, deployed on 3 Kubernetes application nodes with physical diverse underlying server infrastructure.
-
-Use cases for this small size data platform setup include: data and application evaluation, development, and functional testing.
+This blueprint, in its default configuration, deploys the data platform, on a Kubernetes cluster with three worker nodes. Use cases for this data platform setup include: data and application evaluation, development, and functional testing.
 
 ## TL;DR
 
@@ -34,18 +32,16 @@ $ helm install my-release bitnami/dataplatform-bp1
 
 ## Introduction
 
-This chart bootstraps Data Platform Blueprint-1 deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps Data Platform Blueprint-1 deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-The "Small" size data platform in default configuration deploys the following:
+Once the chart is installed, the deployed data platform cluster comprises of:
 1. Zookeeper with 3 nodes to be used for both Kafka and Solr
 2. Kafka with 3 nodes using the zookeeper deployed above
 3. Solr with 2 nodes using the zookeeper deployed above
 4. Spark with 1 Master and 2 worker nodes
 5. Data Platform Metrics emitter and Prometheus exporter
 
-The data platform can be optionally deployed with the Tanzu observability framework. In that case, the wavefront collectors will be set up as a DaemonSet to collect the Kubernetes cluster metrics to enable runtime feed into the Tanzu Observability service. It will also be pre-configured to scrape the metrics from the Prometheus endpoint that each application (Kafka/Spark/Solr) emits the metrics to.
-
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
+The data platform can be optionally deployed with the Tanzu observability framework. In that case, the wavefront collectors will be set up as a DaemonSet to collect the Kubernetes cluster metrics to enable runtime feed into the Tanzu Observability service.
 
 ## Prerequisites
 
@@ -97,10 +93,11 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common parameters
 
-| Name                | Description                                | Value |
-| ------------------- | ------------------------------------------ | ----- |
-| `commonLabels`      | Labels to add to all deployed objects      | `{}`  |
-| `commonAnnotations` | Annotations to add to all deployed objects | `{}`  |
+| Name                | Description                                       | Value |
+| ------------------- | ------------------------------------------------- | ----- |
+| `commonLabels`      | Labels to add to all deployed objects             | `{}`  |
+| `commonAnnotations` | Annotations to add to all deployed objects        | `{}`  |
+| `extraDeploy`       | Array of extra objects to deploy with the release | `[]`  |
 
 
 ### Data Platform Chart parameters
@@ -114,9 +111,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dataplatform.exporter.enabled`                               | Start a prometheus exporter                                                                                      | `true`                          |
 | `dataplatform.exporter.image.registry`                        | dataplatform exporter image registry                                                                             | `docker.io`                     |
 | `dataplatform.exporter.image.repository`                      | dataplatform exporter image repository                                                                           | `bitnami/dataplatform-exporter` |
-| `dataplatform.exporter.image.tag`                             | dataplatform exporter image tag (immutable tags are recommended)                                                 | `0.0.11-scratch-r2`             |
+| `dataplatform.exporter.image.tag`                             | dataplatform exporter image tag (immutable tags are recommended)                                                 | `1.0.1-scratch-r0`              |
 | `dataplatform.exporter.image.pullPolicy`                      | dataplatform exporter image pull policy                                                                          | `IfNotPresent`                  |
 | `dataplatform.exporter.image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                 | `[]`                            |
+| `dataplatform.exporter.config`                                | Data Platform Metrics Configuration emitted in Prometheus format                                                 | `""`                            |
 | `dataplatform.exporter.livenessProbe.enabled`                 | Enable livenessProbe                                                                                             | `true`                          |
 | `dataplatform.exporter.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                          | `10`                            |
 | `dataplatform.exporter.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                                 | `5`                             |
@@ -179,7 +177,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dataplatform.emitter.enabled`                                | Start Data Platform metrics emitter                                                                              | `true`                          |
 | `dataplatform.emitter.image.registry`                         | Data Platform emitter image registry                                                                             | `docker.io`                     |
 | `dataplatform.emitter.image.repository`                       | Data Platform emitter image repository                                                                           | `bitnami/dataplatform-emitter`  |
-| `dataplatform.emitter.image.tag`                              | Data Platform emitter image tag (immutable tags are recommended)                                                 | `0.0.10-scratch-r1`             |
+| `dataplatform.emitter.image.tag`                              | Data Platform emitter image tag (immutable tags are recommended)                                                 | `1.0.1-scratch-r0`              |
 | `dataplatform.emitter.image.pullPolicy`                       | Data Platform emitter image pull policy                                                                          | `IfNotPresent`                  |
 | `dataplatform.emitter.image.pullSecrets`                      | Specify docker-registry secret names as an array                                                                 | `[]`                            |
 | `dataplatform.emitter.livenessProbe.enabled`                  | Enable livenessProbe                                                                                             | `true`                          |
@@ -257,45 +255,47 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Kafka chart parameters
 
-| Name                                     | Description                                                                               | Value                 |
-| ---------------------------------------- | ----------------------------------------------------------------------------------------- | --------------------- |
-| `kafka.enabled`                          | Switch to enable or disable the Kafka helm chart                                          | `true`                |
-| `kafka.replicaCount`                     | Number of Kafka replicas                                                                  | `3`                   |
-| `kafka.heapOpts`                         | Kafka's Java Heap size                                                                    | `-Xmx4096m -Xms4096m` |
-| `kafka.resources.limits`                 | The resources limits for Kafka containers                                                 | `{}`                  |
-| `kafka.resources.requests`               | The requested resources for Kafka containers                                              | `{}`                  |
-| `kafka.affinity.podAntiAffinity`         | Zookeeper pods Anti Affinity rules for best possible resiliency (evaluated as a template) | `{}`                  |
-| `kafka.affinity.podAffinity`             | Zookeeper pods Affinity rules for best possible resiliency (evaluated as a template)      | `{}`                  |
-| `kafka.metrics.kafka.enabled`            | Whether or not to create a standalone Kafka exporter to expose Kafka metrics              | `false`               |
-| `kafka.metrics.kafka.resources.limits`   | The resources limits for the container                                                    | `{}`                  |
-| `kafka.metrics.kafka.resources.requests` | Kafka Exporter container resource requests                                                | `{}`                  |
-| `kafka.metrics.kafka.service.port`       | Kafka Exporter Prometheus port to be used in Wavefront configuration                      | `9308`                |
-| `kafka.metrics.jmx.enabled`              | Whether or not to expose JMX metrics to Prometheus                                        | `false`               |
-| `kafka.metrics.jmx.resources.limits`     | The resources limits for the container                                                    | `{}`                  |
-| `kafka.metrics.jmx.resources.requests`   | JMX Exporter container resource requests                                                  | `{}`                  |
-| `kafka.metrics.jmx.service.port`         | JMX Exporter Prometheus port                                                              | `5556`                |
-| `kafka.zookeeper.enabled`                | Switch to enable or disable the Zookeeper helm chart                                      | `false`               |
-| `kafka.externalZookeeper.servers`        | Server or list of external Zookeeper servers to use                                       | `[]`                  |
+| Name                                     | Description                                                                               | Value                               |
+| ---------------------------------------- | ----------------------------------------------------------------------------------------- | ----------------------------------- |
+| `kafka.enabled`                          | Switch to enable or disable the Kafka helm chart                                          | `true`                              |
+| `kafka.replicaCount`                     | Number of Kafka replicas                                                                  | `3`                                 |
+| `kafka.heapOpts`                         | Kafka's Java Heap size                                                                    | `-Xmx4096m -Xms4096m`               |
+| `kafka.resources.limits`                 | The resources limits for Kafka containers                                                 | `{}`                                |
+| `kafka.resources.requests`               | The requested resources for Kafka containers                                              | `{}`                                |
+| `kafka.affinity.podAntiAffinity`         | Zookeeper pods Anti Affinity rules for best possible resiliency (evaluated as a template) | `{}`                                |
+| `kafka.affinity.podAffinity`             | Zookeeper pods Affinity rules for best possible resiliency (evaluated as a template)      | `{}`                                |
+| `kafka.metrics.kafka.enabled`            | Whether or not to create a standalone Kafka exporter to expose Kafka metrics              | `false`                             |
+| `kafka.metrics.kafka.resources.limits`   | The resources limits for the container                                                    | `{}`                                |
+| `kafka.metrics.kafka.resources.requests` | Kafka Exporter container resource requests                                                | `{}`                                |
+| `kafka.metrics.kafka.service.port`       | Kafka Exporter Prometheus port to be used in Wavefront configuration                      | `9308`                              |
+| `kafka.metrics.jmx.enabled`              | Whether or not to expose JMX metrics to Prometheus                                        | `false`                             |
+| `kafka.metrics.jmx.resources.limits`     | The resources limits for the container                                                    | `{}`                                |
+| `kafka.metrics.jmx.resources.requests`   | JMX Exporter container resource requests                                                  | `{}`                                |
+| `kafka.metrics.jmx.service.port`         | JMX Exporter Prometheus port                                                              | `5556`                              |
+| `kafka.metrics.jmx.service.annotations`  | Exporter service annotation                                                               | `{}`                                |
+| `kafka.zookeeper.enabled`                | Switch to enable or disable the Zookeeper helm chart                                      | `false`                             |
+| `kafka.externalZookeeper.servers`        | Server or list of external Zookeeper servers to use                                       | `["{{ .Release.Name }}-zookeeper"]` |
 
 
 ### Solr chart parameters
 
-| Name                                 | Description                                                                                    | Value                 |
-| ------------------------------------ | ---------------------------------------------------------------------------------------------- | --------------------- |
-| `solr.enabled`                       | Switch to enable or disable the Solr helm chart                                                | `true`                |
-| `solr.replicaCount`                  | Number of Solr replicas                                                                        | `2`                   |
-| `solr.authentication.enabled`        | Enable Solr authentication. BUG: Exporter deployment does not work with authentication enabled | `false`               |
-| `solr.javaMem`                       | Java recommended memory options to pass to the Solr container                                  | `-Xmx4096m -Xms4096m` |
-| `solr.affinity.podAntiAffinity`      | Zookeeper pods Anti Affinity rules for best possible resiliency (evaluated as a template)      | `{}`                  |
-| `solr.resources.limits`              | The resources limits for Solr containers                                                       | `{}`                  |
-| `solr.resources.requests`            | The requested resources for Solr containers                                                    | `{}`                  |
-| `solr.exporter.enabled`              | Start a prometheus exporter                                                                    | `false`               |
-| `solr.exporter.port`                 | Solr exporter port                                                                             | `9983`                |
-| `solr.exporter.affinity.podAffinity` | Zookeeper pods Affinity rules for best possible resiliency (evaluated as a template)           | `{}`                  |
-| `solr.exporter.resources.limits`     | The resources limits for the container                                                         | `{}`                  |
-| `solr.exporter.resources.requests`   | The requested resources for the container                                                      | `{}`                  |
-| `solr.zookeeper.enabled`             | Enable Zookeeper deployment. Needed for Solr cloud.                                            | `false`               |
-| `solr.externalZookeeper.servers`     | Servers for an already existing Zookeeper.                                                     | `[]`                  |
+| Name                                 | Description                                                                                    | Value                               |
+| ------------------------------------ | ---------------------------------------------------------------------------------------------- | ----------------------------------- |
+| `solr.enabled`                       | Switch to enable or disable the Solr helm chart                                                | `true`                              |
+| `solr.replicaCount`                  | Number of Solr replicas                                                                        | `2`                                 |
+| `solr.authentication.enabled`        | Enable Solr authentication. BUG: Exporter deployment does not work with authentication enabled | `false`                             |
+| `solr.javaMem`                       | Java recommended memory options to pass to the Solr container                                  | `-Xmx4096m -Xms4096m`               |
+| `solr.affinity.podAntiAffinity`      | Zookeeper pods Anti Affinity rules for best possible resiliency (evaluated as a template)      | `{}`                                |
+| `solr.resources.limits`              | The resources limits for Solr containers                                                       | `{}`                                |
+| `solr.resources.requests`            | The requested resources for Solr containers                                                    | `{}`                                |
+| `solr.exporter.enabled`              | Start a prometheus exporter                                                                    | `false`                             |
+| `solr.exporter.port`                 | Solr exporter port                                                                             | `9983`                              |
+| `solr.exporter.affinity.podAffinity` | Zookeeper pods Affinity rules for best possible resiliency (evaluated as a template)           | `{}`                                |
+| `solr.exporter.resources.limits`     | The resources limits for the container                                                         | `{}`                                |
+| `solr.exporter.resources.requests`   | The requested resources for the container                                                      | `{}`                                |
+| `solr.exporter.service.annotations`  | Exporter service annotations                                                                   | `{}`                                |
+| `solr.zookeeper.enabled`             | Enable Zookeeper deployment. Needed for Solr cloud.                                            | `false`                             |
+| `solr.externalZookeeper.servers`     | Servers for an already existing Zookeeper.                                                     | `["{{ .Release.Name }}-zookeeper"]` |
 
 
 ### Spark chart parameters
@@ -357,7 +357,7 @@ $ helm install my-release -f values.yaml bitnami/dataplatform-bp1
 
 In the default deployment, the helm chart deploys the data platform with [Metrics Emitter](https://hub.docker.com/r/bitnami/dataplatform-emitter) and [Prometheus Exporter](https://hub.docker.com/r/bitnami/dataplatform-exporter) which emit the health metrics of the data platform which can be integrated with your observability solution.
 
-In case you need to deploy the data platform with [Tanzu Observability](https://docs.wavefront.com/kubernetes.html) Framework for all the applications (Kafka/Spark/Solr) in the data platform, you can specify the 'enabled' parameter using the `--set <component>.metrics.enabled=true` argument to `helm install`. For Solr, the parameter is `solr.exporter.enabled=true` For Example,
+- To deploy the data platform with Tanzu Observability Framework with the Wavefront Collector with enabled annotation based discovery feature for all the applications (Kafka/Spark/Elasticsearch/Logstash) in the data platform, make sure that auto discovery `wavefront.collector.discovery.enabled=true` is enabled, It should be enabled by default and specify the 'enabled' parameter using the `--set <component>.metrics.enabled=true` argument to helm install. For Example,
 
 ```console
 $ helm install my-release bitnami/dataplatform-bp1 \
@@ -370,8 +370,29 @@ $ helm install my-release bitnami/dataplatform-bp1 \
     --set wavefront.wavefront.url=https://<YOUR_CLUSTER>.wavefront.com \
     --set wavefront.wavefront.token=<YOUR_API_TOKEN>
 ```
+> **NOTE**: When the annotation based discovery feature is enabled in the Wavefront Collector, it scrapes metrics from all the pods that have Prometheus annotation enabled.
 
-If you want to use an existing Wavefront deployment, edit the Wavefront Collector ConfigMap and add the following snippet under discovery plugins. Once done, restart the wavefront collectors DaemonSet.
+- To deploy the data platform with Tanzu Observability Framework without the annotation based discovery feature in Wavefront Collector for all the applications (Kafka/Spark/Elasticsearch/Logstash) in the data platform, uncomment the config section in the wavefront deployment from the data platform values.yml file, and specify the 'enable' parameter to 'false' using the `--set wavefront.collector.discovery.enabled=false`  with helm install command, below is an example:
+
+```console
+
+$ helm install my-release bitnami/dataplatform-bp1 \
+    --set kafka.metrics.kafka.enabled=true \
+    --set kafka.metrics.jmx.enabled=true \
+    --set spark.metrics.enabled=true \
+    --set solr.exporter.enabled=true \
+    --set wavefront.enabled=true \
+    --set wavefront.collector.discovery.enabled=false \
+    --set wavefront.clusterName=<K8s-CLUSTER-NAME> \
+    --set wavefront.wavefront.url=https://<YOUR_CLUSTER>.wavefront.com \
+    --set wavefront.wavefront.token=<YOUR_API_TOKEN>
+```
+
+### For using an existing Wavefront deployment
+
+- To enable the annotation discovery feature in wavefront for the existing wavefront deployment,  make sure that auto discovery `enableDiscovery: true` and annotation based discovery `discovery.disable_annotation_discovery: false` are enabled in the Wavefront Collector ConfigMap. They should be enabled by default.
+
+- To not use the annotation based discovery feature in wavefront, edit the Wavefront Collector ConfigMap and add the following snippet under discovery plugins. Once done, restart the wavefront collectors DaemonSet.
 
 ```console
 $ kubectl edit configmap wavefront-collector-config -n wavefront
@@ -392,7 +413,6 @@ Add the below config:
           port: 9308
           path: /metrics
           scheme: http
-          prefix: kafka.
 
         ## auto-discover jmx exporter
         - name: kafka-jmx-discovery
@@ -425,7 +445,7 @@ Add the below config:
           path: /metrics/
           scheme: http
           prefix: spark.
-        
+
         ## auto-discover spark
         - name: spark-master-discovery
           type: prometheus
@@ -460,6 +480,10 @@ In order to render complete information about the deployment including all the s
 
 ## Upgrading
 
+### To 9.0.0
+
+This major adds the auto discovery feature in wavefront and updates to newest versions of the exporter/emitter to the chart.
+
 ### To 8.0.0
 
 This major adds the data platform metrics emitter and Prometheus exporters to the chart which emit health metrics of the data platform.
@@ -491,3 +515,19 @@ The affinity rules have been updated to allow deploying this chart and the `data
 ### To 1.0.0
 
 This version updates the wavefront dependency to `2.x.x` where wavefront started to use a scratch image instead of debian. This can affect a current deployment if wavefront commands were provided. From now on, the only command that you will be able to execute inside the wavefront pod will be `/wavefront-collector`.
+
+## License
+
+Copyright &copy; 2022 Bitnami
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

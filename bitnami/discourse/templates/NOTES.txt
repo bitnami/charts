@@ -1,3 +1,9 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
+** Please be patient while the chart is being deployed **
+
 {{- $secretName := include "discourse.secretName" . -}}
 {{- $postgresqlSecretName := include "discourse.postgresql.secretName" . -}}
 {{- $redisSecretName := include "discourse.redis.secretName" . -}}
@@ -112,8 +118,6 @@ This deployment will be incomplete until you configure Discourse with a resolvab
   {{- if (include "discourse.redis.auth.enabled" .) }}
   {{ include "common.utils.secret.getvalue" (dict "secret" $redisSecretName "field" "redis-password" "context" $) }}
   {{- end }}
-
-
   ## PLEASE UPDATE THE EXTERNAL DATABASE CONNECTION PARAMETERS IN THE FOLLOWING COMMAND AS NEEDED ##
 
   helm upgrade --namespace {{ .Release.Namespace }} {{ .Release.Name }} bitnami/{{ .Chart.Name }} \

@@ -1,8 +1,10 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
 {{- if or .Values.mariadb.enabled .Values.externalDatabase.host -}}
 
-*******************************************************************
-*** PLEASE BE PATIENT: Osclass may take a few minutes to install ***
-*******************************************************************
+** Please be patient while the chart is being deployed **
 
 1. Get the Osclass URL:
 
@@ -66,6 +68,8 @@ host. To configure Osclass to use and external database host:
 
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- include "common.warnings.rollingTag" .Values.metrics.image }}
+{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
+{{- include "common.warnings.rollingTag" .Values.certificates.image }}
 
 {{- $passwordValidationErrors := list -}}
 {{- if not .Values.existingSecret -}}

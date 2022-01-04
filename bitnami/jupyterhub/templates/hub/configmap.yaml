@@ -151,6 +151,8 @@ data:
         ("extra_annotations", None),
         ("uid", None),
         ("fs_gid", None),
+        ("run_privileged", None),
+        ("allow_privilege_escalation", None),
         ("service_account", "serviceAccountName"),
         ("storage_extra_labels", "storage.extraLabels"),
         ("tolerations", "extraTolerations"),

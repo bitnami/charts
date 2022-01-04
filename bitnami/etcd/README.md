@@ -1,6 +1,6 @@
 # etcd
 
-[etcd](https://www.etcd.org/) is an object-relational database management system (ORDBMS) with an emphasis on extensibility and on standards-compliance.
+[etcd](https://etcd.io/) is an object-relational database management system (ORDBMS) with an emphasis on extensibility and on standards-compliance.
 
 ## TL;DR
 
@@ -11,7 +11,7 @@ $ helm install my-release bitnami/etcd
 
 ## Introduction
 
-This chart bootstraps a [etcd](https://github.com/bitnami/bitnami-docker-etcd) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [etcd](https://github.com/bitnami/bitnami-docker-etcd) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
@@ -67,51 +67,56 @@ The command removes all the Kubernetes components associated with the chart and 
 | `clusterDomain`          | Default Kubernetes cluster domain                                                            | `cluster.local` |
 | `extraDeploy`            | Array of extra objects to deploy with the release                                            | `[]`            |
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)      | `false`         |
-| `diagnosticMode.command` | Command to override all containers in the deployment                                         | `[]`            |
-| `diagnosticMode.args`    | Args to override all containers in the deployment                                            | `[]`            |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                         | `["sleep"]`     |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                            | `["infinity"]`  |
 
 
 ### etcd parameters
 
-| Name                                  | Description                                                                                     | Value                 |
-| ------------------------------------- | ----------------------------------------------------------------------------------------------- | --------------------- |
-| `image.registry`                      | etcd image registry                                                                             | `docker.io`           |
-| `image.repository`                    | etcd image name                                                                                 | `bitnami/etcd`        |
-| `image.tag`                           | etcd image tag                                                                                  | `3.5.0-debian-10-r64` |
-| `image.pullPolicy`                    | etcd image pull policy                                                                          | `IfNotPresent`        |
-| `image.pullSecrets`                   | etcd image pull secrets                                                                         | `[]`                  |
-| `image.debug`                         | Enable image debug mode                                                                         | `false`               |
-| `auth.rbac.enabled`                   | Switch to enable RBAC authentication                                                            | `true`                |
-| `auth.rbac.allowNoneAuthentication`   | Allow to use etcd without configuring RBAC authentication                                       | `true`                |
-| `auth.rbac.rootPassword`              | Root user password. The root user is always `root`                                              | `""`                  |
-| `auth.rbac.existingSecret`            | Name of the existing secret containing credentials for the root user                            | `""`                  |
-| `auth.rbac.existingSecretPasswordKey` | Name of key containing password to be retrieved from the existing secret                        | `""`                  |
-| `auth.client.secureTransport`         | Switch to encrypt client-to-server communications using TLS certificates                        | `false`               |
-| `auth.client.useAutoTLS`              | Switch to automatically create the TLS certificates                                             | `false`               |
-| `auth.client.existingSecret`          | Name of the existing secret containing the TLS certificates for client-to-server communications | `""`                  |
-| `auth.client.enableAuthentication`    | Switch to enable host authentication using TLS certificates. Requires existing secret           | `false`               |
-| `auth.client.certFilename`            | Name of the file containing the client certificate                                              | `cert.pem`            |
-| `auth.client.certKeyFilename`         | Name of the file containing the client certificate private key                                  | `key.pem`             |
-| `auth.client.caFilename`              | Name of the file containing the client CA certificate                                           | `""`                  |
-| `auth.peer.secureTransport`           | Switch to encrypt server-to-server communications using TLS certificates                        | `false`               |
-| `auth.peer.useAutoTLS`                | Switch to automatically create the TLS certificates                                             | `false`               |
-| `auth.peer.existingSecret`            | Name of the existing secret containing the TLS certificates for server-to-server communications | `""`                  |
-| `auth.peer.enableAuthentication`      | Switch to enable host authentication using TLS certificates. Requires existing secret           | `false`               |
-| `auth.peer.certFilename`              | Name of the file containing the peer certificate                                                | `cert.pem`            |
-| `auth.peer.certKeyFilename`           | Name of the file containing the peer certificate private key                                    | `key.pem`             |
-| `auth.peer.caFilename`                | Name of the file containing the peer CA certificate                                             | `""`                  |
-| `autoCompactionMode`                  | Auto compaction mode, by default periodic. Valid values: ‘periodic’, ‘revision’.                | `""`                  |
-| `autoCompactionRetention`             | Auto compaction retention for mvcc key value store in hour, by default 0, means disabled        | `""`                  |
-| `initialClusterState`                 | Initial cluster state. Allowed values: 'new' or 'existing'                                      | `""`                  |
-| `maxProcs`                            | Limits the number of operating system threads that can execute user-level                       | `""`                  |
-| `removeMemberOnContainerTermination`  | Use a PreStop hook to remove the etcd members from the etcd cluster on container termination    | `true`                |
-| `configuration`                       | etcd configuration. Specify content for etcd.conf.yml                                           | `""`                  |
-| `existingConfigmap`                   | Existing ConfigMap with etcd configuration                                                      | `""`                  |
-| `extraEnvVars`                        | Extra environment variables to be set on etcd container                                         | `[]`                  |
-| `extraEnvVarsCM`                      | Name of existing ConfigMap containing extra env vars                                            | `""`                  |
-| `extraEnvVarsSecret`                  | Name of existing Secret containing extra env vars                                               | `""`                  |
-| `command`                             | Default container command (useful when using custom images)                                     | `[]`                  |
-| `args`                                | Default container args (useful when using custom images)                                        | `[]`                  |
+| Name                                   | Description                                                                                     | Value                 |
+| -------------------------------------- | ----------------------------------------------------------------------------------------------- | --------------------- |
+| `image.registry`                       | etcd image registry                                                                             | `docker.io`           |
+| `image.repository`                     | etcd image name                                                                                 | `bitnami/etcd`        |
+| `image.tag`                            | etcd image tag                                                                                  | `3.5.1-debian-10-r31` |
+| `image.pullPolicy`                     | etcd image pull policy                                                                          | `IfNotPresent`        |
+| `image.pullSecrets`                    | etcd image pull secrets                                                                         | `[]`                  |
+| `image.debug`                          | Enable image debug mode                                                                         | `false`               |
+| `auth.rbac.enabled`                    | Switch to enable RBAC authentication                                                            | `true`                |
+| `auth.rbac.allowNoneAuthentication`    | Allow to use etcd without configuring RBAC authentication                                       | `true`                |
+| `auth.rbac.rootPassword`               | Root user password. The root user is always `root`                                              | `""`                  |
+| `auth.rbac.existingSecret`             | Name of the existing secret containing credentials for the root user                            | `""`                  |
+| `auth.rbac.existingSecretPasswordKey`  | Name of key containing password to be retrieved from the existing secret                        | `""`                  |
+| `auth.token.type`                      | Authentication token type. Allowed values: 'simple' or 'jwt'                                    | `jwt`                 |
+| `auth.token.privateKey.filename`       | Name of the file containing the private key for signing the JWT token                           | `jwt-token.pem`       |
+| `auth.token.privateKey.existingSecret` | Name of the existing secret containing the private key for signing the JWT token                | `""`                  |
+| `auth.token.signMethod`                | JWT token sign method                                                                           | `RS256`               |
+| `auth.token.ttl`                       | JWT token TTL                                                                                   | `10m`                 |
+| `auth.client.secureTransport`          | Switch to encrypt client-to-server communications using TLS certificates                        | `false`               |
+| `auth.client.useAutoTLS`               | Switch to automatically create the TLS certificates                                             | `false`               |
+| `auth.client.existingSecret`           | Name of the existing secret containing the TLS certificates for client-to-server communications | `""`                  |
+| `auth.client.enableAuthentication`     | Switch to enable host authentication using TLS certificates. Requires existing secret           | `false`               |
+| `auth.client.certFilename`             | Name of the file containing the client certificate                                              | `cert.pem`            |
+| `auth.client.certKeyFilename`          | Name of the file containing the client certificate private key                                  | `key.pem`             |
+| `auth.client.caFilename`               | Name of the file containing the client CA certificate                                           | `""`                  |
+| `auth.peer.secureTransport`            | Switch to encrypt server-to-server communications using TLS certificates                        | `false`               |
+| `auth.peer.useAutoTLS`                 | Switch to automatically create the TLS certificates                                             | `false`               |
+| `auth.peer.existingSecret`             | Name of the existing secret containing the TLS certificates for server-to-server communications | `""`                  |
+| `auth.peer.enableAuthentication`       | Switch to enable host authentication using TLS certificates. Requires existing secret           | `false`               |
+| `auth.peer.certFilename`               | Name of the file containing the peer certificate                                                | `cert.pem`            |
+| `auth.peer.certKeyFilename`            | Name of the file containing the peer certificate private key                                    | `key.pem`             |
+| `auth.peer.caFilename`                 | Name of the file containing the peer CA certificate                                             | `""`                  |
+| `autoCompactionMode`                   | Auto compaction mode, by default periodic. Valid values: ‘periodic’, ‘revision’.                | `""`                  |
+| `autoCompactionRetention`              | Auto compaction retention for mvcc key value store in hour, by default 0, means disabled        | `""`                  |
+| `initialClusterState`                  | Initial cluster state. Allowed values: 'new' or 'existing'                                      | `""`                  |
+| `maxProcs`                             | Limits the number of operating system threads that can execute user-level                       | `""`                  |
+| `removeMemberOnContainerTermination`   | Use a PreStop hook to remove the etcd members from the etcd cluster on container termination    | `true`                |
+| `configuration`                        | etcd configuration. Specify content for etcd.conf.yml                                           | `""`                  |
+| `existingConfigmap`                    | Existing ConfigMap with etcd configuration                                                      | `""`                  |
+| `extraEnvVars`                         | Extra environment variables to be set on etcd container                                         | `[]`                  |
+| `extraEnvVarsCM`                       | Name of existing ConfigMap containing extra env vars                                            | `""`                  |
+| `extraEnvVarsSecret`                   | Name of existing Secret containing extra env vars                                               | `""`                  |
+| `command`                              | Default container command (useful when using custom images)                                     | `[]`                  |
+| `args`                                 | Default container args (useful when using custom images)                                        | `[]`                  |
 
 
 ### etcd statefulset parameters
@@ -191,14 +196,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Persistence parameters
 
-| Name                       | Description                                                     | Value  |
-| -------------------------- | --------------------------------------------------------------- | ------ |
-| `persistence.enabled`      | If true, use a Persistent Volume Claim. If false, use emptyDir. | `true` |
-| `persistence.storageClass` | Persistent Volume Storage Class                                 | `""`   |
-| `persistence.annotations`  | Annotations for the PVC                                         | `{}`   |
-| `persistence.accessModes`  | Persistent Volume Access Modes                                  | `[]`   |
-| `persistence.size`         | PVC Storage Request for etcd data volume                        | `8Gi`  |
-| `persistence.selector`     | Selector to match an existing Persistent Volume                 | `{}`   |
+| Name                       | Description                                                     | Value               |
+| -------------------------- | --------------------------------------------------------------- | ------------------- |
+| `persistence.enabled`      | If true, use a Persistent Volume Claim. If false, use emptyDir. | `true`              |
+| `persistence.storageClass` | Persistent Volume Storage Class                                 | `""`                |
+| `persistence.annotations`  | Annotations for the PVC                                         | `{}`                |
+| `persistence.accessModes`  | Persistent Volume Access Modes                                  | `["ReadWriteOnce"]` |
+| `persistence.size`         | PVC Storage Request for etcd data volume                        | `8Gi`               |
+| `persistence.selector`     | Selector to match an existing Persistent Volume                 | `{}`                |
 
 
 ### Volume Permissions parameters
@@ -208,8 +213,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                     | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                         | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                          | `10-debian-10-r172`     |
-| `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                  | `Always`                |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                          | `10-debian-10-r256`     |
+| `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                  | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                     | `[]`                    |
 | `volumePermissions.resources.limits`   | Init container volume-permissions resource  limits                                                                   | `{}`                    |
 | `volumePermissions.resources.requests` | Init container volume-permissions resource  requests                                                                 | `{}`                    |
@@ -257,6 +262,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `disasterRecovery.cronjob.podAnnotations`       | Pod annotations for cronjob pods                                        | `{}`           |
 | `disasterRecovery.cronjob.resources.limits`     | Cronjob container resource limits                                       | `{}`           |
 | `disasterRecovery.cronjob.resources.requests`   | Cronjob container resource requests                                     | `{}`           |
+| `disasterRecovery.cronjob.nodeSelector`         | Node labels for cronjob pods assignment                                 | `{}`           |
+| `disasterRecovery.cronjob.tolerations`          | Tolerations for cronjob pods assignment                                 | `[]`           |
 | `disasterRecovery.pvc.existingClaim`            | A manually managed Persistent Volume and Claim                          | `""`           |
 | `disasterRecovery.pvc.size`                     | PVC Storage Request                                                     | `2Gi`          |
 | `disasterRecovery.pvc.storageClassName`         | Storage Class for snapshots volume                                      | `nfs`          |
@@ -325,7 +332,7 @@ The etcd chart can be configured with Role-based access control and TLS encrypti
 
 The [Bitnami etcd](https://github.com/bitnami/bitnami-docker-etcd) image stores the etcd data at the `/bitnami/etcd` path of the container. Persistent Volume Claims are used to keep the data across statefulsets.
 
-The chart mounts a [Persistent Volume](https://kubernetes.io/docs/user-guide/persistent-volumes/) volume at this location. The volume is created using dynamic volume provisioning by default. An existing PersistentVolumeClaim can also be defined for this purpose.
+The chart mounts a [Persistent Volume](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) volume at this location. The volume is created using dynamic volume provisioning by default. An existing PersistentVolumeClaim can also be defined for this purpose.
 
 If you encounter errors when working with persistent volumes, refer to our [troubleshooting guide for persistent volumes](https://docs.bitnami.com/kubernetes/faq/troubleshooting/troubleshooting-persistence-volumes/).
 
@@ -487,3 +494,19 @@ Use the workaround below to upgrade from versions previous to 1.0.0. The followi
 ```console
 $ kubectl delete statefulset etcd --cascade=false
 ```
+
+## License
+
+Copyright &copy; 2022 Bitnami
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
