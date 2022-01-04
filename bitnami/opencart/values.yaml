@@ -198,7 +198,7 @@ persistence:
   ## Requires persistence.enabled: true
   ## If defined, PVC must be created manually before volume will be bound
   ##
-  ## @param persistence.accessModes [array] PVC Access Mode for OpenCart volume
+  ## @param persistence.accessModes PVC Access Mode for OpenCart volume
   ##
   accessModes:
     - ReadWriteOnce
