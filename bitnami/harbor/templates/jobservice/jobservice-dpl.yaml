@@ -46,6 +46,7 @@ spec:
       {{- if .Values.jobservice.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.jobservice.affinity "context" $) | nindent 8 }}
       {{- else }}
+      priorityClassName: {{ .Values.jobservice.priorityClassName | quote }}
       affinity:
         podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.jobservice.podAffinityPreset "component" "jobservice" "context" $) | nindent 10 }}
         podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.jobservice.podAntiAffinityPreset "component" "jobservice" "context" $) | nindent 10 }}

@@ -22,14 +22,15 @@ nameOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname template
 ##
 fullnameOverride: ""
-
 ## @param commonLabels Add labels to all the deployed resources
 ##
 commonLabels: {}
-
 ## @param commonAnnotations Add annotations to all the deployed resources
 ##
 commonAnnotations: {}
+## @param extraDeploy Array of extra objects to deploy with the release
+##
+extraDeploy: []
 
 ## @section Metrics Server parameters
 
@@ -44,10 +45,10 @@ commonAnnotations: {}
 image:
   registry: docker.io
   repository: bitnami/metrics-server
-  tag: 0.5.0-debian-10-r112
+  tag: 0.5.2-debian-10-r25
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -106,6 +107,11 @@ apiService:
   ## This is still necessary up to at least k8s version >= 1.21, but depends on vendors and cloud providers.
   ##
   create: false
+  ## @param apiService.insecureSkipTLSVerify Specifies whether to skip self-verifying self-signed TLS certificates. Set to "false" if you are providing your own certificates.
+  ## Note that "false" MUST be in quotation marks (cf. https://github.com/helm/helm/issues/3308), since false without quotation marks will render to true
+  insecureSkipTLSVerify: true
+  ## @param apiService.caBundle A base64-encoded string of concatenated certificates for the CA chain for the APIService.
+  caBundle: ""
 ## @param securePort Port where metrics-server will be running
 ##
 securePort: 8443
@@ -115,6 +121,10 @@ securePort: 8443
 ## if you use Weave network on EKS
 ##
 hostNetwork: false
+## @param dnsPolicy Default dnsPolicy setting
+## If you enable hostNetwork then you may need to set your dnsPolicy to something other
+## than "ClusterFirst" depending on your requirements.
+dnsPolicy: "ClusterFirst"
 ## @param command Override default container command (useful when using custom images)
 ##
 command: ["metrics-server"]
@@ -223,7 +233,7 @@ service:
   ##
   labels: {}
 ## Metric Server containers' resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## ref: https://kubernetes.io/docs/user-guide/compute-resources/
 ## We usually recommend not to specify default resources and to leave this as a conscious
 ## choice for the user. This also increases chances charts run on environments with little
 ## resources, such as Minikube. If you do want to specify resources, uncomment the following

@@ -5,6 +5,9 @@ metadata:
   name: {{ template "common.names.fullname" . }}-init-scripts
   labels:
   {{- include "common.labels.standard" . | nindent 4 }}
+  {{- if .Values.commonLabels }}
+  {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -19,7 +22,5 @@ data:
 {{- with .Files.Glob "files/docker-entrypoint-initdb.d/*.{sh,sql}" }}
 {{ .AsConfig | indent 2 }}
 {{- end }}
-{{- with .Values.initdbScripts }}
-{{ toYaml . | indent 2 }}
-{{- end }}
+{{- include "common.tplvalues.render" (dict "value" .Values.initdbScripts "context" .) | nindent 2 }}
 {{- end }}

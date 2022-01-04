@@ -14,7 +14,7 @@ spec:
   clusterIP: None
   ports:
     - name: postgresql
-      port: 5432
+      port: {{ .Values.postgresql.containerPort }}
       targetPort: postgresql
       protocol: TCP
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}

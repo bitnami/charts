@@ -11,7 +11,7 @@ $ helm install my-release bitnami/metrics-server
 
 ## Introduction
 
-This chart bootstraps a [Metrics Server](https://github.com/bitnami/bitnami-docker-metrics-server) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Metrics Server](https://github.com/bitnami/bitnami-docker-metrics-server) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
@@ -61,6 +61,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `fullnameOverride`  | String to fully override common.names.fullname template                                      | `""`  |
 | `commonLabels`      | Add labels to all the deployed resources                                                     | `{}`  |
 | `commonAnnotations` | Add annotations to all the deployed resources                                                | `{}`  |
+| `extraDeploy`       | Array of extra objects to deploy with the release                                            | `[]`  |
 
 
 ### Metrics Server parameters
@@ -69,7 +70,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------ |
 | `image.registry`                                  | Metrics Server image registry                                                                                                                                            | `docker.io`              |
 | `image.repository`                                | Metrics Server image repository                                                                                                                                          | `bitnami/metrics-server` |
-| `image.tag`                                       | Metrics Server image tag (immutable tags are recommended)                                                                                                                | `0.5.0-debian-10-r112`   |
+| `image.tag`                                       | Metrics Server image tag (immutable tags are recommended)                                                                                                                | `0.5.2-debian-10-r0`     |
 | `image.pullPolicy`                                | Metrics Server image pull policy                                                                                                                                         | `IfNotPresent`           |
 | `image.pullSecrets`                               | Metrics Server image pull secrets                                                                                                                                        | `[]`                     |
 | `hostAliases`                                     | Add deployment host aliases                                                                                                                                              | `[]`                     |
@@ -80,8 +81,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.name`                             | The name of the ServiceAccount to create                                                                                                                                 | `""`                     |
 | `serviceAccount.automountServiceAccountToken`     | Automount API credentials for a service account                                                                                                                          | `true`                   |
 | `apiService.create`                               | Specifies whether the v1beta1.metrics.k8s.io API service should be created. You can check if it is needed with `kubectl get --raw "/apis/metrics.k8s.io/v1beta1/nodes"`. | `false`                  |
+| `apiService.insecureSkipTLSVerify`                | Specifies whether to skip self-verifying self-signed TLS certificates. Set to "false" if you are providing your own certificates.                                        | `true`                   |
+| `apiService.caBundle`                             | A base64-encoded string of concatenated certificates for the CA chain for the APIService.                                                                                | `""`                     |
 | `securePort`                                      | Port where metrics-server will be running                                                                                                                                | `8443`                   |
 | `hostNetwork`                                     | Enable hostNetwork mode                                                                                                                                                  | `false`                  |
+| `dnsPolicy`                                       | Default dnsPolicy setting                                                                                                                                                | `ClusterFirst`           |
 | `command`                                         | Override default container command (useful when using custom images)                                                                                                     | `["metrics-server"]`     |
 | `extraArgs`                                       | Extra arguments to pass to metrics-server on start up                                                                                                                    | `{}`                     |
 | `podLabels`                                       | Pod labels                                                                                                                                                               | `{}`                     |
@@ -159,6 +163,10 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 In order to enable Role-Based Access Control (RBAC) for Metrics Server, use the following parameter: `rbac.create=true`.
 
+### Configure certificates
+
+If you are providing your own certificates for the API Service, set `insecureSkipTLSVerify` to `"false"`, and provide a `caBundle` consisting of the base64-encoded certificate chain.
+
 ### Set Pod affinity
 
 This chart allows you to set custom Pod affinity using the `affinity` parameter. Find more information about Pod affinity in the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
@@ -199,3 +207,19 @@ Use the workaround below to upgrade from versions previous to 2.0.0. The followi
 ```console
 $ kubectl patch deployment metrics-server --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
 ```
+
+## License
+
+Copyright &copy; 2022 Bitnami
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

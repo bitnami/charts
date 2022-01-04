@@ -5,6 +5,7 @@
 
 {{- range $i, $e := until $nodesCount }}
 {{- $targetPod := printf "%s-%d" (printf "%s" $fullName) $i }}
+{{- $_ := set $ "targetPod" $targetPod }}
 
 ---
 apiVersion: v1
@@ -34,7 +35,7 @@ spec:
       targetPort: tcp-redis
     - name: tcp-redis-bus
       targetPort: tcp-redis-bus
-      port: {{ $root.Values.redis.busPort }}
+      port: {{ $root.Values.redis.containerPorts.bus }}
   selector: {{- include "common.labels.matchLabels" $ | nindent 4 }}
     statefulset.kubernetes.io/pod-name: {{ $targetPod }}
 ---

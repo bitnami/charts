@@ -30,22 +30,33 @@ We prepend a random letter to the string to avoid password validation errors
 {{- end -}}
 
 {{/*
-Return the appropriate apiVersion for networkpolicy.
+Return true if a NATS configuration secret object should be created
 */}}
-{{- define "networkPolicy.apiVersion" -}}
-{{- if semverCompare ">=1.4-0, <1.7-0" .Capabilities.KubeVersion.GitVersion -}}
-{{- print "extensions/v1beta1" -}}
-{{- else -}}
-{{- print "networking.k8s.io/v1" -}}
+{{- define "nats.createSecret" -}}
+{{- if and .Values.configuration (not .Values.existingSecret) }}
+    {{- true -}}
 {{- end -}}
 {{- end -}}
 
 {{/*
-Check if there are rolling tags in the images
+Return the NATS configuration secret name
 */}}
-{{- define "nats.checkRollingTags" -}}
-{{- include "common.warnings.rollingTag" .Values.image }}
-{{- include "common.warnings.rollingTag" .Values.metrics.image }}
+{{- define "nats.secretName" -}}
+{{- if .Values.existingSecret }}
+    {{- printf "%s" (tpl .Values.existingSecret .) -}}
+{{- else -}}
+    {{- printf "%s" (include "common.names.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return true if cert-manager required annotations for TLS signed certificates are set in the Ingress annotations
+Ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
+*/}}
+{{- define "nats.ingress.certManagerRequest" -}}
+{{ if or (hasKey . "cert-manager.io/cluster-issuer") (hasKey . "cert-manager.io/issuer") }}
+    {{- true -}}
+{{- end -}}
 {{- end -}}
 
 {{/*

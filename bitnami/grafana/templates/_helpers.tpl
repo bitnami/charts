@@ -15,6 +15,13 @@ Return the proper Grafana Image Renderer image name
 {{- end -}}
 
 {{/*
+Return the proper image name (for the init container volume-permissions image)
+*/}}
+{{- define "volumePermissions.image" -}}
+{{- include "common.images.image" ( dict "imageRoot" .Values.volumePermissions.image "global" .Values.global ) -}}
+{{- end -}}
+
+{{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "grafana.imagePullSecrets" -}}
@@ -104,55 +111,6 @@ Return true if a secret object should be created
 {{- end -}}
 
 {{/*
-Validate values for Grafana.
-*/}}
-{{- define "grafana.validateValues" -}}
-{{- $messages := list -}}
-{{- $messages := append $messages (include "grafana.validateValues.database" .) -}}
-{{- $messages := append $messages (include "grafana.validateValues.configmapsOrSecrets" .) -}}
-{{- $messages := without $messages "" -}}
-{{- $message := join "\n" $messages -}}
-
-{{- if $message -}}
-{{-   printf "\nVALUES VALIDATION:\n%s" $message -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Function to validate the external database
-*/}}
-{{- define "grafana.validateValues.database" -}}
-{{- $replicaCount := int .Values.replicaCount }}
-{{- if gt $replicaCount 1 -}}
-WARNING: Using more than one replica requires using an external database to share data between Grafana instances.
-         By default Grafana uses an internal sqlite3 per instance but you can configure an external MySQL or PostgreSQL.
-         Please, ensure you provide a configuration file configuring the external database to share data between replicas.
-{{- end -}}
-{{- end -}}
-
-{{/*
-Function to validate grafana confirmaps and secrets
-*/}}
-{{- define "grafana.validateValues.configmapsOrSecrets" -}}
-{{- if and .Values.config.useGrafanaIniFile (not .Values.config.grafanaIniSecret) (not .Values.config.grafanaIniConfigMap) -}}
-WARNING: You enabled config.useGrafanaIniFile but did not specify config.grafanaIniSecret nor config.grafanaIniConfigMap
-{{- end -}}
-{{- end -}}
-
-{{/*
-Renders a value that contains template.
-Usage:
-{{ include "common.tplvalues.render" ( dict "value" .Values.path.to.the.Value "context" $) }}
-*/}}
-{{- define "common.tplvalues.render" -}}
-    {{- if typeIs "string" .value }}
-        {{- tpl .value .context }}
-    {{- else }}
-        {{- tpl (.value | toYaml) .context }}
-    {{- end }}
-{{- end -}}
-
-{{/*
 Returns the proper service account name depending if an explicit service account name is set
 in the values file. If the name is not set it will default to either common.names.fullname if serviceAccount.create
 is true or default otherwise.
@@ -166,12 +124,65 @@ is true or default otherwise.
 {{- end -}}
 
 {{/*
-Return the appropriate apiVersion for deployment.
+Return true if cert-manager required annotations for TLS signed certificates are set in the Ingress annotations
+Ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
 */}}
-{{- define "grafana.ingress.apiVersion" -}}
-{{- if semverCompare "<1.14-0" .Capabilities.KubeVersion.GitVersion -}}
-{{- print "extensions/v1beta1" -}}
-{{- else -}}
-{{- print "networking.k8s.io/v1beta1" -}}
+{{- define "grafana.ingress.certManagerRequest" -}}
+{{ if or (hasKey . "cert-manager.io/cluster-issuer") (hasKey . "cert-manager.io/issuer") }}
+    {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values for Grafana.
+*/}}
+{{- define "grafana.validateValues" -}}
+{{- $messages := list -}}
+{{- $messages := append $messages (include "grafana.validateValues.database" .) -}}
+{{- $messages := append $messages (include "grafana.validateValues.configmapsOrSecrets" .) -}}
+{{- $messages := append $messages (include "grafana.validateValues.ldap.configuration" .) -}}
+{{- $messages := append $messages (include "grafana.validateValues.ldap.configmapsecret" .) -}}
+{{- $messages := without $messages "" -}}
+{{- $message := join "\n" $messages -}}
+
+{{- if $message -}}
+{{-   printf "\nVALUES VALIDATION:\n%s" $message -}}
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of Grafana - Requirements to use an external database */}}
+{{- define "grafana.validateValues.database" -}}
+{{- $replicaCount := int .Values.replicaCount }}
+{{- if gt $replicaCount 1 -}}
+grafana: replicaCount
+        Using more than one replica requires using an external database to share data between Grafana instances.
+        By default Grafana uses an internal sqlite3 per instance but you can configure an external MySQL or PostgreSQL.
+        Please, ensure you provide a configuration file configuring the external database to share data between replicas.
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of Grafana - A ConfigMap or Secret name must be provided when loading a custom grafana.ini file */}}
+{{- define "grafana.validateValues.configmapsOrSecrets" -}}
+{{- if and .Values.config.useGrafanaIniFile (not .Values.config.grafanaIniSecret) (not .Values.config.grafanaIniConfigMap) -}}
+grafana: config.useGrafanaIniFile config.grafanaIniSecret and config.grafanaIniConfigMap
+        You enabled config.useGrafanaIniFile but did not specify config.grafanaIniSecret nor config.grafanaIniConfigMap
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of Grafana - A custom ldap.toml file must be provided when enabling LDAP */}}
+{{- define "grafana.validateValues.ldap.configuration" -}}
+{{- if and .Values.ldap.enabled (empty .Values.ldap.configuration) (empty .Values.ldap.configMapName) (empty .Values.ldap.secretName) -}}
+grafana: ldap.enabled ldap.configuration ldap.configMapName and ldap.secretName
+        You must provide the content of your custom ldap.toml file when enabling LDAP (--set ldap.configuration="xxx")
+        As an alternative, you can set the name of an existing ConfigMap (--set ldap.configMapName="yyy") or
+        an an existing Secret (--set ldap.secretName="zzz") containging the custom ldap.toml file.
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of Grafana - Only a ConfigMap or Secret name must be provided when loading a custom ldap.toml file */}}
+{{- define "grafana.validateValues.ldap.configmapsecret" -}}
+{{- if and .Values.ldap.enabled (not (empty .Values.ldap.configMapName)) (not (empty .Values.ldap.secretName)) -}}
+grafana: ldap.enabled ldap.configMapName and ldap.secretName
+        You cannot load a custom ldap.toml file both from a ConfigMap and a Secret simultaneously
 {{- end -}}
 {{- end -}}

@@ -20,6 +20,9 @@ global:
 ## @section Common parameters
 ##
 
+## @param kubeVersion Override Kubernetes version
+##
+kubeVersion: ""
 ## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
 ##
 nameOverride: ""
@@ -69,10 +72,10 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/zookeeper
-  tag: 3.7.0-debian-10-r127
+  tag: 3.7.0-debian-10-r242
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -247,14 +250,22 @@ electionContainerPort: 3888
 ##
 minServerId: 1
 ## Zookeeper Pod Security Context
-## @param securityContext.enabled Enable security context (ZooKeeper master pod)
-## @param securityContext.fsGroup Group ID for the container (ZooKeeper master pod)
-## @param securityContext.runAsUser User ID for the container (ZooKeeper master pod)
+## @param podSecurityContext.enabled Enable security context (ZooKeeper master pod)
+## @param podSecurityContext.fsGroup Group ID for the container (ZooKeeper master pod)
 ##
-securityContext:
+podSecurityContext:
   enabled: true
   fsGroup: 1001
+## Zookeeper container Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+## @param containerSecurityContext.enabled Enable container Security Context
+## @param containerSecurityContext.runAsUser User ID for the container
+## @param containerSecurityContext.runAsNonRoot Avoid running as root User
+##
+containerSecurityContext:
+  enabled: true
   runAsUser: 1001
+  runAsNonRoot: true
 ## @param initContainers Extra init container to add to the statefulset
 ## Example:
 ## initContainers:
@@ -327,7 +338,7 @@ priorityClassName: ""
 ##
 schedulerName: ""
 ## Configure resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## ref: https://kubernetes.io/docs/user-guide/compute-resources/
 ## @param resources.requests [object] The requested resources for the container
 ##
 resources:
@@ -388,7 +399,7 @@ service:
   ##
   type: ClusterIP
   ## @param service.loadBalancerIP Load balancer IP for the Zookeper Service (optional, cloud specific)
-  ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+  ## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
   ##
   loadBalancerIP: ""
   ## @param service.port ZooKeeper port
@@ -541,8 +552,8 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r172
-    pullPolicy: Always
+    tag: 10-debian-10-r289
+    pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -554,6 +565,13 @@ volumePermissions:
   ## @param volumePermissions.resources Init container resource requests/limit
   ##
   resources: {}
+  ## Init container' Security Context
+  ## Note: the chown of the data folder is done to containerSecurityContext.runAsUser
+  ## and not the below volumePermissions.containerSecurityContext.runAsUser
+  ## @param volumePermissions.containerSecurityContext.runAsUser User ID for the init container
+  ##
+  containerSecurityContext:
+    runAsUser: 0
 
 ## @section Metrics parameters
 ##
@@ -603,6 +621,9 @@ metrics:
     ## scrapeTimeout: 10s
     ##
     scrapeTimeout: ""
+    ## @param metrics.serviceMonitor.additionalLabels Additional labels that can be used so ServiceMonitor will be discovered by Prometheus
+    ##
+    additionalLabels: {}
     ## @param metrics.serviceMonitor.selector Prometheus instance selector labels
     ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
     ## e.g:
@@ -610,6 +631,12 @@ metrics:
     ##   prometheus: my-prometheus
     ##
     selector: {}
+    ## @param metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping
+    ##
+    relabelings: []
+    ## @param metrics.serviceMonitor.metricRelabelings MetricRelabelConfigs to apply to samples before ingestion
+    ##
+    metricRelabelings: []
   ## Prometheus Operator PrometheusRule configuration
   ##
   prometheusRule:

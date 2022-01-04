@@ -1,3 +1,7 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
 {{- $servicePort := or (.Values.service.portEnabled) (not .Values.auth.tls.enabled) | ternary .Values.service.port .Values.service.tlsPort -}}
 {{- $serviceNodePort := or (.Values.service.portEnabled) (not .Values.auth.tls.enabled) | ternary .Values.service.nodePort .Values.service.tlsNodePort -}}
 ** Please be patient while the chart is being deployed **
@@ -145,6 +149,7 @@ Then, open the obtained URL in a browser.
 {{- end }}
 
 {{- include "common.warnings.rollingTag" .Values.image }}
+{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
 {{- include "rabbitmq.validateValues" . -}}
 
 {{- $requiredPassword := list -}}
