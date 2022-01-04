@@ -328,7 +328,7 @@ Affected values:
 - `service.nodePort` was deprecated, we recommend using `service.nodePorts.http` instead .
 - `containerPort` was deprecated, we recommend using `containerPorts.http` instead.
 
-Additionally also updates the MariaDB subchart to it newest major, 10.0.0, which contains similar changes.
+Additionally also updates the MariaDB subchart to it newest major, 10.0.0, which contains similar changes. Check [MariaDB Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#to-1000) for more information.
 
 ### To 11.0.0
 
