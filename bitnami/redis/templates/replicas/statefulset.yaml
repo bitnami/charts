@@ -387,7 +387,13 @@ spec:
             path: /sys
         {{- end }}
         - name: redis-tmp-conf
+          {{- if .Values.replica.persistence.medium }}
+          emptyDir: {
+            medium: {{ .Values.replica.persistence.medium | quote }}
+          }
+          {{- else }}
           emptyDir: {}
+          {{- end }}
         {{- if .Values.tls.enabled }}
         - name: redis-certificates
           secret:
@@ -402,7 +408,13 @@ spec:
         {{- end }}
   {{- if not .Values.replica.persistence.enabled }}
         - name: redis-data
+          {{- if .Values.replica.persistence.medium }}
+          emptyDir: {
+            medium: {{ .Values.replica.persistence.medium | quote }}
+          }
+          {{- else }}
           emptyDir: {}
+          {{- end }}
   {{- else }}
   volumeClaimTemplates:
     - metadata:
@@ -422,6 +434,9 @@ spec:
             storage: {{ .Values.replica.persistence.size | quote }}
         {{- if .Values.replica.persistence.selector }}
         selector: {{- include "common.tplvalues.render" (dict "value" .Values.replica.persistence.selector "context" $) | nindent 10 }}
+        {{- end }}
+        {{- if .Values.replica.persistence.dataSource }}
+        dataSource: {{- include "common.tplvalues.render" (dict "value" .Values.replica.persistence.dataSource "context" $) | nindent 10 }}
         {{- end }}
         {{- include "common.storage.class" (dict "persistence" .Values.replica.persistence "global" .Values.global) | nindent 8 }}
   {{- end }}

@@ -75,10 +75,10 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/redis
-  tag: 6.2.5-debian-10-r63
+  tag: 6.2.6-debian-10-r81
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -145,7 +145,7 @@ master:
   ## ref: https://redis.io/topics/config
   ##
   configuration: ""
-  ## @param master.disableCommands [array] Array with Redis&trade; commands to disable on master nodes
+  ## @param master.disableCommands Array with Redis&trade; commands to disable on master nodes
   ## Commands will be completely disabled by renaming each to an empty string.
   ## ref: https://redis.io/topics/security#disabling-of-specific-commands
   ##
@@ -221,7 +221,7 @@ master:
   ##
   customReadinessProbe: {}
   ## Redis&trade; master resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param master.resources.limits The resources limits for the Redis&trade; master containers
   ## @param master.resources.requests The requested resources for the Redis&trade; master containers
   ##
@@ -315,7 +315,7 @@ master:
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-  ## @param master.spreadConstraints Spread Constraints for Redis&trade; master pod assignment
+  ## @param master.spreadConstraints [array] Spread Constraints for Redis&trade; master pod assignment
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
   ## E.g.
   ## spreadConstraints:
@@ -323,7 +323,7 @@ master:
   ##     topologyKey: node
   ##     whenUnsatisfiable: DoNotSchedule
   ##
-  spreadConstraints: {}
+  spreadConstraints: []
   ## @param master.lifecycleHooks for the Redis&trade; master container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -355,12 +355,15 @@ master:
   ##
   initContainers: []
   ## Persistence parameters
-  ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
   persistence:
     ## @param master.persistence.enabled Enable persistence on Redis&trade; master nodes using Persistent Volume Claims
     ##
     enabled: true
+    ## @param master.persistence.medium Provide a medium for `emptyDir` volumes.
+    ##
+    medium: ""
     ## @param master.persistence.path The path the volume will be mounted at on Redis&trade; master containers
     ## NOTE: Useful when using different Redis&trade; images
     ##
@@ -375,7 +378,7 @@ master:
     ## If undefined (the default) or set to null, no storageClassName spec is set, choosing the default provisioner
     ##
     storageClass: ""
-    ## @param master.persistence.accessModes [array] Persistent Volume access modes
+    ## @param master.persistence.accessModes Persistent Volume access modes
     ##
     accessModes:
       - ReadWriteOnce
@@ -392,6 +395,8 @@ master:
     ##     app: my-app
     ##
     selector: {}
+    ## @param master.persistence.dataSource Custom PVC data source
+    dataSource: {}
     ## @param master.persistence.existingClaim Use a existing PVC which must be created manually before bound
     ## NOTE: requires master.persistence.enabled: true
     ##
@@ -446,7 +451,7 @@ replica:
   ## ref: https://redis.io/topics/config
   ##
   configuration: ""
-  ## @param replica.disableCommands [array] Array with Redis&trade; commands to disable on replicas nodes
+  ## @param replica.disableCommands Array with Redis&trade; commands to disable on replicas nodes
   ## Commands will be completely disabled by renaming each to an empty string.
   ## ref: https://redis.io/topics/security#disabling-of-specific-commands
   ##
@@ -522,7 +527,7 @@ replica:
   ##
   customReadinessProbe: {}
   ## Redis&trade; replicas resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param replica.resources.limits The resources limits for the Redis&trade; replicas containers
   ## @param replica.resources.requests The requested resources for the Redis&trade; replicas containers
   ##
@@ -624,7 +629,7 @@ replica:
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-  ## @param replica.spreadConstraints Spread Constraints for Redis&trade; replicas pod assignment
+  ## @param replica.spreadConstraints [array] Spread Constraints for Redis&trade; replicas pod assignment
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
   ## E.g.
   ## spreadConstraints:
@@ -632,7 +637,7 @@ replica:
   ##     topologyKey: node
   ##     whenUnsatisfiable: DoNotSchedule
   ##
-  spreadConstraints: {}
+  spreadConstraints: []
   ## @param replica.lifecycleHooks for the Redis&trade; replica container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -664,12 +669,15 @@ replica:
   ##
   initContainers: []
   ## Persistence Parameters
-  ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
   persistence:
     ## @param replica.persistence.enabled Enable persistence on Redis&trade; replicas nodes using Persistent Volume Claims
     ##
     enabled: true
+    ## @param replica.persistence.medium Provide a medium for `emptyDir` volumes.
+    ##
+    medium: ""
     ## @param replica.persistence.path The path the volume will be mounted at on Redis&trade; replicas containers
     ## NOTE: Useful when using different Redis&trade; images
     ##
@@ -684,7 +692,7 @@ replica:
     ## If undefined (the default) or set to null, no storageClassName spec is set, choosing the default provisioner
     ##
     storageClass: ""
-    ## @param replica.persistence.accessModes [array] Persistent Volume access modes
+    ## @param replica.persistence.accessModes Persistent Volume access modes
     ##
     accessModes:
       - ReadWriteOnce
@@ -701,6 +709,8 @@ replica:
     ##     app: my-app
     ##
     selector: {}
+    ## @param replica.persistence.dataSource Custom PVC data source
+    dataSource: {}
   ## Redis&trade; replicas service parameters
   ##
   service:
@@ -779,10 +789,10 @@ sentinel:
   image:
     registry: docker.io
     repository: bitnami/redis-sentinel
-    tag: 6.2.5-debian-10-r63
+    tag: 6.2.6-debian-10-r80
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -802,6 +812,11 @@ sentinel:
   ## @param sentinel.quorum Sentinel Quorum
   ##
   quorum: 2
+  ## @param sentinel.automateClusterRecovery Automate cluster recovery in cases where the last replica is not considered a good replica and Sentinel won't automatically failover to it.
+  ## This also prevents any new replica from starting until the last remaining replica is elected as master to guarantee that it is the one to be elected by Sentinel, and not a newly started replica with no data.
+  ## NOTE: This feature requires a "downAfterMilliseconds" value less or equal to 2000.
+  ##
+  automateClusterRecovery: false
   ## Sentinel timing restrictions
   ## @param sentinel.downAfterMilliseconds Timeout for detecting a Redis&trade; node is down
   ## @param sentinel.failoverTimeout Timeout for performing a election failover
@@ -877,7 +892,7 @@ sentinel:
   ##
   customReadinessProbe: {}
   ## Redis&trade; Sentinel resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param sentinel.resources.limits The resources limits for the Redis&trade; Sentinel containers
   ## @param sentinel.resources.requests The requested resources for the Redis&trade; Sentinel containers
   ##
@@ -917,6 +932,8 @@ sentinel:
     ## @param sentinel.service.nodePorts.sentinel Node port for Sentinel
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     ## NOTE: choose port between <30000-32767>
+    ## NOTE: By leaving these values blank, they will be generated by ports-configmap
+    ##       If setting manually, please leave at least replica.replicaCount + 1 in between sentinel.service.nodePorts.redis and sentinel.service.nodePorts.sentinel to take into account the ports that will be created while incrementing that base port
     ##
     nodePorts:
       redis: ""
@@ -1005,10 +1022,10 @@ networkPolicy:
 ## ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/
 ##
 podSecurityPolicy:
-  ## @param podSecurityPolicy.create Specifies whether a PodSecurityPolicy should be created (set `podSecurityPolicy.enabled` to `true` to enable it)
+  ## @param podSecurityPolicy.create Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later
   ##
   create: false
-  ## @param podSecurityPolicy.enabled Enable PodSecurityPolicy
+  ## @param podSecurityPolicy.enabled Enable PodSecurityPolicy's RBAC rules
   ##
   enabled: false
 ## RBAC configuration
@@ -1108,7 +1125,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/redis-exporter
-    tag: 1.27.1-debian-10-r4
+    tag: 1.33.0-debian-10-r6
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1143,7 +1160,7 @@ metrics:
   ##
   extraVolumeMounts: []
   ## Redis&trade; exporter resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param metrics.resources.limits The resources limits for the Redis&trade; exporter container
   ## @param metrics.resources.requests The requested resources for the Redis&trade; exporter container
   ##
@@ -1288,8 +1305,8 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r203
-    pullPolicy: Always
+    tag: 10-debian-10-r291
+    pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -1299,7 +1316,7 @@ volumePermissions:
     ##
     pullSecrets: []
   ## Init container's resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param volumePermissions.resources.limits The resources limits for the init container
   ## @param volumePermissions.resources.requests The requested resources for the init container
   ##
@@ -1334,8 +1351,8 @@ sysctl:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r203
-    pullPolicy: Always
+    tag: 10-debian-10-r291
+    pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -1351,7 +1368,7 @@ sysctl:
   ##
   mountHostSys: false
   ## Init container's resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param sysctl.resources.limits The resources limits for the init container
   ## @param sysctl.resources.requests The requested resources for the init container
   ##

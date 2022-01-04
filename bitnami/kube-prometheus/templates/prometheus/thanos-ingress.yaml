@@ -14,6 +14,9 @@ metadata:
     {{ $key }}: {{ $value | quote }}
     {{- end }}
 spec:
+  {{- if and .Values.prometheus.thanos.ingress.ingressClassName (include "common.ingress.supportsIngressClassname" .) }}
+  ingressClassName: {{ .Values.prometheus.thanos.ingress.ingressClassName | quote }}
+  {{- end }}
   rules:
     {{- range .Values.prometheus.thanos.ingress.hosts }}
     - host: {{ .name }}

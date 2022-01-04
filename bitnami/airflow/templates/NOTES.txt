@@ -1,3 +1,9 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
+** Please be patient while the chart is being deployed **
+
 {{- $airflowSecretName := include "airflow.secretName" . -}}
 {{- $postgresqlSecretName := include "airflow.postgresql.secretName" . -}}
 {{- $redisSecretName := include "airflow.redis.secretName" . -}}
@@ -53,8 +59,8 @@ host. To configure Airflow with the URL of your service:
     --set service.type={{ .Values.service.type }} \
     --set web.baseUrl=http://$AIRFLOW_HOST:$AIRFLOW_PORT \
     --set auth.password=$AIRFLOW_PASSWORD \
-    --set auth.fernetKey=$AIRFLOW_FERNET_KEY \
-    --set auth.secretKey=$AIRFLOW_SECRET_KEY \
+    --set auth.fernetKey=$AIRFLOW_FERNETKEY \
+    --set auth.secretKey=$AIRFLOW_SECRETKEY \
     --set postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD \
     --set redis.auth.password=$REDIS_PASSWORD
 
