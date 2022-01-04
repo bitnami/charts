@@ -996,7 +996,7 @@ deployer:
 serviceAccount:
   create: true
   name: ""
-  automountServiceAccountToken: false
+  automountServiceAccountToken: true
   annotations: {}
 ## Role Based Access
 ## ref: https://kubernetes.io/docs/admin/authorization/rbac/
