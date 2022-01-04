@@ -1,3 +1,7 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
 {{- if (eq .Values.service.type "LoadBalancer")  }}
 ---------------------------------------------------------------------------------------------
  WARNING
@@ -11,8 +15,6 @@
 
 ---------------------------------------------------------------------------------------------
 {{- end }}
-
-
 ** Please be patient while the chart is being deployed **
 
 Solr can be accessed via port {{ .Values.service.port }} on the following DNS name from within your cluster:
@@ -63,6 +65,7 @@ To connect to your Solr from outside the cluster execute the following commands:
 {{- end }}
 
 {{- include "common.warnings.rollingTag" .Values.image }}
+{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
 
 {{- if .Values.authentication.enabled -}}
 {{- $requiredPasswords := list -}}

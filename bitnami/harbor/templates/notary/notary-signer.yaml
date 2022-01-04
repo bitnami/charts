@@ -37,6 +37,9 @@ spec:
     spec:
       {{- include "harbor.imagePullSecrets" . | nindent 6 }}
       automountServiceAccountToken: {{ .Values.notary.signer.automountServiceAccountToken }}
+      {{- if .Values.notary.signer.priorityClassName }}
+      priorityClassName: {{ .Values.notary.signer.priorityClassName | quote }}
+      {{- end }}
       {{- if .Values.notary.signer.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.notary.signer.affinity "context" $) | nindent 8 }}
       {{- else }}

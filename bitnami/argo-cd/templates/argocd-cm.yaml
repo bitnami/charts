@@ -17,5 +17,8 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 data:
+  {{- if .Values.config.styles }}
+  ui.cssurl: "./custom/custom.styles.css"
+  {{- end }}
   {{- include "common.tplvalues.render" ( dict "value" .Values.server.config "context" $ ) | nindent 2 }}
 {{- end }}

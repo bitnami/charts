@@ -1,8 +1,8 @@
 # TLS certificates
 
-You can copy here your JKS or PEM certificates.
+You can copy here your JKS or PEM certificates. Find more info in [this section](https://github.com/bitnami/charts/tree/master/bitnami/kafka#enable-security-for-kafka-and-zookeeper) of the README.md file.
 
-Find more info in [this section](https://github.com/bitnami/charts/tree/master/bitnami/kafka#enable-security-for-kafka-and-zookeeper) of the README.md file.
+> Note: DEPRECATED!! Please create a secret following the instructions available in the values.yaml instead of copying here your JKS or PEM certificates.
 
 ## Java Key Stores
 

@@ -12,7 +12,7 @@ $ helm install my-release bitnami/wavefront-hpa-adapter
 ## Introduction
 Bitnami charts for Helm are carefully engineered, actively maintained and are the quickest and easiest way to deploy containers on a Kubernetes cluster that are ready to handle production workloads.
 
-[Wavefront HPA Adapter for Kubernetes](https://github.com/wavefrontHQ/wavefront-kubernetes-adapter) Deployment in a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+[Wavefront HPA Adapter for Kubernetes](https://github.com/wavefrontHQ/wavefront-kubernetes-adapter) Deployment in a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
@@ -68,7 +68,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------ |
 | `image.registry`                        | Adapter image registry                                                                    | `docker.io`                          |
 | `image.repository`                      | Adapter image repository                                                                  | `bitnami/wavefront-hpa-adapter`      |
-| `image.tag`                             | Adapter image tag (immutabe tags are recommended)                                         | `0.9.8-scratch-r4`                   |
+| `image.tag`                             | Adapter image tag (immutabe tags are recommended)                                         | `0.9.8-scratch-r6`                   |
 | `image.pullPolicy`                      | Adapter image pull policy                                                                 | `IfNotPresent`                       |
 | `image.pullSecrets`                     | Adapter image pull secrets                                                                | `[]`                                 |
 | `image.debug`                           | Enable image debug mode                                                                   | `false`                              |
@@ -84,6 +84,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                        | `1`                                  |
 | `readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                      | `3`                                  |
 | `readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                      | `1`                                  |
+| `startupProbe.enabled`                  | Enable startupProbe                                                                       | `false`                              |
+| `startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                    | `10`                                 |
+| `startupProbe.periodSeconds`            | Period seconds for startupProbe                                                           | `10`                                 |
+| `startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                          | `1`                                  |
+| `startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                        | `3`                                  |
+| `startupProbe.successThreshold`         | Success threshold for startupProbe                                                        | `1`                                  |
 | `command`                               | Override default container command (useful when using custom images)                      | `[]`                                 |
 | `args`                                  | Override default container args (useful when using custom images)                         | `[]`                                 |
 | `hostAliases`                           | Add deployment host aliases                                                               | `[]`                                 |
@@ -106,10 +112,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podAnnotations`                        | Annotations for Adapter pods                                                              | `{}`                                 |
 | `priorityClassName`                     | Adapter pod priority                                                                      | `""`                                 |
 | `lifecycleHooks`                        | Add lifecycle hooks to the Adapter deployment                                             | `{}`                                 |
+| `schedulerName`                         | Alternative scheduler                                                                     | `""`                                 |
+| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment                                            | `[]`                                 |
 | `customLivenessProbe`                   | Override default liveness probe                                                           | `{}`                                 |
 | `customReadinessProbe`                  | Override default readiness probe                                                          | `{}`                                 |
+| `customStartupProbe`                    | Override default startup probe                                                            | `{}`                                 |
 | `updateStrategy.type`                   | Adapter deployment update strategy                                                        | `RollingUpdate`                      |
-| `containerPort`                         | Adapter container port                                                                    | `6443`                               |
+| `containerPorts.https`                  | Adapter container port                                                                    | `6443`                               |
 | `extraEnvVars`                          | Add extra environment variables to the Adapter container                                  | `[]`                                 |
 | `extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars                                      | `""`                                 |
 | `extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars                                         | `""`                                 |
@@ -130,24 +139,29 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Traffic Exposure Parameters
 
-| Name                               | Description                                  | Value       |
-| ---------------------------------- | -------------------------------------------- | ----------- |
-| `service.type`                     | Adapter service type                         | `ClusterIP` |
-| `service.port`                     | Adapter service port                         | `443`       |
-| `service.loadBalancerIP`           | Adapter service LoadBalancer IP              | `""`        |
-| `service.loadBalancerSourceRanges` | loadBalancerIP source ranges for the Service | `[]`        |
-| `service.nodePorts.http`           | NodePort for the HTTP endpoint               | `""`        |
-| `service.externalTrafficPolicy`    | External traffic policy for the service      | `Cluster`   |
+| Name                               | Description                                         | Value       |
+| ---------------------------------- | --------------------------------------------------- | ----------- |
+| `service.type`                     | Adapter service type                                | `ClusterIP` |
+| `service.ports.https`              | Adapter service port                                | `443`       |
+| `service.clusterIP`                | WordPress service Cluster IP                        | `""`        |
+| `service.annotations`              | Additional custom annotations for WordPress service | `{}`        |
+| `service.extraPorts`               | Extra port to expose on WordPress service           | `[]`        |
+| `service.loadBalancerIP`           | Adapter service LoadBalancer IP                     | `""`        |
+| `service.loadBalancerSourceRanges` | loadBalancerIP source ranges for the Service        | `[]`        |
+| `service.nodePorts.http`           | NodePort for the HTTP endpoint                      | `""`        |
+| `service.externalTrafficPolicy`    | External traffic policy for the service             | `Cluster`   |
 
 
 ### RBAC parameters
 
-| Name                    | Description                                                 | Value  |
-| ----------------------- | ----------------------------------------------------------- | ------ |
-| `rbac.create`           | Weather to create & use RBAC resources or not               | `true` |
-| `serviceAccount.create` | Enable the creation of a ServiceAccount for Reconciler pods | `true` |
-| `serviceAccount.name`   | Name of the created ServiceAccount                          | `""`   |
-| `apiService.create`     | Create the APIService objects in Kubernetes API             | `true` |
+| Name                                          | Description                                                 | Value  |
+| --------------------------------------------- | ----------------------------------------------------------- | ------ |
+| `rbac.create`                                 | Weather to create & use RBAC resources or not               | `true` |
+| `serviceAccount.create`                       | Enable the creation of a ServiceAccount for Reconciler pods | `true` |
+| `serviceAccount.name`                         | Name of the created ServiceAccount                          | `""`   |
+| `serviceAccount.automountServiceAccountToken` | Automount API credentials for a service account.            | `true` |
+| `serviceAccount.annotations`                  | Add annotations to the service account                      | `{}`   |
+| `apiService.create`                           | Create the APIService objects in Kubernetes API             | `true` |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
@@ -176,7 +190,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ### Connect to a Wavefront instance
 
-Wavefront HPA for Kubernetes only works when it configured to use a Wavefront SaaS instance with a proper API token. This is done by setting the `wavefront.url` and `wavefront.token` values. Obtain an instance and an API token by signing up for an account through the [official Wavefront sign-up page](https://www.wavefront.com/sign-up). Refer to the [chart documentation for a configuration example](https://docs.bitnami.com/kubernetes/apps/wavefront-hpa-adapter-for-kubernetes/get-started/configure-connection/).
+Wavefront HPA for Kubernetes only works when it configured to use a Wavefront SaaS instance with a proper API token. This is done by setting the `wavefront.url` and `wavefront.token` values. Obtain an instance and an API token by signing up for an account through the [official Wavefront sign-up page](https://www.wavefront.com/sign-up).
 
 ## Troubleshooting
 
@@ -187,3 +201,28 @@ Find more information about how to deal with common errors related to Bitnami’
 ```bash
 $ helm upgrade my-release bitnami/wavefront-hpa-adapter
 ```
+
+## To 1.0.0
+
+Some of the chart values were changed to adapt to the latest Bitnami standards. More specifically:
+
+- `containerPort` was changed to `containerPorts.http`
+- `service.port` was changed to `service.ports.http`
+
+No issues should be expected when upgrading.
+
+## License
+
+Copyright &copy; 2022 Bitnami
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

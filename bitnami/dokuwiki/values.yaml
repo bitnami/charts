@@ -2,6 +2,7 @@
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
 ## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
@@ -17,6 +18,7 @@ global:
   storageClass: ""
 
 ## @section Common parameters
+##
 
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
@@ -38,6 +40,7 @@ commonLabels: {}
 extraDeploy: []
 
 ## @section Dokuwiki parameters
+##
 
 ## Bitnami DokuWiki image version
 ## ref: https://hub.docker.com/r/bitnami/dokuwiki/tags/
@@ -51,10 +54,10 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/dokuwiki
-  tag: 20200729.0.0-debian-10-r370
+  tag: 20200729.0.0-debian-10-r445
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -102,13 +105,26 @@ dokuwikiFullName: User Name
 ## ref: https://github.com/bitnami/bitnami-docker-dokuwiki#environment-variables
 ##
 dokuwikiWikiName: My Wiki
+
+## @param updateStrategy Strategy to use to update Pods
+## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+##
+updateStrategy: {}
+
+## @param topologySpreadConstraints Topology Spread Constraints for pod assignment
+## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+## The value is evaluated as a template
+##
+topologySpreadConstraints: []
+
 ## Enable persistence using Persistent Volume Claims
-## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
 ## @param persistence.enabled Enable persistence using PVC
 ## @param persistence.storageClass PVC Storage Class for DokuWiki volume
-## @param persistence.accessMode PVC Access Mode for DokuWiki volume
+## @param persistence.accessModes [array] PVC Access Mode for DokuWiki volume
 ## @param persistence.size PVC Storage Request for DokuWiki volume
 ## @param persistence.existingClaim Name of an existing PVC to be used
+## @param persistence.annotations Annotations to add to the PVC
 ##
 persistence:
   enabled: true
@@ -120,9 +136,11 @@ persistence:
   ##   GKE, AWS & OpenStack)
   ##
   storageClass: ""
-  accessMode: ReadWriteOnce
+  accessModes:
+    - ReadWriteOnce
   size: 8Gi
   existingClaim: ""
+  annotations: {}
 ## @param podSecurityContext.enabled Enable securityContext on for DokuWiki deployment
 ## @param podSecurityContext.fsGroup Group to configure permissions for volumes
 ##
@@ -132,18 +150,22 @@ podSecurityContext:
 ## SecurityContext configuration for the container
 ## @param containerSecurityContext.enabled Enable securityContext on for DokuWiki deployment
 ## @param containerSecurityContext.runAsUser User for the securityContext
+## @param containerSecurityContext.runAsNonRoot Force the container as be run as non root
 ##
 containerSecurityContext:
   enabled: true
   runAsUser: 1001
+  runAsNonRoot: true
 ## Configure resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## ref: https://kubernetes.io/docs/user-guide/compute-resources/
 ## @param resources.requests [object] The requested resources for the container
+## @param resources.limits [object] The requested limits for the container
 ##
 resources:
   requests:
     memory: 512Mi
     cpu: 300m
+  limits: {}
 ## Configure extra options for liveness and readiness probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
 ## @param livenessProbe.enabled Enable/disable the liveness probe
@@ -172,6 +194,22 @@ livenessProbe:
 readinessProbe:
   enabled: true
   initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+## Configure extra options for startup and readiness probes
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-startup-readiness-probes/#configure-probes)
+## @param startupProbe.enabled Enable/disable the startup probe
+## @param startupProbe.initialDelaySeconds Delay before startup probe is initiated
+## @param startupProbe.periodSeconds How often to perform the probe
+## @param startupProbe.timeoutSeconds When the probe times out
+## @param startupProbe.failureThreshold Minimum consecutive failures to be considered failed
+## @param startupProbe.successThreshold Minimum consecutive successes to be considered successful
+##
+startupProbe:
+  enabled: false
+  initialDelaySeconds: 120
   periodSeconds: 10
   timeoutSeconds: 5
   failureThreshold: 6
@@ -240,6 +278,9 @@ customLivenessProbe: {}
 ## @param customReadinessProbe Override default readiness probe
 ##
 customReadinessProbe: {}
+## @param customStartupProbe Override default startup probe
+##
+customStartupProbe: {}
 ## @param extraVolumes Array of extra volumes to be added to the deployment (evaluated as template). Requires setting `extraVolumeMounts`
 ##
 extraVolumes: []
@@ -253,11 +294,28 @@ lifecycleHooks: {}
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
 podLabels: {}
+## @param initContainers Attach additional init containers to the pod (evaluated as a template)
+##
+initContainers: []
 ## @param sidecars Attach additional containers to the pod (evaluated as a template)
 ##
 sidecars: []
+## @param priorityClassName Priority class assigned to the Pods
+##
+priorityClassName: ""
+## @param schedulerName Alternative scheduler
+## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+##
+schedulerName: ""
 
+## @param containerPorts.http Container HTTP port
+## @param containerPorts.https Container HTTPS port
+##
+containerPorts:
+  http: 8080
+  https: 8443
 ## @section Traffic Exposure Parameters
+##
 
 ## Kubernetes svc configuration
 ##
@@ -269,12 +327,13 @@ service:
   ## @param service.loadBalancerIP Use serviceLoadBalancerIP to request a specific static IP, otherwise leave blank
   ##
   loadBalancerIP: ""
-  ## @param service.port Service HTTP port
+  ## @param service.ports.http Service HTTP port
+  ## @param service.ports.https Service HTTPS port
   ##
-  port: 80
-  ## @param service.httpsPort Service HTTPS port
+  ports:
+    http: 80
+    https: 443
   ##
-  httpsPort: 443
   ## @param service.nodePorts [object] Use nodePorts to request some specific ports when using NodePort
   ## nodePorts:
   ##   http: <to set explicitly, choose port between 30000-32767>
@@ -284,20 +343,28 @@ service:
     http: ""
     https: ""
   ## @param service.externalTrafficPolicy Enable client source IP preservation
-  ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+  ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
   externalTrafficPolicy: Cluster
+  ## @param service.extraPorts Extra ports to expose in the service (normally used with the `sidecar` value)
+  ##
+  extraPorts: []
+  ## @param service.annotations Annotations to add to the service
+  ##
+  annotations: {}
+
 ## Configure the ingress resource that allows you to access the
 ## Dokuwiki installation. Set up the URL
-## ref: http://kubernetes.io/docs/user-guide/ingress/
+## ref: https://kubernetes.io/docs/user-guide/ingress/
 ##
 ingress:
   ## @param ingress.enabled Set to true to enable ingress record generation
   ##
   enabled: false
-  ## @param ingress.certManager Set this to true in order to add the corresponding annotations for cert-manager
+  ## DEPRECATED: Use ingress.annotations instead of ingress.certManager
+  ## certManager: false
   ##
-  certManager: false
+
   ## @param ingress.pathType Ingress Path type
   ##
   pathType: ImplementationSpecific
@@ -311,11 +378,16 @@ ingress:
   ## with ALB ingress controllers.
   ##
   path: /
-  ## @param ingress.annotations Ingress annotations done as key:value pairs
+  ## @param ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
   ## For a full list of possible ingress annotations, please see
   ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+  ## Use this parameter to set the required annotations for cert-manager, see
+  ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
   ##
-  ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+  ## e.g:
+  ## annotations:
+  ##   kubernetes.io/ingress.class: nginx
+  ##   cert-manager.io/cluster-issuer: cluster-issuer-name
   ##
   annotations: {}
   ## @param ingress.tls Enable TLS configuration for the hostname defined at ingress.hostname parameter
@@ -328,6 +400,7 @@ ingress:
   ## extraHosts:
   ## - name: dokuwiki.local
   ##   path: /
+  ##
   extraHosts: []
   ## @param ingress.extraPaths Any additional arbitrary paths that may need to be added to the ingress under the main host.
   ## For example: The ALB ingress controller requires a special rule for handling SSL redirection.
@@ -336,6 +409,7 @@ ingress:
   ##   backend:
   ##     serviceName: ssl-redirect
   ##     servicePort: use-annotation
+  ##
   extraPaths: []
   ## @param ingress.extraTls The tls configuration for additional hostnames to be covered with this ingress record.
   ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
@@ -343,6 +417,7 @@ ingress:
   ## - hosts:
   ##     - dokuwiki.local
   ##   secretName: dokuwiki.local-tls
+  ##
   extraTls: []
   ## @param ingress.secrets If you're providing your own certificates, please use this to add the certificates as secrets
   ## key and certificate should start with -----BEGIN CERTIFICATE----- or
@@ -359,8 +434,15 @@ ingress:
   ##   certificate:
   ##
   secrets: []
+  ## @param ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+  ##
+  ingressClassName: ""
+  ## @param ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
+  ##
+  selfSigned: false
 
 ## @section Volume Permissions parameters
+##
 
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
@@ -378,8 +460,8 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r202
-    pullPolicy: Always
+    tag: 10-debian-10-r280
+    pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -387,7 +469,7 @@ volumePermissions:
     pullSecrets: []
     ##   - myRegistryKeySecretName
   ## Init containers' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -400,14 +482,17 @@ volumePermissions:
     ## limits:
     ##    cpu: 100m
     ##    memory: 128Mi
+    ##
     limits: {}
     ## Examples:
     ## requests:
     ##    cpu: 100m
     ##    memory: 128Mi
+    ##
     requests: {}
 
 ## @section Metrics parameters
+##
 
 ## Prometheus Exporter / Metrics
 ##
@@ -424,7 +509,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.10.1-debian-10-r4
+    tag: 0.10.1-debian-10-r82
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -440,11 +525,12 @@ metrics:
     prometheus.io/scrape: "true"
     prometheus.io/port: "9117"
   ## @param metrics.resources Exporter resource requests/limit
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ##
   resources: {}
 
 ## @section Certificate injection parameters
+##
 
 ## Add custom certificates and certificate authorities to redmine container
 ##
@@ -494,10 +580,10 @@ certificates:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r202
+    tag: 10-debian-10-r280
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
     pullPolicy: IfNotPresent
     ## e.g:
