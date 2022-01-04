@@ -242,6 +242,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.relabelings`       | RelabelConfigs to apply to samples before scraping                           | `[]`                      |
 | `metrics.serviceMonitor.metricRelabelings` | MetricRelabelConfigs to apply to samples before ingestion                    | `[]`                      |
 | `metrics.serviceMonitor.selector`          | ServiceMonitor selector labels                                               | `{}`                      |
+| `metrics.serviceMonitor.labels`            | Extra labels for the ServiceMonitor                                          | `{}`                      |
 | `metrics.serviceMonitor.honorLabels`       | honorLabels chooses the metric's labels on collisions with target labels     | `false`                   |
 
 
@@ -369,10 +370,10 @@ Affected values:
 
 - `service.port` was deprecated. We recommend using `service.ports.http` instead.
 - `service.httpsPort` was deprecated. We recommend using `service.ports.https` instead.
-- `metrics.serviceMonitor.additionalLabels` was replaced by `metrics.serviceMonitor.selector`.
+- `metrics.serviceMonitor.additionalLabels` was replaced by `metrics.serviceMonitor.labels`.
 - `metrics.serviceMonitor.relabellings` was replaced by `metrics.serviceMonitor.metricRelabelings`, and new value `metrics.serviceMonitor.relabelings` was introduced, fixing an issue with the values mapping. Now, the ServiceMonitor settings are inline with the chart values.
 
-Additionally updates the MariaDB subchart to it newest major, 10.0.0, which contains similar changes.
+Additionally updates the MariaDB subchart to it newest major, 10.0.0, which contains similar changes. Check [MariaDB Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#to-1000) for more information.
 
 ### To 12.0.0
 
