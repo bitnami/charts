@@ -151,6 +151,9 @@ spec:
                 secretKeyRef:
                   name: {{ template "kubeapps.oauth2_proxy-secret.name" . }}
                   key: cookieSecret
+            {{- if .Values.authProxy.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.authProxy.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
           ports:
             - name: proxy
               containerPort: {{ .Values.authProxy.containerPort }}
@@ -161,7 +164,7 @@ spec:
         {{- if and (gt (len .Values.clusters) 1) (not .Values.authProxy.enabled) }}
           {{ fail "clusters can be configured only when using an auth proxy for cluster oidc authentication."}}
         {{- end }}
-        {{- if and .Values.pinnipedProxy.enabled }}
+        {{- if .Values.pinnipedProxy.enabled }}
         - name: pinniped-proxy
           image: {{ include "common.images.image" (dict "imageRoot" .Values.pinnipedProxy.image "global" .Values.global) }}
           imagePullPolicy: {{ .Values.pinnipedProxy.image.pullPolicy | quote }}

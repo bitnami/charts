@@ -1,8 +1,10 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
 {{- $dbSecretName := include "parse.mongodb.fullname" . -}}
 
-******************************************************************
-*** PLEASE BE PATIENT: Parse may take a few minutes to install ***
-******************************************************************
+** Please be patient while the chart is being deployed **
 
 Parse Server
 ------------

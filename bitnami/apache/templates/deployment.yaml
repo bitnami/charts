@@ -1,4 +1,4 @@
-apiVersion: apps/v1
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ include "common.names.fullname" . }}
@@ -62,8 +62,11 @@ spec:
             - /bin/bash
             - -ec
             - |
+              # Allow the mv to move hidden directories
+              shopt -s dotglob
               [[ -f "/opt/bitnami/scripts/git/entrypoint.sh" ]] && source "/opt/bitnami/scripts/git/entrypoint.sh"
-              git clone {{ .Values.cloneHtdocsFromGit.repository }} --branch {{ .Values.cloneHtdocsFromGit.branch }} /app
+              git clone {{ .Values.cloneHtdocsFromGit.repository }} --branch {{ .Values.cloneHtdocsFromGit.branch }} /tmp/repo
+              [[ "$?" -eq 0 ]] && rm -rf /app/* && mv /tmp/repo/* /app/
           resources: {{- toYaml .Values.cloneHtdocsFromGit.resources | nindent 12 }}
           volumeMounts:
             - name: htdocs
@@ -77,7 +80,7 @@ spec:
         {{- end }}
       {{- end }}
       containers:
-        {{- if .Values.cloneHtdocsFromGit.enabled }}
+        {{- if and .Values.cloneHtdocsFromGit.enabled .Values.cloneHtdocsFromGit.enableAutoRefresh }}
         - name: git-repo-syncer
           image: {{ include "git.image" . }}
           imagePullPolicy: {{ .Values.git.pullPolicy | quote }}
@@ -199,3 +202,6 @@ spec:
         {{- if .Values.extraVolumes }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
+      {{- if .Values.extraPodSpec }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.extraPodSpec "context" $) | nindent 6 }}
+      {{- end }}

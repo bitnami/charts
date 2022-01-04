@@ -3,8 +3,20 @@
 {{/*
 Return the proper Fluentd image name
 */}}
-{{- define "fluentd.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.image "global" .Values.global) }}
+{{- define "fluentd.forwarder.image" -}}
+{{- $registryName := default .Values.image.registry .Values.forwarder.image.registry -}}
+{{- $repositoryName := default .Values.image.repository .Values.forwarder.image.repository -}}
+{{- $tag := default .Values.image.tag .Values.forwarder.image.tag -}}
+{{- $imageRoot := dict "registry" $registryName "repository" $repositoryName "tag" $tag -}}
+{{ include "common.images.image" (dict "imageRoot" $imageRoot "global" .Values.global) }}
+{{- end -}}
+
+{{- define "fluentd.aggregator.image" -}}
+{{- $registryName := default .Values.image.registry .Values.aggregator.image.registry -}}
+{{- $repositoryName := default .Values.image.repository .Values.aggregator.image.repository -}}
+{{- $tag := default .Values.image.tag .Values.aggregator.image.tag -}}
+{{- $imageRoot := dict "registry" $registryName "repository" $repositoryName "tag" $tag -}}
+{{ include "common.images.image" (dict "imageRoot" $imageRoot "global" .Values.global) }}
 {{- end -}}
 
 {{/*
@@ -91,6 +103,7 @@ fluentd:
 
 {{/* Validate values of Fluentd - must create serviceAccount to create enable RBAC */}}
 {{- define "fluentd.validateValues.rbac" -}}
+{{- $pspAvailable := (semverCompare "<1.25-0" (include "common.capabilities.kubeVersion" .)) -}}
 {{- if not (typeIs "<nil>" .Values.rbac.create) -}}
 fluentd: rbac.create
     Top-level rbac configuration has been removed, as it only applied to the forwarder.
@@ -101,16 +114,16 @@ fluentd: forwarder.rbac.create
     A ServiceAccount is required ("forwarder.rbac.create=true" is set)
     Please create a ServiceAccount (--set serviceAccount.forwarder.create=true)
 {{- end -}}
-{{- if and .Values.forwarder.rbac.pspEnabled (not .Values.forwarder.rbac.create) }}
+{{- if and $pspAvailable .Values.forwarder.rbac.pspEnabled (not .Values.forwarder.rbac.create) }}
 fluentd: forwarder.rbac.pspEnabled
     Enabling PSP requires RBAC to be created ("forwarder.rbac.create=true" is set)
     Please enable RBAC, or disable creation of PSP (--set forwarder.rbac.create=true) or (--set forwarder.rbac.pspEnabled=false)
 {{- end -}}
-{{- if and .Values.forwarder.rbac.pspEnabled (not .Values.forwarder.securityContext.enabled) }}
+{{- if and $pspAvailable .Values.forwarder.rbac.pspEnabled (not .Values.forwarder.securityContext.enabled) }}
 fluentd: forwarder.rbac.pspEnabled
     Enabling PSP requires enabling forwarder pod security context ("forwarder.securityContext.enabled=true")
 {{- end -}}
-{{- if and .Values.forwarder.rbac.pspEnabled (not .Values.forwarder.containerSecurityContext.enabled) }}
+{{- if and $pspAvailable .Values.forwarder.rbac.pspEnabled (not .Values.forwarder.containerSecurityContext.enabled) }}
 fluentd: forwarder.rbac.pspEnabled
     Enabling PSP requires enabling forwarder container security context ("forwarder.containerSecurityContext.enabled=true")
 {{- end -}}

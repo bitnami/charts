@@ -15,9 +15,12 @@ spec:
   clusterIP: None
   ports:
     - name: tcp-client
-      port: {{ .Values.client.service.port }}
+      port: {{ .Values.service.ports.client }}
       targetPort: client
     - name: tcp-cluster
-      port: {{ .Values.cluster.service.port }}
+      port: {{ .Values.service.ports.cluster }}
       targetPort: cluster
+    - name: tcp-monitoring
+      port: {{ .Values.service.ports.monitoring }}
+      targetPort: monitoring
   selector: {{ include "common.labels.matchLabels" . | nindent 4 }}

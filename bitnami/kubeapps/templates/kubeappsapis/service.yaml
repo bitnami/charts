@@ -1,4 +1,3 @@
-{{- if .Values.featureFlags.kubeappsAPIsServer }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -27,4 +26,3 @@ spec:
       name: grpc-http
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: kubeappsapis
-{{- end }}

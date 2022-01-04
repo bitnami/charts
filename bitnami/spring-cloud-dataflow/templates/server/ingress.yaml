@@ -20,19 +20,22 @@ metadata:
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
     {{- end }}
 spec:
+  {{- if and .Values.server.ingress.ingressClassName (eq "true" (include "common.ingress.supportsIngressClassname" .)) }}
+  ingressClassName: {{ .Values.server.ingress.ingressClassName | quote }}
+  {{- end }}
   rules:
     {{- if .Values.server.ingress.hostname }}
     - host: {{ .Values.server.ingress.hostname }}
       http:
         paths:
-          {{- if .Values.server.ingress.extraPaths }}
-          {{- toYaml .Values.server.ingress.extraPaths | nindent 10 }}
-          {{- end }}
           - path: {{ .Values.server.ingress.path }}
             {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
             pathType: {{ .Values.server.ingress.pathType }}
             {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (printf "%s-server" (include "common.names.fullname" .)) "servicePort" "http" "context" $)  | nindent 14 }}
+          {{- if .Values.server.ingress.extraPaths }}
+          {{- toYaml .Values.server.ingress.extraPaths | nindent 10 }}
+          {{- end }}
     {{- end }}
     {{- range .Values.server.ingress.extraHosts }}
     - host: {{ .name }}

@@ -31,7 +31,7 @@ The quickest way to setup a Kubernetes cluster to install Bitnami Charts is foll
 - [Get Started with Bitnami Charts using the Google Kubernetes Engine (GKE)](https://docs.bitnami.com/kubernetes/get-started-gke/)
 - [Get Started with Bitnami Charts using the IBM Cloud Kubernetes Service (IKS)](https://docs.bitnami.com/kubernetes/get-started-charts-iks/)
 
-For setting up Kubernetes on other cloud platforms or bare-metal servers refer to the Kubernetes [getting started guide](http://kubernetes.io/docs/getting-started-guides/).
+For setting up Kubernetes on other cloud platforms or bare-metal servers refer to the Kubernetes [getting started guide](https://kubernetes.io/docs/getting-started-guides/).
 
 ### Install Helm
 
@@ -58,9 +58,9 @@ Useful Helm Client Commands:
 * Install a chart: `helm install my-release bitnami/<package-name>`
 * Upgrade your application: `helm upgrade`
 
-# License
+## License
 
-Copyright (c) 2015-2021 Bitnami
+Copyright &copy; 2022 Bitnami
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

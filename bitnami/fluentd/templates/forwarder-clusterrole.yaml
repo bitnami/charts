@@ -14,7 +14,8 @@ rules:
       - "get"
       - "watch"
       - "list"
-  {{- if .Values.forwarder.rbac.pspEnabled }}
+  {{- $pspAvailable := (semverCompare "<1.25-0" (include "common.capabilities.kubeVersion" .)) -}}
+  {{- if and $pspAvailable .Values.forwarder.rbac.pspEnabled }}
   - apiGroups:
       - "policy"
     resources:
