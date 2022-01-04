@@ -1,37 +1,37 @@
-{{- $query := (include "thanos.query.values" . | fromYaml) -}}
-{{- if $query.ingress.enabled -}}
+{{- if .Values.query.ingress.enabled -}}
 apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
   name: {{ include "common.names.fullname" . }}-query
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: query
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
   annotations:
-    {{- if $query.ingress.certManager }}
-    kubernetes.io/tls-acme: "true"
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
     {{- end }}
-    {{- range $key, $value := $query.ingress.annotations }}
-    {{ $key }}: {{ $value | quote }}
+    {{- if .Values.query.ingress.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.query.ingress.annotations "context" $ ) | nindent 4 }}
     {{- end }}
 spec:
-  {{- if and $query.ingress.ingressClassName (eq "true" (include "common.ingress.supportsIngressClassname" .)) }}
-  ingressClassName: {{ $query.ingress.ingressClassName | quote }}
+  {{- if and .Values.query.ingress.ingressClassName (include "common.ingress.supportsIngressClassname" .) }}
+  ingressClassName: {{ .Values.query.ingress.ingressClassName | quote }}
   {{- end }}
   rules:
-    {{- if $query.ingress.hostname }}
-    - host: {{ $query.ingress.hostname }}
+    {{- if .Values.query.ingress.hostname }}
+    - host: {{ .Values.query.ingress.hostname }}
       http:
         paths:
-          - path: {{ $query.ingress.path }}
+          - path: {{ .Values.query.ingress.path }}
             {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
-            pathType: {{ $query.ingress.pathType }}
+            pathType: {{ .Values.query.ingress.pathType }}
             {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (printf "%s-%s"  (include "common.names.fullname" .) "query") "servicePort" "http" "context" $)  | nindent 14 }}
     {{- end }}
-    {{- range $query.ingress.extraHosts }}
+    {{- range .Values.query.ingress.extraHosts }}
     - host: {{ .name }}
       http:
         paths:
@@ -41,15 +41,15 @@ spec:
             {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (printf "%s-%s"  (include "common.names.fullname" $) "query") "servicePort" "http" "context" $) | nindent 14 }}
     {{- end }}
-  {{- if or $query.ingress.tls $query.ingress.extraTls $query.ingress.hosts }}
+  {{- if or (and .Values.query.ingress.tls (or (include "thanos.ingress.certManagerRequest" .Values.query.ingress.annotations) .Values.query.ingress.selfSigned)) .Values.query.ingress.extraTls }}
   tls:
-    {{- if or $query.ingress.secrets $query.ingress.tls }}
+    {{- if and .Values.query.ingress.tls (or (include "thanos.ingress.certManagerRequest" .Values.query.ingress.annotations) .Values.query.ingress.selfSigned) }}
     - hosts:
-        - {{ $query.ingress.hostname }}
-      secretName: {{ printf "%s-tls" $query.ingress.hostname }}
+        - {{ .Values.query.ingress.hostname }}
+      secretName: {{ printf "%s-tls" .Values.query.ingress.hostname }}
     {{- end }}
-    {{- if $query.ingress.extraTls }}
-    {{- toYaml $query.ingress.extraTls | nindent 4 }}
+    {{- if .Values.query.ingress.extraTls }}
+    {{- toYaml .Values.query.ingress.extraTls | nindent 4 }}
     {{- end }}
   {{- end }}
 {{- end }}

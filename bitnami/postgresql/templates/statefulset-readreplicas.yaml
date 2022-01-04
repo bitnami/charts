@@ -6,9 +6,12 @@ metadata:
   name: "{{ template "common.names.fullname" . }}-read"
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: read
-{{- with .Values.readReplicas.labels }}
-{{ toYaml . | indent 4 }}
-{{- end }}
+  {{- if .Values.commonLabels }}
+  {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.readReplicas.labels }}
+  {{- include "common.tplvalues.render" ( dict "value" .Values.readReplicas.labels "context" $ ) | nindent 4 }}
+  {{- end }}
   annotations:
   {{- if .Values.commonAnnotations }}
   {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
@@ -31,9 +34,12 @@ spec:
       {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: read
         role: read
-{{- with .Values.readReplicas.podLabels }}
-{{ toYaml . | indent 8 }}
-{{- end }}
+      {{- if .Values.commonLabels }}
+      {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.readReplicas.podLabels }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.readReplicas.podLabels  "context" $) | nindent 8 }}
+      {{- end }}
 {{- with .Values.readReplicas.podAnnotations }}
       annotations:
 {{ toYaml . | indent 8 }}
@@ -56,6 +62,9 @@ spec:
       {{- end }}
       {{- if .Values.readReplicas.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.readReplicas.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.readReplicas.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.readReplicas.topologySpreadConstraints "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
@@ -156,7 +165,7 @@ spec:
             - name: POSTGRESQL_VOLUME_DIR
               value: "{{ .Values.persistence.mountPath }}"
             - name: POSTGRESQL_PORT_NUMBER
-              value: "{{ template "postgresql.port" . }}"
+              value: {{ .Values.containerPorts.postgresql | quote }}
             {{- if .Values.persistence.mountPath }}
             - name: PGDATA
               value: {{ .Values.postgresqlDataDir | quote }}
@@ -180,7 +189,7 @@ spec:
             - name: POSTGRES_MASTER_HOST
               value: {{ template "common.names.fullname" . }}
             - name: POSTGRES_MASTER_PORT_NUMBER
-              value: {{ include "postgresql.port" . | quote }}
+              value: {{ include "postgresql.servicePort" . | quote }}
             {{- if not (eq (include "postgresql.username" .) "postgres")  }}
             {{- if .Values.usePasswordFile }}
             - name: POSTGRES_POSTGRES_PASSWORD_FILE
@@ -279,7 +288,7 @@ spec:
             {{- end }}
           ports:
             - name: tcp-postgresql
-              containerPort: {{ template "postgresql.port" . }}
+              containerPort: {{ .Values.containerPorts.postgresql }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
@@ -288,9 +297,9 @@ spec:
                 - /bin/sh
                 - -c
                 {{- if (include "postgresql.database" .) }}
-                - exec pg_isready -U {{ include "postgresql.username" . | quote }} -d "dbname={{ include "postgresql.database" . }} {{- if and .Values.tls.enabled .Values.tls.certCAFilename }} sslcert={{ include "postgresql.tlsCert" . }} sslkey={{ include "postgresql.tlsCertKey" . }}{{- end }}" -h 127.0.0.1 -p {{ template "postgresql.port" . }}
+                - exec pg_isready -U {{ include "postgresql.username" . | quote }} -d "dbname={{ include "postgresql.database" . }} {{- if and .Values.tls.enabled .Values.tls.certCAFilename }} sslcert={{ include "postgresql.tlsCert" . }} sslkey={{ include "postgresql.tlsCertKey" . }}{{- end }}" -h 127.0.0.1 -p {{ .Values.containerPorts.postgresql }}
                 {{- else }}
-                - exec pg_isready -U {{ include "postgresql.username" . | quote }} {{- if and .Values.tls.enabled .Values.tls.certCAFilename }} -d "sslcert={{ include "postgresql.tlsCert" . }} sslkey={{ include "postgresql.tlsCertKey" . }}"{{- end }} -h 127.0.0.1 -p {{ template "postgresql.port" . }}
+                - exec pg_isready -U {{ include "postgresql.username" . | quote }} {{- if and .Values.tls.enabled .Values.tls.certCAFilename }} -d "sslcert={{ include "postgresql.tlsCert" . }} sslkey={{ include "postgresql.tlsCertKey" . }}"{{- end }} -h 127.0.0.1 -p {{ .Values.containerPorts.postgresql }}
                 {{- end }}
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
@@ -345,7 +354,7 @@ spec:
               readOnly: true
             {{- end }}
             {{- if .Values.readReplicas.extraVolumeMounts }}
-            {{- toYaml .Values.readReplicas.extraVolumeMounts | nindent 12 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.readReplicas.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
 {{- if .Values.readReplicas.sidecars }}
 {{- include "common.tplvalues.render" ( dict "value" .Values.readReplicas.sidecars "context" $ ) | nindent 8 }}
@@ -384,8 +393,11 @@ spec:
           emptyDir: {}
         {{- end }}
         {{- if .Values.readReplicas.extraVolumes }}
-        {{- toYaml .Values.readReplicas.extraVolumes | nindent 8 }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.readReplicas.extraVolumes "context" $ ) | nindent 8 }}
         {{- end }}
+      {{- if .Values.readReplicas.extraPodSpec }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.readReplicas.extraPodSpec "context" $) | nindent 6 }}
+      {{- end }}
   updateStrategy:
     type: {{ .Values.updateStrategy.type }}
     {{- if (eq "Recreate" .Values.updateStrategy.type) }}

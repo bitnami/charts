@@ -13,11 +13,11 @@ $ helm install my-release bitnami/grafana-tempo
 
 Bitnami charts for Helm are carefully engineered, actively maintained and are the quickest and easiest way to deploy containers on a Kubernetes cluster that are ready to handle production workloads.
 
-This chart bootstraps a [Grafana Tempo](https://github.com/grafana/tempo) Deployment in a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Grafana Tempo](https://github.com/grafana/tempo) Deployment in a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
-[Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/infrastructure/grafana-tempo/get-started/understand-default-configuration/).
+[Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/infrastructure/grafana-tempo/get-started/).
 
 ## Prerequisites
 
@@ -70,8 +70,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `clusterDomain`          | Kubernetes cluster domain name                                                          | `cluster.local` |
 | `extraDeploy`            | Array of extra objects to deploy with the release                                       | `[]`            |
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
-| `diagnosticMode.command` | Command to override all containers in the deployment                                    | `[]`            |
-| `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `[]`            |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`     |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]`  |
 
 
 ### Common Grafana Tempo Parameters
@@ -80,13 +80,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------- | ---------------------------------------------------------- | ----------------------------- |
 | `tempo.image.registry`                 | Grafana Tempo image registry                               | `docker.io`                   |
 | `tempo.image.repository`               | Grafana Tempo image repository                             | `bitnami/grafana-tempo`       |
-| `tempo.image.tag`                      | Grafana Tempo image tag (immutable tags are recommended)   | `1.1.0-debian-10-r14`         |
+| `tempo.image.tag`                      | Grafana Tempo image tag (immutable tags are recommended)   | `1.2.1-debian-10-r0`          |
 | `tempo.image.pullPolicy`               | Grafana Tempo image pull policy                            | `IfNotPresent`                |
 | `tempo.image.pullSecrets`              | Grafana Tempo image pull secrets                           | `[]`                          |
 | `tempo.containerPort`                  | Tempo components web port                                  | `3100`                        |
 | `tempo.grpcContainerPort`              | Tempo components GRPC port                                 | `9095`                        |
 | `tempo.memBallastSizeMbs`              | Tempo components memory ballast size in MB                 | `1024`                        |
-| `tempo.dataDir`                        | Tempo components data directory                            | `/bitnami/tempo-grafana/data` |
+| `tempo.dataDir`                        | Tempo components data directory                            | `/bitnami/grafana-tempo/data` |
 | `tempo.traces.jaeger.grpc`             | Enable Tempo to ingest Jaeger GRPC traces                  | `true`                        |
 | `tempo.traces.jaeger.thriftBinary`     | Enable Tempo to ingest Jaeger Thrift Binary traces         | `false`                       |
 | `tempo.traces.jaeger.thriftCompact`    | Enable Tempo to ingest Jaeger Thrift Compact traces        | `false`                       |
@@ -432,7 +432,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryFrontend.initContainers`                           | Add additional init containers to the queryFrontend pod(s)                                              | `[]`                          |
 | `queryFrontend.query.image.registry`                     | Grafana Tempo Query image registry                                                                      | `docker.io`                   |
 | `queryFrontend.query.image.repository`                   | Grafana Tempo Query image repository                                                                    | `bitnami/grafana-tempo-query` |
-| `queryFrontend.query.image.tag`                          | Grafana Tempo Query image tag (immutable tags are recommended)                                          | `1.1.0-debian-10-r17`         |
+| `queryFrontend.query.image.tag`                          | Grafana Tempo Query image tag (immutable tags are recommended)                                          | `1.2.1-debian-10-r8`          |
 | `queryFrontend.query.image.pullPolicy`                   | Grafana Tempo Query image pull policy                                                                   | `IfNotPresent`                |
 | `queryFrontend.query.image.pullSecrets`                  | Grafana Tempo Query image pull secrets                                                                  | `[]`                          |
 | `queryFrontend.query.command`                            | Override default container command (useful when using custom images)                                    | `[]`                          |
@@ -489,7 +489,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `vulture.enabled`                            | Enable vulture deployment                                                                         | `true`                          |
 | `vulture.image.registry`                     | Grafana Vulture image registry                                                                    | `docker.io`                     |
 | `vulture.image.repository`                   | Grafana Vulture image repository                                                                  | `bitnami/grafana-tempo-vulture` |
-| `vulture.image.tag`                          | Grafana Vulture image tag (immutable tags are recommended)                                        | `1.1.0-debian-10-r14`           |
+| `vulture.image.tag`                          | Grafana Vulture image tag (immutable tags are recommended)                                        | `1.2.1-debian-10-r8`            |
 | `vulture.image.pullPolicy`                   | Grafana Vulture image pull policy                                                                 | `IfNotPresent`                  |
 | `vulture.image.pullSecrets`                  | Grafana Vulture image pull secrets                                                                | `[]`                            |
 | `vulture.replicaCount`                       | Number of vulture replicas to deploy                                                              | `1`                             |
@@ -560,8 +560,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `10`                    |
-| `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `Always`                |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r261`     |
+| `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                    |
 | `volumePermissions.resources.requests`                 | The requested resources for the init container                                                  | `{}`                    |
@@ -606,7 +606,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 See https://github.com/bitnami-labs/readme-generator-for-helm to create the table
 
-The above parameters map to the env variables defined in [bitnami/grafana-tempo](http://github.com/bitnami/bitnami-docker-grafana-tempo). For more information please refer to the [bitnami/grafana-tempo](http://github.com/bitnami/bitnami-docker-grafana-tempo) image documentation.
+The above parameters map to the env variables defined in [bitnami/grafana-tempo](https://github.com/bitnami/bitnami-docker-grafana-tempo). For more information please refer to the [bitnami/grafana-tempo](https://github.com/bitnami/bitnami-docker-grafana-tempo) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -639,7 +639,7 @@ The tempo configuration file `tempo.yaml` is shared across the different compone
 
 ## Persistence
 
-The [Bitnami grafana-tempo](https://github.com/bitnami/bitnami-docker-grafana-tempo) image stores the grafana-tempo `ingester` data at the `/bitnami` path of the container. Persistent Volume Claims are used to keep the data across deployments. [Learn more about persistence in the chart documentation](https://docs.bitnami.com/kubernetes/apps/grafana-tempo/configuration/chart-persistence/).
+The [Bitnami grafana-tempo](https://github.com/bitnami/bitnami-docker-grafana-tempo) image stores the grafana-tempo `ingester` data at the `/bitnami` path of the container. Persistent Volume Claims are used to keep the data across deployments.
 
 ### Additional environment variables
 
@@ -681,7 +681,7 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 ### Sidecars
 
-If additional containers are needed in the same pod as grafana-tempo (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter inside each of the subsections: `distributor`, `compactor`, `ingester`, `querier`, `queryFrontend` and `vulture` . If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/apps/grafana-tempo/administration/configure-use-sidecars/).
+If additional containers are needed in the same pod as grafana-tempo (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter inside each of the subsections: `distributor`, `compactor`, `ingester`, `querier`, `queryFrontend` and `vulture` . If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/infrastructure/grafana-tempo/configuration/configure-sidecar-init-containers/).
 
 ### Pod affinity
 
@@ -702,3 +702,19 @@ externalMemcached.port=11211
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+
+## License
+
+Copyright &copy; 2022 Bitnami
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

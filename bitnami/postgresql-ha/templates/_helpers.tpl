@@ -548,22 +548,12 @@ Also, we can't use a single if because lazy evaluation is not an option
 {{- end -}}
 {{- end -}}
 
-{{/*
-Return the appropriate apiVersion for networkPolicy
-*/}}
-{{- define "postgresql-ha.networkPolicy.apiVersion" -}}
-{{- if semverCompare ">=1.4-0, <1.7-0" .Capabilities.KubeVersion.GitVersion -}}
-"extensions/v1beta1"
-{{- else if semverCompare "^1.7-0" .Capabilities.KubeVersion.GitVersion -}}
-"networking.k8s.io/v1"
-{{- end -}}
-{{- end -}}
-
 {{/* Check if there are rolling tags in the images */}}
 {{- define "postgresql-ha.checkRollingTags" -}}
 {{- include "common.warnings.rollingTag" .Values.postgresqlImage -}}
 {{- include "common.warnings.rollingTag" .Values.pgpoolImage -}}
 {{- include "common.warnings.rollingTag" .Values.metricsImage -}}
+{{- include "common.warnings.rollingTag" .Values.volumePermissionsImage -}}
 {{- end -}}
 
 {{/*
@@ -771,3 +761,4 @@ Return the path to the CA cert file.
 {{- define "postgresql-ha.postgresql.tlsCACert" -}}
 {{- printf "/opt/bitnami/postgresql/certs/%s" .Values.postgresql.tls.certCAFilename -}}
 {{- end -}}
+
