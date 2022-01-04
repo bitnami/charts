@@ -49,7 +49,7 @@ extraDeploy: []
 ## @param image.tag MediaWiki image tag (immutable tags are recommended)
 ## @param image.pullPolicy Image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
-## @param image.debug Enable %%MAIN_CONTAINER%% image debug mode
+## @param image.debug Enable MediaWiki image debug mode
 ##
 image:
   registry: docker.io
