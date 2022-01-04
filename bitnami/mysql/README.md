@@ -11,7 +11,7 @@ $ helm install my-release bitnami/mysql
 
 ## Introduction
 
-This chart bootstraps a [MySQL](https://github.com/bitnami/bitnami-docker-mysql) replication cluster deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [MySQL](https://github.com/bitnami/bitnami-docker-mysql) replication cluster deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
@@ -67,8 +67,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraDeploy`            | Array with extra yaml to deploy with the chart. Evaluated as a template                                   | `[]`            |
 | `schedulerName`          | Use an alternate scheduler, e.g. "stork".                                                                 | `""`            |
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                   | `false`         |
-| `diagnosticMode.command` | Command to override all containers in the deployment                                                      | `[]`            |
-| `diagnosticMode.args`    | Args to override all containers in the deployment                                                         | `[]`            |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                                      | `["sleep"]`     |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                                         | `["infinity"]`  |
 
 
 ### MySQL common parameters
@@ -77,7 +77,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
 | `image.registry`           | MySQL image registry                                                                                                                                                                | `docker.io`            |
 | `image.repository`         | MySQL image repository                                                                                                                                                              | `bitnami/mysql`        |
-| `image.tag`                | MySQL image tag (immutable tags are recommended)                                                                                                                                    | `8.0.26-debian-10-r31` |
+| `image.tag`                | MySQL image tag (immutable tags are recommended)                                                                                                                                    | `8.0.27-debian-10-r35` |
 | `image.pullPolicy`         | MySQL image pull policy                                                                                                                                                             | `IfNotPresent`         |
 | `image.pullSecrets`        | Specify docker-registry secret names as an array                                                                                                                                    | `[]`                   |
 | `image.debug`              | Specify if debug logs should be enabled                                                                                                                                             | `false`                |
@@ -98,154 +98,154 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### MySQL Primary parameters
 
-| Name                                         | Description                                                                                                     | Value           |
-| -------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | --------------- |
-| `primary.command`                            | Override default container command on MySQL Primary container(s) (useful when using custom images)              | `[]`            |
-| `primary.args`                               | Override default container args on MySQL Primary container(s) (useful when using custom images)                 | `[]`            |
-| `primary.hostAliases`                        | Deployment pod host aliases                                                                                     | `[]`            |
-| `primary.configuration`                      | Configure MySQL Primary with a custom my.cnf file                                                               | `""`            |
-| `primary.existingConfiguration`              | Name of existing ConfigMap with MySQL Primary configuration.                                                    | `""`            |
-| `primary.updateStrategy`                     | Update strategy type for the MySQL primary statefulset                                                          | `RollingUpdate` |
-| `primary.rollingUpdatePartition`             | Partition update strategy for MySQL Primary statefulset                                                         | `""`            |
-| `primary.podAnnotations`                     | Additional pod annotations for MySQL primary pods                                                               | `{}`            |
-| `primary.podAffinityPreset`                  | MySQL primary pod affinity preset. Ignored if `primary.affinity` is set. Allowed values: `soft` or `hard`       | `""`            |
-| `primary.podAntiAffinityPreset`              | MySQL primary pod anti-affinity preset. Ignored if `primary.affinity` is set. Allowed values: `soft` or `hard`  | `soft`          |
-| `primary.nodeAffinityPreset.type`            | MySQL primary node affinity preset type. Ignored if `primary.affinity` is set. Allowed values: `soft` or `hard` | `""`            |
-| `primary.nodeAffinityPreset.key`             | MySQL primary node label key to match Ignored if `primary.affinity` is set.                                     | `""`            |
-| `primary.nodeAffinityPreset.values`          | MySQL primary node label values to match. Ignored if `primary.affinity` is set.                                 | `[]`            |
-| `primary.affinity`                           | Affinity for MySQL primary pods assignment                                                                      | `{}`            |
-| `primary.nodeSelector`                       | Node labels for MySQL primary pods assignment                                                                   | `{}`            |
-| `primary.tolerations`                        | Tolerations for MySQL primary pods assignment                                                                   | `[]`            |
-| `primary.podSecurityContext.enabled`         | Enable security context for MySQL primary pods                                                                  | `true`          |
-| `primary.podSecurityContext.fsGroup`         | Group ID for the mounted volumes' filesystem                                                                    | `1001`          |
-| `primary.containerSecurityContext.enabled`   | MySQL primary container securityContext                                                                         | `true`          |
-| `primary.containerSecurityContext.runAsUser` | User ID for the MySQL primary container                                                                         | `1001`          |
-| `primary.resources.limits`                   | The resources limits for MySQL primary containers                                                               | `{}`            |
-| `primary.resources.requests`                 | The requested resources for MySQL primary containers                                                            | `{}`            |
-| `primary.livenessProbe.enabled`              | Enable livenessProbe                                                                                            | `true`          |
-| `primary.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                         | `5`             |
-| `primary.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                                | `10`            |
-| `primary.livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                                               | `1`             |
-| `primary.livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                                             | `3`             |
-| `primary.livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                                             | `1`             |
-| `primary.readinessProbe.enabled`             | Enable readinessProbe                                                                                           | `true`          |
-| `primary.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                                        | `5`             |
-| `primary.readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                                               | `10`            |
-| `primary.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                              | `1`             |
-| `primary.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                                            | `3`             |
-| `primary.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                            | `1`             |
-| `primary.startupProbe.enabled`               | Enable startupProbe                                                                                             | `true`          |
-| `primary.startupProbe.initialDelaySeconds`   | Initial delay seconds for startupProbe                                                                          | `15`            |
-| `primary.startupProbe.periodSeconds`         | Period seconds for startupProbe                                                                                 | `10`            |
-| `primary.startupProbe.timeoutSeconds`        | Timeout seconds for startupProbe                                                                                | `1`             |
-| `primary.startupProbe.failureThreshold`      | Failure threshold for startupProbe                                                                              | `10`            |
-| `primary.startupProbe.successThreshold`      | Success threshold for startupProbe                                                                              | `1`             |
-| `primary.customLivenessProbe`                | Override default liveness probe for MySQL primary containers                                                    | `{}`            |
-| `primary.customReadinessProbe`               | Override default readiness probe for MySQL primary containers                                                   | `{}`            |
-| `primary.customStartupProbe`                 | Override default startup probe for MySQL primary containers                                                     | `{}`            |
-| `primary.extraFlags`                         | MySQL primary additional command line flags                                                                     | `""`            |
-| `primary.extraEnvVars`                       | Extra environment variables to be set on MySQL primary containers                                               | `[]`            |
-| `primary.extraEnvVarsCM`                     | Name of existing ConfigMap containing extra env vars for MySQL primary containers                               | `""`            |
-| `primary.extraEnvVarsSecret`                 | Name of existing Secret containing extra env vars for MySQL primary containers                                  | `""`            |
-| `primary.persistence.enabled`                | Enable persistence on MySQL primary replicas using a `PersistentVolumeClaim`. If false, use emptyDir            | `true`          |
-| `primary.persistence.existingClaim`          | Name of an existing `PersistentVolumeClaim` for MySQL primary replicas                                          | `""`            |
-| `primary.persistence.storageClass`           | MySQL primary persistent volume storage Class                                                                   | `""`            |
-| `primary.persistence.annotations`            | MySQL primary persistent volume claim annotations                                                               | `{}`            |
-| `primary.persistence.accessModes`            | MySQL primary persistent volume access Modes                                                                    | `[]`            |
-| `primary.persistence.size`                   | MySQL primary persistent volume size                                                                            | `8Gi`           |
-| `primary.persistence.selector`               | Selector to match an existing Persistent Volume                                                                 | `{}`            |
-| `primary.extraVolumes`                       | Optionally specify extra list of additional volumes to the MySQL Primary pod(s)                                 | `[]`            |
-| `primary.extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for the MySQL Primary container(s)                     | `[]`            |
-| `primary.initContainers`                     | Add additional init containers for the MySQL Primary pod(s)                                                     | `[]`            |
-| `primary.sidecars`                           | Add additional sidecar containers for the MySQL Primary pod(s)                                                  | `[]`            |
-| `primary.service.type`                       | MySQL Primary K8s service type                                                                                  | `ClusterIP`     |
-| `primary.service.port`                       | MySQL Primary K8s service port                                                                                  | `3306`          |
-| `primary.service.nodePort`                   | MySQL Primary K8s service node port                                                                             | `""`            |
-| `primary.service.clusterIP`                  | MySQL Primary K8s service clusterIP IP                                                                          | `""`            |
-| `primary.service.loadBalancerIP`             | MySQL Primary loadBalancerIP if service type is `LoadBalancer`                                                  | `""`            |
-| `primary.service.externalTrafficPolicy`      | Enable client source IP preservation                                                                            | `Cluster`       |
-| `primary.service.loadBalancerSourceRanges`   | Addresses that are allowed when MySQL Primary service is LoadBalancer                                           | `[]`            |
-| `primary.service.annotations`                | Provide any additional annotations which may be required                                                        | `{}`            |
-| `primary.pdb.enabled`                        | Enable/disable a Pod Disruption Budget creation for MySQL primary pods                                          | `false`         |
-| `primary.pdb.minAvailable`                   | Minimum number/percentage of MySQL primary pods that should remain scheduled                                    | `1`             |
-| `primary.pdb.maxUnavailable`                 | Maximum number/percentage of MySQL primary pods that may be made unavailable                                    | `""`            |
-| `primary.podLabels`                          | MySQL Primary pod label. If labels are same as commonLabels , this will take precedence                         | `{}`            |
+| Name                                         | Description                                                                                                     | Value               |
+| -------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | ------------------- |
+| `primary.command`                            | Override default container command on MySQL Primary container(s) (useful when using custom images)              | `[]`                |
+| `primary.args`                               | Override default container args on MySQL Primary container(s) (useful when using custom images)                 | `[]`                |
+| `primary.hostAliases`                        | Deployment pod host aliases                                                                                     | `[]`                |
+| `primary.configuration`                      | Configure MySQL Primary with a custom my.cnf file                                                               | `""`                |
+| `primary.existingConfigmap`                  | Name of existing ConfigMap with MySQL Primary configuration.                                                    | `""`                |
+| `primary.updateStrategy`                     | Update strategy type for the MySQL primary statefulset                                                          | `RollingUpdate`     |
+| `primary.rollingUpdatePartition`             | Partition update strategy for MySQL Primary statefulset                                                         | `""`                |
+| `primary.podAnnotations`                     | Additional pod annotations for MySQL primary pods                                                               | `{}`                |
+| `primary.podAffinityPreset`                  | MySQL primary pod affinity preset. Ignored if `primary.affinity` is set. Allowed values: `soft` or `hard`       | `""`                |
+| `primary.podAntiAffinityPreset`              | MySQL primary pod anti-affinity preset. Ignored if `primary.affinity` is set. Allowed values: `soft` or `hard`  | `soft`              |
+| `primary.nodeAffinityPreset.type`            | MySQL primary node affinity preset type. Ignored if `primary.affinity` is set. Allowed values: `soft` or `hard` | `""`                |
+| `primary.nodeAffinityPreset.key`             | MySQL primary node label key to match Ignored if `primary.affinity` is set.                                     | `""`                |
+| `primary.nodeAffinityPreset.values`          | MySQL primary node label values to match. Ignored if `primary.affinity` is set.                                 | `[]`                |
+| `primary.affinity`                           | Affinity for MySQL primary pods assignment                                                                      | `{}`                |
+| `primary.nodeSelector`                       | Node labels for MySQL primary pods assignment                                                                   | `{}`                |
+| `primary.tolerations`                        | Tolerations for MySQL primary pods assignment                                                                   | `[]`                |
+| `primary.podSecurityContext.enabled`         | Enable security context for MySQL primary pods                                                                  | `true`              |
+| `primary.podSecurityContext.fsGroup`         | Group ID for the mounted volumes' filesystem                                                                    | `1001`              |
+| `primary.containerSecurityContext.enabled`   | MySQL primary container securityContext                                                                         | `true`              |
+| `primary.containerSecurityContext.runAsUser` | User ID for the MySQL primary container                                                                         | `1001`              |
+| `primary.resources.limits`                   | The resources limits for MySQL primary containers                                                               | `{}`                |
+| `primary.resources.requests`                 | The requested resources for MySQL primary containers                                                            | `{}`                |
+| `primary.livenessProbe.enabled`              | Enable livenessProbe                                                                                            | `true`              |
+| `primary.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                         | `5`                 |
+| `primary.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                                | `10`                |
+| `primary.livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                                               | `1`                 |
+| `primary.livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                                             | `3`                 |
+| `primary.livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                                             | `1`                 |
+| `primary.readinessProbe.enabled`             | Enable readinessProbe                                                                                           | `true`              |
+| `primary.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                                        | `5`                 |
+| `primary.readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                                               | `10`                |
+| `primary.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                              | `1`                 |
+| `primary.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                                            | `3`                 |
+| `primary.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                            | `1`                 |
+| `primary.startupProbe.enabled`               | Enable startupProbe                                                                                             | `true`              |
+| `primary.startupProbe.initialDelaySeconds`   | Initial delay seconds for startupProbe                                                                          | `15`                |
+| `primary.startupProbe.periodSeconds`         | Period seconds for startupProbe                                                                                 | `10`                |
+| `primary.startupProbe.timeoutSeconds`        | Timeout seconds for startupProbe                                                                                | `1`                 |
+| `primary.startupProbe.failureThreshold`      | Failure threshold for startupProbe                                                                              | `10`                |
+| `primary.startupProbe.successThreshold`      | Success threshold for startupProbe                                                                              | `1`                 |
+| `primary.customLivenessProbe`                | Override default liveness probe for MySQL primary containers                                                    | `{}`                |
+| `primary.customReadinessProbe`               | Override default readiness probe for MySQL primary containers                                                   | `{}`                |
+| `primary.customStartupProbe`                 | Override default startup probe for MySQL primary containers                                                     | `{}`                |
+| `primary.extraFlags`                         | MySQL primary additional command line flags                                                                     | `""`                |
+| `primary.extraEnvVars`                       | Extra environment variables to be set on MySQL primary containers                                               | `[]`                |
+| `primary.extraEnvVarsCM`                     | Name of existing ConfigMap containing extra env vars for MySQL primary containers                               | `""`                |
+| `primary.extraEnvVarsSecret`                 | Name of existing Secret containing extra env vars for MySQL primary containers                                  | `""`                |
+| `primary.persistence.enabled`                | Enable persistence on MySQL primary replicas using a `PersistentVolumeClaim`. If false, use emptyDir            | `true`              |
+| `primary.persistence.existingClaim`          | Name of an existing `PersistentVolumeClaim` for MySQL primary replicas                                          | `""`                |
+| `primary.persistence.storageClass`           | MySQL primary persistent volume storage Class                                                                   | `""`                |
+| `primary.persistence.annotations`            | MySQL primary persistent volume claim annotations                                                               | `{}`                |
+| `primary.persistence.accessModes`            | MySQL primary persistent volume access Modes                                                                    | `["ReadWriteOnce"]` |
+| `primary.persistence.size`                   | MySQL primary persistent volume size                                                                            | `8Gi`               |
+| `primary.persistence.selector`               | Selector to match an existing Persistent Volume                                                                 | `{}`                |
+| `primary.extraVolumes`                       | Optionally specify extra list of additional volumes to the MySQL Primary pod(s)                                 | `[]`                |
+| `primary.extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for the MySQL Primary container(s)                     | `[]`                |
+| `primary.initContainers`                     | Add additional init containers for the MySQL Primary pod(s)                                                     | `[]`                |
+| `primary.sidecars`                           | Add additional sidecar containers for the MySQL Primary pod(s)                                                  | `[]`                |
+| `primary.service.type`                       | MySQL Primary K8s service type                                                                                  | `ClusterIP`         |
+| `primary.service.port`                       | MySQL Primary K8s service port                                                                                  | `3306`              |
+| `primary.service.nodePort`                   | MySQL Primary K8s service node port                                                                             | `""`                |
+| `primary.service.clusterIP`                  | MySQL Primary K8s service clusterIP IP                                                                          | `""`                |
+| `primary.service.loadBalancerIP`             | MySQL Primary loadBalancerIP if service type is `LoadBalancer`                                                  | `""`                |
+| `primary.service.externalTrafficPolicy`      | Enable client source IP preservation                                                                            | `Cluster`           |
+| `primary.service.loadBalancerSourceRanges`   | Addresses that are allowed when MySQL Primary service is LoadBalancer                                           | `[]`                |
+| `primary.service.annotations`                | Provide any additional annotations which may be required                                                        | `{}`                |
+| `primary.pdb.enabled`                        | Enable/disable a Pod Disruption Budget creation for MySQL primary pods                                          | `false`             |
+| `primary.pdb.minAvailable`                   | Minimum number/percentage of MySQL primary pods that should remain scheduled                                    | `1`                 |
+| `primary.pdb.maxUnavailable`                 | Maximum number/percentage of MySQL primary pods that may be made unavailable                                    | `""`                |
+| `primary.podLabels`                          | MySQL Primary pod label. If labels are same as commonLabels , this will take precedence                         | `{}`                |
 
 
 ### MySQL Secondary parameters
 
-| Name                                           | Description                                                                                                         | Value           |
-| ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | --------------- |
-| `secondary.replicaCount`                       | Number of MySQL secondary replicas                                                                                  | `1`             |
-| `secondary.hostAliases`                        | Deployment pod host aliases                                                                                         | `[]`            |
-| `secondary.command`                            | Override default container command on MySQL Secondary container(s) (useful when using custom images)                | `[]`            |
-| `secondary.args`                               | Override default container args on MySQL Secondary container(s) (useful when using custom images)                   | `[]`            |
-| `secondary.configuration`                      | Configure MySQL Secondary with a custom my.cnf file                                                                 | `""`            |
-| `secondary.existingConfiguration`              | Name of existing ConfigMap with MySQL Secondary configuration.                                                      | `""`            |
-| `secondary.updateStrategy`                     | Update strategy type for the MySQL secondary statefulset                                                            | `RollingUpdate` |
-| `secondary.rollingUpdatePartition`             | Partition update strategy for MySQL Secondary statefulset                                                           | `""`            |
-| `secondary.podAnnotations`                     | Additional pod annotations for MySQL secondary pods                                                                 | `{}`            |
-| `secondary.podAffinityPreset`                  | MySQL secondary pod affinity preset. Ignored if `secondary.affinity` is set. Allowed values: `soft` or `hard`       | `""`            |
-| `secondary.podAntiAffinityPreset`              | MySQL secondary pod anti-affinity preset. Ignored if `secondary.affinity` is set. Allowed values: `soft` or `hard`  | `soft`          |
-| `secondary.nodeAffinityPreset.type`            | MySQL secondary node affinity preset type. Ignored if `secondary.affinity` is set. Allowed values: `soft` or `hard` | `""`            |
-| `secondary.nodeAffinityPreset.key`             | MySQL secondary node label key to match Ignored if `secondary.affinity` is set.                                     | `""`            |
-| `secondary.nodeAffinityPreset.values`          | MySQL secondary node label values to match. Ignored if `secondary.affinity` is set.                                 | `[]`            |
-| `secondary.affinity`                           | Affinity for MySQL secondary pods assignment                                                                        | `{}`            |
-| `secondary.nodeSelector`                       | Node labels for MySQL secondary pods assignment                                                                     | `{}`            |
-| `secondary.tolerations`                        | Tolerations for MySQL secondary pods assignment                                                                     | `[]`            |
-| `secondary.podSecurityContext.enabled`         | Enable security context for MySQL secondary pods                                                                    | `true`          |
-| `secondary.podSecurityContext.fsGroup`         | Group ID for the mounted volumes' filesystem                                                                        | `1001`          |
-| `secondary.containerSecurityContext.enabled`   | MySQL secondary container securityContext                                                                           | `true`          |
-| `secondary.containerSecurityContext.runAsUser` | User ID for the MySQL secondary container                                                                           | `1001`          |
-| `secondary.resources.limits`                   | The resources limits for MySQL secondary containers                                                                 | `{}`            |
-| `secondary.resources.requests`                 | The requested resources for MySQL secondary containers                                                              | `{}`            |
-| `secondary.livenessProbe.enabled`              | Enable livenessProbe                                                                                                | `true`          |
-| `secondary.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                             | `5`             |
-| `secondary.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                                    | `10`            |
-| `secondary.livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                                                   | `1`             |
-| `secondary.livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                                                 | `3`             |
-| `secondary.livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                                                 | `1`             |
-| `secondary.readinessProbe.enabled`             | Enable readinessProbe                                                                                               | `true`          |
-| `secondary.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                                            | `5`             |
-| `secondary.readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                                                   | `10`            |
-| `secondary.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                                  | `1`             |
-| `secondary.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                                                | `3`             |
-| `secondary.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                                | `1`             |
-| `secondary.startupProbe.enabled`               | Enable startupProbe                                                                                                 | `true`          |
-| `secondary.startupProbe.initialDelaySeconds`   | Initial delay seconds for startupProbe                                                                              | `15`            |
-| `secondary.startupProbe.periodSeconds`         | Period seconds for startupProbe                                                                                     | `10`            |
-| `secondary.startupProbe.timeoutSeconds`        | Timeout seconds for startupProbe                                                                                    | `1`             |
-| `secondary.startupProbe.failureThreshold`      | Failure threshold for startupProbe                                                                                  | `15`            |
-| `secondary.startupProbe.successThreshold`      | Success threshold for startupProbe                                                                                  | `1`             |
-| `secondary.customLivenessProbe`                | Override default liveness probe for MySQL secondary containers                                                      | `{}`            |
-| `secondary.customReadinessProbe`               | Override default readiness probe for MySQL secondary containers                                                     | `{}`            |
-| `secondary.customStartupProbe`                 | Override default startup probe for MySQL secondary containers                                                       | `{}`            |
-| `secondary.extraFlags`                         | MySQL secondary additional command line flags                                                                       | `""`            |
-| `secondary.extraEnvVars`                       | An array to add extra environment variables on MySQL secondary containers                                           | `[]`            |
-| `secondary.extraEnvVarsCM`                     | Name of existing ConfigMap containing extra env vars for MySQL secondary containers                                 | `""`            |
-| `secondary.extraEnvVarsSecret`                 | Name of existing Secret containing extra env vars for MySQL secondary containers                                    | `""`            |
-| `secondary.persistence.enabled`                | Enable persistence on MySQL secondary replicas using a `PersistentVolumeClaim`                                      | `true`          |
-| `secondary.persistence.storageClass`           | MySQL secondary persistent volume storage Class                                                                     | `""`            |
-| `secondary.persistence.annotations`            | MySQL secondary persistent volume claim annotations                                                                 | `{}`            |
-| `secondary.persistence.accessModes`            | MySQL secondary persistent volume access Modes                                                                      | `[]`            |
-| `secondary.persistence.size`                   | MySQL secondary persistent volume size                                                                              | `8Gi`           |
-| `secondary.persistence.selector`               | Selector to match an existing Persistent Volume                                                                     | `{}`            |
-| `secondary.extraVolumes`                       | Optionally specify extra list of additional volumes to the MySQL secondary pod(s)                                   | `[]`            |
-| `secondary.extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for the MySQL secondary container(s)                       | `[]`            |
-| `secondary.initContainers`                     | Add additional init containers for the MySQL secondary pod(s)                                                       | `[]`            |
-| `secondary.sidecars`                           | Add additional sidecar containers for the MySQL secondary pod(s)                                                    | `[]`            |
-| `secondary.service.type`                       | MySQL secondary Kubernetes service type                                                                             | `ClusterIP`     |
-| `secondary.service.port`                       | MySQL secondary Kubernetes service port                                                                             | `3306`          |
-| `secondary.service.nodePort`                   | MySQL secondary Kubernetes service node port                                                                        | `""`            |
-| `secondary.service.clusterIP`                  | MySQL secondary Kubernetes service clusterIP IP                                                                     | `""`            |
-| `secondary.service.loadBalancerIP`             | MySQL secondary loadBalancerIP if service type is `LoadBalancer`                                                    | `""`            |
-| `secondary.service.externalTrafficPolicy`      | Enable client source IP preservation                                                                                | `Cluster`       |
-| `secondary.service.loadBalancerSourceRanges`   | Addresses that are allowed when MySQL secondary service is LoadBalancer                                             | `[]`            |
-| `secondary.service.annotations`                | Provide any additional annotations which may be required                                                            | `{}`            |
-| `secondary.pdb.enabled`                        | Enable/disable a Pod Disruption Budget creation for MySQL secondary pods                                            | `false`         |
-| `secondary.pdb.minAvailable`                   | Minimum number/percentage of MySQL secondary pods that should remain scheduled                                      | `1`             |
-| `secondary.pdb.maxUnavailable`                 | Maximum number/percentage of MySQL secondary pods that may be made unavailable                                      | `""`            |
-| `secondary.podLabels`                          | Additional pod labels for MySQL secondary pods                                                                      | `{}`            |
+| Name                                           | Description                                                                                                         | Value               |
+| ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------------------- |
+| `secondary.replicaCount`                       | Number of MySQL secondary replicas                                                                                  | `1`                 |
+| `secondary.hostAliases`                        | Deployment pod host aliases                                                                                         | `[]`                |
+| `secondary.command`                            | Override default container command on MySQL Secondary container(s) (useful when using custom images)                | `[]`                |
+| `secondary.args`                               | Override default container args on MySQL Secondary container(s) (useful when using custom images)                   | `[]`                |
+| `secondary.configuration`                      | Configure MySQL Secondary with a custom my.cnf file                                                                 | `""`                |
+| `secondary.existingConfigmap`                  | Name of existing ConfigMap with MySQL Secondary configuration.                                                      | `""`                |
+| `secondary.updateStrategy`                     | Update strategy type for the MySQL secondary statefulset                                                            | `RollingUpdate`     |
+| `secondary.rollingUpdatePartition`             | Partition update strategy for MySQL Secondary statefulset                                                           | `""`                |
+| `secondary.podAnnotations`                     | Additional pod annotations for MySQL secondary pods                                                                 | `{}`                |
+| `secondary.podAffinityPreset`                  | MySQL secondary pod affinity preset. Ignored if `secondary.affinity` is set. Allowed values: `soft` or `hard`       | `""`                |
+| `secondary.podAntiAffinityPreset`              | MySQL secondary pod anti-affinity preset. Ignored if `secondary.affinity` is set. Allowed values: `soft` or `hard`  | `soft`              |
+| `secondary.nodeAffinityPreset.type`            | MySQL secondary node affinity preset type. Ignored if `secondary.affinity` is set. Allowed values: `soft` or `hard` | `""`                |
+| `secondary.nodeAffinityPreset.key`             | MySQL secondary node label key to match Ignored if `secondary.affinity` is set.                                     | `""`                |
+| `secondary.nodeAffinityPreset.values`          | MySQL secondary node label values to match. Ignored if `secondary.affinity` is set.                                 | `[]`                |
+| `secondary.affinity`                           | Affinity for MySQL secondary pods assignment                                                                        | `{}`                |
+| `secondary.nodeSelector`                       | Node labels for MySQL secondary pods assignment                                                                     | `{}`                |
+| `secondary.tolerations`                        | Tolerations for MySQL secondary pods assignment                                                                     | `[]`                |
+| `secondary.podSecurityContext.enabled`         | Enable security context for MySQL secondary pods                                                                    | `true`              |
+| `secondary.podSecurityContext.fsGroup`         | Group ID for the mounted volumes' filesystem                                                                        | `1001`              |
+| `secondary.containerSecurityContext.enabled`   | MySQL secondary container securityContext                                                                           | `true`              |
+| `secondary.containerSecurityContext.runAsUser` | User ID for the MySQL secondary container                                                                           | `1001`              |
+| `secondary.resources.limits`                   | The resources limits for MySQL secondary containers                                                                 | `{}`                |
+| `secondary.resources.requests`                 | The requested resources for MySQL secondary containers                                                              | `{}`                |
+| `secondary.livenessProbe.enabled`              | Enable livenessProbe                                                                                                | `true`              |
+| `secondary.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                             | `5`                 |
+| `secondary.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                                    | `10`                |
+| `secondary.livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                                                   | `1`                 |
+| `secondary.livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                                                 | `3`                 |
+| `secondary.livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                                                 | `1`                 |
+| `secondary.readinessProbe.enabled`             | Enable readinessProbe                                                                                               | `true`              |
+| `secondary.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                                            | `5`                 |
+| `secondary.readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                                                   | `10`                |
+| `secondary.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                                  | `1`                 |
+| `secondary.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                                                | `3`                 |
+| `secondary.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                                | `1`                 |
+| `secondary.startupProbe.enabled`               | Enable startupProbe                                                                                                 | `true`              |
+| `secondary.startupProbe.initialDelaySeconds`   | Initial delay seconds for startupProbe                                                                              | `15`                |
+| `secondary.startupProbe.periodSeconds`         | Period seconds for startupProbe                                                                                     | `10`                |
+| `secondary.startupProbe.timeoutSeconds`        | Timeout seconds for startupProbe                                                                                    | `1`                 |
+| `secondary.startupProbe.failureThreshold`      | Failure threshold for startupProbe                                                                                  | `15`                |
+| `secondary.startupProbe.successThreshold`      | Success threshold for startupProbe                                                                                  | `1`                 |
+| `secondary.customLivenessProbe`                | Override default liveness probe for MySQL secondary containers                                                      | `{}`                |
+| `secondary.customReadinessProbe`               | Override default readiness probe for MySQL secondary containers                                                     | `{}`                |
+| `secondary.customStartupProbe`                 | Override default startup probe for MySQL secondary containers                                                       | `{}`                |
+| `secondary.extraFlags`                         | MySQL secondary additional command line flags                                                                       | `""`                |
+| `secondary.extraEnvVars`                       | An array to add extra environment variables on MySQL secondary containers                                           | `[]`                |
+| `secondary.extraEnvVarsCM`                     | Name of existing ConfigMap containing extra env vars for MySQL secondary containers                                 | `""`                |
+| `secondary.extraEnvVarsSecret`                 | Name of existing Secret containing extra env vars for MySQL secondary containers                                    | `""`                |
+| `secondary.persistence.enabled`                | Enable persistence on MySQL secondary replicas using a `PersistentVolumeClaim`                                      | `true`              |
+| `secondary.persistence.storageClass`           | MySQL secondary persistent volume storage Class                                                                     | `""`                |
+| `secondary.persistence.annotations`            | MySQL secondary persistent volume claim annotations                                                                 | `{}`                |
+| `secondary.persistence.accessModes`            | MySQL secondary persistent volume access Modes                                                                      | `["ReadWriteOnce"]` |
+| `secondary.persistence.size`                   | MySQL secondary persistent volume size                                                                              | `8Gi`               |
+| `secondary.persistence.selector`               | Selector to match an existing Persistent Volume                                                                     | `{}`                |
+| `secondary.extraVolumes`                       | Optionally specify extra list of additional volumes to the MySQL secondary pod(s)                                   | `[]`                |
+| `secondary.extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for the MySQL secondary container(s)                       | `[]`                |
+| `secondary.initContainers`                     | Add additional init containers for the MySQL secondary pod(s)                                                       | `[]`                |
+| `secondary.sidecars`                           | Add additional sidecar containers for the MySQL secondary pod(s)                                                    | `[]`                |
+| `secondary.service.type`                       | MySQL secondary Kubernetes service type                                                                             | `ClusterIP`         |
+| `secondary.service.port`                       | MySQL secondary Kubernetes service port                                                                             | `3306`              |
+| `secondary.service.nodePort`                   | MySQL secondary Kubernetes service node port                                                                        | `""`                |
+| `secondary.service.clusterIP`                  | MySQL secondary Kubernetes service clusterIP IP                                                                     | `""`                |
+| `secondary.service.loadBalancerIP`             | MySQL secondary loadBalancerIP if service type is `LoadBalancer`                                                    | `""`                |
+| `secondary.service.externalTrafficPolicy`      | Enable client source IP preservation                                                                                | `Cluster`           |
+| `secondary.service.loadBalancerSourceRanges`   | Addresses that are allowed when MySQL secondary service is LoadBalancer                                             | `[]`                |
+| `secondary.service.annotations`                | Provide any additional annotations which may be required                                                            | `{}`                |
+| `secondary.pdb.enabled`                        | Enable/disable a Pod Disruption Budget creation for MySQL secondary pods                                            | `false`             |
+| `secondary.pdb.minAvailable`                   | Minimum number/percentage of MySQL secondary pods that should remain scheduled                                      | `1`                 |
+| `secondary.pdb.maxUnavailable`                 | Maximum number/percentage of MySQL secondary pods that may be made unavailable                                      | `""`                |
+| `secondary.podLabels`                          | Additional pod labels for MySQL secondary pods                                                                      | `{}`                |
 
 
 ### RBAC parameters
@@ -274,8 +274,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`           | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`    | Init container volume-permissions image registry                                                                     | `docker.io`             |
 | `volumePermissions.image.repository`  | Init container volume-permissions image repository                                                                   | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`         | Init container volume-permissions image tag (immutable tags are recommended)                                         | `10-debian-10-r172`     |
-| `volumePermissions.image.pullPolicy`  | Init container volume-permissions image pull policy                                                                  | `Always`                |
+| `volumePermissions.image.tag`         | Init container volume-permissions image tag (immutable tags are recommended)                                         | `10-debian-10-r261`     |
+| `volumePermissions.image.pullPolicy`  | Init container volume-permissions image pull policy                                                                  | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets` | Specify docker-registry secret names as an array                                                                     | `[]`                    |
 | `volumePermissions.resources`         | Init container volume-permissions resources                                                                          | `{}`                    |
 
@@ -287,7 +287,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                            | Start a side-car prometheus exporter                                                                                  | `false`                   |
 | `metrics.image.registry`                     | Exporter image registry                                                                                               | `docker.io`               |
 | `metrics.image.repository`                   | Exporter image repository                                                                                             | `bitnami/mysqld-exporter` |
-| `metrics.image.tag`                          | Exporter image tag (immutable tags are recommended)                                                                   | `0.13.0-debian-10-r75`    |
+| `metrics.image.tag`                          | Exporter image tag (immutable tags are recommended)                                                                   | `0.13.0-debian-10-r164`   |
 | `metrics.image.pullPolicy`                   | Exporter image pull policy                                                                                            | `IfNotPresent`            |
 | `metrics.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                      | `[]`                      |
 | `metrics.service.type`                       | Kubernetes service type for MySQL Prometheus Exporter                                                                 | `ClusterIP`               |
@@ -318,7 +318,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.additionalLabels`    | Used to pass Labels that are used by the Prometheus installed in your cluster to select Service Monitors to work with | `{}`                      |
 
 
-The above parameters map to the env variables defined in [bitnami/mysql](http://github.com/bitnami/bitnami-docker-mysql). For more information please refer to the [bitnami/mysql](http://github.com/bitnami/bitnami-docker-mysql) image documentation.
+The above parameters map to the env variables defined in [bitnami/mysql](https://github.com/bitnami/bitnami-docker-mysql). For more information please refer to the [bitnami/mysql](https://github.com/bitnami/bitnami-docker-mysql) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -392,7 +392,7 @@ initContainers:
 
 The [Bitnami MySQL](https://github.com/bitnami/bitnami-docker-mysql) image stores the MySQL data and configurations at the `/bitnami/mysql` path of the container.
 
-The chart mounts a [Persistent Volume](https://kubernetes.io/docs/user-guide/persistent-volumes/) volume at this location. The volume is created using dynamic volume provisioning by default. An existing PersistentVolumeClaim can also be defined for this purpose.
+The chart mounts a [Persistent Volume](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) volume at this location. The volume is created using dynamic volume provisioning by default. An existing PersistentVolumeClaim can also be defined for this purpose.
 
 If you encounter errors when working with persistent volumes, refer to our [troubleshooting guide for persistent volumes](https://docs.bitnami.com/kubernetes/faq/troubleshooting/troubleshooting-persistence-volumes/).
 
@@ -467,3 +467,19 @@ Use the workaround below to upgrade from versions previous to 3.0.0. The followi
 $ kubectl delete statefulset mysql-master --cascade=false
 $ kubectl delete statefulset mysql-slave --cascade=false
 ```
+
+## License
+
+Copyright &copy; 2022 Bitnami
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

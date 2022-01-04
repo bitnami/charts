@@ -3,20 +3,21 @@ apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
   name: {{ include "common.names.fullname" . }}-query-frontend
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: query-frontend
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
   annotations:
-    {{- if .Values.queryFrontend.ingress.certManager }}
-    kubernetes.io/tls-acme: "true"
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
     {{- end }}
-    {{- range $key, $value := .Values.queryFrontend.ingress.annotations }}
-    {{ $key }}: {{ $value | quote }}
+    {{- if .Values.queryFrontend.ingress.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.queryFrontend.ingress.annotations "context" $ ) | nindent 4 }}
     {{- end }}
 spec:
-  {{- if and .Values.queryFrontend.ingress.ingressClassName (eq "true" (include "common.ingress.supportsIngressClassname" .)) }}
+  {{- if and .Values.queryFrontend.ingress.ingressClassName (include "common.ingress.supportsIngressClassname" .) }}
   ingressClassName: {{ .Values.queryFrontend.ingress.ingressClassName | quote }}
   {{- end }}
   rules:
@@ -40,9 +41,9 @@ spec:
             {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (printf "%s-%s"  (include "common.names.fullname" $) "query-frontend") "servicePort" "http" "context" $) | nindent 14 }}
     {{- end }}
-  {{- if or .Values.queryFrontend.ingress.tls .Values.queryFrontend.ingress.extraTls .Values.queryFrontend.ingress.hosts }}
+  {{- if or (and .Values.queryFrontend.ingress.tls (or (include "thanos.ingress.certManagerRequest" .Values.queryFrontend.ingress.annotations) .Values.queryFrontend.ingress.selfSigned)) .Values.queryFrontend.ingress.extraTls }}
   tls:
-    {{- if or .Values.queryFrontend.ingress.secrets .Values.queryFrontend.ingress.tls }}
+    {{- if and .Values.queryFrontend.ingress.tls (or (include "thanos.ingress.certManagerRequest" .Values.queryFrontend.ingress.annotations) .Values.queryFrontend.ingress.selfSigned) }}
     - hosts:
         - {{ .Values.queryFrontend.ingress.hostname }}
       secretName: {{ printf "%s-query-frontend" (include "common.names.fullname" .) }}

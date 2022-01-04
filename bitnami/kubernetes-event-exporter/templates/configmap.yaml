@@ -11,4 +11,4 @@ metadata:
     {{- end }}
 data:
   config.yaml: |
-    {{- toYaml .Values.config | nindent 4 }}
+    {{- include "kubernetes-event-exporter.config" . | nindent 4 }}

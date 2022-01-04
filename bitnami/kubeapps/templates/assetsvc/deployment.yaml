@@ -1,3 +1,4 @@
+{{- if .Values.assetsvc.enabled }}
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
@@ -92,6 +93,7 @@ spec:
           {{- else if .Values.assetsvc.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.assetsvc.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.assetsvc.resource }}
+          {{- if .Values.assetsvc.resources }}
           resources: {{- toYaml .Values.assetsvc.resources | nindent 12 }}
           {{- end }}
+{{- end }}

@@ -10,7 +10,7 @@ $ helm install my-release bitnami/airflow
 
 ## Introduction
 
-This chart bootstraps an [Apache Airflow](https://github.com/bitnami/bitnami-docker-airflow) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps an [Apache Airflow](https://github.com/bitnami/bitnami-docker-airflow) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
@@ -89,17 +89,22 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Airflow common parameters
 
-| Name                     | Description                                                                                                                                     | Value            |
-| ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
-| `auth.existingSecret`    | Name of an existing secret containing password and fernet key ('airflow-password and 'airflow-fernetKey' keys)                                  | `""`             |
-| `auth.fernetKey`         | Fernet key to secure connections                                                                                                                | `""`             |
-| `auth.forcePassword`     | Force users to specify a password                                                                                                               | `false`          |
-| `auth.password`          | Password to access web UI                                                                                                                       | `""`             |
-| `auth.username`          | Username to access web UI                                                                                                                       | `user`           |
-| `configurationConfigMap` | Name of an existing config map containing the Airflow config file                                                                               | `""`             |
-| `executor`               | Airflow executor, it should be one of 'SequentialExecutor', 'LocalExecutor', 'CeleryExecutor', 'KubernetesExecutor', 'CeleryKubernetesExecutor' | `CeleryExecutor` |
-| `dagsConfigMap`          | Name of an existing config map containing all the DAGs files you want to load in Airflow                                                        | `""`             |
-| `loadExamples`           | Switch to load some Airflow examples                                                                                                            | `false`          |
+| Name                     | Description                                                                                                                                      | Value                   |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------- |
+| `auth.existingSecret`    | Name of an existing secret containing password, fernet key and secret key ('airflow-password', 'airflow-fernetKey' and 'airflow-secretKey' keys) | `""`                    |
+| `auth.fernetKey`         | Fernet key to secure connections                                                                                                                 | `""`                    |
+| `auth.forcePassword`     | Force users to specify a password                                                                                                                | `false`                 |
+| `auth.password`          | Password to access web UI                                                                                                                        | `""`                    |
+| `auth.username`          | Username to access web UI                                                                                                                        | `user`                  |
+| `auth.secretKey`         | Secret key to run your flask app                                                                                                                 | `""`                    |
+| `configurationConfigMap` | Name of an existing config map containing the Airflow config file                                                                                | `""`                    |
+| `executor`               | Airflow executor, it should be one of 'SequentialExecutor', 'LocalExecutor', 'CeleryExecutor', 'KubernetesExecutor', 'CeleryKubernetesExecutor'  | `CeleryExecutor`        |
+| `dags.configMap`         | Name of an existing config map containing all the DAGs files you want to load in Airflow                                                         | `""`                    |
+| `dags.image.registry`    | Container sidecar registry                                                                                                                       | `docker.io`             |
+| `dags.image.repository`  | Container sidecar image                                                                                                                          | `bitnami/bitnami-shell` |
+| `dags.image.tag`         | Container sidecar image tag                                                                                                                      | `10-debian-10-r252`     |
+| `dags.image.pullPolicy`  | Container sidecar image pull policy                                                                                                              | `IfNotPresent`          |
+| `loadExamples`           | Switch to load some Airflow examples                                                                                                             | `false`                 |
 
 
 ### Airflow web parameters
@@ -108,7 +113,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ---------------------------------------- | --------------------------------------------------------------------------- | -------------------- |
 | `web.image.registry`                     | Airflow image registry                                                      | `docker.io`          |
 | `web.image.repository`                   | Airflow image repository                                                    | `bitnami/airflow`    |
-| `web.image.tag`                          | Airflow image tag (immutable tags are recommended)                          | `2.1.4-debian-10-r0` |
+| `web.image.tag`                          | Airflow image tag (immutable tags are recommended)                          | `2.2.2-debian-10-r0` |
 | `web.image.pullPolicy`                   | Airflow image pull policy                                                   | `IfNotPresent`       |
 | `web.image.pullSecrets`                  | Airflow image pull secrets                                                  | `[]`                 |
 | `web.image.debug`                        | Enable image debug mode                                                     | `false`              |
@@ -162,7 +167,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------------- | ----------------------------------------------------------------------- | --------------------------- |
 | `scheduler.image.registry`                   | Airflow Scheduler image registry                                        | `docker.io`                 |
 | `scheduler.image.repository`                 | Airflow Scheduler image repository                                      | `bitnami/airflow-scheduler` |
-| `scheduler.image.tag`                        | Airflow Scheduler image tag (immutable tags are recommended)            | `2.1.3-debian-10-r23`       |
+| `scheduler.image.tag`                        | Airflow Scheduler image tag (immutable tags are recommended)            | `2.2.1-debian-10-r15`       |
 | `scheduler.image.pullPolicy`                 | Airflow Scheduler image pull policy                                     | `IfNotPresent`              |
 | `scheduler.image.pullSecrets`                | Airflow Scheduler image pull secrets                                    | `[]`                        |
 | `scheduler.image.debug`                      | Enable image debug mode                                                 | `false`                     |
@@ -195,7 +200,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ------------------------ |
 | `worker.image.registry`                     | Airflow Worker image registry                                                                                        | `docker.io`              |
 | `worker.image.repository`                   | Airflow Worker image repository                                                                                      | `bitnami/airflow-worker` |
-| `worker.image.tag`                          | Airflow Worker image tag (immutable tags are recommended)                                                            | `2.1.3-debian-10-r23`    |
+| `worker.image.tag`                          | Airflow Worker image tag (immutable tags are recommended)                                                            | `2.2.1-debian-10-r15`    |
 | `worker.image.pullPolicy`                   | Airflow Worker image pull policy                                                                                     | `IfNotPresent`           |
 | `worker.image.pullSecrets`                  | Airflow Worker image pull secrets                                                                                    | `[]`                     |
 | `worker.image.debug`                        | Enable image debug mode                                                                                              | `false`                  |
@@ -253,7 +258,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------ | -------------------------------------------------------------------------------------- | ---------------------- |
 | `git.image.registry`           | Git image registry                                                                     | `docker.io`            |
 | `git.image.repository`         | Git image repository                                                                   | `bitnami/git`          |
-| `git.image.tag`                | Git image tag (immutable tags are recommended)                                         | `2.33.0-debian-10-r32` |
+| `git.image.tag`                | Git image tag (immutable tags are recommended)                                         | `2.33.0-debian-10-r87` |
 | `git.image.pullPolicy`         | Git image pull policy                                                                  | `IfNotPresent`         |
 | `git.image.pullSecrets`        | Git image pull secrets                                                                 | `[]`                   |
 | `git.dags.enabled`             | Enable in order to download DAG files from git repositories.                           | `false`                |
@@ -299,15 +304,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Airflow exposing parameters
 
-| Name                  | Description                                                                            | Value                    |
-| --------------------- | -------------------------------------------------------------------------------------- | ------------------------ |
-| `ingress.enabled`     | Set to true to enable ingress record generation                                        | `false`                  |
-| `ingress.apiVersion`  | Override API Version (automatically detected if not set)                               | `""`                     |
-| `ingress.pathType`    | Ingress Path type                                                                      | `ImplementationSpecific` |
-| `ingress.certManager` | Set this to true in order to add the corresponding annotations for cert-manager        | `false`                  |
-| `ingress.annotations` | Ingress annotations done as key:value pairs                                            | `{}`                     |
-| `ingress.hosts`       | The list of hostnames to be covered with this ingress record.                          | `[]`                     |
-| `ingress.secrets`     | If you're providing your own certificates, use this to add the certificates as secrets | `[]`                     |
+| Name                  | Description                                                                                                                      | Value                    |
+| --------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `ingress.enabled`     | Set to true to enable ingress record generation                                                                                  | `false`                  |
+| `ingress.apiVersion`  | Override API Version (automatically detected if not set)                                                                         | `""`                     |
+| `ingress.pathType`    | Ingress Path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.annotations` | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.hosts`       | The list of hostnames to be covered with this ingress record.                                                                    | `[]`                     |
+| `ingress.secrets`     | If you're providing your own certificates, use this to add the certificates as secrets                                           | `[]`                     |
 
 
 ### Airflow database parameters
@@ -345,7 +349,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                      | Start a side-car prometheus exporter                                      | `false`                       |
 | `metrics.image.registry`               | Airflow Exporter image registry                                           | `docker.io`                   |
 | `metrics.image.repository`             | Airflow Exporter image repository                                         | `bitnami/airflow-exporter`    |
-| `metrics.image.tag`                    | Airflow Exporter image tag (immutable tags are recommended)               | `0.20210126.0-debian-10-r217` |
+| `metrics.image.tag`                    | Airflow Exporter image tag (immutable tags are recommended)               | `0.20210126.0-debian-10-r277` |
 | `metrics.image.pullPolicy`             | Airflow Exporter image pull policy                                        | `IfNotPresent`                |
 | `metrics.image.pullSecrets`            | Airflow Exporter image pull secrets                                       | `[]`                          |
 | `metrics.hostAliases`                  | Deployment pod host aliases                                               | `[]`                          |
@@ -370,6 +374,7 @@ $ helm install my-release \
                --set auth.username=my-user \
                --set auth.password=my-passsword \
                --set auth.fernetKey=my-fernet-key \
+               --set auth.secretKey=my-secret-key \
                bitnami/airflow
 ```
 
@@ -397,7 +402,11 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 A Fernet key is required in order to encrypt password within connections. The Fernet key must be a base64-encoded 32-byte key.
 
-Learn how to generate one [here](https://bcb.github.io/airflow/fernet-key)
+Learn how to generate one [here](https://airflow.apache.org/docs/apache-airflow/stable/security/secrets/fernet.html#generating-fernet-key)
+
+### Generate a Secret key
+
+Secret key used to run your flask app. It should be as random as possible. However, when running more than 1 instances of webserver, make sure all of them use the same secret_key otherwise one of them will error with “CSRF session token is missing”.
 
 ### Load DAG files
 
@@ -405,7 +414,7 @@ There are two different ways to load your custom DAG files into the Airflow char
 
 #### Option 1: Specify an existing config map
 
-You can manually create a config map containing all your DAG files and then pass the name when deploying Airflow chart. For that, you can pass the option `dagsConfigMap`.
+You can manually create a config map containing all your DAG files and then pass the name when deploying Airflow chart. For that, you can pass the option `dags.configMap`.
 
 #### Option 2: Get your DAG files from a git repository
 
@@ -420,7 +429,7 @@ git.dags.repositories[0].name=REPO-IDENTIFIER
 git.dags.repositories[0].branch=master
 ```
 
-If you use a private repository from GitHub, a possible option to clone the files is using a [Personal Access Token](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token) and using it as part of the URL: https://USERNAME:PERSONAL_ACCESS_TOKEN@github.com/USERNAME/REPOSITORY
+If you use a private repository from GitHub, a possible option to clone the files is using a [Personal Access Token](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token) and using it as part of the URL: `https://USERNAME:PERSONAL_ACCESS_TOKEN@github.com/USERNAME/REPOSITORY`
 
 ### Loading Plugins
 
@@ -464,6 +473,7 @@ type: Opaque
 data:
   airflow-password: "Smo1QTJLdGxXMg=="
   airflow-fernetKey: "YVRZeVJVWnlXbU4wY1dOalVrdE1SV3cxWWtKeFIzWkVRVTVrVjNaTFR6WT0="
+  airflow-secretKey: "a25mQ1FHTUh3MnFRSk5KMEIyVVU2YmN0VGRyYTVXY08="
   postgresql-password: "cG9zdGdyZXMK"
   redis-password: "cmVkaXMK"
 ```
@@ -605,7 +615,8 @@ $ helm install airflow bitnami/airflow \
 
 ```console
 $ export AIRFLOW_PASSWORD=$(kubectl get secret --namespace default airflow -o jsonpath="{.data.airflow-password}" | base64 --decode)
-$ export AIRFLOW_FERNETKEY=$(kubectl get secret --namespace default airflow -o jsonpath="{.data.airflow-fernetKey}" | base64 --decode)
+$ export AIRFLOW_FERNET_KEY=$(kubectl get secret --namespace default airflow -o jsonpath="{.data.airflow-fernetKey}" | base64 --decode)
+$ export AIRFLOW_SECRET_KEY=$(kubectl get secret --namespace default airflow -o jsonpath="{.data.airflow-secretKey}" | base64 --decode)
 $ export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default airflow-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
 $ export REDIS_PASSWORD=$(kubectl get secret --namespace default airflow-redis -o jsonpath="{.data.redis-password}" | base64 --decode)
 $ export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=airflow,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
@@ -631,7 +642,8 @@ $ helm upgrade airflow bitnami/airflow \
     --set loadExamples=true \
     --set web.baseUrl=http://127.0.0.1:8080 \
     --set auth.password=$AIRFLOW_PASSWORD \
-    --set auth.fernetKey=$AIRFLOW_FERNETKEY \
+    --set auth.fernetKey=$AIRFLOW_FERNET_KEY \
+    --set auth.secretKey=$AIRFLOW_SECRET_KEY \
     --set postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD \
     --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC \
     --set redis.password=$REDIS_PASSWORD \
@@ -665,3 +677,19 @@ This release adds support for LDAP authentication.
 ### To 1.0.0
 
 This release updates the PostgreSQL chart dependency to use PostgreSQL 11.x. You need to migrate the existing PostgreSQL data to this version before upgrading to this release. For more information follow [this link](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#500).
+
+## License
+
+Copyright &copy; 2022 Bitnami
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

@@ -11,7 +11,7 @@ $ helm install my-release bitnami/kubewatch
 
 ## Introduction
 
-This chart bootstraps a kubewatch deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a kubewatch deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 ## Prerequisites
 
@@ -65,7 +65,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ---------------------------------------- | -------------------------------------------------------------------- | ---------------------- |
 | `image.registry`                         | Kubewatch image registry                                             | `docker.io`            |
 | `image.repository`                       | Kubewatch image repository                                           | `bitnami/kubewatch`    |
-| `image.tag`                              | Kubewatch image tag (immutable tags are recommended)                 | `0.1.0-debian-10-r368` |
+| `image.tag`                              | Kubewatch image tag (immutable tags are recommended)                 | `0.1.0-debian-10-r457` |
 | `image.pullPolicy`                       | Kubewatch image pull policy                                          | `IfNotPresent`         |
 | `image.pullSecrets`                      | Specify docker-registry secret names as an array                     | `[]`                   |
 | `hostAliases`                            | Add deployment host aliases                                          | `[]`                   |
@@ -286,3 +286,19 @@ Helm performs a lookup for the object based on its group (apps), version (v1), a
 In https://github.com/helm/charts/pull/17285 the `apiVersion` of the deployment resources was updated to `apps/v1` in tune with the api's deprecated, resulting in compatibility breakage.
 
 This major version signifies this change.
+
+## License
+
+Copyright &copy; 2022 Bitnami
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
