@@ -57,18 +57,19 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common parameters
 
-| Name                       | Description                                        | Value         |
-| -------------------------- | -------------------------------------------------- | ------------- |
-| `kubeVersion`              | Override Kubernetes version                        | `""`          |
-| `nameOverride`             | String to partially override common.names.fullname | `""`          |
-| `fullnameOverride`         | String to fully override common.names.fullname     | `""`          |
-| `commonLabels`             | Labels to add to all deployed objects              | `{}`          |
-| `commonAnnotations`        | Annotations to add to all deployed objects         | `{}`          |
-| `extraDeploy`              | Array of extra objects to deploy with the release  | `[]`          |
-| `logLevel`                 | Set up cert manager log level                      | `2`           |
-| `leaderElection.namespace` | Namespace which leaderElection works.              | `kube-system` |
-| `installCRDs`              | Flag to install Cert Manager CRDs                  | `false`       |
-| `replicaCount`             | Number of Cert Manager replicas                    | `1`           |
+| Name                       | Description                                                                                                                                       | Value         |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | ------------- |
+| `kubeVersion`              | Override Kubernetes version                                                                                                                       | `""`          |
+| `nameOverride`             | String to partially override common.names.fullname                                                                                                | `""`          |
+| `fullnameOverride`         | String to fully override common.names.fullname                                                                                                    | `""`          |
+| `commonLabels`             | Labels to add to all deployed objects                                                                                                             | `{}`          |
+| `commonAnnotations`        | Annotations to add to all deployed objects                                                                                                        | `{}`          |
+| `extraDeploy`              | Array of extra objects to deploy with the release                                                                                                 | `[]`          |
+| `logLevel`                 | Set up cert manager log level                                                                                                                     | `2`           |
+| `clusterResourceNamespace` | Namespace used to store DNS provider credentials etc. for ClusterIssuer resources. If empty, uses the namespace where the controller is deployed. | `""`          |
+| `leaderElection.namespace` | Namespace which leaderElection works.                                                                                                             | `kube-system` |
+| `installCRDs`              | Flag to install Cert Manager CRDs                                                                                                                 | `false`       |
+| `replicaCount`             | Number of Cert Manager replicas                                                                                                                   | `1`           |
 
 
 ### Controller deployment parameters
@@ -78,13 +79,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.replicaCount`                          | Number of Controller replicas                                                                        | `1`                    |
 | `controller.image.registry`                        | Controller image registry                                                                            | `docker.io`            |
 | `controller.image.repository`                      | Controller image repository                                                                          | `bitnami/cert-manager` |
-| `controller.image.tag`                             | Controller image tag (immutable tags are recommended)                                                | `1.6.1-debian-10-r25`  |
+| `controller.image.tag`                             | Controller image tag (immutable tags are recommended)                                                | `1.6.1-debian-10-r41`  |
 | `controller.image.pullPolicy`                      | Controller image pull policy                                                                         | `IfNotPresent`         |
 | `controller.image.pullSecrets`                     | Controller image pull secrets                                                                        | `[]`                   |
 | `controller.image.debug`                           | Controller image debug mode                                                                          | `false`                |
 | `controller.acmesolver.image.registry`             | Controller image registry                                                                            | `docker.io`            |
 | `controller.acmesolver.image.repository`           | Controller image repository                                                                          | `bitnami/acmesolver`   |
-| `controller.acmesolver.image.tag`                  | Controller image tag (immutable tags are recommended)                                                | `1.6.1-debian-10-r27`  |
+| `controller.acmesolver.image.tag`                  | Controller image tag (immutable tags are recommended)                                                | `1.6.1-debian-10-r43`  |
 | `controller.acmesolver.image.pullPolicy`           | Controller image pull policy                                                                         | `IfNotPresent`         |
 | `controller.acmesolver.image.pullSecrets`          | Controller image pull secrets                                                                        | `[]`                   |
 | `controller.acmesolver.image.debug`                | Controller image debug mode                                                                          | `false`                |
@@ -132,7 +133,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `webhook.replicaCount`                          | Number of Webhook replicas                                                                        | `1`                            |
 | `webhook.image.registry`                        | Webhook image registry                                                                            | `docker.io`                    |
 | `webhook.image.repository`                      | Webhook image repository                                                                          | `bitnami/cert-manager-webhook` |
-| `webhook.image.tag`                             | Webhook image tag (immutable tags are recommended)                                                | `1.6.1-debian-10-r27`          |
+| `webhook.image.tag`                             | Webhook image tag (immutable tags are recommended)                                                | `1.6.1-debian-10-r43`          |
 | `webhook.image.pullPolicy`                      | Webhook image pull policy                                                                         | `IfNotPresent`                 |
 | `webhook.image.pullSecrets`                     | Webhook image pull secrets                                                                        | `[]`                           |
 | `webhook.image.debug`                           | Webhook image debug mode                                                                          | `false`                        |
@@ -198,7 +199,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cainjector.replicaCount`                          | Number of CAInjector replicas                                                                        | `1`                   |
 | `cainjector.image.registry`                        | CAInjector image registry                                                                            | `docker.io`           |
 | `cainjector.image.repository`                      | CAInjector image repository                                                                          | `bitnami/cainjector`  |
-| `cainjector.image.tag`                             | CAInjector image tag (immutable tags are recommended)                                                | `1.6.1-debian-10-r26` |
+| `cainjector.image.tag`                             | CAInjector image tag (immutable tags are recommended)                                                | `1.6.1-debian-10-r42` |
 | `cainjector.image.pullPolicy`                      | CAInjector image pull policy                                                                         | `IfNotPresent`        |
 | `cainjector.image.pullSecrets`                     | CAInjector image pull secrets                                                                        | `[]`                  |
 | `cainjector.image.debug`                           | CAInjector image debug mode                                                                          | `false`               |
