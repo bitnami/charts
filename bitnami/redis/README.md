@@ -88,8 +88,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]`  |
 | `useExternalDNS.enabled` | Enable various syntax that would enable external-dns to work.  Note this requires a working installation of [`external-dns`] to be usable. | `false` |
 | `useExternalDNS.suffix`  | The DNS suffix utilized when [`external-dns`] is enabled.  Note that we prepend the suffix with the full name of the install.              | `""`    |
+| `useExternalDNS.annotationKey`  | The annotation key utilized when [`external-dns`] is enabled.              | `"external-dns.alpha.kubernetes.io/"`    |
+| `useExternalDNS.additionalAnnotations`  | Extra annotations to be utilized when [`external-dns`] is enabled.              | `{}`    |
 
-[`external-dns`]: https://github.com/kubernetes-sigs/external-dns
 
 ### Redis&trade; Image parameters
 
@@ -464,6 +465,38 @@ Bitnami will release a new chart updating its containers if a new version of the
 ### Use a different Redis&trade; version
 
 To modify the application version used in this chart, specify a different version of the image using the `image.tag` parameter and/or a different repository using the `image.repository` parameter. Refer to the [chart documentation for more information on these parameters and how to use them with images from a private registry](https://docs.bitnami.com/kubernetes/infrastructure/redis/configuration/change-image-version/).
+
+### External DNS
+
+This chart is equipped to assist the cluster leverage the [`external-dns`]
+project.  Doing so will enable the instances to announce the FQDN that is put
+together in the format of `<pod-name>.<installation-name>.<dns-suffix>`.
+Example, when using the following configuration:
+
+```yaml
+useExternalDNS:
+  enabled: true
+  suffix: prod.example.org
+  additionalAnnotations:
+    ttl: 10
+```
+
+On a cluster where the name of the installation is `a`, the hostname of a Pod
+is configured like so: `a-redis-node-0.a-redis.prod.example.org`.  The IP of
+that FQDN will match that of the associated Pod.  This modifies the following
+parameters of the Redis/Sentinel configuration using this new FQDN:
+
+* `replica-announce-ip`
+* `known-sentinel`
+* `known-replica`
+* `announce-ip`
+
+:warning: This requires a working installation of [`external-dns`] to be fully
+functional. :warning:
+
+See the documentation of [`external-dns`] for additional configuration options.
+
+[`external-dns`]: https://github.com/kubernetes-sigs/external-dns
 
 ### Cluster topologies
 

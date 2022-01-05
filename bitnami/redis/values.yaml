@@ -28,6 +28,8 @@ global:
 useExternalDNS:
   enabled: false
   # suffix: ""
+  annotationKey: external-dns.alpha.kubernetes.io/
+  additionalAnnotations: []
 
 ## @param kubeVersion Override Kubernetes version
 ##

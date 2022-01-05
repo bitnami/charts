@@ -12,7 +12,10 @@ metadata:
   {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
   {{- if .Values.useExternalDNS.enabled }}
-    external-dns.alpha.kubernetes.io/hostname: {{ include "redis.externalDNS.suffix" . }}
+    {{ .Values.useExternalDNS.annotationKey }}hostname: {{ include "redis.externalDNS.suffix" . }}
+    {{- range $key, $val := .Values.useExternalDNS.additionalAnnotations }}
+    {{ $.Values.useExternalDNS.annotationKey }}{{ $key }}: {{ $val | quote }}
+    {{- end }}
   {{- end }}
 spec:
   type: ClusterIP
