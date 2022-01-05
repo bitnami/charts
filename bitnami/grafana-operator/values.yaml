@@ -589,7 +589,8 @@ grafana:
     storageClass: ""
     ## @param grafana.persistence.accessModes Define the accessModes for the persistent storage
     ##
-    accessModes: ReadWriteOnce
+    accessModes:
+      - ReadWriteOnce
     ## @param grafana.persistence.annotations Add annotations to the persistent volume
     ##
     annotations: {}
