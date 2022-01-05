@@ -11,8 +11,8 @@ metadata:
   {{- if .Values.commonAnnotations }}
   {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
-  {{- if .Values.externalDNS.enabled }}
-    external-dns.alpha.kubernetes.io/hostname: {{ printf "%s.%s" (include "common.names.fullname" .) .Values.externalDNS.suffix }}
+  {{- if .Values.useExternalDNS.enabled }}
+    external-dns.alpha.kubernetes.io/hostname: {{ include "redis.externalDNS.suffix" . }}
   {{- end }}
 spec:
   type: ClusterIP

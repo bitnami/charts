@@ -23,9 +23,9 @@ global:
 ## @section Common parameters
 ##
 
-## @param externalDNS Boolean to indicate the desire to utilize `external-dns`
+## @param useExternalDNS Boolean to indicate the desire to utilize `external-dns`
 ##
-externalDNS:
+useExternalDNS:
   enabled: false
   # suffix: ""
 
