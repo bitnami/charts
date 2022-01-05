@@ -261,7 +261,7 @@ nodeSelector: {}
 ## Configure resource requests and limits
 ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
 ## @param resources.requests [object] The requested resources for the container
-## @param resources.limits [object] The resources limits for the container
+## @param resources.limits The resources limits for the container
 ##
 resources:
   requests:
@@ -416,6 +416,7 @@ service:
   ## sessionAffinityConfig:
   ##   clientIP:
   ##     timeoutSeconds: 300
+  ##
   sessionAffinityConfig: {}
 
 ## Configure the ingress resource that allows you to access the
@@ -465,7 +466,7 @@ ingress:
   ## @param ingress.extraHosts An array with additional hostname(s) to be covered with the ingress record
   ## e.g:
   ## extraHosts:
-  ##   - name: %%COMPONENT_NAME%%.local
+  ##   - name: testlink.local
   ##     path: /
   ##
   extraHosts: []
@@ -483,8 +484,8 @@ ingress:
   ## e.g:
   ## extraTls:
   ## - hosts:
-  ##     - %%COMPONENT_NAME%%.local
-  ##   secretName: %%COMPONENT_NAME%%.local-tls
+  ##     - testlink.local
+  ##   secretName: testlink.local-tls
   ##
   extraTls: []
   ## @param ingress.secrets If you're providing your own certificates, please use this to add the certificates as secrets
