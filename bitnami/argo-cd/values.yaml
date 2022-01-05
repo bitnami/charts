@@ -287,9 +287,9 @@ controller:
       ##   labels:
       ##     severity: warning
       ##   annotations:
-      ##     summary: "[{{`{{$labels.name}}`}}] Application not synchronized"
+      ##     summary: "[{{`{{ $labels.name }}`}}] Application not synchronized"
       ##     description: >
-      ##       The application [{{`{{$labels.name}}`}} has not been synchronized for over
+      ##       The application [{{`{{ $labels.name }}`}} has not been synchronized for over
       ##       12 hours which means that the state of this cloud has drifted away from the
       ##       state inside Git.
       ##

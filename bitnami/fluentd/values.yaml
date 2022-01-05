@@ -210,7 +210,7 @@ forwarder:
           standby
           {{- end }}
         </server>
-        {{- end}}
+        {{- end }}
         <buffer>
           @type file
           path /opt/bitnami/fluentd/logs/buffers/logs.buffer

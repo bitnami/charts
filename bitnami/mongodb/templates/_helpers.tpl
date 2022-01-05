@@ -387,7 +387,7 @@ mongodb: .Values.externalAccess.service.nodePorts
 Validate values of MongoDB&reg; - RBAC should be enabled when autoDiscovery is enabled
 */}}
 {{- define "mongodb.validateValues.externalAccessAutoDiscoveryRBAC" -}}
-{{- if and (eq .Values.architecture "replicaset") .Values.externalAccess.enabled .Values.externalAccess.autoDiscovery.enabled (not .Values.rbac.create )}}
+{{- if and (eq .Values.architecture "replicaset") .Values.externalAccess.enabled .Values.externalAccess.autoDiscovery.enabled (not .Values.rbac.create ) }}
 mongodb: rbac.create
     By specifying "externalAccess.enabled=true" and "externalAccess.autoDiscovery.enabled=true"
     an initContainer will be used to autodetect the external IPs/ports by querying the

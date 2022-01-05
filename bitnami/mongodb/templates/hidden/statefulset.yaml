@@ -296,7 +296,7 @@ spec:
             {{- if .Values.tls.enabled }}
               {{- $extraFlags = printf "--tlsMode=%s --tlsCertificateKeyFile=/certs/mongodb.pem --tlsCAFile=/certs/mongodb-ca-cert %s" .Values.tls.mode $extraFlags  }}
             {{- end }}
-            {{- if ne $extraFlags ""}}
+            {{- if ne $extraFlags "" }}
             - name: MONGODB_EXTRA_FLAGS
               value: {{ $extraFlags | quote }}
             {{- end }}

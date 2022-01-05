@@ -359,7 +359,7 @@ kafka: externalAccess.service.type
 
 {{/* Validate values of Kafka - RBAC should be enabled when autoDiscovery is enabled */}}
 {{- define "kafka.validateValues.externalAccessAutoDiscoveryRBAC" -}}
-{{- if and .Values.externalAccess.enabled .Values.externalAccess.autoDiscovery.enabled (not .Values.rbac.create )}}
+{{- if and .Values.externalAccess.enabled .Values.externalAccess.autoDiscovery.enabled (not .Values.rbac.create ) }}
 kafka: rbac.create
     By specifying "externalAccess.enabled=true" and "externalAccess.autoDiscovery.enabled=true"
     an initContainer will be used to auto-detect the external IPs/ports by querying the

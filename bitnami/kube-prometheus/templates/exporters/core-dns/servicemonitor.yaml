@@ -16,7 +16,7 @@ spec:
       - {{ .Values.coreDns.namespace }}
   endpoints:
     - port: http-metrics
-      {{- if .Values.coreDns.serviceMonitor.interval}}
+      {{- if .Values.coreDns.serviceMonitor.interval }}
       interval: {{ .Values.coreDns.serviceMonitor.interval }}
       {{- end }}
       bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token

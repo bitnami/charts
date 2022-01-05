@@ -84,7 +84,7 @@ spec:
         {{- if .Values.initContainers }}
           {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
         {{- end }}
-        {{- if .Values.tls.enabled}}
+        {{- if .Values.tls.enabled }}
         {{- $fullname := include "solr.fullname" . }}
         - name: init-certs
           image: {{ include "solr.image" . }}
@@ -310,7 +310,7 @@ spec:
           {{- range .Values.persistence.extraVolumeClaimTemplates }}
             - name: {{ .name }}
               mountPath: {{ .mountPath }}
-          {{- end}}
+          {{- end }}
         {{- if .Values.sidecars }}
         {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}

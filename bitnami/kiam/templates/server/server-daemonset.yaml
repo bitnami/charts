@@ -195,7 +195,7 @@ spec:
           secret:
             {{- if .Values.server.tlsSecret }}
             secretName: {{ .Values.server.tlsSecret }}
-            {{else}}
+            {{ else }}
             secretName: {{ template "common.names.fullname" . }}-server
             {{- end }}
         {{- if .Values.server.sslCertHostPath }}

@@ -16,7 +16,7 @@ spec:
   selector:
     {{- if .Values.coreDns.service.selector }}
 {{ toYaml .Values.coreDns.service.selector | indent 4 }}
-    {{- else}}
+    {{- else }}
     k8s-app: kube-dns
-    {{- end}}
+    {{- end }}
 {{- end }}

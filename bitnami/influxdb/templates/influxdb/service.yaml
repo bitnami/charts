@@ -42,7 +42,7 @@ spec:
       targetPort: http
       protocol: TCP
       name: http
-      {{- if (and (or (eq .Values.influxdb.service.type "NodePort") (eq .Values.influxdb.service.type "LoadBalancer")) (not (empty .Values.influxdb.service.nodePorts.http)))}}
+      {{- if (and (or (eq .Values.influxdb.service.type "NodePort") (eq .Values.influxdb.service.type "LoadBalancer")) (not (empty .Values.influxdb.service.nodePorts.http))) }}
       nodePort: {{ .Values.influxdb.service.nodePorts.http }}
       {{- else if eq .Values.influxdb.service.type "ClusterIP" }}
       nodePort: null
@@ -51,7 +51,7 @@ spec:
       targetPort: rpc
       protocol: TCP
       name: rpc
-      {{- if (and (or (eq .Values.influxdb.service.type "NodePort") (eq .Values.influxdb.service.type "LoadBalancer")) (not (empty .Values.influxdb.service.nodePorts.rpc)))}}
+      {{- if (and (or (eq .Values.influxdb.service.type "NodePort") (eq .Values.influxdb.service.type "LoadBalancer")) (not (empty .Values.influxdb.service.nodePorts.rpc))) }}
       nodePort: {{ .Values.influxdb.service.nodePorts.rpc }}
       {{- else if eq .Values.influxdb.service.type "ClusterIP" }}
       nodePort: null
