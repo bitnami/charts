@@ -453,6 +453,7 @@ service:
   ## sessionAffinityConfig:
   ##   clientIP:
   ##     timeoutSeconds: 300
+  ##
   sessionAffinityConfig: {}
 ## Configure the ingress resource that allows you to access the Mediawiki installation. Set up the URL
 ## ref: https://kubernetes.io/docs/user-guide/ingress/
