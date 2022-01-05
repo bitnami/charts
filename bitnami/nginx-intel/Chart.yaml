@@ -1,0 +1,27 @@
+annotations:
+  category: Infrastructure
+apiVersion: v2
+appVersion: 0.4.7
+dependencies:
+- name: common
+  repository: https://charts.bitnami.com/bitnami
+  tags:
+  - bitnami-common
+  version: 1.x.x
+description: Chart for the nginx server with Intel optimizations
+home: https://github.com/bitnami/charts/tree/master/bitnami/nginx-intel
+icon: https://bitnami.com/assets/stacks/nginx/img/nginx-stack-220x234.png
+keywords:
+- nginx
+- http
+- web
+- www
+- reverse proxy
+maintainers:
+- email: containers@bitnami.com
+  name: Bitnami
+name: nginx-intel
+sources:
+- https://github.com/bitnami/bitnami-docker-nginx-intel
+- https://github.com/intel/asynch_mode_nginx
+version: 0.1.0
