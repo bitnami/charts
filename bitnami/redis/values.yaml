@@ -240,10 +240,12 @@ master:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param master.containerSecurityContext.enabled Enabled Redis&trade; master containers' Security Context
   ## @param master.containerSecurityContext.runAsUser Set Redis&trade; master containers' Security Context runAsUser
+  ## @param master.containerSecurityContext.runAsUser Set Redis&trade; master containers' Security Context runAsGroup
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
+    runAsGroup: 1001
   ## @param master.schedulerName Alternate scheduler for Redis&trade; master pods
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
@@ -554,10 +556,12 @@ replica:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param replica.containerSecurityContext.enabled Enabled Redis&trade; replicas containers' Security Context
   ## @param replica.containerSecurityContext.runAsUser Set Redis&trade; replicas containers' Security Context runAsUser
+  ## @param replica.containerSecurityContext.runAsGroup Set Redis&trade; replicas containers' Security Context runAsGroup
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
+    runAsGroup: 1001
   ## @param replica.schedulerName Alternate scheduler for Redis&trade; replicas pods
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
@@ -903,10 +907,12 @@ sentinel:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param sentinel.containerSecurityContext.enabled Enabled Redis&trade; Sentinel containers' Security Context
   ## @param sentinel.containerSecurityContext.runAsUser Set Redis&trade; Sentinel containers' Security Context runAsUser
+  ## @param sentinel.containerSecurityContext.runAsUser Set Redis&trade; Sentinel containers' Security Context runAsGroup
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
+    runAsGroup: 1001
   ## @param sentinel.lifecycleHooks for the Redis&trade; sentinel container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
