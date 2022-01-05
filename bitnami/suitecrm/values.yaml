@@ -563,6 +563,7 @@ service:
   ## sessionAffinityConfig:
   ##   clientIP:
   ##     timeoutSeconds: 300
+  ##
   sessionAffinityConfig: {}
 
 ## Configure the ingress resource that allows you to access the
