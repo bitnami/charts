@@ -108,17 +108,17 @@ spec:
               env:
                 {{- if .Values.curator.env }}
                 {{- range $key,$value := .Values.curator.env }}
-                - name: {{ $key | upper | quote}}
-                  value: {{ $value | quote}}
+                - name: {{ $key | upper | quote }}
+                  value: {{ $value | quote }}
                 {{- end }}
                 {{- end }}
                 {{- if .Values.curator.envFromSecrets }}
                 {{- range $key,$value := .Values.curator.envFromSecrets }}
-                - name: {{ $key | upper | quote}}
+                - name: {{ $key | upper | quote }}
                   valueFrom:
                     secretKeyRef:
-                      name: {{ $value.from.secret | quote}}
-                      key: {{ $value.from.key | quote}}
+                      name: {{ $value.from.secret | quote }}
+                      key: {{ $value.from.key | quote }}
                 {{- end }}
                 {{- end }}
               {{- if .Values.curator.resources }}

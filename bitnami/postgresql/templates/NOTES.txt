@@ -73,7 +73,7 @@ To connect to your database from outside the cluster execute the following comma
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
         Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "common.names.fullname" . }}'
 
-    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
     {{ if (include "postgresql.password" . ) }}PGPASSWORD="$POSTGRES_PASSWORD" {{ end }}psql --host $SERVICE_IP --port {{ template "postgresql.servicePort" . }} -U {{ .Values.postgresqlUsername }} -d {{- if .Values.postgresqlDatabase }} {{ .Values.postgresqlDatabase }}{{- else }} postgres{{- end }}
 
 {{- else if contains "ClusterIP" .Values.service.type }}

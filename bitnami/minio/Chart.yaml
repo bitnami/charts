@@ -25,4 +25,4 @@ name: minio
 sources:
   - https://github.com/bitnami/bitnami-docker-minio
   - https://min.io
-version: 9.2.9
+version: 9.3.0

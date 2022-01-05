@@ -54,7 +54,7 @@ spec:
       {{- if .Values.envoy.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
-      {{- if .Values.envoy.tolerations}}
+      {{- if .Values.envoy.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.tolerations "context" $) | nindent 8 }}
       {{- end }}
       terminationGracePeriodSeconds: {{ .Values.envoy.terminationGracePeriodSeconds }}

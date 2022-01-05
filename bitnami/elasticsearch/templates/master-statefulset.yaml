@@ -146,7 +146,7 @@ spec:
             - name: ELASTICSEARCH_CLUSTER_MASTER_HOSTS
               {{- $elasticsearchMasterFullname := include "elasticsearch.master.fullname" . }}
               {{- $replicas := int (ternary .Values.master.autoscaling.minReplicas .Values.master.replicas .Values.master.autoscaling.enabled) }}
-              value: {{range $i, $e := until $replicas }}{{ $elasticsearchMasterFullname }}-{{ $e }} {{ end }}
+              value: {{ range $i, $e := until $replicas }}{{ $elasticsearchMasterFullname }}-{{ $e }} {{ end }}
             - name: ELASTICSEARCH_MINIMUM_MASTER_NODES
               value: {{ add (div (ternary .Values.master.autoscaling.minReplicas .Values.master.replicas .Values.master.autoscaling.enabled) 2) 1 | quote }}
             - name: ELASTICSEARCH_ADVERTISED_HOSTNAME

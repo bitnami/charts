@@ -200,16 +200,16 @@ Return the name of the Secret used to store the passwords
 {
   {{- if .Values.alibabacloud.regionId }}
   "regionId": "{{ .Values.alibabacloud.regionId }}",
-  {{- end}}
+  {{- end }}
   {{- if .Values.alibabacloud.vpcId }}
   "vpcId": "{{ .Values.alibabacloud.vpcId }}",
-  {{- end}}
+  {{- end }}
   {{- if .Values.alibabacloud.accessKeyId }}
   "accessKeyId": "{{ .Values.alibabacloud.accessKeyId }}",
-  {{- end}}
+  {{- end }}
   {{- if .Values.alibabacloud.accessKeySecret }}
   "accessKeySecret": "{{ .Values.alibabacloud.accessKeySecret }}"
-  {{- end}}
+  {{- end }}
 }
 {{ end }}
 
@@ -228,7 +228,7 @@ region = {{ .Values.aws.region }}
 {
   {{- if .Values.azure.cloud }}
   "cloud": "{{ .Values.azure.cloud }}",
-  {{- end}}
+  {{- end }}
   "tenantId": "{{ .Values.azure.tenantId }}",
   "subscriptionId": "{{ .Values.azure.subscriptionId }}",
   "resourceGroup": "{{ .Values.azure.resourceGroup }}",
