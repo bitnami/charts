@@ -281,7 +281,7 @@ nodeSelector: {}
 ## Configure resource requests and limits
 ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
 ## @param resources.requests [object] The requested resources for the container
-## @param resources.limits [object] The resources limits for the container
+## @param resources.limits The resources limits for the container
 ##
 resources:
   requests:
@@ -436,6 +436,7 @@ service:
   ## sessionAffinityConfig:
   ##   clientIP:
   ##     timeoutSeconds: 300
+  ##
   sessionAffinityConfig: {}
 
 ## Configure the ingress resource that allows you to access the
