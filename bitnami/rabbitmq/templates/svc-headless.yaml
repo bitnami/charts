@@ -6,10 +6,10 @@ metadata:
   labels: {{- include "common.labels.standard" . | nindent 4 }}
   {{- if or (.Values.service.annotationsHeadless) (.Values.commonAnnotations) }}
   annotations:
-    {{- if .Values.commonAnnotations}}
+    {{- if .Values.commonAnnotations }}
     {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
     {{- end -}}
-    {{- if .Values.service.annotationsHeadless}}
+    {{- if .Values.service.annotationsHeadless }}
     {{- include "common.tplvalues.render" (dict "value" .Values.service.annotationsHeadless "context" $) | nindent 4 }}
     {{- end -}}
   {{- end }}

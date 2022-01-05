@@ -162,7 +162,7 @@ spec:
           {{- end }}
         {{- end }}
         {{- if and (gt (len .Values.clusters) 1) (not .Values.authProxy.enabled) }}
-          {{ fail "clusters can be configured only when using an auth proxy for cluster oidc authentication."}}
+          {{ fail "clusters can be configured only when using an auth proxy for cluster oidc authentication." }}
         {{- end }}
         {{- if .Values.pinnipedProxy.enabled }}
         - name: pinniped-proxy

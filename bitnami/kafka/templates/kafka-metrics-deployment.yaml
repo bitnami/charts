@@ -73,7 +73,7 @@ spec:
               --tls.cert-file="/opt/bitnami/kafka-exporter/certs/{{ .Values.metrics.kafka.tlsCert }}" \
               {{- if .Values.metrics.kafka.tlsCaSecret }}
               --tls.ca-file="/opt/bitnami/kafka-exporter/cacert/{{ .Values.metrics.kafka.tlsCaCert }}" \
-              {{- else}}
+              {{- else }}
               --tls.ca-file="/opt/bitnami/kafka-exporter/certs/{{ .Values.metrics.kafka.tlsCaCert }}" \
               {{- end }}
               {{- end }}

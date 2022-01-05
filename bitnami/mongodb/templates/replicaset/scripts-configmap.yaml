@@ -166,13 +166,13 @@ data:
 
     SLEEP_PERIOD=10
 
-    {{- if and .Values.auth.enabled .Values.auth.rootPassword}}
+    {{- if and .Values.auth.enabled .Values.auth.rootPassword }}
     usernameAndPassword="-u root -p ${MONGODB_ROOT_PASSWORD}"
     {{- else }}
     usernameAndPassword=""
     {{- end }}
-    
-    # load Values.replicaSetConfigurationSettings.configuration into associtive array which makes iterating and string manipulation easy      
+
+    # load Values.replicaSetConfigurationSettings.configuration into associtive array which makes iterating and string manipulation easy
     declare -A desiredRsConf
     {{ range $setting, $value := .Values.replicaSetConfigurationSettings.configuration -}}
     {{ printf "desiredRsConf[%s]='%v'" $setting $value }}
@@ -182,10 +182,10 @@ data:
     rs_conf_configured_ok=unknown
 
     while [[ "${rs_conf_configured_ok}" != "true" ]]; do
-      
+
       # give the rs setup a chance to succeed before attempting to read or configure
       sleep ${SLEEP_PERIOD}
-      
+
       counter=0
       while ! mongo ${usernameAndPassword} --eval 'rs.conf()'; do
         counter=$((${counter} +1))
@@ -194,7 +194,7 @@ data:
       done
       counter=$((${counter} +1))
       logger "rs.conf settings have been read from the currently running rs (after ${counter} attempts)"
-      
+
       # read rs.conf again and store it. settings format is '"<key>" : <value>,'
       currentRsConf=$(mongo ${usernameAndPassword} --eval 'rs.conf()')
 
@@ -206,7 +206,7 @@ data:
            logger "rs conf setting: ${key} value will be set to: ${value}"
            settingsToConfigure="${settingsToConfigure}cfg.settings.${key} = ${value}; "
            desiredEqualsactual=false
-        else 
+        else
           logger "rs conf: ${key} is already at desired value: ${value}"
         fi
       done
@@ -241,13 +241,13 @@ data:
         mongo ${usernameAndPassword} --eval "${rsCommand}"
         if [ $? -ne 0 ]; then
           logger "Failed to apply mongodb cfg.settings configuration"
-        else 
+        else
           logger "mongodb replicaset cfg.settings configuration applied"
           logger "Will check rs conf"
           # don't exit just yet - the settings will be checked in the next loop
         fi
         rsConfWriteAttempts=$((${rsConfWriteAttempts} + 1 ))
       fi
-    done  
+    done
   {{- end }}
 {{- end }}

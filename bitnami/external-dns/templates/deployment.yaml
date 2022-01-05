@@ -335,14 +335,14 @@ spec:
             - name: OPENSTACK_CA_FILE
               value: {{ .Values.designate.customCAHostPath }}
             {{- end }}
-            {{- if .Values.designate.username}}
+            {{- if .Values.designate.username }}
             - name: OS_USERNAME
               valueFrom:
                 secretKeyRef:
                   name: {{ template "external-dns.secretName" . }}
                   key: designate_username
             {{- end }}
-            {{- if .Values.designate.password}}
+            {{- if .Values.designate.password }}
             - name: OS_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -628,7 +628,7 @@ spec:
             {{- if eq .Values.provider "designate" }}
             # Designate mountPath(s)
             {{- if and (.Values.designate.customCAHostPath) (.Values.designate.customCA.enabled) }}
-            {{- fail "designate.customCAHostPath cannot be specified with designate.customCA.enabled set to true"}}
+            {{- fail "designate.customCAHostPath cannot be specified with designate.customCA.enabled set to true" }}
             {{- else if .Values.designate.customCA.enabled }}
             - name: designate-custom-ca
               mountPath: {{ .Values.designate.customCA.mountPath }}
@@ -643,7 +643,7 @@ spec:
             - name: krb5config
               mountPath: /etc/krb5.conf
               subPath: krb5.conf
-            {{- end}}
+            {{- end }}
             {{- if (eq .Values.provider "transip") }}
             # TransIP mountPath(s)
             - name: transip-api-key

@@ -230,7 +230,7 @@ spec:
       volumes:
         - name: concourse-keys
           secret:
-            secretName: {{ include "concourse.worker.secretName" .}}
+            secretName: {{ include "concourse.worker.secretName" . }}
             defaultMode: 0400
         {{- if .Values.worker.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.worker.extraVolumes "context" $) | nindent 8 }}

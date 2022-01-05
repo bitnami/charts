@@ -59,7 +59,7 @@ To connect to your database from outside the cluster execute the following comma
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
         Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ include "mongodb-sharded.serviceName" . }}'
 
-    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "mongodb-sharded.serviceName" . }} --include "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "mongodb-sharded.serviceName" . }} --include "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
     mongo --host $SERVICE_IP --port {{ .Values.service.port }} --authenticationDatabase admin -p $MONGODB_ROOT_PASSWORD
 
 {{- else if contains "ClusterIP" .Values.service.type }}

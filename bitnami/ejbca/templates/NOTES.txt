@@ -46,7 +46,7 @@ To access your EJBCA site from outside the cluster follow the steps below:
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
         Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "common.names.fullname" . }}'
 
-   export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+   export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
    echo "EJBCA Public URL: https://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.service.httpsPort }}{{ end }}/ejbca"
    echo "EJBCA Admin URL: https://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.service.httpsPort }}{{ end }}/ejbca/adminweb"
    echo "EJBCA Enrol URL: https://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.service.httpsPort }}{{ end }}/ejbca/enrol/keystore.jsp"
