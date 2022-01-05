@@ -10,7 +10,7 @@ metadata:
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.podMonitor.additionalLabels "context" $ ) | nindent 4 }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.serviceMonitor.additionalLabels "context" $ ) | nindent 4 }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}  
@@ -31,11 +31,11 @@ spec:
       {{- end }}
       {{- if .Values.metrics.podMonitor.relabelings }}
       relabelings:
-      {{- include "common.tplvalues.render" (dict "value" .Values.metrics.podMonitor.relabelings "context" $) | nindent 8 }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.metrics.serviceMonitor.relabelings "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.metrics.podMonitor.relabelings }}
       metricRelabelings:
-      {{- include "common.tplvalues.render" (dict "value" .Values.metrics.podMonitor.metricRelabelings "context" $) | nindent 8 }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.metrics.serviceMonitor.metricRelabelings "context" $) | nindent 8 }}
       {{- end }} 
   namespaceSelector:
     matchNames:

@@ -3,6 +3,7 @@
 {{- $headlessService := printf "%s-headless" (include "common.names.fullname" .) | trunc 63 }}
 {{- $releaseNamespace := .Release.Namespace }}
 {{- $clusterDomain := .Values.clusterDomain }}
+{{- $apiPort := toString .Values.containerPorts.api }}
 {{- $replicaCount := int .Values.statefulset.replicaCount }}
 {{- $zoneCount := int .Values.statefulset.zones }}
 {{- $drivesPerNode := int .Values.statefulset.drivesPerNode }}
@@ -134,7 +135,7 @@ spec:
                   {{- $endIndex := sub (add $factor $replicaCount) 1 }}
                   {{- $beginIndex := mul $i $replicaCount }}
                   {{- $bucket := ternary (printf "%s-{0...%d}" $mountPath (sub $drivesPerNode 1)) $mountPath (gt $drivesPerNode 1) }}
-                  {{- $clusters = append $clusters (printf "%s-{%d...%d}.%s.%s.svc.%s%s" $fullname $beginIndex $endIndex $headlessService $releaseNamespace $clusterDomain $bucket) }}
+                  {{- $clusters = append $clusters (printf "%s-{%d...%d}.%s.%s.svc.%s:%s%s" $fullname $beginIndex $endIndex $headlessService $releaseNamespace $clusterDomain $apiPort $bucket) }}
               {{- end }}
               value: {{ join "," $clusters | quote }}
             - name: MINIO_SCHEME
