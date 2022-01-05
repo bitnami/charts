@@ -736,6 +736,7 @@ metrics:
     ## sessionAffinityConfig:
     ##   clientIP:
     ##     timeoutSeconds: 300
+    ##
     sessionAffinityConfig: {}
 
 ## @section Certificate injection parameters
