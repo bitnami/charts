@@ -261,7 +261,7 @@ nodeSelector: {}
 ## Drupal container's resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ## @param resources.limits The resources limits for the init container
-## @param resources.requests [object] The requested resources for the init container
+## @param resources.requests The requested resources for the init container
 ##
 resources:
   requests:
