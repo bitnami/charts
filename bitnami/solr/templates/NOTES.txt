@@ -15,6 +15,15 @@ APP VERSION: {{ .Chart.AppVersion }}
 
 ---------------------------------------------------------------------------------------------
 {{- end }}
+{{- if .Values.coreName }}
+---------------------------------------------------------------------------------------------
+ WARNING
+
+    The "coreName" property is deprecated and will be removed in a future version.
+    Please use the "coreNames" property instead.
+
+---------------------------------------------------------------------------------------------
+{{- end }}
 ** Please be patient while the chart is being deployed **
 
 Solr can be accessed via port {{ .Values.service.port }} on the following DNS name from within your cluster:

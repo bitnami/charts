@@ -64,6 +64,9 @@ image:
   ##   - myRegistryKeySecretName
   ##
   pullSecrets: []
+## @param coreName Solr core name to be created (deprecated, will be removed in a future version)
+##
+coreName: ""
 ## @param coreNames Solr core names to be created
 ##
 coreNames:

@@ -187,7 +187,11 @@ spec:
               value: {{ .Values.collection | quote }}
             {{- else }}
             - name: SOLR_CORES
+              {{- if .Values.coreName }}
+              value: {{ .Values.coreName | quote }}
+              {{- else }}
               value: {{ .Values.coreNames | join "," | quote }}
+              {{- end }}
             {{- end }}
             - name: SOLR_COLLECTION_SHARDS
               value: {{ .Values.collectionShards | quote }}
