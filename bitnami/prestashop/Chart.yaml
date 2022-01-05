@@ -6,7 +6,7 @@ dependencies:
   - condition: mariadb.enabled
     name: mariadb
     repository: https://charts.bitnami.com/bitnami
-    version: 9.x.x
+    version: 10.x.x
   - name: common
     repository: https://charts.bitnami.com/bitnami
     tags:
@@ -29,4 +29,4 @@ name: prestashop
 sources:
   - https://github.com/bitnami/bitnami-docker-prestashop
   - https://prestashop.com/
-version: 13.3.2
+version: 14.0.0
