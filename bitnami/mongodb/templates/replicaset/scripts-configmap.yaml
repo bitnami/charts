@@ -71,10 +71,12 @@ data:
     export MONGODB_ADVERTISED_HOSTNAME=$(echo '{{ .Values.externalAccess.service.loadBalancerIPs }}' | tr -d '[]' | cut -d ' ' -f "$(($ID + 1))")
     {{- end }}
     {{- else if eq .Values.externalAccess.service.type "NodePort" }}
+    ID="${MY_POD_NAME#"{{ $fullname }}-"}"
+    export MONGODB_ADVERTISED_PORT_NUMBER=$(echo '{{ .Values.externalAccess.service.nodePorts }}' | tr -d '[]' | cut -d ' ' -f "$(($ID + 1))")
     {{- if .Values.externalAccess.service.domain }}
     export MONGODB_ADVERTISED_HOSTNAME={{ .Values.externalAccess.service.domain }}
     {{- else }}
-    export MONGODB_ADVERTISED_HOSTNAME=$(curl -s https://ipinfo.io/ip)
+    export MONGODB_ADVERTISED_HOSTNAME=$MY_POD_HOST_IP
     {{- end }}
     {{- end }}
     {{- end }}
@@ -87,6 +89,7 @@ data:
     {{- end }}
 
     echo "Advertised Hostname: $MONGODB_ADVERTISED_HOSTNAME"
+    echo "Advertised Port: $MONGODB_ADVERTISED_PORT_NUMBER"
 
     if [[ "$MY_POD_NAME" = "{{ $fullname }}-0" ]]; then
         echo "Pod name matches initial primary pod name, configuring node as a primary"
@@ -122,10 +125,12 @@ data:
     export MONGODB_ADVERTISED_HOSTNAME=$(echo '{{ .Values.externalAccess.hidden.service.loadBalancerIPs }}' | tr -d '[]' | cut -d ' ' -f "$(($ID + 1))")
     {{- end }}
     {{- else if eq .Values.externalAccess.hidden.service.type "NodePort" }}
+    ID="${MY_POD_NAME#"{{ $fullname }}-hidden-"}"
+    export MONGODB_ADVERTISED_PORT_NUMBER=$(echo '{{ .Values.externalAccess.hidden.service.nodePorts }}' | tr -d '[]' | cut -d ' ' -f "$(($ID + 1))"
     {{- if .Values.externalAccess.hidden.service.domain }}
     export MONGODB_ADVERTISED_HOSTNAME={{ .Values.externalAccess.hidden.service.domain }}
     {{- else }}
-    export MONGODB_ADVERTISED_HOSTNAME=$(curl -s https://ipinfo.io/ip)
+    export MONGODB_ADVERTISED_HOSTNAME=$MY_POD_HOST_IP
     {{- end }}
     {{- end }}
     {{- end }}
@@ -138,6 +143,7 @@ data:
     {{- end }}
 
     echo "Advertised Hostname: $MONGODB_ADVERTISED_HOSTNAME"
+    echo "Advertised Port: $MONGODB_ADVERTISED_PORT_NUMBER"
     echo "Configuring node as a hidden node"
     export MONGODB_REPLICA_SET_MODE="hidden"
     export MONGODB_INITIAL_PRIMARY_ROOT_USER="$MONGODB_ROOT_USER"
