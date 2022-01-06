@@ -50,9 +50,9 @@ data:
       access_log /dev/stdout timed_combined;
 
       server {
-        {{- if .Values.ipFamily.ipv4.enabled}}
+        {{- if .Values.ipFamily.ipv4.enabled }}
         listen 8080;
-        {{- end}}
+        {{- end }}
         {{- if .Values.ipFamily.ipv6.enabled }}
         listen [::]:8080;
         {{- end }}

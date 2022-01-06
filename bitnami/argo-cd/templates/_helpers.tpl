@@ -130,7 +130,7 @@ Return the Redis&trade; secret name
     {{- if .Values.redis.auth.existingSecret }}
         {{- printf "%s" .Values.redis.auth.existingSecret -}}
     {{- else -}}
-        {{- printf "%s" (include "argocd.redis.fullname" .)}}
+        {{- printf "%s" (include "argocd.redis.fullname" .) }}
     {{- end -}}
 {{- else if .Values.externalRedis.existingSecret }}
     {{- printf "%s" .Values.externalRedis.existingSecret -}}

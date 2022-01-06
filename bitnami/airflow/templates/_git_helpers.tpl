@@ -79,7 +79,7 @@ Returns the init container that will clone repositories files from a given list 
 {{- if .Values.containerSecurityContext.enabled }}
   securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 4 }}
 {{- end }}
-{{- if .Values.git.clone.resources}}
+{{- if .Values.git.clone.resources }}
   resources: {{- toYaml .Values.git.clone.resources | nindent 4 }}
 {{- end }}
 {{- if .Values.git.clone.command }}
@@ -140,7 +140,7 @@ Returns the a container that will pull and sync repositories files from a given 
 {{- if .Values.containerSecurityContext.enabled }}
   securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 4 }}
 {{- end }}
-{{- if .Values.git.sync.resources}}
+{{- if .Values.git.sync.resources }}
   resources: {{- toYaml .Values.git.sync.resources | nindent 4 }}
 {{- end }}
 {{- if .Values.git.sync.command }}

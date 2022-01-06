@@ -46,6 +46,8 @@ spec:
           env:
             - name: KONG_MIGRATE
               value: "yes"
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
             - name: KONG_EXIT_AFTER_MIGRATE
               value: "yes"
             {{- if (eq .Values.database "postgresql") }}

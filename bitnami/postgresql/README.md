@@ -144,6 +144,7 @@ $ kubectl delete pvc -l release=my-release
 | `initdbScriptsSecret`                         | Secret with scripts to be run at first boot (in case it contains sensitive information)                                                                   | `""`                        |
 | `initdbUser`                                  | Specify the PostgreSQL username to execute the initdb scripts                                                                                             | `""`                        |
 | `initdbPassword`                              | Specify the PostgreSQL password to execute the initdb scripts                                                                                             | `""`                        |
+| `containerPorts.postgresql`                   | PostgreSQL container port                                                                                                                                 | `5432`                      |
 | `audit.logHostname`                           | Log client hostnames                                                                                                                                      | `false`                     |
 | `audit.logConnections`                        | Add client log-in operations to the log file                                                                                                              | `false`                     |
 | `audit.logDisconnections`                     | Add client log-outs operations to the log file                                                                                                            | `false`                     |
@@ -797,3 +798,19 @@ postgres=# alter role USER_NAME with password 'BITNAMI_USER_PASSWORD';
 postgres=# grant all privileges on database DATABASE_NAME to USER_NAME;
 postgres=# alter database DATABASE_NAME owner to USER_NAME;
 ```
+
+## License
+
+Copyright &copy; 2022 Bitnami
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

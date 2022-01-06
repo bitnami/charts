@@ -7,6 +7,6 @@ dependencies:
   version: 9.8.1
 - name: elasticsearch
   repository: https://charts.bitnami.com/bitnami
-  version: 17.5.2
-digest: sha256:480c063679b66d8bf5cf2d08af7ba64fb85ed4b215b81548c46a661179822286
-generated: "2021-12-14T20:34:58.360481818Z"
+  version: 17.5.4
+digest: sha256:83681f1b4e8eae8762c8e26b63644484d0f4ed5db3bd6a1ae87eecd716210ed6
+generated: "2021-12-20T11:56:28.350198352Z"

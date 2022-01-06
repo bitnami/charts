@@ -12,7 +12,7 @@ Return the proper image name used for setting up Certificates
 - name: certificates
   image: {{ include "certificates.image" . }}
   imagePullPolicy: {{ .Values.certificates.image.pullPolicy }}
-  {{- if .Values.image.pullSecrets}}
+  {{- if .Values.image.pullSecrets }}
   imagePullSecrets:
   {{- range (default .Values.image.pullSecrets .Values.certificates.image.pullSecrets) }}
     - name: {{ . }}

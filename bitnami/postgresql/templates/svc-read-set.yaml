@@ -31,7 +31,7 @@ spec:
   type: ClusterIP
   ports:
     - name: tcp-postgresql
-      port:  {{ template "postgresql.port" $root }}
+      port:  {{ template "postgresql.servicePort" $root }}
       targetPort: tcp-postgresql
   selector:
   {{- include "common.labels.matchLabels" $root | nindent 4 }}

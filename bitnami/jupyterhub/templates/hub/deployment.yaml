@@ -107,7 +107,7 @@ spec:
             - name: POSTGRESQL_CLIENT_DATABASE_NAME
               value: {{ ternary .Values.postgresql.postgresqlDatabase .Values.externalDatabase.port .Values.postgresql.enabled }}
             - name: POSTGRESQL_CLIENT_DATABASE_PORT_NUMBER
-              value: {{ ternary "5432" .Values.externalDatabase.port .Values.postgresql.enabled | quote}}
+              value: {{ ternary "5432" .Values.externalDatabase.port .Values.postgresql.enabled | quote }}
             - name: POSTGRESQL_CLIENT_CREATE_DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
