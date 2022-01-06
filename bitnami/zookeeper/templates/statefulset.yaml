@@ -557,7 +557,7 @@ spec:
         selector: {{- include "common.tplvalues.render" (dict "value" .Values.persistence.selector "context" $) | nindent 10 }}
         {{- end }}
     {{- end }}
-    {{- if and (not .Values.persistence.dataLogDir.existingClaim) .Values.dataLogDir }}
+    {{- if and (not .Values.persistence.dataLogDir.existingClaim) .Values.persistence.dataLogDir }}
     - metadata:
         name: data-log
         annotations:
