@@ -87,7 +87,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]`  |
 | `useExternalDNS.enabled` | Enable various syntax that would enable external-dns to work.  Note this requires a working installation of [`external-dns`] to be usable. | `false` |
-| `useExternalDNS.suffix`  | The DNS suffix utilized when [`external-dns`] is enabled.  Note that we prepend the suffix with the full name of the install.              | `""`    |
+| `useExternalDNS.suffix`  | The DNS suffix utilized when [`external-dns`] is enabled.  Note that we prepend the suffix with the full name of the release.              | `""`    |
 | `useExternalDNS.annotationKey`  | The annotation key utilized when [`external-dns`] is enabled.              | `"external-dns.alpha.kubernetes.io/"`    |
 | `useExternalDNS.additionalAnnotations`  | Extra annotations to be utilized when [`external-dns`] is enabled.              | `{}`    |
 
@@ -468,9 +468,9 @@ To modify the application version used in this chart, specify a different versio
 
 ### External DNS
 
-This chart is equipped to assist the cluster leverage the [`external-dns`]
-project.  Doing so will enable the instances to announce the FQDN that is put
-together in the format of `<pod-name>.<installation-name>.<dns-suffix>`.
+This chart is equipped to allow leveraging the [`external-dns`] project.
+Doing so will enable ExternalDNS to publish the FQDN for each instance,
+in the format of `<pod-name>.<release-name>.<dns-suffix>`.
 Example, when using the following configuration:
 
 ```yaml
@@ -481,8 +481,8 @@ useExternalDNS:
     ttl: 10
 ```
 
-On a cluster where the name of the installation is `a`, the hostname of a Pod
-is configured like so: `a-redis-node-0.a-redis.prod.example.org`.  The IP of
+On a cluster where the name of the Helm release is `a`, the hostname of a Pod
+is generated as: `a-redis-node-0.a-redis.prod.example.org`.  The IP of
 that FQDN will match that of the associated Pod.  This modifies the following
 parameters of the Redis/Sentinel configuration using this new FQDN:
 
