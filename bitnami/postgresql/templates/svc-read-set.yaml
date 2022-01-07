@@ -15,8 +15,8 @@ metadata:
   labels:
     pod: {{ $targetPod }}
   {{- include "common.labels.standard" $root | nindent 4 }}
-  {{- if .Values.commonLabels }}
-  {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- if $root.Values.commonLabels }}
+  {{- include "common.tplvalues.render" ( dict "value" $root.Values.commonLabels "context" $ ) | nindent 4 }}
   {{- end }}
   annotations:
 
