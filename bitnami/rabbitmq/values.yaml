@@ -1022,7 +1022,7 @@ metrics:
     ## @param metrics.serviceMonitor.relabellings MetricsRelabelConfigs to apply to samples before ingestion. DEPRECATED: Will be removed in next major.
     ##
     relabellings: []
-    ## @param metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping. DEPRECATED: Will be removed in next major.
+    ## @param metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping.
     ##
     relabelings: []
     ## @param metrics.serviceMonitor.metricRelabelings MetricsRelabelConfigs to apply to samples before ingestion.
