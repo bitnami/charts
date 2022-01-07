@@ -194,6 +194,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.nodePorts.http`  | Node ports for the HTTP service                                                                                                  | `""`                     |
 | `service.nodePorts.https` | Node ports for the HTTPS service                                                                                                 | `""`                     |
 | `ingress.enabled`         | Enable ingress controller resource                                                                                               | `false`                  |
+| `ingress.ingressClassName`| Name of the ingress class (Kubernetes 1.18+)                                                                                     | `""`                     |
 | `ingress.pathType`        | Path type for the ingress resource                                                                                               | `ImplementationSpecific` |
 | `ingress.apiVersion`      | Override API Version (automatically detected if not set)                                                                         | `""`                     |
 | `ingress.hostname`        | Default host for the ingress resource                                                                                            | `solr.local`             |
