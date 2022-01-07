@@ -30,7 +30,9 @@ spec:
       {{- if .Values.metrics.serviceMonitor.relabelings }}
       relabelings: {{- toYaml .Values.metrics.serviceMonitor.relabelings | nindent 6 }}
       {{- end }}
-      {{- if .Values.metrics.serviceMonitor.metricRelabelings }}
+      {{- if .Values.metrics.serviceMonitor.relabellings }}
+      metricRelabelings: {{- toYaml .Values.metrics.serviceMonitor.relabellings | nindent 6 }}
+      {{- else if .Values.metrics.serviceMonitor.metricRelabelings }}
       metricRelabelings: {{- toYaml .Values.metrics.serviceMonitor.metricRelabelings | nindent 6 }}
       {{- end }}
       {{- if .Values.metrics.serviceMonitor.path }}
