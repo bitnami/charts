@@ -34,7 +34,9 @@ extraDeploy: []
 ## @param logLevel Set up cert manager log level
 ##
 logLevel: 2
-## Cert Manager leader Election
+## @param clusterResourceNamespace Namespace used to store DNS provider credentials etc. for ClusterIssuer resources. If empty, uses the namespace where the controller is deployed.
+##
+clusterResourceNamespace: ""
 ## @param leaderElection.namespace Namespace which leaderElection works.
 ##
 leaderElection:

@@ -52,13 +52,13 @@ host. To configure ownCloud with the URL of your service:
 {{- if eq .Values.service.type "ClusterIP" }}
 
   echo "ownCloud URL: http://127.0.0.1:8080/"
-  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "common.names.fullname" . }} 8080:{{ .Values.service.port }}
+  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "common.names.fullname" . }} 8080:{{ coalesce .Values.service.ports.http .Values.service.port }}
 
 {{- else }}
 
-{{- $port:=.Values.service.port | toString }}
+{{- $port:=(coalesce .Values.service.ports.http .Values.service.port) | toString }}
 
-  echo "ownCloud URL: http://{{ include "owncloud.host" . }}{{- if ne $port "80" }}:{{ .Values.service.port }}{{ end }}/"
+  echo "ownCloud URL: http://{{ include "owncloud.host" . }}{{- if ne $port "80" }}:{{ coalesce .Values.service.ports.http .Values.service.port }}{{ end }}/"
 
 {{- end }}
 

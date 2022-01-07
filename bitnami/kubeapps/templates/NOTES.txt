@@ -51,7 +51,7 @@ To access Kubeapps from outside your K8s cluster, follow the steps below:
  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
        Watch the status by running 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "common.names.fullname" . }}'
 
-   export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+   export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
    echo "Kubeapps URL: http{{ if eq ( .Values.frontend.service.port | toString ) "443" }}s{{ end }}://$SERVICE_IP:{{ .Values.frontend.service.port }}"
 
 {{- else if contains "ClusterIP" .Values.frontend.service.type }}

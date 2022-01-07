@@ -168,7 +168,7 @@ spec:
             {{- if .Values.metrics.enabled }}
             - name: SPARK_METRICS_ENABLED
               value: "true"
-            {{- end}}
+            {{- end }}
             - name: SPARK_DAEMON_MEMORY
               value: {{ .Values.master.daemonMemoryLimit | quote }}
             {{- if .Values.master.clusterPort }}

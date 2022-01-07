@@ -34,7 +34,7 @@ spec:
       hostNetwork: true
       {{- if .Values.speaker.initContainers }}
       initContainers:
-      {{- include "common.tplvalues.render" (dict "value" .Values.speaker.initContainers "context" $) | nindent 8 }} 
+      {{- include "common.tplvalues.render" (dict "value" .Values.speaker.initContainers "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.speaker.priorityClassName }}
       priorityClassName: {{ .Values.speaker.priorityClassName | quote }}
@@ -123,6 +123,6 @@ spec:
       {{- if .Values.speaker.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.speaker.affinity "context" $) | nindent 8 }}
       {{- end }}
-      {{- if .Values.speaker.tolerations}}
+      {{- if .Values.speaker.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.speaker.tolerations "context" $) | nindent 8 }}
       {{- end }}

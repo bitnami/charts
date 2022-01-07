@@ -1,5 +1,5 @@
 {{- $pspAvailable := (semverCompare "<1.25-0" (include "common.capabilities.kubeVersion" .)) -}}
-{{- if and $pspAvailable .Values.podSecurityPolicy.enabled}}
+{{- if and $pspAvailable .Values.podSecurityPolicy.enabled }}
 apiVersion: policy/v1beta1
 kind: PodSecurityPolicy
 metadata:

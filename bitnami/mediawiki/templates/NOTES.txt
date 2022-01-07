@@ -70,15 +70,15 @@ host. To configure Mediawiki with the URL of your service:
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
         Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "common.names.fullname" . }}'
 
-  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
 
-{{- $port:=.Values.service.port | toString }}
-  echo "Mediawiki URL: http://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.service.port }}{{ end }}/"
+{{- $port:= ( coalesce .Values.service.ports.http .Values.service.port) | toString }}
+  echo "Mediawiki URL: http://$SERVICE_IP{{- if ne $port "80" }}:{{ coalesce .Values.service.ports.http .Values.service.port }}{{ end }}/"
 
 {{- else if contains "ClusterIP"  .Values.service.type }}
 
   echo "Mediawiki URL: http://127.0.0.1:8080/"
-  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "common.names.fullname" . }} 8080:{{ .Values.service.port }}
+  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "common.names.fullname" . }} 8080:{{ coalesce .Values.service.ports.http .Values.service.port }}
 
 {{- end }}
 {{- end }}
@@ -102,7 +102,7 @@ host. To configure MediaWiki to use and external database host:
 
   helm upgrade --namespace {{ .Release.Namespace }} {{ .Release.Name }} --set service.type={{ .Values.service.type }},mariadb.enabled=false,externalDatabase.host=YOUR_EXTERNAL_DATABASE_HOST bitnami/mediawiki
 
-{{- end}}
+{{- end }}
 
 {{- include "mediawiki.checkRollingTags" . }}
 {{- $passwordValidationErrors := list -}}
