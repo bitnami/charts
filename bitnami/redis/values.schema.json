@@ -1,149 +1,1845 @@
 {
-  "$schema": "http://json-schema.org/schema#",
-  "type": "object",
-  "properties": {
-    "architecture": {
-      "type": "string",
-      "title": "Redis architecture",
-      "form": true,
-      "description": "Allowed values: `standalone` or `replication`",
-      "enum": ["standalone", "replication"]
-    },
-    "auth": {
-      "type": "object",
-      "title": "Authentication configuration",
-      "form": true,
-      "properties": {
-        "enabled": {
-          "type": "boolean",
-          "form": true,
-          "title": "Use password authentication"
-        },
-        "password": {
-          "type": "string",
-          "title": "Redis password",
-          "form": true,
-          "description": "Defaults to a random 10-character alphanumeric string if not set",
-          "hidden": {
-            "value": false,
-            "path": "auth/enabled"
-          }
-        }
-      }
-    },
-    "master": {
-      "type": "object",
-      "title": "Master replicas settings",
-      "form": true,
-      "properties": {
-        "persistence": {
-          "type": "object",
-          "title": "Persistence for master replicas",
-          "form": true,
-          "properties": {
-            "enabled": {
-              "type": "boolean",
-              "form": true,
-              "title": "Enable persistence",
-              "description": "Enable persistence using Persistent Volume Claims"
-            },
-            "size": {
-              "type": "string",
-              "title": "Persistent Volume Size",
-              "form": true,
-              "render": "slider",
-              "sliderMin": 1,
-              "sliderMax": 100,
-              "sliderUnit": "Gi",
-              "hidden": {
-                "value": false,
-                "path": "master/persistence/enabled"
-              }
+    "title": "Chart Values",
+    "type": "object",
+    "properties": {
+        "global": {
+            "type": "object",
+            "properties": {
+                "imageRegistry": {
+                    "type": "string",
+                    "description": "Global Docker image registry",
+                    "default": ""
+                },
+                "imagePullSecrets": {
+                    "type": "array",
+                    "description": "Global Docker registry secret names as an array",
+                    "default": []
+                },
+                "storageClass": {
+                    "type": "string",
+                    "description": "Global StorageClass for Persistent Volume(s)",
+                    "default": ""
+                },
+                "redis": {
+                    "type": "object",
+                    "properties": {
+                        "password": {
+                            "type": "string",
+                            "description": "Global Redis&trade; password (overrides `auth.password`)",
+                            "default": ""
+                        }
+                    }
+                }
             }
-          }
-        }
-      }
-    },
-    "replica": {
-      "type": "object",
-      "title": "Redis replicas settings",
-      "form": true,
-      "hidden": {
-        "value": "standalone",
-        "path": "architecture"
-      },
-      "properties": {
-        "replicaCount": {
-          "type": "integer",
-          "form": true,
-          "title": "Number of Redis replicas"
         },
-        "persistence": {
-          "type": "object",
-          "title": "Persistence for Redis replicas",
-          "form": true,
-          "properties": {
-            "enabled": {
-              "type": "boolean",
-              "form": true,
-              "title": "Enable persistence",
-              "description": "Enable persistence using Persistent Volume Claims"
-            },
-            "size": {
-              "type": "string",
-              "title": "Persistent Volume Size",
-              "form": true,
-              "render": "slider",
-              "sliderMin": 1,
-              "sliderMax": 100,
-              "sliderUnit": "Gi",
-              "hidden": {
-                "value": false,
-                "path": "replica/persistence/enabled"
-              }
-            }
-          }
-        }
-      }
-    },
-    "volumePermissions": {
-      "type": "object",
-      "properties": {
-        "enabled": {
-          "type": "boolean",
-          "form": true,
-          "title": "Enable Init Containers",
-          "description": "Use an init container to set required folder permissions on the data volume before mounting it in the final destination"
-        }
-      }
-    },
-    "metrics": {
-      "type": "object",
-      "form": true,
-      "title": "Prometheus metrics details",
-      "properties": {
-        "enabled": {
-          "type": "boolean",
-          "title": "Create Prometheus metrics exporter",
-          "description": "Create a side-car container to expose Prometheus metrics",
-          "form": true
+        "kubeVersion": {
+            "type": "string",
+            "description": "Override Kubernetes version",
+            "default": ""
         },
-        "serviceMonitor": {
-          "type": "object",
-          "properties": {
-            "enabled": {
-              "type": "boolean",
-              "title": "Create Prometheus Operator ServiceMonitor",
-              "description": "Create a ServiceMonitor to track metrics using Prometheus Operator",
-              "form": true,
-              "hidden": {
-                "value": false,
-                "path": "metrics/enabled"
-              }
+        "nameOverride": {
+            "type": "string",
+            "description": "String to partially override common.names.fullname",
+            "default": ""
+        },
+        "fullnameOverride": {
+            "type": "string",
+            "description": "String to fully override common.names.fullname",
+            "default": ""
+        },
+        "commonLabels": {
+            "type": "object",
+            "description": "Labels to add to all deployed objects",
+            "default": {}
+        },
+        "commonAnnotations": {
+            "type": "object",
+            "description": "Annotations to add to all deployed objects",
+            "default": {}
+        },
+        "clusterDomain": {
+            "type": "string",
+            "description": "Kubernetes cluster domain name",
+            "default": "cluster.local"
+        },
+        "extraDeploy": {
+            "type": "array",
+            "description": "Array of extra objects to deploy with the release",
+            "default": []
+        },
+        "diagnosticMode": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Enable diagnostic mode (all probes will be disabled and the command will be overridden)",
+                    "default": false
+                },
+                "command": {
+                    "type": "array",
+                    "description": "Command to override all containers in the deployment",
+                    "default": [
+                        "sleep"
+                    ]
+                },
+                "args": {
+                    "type": "array",
+                    "description": "Args to override all containers in the deployment",
+                    "default": [
+                        "infinity"
+                    ]
+                }
             }
-          }
+        },
+        "image": {
+            "type": "object",
+            "properties": {
+                "registry": {
+                    "type": "string",
+                    "description": "Redis&trade; image registry",
+                    "default": "docker.io"
+                },
+                "repository": {
+                    "type": "string",
+                    "description": "Redis&trade; image repository",
+                    "default": "bitnami/redis"
+                },
+                "tag": {
+                    "type": "string",
+                    "description": "Redis&trade; image tag (immutable tags are recommended)",
+                    "default": "6.2.6-debian-10-r90"
+                },
+                "pullPolicy": {
+                    "type": "string",
+                    "description": "Redis&trade; image pull policy",
+                    "default": "IfNotPresent"
+                },
+                "pullSecrets": {
+                    "type": "array",
+                    "description": "Redis&trade; image pull secrets",
+                    "default": []
+                },
+                "debug": {
+                    "type": "boolean",
+                    "description": "Enable image debug mode",
+                    "default": false
+                }
+            }
+        },
+        "architecture": {
+            "type": "string",
+            "description": "Redis&trade; architecture. Allowed values: `standalone` or `replication`",
+            "default": "replication"
+        },
+        "auth": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Enable password authentication",
+                    "default": true
+                },
+                "sentinel": {
+                    "type": "boolean",
+                    "description": "Enable password authentication on sentinels too",
+                    "default": true
+                },
+                "password": {
+                    "type": "string",
+                    "description": "Redis&trade; password",
+                    "default": ""
+                },
+                "existingSecret": {
+                    "type": "string",
+                    "description": "The name of an existing secret with Redis&trade; credentials",
+                    "default": ""
+                },
+                "existingSecretPasswordKey": {
+                    "type": "string",
+                    "description": "Password key to be retrieved from existing secret",
+                    "default": ""
+                },
+                "usePasswordFiles": {
+                    "type": "boolean",
+                    "description": "Mount credentials as files instead of using an environment variable",
+                    "default": false
+                }
+            }
+        },
+        "commonConfiguration": {
+            "type": "string",
+            "description": "Common configuration to be added into the ConfigMap",
+            "default": "# Enable AOF https://redis.io/topics/persistence#append-only-file\nappendonly yes\n# Disable RDB persistence, AOF persistence already enabled.\nsave \"\""
+        },
+        "existingConfigmap": {
+            "type": "string",
+            "description": "The name of an existing ConfigMap with your custom configuration for Redis&trade; nodes",
+            "default": ""
+        },
+        "master": {
+            "type": "object",
+            "properties": {
+                "configuration": {
+                    "type": "string",
+                    "description": "Configuration for Redis&trade; master nodes",
+                    "default": ""
+                },
+                "disableCommands": {
+                    "type": "array",
+                    "description": "Array with Redis&trade; commands to disable on master nodes",
+                    "default": [
+                        "FLUSHDB",
+                        "FLUSHALL"
+                    ]
+                },
+                "command": {
+                    "type": "array",
+                    "description": "Override default container command (useful when using custom images)",
+                    "default": []
+                },
+                "args": {
+                    "type": "array",
+                    "description": "Override default container args (useful when using custom images)",
+                    "default": []
+                },
+                "preExecCmds": {
+                    "type": "array",
+                    "description": "Additional commands to run prior to starting Redis&trade; master",
+                    "default": []
+                },
+                "extraFlags": {
+                    "type": "array",
+                    "description": "Array with additional command line flags for Redis&trade; master",
+                    "default": []
+                },
+                "extraEnvVars": {
+                    "type": "array",
+                    "description": "Array with extra environment variables to add to Redis&trade; master nodes",
+                    "default": []
+                },
+                "extraEnvVarsCM": {
+                    "type": "string",
+                    "description": "Name of existing ConfigMap containing extra env vars for Redis&trade; master nodes",
+                    "default": ""
+                },
+                "extraEnvVarsSecret": {
+                    "type": "string",
+                    "description": "Name of existing Secret containing extra env vars for Redis&trade; master nodes",
+                    "default": ""
+                },
+                "containerPort": {
+                    "type": "number",
+                    "description": "Container port to open on Redis&trade; master nodes",
+                    "default": 6379
+                },
+                "livenessProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable livenessProbe on Redis&trade; master nodes",
+                            "default": true
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for livenessProbe",
+                            "default": 20
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for livenessProbe",
+                            "default": 5
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for livenessProbe",
+                            "default": 5
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for livenessProbe",
+                            "default": 5
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for livenessProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "readinessProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable readinessProbe on Redis&trade; master nodes",
+                            "default": true
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for readinessProbe",
+                            "default": 20
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for readinessProbe",
+                            "default": 5
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for readinessProbe",
+                            "default": 1
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for readinessProbe",
+                            "default": 5
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for readinessProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "customLivenessProbe": {
+                    "type": "object",
+                    "description": "Custom livenessProbe that overrides the default one",
+                    "default": {}
+                },
+                "customReadinessProbe": {
+                    "type": "object",
+                    "description": "Custom readinessProbe that overrides the default one",
+                    "default": {}
+                },
+                "resources": {
+                    "type": "object",
+                    "properties": {
+                        "limits": {
+                            "type": "object",
+                            "description": "The resources limits for the Redis&trade; master containers",
+                            "default": {}
+                        },
+                        "requests": {
+                            "type": "object",
+                            "description": "The requested resources for the Redis&trade; master containers",
+                            "default": {}
+                        }
+                    }
+                },
+                "podSecurityContext": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enabled Redis&trade; master pods' Security Context",
+                            "default": true
+                        },
+                        "fsGroup": {
+                            "type": "number",
+                            "description": "Set Redis&trade; master pod's Security Context fsGroup",
+                            "default": 1001
+                        }
+                    }
+                },
+                "containerSecurityContext": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enabled Redis&trade; master containers' Security Context",
+                            "default": true
+                        },
+                        "runAsUser": {
+                            "type": "number",
+                            "description": "Set Redis&trade; master containers' Security Context runAsUser",
+                            "default": 1001
+                        }
+                    }
+                },
+                "schedulerName": {
+                    "type": "string",
+                    "description": "Alternate scheduler for Redis&trade; master pods",
+                    "default": ""
+                },
+                "updateStrategy": {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "description": "Redis&trade; master statefulset strategy type",
+                            "default": "RollingUpdate"
+                        },
+                        "rollingUpdate": {
+                            "type": "object",
+                            "description": "",
+                            "default": {}
+                        }
+                    }
+                },
+                "priorityClassName": {
+                    "type": "string",
+                    "description": "Redis&trade; master pods' priorityClassName",
+                    "default": ""
+                },
+                "hostAliases": {
+                    "type": "array",
+                    "description": "Redis&trade; master pods host aliases",
+                    "default": []
+                },
+                "podLabels": {
+                    "type": "object",
+                    "description": "Extra labels for Redis&trade; master pods",
+                    "default": {}
+                },
+                "podAnnotations": {
+                    "type": "object",
+                    "description": "Annotations for Redis&trade; master pods",
+                    "default": {}
+                },
+                "shareProcessNamespace": {
+                    "type": "boolean",
+                    "description": "Share a single process namespace between all of the containers in Redis&trade; master pods",
+                    "default": false
+                },
+                "podAffinityPreset": {
+                    "type": "string",
+                    "description": "Pod affinity preset. Ignored if `master.affinity` is set. Allowed values: `soft` or `hard`",
+                    "default": ""
+                },
+                "podAntiAffinityPreset": {
+                    "type": "string",
+                    "description": "Pod anti-affinity preset. Ignored if `master.affinity` is set. Allowed values: `soft` or `hard`",
+                    "default": "soft"
+                },
+                "nodeAffinityPreset": {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "description": "Node affinity preset type. Ignored if `master.affinity` is set. Allowed values: `soft` or `hard`",
+                            "default": ""
+                        },
+                        "key": {
+                            "type": "string",
+                            "description": "Node label key to match. Ignored if `master.affinity` is set",
+                            "default": ""
+                        },
+                        "values": {
+                            "type": "array",
+                            "description": "Node label values to match. Ignored if `master.affinity` is set",
+                            "default": []
+                        }
+                    }
+                },
+                "affinity": {
+                    "type": "object",
+                    "description": "Affinity for Redis&trade; master pods assignment",
+                    "default": {}
+                },
+                "nodeSelector": {
+                    "type": "object",
+                    "description": "Node labels for Redis&trade; master pods assignment",
+                    "default": {}
+                },
+                "tolerations": {
+                    "type": "array",
+                    "description": "Tolerations for Redis&trade; master pods assignment",
+                    "default": []
+                },
+                "spreadConstraints": {
+                    "type": "array",
+                    "description": "Spread Constraints for Redis&trade; master pod assignment",
+                    "default": []
+                },
+                "lifecycleHooks": {
+                    "type": "object",
+                    "description": "for the Redis&trade; master container(s) to automate configuration before or after startup",
+                    "default": {}
+                },
+                "extraVolumes": {
+                    "type": "array",
+                    "description": "Optionally specify extra list of additional volumes for the Redis&trade; master pod(s)",
+                    "default": []
+                },
+                "extraVolumeMounts": {
+                    "type": "array",
+                    "description": "Optionally specify extra list of additional volumeMounts for the Redis&trade; master container(s)",
+                    "default": []
+                },
+                "sidecars": {
+                    "type": "array",
+                    "description": "Add additional sidecar containers to the Redis&trade; master pod(s)",
+                    "default": []
+                },
+                "initContainers": {
+                    "type": "array",
+                    "description": "Add additional init containers to the Redis&trade; master pod(s)",
+                    "default": []
+                },
+                "persistence": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable persistence on Redis&trade; master nodes using Persistent Volume Claims",
+                            "default": true
+                        },
+                        "medium": {
+                            "type": "string",
+                            "description": "Provide a medium for `emptyDir` volumes.",
+                            "default": ""
+                        },
+                        "path": {
+                            "type": "string",
+                            "description": "The path the volume will be mounted at on Redis&trade; master containers",
+                            "default": "/data"
+                        },
+                        "subPath": {
+                            "type": "string",
+                            "description": "The subdirectory of the volume to mount on Redis&trade; master containers",
+                            "default": ""
+                        },
+                        "storageClass": {
+                            "type": "string",
+                            "description": "Persistent Volume storage class",
+                            "default": ""
+                        },
+                        "accessModes": {
+                            "type": "array",
+                            "description": "Persistent Volume access modes",
+                            "default": [
+                                "ReadWriteOnce"
+                            ]
+                        },
+                        "size": {
+                            "type": "string",
+                            "description": "Persistent Volume size",
+                            "default": "8Gi"
+                        },
+                        "annotations": {
+                            "type": "object",
+                            "description": "Additional custom annotations for the PVC",
+                            "default": {}
+                        },
+                        "selector": {
+                            "type": "object",
+                            "description": "Additional labels to match for the PVC",
+                            "default": {}
+                        },
+                        "dataSource": {
+                            "type": "object",
+                            "description": "Custom PVC data source",
+                            "default": {}
+                        },
+                        "existingClaim": {
+                            "type": "string",
+                            "description": "Use a existing PVC which must be created manually before bound",
+                            "default": ""
+                        }
+                    }
+                },
+                "service": {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "description": "Redis&trade; master service type",
+                            "default": "ClusterIP"
+                        },
+                        "port": {
+                            "type": "number",
+                            "description": "Redis&trade; master service port",
+                            "default": 6379
+                        },
+                        "nodePort": {
+                            "type": "string",
+                            "description": "Node port for Redis&trade; master",
+                            "default": ""
+                        },
+                        "externalTrafficPolicy": {
+                            "type": "string",
+                            "description": "Redis&trade; master service external traffic policy",
+                            "default": "Cluster"
+                        },
+                        "clusterIP": {
+                            "type": "string",
+                            "description": "Redis&trade; master service Cluster IP",
+                            "default": ""
+                        },
+                        "loadBalancerIP": {
+                            "type": "string",
+                            "description": "Redis&trade; master service Load Balancer IP",
+                            "default": ""
+                        },
+                        "loadBalancerSourceRanges": {
+                            "type": "array",
+                            "description": "Redis&trade; master service Load Balancer sources",
+                            "default": []
+                        },
+                        "annotations": {
+                            "type": "object",
+                            "description": "Additional custom annotations for Redis&trade; master service",
+                            "default": {}
+                        }
+                    }
+                },
+                "terminationGracePeriodSeconds": {
+                    "type": "number",
+                    "description": "Integer setting the termination grace period for the redis-master pods",
+                    "default": 30
+                }
+            }
+        },
+        "replica": {
+            "type": "object",
+            "properties": {
+                "replicaCount": {
+                    "type": "number",
+                    "description": "Number of Redis&trade; replicas to deploy",
+                    "default": 3
+                },
+                "configuration": {
+                    "type": "string",
+                    "description": "Configuration for Redis&trade; replicas nodes",
+                    "default": ""
+                },
+                "disableCommands": {
+                    "type": "array",
+                    "description": "Array with Redis&trade; commands to disable on replicas nodes",
+                    "default": [
+                        "FLUSHDB",
+                        "FLUSHALL"
+                    ]
+                },
+                "command": {
+                    "type": "array",
+                    "description": "Override default container command (useful when using custom images)",
+                    "default": []
+                },
+                "args": {
+                    "type": "array",
+                    "description": "Override default container args (useful when using custom images)",
+                    "default": []
+                },
+                "preExecCmds": {
+                    "type": "array",
+                    "description": "Additional commands to run prior to starting Redis&trade; replicas",
+                    "default": []
+                },
+                "extraFlags": {
+                    "type": "array",
+                    "description": "Array with additional command line flags for Redis&trade; replicas",
+                    "default": []
+                },
+                "extraEnvVars": {
+                    "type": "array",
+                    "description": "Array with extra environment variables to add to Redis&trade; replicas nodes",
+                    "default": []
+                },
+                "extraEnvVarsCM": {
+                    "type": "string",
+                    "description": "Name of existing ConfigMap containing extra env vars for Redis&trade; replicas nodes",
+                    "default": ""
+                },
+                "extraEnvVarsSecret": {
+                    "type": "string",
+                    "description": "Name of existing Secret containing extra env vars for Redis&trade; replicas nodes",
+                    "default": ""
+                },
+                "containerPort": {
+                    "type": "number",
+                    "description": "Container port to open on Redis&trade; replicas nodes",
+                    "default": 6379
+                },
+                "livenessProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable livenessProbe on Redis&trade; replicas nodes",
+                            "default": true
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for livenessProbe",
+                            "default": 20
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for livenessProbe",
+                            "default": 5
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for livenessProbe",
+                            "default": 5
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for livenessProbe",
+                            "default": 5
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for livenessProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "readinessProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable readinessProbe on Redis&trade; replicas nodes",
+                            "default": true
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for readinessProbe",
+                            "default": 20
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for readinessProbe",
+                            "default": 5
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for readinessProbe",
+                            "default": 1
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for readinessProbe",
+                            "default": 5
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for readinessProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "customLivenessProbe": {
+                    "type": "object",
+                    "description": "Custom livenessProbe that overrides the default one",
+                    "default": {}
+                },
+                "customReadinessProbe": {
+                    "type": "object",
+                    "description": "Custom readinessProbe that overrides the default one",
+                    "default": {}
+                },
+                "resources": {
+                    "type": "object",
+                    "properties": {
+                        "limits": {
+                            "type": "object",
+                            "description": "The resources limits for the Redis&trade; replicas containers",
+                            "default": {}
+                        },
+                        "requests": {
+                            "type": "object",
+                            "description": "The requested resources for the Redis&trade; replicas containers",
+                            "default": {}
+                        }
+                    }
+                },
+                "podSecurityContext": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enabled Redis&trade; replicas pods' Security Context",
+                            "default": true
+                        },
+                        "fsGroup": {
+                            "type": "number",
+                            "description": "Set Redis&trade; replicas pod's Security Context fsGroup",
+                            "default": 1001
+                        }
+                    }
+                },
+                "containerSecurityContext": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enabled Redis&trade; replicas containers' Security Context",
+                            "default": true
+                        },
+                        "runAsUser": {
+                            "type": "number",
+                            "description": "Set Redis&trade; replicas containers' Security Context runAsUser",
+                            "default": 1001
+                        }
+                    }
+                },
+                "schedulerName": {
+                    "type": "string",
+                    "description": "Alternate scheduler for Redis&trade; replicas pods",
+                    "default": ""
+                },
+                "updateStrategy": {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "description": "Redis&trade; replicas statefulset strategy type",
+                            "default": "RollingUpdate"
+                        },
+                        "rollingUpdate": {
+                            "type": "object",
+                            "description": "",
+                            "default": {}
+                        }
+                    }
+                },
+                "priorityClassName": {
+                    "type": "string",
+                    "description": "Redis&trade; replicas pods' priorityClassName",
+                    "default": ""
+                },
+                "hostAliases": {
+                    "type": "array",
+                    "description": "Redis&trade; replicas pods host aliases",
+                    "default": []
+                },
+                "podLabels": {
+                    "type": "object",
+                    "description": "Extra labels for Redis&trade; replicas pods",
+                    "default": {}
+                },
+                "podAnnotations": {
+                    "type": "object",
+                    "description": "Annotations for Redis&trade; replicas pods",
+                    "default": {}
+                },
+                "shareProcessNamespace": {
+                    "type": "boolean",
+                    "description": "Share a single process namespace between all of the containers in Redis&trade; replicas pods",
+                    "default": false
+                },
+                "podAffinityPreset": {
+                    "type": "string",
+                    "description": "Pod affinity preset. Ignored if `replica.affinity` is set. Allowed values: `soft` or `hard`",
+                    "default": ""
+                },
+                "podAntiAffinityPreset": {
+                    "type": "string",
+                    "description": "Pod anti-affinity preset. Ignored if `replica.affinity` is set. Allowed values: `soft` or `hard`",
+                    "default": "soft"
+                },
+                "nodeAffinityPreset": {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "description": "Node affinity preset type. Ignored if `replica.affinity` is set. Allowed values: `soft` or `hard`",
+                            "default": ""
+                        },
+                        "key": {
+                            "type": "string",
+                            "description": "Node label key to match. Ignored if `replica.affinity` is set",
+                            "default": ""
+                        },
+                        "values": {
+                            "type": "array",
+                            "description": "Node label values to match. Ignored if `replica.affinity` is set",
+                            "default": []
+                        }
+                    }
+                },
+                "affinity": {
+                    "type": "object",
+                    "description": "Affinity for Redis&trade; replicas pods assignment",
+                    "default": {}
+                },
+                "nodeSelector": {
+                    "type": "object",
+                    "description": "Node labels for Redis&trade; replicas pods assignment",
+                    "default": {}
+                },
+                "tolerations": {
+                    "type": "array",
+                    "description": "Tolerations for Redis&trade; replicas pods assignment",
+                    "default": []
+                },
+                "spreadConstraints": {
+                    "type": "array",
+                    "description": "Spread Constraints for Redis&trade; replicas pod assignment",
+                    "default": []
+                },
+                "lifecycleHooks": {
+                    "type": "object",
+                    "description": "for the Redis&trade; replica container(s) to automate configuration before or after startup",
+                    "default": {}
+                },
+                "extraVolumes": {
+                    "type": "array",
+                    "description": "Optionally specify extra list of additional volumes for the Redis&trade; replicas pod(s)",
+                    "default": []
+                },
+                "extraVolumeMounts": {
+                    "type": "array",
+                    "description": "Optionally specify extra list of additional volumeMounts for the Redis&trade; replicas container(s)",
+                    "default": []
+                },
+                "sidecars": {
+                    "type": "array",
+                    "description": "Add additional sidecar containers to the Redis&trade; replicas pod(s)",
+                    "default": []
+                },
+                "initContainers": {
+                    "type": "array",
+                    "description": "Add additional init containers to the Redis&trade; replicas pod(s)",
+                    "default": []
+                },
+                "persistence": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable persistence on Redis&trade; replicas nodes using Persistent Volume Claims",
+                            "default": true
+                        },
+                        "medium": {
+                            "type": "string",
+                            "description": "Provide a medium for `emptyDir` volumes.",
+                            "default": ""
+                        },
+                        "path": {
+                            "type": "string",
+                            "description": "The path the volume will be mounted at on Redis&trade; replicas containers",
+                            "default": "/data"
+                        },
+                        "subPath": {
+                            "type": "string",
+                            "description": "The subdirectory of the volume to mount on Redis&trade; replicas containers",
+                            "default": ""
+                        },
+                        "storageClass": {
+                            "type": "string",
+                            "description": "Persistent Volume storage class",
+                            "default": ""
+                        },
+                        "accessModes": {
+                            "type": "array",
+                            "description": "Persistent Volume access modes",
+                            "default": [
+                                "ReadWriteOnce"
+                            ]
+                        },
+                        "size": {
+                            "type": "string",
+                            "description": "Persistent Volume size",
+                            "default": "8Gi"
+                        },
+                        "annotations": {
+                            "type": "object",
+                            "description": "Additional custom annotations for the PVC",
+                            "default": {}
+                        },
+                        "selector": {
+                            "type": "object",
+                            "description": "Additional labels to match for the PVC",
+                            "default": {}
+                        },
+                        "dataSource": {
+                            "type": "object",
+                            "description": "Custom PVC data source",
+                            "default": {}
+                        }
+                    }
+                },
+                "service": {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "description": "Redis&trade; replicas service type",
+                            "default": "ClusterIP"
+                        },
+                        "port": {
+                            "type": "number",
+                            "description": "Redis&trade; replicas service port",
+                            "default": 6379
+                        },
+                        "nodePort": {
+                            "type": "string",
+                            "description": "Node port for Redis&trade; replicas",
+                            "default": ""
+                        },
+                        "externalTrafficPolicy": {
+                            "type": "string",
+                            "description": "Redis&trade; replicas service external traffic policy",
+                            "default": "Cluster"
+                        },
+                        "clusterIP": {
+                            "type": "string",
+                            "description": "Redis&trade; replicas service Cluster IP",
+                            "default": ""
+                        },
+                        "loadBalancerIP": {
+                            "type": "string",
+                            "description": "Redis&trade; replicas service Load Balancer IP",
+                            "default": ""
+                        },
+                        "loadBalancerSourceRanges": {
+                            "type": "array",
+                            "description": "Redis&trade; replicas service Load Balancer sources",
+                            "default": []
+                        },
+                        "annotations": {
+                            "type": "object",
+                            "description": "Additional custom annotations for Redis&trade; replicas service",
+                            "default": {}
+                        }
+                    }
+                },
+                "terminationGracePeriodSeconds": {
+                    "type": "number",
+                    "description": "Integer setting the termination grace period for the redis-replicas pods",
+                    "default": 30
+                },
+                "autoscaling": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable replica autoscaling settings",
+                            "default": false
+                        },
+                        "minReplicas": {
+                            "type": "number",
+                            "description": "Minimum replicas for the pod autoscaling",
+                            "default": 1
+                        },
+                        "maxReplicas": {
+                            "type": "number",
+                            "description": "Maximum replicas for the pod autoscaling",
+                            "default": 11
+                        },
+                        "targetCPU": {
+                            "type": "string",
+                            "description": "Percentage of CPU to consider when autoscaling",
+                            "default": ""
+                        },
+                        "targetMemory": {
+                            "type": "string",
+                            "description": "Percentage of Memory to consider when autoscaling",
+                            "default": ""
+                        }
+                    }
+                }
+            }
+        },
+        "sentinel": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Use Redis&trade; Sentinel on Redis&trade; pods.",
+                    "default": false
+                },
+                "image": {
+                    "type": "object",
+                    "properties": {
+                        "registry": {
+                            "type": "string",
+                            "description": "Redis&trade; Sentinel image registry",
+                            "default": "docker.io"
+                        },
+                        "repository": {
+                            "type": "string",
+                            "description": "Redis&trade; Sentinel image repository",
+                            "default": "bitnami/redis-sentinel"
+                        },
+                        "tag": {
+                            "type": "string",
+                            "description": "Redis&trade; Sentinel image tag (immutable tags are recommended)",
+                            "default": "6.2.6-debian-10-r89"
+                        },
+                        "pullPolicy": {
+                            "type": "string",
+                            "description": "Redis&trade; Sentinel image pull policy",
+                            "default": "IfNotPresent"
+                        },
+                        "pullSecrets": {
+                            "type": "array",
+                            "description": "Redis&trade; Sentinel image pull secrets",
+                            "default": []
+                        },
+                        "debug": {
+                            "type": "boolean",
+                            "description": "Enable image debug mode",
+                            "default": false
+                        }
+                    }
+                },
+                "masterSet": {
+                    "type": "string",
+                    "description": "Master set name",
+                    "default": "mymaster"
+                },
+                "quorum": {
+                    "type": "number",
+                    "description": "Sentinel Quorum",
+                    "default": 2
+                },
+                "automateClusterRecovery": {
+                    "type": "boolean",
+                    "description": "Automate cluster recovery in cases where the last replica is not considered a good replica and Sentinel won't automatically failover to it.",
+                    "default": false
+                },
+                "downAfterMilliseconds": {
+                    "type": "number",
+                    "description": "Timeout for detecting a Redis&trade; node is down",
+                    "default": 60000
+                },
+                "failoverTimeout": {
+                    "type": "number",
+                    "description": "Timeout for performing a election failover",
+                    "default": 18000
+                },
+                "parallelSyncs": {
+                    "type": "number",
+                    "description": "Number of replicas that can be reconfigured in parallel to use the new master after a failover",
+                    "default": 1
+                },
+                "configuration": {
+                    "type": "string",
+                    "description": "Configuration for Redis&trade; Sentinel nodes",
+                    "default": ""
+                },
+                "command": {
+                    "type": "array",
+                    "description": "Override default container command (useful when using custom images)",
+                    "default": []
+                },
+                "args": {
+                    "type": "array",
+                    "description": "Override default container args (useful when using custom images)",
+                    "default": []
+                },
+                "preExecCmds": {
+                    "type": "array",
+                    "description": "Additional commands to run prior to starting Redis&trade; Sentinel",
+                    "default": []
+                },
+                "extraEnvVars": {
+                    "type": "array",
+                    "description": "Array with extra environment variables to add to Redis&trade; Sentinel nodes",
+                    "default": []
+                },
+                "extraEnvVarsCM": {
+                    "type": "string",
+                    "description": "Name of existing ConfigMap containing extra env vars for Redis&trade; Sentinel nodes",
+                    "default": ""
+                },
+                "extraEnvVarsSecret": {
+                    "type": "string",
+                    "description": "Name of existing Secret containing extra env vars for Redis&trade; Sentinel nodes",
+                    "default": ""
+                },
+                "containerPort": {
+                    "type": "number",
+                    "description": "Container port to open on Redis&trade; Sentinel nodes",
+                    "default": 26379
+                },
+                "livenessProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable livenessProbe on Redis&trade; Sentinel nodes",
+                            "default": true
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for livenessProbe",
+                            "default": 20
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for livenessProbe",
+                            "default": 5
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for livenessProbe",
+                            "default": 5
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for livenessProbe",
+                            "default": 5
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for livenessProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "readinessProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable readinessProbe on Redis&trade; Sentinel nodes",
+                            "default": true
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for readinessProbe",
+                            "default": 20
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for readinessProbe",
+                            "default": 5
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for readinessProbe",
+                            "default": 1
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for readinessProbe",
+                            "default": 5
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for readinessProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "customLivenessProbe": {
+                    "type": "object",
+                    "description": "Custom livenessProbe that overrides the default one",
+                    "default": {}
+                },
+                "customReadinessProbe": {
+                    "type": "object",
+                    "description": "Custom readinessProbe that overrides the default one",
+                    "default": {}
+                },
+                "resources": {
+                    "type": "object",
+                    "properties": {
+                        "limits": {
+                            "type": "object",
+                            "description": "The resources limits for the Redis&trade; Sentinel containers",
+                            "default": {}
+                        },
+                        "requests": {
+                            "type": "object",
+                            "description": "The requested resources for the Redis&trade; Sentinel containers",
+                            "default": {}
+                        }
+                    }
+                },
+                "containerSecurityContext": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enabled Redis&trade; Sentinel containers' Security Context",
+                            "default": true
+                        },
+                        "runAsUser": {
+                            "type": "number",
+                            "description": "Set Redis&trade; Sentinel containers' Security Context runAsUser",
+                            "default": 1001
+                        }
+                    }
+                },
+                "lifecycleHooks": {
+                    "type": "object",
+                    "description": "for the Redis&trade; sentinel container(s) to automate configuration before or after startup",
+                    "default": {}
+                },
+                "extraVolumes": {
+                    "type": "array",
+                    "description": "Optionally specify extra list of additional volumes for the Redis&trade; Sentinel",
+                    "default": []
+                },
+                "extraVolumeMounts": {
+                    "type": "array",
+                    "description": "Optionally specify extra list of additional volumeMounts for the Redis&trade; Sentinel container(s)",
+                    "default": []
+                },
+                "service": {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "description": "Redis&trade; Sentinel service type",
+                            "default": "ClusterIP"
+                        },
+                        "port": {
+                            "type": "number",
+                            "description": "Redis&trade; service port for Redis&trade;",
+                            "default": 6379
+                        },
+                        "sentinelPort": {
+                            "type": "number",
+                            "description": "Redis&trade; service port for Sentinel",
+                            "default": 26379
+                        },
+                        "nodePorts": {
+                            "type": "object",
+                            "properties": {
+                                "redis": {
+                                    "type": "string",
+                                    "description": "Node port for Redis&trade;",
+                                    "default": ""
+                                },
+                                "sentinel": {
+                                    "type": "string",
+                                    "description": "Node port for Sentinel",
+                                    "default": ""
+                                }
+                            }
+                        },
+                        "externalTrafficPolicy": {
+                            "type": "string",
+                            "description": "Redis&trade; Sentinel service external traffic policy",
+                            "default": "Cluster"
+                        },
+                        "clusterIP": {
+                            "type": "string",
+                            "description": "Redis&trade; Sentinel service Cluster IP",
+                            "default": ""
+                        },
+                        "loadBalancerIP": {
+                            "type": "string",
+                            "description": "Redis&trade; Sentinel service Load Balancer IP",
+                            "default": ""
+                        },
+                        "loadBalancerSourceRanges": {
+                            "type": "array",
+                            "description": "Redis&trade; Sentinel service Load Balancer sources",
+                            "default": []
+                        },
+                        "annotations": {
+                            "type": "object",
+                            "description": "Additional custom annotations for Redis&trade; Sentinel service",
+                            "default": {}
+                        }
+                    }
+                },
+                "terminationGracePeriodSeconds": {
+                    "type": "number",
+                    "description": "Integer setting the termination grace period for the redis-node pods",
+                    "default": 30
+                }
+            }
+        },
+        "networkPolicy": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Enable creation of NetworkPolicy resources",
+                    "default": false
+                },
+                "allowExternal": {
+                    "type": "boolean",
+                    "description": "Don't require client label for connections",
+                    "default": true
+                },
+                "extraIngress": {
+                    "type": "array",
+                    "description": "Add extra ingress rules to the NetworkPolicy",
+                    "default": []
+                },
+                "extraEgress": {
+                    "type": "array",
+                    "description": "Add extra ingress rules to the NetworkPolicy",
+                    "default": []
+                },
+                "ingressNSMatchLabels": {
+                    "type": "object",
+                    "description": "Labels to match to allow traffic from other namespaces",
+                    "default": {}
+                },
+                "ingressNSPodMatchLabels": {
+                    "type": "object",
+                    "description": "Pod labels to match to allow traffic from other namespaces",
+                    "default": {}
+                }
+            }
+        },
+        "podSecurityPolicy": {
+            "type": "object",
+            "properties": {
+                "create": {
+                    "type": "boolean",
+                    "description": "Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later",
+                    "default": false
+                },
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Enable PodSecurityPolicy's RBAC rules",
+                    "default": false
+                }
+            }
+        },
+        "rbac": {
+            "type": "object",
+            "properties": {
+                "create": {
+                    "type": "boolean",
+                    "description": "Specifies whether RBAC resources should be created",
+                    "default": false
+                },
+                "rules": {
+                    "type": "array",
+                    "description": "Custom RBAC rules to set",
+                    "default": []
+                }
+            }
+        },
+        "serviceAccount": {
+            "type": "object",
+            "properties": {
+                "create": {
+                    "type": "boolean",
+                    "description": "Specifies whether a ServiceAccount should be created",
+                    "default": true
+                },
+                "name": {
+                    "type": "string",
+                    "description": "The name of the ServiceAccount to use.",
+                    "default": ""
+                },
+                "automountServiceAccountToken": {
+                    "type": "boolean",
+                    "description": "Whether to auto mount the service account token",
+                    "default": true
+                },
+                "annotations": {
+                    "type": "object",
+                    "description": "Additional custom annotations for the ServiceAccount",
+                    "default": {}
+                }
+            }
+        },
+        "pdb": {
+            "type": "object",
+            "properties": {
+                "create": {
+                    "type": "boolean",
+                    "description": "Specifies whether a PodDisruptionBudget should be created",
+                    "default": false
+                },
+                "minAvailable": {
+                    "type": "number",
+                    "description": "Min number of pods that must still be available after the eviction",
+                    "default": 1
+                },
+                "maxUnavailable": {
+                    "type": "string",
+                    "description": "Max number of pods that can be unavailable after the eviction",
+                    "default": ""
+                }
+            }
+        },
+        "tls": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Enable TLS traffic",
+                    "default": false
+                },
+                "authClients": {
+                    "type": "boolean",
+                    "description": "Require clients to authenticate",
+                    "default": true
+                },
+                "autoGenerated": {
+                    "type": "boolean",
+                    "description": "Enable autogenerated certificates",
+                    "default": false
+                },
+                "existingSecret": {
+                    "type": "string",
+                    "description": "The name of the existing secret that contains the TLS certificates",
+                    "default": ""
+                },
+                "certificatesSecret": {
+                    "type": "string",
+                    "description": "DEPRECATED. Use existingSecret instead.",
+                    "default": ""
+                },
+                "certFilename": {
+                    "type": "string",
+                    "description": "Certificate filename",
+                    "default": ""
+                },
+                "certKeyFilename": {
+                    "type": "string",
+                    "description": "Certificate Key filename",
+                    "default": ""
+                },
+                "certCAFilename": {
+                    "type": "string",
+                    "description": "CA Certificate filename",
+                    "default": ""
+                },
+                "dhParamsFilename": {
+                    "type": "string",
+                    "description": "File containing DH params (in order to support DH based ciphers)",
+                    "default": ""
+                }
+            }
+        },
+        "metrics": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Start a sidecar prometheus exporter to expose Redis&trade; metrics",
+                    "default": false
+                },
+                "image": {
+                    "type": "object",
+                    "properties": {
+                        "registry": {
+                            "type": "string",
+                            "description": "Redis&trade; Exporter image registry",
+                            "default": "docker.io"
+                        },
+                        "repository": {
+                            "type": "string",
+                            "description": "Redis&trade; Exporter image repository",
+                            "default": "bitnami/redis-exporter"
+                        },
+                        "tag": {
+                            "type": "string",
+                            "description": "Redis&trade; Redis&trade; Exporter image tag (immutable tags are recommended)",
+                            "default": "1.33.0-debian-10-r15"
+                        },
+                        "pullPolicy": {
+                            "type": "string",
+                            "description": "Redis&trade; Exporter image pull policy",
+                            "default": "IfNotPresent"
+                        },
+                        "pullSecrets": {
+                            "type": "array",
+                            "description": "Redis&trade; Exporter image pull secrets",
+                            "default": []
+                        }
+                    }
+                },
+                "redisTargetHost": {
+                    "type": "string",
+                    "description": "A way to specify an alternative Redis&trade; hostname",
+                    "default": "localhost"
+                },
+                "extraArgs": {
+                    "type": "object",
+                    "description": "Extra arguments for Redis&trade; exporter, for example:",
+                    "default": {}
+                },
+                "containerSecurityContext": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enabled Redis&trade; exporter containers' Security Context",
+                            "default": true
+                        },
+                        "runAsUser": {
+                            "type": "number",
+                            "description": "Set Redis&trade; exporter containers' Security Context runAsUser",
+                            "default": 1001
+                        }
+                    }
+                },
+                "extraVolumes": {
+                    "type": "array",
+                    "description": "Optionally specify extra list of additional volumes for the Redis&trade; metrics sidecar",
+                    "default": []
+                },
+                "extraVolumeMounts": {
+                    "type": "array",
+                    "description": "Optionally specify extra list of additional volumeMounts for the Redis&trade; metrics sidecar",
+                    "default": []
+                },
+                "resources": {
+                    "type": "object",
+                    "properties": {
+                        "limits": {
+                            "type": "object",
+                            "description": "The resources limits for the Redis&trade; exporter container",
+                            "default": {}
+                        },
+                        "requests": {
+                            "type": "object",
+                            "description": "The requested resources for the Redis&trade; exporter container",
+                            "default": {}
+                        }
+                    }
+                },
+                "podLabels": {
+                    "type": "object",
+                    "description": "Extra labels for Redis&trade; exporter pods",
+                    "default": {}
+                },
+                "service": {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "description": "Redis&trade; exporter service type",
+                            "default": "ClusterIP"
+                        },
+                        "port": {
+                            "type": "number",
+                            "description": "Redis&trade; exporter service port",
+                            "default": 9121
+                        },
+                        "externalTrafficPolicy": {
+                            "type": "string",
+                            "description": "Redis&trade; exporter service external traffic policy",
+                            "default": "Cluster"
+                        },
+                        "loadBalancerIP": {
+                            "type": "string",
+                            "description": "Redis&trade; exporter service Load Balancer IP",
+                            "default": ""
+                        },
+                        "loadBalancerSourceRanges": {
+                            "type": "array",
+                            "description": "Redis&trade; exporter service Load Balancer sources",
+                            "default": []
+                        },
+                        "annotations": {
+                            "type": "object",
+                            "description": "Additional custom annotations for Redis&trade; exporter service",
+                            "default": {}
+                        }
+                    }
+                },
+                "serviceMonitor": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Create ServiceMonitor resource(s) for scraping metrics using PrometheusOperator",
+                            "default": false
+                        },
+                        "namespace": {
+                            "type": "string",
+                            "description": "The namespace in which the ServiceMonitor will be created",
+                            "default": ""
+                        },
+                        "interval": {
+                            "type": "string",
+                            "description": "The interval at which metrics should be scraped",
+                            "default": "30s"
+                        },
+                        "scrapeTimeout": {
+                            "type": "string",
+                            "description": "The timeout after which the scrape is ended",
+                            "default": ""
+                        },
+                        "relabellings": {
+                            "type": "array",
+                            "description": "Metrics RelabelConfigs to apply to samples before scraping.",
+                            "default": []
+                        },
+                        "metricRelabelings": {
+                            "type": "array",
+                            "description": "Metrics RelabelConfigs to apply to samples before ingestion.",
+                            "default": []
+                        },
+                        "honorLabels": {
+                            "type": "boolean",
+                            "description": "Specify honorLabels parameter to add the scrape endpoint",
+                            "default": false
+                        },
+                        "additionalLabels": {
+                            "type": "object",
+                            "description": "Additional labels that can be used so ServiceMonitor resource(s) can be discovered by Prometheus",
+                            "default": {}
+                        }
+                    }
+                },
+                "prometheusRule": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Create a custom prometheusRule Resource for scraping metrics using PrometheusOperator",
+                            "default": false
+                        },
+                        "namespace": {
+                            "type": "string",
+                            "description": "The namespace in which the prometheusRule will be created",
+                            "default": ""
+                        },
+                        "additionalLabels": {
+                            "type": "object",
+                            "description": "Additional labels for the prometheusRule",
+                            "default": {}
+                        },
+                        "rules": {
+                            "type": "array",
+                            "description": "Custom Prometheus rules",
+                            "default": []
+                        }
+                    }
+                }
+            }
+        },
+        "volumePermissions": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`",
+                    "default": false
+                },
+                "image": {
+                    "type": "object",
+                    "properties": {
+                        "registry": {
+                            "type": "string",
+                            "description": "Bitnami Shell image registry",
+                            "default": "docker.io"
+                        },
+                        "repository": {
+                            "type": "string",
+                            "description": "Bitnami Shell image repository",
+                            "default": "bitnami/bitnami-shell"
+                        },
+                        "tag": {
+                            "type": "string",
+                            "description": "Bitnami Shell image tag (immutable tags are recommended)",
+                            "default": "10-debian-10-r300"
+                        },
+                        "pullPolicy": {
+                            "type": "string",
+                            "description": "Bitnami Shell image pull policy",
+                            "default": "IfNotPresent"
+                        },
+                        "pullSecrets": {
+                            "type": "array",
+                            "description": "Bitnami Shell image pull secrets",
+                            "default": []
+                        }
+                    }
+                },
+                "resources": {
+                    "type": "object",
+                    "properties": {
+                        "limits": {
+                            "type": "object",
+                            "description": "The resources limits for the init container",
+                            "default": {}
+                        },
+                        "requests": {
+                            "type": "object",
+                            "description": "The requested resources for the init container",
+                            "default": {}
+                        }
+                    }
+                },
+                "containerSecurityContext": {
+                    "type": "object",
+                    "properties": {
+                        "runAsUser": {
+                            "type": "number",
+                            "description": "Set init container's Security Context runAsUser",
+                            "default": 0
+                        }
+                    }
+                }
+            }
+        },
+        "sysctl": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Enable init container to modify Kernel settings",
+                    "default": false
+                },
+                "image": {
+                    "type": "object",
+                    "properties": {
+                        "registry": {
+                            "type": "string",
+                            "description": "Bitnami Shell image registry",
+                            "default": "docker.io"
+                        },
+                        "repository": {
+                            "type": "string",
+                            "description": "Bitnami Shell image repository",
+                            "default": "bitnami/bitnami-shell"
+                        },
+                        "tag": {
+                            "type": "string",
+                            "description": "Bitnami Shell image tag (immutable tags are recommended)",
+                            "default": "10-debian-10-r300"
+                        },
+                        "pullPolicy": {
+                            "type": "string",
+                            "description": "Bitnami Shell image pull policy",
+                            "default": "IfNotPresent"
+                        },
+                        "pullSecrets": {
+                            "type": "array",
+                            "description": "Bitnami Shell image pull secrets",
+                            "default": []
+                        }
+                    }
+                },
+                "command": {
+                    "type": "array",
+                    "description": "Override default init-sysctl container command (useful when using custom images)",
+                    "default": []
+                },
+                "mountHostSys": {
+                    "type": "boolean",
+                    "description": "Mount the host `/sys` folder to `/host-sys`",
+                    "default": false
+                },
+                "resources": {
+                    "type": "object",
+                    "properties": {
+                        "limits": {
+                            "type": "object",
+                            "description": "The resources limits for the init container",
+                            "default": {}
+                        },
+                        "requests": {
+                            "type": "object",
+                            "description": "The requested resources for the init container",
+                            "default": {}
+                        }
+                    }
+                }
+            }
+        },
+        "istio": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Enable support to istio-proxy sidecar containers adding a check in the start scripts.",
+                    "default": false
+                }
+            }
         }
-      }
     }
-  }
 }

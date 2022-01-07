@@ -19,6 +19,16 @@ data:
     . /opt/bitnami/scripts/liblog.sh
     . /opt/bitnami/scripts/libvalidations.sh
 
+    {{- if .Values.istio.enabled }}
+    # Istio-proxy container check
+    debug "Istio is enabled, checking if istio-proxy sidecar container is ready."
+    until curl -fsI -o /dev/null http://localhost:15021/healthz/ready; 
+    do
+        debug "Waiting for istio-proxy sidecar container to be ready..." && sleep 3
+    done
+    debug "istio-proxy sidecar container is ready."
+    {{- end }}
+
     get_port() {
         hostname="$1"
         type="$2"
