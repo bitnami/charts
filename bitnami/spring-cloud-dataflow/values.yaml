@@ -983,6 +983,8 @@ deployer:
   ##
   podSecurityContext:
     runAsUser: 1001
+  ## @param deployer.imagePullSecrets Streaming applications imagePullSecrets
+  imagePullSecrets : []
 
 ## @section RBAC parameters
 
