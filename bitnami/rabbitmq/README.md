@@ -60,7 +60,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | -------------------------------------------------------------- | --------------------- |
 | `image.registry`    | RabbitMQ image registry                                        | `docker.io`           |
 | `image.repository`  | RabbitMQ image repository                                      | `bitnami/rabbitmq`    |
-| `image.tag`         | RabbitMQ image tag (immutable tags are recommended)            | `3.9.10-debian-10-r4` |
+| `image.tag`         | RabbitMQ image tag (immutable tags are recommended)            | `3.9.12-debian-10-r0` |
 | `image.pullPolicy`  | RabbitMQ image pull policy                                     | `IfNotPresent`        |
 | `image.pullSecrets` | Specify docker-registry secret names as an array               | `[]`                  |
 | `image.debug`       | Set to true if you would like to see extra information on logs | `false`               |
@@ -255,25 +255,27 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Metrics Parameters
 
-| Name                                      | Description                                                                            | Value                 |
-| ----------------------------------------- | -------------------------------------------------------------------------------------- | --------------------- |
-| `metrics.enabled`                         | Enable exposing RabbitMQ metrics to be gathered by Prometheus                          | `false`               |
-| `metrics.plugins`                         | Plugins to enable Prometheus metrics in RabbitMQ                                       | `rabbitmq_prometheus` |
-| `metrics.podAnnotations`                  | Annotations for enabling prometheus to access the metrics endpoint                     | `{}`                  |
-| `metrics.serviceMonitor.enabled`          | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator           | `false`               |
-| `metrics.serviceMonitor.namespace`        | Specify the namespace in which the serviceMonitor resource will be created             | `""`                  |
-| `metrics.serviceMonitor.interval`         | Specify the interval at which metrics should be scraped                                | `30s`                 |
-| `metrics.serviceMonitor.scrapeTimeout`    | Specify the timeout after which the scrape is ended                                    | `""`                  |
-| `metrics.serviceMonitor.relabellings`     | Specify Metric Relabellings to add to the scrape endpoint                              | `[]`                  |
-| `metrics.serviceMonitor.honorLabels`      | honorLabels chooses the metric's labels on collisions with target labels               | `false`               |
-| `metrics.serviceMonitor.additionalLabels` | Used to pass Labels that are required by the installed Prometheus Operator             | `{}`                  |
-| `metrics.serviceMonitor.targetLabels`     | Used to keep given service's labels in target                                          | `{}`                  |
-| `metrics.serviceMonitor.podTargetLabels`  | Used to keep given pod's labels in target                                              | `{}`                  |
-| `metrics.serviceMonitor.path`             | Define the path used by ServiceMonitor to scrap metrics                                | `""`                  |
-| `metrics.prometheusRule.enabled`          | Set this to true to create prometheusRules for Prometheus operator                     | `false`               |
-| `metrics.prometheusRule.additionalLabels` | Additional labels that can be used so prometheusRules will be discovered by Prometheus | `{}`                  |
-| `metrics.prometheusRule.namespace`        | namespace where prometheusRules resource should be created                             | `""`                  |
-| `metrics.prometheusRule.rules`            | List of rules, used as template by Helm.                                               | `[]`                  |
+| Name                                       | Description                                                                                            | Value                 |
+| ------------------------------------------ | ------------------------------------------------------------------------------------------------------ | --------------------- |
+| `metrics.enabled`                          | Enable exposing RabbitMQ metrics to be gathered by Prometheus                                          | `false`               |
+| `metrics.plugins`                          | Plugins to enable Prometheus metrics in RabbitMQ                                                       | `rabbitmq_prometheus` |
+| `metrics.podAnnotations`                   | Annotations for enabling prometheus to access the metrics endpoint                                     | `{}`                  |
+| `metrics.serviceMonitor.enabled`           | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator                           | `false`               |
+| `metrics.serviceMonitor.namespace`         | Specify the namespace in which the serviceMonitor resource will be created                             | `""`                  |
+| `metrics.serviceMonitor.interval`          | Specify the interval at which metrics should be scraped                                                | `30s`                 |
+| `metrics.serviceMonitor.scrapeTimeout`     | Specify the timeout after which the scrape is ended                                                    | `""`                  |
+| `metrics.serviceMonitor.relabellings`      | MetricsRelabelConfigs to apply to samples before ingestion. DEPRECATED: Will be removed in next major. | `[]`                  |
+| `metrics.serviceMonitor.relabelings`       | RelabelConfigs to apply to samples before scraping.                                                    | `[]`                  |
+| `metrics.serviceMonitor.metricRelabelings` | MetricsRelabelConfigs to apply to samples before ingestion.                                            | `[]`                  |
+| `metrics.serviceMonitor.honorLabels`       | honorLabels chooses the metric's labels on collisions with target labels                               | `false`               |
+| `metrics.serviceMonitor.additionalLabels`  | Used to pass Labels that are required by the installed Prometheus Operator                             | `{}`                  |
+| `metrics.serviceMonitor.targetLabels`      | Used to keep given service's labels in target                                                          | `{}`                  |
+| `metrics.serviceMonitor.podTargetLabels`   | Used to keep given pod's labels in target                                                              | `{}`                  |
+| `metrics.serviceMonitor.path`              | Define the path used by ServiceMonitor to scrap metrics                                                | `""`                  |
+| `metrics.prometheusRule.enabled`           | Set this to true to create prometheusRules for Prometheus operator                                     | `false`               |
+| `metrics.prometheusRule.additionalLabels`  | Additional labels that can be used so prometheusRules will be discovered by Prometheus                 | `{}`                  |
+| `metrics.prometheusRule.namespace`         | namespace where prometheusRules resource should be created                                             | `""`                  |
+| `metrics.prometheusRule.rules`             | List of rules, used as template by Helm.                                                               | `[]`                  |
 
 
 ### Init Container Parameters
@@ -283,7 +285,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                     | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image repository                                                                   | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                          | `10-debian-10-r261`     |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                          | `10-debian-10-r301`     |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                  | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                     | `[]`                    |
 | `volumePermissions.resources.limits`   | Init container volume-permissions resource limits                                                                    | `{}`                    |
