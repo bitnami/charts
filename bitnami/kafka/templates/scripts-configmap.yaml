@@ -118,7 +118,7 @@ data:
     {{- if (include "kafka.tlsEncryption" .) }}
     mkdir -p /opt/bitnami/kafka/config/certs
     {{- if eq .Values.auth.tls.type "jks" }}
-    {{- if not (empty .Values.auth.tls.existingSecrets) }}
+    {{- if (empty .Values.auth.tls.existingSecrets) }}
     JKS_TRUSTSTORE={{ printf "/%s/%s" (ternary "certs-${ID}" "truststore" (empty $jksTruststoreSecret)) (default "kafka.truststore.jks" $jksTruststore) | quote }}
     JKS_KEYSTORE="/certs-${ID}/kafka-keystore.jks"
     {{- else }}
