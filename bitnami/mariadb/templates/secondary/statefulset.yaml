@@ -140,7 +140,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ template "mariadb.secretName" . }}
-                  key: mariadb-root-password
+                  key: {{ template "mariadb.secretRootPasswordKey" . }}
             {{- end }}
             - name: MARIADB_REPLICATION_USER
               value: {{ .Values.auth.replicationUser | quote }}
@@ -152,7 +152,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ template "mariadb.secretName" . }}
-                  key: mariadb-replication-password
+                  key: {{ template "mariadb.secretReplicationPasswordKey" . }}
             {{- end }}
             {{- if .Values.secondary.extraFlags }}
             - name: MARIADB_EXTRA_FLAGS
@@ -265,7 +265,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ template "mariadb.secretName" . }}
-                  key: mariadb-root-password
+                  key: {{ template "mariadb.secretRootPasswordKey" . }}
             {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -321,9 +321,9 @@ spec:
           secret:
             secretName: {{ template "mariadb.secretName" . }}
             items:
-              - key: mariadb-root-password
+              - key: {{ template "mariadb.secretRootPasswordKey" . }}
                 path: mariadb-root-password
-              - key: mariadb-replication-password
+              - key: {{ template "mariadb.secretReplicationPasswordKey" . }}
                 path: mariadb-replication-password
         {{- end }}
         {{- if .Values.secondary.extraVolumes }}

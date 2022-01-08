@@ -133,7 +133,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ template "mariadb.secretName" . }}
-                  key: mariadb-root-password
+                  key: {{ template "mariadb.secretRootPasswordKey" . }}
             {{- end }}
             {{- if not (empty .Values.auth.username) }}
             - name: MARIADB_USER
@@ -146,7 +146,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ template "mariadb.secretName" . }}
-                  key: mariadb-password
+                  key: {{ template "mariadb.secretPasswordKey" . }}
             {{- end }}
             {{- end }}
             - name: MARIADB_DATABASE
@@ -164,7 +164,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ template "mariadb.secretName" . }}
-                  key: mariadb-replication-password
+                  key: {{ template "mariadb.secretReplicationPasswordKey" . }}
             {{- end }}
             {{- end }}
             {{- if .Values.primary.extraFlags }}
@@ -282,7 +282,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ template "mariadb.secretName" . }}
-                  key: mariadb-root-password
+                  key: {{ template "mariadb.secretRootPasswordKey" . }}
             {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -343,12 +343,12 @@ spec:
           secret:
             secretName: {{ template "mariadb.secretName" . }}
             items:
-              - key: mariadb-root-password
+              - key: {{ template "mariadb.secretRootPasswordKey" . }}
                 path: mariadb-root-password
-              - key: mariadb-password
+              - key: {{ template "mariadb.secretPasswordKey" . }}
                 path: mariadb-password
               {{- if eq .Values.architecture "replication" }}
-              - key: mariadb-replication-password
+              - key: {{ template "mariadb.secretReplicationPasswordKey" . }}
                 path: mariadb-replication-password
               {{- end }}
         {{- end }}

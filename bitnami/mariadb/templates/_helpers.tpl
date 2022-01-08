@@ -117,6 +117,39 @@ Return the secret with MariaDB credentials
 {{- end -}}
 
 {{/*
+Return the MariaDB secret password key
+*/}}
+{{- define "mariadb.secretPasswordKey" -}}
+    {{- if .Values.auth.existingSecret -}}
+        {{- printf "%s" .Values.auth.existingSecretPasswordKey -}}
+    {{- else -}}
+        {{- printf "mariadb-password" -}}
+    {{- end -}}
+{{- end -}}
+
+{{/*
+Return the MariaDB secret root password key
+*/}}
+{{- define "mariadb.secretRootPasswordKey" -}}
+    {{- if .Values.auth.existingSecret -}}
+        {{- printf "%s" .Values.auth.existingSecretRootPasswordKey -}}
+    {{- else -}}
+        {{- printf "mariadb-root-password" -}}
+    {{- end -}}
+{{- end -}}
+
+{{/*
+Return the MariaDB secret replication password key
+*/}}
+{{- define "mariadb.secretReplicationPasswordKey" -}}
+    {{- if .Values.auth.existingSecret -}}
+        {{- printf "%s" .Values.auth.existingSecretReplicationPasswordKey -}}
+    {{- else -}}
+        {{- printf "mariadb-replication-password" -}}
+    {{- end -}}
+{{- end -}}
+
+{{/*
 Return true if a secret object should be created for MariaDB
 */}}
 {{- define "mariadb.createSecret" -}}
