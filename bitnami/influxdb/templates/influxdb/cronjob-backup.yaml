@@ -144,4 +144,49 @@ spec:
                   mountPath: /tmp/upload-azure.sh
                   subPath: upload-azure.sh
             {{- end }}
+            {{- if .Values.backup.uploadProviders.aws.enabled }}
+            - name: aws-cli
+              image: {{ include "awsCli.image" . }}
+              {{- if .Values.diagnosticMode.enabled }}
+              command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 16 }}
+              args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 16 }}
+              {{- else }}
+              command:
+              - "/tmp/upload-aws.sh"
+              {{- end }}
+              env:
+                - name: AWS_ACCESS_KEY_ID
+                  valueFrom:
+                    secretKeyRef:
+                      {{- if .Values.backup.uploadProviders.aws.existingSecret }}
+                      name: {{ .Values.backup.uploadProviders.aws.existingSecret | quote }}
+                      {{- else }}
+                      name: {{ include "common.names.fullname" . }}-backup-aws
+                      {{- end }}
+                      key: accessKeyID
+                - name: AWS_SECRET_ACCESS_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      {{- if .Values.backup.uploadProviders.aws.existingSecret }}
+                      name: {{ .Values.backup.uploadProviders.aws.existingSecret | quote }}
+                      {{- else }}
+                      name: {{ include "common.names.fullname" . }}-backup-aws
+                      {{- end }}
+                      key: secretAccessKey
+                - name: AWS_DEFAULT_REGION
+                  valueFrom:
+                    secretKeyRef:
+                      {{- if .Values.backup.uploadProviders.aws.existingSecret }}
+                      name: {{ .Values.backup.uploadProviders.aws.existingSecret | quote }}
+                      {{- else }}
+                      name: {{ include "common.names.fullname" . }}-backup-aws
+                      {{- end }}
+                      key: region
+              volumeMounts:
+                - name: {{ include "common.names.fullname" . }}-backups
+                  mountPath: {{ .Values.backup.directory | quote }}
+                - name: backup-scripts
+                  mountPath: /tmp/upload-aws.sh
+                  subPath: upload-aws.sh
+            {{- end }}
 {{- end }}

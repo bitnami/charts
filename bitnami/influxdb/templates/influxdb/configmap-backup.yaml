@@ -43,7 +43,7 @@ data:
             echo "backuping ${DATABASE} db to {{ .Values.backup.directory }}/${DATABASE}"
             mkdir -p {{ .Values.backup.directory }}/${DATABASE}
 
-            influxd backup -host "${host}" -port {{ .Values.influxdb.service.port }} -portable -db ${DATABASE} {{ .Values.backup.directory }}/"${DATABASE}/${DATE}"
+            influxd backup -host "${host}:{{ .Values.influxdb.service.rpcPort }}" -portable -db ${DATABASE} {{ .Values.backup.directory }}/"${DATABASE}/${DATE}"
         done
 
         echo "deleting old backups"
@@ -75,4 +75,10 @@ data:
     set -e
 
     az storage blob sync --source {{ .Values.backup.directory }} --container {{ .Values.backup.uploadProviders.azure.containerName }}
+  upload-aws.sh: |-
+    #!/bin/sh
+
+    set -e
+
+    aws s3 sync {{ .Values.backup.directory }} {{ .Values.backup.uploadProviders.aws.bucketName }}
 {{ end }}
