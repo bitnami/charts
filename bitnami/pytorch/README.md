@@ -2,7 +2,7 @@
 
 # PyTorch
 
-[PyTorch](https://pytorch.org/) is a deep learning platform that accelerates the transition from research prototyping to production deployment. It is built for full integration into Python that enables you to use it with its libraries and main packages.
+[PyTorch](https://pytorch.org/) is a deep learning platform that accelerates the transition from research prototyping to production deployment. 
 
 ## TL;DR
 
@@ -14,6 +14,8 @@ $ helm install my-release bitnami/pytorch
 ## Introduction
 
 This chart bootstraps a [PyTorch](https://github.com/bitnami/bitnami-docker-pytorch) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+
+Python is built for full integration into Python that enables you to use it with its libraries and main packages.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 

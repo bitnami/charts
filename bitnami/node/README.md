@@ -1,4 +1,4 @@
-[//]: # app-name: Node.js
+[//]: # app-name: Node
 
 # Node
 

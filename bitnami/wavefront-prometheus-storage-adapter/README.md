@@ -1,8 +1,9 @@
 [//]: # app-name: Wavefront Prometheus Adapter
 
-# wavefront-prometheus-storage-adapter
+# Wavefront Prometheus Adapter
 
-[Wavefront Storage Adapter for Prometheus](https://github.com/wavefrontHQ/prometheus-storage-adapter) is a Prometheus integration to transfer metrics from Prometheus to Wavefront. It works as a "fork", such that data written to Prometheus is also written to Wavefront. It supports metrics path conversion and direct ingestion of metrics.
+[Wavefront Storage Adapter for Prometheus](https://github.com/wavefrontHQ/prometheus-storage-adapter) is a Prometheus integration to transfer metrics from Prometheus to Wavefront.
+
 ## TL;DR
 
 ```console
@@ -11,7 +12,10 @@ $ helm install my-release bitnami/wavefront-prometheus-storage-adapter
 ```
 
 ## Introduction
+
 Bitnami charts for Helm are carefully engineered, actively maintained and are the quickest and easiest way to deploy containers on a Kubernetes cluster that are ready to handle production workloads.
+
+Wavefront Prometheus Adapter  works as a "fork", such that data written to Prometheus is also written to Wavefront. It supports metrics path conversion and direct ingestion of metrics.
 
 This chart bootstraps a [Wavefront Storage Adapter for Prometheus](https://github.com/wavefrontHQ/prometheus-storage-adapter) Deployment in a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 

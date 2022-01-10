@@ -1,4 +1,4 @@
-[//]: # app-name: Redis(TM) Cluster
+[//]: # app-name: Redis&trade; Cluster
 
 
 # Redis&trade; Cluster Chart packaged by Bitnami
