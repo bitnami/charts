@@ -887,7 +887,7 @@ metrics:
     ## e.g.:
     ## clusterIP: None
     ##
-    ClusterIP: ""
+    clusterIP: ""
     loadBalancerIP: ""
     annotations: {}
     labels: {}
