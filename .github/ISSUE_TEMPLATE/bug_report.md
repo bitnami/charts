@@ -1,12 +1,3 @@
----
-name: Bug report
-about: Create a report to help us improve
-title: ''
-labels: ''
-assignees: ''
-
----
-
 <!--
  Before you open the bug report please review the following troubleshooting guide:
 
@@ -29,20 +20,6 @@ Steps to reproduce the behavior:
 
 **Expected behavior**
 A clear and concise description of what you expected to happen.
-
-**Version of Helm and Kubernetes**:
-
-- Output of `helm version`:
-
-```
-(paste your output here)
-```
-
-- Output of `kubectl version`:
-
-```
-(paste your output here)
-```
 
 **Additional context**
 Add any other context about the problem here.
