@@ -883,6 +883,11 @@ metrics:
   ##
   service:
     type: ClusterIP
+    ## @param metrics.service.clusterIP Service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
     loadBalancerIP: ""
     annotations: {}
     labels: {}
