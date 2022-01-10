@@ -74,22 +74,22 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common parameters
 
-| Name                     | Description                                                                             | Value           |
-| ------------------------ | --------------------------------------------------------------------------------------- | --------------- |
-| `kubeVersion`            | Override Kubernetes version                                                             | `""`            |
-| `nameOverride`           | String to partially override common.names.fullname                                      | `""`            |
-| `fullnameOverride`       | String to fully override common.names.fullname                                          | `""`            |
-| `commonLabels`           | Labels to add to all deployed objects                                                   | `{}`            |
-| `commonAnnotations`      | Annotations to add to all deployed objects                                              | `{}`            |
-| `clusterDomain`          | Kubernetes cluster domain name                                                          | `cluster.local` |
-| `extraDeploy`            | Array of extra objects to deploy with the release                                       | `[]`            |
-| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
-| `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`     |
-| `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]`  |
-| `useExternalDNS.enabled` | Enable various syntax that would enable external-dns to work.  Note this requires a working installation of [`external-dns`] to be usable. | `false` |
-| `useExternalDNS.suffix`  | The DNS suffix utilized when [`external-dns`] is enabled.  Note that we prepend the suffix with the full name of the release.              | `""`    |
-| `useExternalDNS.annotationKey`  | The annotation key utilized when [`external-dns`] is enabled.              | `"external-dns.alpha.kubernetes.io/"`    |
-| `useExternalDNS.additionalAnnotations`  | Extra annotations to be utilized when [`external-dns`] is enabled.              | `{}`    |
+| Name                                   | Description                                                                                                                                | Value                               |
+| -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------- |
+| `useExternalDNS.enabled`               | Enable various syntax that would enable external-dns to work.  Note this requires a working installation of [`external-dns`] to be usable. | `false`                             |
+| `useExternalDNS.additionalAnnotations` | Extra annotations to be utilized when [`external-dns`] is enabled.                                                                         | `{}`                                |
+| `useExternalDNS.annotationKey`         | The annotation key utilized when [`external-dns`] is enabled.                                                                              | `external-dns.alpha.kubernetes.io/` |
+| `useExternalDNS.suffix`                | The DNS suffix utilized when [`external-dns`] is enabled.  Note that we prepend the suffix with the full name of the release.              | `""`                                |
+| `kubeVersion`                          | Override Kubernetes version                                                                                                                | `""`                                |
+| `nameOverride`                         | String to partially override common.names.fullname                                                                                         | `""`                                |
+| `fullnameOverride`                     | String to fully override common.names.fullname                                                                                             | `""`                                |
+| `commonLabels`                         | Labels to add to all deployed objects                                                                                                      | `{}`                                |
+| `commonAnnotations`                    | Annotations to add to all deployed objects                                                                                                 | `{}`                                |
+| `clusterDomain`                        | Kubernetes cluster domain name                                                                                                             | `cluster.local`                     |
+| `extraDeploy`                          | Array of extra objects to deploy with the release                                                                                          | `[]`                                |
+| `diagnosticMode.enabled`               | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                                                    | `false`                             |
+| `diagnosticMode.command`               | Command to override all containers in the deployment                                                                                       | `["sleep"]`                         |
+| `diagnosticMode.args`                  | Args to override all containers in the deployment                                                                                          | `["infinity"]`                      |
 
 
 ### Redis&trade; Image parameters
