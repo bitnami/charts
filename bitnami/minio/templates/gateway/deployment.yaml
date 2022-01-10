@@ -70,7 +70,7 @@ spec:
       securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       {{- if .Values.gateway.priorityClassName }}
-      priorityClassName: {{ .Values.gateway.priorityClassName | quote}}
+      priorityClassName: {{ .Values.gateway.priorityClassName | quote }}
       {{- end }}
       {{- if .Values.initContainers }}
       initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
@@ -96,7 +96,7 @@ spec:
             - {{ default "/opt/bitnami/minio/certs" .Values.tls.mountPath }}
             - gateway
             - {{ .Values.gateway.type }}
-            - --console-address 
+            - --console-address
             - :{{ .Values.containerPorts.console }}
             {{- if eq .Values.gateway.type "gcs" }}
             - {{ .Values.gateway.auth.gcs.projectID }}
@@ -113,7 +113,7 @@ spec:
             - name: AZURE_STORAGE_ACCOUNT
               valueFrom:
                 secretKeyRef:
-                {{- if not ( or (empty .Values.gateway.auth.azure.storageAccountNameExistingSecret) (empty .Values.gateway.auth.azure.storageAccountNameExistingSecretKey))}}
+                {{- if not ( or (empty .Values.gateway.auth.azure.storageAccountNameExistingSecret) (empty .Values.gateway.auth.azure.storageAccountNameExistingSecretKey)) }}
                   name: {{ .Values.gateway.auth.azure.storageAccountNameExistingSecret }}
                   key: {{ .Values.gateway.auth.azure.storageAccountNameExistingSecretKey }}
                 {{- else }}
@@ -123,7 +123,7 @@ spec:
             - name: AZURE_STORAGE_KEY
               valueFrom:
                 secretKeyRef:
-                {{- if not ( or (empty .Values.gateway.auth.azure.storageAccountNameExistingSecret) (empty .Values.gateway.auth.azure.storageAccountNameExistingSecretKey))}}
+                {{- if not ( or (empty .Values.gateway.auth.azure.storageAccountNameExistingSecret) (empty .Values.gateway.auth.azure.storageAccountNameExistingSecretKey)) }}
                   name: {{ .Values.gateway.auth.azure.storageAccountKeyExistingSecret }}
                   key: {{ .Values.gateway.auth.azure.storageAccountKeyExistingSecretKey }}
                 {{- else }}

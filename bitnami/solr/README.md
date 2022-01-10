@@ -77,7 +77,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.tag`                    | Solr image tag (immutable tags are recommended)               | `8.11.0-debian-10-r0` |
 | `image.pullPolicy`             | image pull policy                                             | `IfNotPresent`        |
 | `image.pullSecrets`            | Specify docker-registry secret names as an array              | `[]`                  |
-| `coreName`                     | Solr core name to be created                                  | `my-core`             |
+| `coreName`                     | Solr core name to be created (deprecated)                     | `""`                  |
+| `coreNames`                    | Solr core names to be created                                 | `[my-core]`           |
 | `cloudEnabled`                 | Enable Solr cloud mode                                        | `true`                |
 | `cloudBootstrap`               | Enable cloud bootstrap. It will be performed from the node 0. | `true`                |
 | `collection`                   | Solr collection name                                          | `my-collection`       |
@@ -389,3 +390,19 @@ See [PR#7114](https://github.com/bitnami/charts/pull/7114) for more info about t
 ### To 1.0.0
 
 This major updates the Zookeeper subchart to it newest major, 7.0.0, which renames all TLS-related settings. For more information on this subchart's major, please refer to [zookeeper upgrade notes](https://github.com/bitnami/charts/tree/master/bitnami/zookeeper#to-700).
+
+## License
+
+Copyright &copy; 2022 Bitnami
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

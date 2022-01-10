@@ -106,7 +106,7 @@ spec:
           {{- if .Values.maxmindLicenseKey }}
             - --maxmind-license-key={{ .Values.maxmindLicenseKey }}
           {{- end }}
-          {{- if and (.Values.reportNodeInternalIp) (.Values.hostNetwork)}}
+          {{- if and (.Values.reportNodeInternalIp) (.Values.hostNetwork) }}
             - --report-node-internal-ip-address={{ .Values.reportNodeInternalIp }}
           {{- end }}
           {{- if .Values.watchIngressWithoutClass }}

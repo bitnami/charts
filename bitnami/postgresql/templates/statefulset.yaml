@@ -213,7 +213,7 @@ spec:
                   name: {{ template "postgresql.secretName" . }}
                   key: postgresql-replication-password
             {{- end }}
-            {{- if not (eq .Values.replication.synchronousCommit "off")}}
+            {{- if not (eq .Values.replication.synchronousCommit "off") }}
             - name: POSTGRES_SYNCHRONOUS_COMMIT_MODE
               value: {{ .Values.replication.synchronousCommit | quote }}
             - name: POSTGRES_NUM_SYNCHRONOUS_REPLICAS
@@ -280,14 +280,14 @@ spec:
                 secretKeyRef:
                   name: {{ template "postgresql.secretName" . }}
                   key: postgresql-ldap-password
-            {{- end}}
+            {{- end }}
             - name: POSTGRESQL_LDAP_SEARCH_ATTR
               value: {{ .Values.ldap.search_attr }}
             - name: POSTGRESQL_LDAP_SEARCH_FILTER
               value: {{ .Values.ldap.search_filter }}
             - name: POSTGRESQL_LDAP_URL
               value: {{ .Values.ldap.url }}
-            {{- end}}
+            {{- end }}
             - name: POSTGRESQL_ENABLE_TLS
               value: {{ ternary "yes" "no" .Values.tls.enabled | quote }}
             {{- if .Values.tls.enabled }}
@@ -551,7 +551,7 @@ spec:
           {{- end }}
 {{- end }}
       volumes:
-        {{- if or (.Files.Glob "files/postgresql.conf") (.Files.Glob "files/pg_hba.conf") .Values.postgresqlConfiguration .Values.pgHbaConfiguration .Values.configurationConfigMap}}
+        {{- if or (.Files.Glob "files/postgresql.conf") (.Files.Glob "files/pg_hba.conf") .Values.postgresqlConfiguration .Values.pgHbaConfiguration .Values.configurationConfigMap }}
         - name: postgresql-config
           configMap:
             name: {{ template "postgresql.configurationCM" . }}

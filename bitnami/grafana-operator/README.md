@@ -10,6 +10,7 @@ $ helm install my-release bitnami/grafana-operator
 ```
 
 ## Introduction
+
 Bitnami charts for Helm are carefully engineered, actively maintained and are the quickest and easiest way to deploy containers on a Kubernetes cluster that are ready to handle production workloads.
 
 This chart bootstraps a [Grafana Operator](https://github.com/integr8ly/grafana-operator/blob/master/documentation/deploy_grafana.md) Deployment [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
@@ -48,9 +49,9 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The Bitnami catalog offers both the `bitnami/grafana` and `bitnami/grafana-operator` charts. Each solution covers different needs and use cases.
 
-* The `bitnami/grafana` chart deploys a single Grafana installation (with Grafana Image Renderer) using a Kubernetes Deployment object (together with Services, PVCs, ConfigMaps, etc.). Its lifecycle is managed using Helm and, at the Grafana container level, the following operations are automated: persistence management, configuration based on environment variables and plugin initialization. The chart also allows deploying dashboards and data sources using ConfigMaps. The Deployments do not require any ServiceAccounts with special RBAC privileges so this solution would fit better in more restricted Kubernetes installations.
+- The `bitnami/grafana` chart deploys a single Grafana installation (with Grafana Image Renderer) using a Kubernetes Deployment object (together with Services, PVCs, ConfigMaps, etc.). Its lifecycle is managed using Helm and, at the Grafana container level, the following operations are automated: persistence management, configuration based on environment variables and plugin initialization. The chart also allows deploying dashboards and data sources using ConfigMaps. The Deployments do not require any ServiceAccounts with special RBAC privileges so this solution would fit better in more restricted Kubernetes installations.
 
-* The `bitnami/grafana-operator` chart deploys a Grafana Operator installation using a Kubernetes Deployment. The operator will extend the Kubernetes API with the following objects: `Grafana`, `GrafanaDashboard` and `GrafanaDataSource`. From that moment, the user will be able to deploy objects of these kinds and the previously deployed Operator will take care of deploying all the required Deployments, ConfigMaps and Services for running a Grafana instance. Its lifecycle is managed using *kubectl* on the Grafana, GrafanaDashboard and GrafanaDataSource objects.
+- The `bitnami/grafana-operator` chart deploys a Grafana Operator installation using a Kubernetes Deployment. The operator will extend the Kubernetes API with the following objects: `Grafana`, `GrafanaDashboard` and `GrafanaDataSource`. From that moment, the user will be able to deploy objects of these kinds and the previously deployed Operator will take care of deploying all the required Deployments, ConfigMaps and Services for running a Grafana instance. Its lifecycle is managed using _kubectl_ on the Grafana, GrafanaDashboard and GrafanaDataSource objects.
 
 > Note: As the operator automatically deploys Grafana installations, the Grafana Operator pods will require a ServiceAccount with privileges to create and destroy multiple Kubernetes objects. This may be problematic for Kubernetes clusters with strict role-based access policies.
 
@@ -65,7 +66,6 @@ For more information, refer to the [documentation on the differences between the
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 
-
 ### Common parameters
 
 | Name                | Description                                                                                               | Value |
@@ -75,7 +75,6 @@ For more information, refer to the [documentation on the differences between the
 | `extraDeploy`       | Array of extra objects to deploy with the release                                                         | `[]`  |
 | `commonLabels`      | Common Labels which are applied to every resource deployed                                                | `{}`  |
 | `commonAnnotations` | Common Annotations which are applied to every ressource deployed                                          | `{}`  |
-
 
 ### Grafana Operator parameters
 
@@ -99,7 +98,7 @@ For more information, refer to the [documentation on the differences between the
 | `operator.updateStrategy.type`                               | Set up update strategy for Grafana Operator installation.                                                                                 | `Recreate`                 |
 | `operator.image.registry`                                    | Grafana Operator image registry                                                                                                           | `docker.io`                |
 | `operator.image.repository`                                  | Grafana Operator image name                                                                                                               | `bitnami/grafana-operator` |
-| `operator.image.tag`                                         | Grafana Operator image tag                                                                                                                | `4.1.0-debian-10-r0`       |
+| `operator.image.tag`                                         | Grafana Operator image tag                                                                                                                | `4.1.1-debian-10-r23`      |
 | `operator.image.pullPolicy`                                  | Grafana Operator image pull policy                                                                                                        | `IfNotPresent`             |
 | `operator.image.pullSecrets`                                 | Grafana Operator image pull secrets                                                                                                       | `[]`                       |
 | `operator.leaderElect`                                       | Enables or disables the operator leader Election.                                                                                         | `true`                     |
@@ -170,81 +169,79 @@ For more information, refer to the [documentation on the differences between the
 | `operator.startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                                                        | `3`                        |
 | `operator.startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                                                        | `1`                        |
 
-
 ### Grafana parameters
 
-| Name                                                        | Description                                                                                   | Value                 |
-| ----------------------------------------------------------- | --------------------------------------------------------------------------------------------- | --------------------- |
-| `grafana.enabled`                                           | Enabled the deployment of the Grafana CRD object into the cluster                             | `true`                |
-| `grafana.image.registry`                                    | Grafana image registry                                                                        | `docker.io`           |
-| `grafana.image.repository`                                  | Grafana image name                                                                            | `bitnami/grafana`     |
-| `grafana.image.tag`                                         | Grafana image tag                                                                             | `8.3.3-debian-10-r13` |
-| `grafana.image.pullSecrets`                                 | Grafana image pull secrets                                                                    | `[]`                  |
-| `grafana.serviceAccount`                                    | Additional service account configuration                                                      | `{}`                  |
-| `grafana.podSecurityContext.enabled`                        | Enable pods security context                                                                  | `true`                |
-| `grafana.podSecurityContext.runAsUser`                      | User ID for the pods                                                                          | `1001`                |
-| `grafana.podSecurityContext.runAsGroup`                     | User ID for the pods                                                                          | `0`                   |
-| `grafana.podSecurityContext.runAsNonRoot`                   | Grafana Operator must run as nonRoot                                                          | `true`                |
-| `grafana.podSecurityContext.fsGroup`                        | Group ID for the pods                                                                         | `1001`                |
-| `grafana.podSecurityContext.supplementalGroups`             | Which group IDs containers add                                                                | `[]`                  |
-| `grafana.containerSecurityContext.enabled`                  | Enable containers security context                                                            | `true`                |
-| `grafana.containerSecurityContext.runAsUser`                | User ID for the containers                                                                    | `1001`                |
-| `grafana.containerSecurityContext.runAsGroup`               | Group ID for the containers                                                                   | `0`                   |
-| `grafana.containerSecurityContext.privileged`               | Decide if the container runs privileged.                                                      | `false`               |
-| `grafana.containerSecurityContext.runAsNonRoot`             | Force the container to run as non-root                                                        | `true`                |
-| `grafana.containerSecurityContext.allowPrivilegeEscalation` | Don't allow privilege escalation for the containers                                           | `false`               |
-| `grafana.resources.limits`                                  | The resources limits for the container                                                        | `{}`                  |
-| `grafana.resources.requests`                                | The requested resources for the container                                                     | `{}`                  |
-| `grafana.replicaCount`                                      | Specify the amount of replicas running                                                        | `1`                   |
-| `grafana.podAffinityPreset`                                 | Pod affinity preset                                                                           | `""`                  |
-| `grafana.podAntiAffinityPreset`                             | Pod anti-affinity preset                                                                      | `soft`                |
-| `grafana.nodeAffinityPreset.type`                           | Set nodeAffinity preset type                                                                  | `""`                  |
-| `grafana.nodeAffinityPreset.key`                            | Set nodeAffinity preset key                                                                   | `""`                  |
-| `grafana.nodeAffinityPreset.values`                         | Set nodeAffinity preset values                                                                | `[]`                  |
-| `grafana.affinity`                                          | Affinity for controller pod assignment                                                        | `{}`                  |
-| `grafana.nodeSelector`                                      | Node labels for controller pod assignment                                                     | `{}`                  |
-| `grafana.tolerations`                                       | Tolerations for controller pod assignment                                                     | `[]`                  |
-| `grafana.envFrom`                                           | Extra environment variable to pass to the running container                                   | `[]`                  |
-| `grafana.client.timeout`                                    | The timeout in seconds for the Grafana Rest API on that instance                              | `5`                   |
-| `grafana.client.preferService`                              | If the API should be used via Ingress or via the internal service                             | `true`                |
-| `grafana.labels`                                            | Add additional labels to the grafana deployment, service and ingress resources                | `{}`                  |
-| `grafana.ingress.enabled`                                   | If an ingress or OpenShift Route should be created                                            | `false`               |
-| `grafana.ingress.ingressClassName`                          | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                 | `""`                  |
-| `grafana.ingress.hostname`                                  | The hostname under which the grafana instance should be reachable                             | `grafana.local`       |
-| `grafana.ingress.path`                                      | The path for the ingress instance to forward to the grafana app                               | `/`                   |
-| `grafana.ingress.pathType`                                  | The pathType for the ingress instance to forward to the grafana app                           | `ImplementationSpecific`                   |
-| `grafana.ingress.labels`                                    | Additional Labels for the ingress resource                                                    | `{}`                  |
-| `grafana.ingress.annotations`                               | Additional Annotations for the ingress resource                                               | `{}`                  |
-| `grafana.ingress.tls`                                       | This enables tls support for the ingress resource                                             | `false`               |
-| `grafana.ingress.tlsSecret`                                 | The name for the secret to use for the tls termination                                        | `grafana.local-tls`   |
-| `grafana.persistence.enabled`                               | Enable persistent storage for the grafana deployment                                          | `false`               |
-| `grafana.persistence.storageClass`                          | Define the storageClass for the persistent storage if not defined default is used             | `""`                  |
-| `grafana.persistence.accessModes`                           | Define the accessModes for the persistent storage                                             | `ReadWriteOnce`       |
-| `grafana.persistence.annotations`                           | Add annotations to the persistent volume                                                      | `{}`                  |
-| `grafana.persistence.size`                                  | Define the size of the PersistentVolumeClaim to request for                                   | `10Gi`                |
-| `grafana.config`                                            | grafana.ini configuration for the instance for this to configure please look at upstream docs | `{}`                  |
-| `grafana.configMaps`                                        | Extra configMaps to mount into the grafana pod                                                | `[]`                  |
-| `grafana.secrets`                                           | Extra secrets to mount into the grafana pod                                                   | `[]`                  |
-| `grafana.jsonnetLibrarySelector`                            | Configuring the read for jsonnetLibraries to pull in.                                         | `{}`                  |
-| `grafana.dashboardLabelSelectors`                           | This selects dashboards on the label.                                                         | `{}`                  |
-| `grafana.dashboardNamespaceSelector`                        | Watch for dashboards only in the Namespaces that have the specified namespace label           | `[]`                  |
-| `grafana.livenessProbe.enabled`                             | Enable livenessProbe                                                                          | `true`                |
-| `grafana.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                       | `120`                 |
-| `grafana.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                              | `10`                  |
-| `grafana.livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                             | `5`                   |
-| `grafana.livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                           | `6`                   |
-| `grafana.livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                           | `1`                   |
-| `grafana.readinessProbe.enabled`                            | Enable readinessProbe                                                                         | `true`                |
-| `grafana.readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                      | `30`                  |
-| `grafana.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                             | `10`                  |
-| `grafana.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                            | `5`                   |
-| `grafana.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                          | `6`                   |
-| `grafana.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                          | `1`                   |
-| `grafana.updateStrategy`                                    | Set up update strategy for Grafana installation.                                              | `{}`                  |
-| `grafana.extraVolumes`                                      | Optionally specify extra list of additional volumes for the grafana pod(s)                    | `[]`                  |
-| `grafana.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the grafana container(s)         | `[]`                  |
-| `grafana.sidecars`                                          | Add additional sidecar containers to the grafana pod(s)                                       | `[]`                  |
-
+| Name                                                        | Description                                                                                   | Value                    |
+| ----------------------------------------------------------- | --------------------------------------------------------------------------------------------- | ------------------------ |
+| `grafana.enabled`                                           | Enabled the deployment of the Grafana CRD object into the cluster                             | `true`                   |
+| `grafana.image.registry`                                    | Grafana image registry                                                                        | `docker.io`              |
+| `grafana.image.repository`                                  | Grafana image name                                                                            | `bitnami/grafana`        |
+| `grafana.image.tag`                                         | Grafana image tag                                                                             | `8.3.3-debian-10-r22`    |
+| `grafana.image.pullSecrets`                                 | Grafana image pull secrets                                                                    | `[]`                     |
+| `grafana.serviceAccount`                                    | Additional service account configuration                                                      | `{}`                     |
+| `grafana.podSecurityContext.enabled`                        | Enable pods security context                                                                  | `true`                   |
+| `grafana.podSecurityContext.runAsUser`                      | User ID for the pods                                                                          | `1001`                   |
+| `grafana.podSecurityContext.runAsGroup`                     | User ID for the pods                                                                          | `0`                      |
+| `grafana.podSecurityContext.runAsNonRoot`                   | Grafana Operator must run as nonRoot                                                          | `true`                   |
+| `grafana.podSecurityContext.fsGroup`                        | Group ID for the pods                                                                         | `1001`                   |
+| `grafana.podSecurityContext.supplementalGroups`             | Which group IDs containers add                                                                | `[]`                     |
+| `grafana.containerSecurityContext.enabled`                  | Enable containers security context                                                            | `true`                   |
+| `grafana.containerSecurityContext.runAsUser`                | User ID for the containers                                                                    | `1001`                   |
+| `grafana.containerSecurityContext.runAsGroup`               | Group ID for the containers                                                                   | `0`                      |
+| `grafana.containerSecurityContext.privileged`               | Decide if the container runs privileged.                                                      | `false`                  |
+| `grafana.containerSecurityContext.runAsNonRoot`             | Force the container to run as non-root                                                        | `true`                   |
+| `grafana.containerSecurityContext.allowPrivilegeEscalation` | Don't allow privilege escalation for the containers                                           | `false`                  |
+| `grafana.resources.limits`                                  | The resources limits for the container                                                        | `{}`                     |
+| `grafana.resources.requests`                                | The requested resources for the container                                                     | `{}`                     |
+| `grafana.replicaCount`                                      | Specify the amount of replicas running                                                        | `1`                      |
+| `grafana.podAffinityPreset`                                 | Pod affinity preset                                                                           | `""`                     |
+| `grafana.podAntiAffinityPreset`                             | Pod anti-affinity preset                                                                      | `soft`                   |
+| `grafana.nodeAffinityPreset.type`                           | Set nodeAffinity preset type                                                                  | `""`                     |
+| `grafana.nodeAffinityPreset.key`                            | Set nodeAffinity preset key                                                                   | `""`                     |
+| `grafana.nodeAffinityPreset.values`                         | Set nodeAffinity preset values                                                                | `[]`                     |
+| `grafana.affinity`                                          | Affinity for controller pod assignment                                                        | `{}`                     |
+| `grafana.nodeSelector`                                      | Node labels for controller pod assignment                                                     | `{}`                     |
+| `grafana.tolerations`                                       | Tolerations for controller pod assignment                                                     | `[]`                     |
+| `grafana.envFrom`                                           | Extra environment variable to pass to the running container                                   | `[]`                     |
+| `grafana.client.timeout`                                    | The timeout in seconds for the Grafana Rest API on that instance                              | `5`                      |
+| `grafana.client.preferService`                              | If the API should be used via Ingress or via the internal service                             | `true`                   |
+| `grafana.labels`                                            | Add additional labels to the grafana deployment, service and ingress resources                | `{}`                     |
+| `grafana.ingress.enabled`                                   | If an ingress or OpenShift Route should be created                                            | `false`                  |
+| `grafana.ingress.ingressClassName`                          | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                 | `""`                     |
+| `grafana.ingress.hostname`                                  | The hostname under which the grafana instance should be reachable                             | `grafana.local`          |
+| `grafana.ingress.path`                                      | The path for the ingress instance to forward to the grafana app                               | `/`                      |
+| `grafana.ingress.pathType`                                  | The pathType for the ingress instance to forward to the grafana app                           | `ImplementationSpecific` |
+| `grafana.ingress.labels`                                    | Additional Labels for the ingress resource                                                    | `{}`                     |
+| `grafana.ingress.annotations`                               | Additional Annotations for the ingress resource                                               | `{}`                     |
+| `grafana.ingress.tls`                                       | This enables tls support for the ingress resource                                             | `false`                  |
+| `grafana.ingress.tlsSecret`                                 | The name for the secret to use for the tls termination                                        | `grafana.local-tls`      |
+| `grafana.persistence.enabled`                               | Enable persistent storage for the grafana deployment                                          | `false`                  |
+| `grafana.persistence.storageClass`                          | Define the storageClass for the persistent storage if not defined default is used             | `""`                     |
+| `grafana.persistence.accessModes`                           | Define the accessModes for the persistent storage                                             | `[ReadWriteOnce]`        |
+| `grafana.persistence.annotations`                           | Add annotations to the persistent volume                                                      | `{}`                     |
+| `grafana.persistence.size`                                  | Define the size of the PersistentVolumeClaim to request for                                   | `10Gi`                   |
+| `grafana.config`                                            | grafana.ini configuration for the instance for this to configure please look at upstream docs | `{}`                     |
+| `grafana.configMaps`                                        | Extra configMaps to mount into the grafana pod                                                | `[]`                     |
+| `grafana.secrets`                                           | Extra secrets to mount into the grafana pod                                                   | `[]`                     |
+| `grafana.jsonnetLibrarySelector`                            | Configuring the read for jsonnetLibraries to pull in.                                         | `{}`                     |
+| `grafana.dashboardLabelSelectors`                           | This selects dashboards on the label.                                                         | `{}`                     |
+| `grafana.dashboardNamespaceSelector`                        | Watch for dashboards only in the Namespaces that have the specified namespace label           | `[]`                     |
+| `grafana.livenessProbe.enabled`                             | Enable livenessProbe                                                                          | `true`                   |
+| `grafana.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                       | `120`                    |
+| `grafana.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                              | `10`                     |
+| `grafana.livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                             | `5`                      |
+| `grafana.livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                           | `6`                      |
+| `grafana.livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                           | `1`                      |
+| `grafana.readinessProbe.enabled`                            | Enable readinessProbe                                                                         | `true`                   |
+| `grafana.readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                      | `30`                     |
+| `grafana.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                             | `10`                     |
+| `grafana.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                            | `5`                      |
+| `grafana.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                          | `6`                      |
+| `grafana.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                          | `1`                      |
+| `grafana.updateStrategy`                                    | Set up update strategy for Grafana installation.                                              | `{}`                     |
+| `grafana.extraVolumes`                                      | Optionally specify extra list of additional volumes for the grafana pod(s)                    | `[]`                     |
+| `grafana.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the grafana container(s)         | `[]`                     |
+| `grafana.sidecars`                                          | Add additional sidecar containers to the grafana pod(s)                                       | `[]`                     |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -278,7 +275,7 @@ For more details regarding what is possible with those CRDs please have a look a
 
 ### Deploy extra Grafana resources or objects
 
-There are cases where you may want to deploy extra objects, such as custom *Grafana*, *GrafanaDashboard* or *GrafanaDataSource* objects. For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter.
+There are cases where you may want to deploy extra objects, such as custom _Grafana_, _GrafanaDashboard_ or _GrafanaDataSource_ objects. For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter.
 
 Refer to the documentation on deploying extra Grafana resources for an [example of deploying a custom Grafana definition](https://docs.bitnami.com/kubernetes/infrastructure/grafana-operator/configuration/deploy-extra-resources/) or to the [tutorial on managing multiple Grafana instances and dashboards on Kubernetes with the Grafana Operator](https://docs.bitnami.com/tutorials/manage-multiple-grafana-operator).
 
@@ -291,8 +288,8 @@ Find more information about how to deal with common errors related to Bitnami’
 ```bash
 $ helm upgrade my-release bitnami/grafana-operator
 ```
-### To 2.0.0
 
+### To 2.0.0
 
 In this version the CRDs get updated from v1beta to v1 stable API. It also updates the operator image to the new major `v4.x.y` release.
 
@@ -319,13 +316,15 @@ image:
   repository: bitnami/grafana
   tag: 7.5.10
 ```
+
 VS
+
 ```yaml
 image:
   registry: docker.io
   repository: bitnami/grafana
   tag: 7.5.10
-...
+---
 grafanaPluginInit:
   image:
     registry: docker.io
@@ -334,3 +333,19 @@ grafanaPluginInit:
 ```
 
 See [PR#7114](https://github.com/bitnami/charts/pull/7114) for more info about the implemented changes
+
+## License
+
+Copyright &copy; 2022 Bitnami
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

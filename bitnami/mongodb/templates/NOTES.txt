@@ -171,7 +171,7 @@ To connect to your database from outside the cluster execute the following comma
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
         Watch the status with: 'kubectl get svc --namespace {{ template "mongodb.namespace" . }} -w {{ template "mongodb.fullname" . }}'
 
-    export SERVICE_IP=$(kubectl get svc --namespace {{ template "mongodb.namespace" . }} {{ template "mongodb.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+    export SERVICE_IP=$(kubectl get svc --namespace {{ template "mongodb.namespace" . }} {{ template "mongodb.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
     mongo --host $SERVICE_IP --port {{ $portNumber }} {{- if .Values.auth.enabled }} --authenticationDatabase admin -p $MONGODB_ROOT_PASSWORD{{- end }}
 
 {{- else if contains "ClusterIP" .Values.service.type }}

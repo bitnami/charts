@@ -62,7 +62,7 @@ spec:
       {{- if .Values.contour.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.contour.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
-      {{- if .Values.contour.tolerations}}
+      {{- if .Values.contour.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.contour.tolerations "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.contour.initContainers }}

@@ -64,9 +64,13 @@ image:
   ##   - myRegistryKeySecretName
   ##
   pullSecrets: []
-## @param coreName Solr core name to be created
+## @param coreName Solr core name to be created (deprecated, will be removed in a future version)
 ##
-coreName: my-core
+coreName: ""
+## @param coreNames Solr core names to be created
+##
+coreNames:
+  - my-core
 ## @param cloudEnabled Enable Solr cloud mode
 ##
 cloudEnabled: true

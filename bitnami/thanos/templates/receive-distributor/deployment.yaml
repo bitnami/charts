@@ -1,4 +1,4 @@
-{{- if and .Values.receive.enabled ( eq .Values.receive.mode "dual-mode" )}}
+{{- if and .Values.receive.enabled ( eq .Values.receive.mode "dual-mode" ) }}
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
