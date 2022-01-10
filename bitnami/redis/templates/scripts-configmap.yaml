@@ -52,25 +52,9 @@ data:
 
     REDISPORT=$(get_port "$HOSTNAME" "REDIS")
 
-    myip=$(hostname -i)
-
-    # If there are more than one IP, use the first IPv4 address
-    if [[ "$myip" = *" "* ]]; then
-        myip=$(echo $myip | awk '{if ( match($0,/([0-9]+\.)([0-9]+\.)([0-9]+\.)[0-9]+/) ) { print substr($0,RSTART,RLENGTH); } }')
-    fi
-
     HEADLESS_SERVICE="{{ template "common.names.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
     REDIS_SERVICE="{{ template "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
     SENTINEL_SERVICE_PORT=$(get_port "{{ include "common.names.fullname" . }}" "TCP_SENTINEL")
-
-    not_exists_dns_entry() {
-        if [[ -z "$(getent ahosts "$HEADLESS_SERVICE" | grep "^${myip}" )" ]]; then
-            warn "$HEADLESS_SERVICE does not contain the IP of this pod: ${myip}"
-            return 1
-        fi
-        debug "$HEADLESS_SERVICE has my IP: ${myip}"
-        return 0
-    }
 
     validate_quorum() {
         if is_boolean_yes "$REDIS_TLS_ENABLED"; then
@@ -113,11 +97,11 @@ data:
     [[ -f $REDIS_PASSWORD_FILE ]] && export REDIS_PASSWORD="$(< "${REDIS_PASSWORD_FILE}")"
     [[ -f $REDIS_MASTER_PASSWORD_FILE ]] && export REDIS_MASTER_PASSWORD="$(< "${REDIS_MASTER_PASSWORD_FILE}")"
 
-    # Waits for DNS to add this ip to the service DNS entry
-    retry_while not_exists_dns_entry
-
-    if [[ -z "$(getent ahosts "$HEADLESS_SERVICE" | grep -v "^${myip}")" ]]; then
-        # Only node available on the network, master by default
+    # check if there is a master
+    get_sentinel_master_info
+    redisRetVal=$?
+    if [[ $redisRetVal -ne 0 ]]; then
+        # there is no master yet, master by default
         export REDIS_REPLICATION_MODE="master"
     else
         export REDIS_REPLICATION_MODE="slave"
@@ -259,14 +243,6 @@ data:
     REDISPORT=$(get_port "$HOSTNAME" "REDIS")
     SENTINEL_SERVICE_PORT=$(get_port "{{ include "common.names.fullname" . }}" "TCP_SENTINEL")
 
-    myip=$(hostname -i)
-
-    # If there are more than one IP, use the first IPv4 address
-    if [[ "$myip" = *" "* ]]; then
-        myip=$(echo $myip | awk '{if ( match($0,/([0-9]+\.)([0-9]+\.)([0-9]+\.)[0-9]+/) ) { print substr($0,RSTART,RLENGTH); } }')
-    fi
-
-
     sentinel_conf_set() {
         local -r key="${1:?missing key}"
         local value="${2:-}"
@@ -285,14 +261,6 @@ data:
     host_id() {
         echo "$1" | openssl sha1 | awk '{print $2}'
     }
-    not_exists_dns_entry() {
-        if [[ -z "$(getent ahosts "$HEADLESS_SERVICE" | grep "^${myip}" )" ]]; then
-            warn "$HEADLESS_SERVICE does not contain the IP of this pod: ${myip}"
-            return 1
-        fi
-        debug "$HEADLESS_SERVICE has my IP: ${myip}"
-        return 0
-    }
     get_sentinel_master_info() {
         if is_boolean_yes "$REDIS_TLS_ENABLED"; then
             sentinel_info_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}REDISCLI_AUTH="\$REDIS_PASSWORD" {{ end }}timeout 5 redis-cli -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
@@ -303,9 +271,6 @@ data:
         info "about to run the command: $sentinel_info_command"
         eval $sentinel_info_command
     }
-
-    # Waits for DNS to add this ip to the service DNS entry
-    retry_while not_exists_dns_entry
 
     [[ -f $REDIS_PASSWORD_FILE ]] && export REDIS_PASSWORD="$(< "${REDIS_PASSWORD_FILE}")"
 
