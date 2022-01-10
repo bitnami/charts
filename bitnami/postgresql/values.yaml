@@ -509,8 +509,8 @@ persistence:
   ##
   accessModes:
     - ReadWriteOnce
-  ## @param persistence.snapshotName Name of a VolumeSnapshot from which to create the PVC
-  ## The same snapshot will be used for the Primary and any Read Replicas
+  ## @param persistence.snapshotName Provide a VolumeSnapshot name which to create the PVC
+  ## The same snapshot will be used for the primary and any read replicas
   ## ref: https://kubernetes.io/docs/concepts/storage/volume-snapshots/
   ##
   snapshotName: ""
