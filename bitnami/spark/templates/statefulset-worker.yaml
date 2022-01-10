@@ -254,6 +254,8 @@ spec:
               value: {{ .Values.security.ssl.needClientAuth | quote }}
             - name: SPARK_SSL_PROTOCOL
               value: {{ .Values.security.ssl.protocol | quote }}
+            - name: SPARK_WEBUI_SSL_PORT
+              value: {{ .Values.worker.webPortHttps }}
             {{- end }}
             {{- if .Values.worker.extraEnvVars }}
             {{- toYaml .Values.worker.extraEnvVars | nindent 12 }}
