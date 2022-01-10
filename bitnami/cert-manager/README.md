@@ -112,6 +112,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.podLabels`                             | Extra labels for Controller pods                                                                     | `{}`                   |
 | `controller.podAnnotations`                        | Annotations for Controller pods                                                                      | `{}`                   |
 | `controller.lifecycleHooks`                        | Add lifecycle hooks to the Controller deployment                                                     | `{}`                   |
+| `controller.dnsPolicy`                             | Controller DNS policy                                                                                | `ClusterFirst`         |
+| `controller.dnsConfig`                             | Controller DNS config. Required if `controller.dnsPolicy` is set to `None`                           | `[]`                   |
 | `controller.updateStrategy.type`                   | Controller deployment update strategy                                                                | `RollingUpdate`        |
 | `controller.updateStrategy.rollingUpdate`          | Controller deployment rolling update configuration parameters                                        | `{}`                   |
 | `controller.extraEnvVars`                          | Add extra environment variables to the Controller container                                          | `[]`                   |
