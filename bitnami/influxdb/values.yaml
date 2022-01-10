@@ -1070,4 +1070,4 @@ backup:
         ## pullSecrets:
         ##   - myRegistryKeySecretName
         ##
-        pullSecrets: [ ]
+        pullSecrets: []
