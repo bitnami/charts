@@ -14,6 +14,8 @@ NOTE: Not using the common function to avoid generating too long names
 {{- define "rmqco.msgTopologyOperator.fullname" -}}
 {{- if .Values.msgTopologyOperator.fullnameOverride -}}
     {{- .Values.msgTopologyOperator.fullnameOverride | trunc 63 | trimSuffix "-" -}}
+{{- else if .Values.fullnameOverride -}}
+    {{- printf "%s-%s" .Values.fullnameOverride "messaging-topology-operator" | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
     {{- printf "%s-%s" .Release.Name "rabbitmq-messaging-topology-operator" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
