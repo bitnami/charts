@@ -1,3 +1,5 @@
+[//]: # app-name: HashiCorp Consul
+
 # HashiCorp Consul Helm Chart
 
 [HashiCorp Consul](https://www.consul.io/) has multiple components, but as a whole, it is a tool for discovering and configuring services in your infrastructure

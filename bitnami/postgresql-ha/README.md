@@ -1,3 +1,5 @@
+[//]: # app-name: PostgreSQL HA
+
 # PostgreSQL HA
 
 This Helm chart has been developed based on [bitnami/postgresql](https://github.com/bitnami/charts/tree/master/bitnami/postgresql) chart but including some changes to guarantee high availability such as:

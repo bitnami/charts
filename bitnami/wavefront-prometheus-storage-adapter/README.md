@@ -1,3 +1,5 @@
+[//]: # app-name: Wavefront Prometheus Adapter
+
 # wavefront-prometheus-storage-adapter
 
 [Wavefront Storage Adapter for Prometheus](https://github.com/wavefrontHQ/prometheus-storage-adapter) is a Prometheus integration to transfer metrics from Prometheus to Wavefront. It works as a "fork", such that data written to Prometheus is also written to Wavefront. It supports metrics path conversion and direct ingestion of metrics.

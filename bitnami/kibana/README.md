@@ -1,3 +1,5 @@
+[//]: # app-name: Kibana
+
 # Kibana
 
 [Kibana](https://www.elastic.co/kibana/) is an open source, browser based analytics and search dashboard for Elasticsearch.

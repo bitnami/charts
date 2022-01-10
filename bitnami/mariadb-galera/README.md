@@ -1,3 +1,5 @@
+[//]: # app-name: MariaDB Galera
+
 # MariaDB Galera
 
 [MariaDB Galera](https://mariadb.com/kb/en/library/what-is-mariadb-galera-cluster/) is a multi-master database cluster solution for synchronous replication and high availability.

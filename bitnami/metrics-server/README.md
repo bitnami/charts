@@ -1,3 +1,5 @@
+[//]: # app-name: Metrics Server
+
 # Metrics Server
 
 [Metrics Server](https://github.com/kubernetes-incubator/metrics-server) is a cluster-wide aggregator of resource usage data. Metrics Server collects metrics from the Summary API, exposed by Kubelet on each node.

@@ -1,3 +1,5 @@
+[//]: # app-name: SonarQube
+
 # SonarQube
 
 SonarQube is an open source quality management platform that analyzes and measures code's technical quality. It enables developers to detect code issues, vulnerabilities, and bugs in early stages.

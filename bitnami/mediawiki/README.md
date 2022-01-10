@@ -1,3 +1,5 @@
+[//]: # app-name: MediaWiki
+
 # MediaWiki
 
 [MediaWiki](https://www.mediawiki.org) is an extremely powerful, scalable software and a feature-rich wiki implementation that uses PHP to process and display data stored in a database, such as MySQL.

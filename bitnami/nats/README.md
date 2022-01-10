@@ -1,3 +1,5 @@
+[//]: # app-name: NATS
+
 # NATS
 
 [NATS](https://nats.io/) is an open-source, cloud-native messaging system. It provides a lightweight server that is written in the Go programming language.

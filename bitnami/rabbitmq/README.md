@@ -1,3 +1,5 @@
+[//]: # app-name: RabbitMQ
+
 # RabbitMQ
 
 [RabbitMQ](https://www.rabbitmq.com/) is an open source multi-protocol message broker.

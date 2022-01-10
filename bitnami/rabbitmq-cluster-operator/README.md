@@ -1,3 +1,5 @@
+[//]: # app-name: RabbitMQ Cluster Operator
+
 # rabbitmq-cluster-operator
 
 [The RabbitMQ Cluster Kubernetes Operator](https://github.com/rabbitmq/cluster-operator) automates provisioning, management, and operations of RabbitMQ clusters running on Kubernetes.

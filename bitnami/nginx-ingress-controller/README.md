@@ -1,3 +1,5 @@
+[//]: # app-name: NGINX Ingress Controller
+
 # Nginx Ingress Controller
 
 [ingress-nginx](https://github.com/kubernetes/ingress-nginx) is an Ingress controller that uses NGINX to manage external access to HTTP services in a Kubernetes cluster.

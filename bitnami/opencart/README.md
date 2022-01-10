@@ -1,3 +1,5 @@
+[//]: # app-name: OpenCart
+
 # OpenCart
 
 [OpenCart](https://opencart.com/) is a free and open source e-commerce platform for online merchants. It provides a professional and reliable foundation for a successful online store.

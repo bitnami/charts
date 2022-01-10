@@ -1,3 +1,5 @@
+[//]: # app-name: Data Platform Blueprint 1
+
 # Data Platform Blueprint 1 with Kafka-Spark-Solr
 
 Enterprise applications increasingly rely on large amounts of data, that needs be distributed, processed, and stored.

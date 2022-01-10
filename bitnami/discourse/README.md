@@ -1,3 +1,5 @@
+[//]: # app-name: Discourse(R)
+
 # Discourse&reg;
 
 [Discourse](https://www.discourse.org/) is an open source discussion platform. It can be used as a mailing list, discussion forum, long-form chat room, and more.

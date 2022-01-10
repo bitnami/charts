@@ -1,3 +1,5 @@
+[//]: # app-name: Kubewatch
+
 # kubewatch
 
 [kubewatch](https://github.com/bitnami-labs/kubewatch) is a Kubernetes watcher that currently publishes notification to Slack. Run it in your k8s cluster, and you will get event notifications in a slack channel.

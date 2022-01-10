@@ -1,3 +1,5 @@
+[//]: # app-name: Data Platform Blueprint 2
+
 # Data Platform Blueprint 2 with Kafka-Spark-Elasticsearch
 
 Enterprise applications increasingly rely on large amounts of data, that needs be distributed, processed, and stored.

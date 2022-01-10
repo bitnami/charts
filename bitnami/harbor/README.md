@@ -1,3 +1,5 @@
+[//]: # app-name: Harbor
+
 # Harbor
 
 This Helm chart has been developed based on [goharbor/harbor-helm](https://github.com/goharbor/harbor-helm) chart but including some features common to the Bitnami chart library.

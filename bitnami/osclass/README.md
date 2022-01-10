@@ -1,3 +1,5 @@
+[//]: # app-name: Osclass
+
 # Osclass
 
 [Osclass](https://osclass-classifieds.com/) is a PHP script that allows you to quickly create and manage your own free classifieds site. Using this script, you can provide free advertising for items for sale, real estate, jobs, cars... Hundreds of free classified advertising sites are using Osclass.

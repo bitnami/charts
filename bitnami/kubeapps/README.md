@@ -1,3 +1,5 @@
+[//]: # app-name: Kubeapps
+
 # Kubeapps
 
 [![CircleCI](https://circleci.com/gh/kubeapps/kubeapps/tree/master.svg?style=svg)](https://circleci.com/gh/kubeapps/kubeapps/tree/master)

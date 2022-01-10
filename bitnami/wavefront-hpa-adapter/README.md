@@ -1,3 +1,5 @@
+[//]: # app-name: Wavefront HPA Adapter for Kubernetes
+
 # wavefront-hpa-adapter
 
 [Wavefront HPA Adapter for Kubernetes](https://github.com/wavefrontHQ/wavefront-kubernetes-adapter) Wavefront HPA Adapter for Kubernetes is a Kubernetes Horizontal Pod Autoscaler adapter. It enables Kubernetes workloads to be scaled based on Wavefront metrics.

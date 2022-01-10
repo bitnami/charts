@@ -1,3 +1,5 @@
+[//]: # app-name: Bitnami Object Storage based on MinIO(R)
+
 # Bitnami Object Storage Helm Chart based on MinIO&reg;
 
 [MinIO&reg;](https://min.io) is an object storage server, compatible with Amazon S3 cloud storage service, mainly used for storing unstructured data (such as photos, videos, log files, etc.)

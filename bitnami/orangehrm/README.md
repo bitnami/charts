@@ -1,3 +1,5 @@
+[//]: # app-name: OrangeHRM
+
 # OrangeHRM
 
 [OrangeHRM](https://www.orangehrm.com) is a free HR management system that offers a wealth of modules to suit the needs of your business. This widely-used system is feature-rich, intuitive and provides an essential HR management platform along with free documentation and access to a broad community of users.

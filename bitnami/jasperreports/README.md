@@ -1,3 +1,5 @@
+[//]: # app-name: JasperReports
+
 # JasperReports
 
 [JasperReports](http://community.jaspersoft.com/project/jasperreports-server) The JasperReports server can be used as a stand-alone or embedded reporting and BI server that offers web-based reporting, analytic tools and visualization, and a dashboard feature for compiling multiple custom views
