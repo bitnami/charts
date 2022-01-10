@@ -173,6 +173,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `nodeSelector`                          | Node labels for pod assignment                                                            | `{}`            |
 | `tolerations`                           | Tolerations for pod assignment                                                            | `[]`            |
 | `terminationGracePeriodSeconds`         | Seconds the pod needs to gracefully terminate                                             | `""`            |
+| `schedulerName`                         | Name of the k8s scheduler (other than default)                                            | `""`            |
 | `priorityClassName`                     | Name of the priority class to be used by etcd pods                                        | `""`            |
 
 

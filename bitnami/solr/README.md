@@ -77,7 +77,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.tag`                    | Solr image tag (immutable tags are recommended)               | `8.11.0-debian-10-r0` |
 | `image.pullPolicy`             | image pull policy                                             | `IfNotPresent`        |
 | `image.pullSecrets`            | Specify docker-registry secret names as an array              | `[]`                  |
-| `coreName`                     | Solr core name to be created                                  | `my-core`             |
+| `coreName`                     | Solr core name to be created (deprecated)                     | `""`                  |
+| `coreNames`                    | Solr core names to be created                                 | `[my-core]`           |
 | `cloudEnabled`                 | Enable Solr cloud mode                                        | `true`                |
 | `cloudBootstrap`               | Enable cloud bootstrap. It will be performed from the node 0. | `true`                |
 | `collection`                   | Solr collection name                                          | `my-collection`       |
