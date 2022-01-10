@@ -1380,5 +1380,5 @@ sysctl:
 ##
 istio:
   ## @param istio.enabled Enable support to istio-proxy sidecar containers adding a check in the start scripts.
-  ##  
+  ##
   enabled: false
