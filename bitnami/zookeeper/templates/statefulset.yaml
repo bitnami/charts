@@ -47,7 +47,7 @@ spec:
       {{- include "zookeeper.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
-      {{- end }}      
+      {{- end }}
       {{- if .Values.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" $) | nindent 8 }}
       {{- else }}
@@ -70,7 +70,7 @@ spec:
       {{- end }}
       {{- if .Values.schedulerName }}
       schedulerName: {{ .Values.schedulerName }}
-      {{- end }}    
+      {{- end }}
       {{- if .Values.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}

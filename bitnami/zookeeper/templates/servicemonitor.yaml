@@ -40,7 +40,7 @@ spec:
       {{- end }}
       {{- if .Values.metrics.serviceMonitor.metricRelabelings }}
       metricRelabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.serviceMonitor.metricRelabelings "context" $) | nindent 6 }}
-      {{- end }}      
+      {{- end }}
   namespaceSelector:
     matchNames:
       - {{ template "zookeeper.namespace" . }}

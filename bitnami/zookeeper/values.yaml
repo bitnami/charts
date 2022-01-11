@@ -604,7 +604,7 @@ persistence:
 ##
 
 ## Init containers parameters:
-## volumePermissions: Change the owner and group of the persistent volume(s) mountpoint(s) to 'runAsUser:fsGroup' on each node 
+## volumePermissions: Change the owner and group of the persistent volume(s) mountpoint(s) to 'runAsUser:fsGroup' on each node
 ##
 volumePermissions:
   ## @param volumePermissions.enabled Enable init container that changes the owner and group of the persistent volume
@@ -705,7 +705,7 @@ metrics:
   ## Prometheus Operator PrometheusRule configuration
   ##
   prometheusRule:
-    ## @param metrics.prometheusRule.enabled Create a PrometheusRule for Prometheus Operator 
+    ## @param metrics.prometheusRule.enabled Create a PrometheusRule for Prometheus Operator
     ##
     enabled: false
     ## @param metrics.prometheusRule.namespace Namespace for the PrometheusRule Resource (defaults to the Release Namespace)

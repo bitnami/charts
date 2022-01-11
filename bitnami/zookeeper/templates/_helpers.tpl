@@ -170,7 +170,7 @@ Return the name of the secret containing the Keystore and Truststore password
 {{- end -}}
 
 {{/*
-Return true if a TLS secret should be created for ZooKeeper client 
+Return true if a TLS secret should be created for ZooKeeper client
 */}}
 {{- define "zookeeper.client.createTlsSecret" -}}
 {{- if and .Values.tls.client.enabled (not .Values.tls.client.existingSecret) }}
