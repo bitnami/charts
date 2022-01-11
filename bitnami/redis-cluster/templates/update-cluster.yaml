@@ -181,6 +181,12 @@ spec:
               value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
             {{- if .Values.cluster.externalAccess.enabled }}
             {{- if .Values.tls.enabled }}
+            - name:  REDIS_TLS_CERT_FILE
+              value: {{ template "redis-cluster.tlsCert" . }}
+            - name:  REDIS_TLS_KEY_FILE
+              value: {{ template "redis-cluster.tlsCertKey" . }}
+            - name:  REDIS_TLS_CA_FILE
+              value: {{ template "redis-cluster.tlsCACert" . }}
             - name: REDIS_TLS_PORT
             {{- else }}
             - name: REDIS_PORT
@@ -188,6 +194,12 @@ spec:
               value: {{ .Values.cluster.externalAccess.service.port | quote }}
             {{- else }}
             {{- if .Values.tls.enabled }}
+            - name:  REDIS_TLS_CERT_FILE
+              value: {{ template "redis-cluster.tlsCert" . }}
+            - name:  REDIS_TLS_KEY_FILE
+              value: {{ template "redis-cluster.tlsCertKey" . }}
+            - name:  REDIS_TLS_CA_FILE
+              value: {{ template "redis-cluster.tlsCACert" . }}
             - name: REDIS_TLS_PORT
             {{- else }}
             - name: REDIS_PORT
