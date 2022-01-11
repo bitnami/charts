@@ -28,8 +28,13 @@ spec:
       nodePort: null
       {{- end }}
     - port: {{ .Values.service.webPort }}
+      {{- if .Values.security.ssl.enabled }}
+      targetPort: https
+      name: https
+      {{- else }}
       targetPort: http
       name: http
+      {{- end }}
       protocol: TCP
       {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.web)) }}
       nodePort: {{ .Values.service.nodePorts.web }}

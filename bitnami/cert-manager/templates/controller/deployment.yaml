@@ -128,3 +128,9 @@ spec:
         {{- if .Values.controller.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.controller.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
+      {{- if .Values.controller.dnsPolicy }}
+      dnsPolicy: {{ .Values.controller.dnsPolicy }}
+      {{- end }}
+      {{- if .Values.controller.dnsConfig }}
+      dnsConfig: {{- include "common.tplvalues.render" (dict "value" .Values.controller.dnsConfig "context" $) | nindent 8 }}
+      {{- end }}
