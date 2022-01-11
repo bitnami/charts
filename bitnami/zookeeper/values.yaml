@@ -380,13 +380,12 @@ priorityClassName: ""
 ##
 schedulerName: ""
 ## @param updateStrategy.type ZooKeeper statefulset strategy type
+## @param updateStrategy.rollingUpdate ZooKeeper statefulset rolling update configuration parameters
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
 ##
 updateStrategy:
-  ## StrategyType
-  ## Can be set to RollingUpdate or OnDelete
-  ##
   type: RollingUpdate
+  rollingUpdate: {}
 ## @param extraVolumes Optionally specify extra list of additional volumes for the ZooKeeper pod(s)
 ## Example Use Case: mount certificates to enable TLS
 ## e.g:
@@ -446,9 +445,6 @@ pdb:
 
 ## @section Traffic Exposure parameters
 
-## Kubernetes configuration
-## For minikube, set this to NodePort, elsewhere use LoadBalancer
-##
 service:
   ## @param service.type Kubernetes Service type
   ##
