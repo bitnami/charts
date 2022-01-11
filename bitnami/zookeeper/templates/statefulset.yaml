@@ -31,10 +31,10 @@ spec:
         {{- if (include "zookeeper.createConfigmap" .) }}
         checksum/configuration: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
         {{- end }}
-        {{- if (include "zookeeper.createSecret" .) }}
-        checksum/auth-secret: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
+        {{- if or (include "zookeeper.createSecret" .) (include "zookeeper.client.createTlsPasswordsSecret" .) (include "zookeeper.quorum.createTlsPasswordsSecret" .) }}
+        checksum/secrets: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
         {{- end }}
-        {{- if or (include "zookeeper.client.createTlsSecret" .) (include "zookeeper.client.createTlsPasswordsSecret" .) (include "zookeeper.quorum.createTlsSecret" .) (include "zookeeper.quorum.createTlsPasswordsSecret" .) }}
+        {{- if or (include "zookeeper.client.createTlsSecret" .) (include "zookeeper.quorum.createTlsSecret" .) }}
         checksum/tls-secrets: {{ include (print $.Template.BasePath "/tls-secrets.yaml") . | sha256sum }}
         {{- end }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
@@ -109,8 +109,7 @@ spec:
           image: {{ include "zookeeper.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.containerSecurityContext.enabled }}
-          securityContext:
-            runAsUser: {{ .Values.containerSecurityContext.runAsUser }}
+          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           command:
             - /scripts/init-certs.sh
