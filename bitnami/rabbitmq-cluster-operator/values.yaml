@@ -566,7 +566,7 @@ msgTopologyOperator:
     runAsUser: 1001
     runAsNonRoot: true
 
-  ## @param fullnameOverride String to fully override rmqco.msgTopologyOperator.fullname template
+  ## @param msgTopologyOperator.fullnameOverride String to fully override rmqco.msgTopologyOperator.fullname template
   ##
   fullnameOverride: ""
 
