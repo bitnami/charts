@@ -492,7 +492,7 @@ On a cluster where the name of the Helm release is `a`, the hostname of a Pod is
 * `known-replica`
 * `announce-ip`
 
-:warning: This requires a working installation of [`external-dns`] to be fully functional. :warning:
+:warning: This requires a working installation of `external-dns` to be fully functional. :warning:
 
 See the [official ExternalDNS documentation](https://github.com/kubernetes-sigs/external-dns) for additional configuration options.
 
