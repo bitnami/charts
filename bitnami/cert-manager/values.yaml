@@ -212,7 +212,7 @@ controller:
   ##   nameservers:
   ##     - "1.1.1.1"
   ##
-  dnsConfig: []
+  dnsConfig: {}
   ## @param controller.lifecycleHooks Add lifecycle hooks to the Controller deployment
   ##
   lifecycleHooks: {}
