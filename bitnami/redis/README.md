@@ -468,9 +468,7 @@ To modify the application version used in this chart, specify a different versio
 
 ### External DNS
 
-This chart is equipped to allow leveraging the [`external-dns`] project.
-Doing so will enable ExternalDNS to publish the FQDN for each instance,
-in the format of `<pod-name>.<release-name>.<dns-suffix>`.
+This chart is equipped to allow leveraging the ExternalDNS project. Doing so will enable ExternalDNS to publish the FQDN for each instance, in the format of `<pod-name>.<release-name>.<dns-suffix>`.
 Example, when using the following configuration:
 
 ```yaml
@@ -481,22 +479,16 @@ useExternalDNS:
     ttl: 10
 ```
 
-On a cluster where the name of the Helm release is `a`, the hostname of a Pod
-is generated as: `a-redis-node-0.a-redis.prod.example.org`.  The IP of
-that FQDN will match that of the associated Pod.  This modifies the following
-parameters of the Redis/Sentinel configuration using this new FQDN:
+On a cluster where the name of the Helm release is `a`, the hostname of a Pod is generated as: `a-redis-node-0.a-redis.prod.example.org`. The IP of that FQDN will match that of the associated Pod. This modifies the following parameters of the Redis/Sentinel configuration using this new FQDN:
 
 * `replica-announce-ip`
 * `known-sentinel`
 * `known-replica`
 * `announce-ip`
 
-:warning: This requires a working installation of [`external-dns`] to be fully
-functional. :warning:
+:warning: This requires a working installation of [`external-dns`] to be fully functional. :warning:
 
-See the documentation of [`external-dns`] for additional configuration options.
-
-[`external-dns`]: https://github.com/kubernetes-sigs/external-dns
+See the [official ExternalDNS documentation](https://github.com/kubernetes-sigs/external-dns) for additional configuration options.
 
 ### Cluster topologies
 
