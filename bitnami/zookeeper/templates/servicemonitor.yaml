@@ -9,7 +9,7 @@ metadata:
   namespace: {{ .Release.Namespace }}
   {{- end }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
-    app.kubernetes.io/component: zookeeper
+    app.kubernetes.io/component: metrics
     {{- if .Values.metrics.serviceMonitor.additionalLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.serviceMonitor.additionalLabels "context" $ ) | nindent 4 }}
     {{- end }}
@@ -25,7 +25,7 @@ spec:
       {{- if .Values.metrics.serviceMonitor.selector }}
       {{- include "common.tplvalues.render" (dict "value" .Values.metrics.serviceMonitor.selector "context" $) | nindent 6 }}
       {{- end }}
-      app.kubernetes.io/component: zookeeper
+      app.kubernetes.io/component: metrics
   endpoints:
     - port: tcp-metrics
       path: "/metrics"
