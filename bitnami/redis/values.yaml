@@ -23,17 +23,6 @@ global:
 ## @section Common parameters
 ##
 
-## @param useExternalDNS.enabled Enable various syntax that would enable external-dns to work.  Note this requires a working installation of [`external-dns`] to be usable.
-## @param useExternalDNS.additionalAnnotations Extra annotations to be utilized when [`external-dns`] is enabled.
-## @param useExternalDNS.annotationKey The annotation key utilized when [`external-dns`] is enabled.
-## @param useExternalDNS.suffix The DNS suffix utilized when [`external-dns`] is enabled.  Note that we prepend the suffix with the full name of the release.
-##
-useExternalDNS:
-  enabled: false
-  suffix: ""
-  annotationKey: external-dns.alpha.kubernetes.io/
-  additionalAnnotations: {}
-
 ## @param kubeVersion Override Kubernetes version
 ##
 kubeVersion: ""
@@ -1386,3 +1375,14 @@ sysctl:
   resources:
     limits: {}
     requests: {}
+
+## @param useExternalDNS.enabled Enable various syntax that would enable external-dns to work.  Note this requires a working installation of [`external-dns`] to be usable.
+## @param useExternalDNS.additionalAnnotations Extra annotations to be utilized when [`external-dns`] is enabled.
+## @param useExternalDNS.annotationKey The annotation key utilized when [`external-dns`] is enabled.
+## @param useExternalDNS.suffix The DNS suffix utilized when [`external-dns`] is enabled.  Note that we prepend the suffix with the full name of the release.
+##
+useExternalDNS:
+  enabled: false
+  suffix: ""
+  annotationKey: external-dns.alpha.kubernetes.io/
+  additionalAnnotations: {}

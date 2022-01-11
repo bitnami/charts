@@ -74,22 +74,18 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common parameters
 
-| Name                                   | Description                                                                                                                                | Value                               |
-| -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------- |
-| `useExternalDNS.enabled`               | Enable various syntax that would enable external-dns to work.  Note this requires a working installation of [`external-dns`] to be usable. | `false`                             |
-| `useExternalDNS.additionalAnnotations` | Extra annotations to be utilized when [`external-dns`] is enabled.                                                                         | `{}`                                |
-| `useExternalDNS.annotationKey`         | The annotation key utilized when [`external-dns`] is enabled.                                                                              | `external-dns.alpha.kubernetes.io/` |
-| `useExternalDNS.suffix`                | The DNS suffix utilized when [`external-dns`] is enabled.  Note that we prepend the suffix with the full name of the release.              | `""`                                |
-| `kubeVersion`                          | Override Kubernetes version                                                                                                                | `""`                                |
-| `nameOverride`                         | String to partially override common.names.fullname                                                                                         | `""`                                |
-| `fullnameOverride`                     | String to fully override common.names.fullname                                                                                             | `""`                                |
-| `commonLabels`                         | Labels to add to all deployed objects                                                                                                      | `{}`                                |
-| `commonAnnotations`                    | Annotations to add to all deployed objects                                                                                                 | `{}`                                |
-| `clusterDomain`                        | Kubernetes cluster domain name                                                                                                             | `cluster.local`                     |
-| `extraDeploy`                          | Array of extra objects to deploy with the release                                                                                          | `[]`                                |
-| `diagnosticMode.enabled`               | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                                                    | `false`                             |
-| `diagnosticMode.command`               | Command to override all containers in the deployment                                                                                       | `["sleep"]`                         |
-| `diagnosticMode.args`                  | Args to override all containers in the deployment                                                                                          | `["infinity"]`                      |
+| Name                     | Description                                                                             | Value           |
+| ------------------------ | --------------------------------------------------------------------------------------- | --------------- |
+| `kubeVersion`            | Override Kubernetes version                                                             | `""`            |
+| `nameOverride`           | String to partially override common.names.fullname                                      | `""`            |
+| `fullnameOverride`       | String to fully override common.names.fullname                                          | `""`            |
+| `commonLabels`           | Labels to add to all deployed objects                                                   | `{}`            |
+| `commonAnnotations`      | Annotations to add to all deployed objects                                              | `{}`            |
+| `clusterDomain`          | Kubernetes cluster domain name                                                          | `cluster.local` |
+| `extraDeploy`            | Array of extra objects to deploy with the release                                       | `[]`            |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`     |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]`  |
 
 
 ### Redis&trade; Image parameters
@@ -411,27 +407,31 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Init Container Parameters
 
-| Name                                                   | Description                                                                                     | Value                   |
-| ------------------------------------------------------ | ----------------------------------------------------------------------------------------------- | ----------------------- |
-| `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
-| `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                    | `docker.io`             |
-| `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r265`     |
-| `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
-| `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                | `[]`                    |
-| `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                    |
-| `volumePermissions.resources.requests`                 | The requested resources for the init container                                                  | `{}`                    |
-| `volumePermissions.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                 | `0`                     |
-| `sysctl.enabled`                                       | Enable init container to modify Kernel settings                                                 | `false`                 |
-| `sysctl.image.registry`                                | Bitnami Shell image registry                                                                    | `docker.io`             |
-| `sysctl.image.repository`                              | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `sysctl.image.tag`                                     | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r265`     |
-| `sysctl.image.pullPolicy`                              | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
-| `sysctl.image.pullSecrets`                             | Bitnami Shell image pull secrets                                                                | `[]`                    |
-| `sysctl.command`                                       | Override default init-sysctl container command (useful when using custom images)                | `[]`                    |
-| `sysctl.mountHostSys`                                  | Mount the host `/sys` folder to `/host-sys`                                                     | `false`                 |
-| `sysctl.resources.limits`                              | The resources limits for the init container                                                     | `{}`                    |
-| `sysctl.resources.requests`                            | The requested resources for the init container                                                  | `{}`                    |
+| Name                                                   | Description                                                                                                                                | Value                               |
+| ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------- |
+| `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                                            | `false`                             |
+| `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                                                               | `docker.io`                         |
+| `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                                                             | `bitnami/bitnami-shell`             |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                                                                   | `10-debian-10-r265`                 |
+| `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                                                            | `IfNotPresent`                      |
+| `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                                                           | `[]`                                |
+| `volumePermissions.resources.limits`                   | The resources limits for the init container                                                                                                | `{}`                                |
+| `volumePermissions.resources.requests`                 | The requested resources for the init container                                                                                             | `{}`                                |
+| `volumePermissions.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                                                            | `0`                                 |
+| `sysctl.enabled`                                       | Enable init container to modify Kernel settings                                                                                            | `false`                             |
+| `sysctl.image.registry`                                | Bitnami Shell image registry                                                                                                               | `docker.io`                         |
+| `sysctl.image.repository`                              | Bitnami Shell image repository                                                                                                             | `bitnami/bitnami-shell`             |
+| `sysctl.image.tag`                                     | Bitnami Shell image tag (immutable tags are recommended)                                                                                   | `10-debian-10-r265`                 |
+| `sysctl.image.pullPolicy`                              | Bitnami Shell image pull policy                                                                                                            | `IfNotPresent`                      |
+| `sysctl.image.pullSecrets`                             | Bitnami Shell image pull secrets                                                                                                           | `[]`                                |
+| `sysctl.command`                                       | Override default init-sysctl container command (useful when using custom images)                                                           | `[]`                                |
+| `sysctl.mountHostSys`                                  | Mount the host `/sys` folder to `/host-sys`                                                                                                | `false`                             |
+| `sysctl.resources.limits`                              | The resources limits for the init container                                                                                                | `{}`                                |
+| `sysctl.resources.requests`                            | The requested resources for the init container                                                                                             | `{}`                                |
+| `useExternalDNS.enabled`                               | Enable various syntax that would enable external-dns to work.  Note this requires a working installation of [`external-dns`] to be usable. | `false`                             |
+| `useExternalDNS.additionalAnnotations`                 | Extra annotations to be utilized when [`external-dns`] is enabled.                                                                         | `{}`                                |
+| `useExternalDNS.annotationKey`                         | The annotation key utilized when [`external-dns`] is enabled.                                                                              | `external-dns.alpha.kubernetes.io/` |
+| `useExternalDNS.suffix`                                | The DNS suffix utilized when [`external-dns`] is enabled.  Note that we prepend the suffix with the full name of the release.              | `""`                                |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
