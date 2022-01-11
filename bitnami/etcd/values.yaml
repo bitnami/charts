@@ -438,7 +438,7 @@ tolerations: []
 ## ref: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/#hook-handler-execution
 ##
 terminationGracePeriodSeconds: ""
-## @param master.schedulerName Name of the k8s scheduler (other than default)
+## @param schedulerName Name of the k8s scheduler (other than default)
 ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
 ##
 schedulerName: ""
