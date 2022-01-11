@@ -509,6 +509,11 @@ persistence:
   ##
   accessModes:
     - ReadWriteOnce
+  ## @param persistence.snapshotName Provide a VolumeSnapshot name which to create the PVC
+  ## The same snapshot will be used for the primary and any read replicas
+  ## ref: https://kubernetes.io/docs/concepts/storage/volume-snapshots/
+  ##
+  snapshotName: ""
   ## @param persistence.size PVC Storage Request for PostgreSQL volume
   ##
   size: 8Gi
