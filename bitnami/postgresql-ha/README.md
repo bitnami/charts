@@ -1,3 +1,8 @@
+# ⚠️ WARNING ⚠️
+Please make sure to check the open issues with postgres-ha chart.
+- [[postgresql-ha] Multiple Primaries](https://github.com/bitnami/charts/issues/2610)
+- [Incorrect timeline and inconsistent data](https://github.com/bitnami/charts/issues/8062)
+
 # PostgreSQL HA
 
 This Helm chart has been developed based on [bitnami/postgresql](https://github.com/bitnami/charts/tree/master/bitnami/postgresql) chart but including some changes to guarantee high availability such as:
