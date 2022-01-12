@@ -204,7 +204,7 @@ spec:
             {{- else }}
             - name: REDIS_PORT
             {{- end }}
-              value: {{ .Values.service.ports.redis | quote }}
+              value: {{ .Values.redis.containerPorts.redis | quote }}
             {{- end }}
             - name: REDIS_CLUSTER_REPLICAS
               value: {{ .Values.cluster.replicas | quote }}
