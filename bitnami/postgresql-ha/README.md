@@ -263,7 +263,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `pgpool.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                                                       | `5`                   |
 | `pgpool.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                                                                     | `5`                   |
 | `pgpool.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                                                     | `1`                   |
-| `pgpool.startupProbe.enabled`               | Enable startupProbe                                                                                                                      | `false`               |
+| `pgpool.startupProbe.enabled`               | Enable startupProbe                                                                                                                      | `true`                |
 | `pgpool.startupProbe.initialDelaySeconds`   | Initial delay seconds for startupProbe                                                                                                   | `5`                   |
 | `pgpool.startupProbe.periodSeconds`         | Period seconds for startupProbe                                                                                                          | `10`                  |
 | `pgpool.startupProbe.timeoutSeconds`        | Timeout seconds for startupProbe                                                                                                         | `5`                   |
