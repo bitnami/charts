@@ -201,6 +201,18 @@ controller:
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
+  ## @param controller.dnsPolicy Controller pod DNS policy
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-s-dns-policy
+  ##
+  dnsPolicy: ""
+  ## @param controller.dnsConfig Controller pod DNS config. Required if `controller.dnsPolicy` is set to `None`
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-dns-config
+  ## E.g:
+  ## dnsConfig:
+  ##   nameservers:
+  ##     - "1.1.1.1"
+  ##
+  dnsConfig: {}
   ## @param controller.lifecycleHooks Add lifecycle hooks to the Controller deployment
   ##
   lifecycleHooks: {}
