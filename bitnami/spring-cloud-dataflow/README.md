@@ -729,7 +729,7 @@ export RABBITMQ_ERLANG_COOKIE=$(kubectl get secret --namespace default dataflow-
 Upgrade your release (maintaining the version) disabling MariaDB and scaling Data Flow replicas to 0:
 
 ```console
-$ helm upgrade dataflow bitnami/spring-cloud-dataflow --version 0.7.4 \
+helm upgrade dataflow bitnami/spring-cloud-dataflow --version 0.7.4 \
   --set server.replicaCount=0 \
   --set skipper.replicaCount=0 \
   --set mariadb.enabled=false \
@@ -740,7 +740,7 @@ $ helm upgrade dataflow bitnami/spring-cloud-dataflow --version 0.7.4 \
 Finally, upgrade you release to 1.0.0 reusing the existing PVC, and enabling back MariaDB:
 
 ```console
-$ helm upgrade dataflow bitnami/spring-cloud-dataflow \
+helm upgrade dataflow bitnami/spring-cloud-dataflow \
   --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC \
   --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD \
   --set mariadb.auth.password=$MARIADB_PASSWORD \
@@ -751,7 +751,7 @@ $ helm upgrade dataflow bitnami/spring-cloud-dataflow \
 You should see the lines below in MariaDB container logs:
 
 ```console
-$ kubectl logs $(kubectl get pods -l app.kubernetes.io/instance=dataflow,app.kubernetes.io/name=mariadb,app.kubernetes.io/component=primary -o jsonpath="{.items[0].metadata.name}")
+kubectl logs $(kubectl get pods -l app.kubernetes.io/instance=dataflow,app.kubernetes.io/name=mariadb,app.kubernetes.io/component=primary -o jsonpath="{.items[0].metadata.name}")
 ...
 mariadb 12:13:24.98 INFO  ==> Using persisted data
 mariadb 12:13:25.01 INFO  ==> Running mysql_upgrade
