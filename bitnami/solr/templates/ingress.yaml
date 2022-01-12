@@ -22,7 +22,7 @@ metadata:
   namespace: {{ .Release.Namespace | quote }}
 spec:
   {{- if .Values.ingress.ingressClassName }}
-    ingressClassName: {{ .Values.ingress.ingressClassName }}
+  ingressClassName: {{ .Values.ingress.ingressClassName }}
   {{- end }}
   rules:
     {{- if .Values.ingress.hostname }}
