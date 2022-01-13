@@ -20,6 +20,9 @@ metadata:
   {{- end }}
 spec:
   type: {{ .Values.metrics.service.type }}
+  {{- if and .Values.metrics.service.clusterIP (eq .Values.metrics.service.type "ClusterIP") }}
+  clusterIP: {{ .Values.metrics.service.clusterIP }}
+  {{- end }}
   {{- if and (eq .Values.metrics.service.type "LoadBalancer") .Values.metrics.service.loadBalancerIP }}
   loadBalancerIP: {{ .Values.metrics.service.loadBalancerIP }}
   {{- end }}

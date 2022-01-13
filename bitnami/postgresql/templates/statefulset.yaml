@@ -626,6 +626,12 @@ spec:
         {{- range .Values.persistence.accessModes }}
           - {{ . | quote }}
         {{- end }}
+        {{- if .Values.persistence.snapshotName }}
+        dataSource:
+          name: {{ .Values.persistence.snapshotName }}
+          kind: VolumeSnapshot
+          apiGroup: snapshot.storage.k8s.io
+        {{- end }}
         resources:
           requests:
             storage: {{ .Values.persistence.size | quote }}

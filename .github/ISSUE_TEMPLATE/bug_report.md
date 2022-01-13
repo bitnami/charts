@@ -14,12 +14,15 @@ assignees: ''
  -->
 
 **Which chart**:
-The name (and version) of the affected chart
+
+<!-- The name and version of the affected chart -->
 
 **Describe the bug**
-A clear and concise description of what the bug is.
+
+<!-- A clear and concise description of what the bug is. -->
 
 **To Reproduce**
+
 Steps to reproduce the behavior:
 
 1. Go to '...'
@@ -28,21 +31,9 @@ Steps to reproduce the behavior:
 4. See error
 
 **Expected behavior**
-A clear and concise description of what you expected to happen.
 
-**Version of Helm and Kubernetes**:
-
-- Output of `helm version`:
-
-```
-(paste your output here)
-```
-
-- Output of `kubectl version`:
-
-```
-(paste your output here)
-```
+<!-- A clear and concise description of what you expected to happen. -->
 
 **Additional context**
-Add any other context about the problem here.
+
+<!-- Add any other context about the problem here. -->

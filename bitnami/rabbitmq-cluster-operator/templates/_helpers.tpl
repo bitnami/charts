@@ -12,7 +12,13 @@ Return the proper RabbitMQ Messaging Topology Operator fullname
 NOTE: Not using the common function to avoid generating too long names
 */}}
 {{- define "rmqco.msgTopologyOperator.fullname" -}}
-{{- printf "%s-%s" .Release.Name "rabbitmq-messaging-topology-operator"  | trunc 63 | trimSuffix "-" -}}
+{{- if .Values.msgTopologyOperator.fullnameOverride -}}
+    {{- .Values.msgTopologyOperator.fullnameOverride | trunc 63 | trimSuffix "-" -}}
+{{- else if .Values.fullnameOverride -}}
+    {{- printf "%s-%s" .Values.fullnameOverride "messaging-topology-operator" | trunc 63 | trimSuffix "-" -}}
+{{- else -}}
+    {{- printf "%s-%s" .Release.Name "rabbitmq-messaging-topology-operator" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
 {{- end -}}
 
 {{/*
@@ -20,7 +26,13 @@ Return the proper RabbitMQ Messaging Topology Operator fullname
 NOTE: Not using the common function to avoid generating too long names
 */}}
 {{- define "rmqco.msgTopologyOperator.webhook.fullname" -}}
-{{- printf "%s-%s" .Release.Name "rabbitmq-messaging-topology-operator-webhook"  | trunc 63 | trimSuffix "-" -}}
+{{- if .Values.msgTopologyOperator.fullnameOverride -}}
+    {{- printf "%s-%s" .Values.msgTopologyOperator.fullnameOverride "webhook" | trunc 63 | trimSuffix "-" -}}
+{{- else if .Values.fullnameOverride -}}
+    {{- printf "%s-%s" .Values.fullnameOverride "messaging-topology-operator-webhook" | trunc 63 | trimSuffix "-" -}}
+{{- else -}}
+    {{- printf "%s-%s" .Release.Name "rabbitmq-messaging-topology-operator-webhook" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
 {{- end -}}
 
 {{/*

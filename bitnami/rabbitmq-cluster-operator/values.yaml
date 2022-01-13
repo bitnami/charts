@@ -566,6 +566,10 @@ msgTopologyOperator:
     runAsUser: 1001
     runAsNonRoot: true
 
+  ## @param msgTopologyOperator.fullnameOverride String to fully override rmqco.msgTopologyOperator.fullname template
+  ##
+  fullnameOverride: ""
+
   ## @param msgTopologyOperator.command Override default container command (useful when using custom images)
   ##
   command: []

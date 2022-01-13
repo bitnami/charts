@@ -298,6 +298,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.prometheusRule.rules`             | Create specified [rules](https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/), check values for an example. | `[]`                     |
 | `metrics.priorityClassName`                | Metrics exporter pod priorityClassName                                                                                             | `""`                     |
 | `metrics.service.type`                     | Kubernetes Service type (redis metrics)                                                                                            | `ClusterIP`              |
+| `metrics.service.clusterIP`                | Service Cluster IP                                                                                                                 | `""`                     |
 | `metrics.service.loadBalancerIP`           | Use serviceLoadBalancerIP to request a specific static IP, otherwise leave blank                                                   | `""`                     |
 | `metrics.service.annotations`              | Annotations for the services to monitor.                                                                                           | `{}`                     |
 | `metrics.service.labels`                   | Additional labels for the metrics service                                                                                          | `{}`                     |
