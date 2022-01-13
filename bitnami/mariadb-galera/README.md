@@ -1,4 +1,4 @@
-[//]: # app-name: MariaDB Galera
+<!--- app-name: MariaDB Galera -->
 
 # MariaDB Galera
 

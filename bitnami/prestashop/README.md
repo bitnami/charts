@@ -1,4 +1,4 @@
-[//]: # app-name: PrestaShop
+<!--- app-name: PrestaShop -->
 
 # PrestaShop
 

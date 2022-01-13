@@ -1,4 +1,4 @@
-[//]: # app-name: Argo CD
+<!--- app-name: Argo CD -->
 
 # Argo CD
 

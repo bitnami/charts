@@ -1,4 +1,4 @@
-[//]: # app-name: Kong
+<!--- app-name: Kong -->
 
 # Kong
 

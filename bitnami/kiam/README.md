@@ -1,4 +1,4 @@
-[//]: # app-name: Kiam
+<!--- app-name: Kiam -->
 
 # kiam
 

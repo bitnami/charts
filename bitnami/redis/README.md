@@ -1,4 +1,4 @@
-[//]: # app-name: Redis&trade;
+<!--- app-name: Redis(TM) -->
 
 # Redis&trade; Chart packaged by Bitnami
 

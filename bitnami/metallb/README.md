@@ -1,4 +1,4 @@
-[//]: # app-name: MetalLB
+<!--- app-name: MetalLB -->
 
 # MetalLB
 

@@ -1,4 +1,4 @@
-[//]: # app-name: EJBCA
+<!--- app-name: EJBCA -->
 
 # EJBCA
 

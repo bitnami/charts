@@ -1,4 +1,4 @@
-[//]: # app-name: Joomla!
+<!--- app-name: Joomla! -->
 
 # Joomla!
 

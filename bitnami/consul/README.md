@@ -1,4 +1,4 @@
-[//]: # app-name: HashiCorp Consul
+<!--- app-name: HashiCorp Consul -->
 
 # HashiCorp Consul Helm Chart
 

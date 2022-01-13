@@ -1,4 +1,4 @@
-[//]: # app-name: Odoo
+<!--- app-name: Odoo -->
 
 # Odoo
 

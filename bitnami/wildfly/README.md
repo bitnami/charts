@@ -1,4 +1,4 @@
-[//]: # app-name: WildFly
+<!--- app-name: WildFly -->
 
 # WildFly
 

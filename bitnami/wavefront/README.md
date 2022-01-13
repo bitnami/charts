@@ -1,4 +1,4 @@
-[//]: # app-name: Wavefront
+<!--- app-name: Wavefront -->
 
 # Wavefront Collector for Kubernetes
 

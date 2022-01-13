@@ -1,4 +1,4 @@
-[//]: # app-name: NGINX Open Source
+<!--- app-name: NGINX Open Source -->
 
 # NGINX
 

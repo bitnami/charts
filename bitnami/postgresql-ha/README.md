@@ -1,4 +1,4 @@
-[//]: # app-name: PostgreSQL HA
+<!--- app-name: PostgreSQL HA -->
 
 # PostgreSQL HA
 

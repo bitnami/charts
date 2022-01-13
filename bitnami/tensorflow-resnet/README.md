@@ -1,4 +1,4 @@
-[//]: # app-name: TensorFlow ResNet
+<!--- app-name: TensorFlow ResNet -->
 
 # TensorFlow Serving ResNet
 

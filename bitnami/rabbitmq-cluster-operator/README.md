@@ -1,4 +1,4 @@
-[//]: # app-name: RabbitMQ Cluster Operator
+<!--- app-name: RabbitMQ Cluster Operator -->
 
 # rabbitmq-cluster-operator
 

@@ -1,4 +1,4 @@
-[//]: # app-name: Kube State Metrics
+<!--- app-name: Kube State Metrics -->
 
 # kube-state-metrics
 

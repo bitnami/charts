@@ -1,4 +1,4 @@
-[//]: # app-name: Bitnami Object Storage based on MinIO&reg;
+<!--- app-name: Bitnami Object Storage based on MinIO(R) -->
 
 # Bitnami Object Storage Helm Chart based on MinIO&reg;
 

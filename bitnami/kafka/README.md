@@ -1,4 +1,4 @@
-[//]: # app-name: Apache Kafka
+<!--- app-name: Apache Kafka -->
 
 # Kafka
 

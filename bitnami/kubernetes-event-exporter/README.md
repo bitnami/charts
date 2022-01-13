@@ -1,4 +1,4 @@
-[//]: # app-name: Kubernetes Event Exporter
+<!--- app-name: Kubernetes Event Exporter -->
 
 # Kubernetes Event Exporter
 

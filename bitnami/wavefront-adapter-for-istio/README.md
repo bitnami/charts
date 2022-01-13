@@ -1,4 +1,4 @@
-[//]: # app-name: Wavefront Adapter for Istio
+<!--- app-name: Wavefront Adapter for Istio -->
 
 # Wavefront Adapter for Istio
 

@@ -1,4 +1,4 @@
-[//]: # app-name: MediaWiki
+<!--- app-name: MediaWiki -->
 
 # MediaWiki
 

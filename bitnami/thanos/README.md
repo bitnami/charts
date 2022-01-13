@@ -1,4 +1,4 @@
-[//]: # app-name: Thanos
+<!--- app-name: Thanos -->
 
 # Thanos
 

@@ -1,4 +1,4 @@
-[//]: # app-name: phpBB
+<!--- app-name: phpBB -->
 
 # phpBB
 

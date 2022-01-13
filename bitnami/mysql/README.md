@@ -1,4 +1,4 @@
-[//]: # app-name: MySQL
+<!--- app-name: MySQL -->
 
 # MySQL
 

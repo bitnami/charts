@@ -1,4 +1,4 @@
-[//]: # app-name: Apache Solr
+<!--- app-name: Apache Solr -->
 
 # Solr
 

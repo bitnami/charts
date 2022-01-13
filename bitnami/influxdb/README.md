@@ -1,4 +1,4 @@
-[//]: # app-name: InfluxDB(TM)
+<!--- app-name: InfluxDB(TM) -->
 
 # InfluxDB&trade;
 

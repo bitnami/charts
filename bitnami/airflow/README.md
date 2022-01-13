@@ -1,4 +1,4 @@
-[//]: # app-name: Apache Airflow
+<!--- app-name: Apache Airflow -->
 
 # Apache Airflow
 

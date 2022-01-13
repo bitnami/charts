@@ -1,4 +1,4 @@
-[//]: # app-name: OpenCart
+<!--- app-name: OpenCart -->
 
 # OpenCart
 

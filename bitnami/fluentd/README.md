@@ -1,4 +1,4 @@
-[//]: # app-name: Fluentd
+<!--- app-name: Fluentd -->
 
 # Fluentd
 

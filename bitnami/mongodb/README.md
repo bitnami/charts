@@ -1,4 +1,4 @@
-[//]: # app-name: MongoDB&reg;
+<!--- app-name: MongoDB(R) -->
 
 # MongoDB&reg; packaged by Bitnami
 

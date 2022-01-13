@@ -1,4 +1,4 @@
-[//]: # app-name: Prometheus Operator
+<!--- app-name: Prometheus Operator -->
 
 # kube-prometheus
 

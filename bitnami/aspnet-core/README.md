@@ -1,4 +1,4 @@
-[//]: # app-name: ASP.NET
+<!--- app-name: ASP.NET -->
 
 # ASP.NET Core
 

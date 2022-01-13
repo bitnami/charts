@@ -1,4 +1,4 @@
-[//]: # app-name: SonarQube
+<!--- app-name: SonarQube -->
 
 # SonarQube
 

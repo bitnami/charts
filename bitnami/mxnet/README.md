@@ -1,4 +1,4 @@
-[//]: # app-name: Apache MXNet (Incubating)
+<!--- app-name: Apache MXNet (Incubating) -->
 
 # Apache MXNet (Incubating)
 

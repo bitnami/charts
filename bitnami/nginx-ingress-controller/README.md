@@ -1,4 +1,4 @@
-[//]: # app-name: NGINX Ingress Controller
+<!--- app-name: NGINX Ingress Controller -->
 
 # Nginx Ingress Controller
 

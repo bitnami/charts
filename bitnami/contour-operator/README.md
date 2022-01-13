@@ -1,4 +1,4 @@
-[//]: # app-name: Contour Operator
+<!--- app-name: Contour Operator -->
 
 # Contour Operator
 

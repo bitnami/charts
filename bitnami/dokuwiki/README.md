@@ -1,4 +1,4 @@
-[//]: # app-name: DokuWiki
+<!--- app-name: DokuWiki -->
 
 # DokuWiki
 

@@ -1,4 +1,4 @@
-[//]: # app-name: Apache ZooKeeper
+<!--- app-name: Apache ZooKeeper -->
 
 # ZooKeeper
 

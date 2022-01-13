@@ -1,4 +1,4 @@
-[//]: # app-name: JupyterHub
+<!--- app-name: JupyterHub -->
 
 # JupyterHub
 

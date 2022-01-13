@@ -1,4 +1,4 @@
-[//]: # app-name: TestLink
+<!--- app-name: TestLink -->
 
 # TestLink
 

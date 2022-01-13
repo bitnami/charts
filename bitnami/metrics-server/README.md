@@ -1,4 +1,4 @@
-[//]: # app-name: Metrics Server
+<!--- app-name: Metrics Server -->
 
 # Metrics Server
 

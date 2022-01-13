@@ -1,4 +1,4 @@
-[//]: # app-name: Discourse(R)
+<!--- app-name: Discourse(R) -->
 
 # Discourse&reg;
 

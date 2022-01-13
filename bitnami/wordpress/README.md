@@ -1,4 +1,4 @@
-[//]: # app-name: WordPress
+<!--- app-name: WordPress -->
 
 # WordPress
 

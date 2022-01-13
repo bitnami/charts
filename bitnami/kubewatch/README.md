@@ -1,4 +1,4 @@
-[//]: # app-name: Kubewatch
+<!--- app-name: Kubewatch -->
 
 # kubewatch
 

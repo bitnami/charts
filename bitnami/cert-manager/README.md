@@ -1,4 +1,4 @@
-[//]: # app-name: Cert Manager
+<!--- app-name: Cert Manager -->
 
 # Cert Manager
 

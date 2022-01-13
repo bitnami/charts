@@ -1,4 +1,4 @@
-[//]: # app-name: RabbitMQ
+<!--- app-name: RabbitMQ -->
 
 # RabbitMQ
 

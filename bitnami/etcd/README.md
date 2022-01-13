@@ -1,4 +1,4 @@
-[//]: # app-name: Etcd
+<!--- app-name: Etcd -->
 
 # etcd
 

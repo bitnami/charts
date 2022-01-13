@@ -1,4 +1,4 @@
-[//]: # app-name: OAuth2 Proxy
+<!--- app-name: OAuth 2 Proxy -->
 
 # OAuth2 Proxy
 

@@ -1,4 +1,4 @@
-[//]: # app-name: Data Platform Blueprint 1
+<!--- app-name: Data Platform Blueprint 1 -->
 
 # Data Platform Blueprint 1 with Kafka-Spark-Solr
 

@@ -1,4 +1,4 @@
-[//]: # app-name: MariaDB
+<!--- app-name: MariaDB -->
 
 # MariaDB
 

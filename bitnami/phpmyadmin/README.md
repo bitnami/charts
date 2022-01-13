@@ -1,4 +1,4 @@
-[//]: # app-name: phpMyAdmin
+<!--- app-name: phpMyAdmin -->
 
 # phpMyAdmin
 

@@ -1,4 +1,4 @@
-[//]: # app-name: Spring Cloud Data Flow
+<!--- app-name: Spring Cloud Data Flow -->
 
 # Spring Cloud Data Flow
 

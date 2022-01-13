@@ -1,4 +1,4 @@
-[//]: # app-name: Node Exporter
+<!--- app-name: Node Exporter -->
 
 # Node Exporter
 

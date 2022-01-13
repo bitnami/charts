@@ -1,4 +1,4 @@
-[//]: # app-name: Drupal
+<!--- app-name: Drupal -->
 
 # Drupal
 

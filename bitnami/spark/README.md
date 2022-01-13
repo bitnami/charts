@@ -1,4 +1,4 @@
-[//]: # app-name: Apache Spark
+<!--- app-name: Apache Spark -->
 
 # Apache Spark
 

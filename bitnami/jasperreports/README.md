@@ -1,4 +1,4 @@
-[//]: # app-name: JasperReports
+<!--- app-name: JasperReports -->
 
 # JasperReports
 

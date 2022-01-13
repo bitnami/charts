@@ -1,4 +1,4 @@
-[//]: # app-name: NATS
+<!--- app-name: NATS -->
 
 # NATS
 

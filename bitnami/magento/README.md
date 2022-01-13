@@ -1,4 +1,4 @@
-[//]: # app-name: Magento
+<!--- app-name: Magento -->
 
 # Magento
 

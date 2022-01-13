@@ -1,4 +1,4 @@
-[//]: # app-name: Kibana
+<!--- app-name: Kibana -->
 
 # Kibana
 

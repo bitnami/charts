@@ -1,4 +1,4 @@
-[//]: # app-name: Grafana Tempo
+<!--- app-name: Grafana Tempo -->
 
 # grafana-tempo
 

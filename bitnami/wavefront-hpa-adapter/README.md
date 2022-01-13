@@ -1,4 +1,4 @@
-[//]: # app-name: Wavefront HPA Adapter for Kubernetes
+<!--- app-name: Wavefront HPA Adapter for Kubernetes -->
 
 # Wavefront HPA Adapter for Kubernetes
 

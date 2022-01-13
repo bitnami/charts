@@ -1,4 +1,4 @@
-[//]: # app-name: SuiteCRM
+<!--- app-name: SuiteCRM -->
 
 # SuiteCRM
 

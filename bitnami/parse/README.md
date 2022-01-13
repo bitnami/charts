@@ -1,4 +1,4 @@
-[//]: # app-name: Parse Server
+<!--- app-name: Parse Server -->
 
 # Parse
 

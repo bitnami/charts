@@ -1,4 +1,4 @@
-[//]: # app-name: ownCloud
+<!--- app-name: ownCloud -->
 
 # ownCloud
 

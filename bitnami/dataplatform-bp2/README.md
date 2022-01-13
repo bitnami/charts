@@ -1,4 +1,4 @@
-[//]: # app-name: Data Platform Blueprint 2
+<!--- app-name: Data Platform Blueprint 2 -->
 
 # Data Platform Blueprint 2 with Kafka-Spark-Elasticsearch
 

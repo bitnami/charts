@@ -1,4 +1,4 @@
-[//]: # app-name: HAProxy
+<!--- app-name: HAProxy -->
 
 # HAProxy
 

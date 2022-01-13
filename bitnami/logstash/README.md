@@ -1,4 +1,4 @@
-[//]: # app-name: Logstash
+<!--- app-name: Logstash -->
 
 # Logstash
 

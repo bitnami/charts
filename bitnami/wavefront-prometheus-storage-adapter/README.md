@@ -1,4 +1,4 @@
-[//]: # app-name: Wavefront Prometheus Adapter
+<!--- app-name: Wavefront Prometheus Adapter -->
 
 # Wavefront Prometheus Adapter
 

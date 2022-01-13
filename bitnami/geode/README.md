@@ -1,4 +1,4 @@
-[//]: # app-name: Apache Geode
+<!--- app-name: Apache Geode -->
 
 # Apache Geode
 

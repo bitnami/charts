@@ -1,4 +1,4 @@
-[//]: # app-name: Argo Workflows
+<!--- app-name: Argo Workflows -->
 
 # Argo Workflows Chart packaged by Bitnami
 

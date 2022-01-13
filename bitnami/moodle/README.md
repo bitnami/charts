@@ -1,4 +1,4 @@
-[//]: # app-name: Bitnami LMS powered by Moodle&trade; LMS
+<!--- app-name: Bitnami LMS powered by Moodle(TM) LMS -->
 
 # Moodle&trade; LMS
 

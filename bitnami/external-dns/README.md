@@ -1,4 +1,4 @@
-[//]: # app-name: ExternalDNS
+<!--- app-name: ExternalDNS -->
 
 # external-dns
 

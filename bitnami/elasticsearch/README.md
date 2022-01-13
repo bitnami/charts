@@ -1,4 +1,4 @@
-[//]: # app-name: Elasticsearch
+<!--- app-name: Elasticsearch -->
 
 # Elasticsearch
 

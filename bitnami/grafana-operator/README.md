@@ -1,4 +1,4 @@
-[//]: # app-name: Grafana Operator
+<!--- app-name: Grafana Operator -->
 
 # grafana-operator
 

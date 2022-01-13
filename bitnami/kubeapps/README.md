@@ -1,4 +1,4 @@
-[//]: # app-name: Kubeapps
+<!--- app-name: Kubeapps -->
 
 # Kubeapps
 

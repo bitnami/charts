@@ -1,4 +1,4 @@
-[//]: # app-name: Redmine
+<!--- app-name: Redmine -->
 
 # Redmine
 

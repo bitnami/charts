@@ -1,4 +1,4 @@
-[//]: # app-name: Ghost
+<!--- app-name: Ghost -->
 
 # Ghost
 

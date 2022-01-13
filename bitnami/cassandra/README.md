@@ -1,4 +1,4 @@
-[//]: # app-name: Apache Cassandra
+<!--- app-name: Apache Cassandra -->
 
 # cassandra
 

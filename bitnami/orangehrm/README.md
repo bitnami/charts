@@ -1,4 +1,4 @@
-[//]: # app-name: OrangeHRM
+<!--- app-name: OrangeHRM -->
 
 # OrangeHRM
 

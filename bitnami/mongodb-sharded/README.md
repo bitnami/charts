@@ -1,4 +1,4 @@
-[//]: # app-name: MongoDB&reg; Sharded
+<!--- app-name: MongoDB(R) Sharded -->
 
 # MongoDB&reg; Sharded packaged by Bitnami
 

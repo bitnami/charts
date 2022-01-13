@@ -1,4 +1,4 @@
-[//]: # app-name: Osclass
+<!--- app-name: Osclass -->
 
 # Osclass
 
