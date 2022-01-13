@@ -86,7 +86,7 @@ data:
         fi
 
         info "about to run the command: $sentinel_info_command"
-        eval $sentinel_info_command
+        retry_while "eval $sentinel_info_command"
     }
 
     {{- if and .Values.replica.containerSecurityContext.runAsUser (eq (.Values.replica.containerSecurityContext.runAsUser | int) 0) }}
