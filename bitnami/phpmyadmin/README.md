@@ -3,6 +3,7 @@
 # phpMyAdmin
 
 [phpMyAdmin](https://www.phpmyadmin.net/) is a free and open source administration tool for MySQL and MariaDB. 
+
 ## TL;DR
 
 ```console
