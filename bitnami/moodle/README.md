@@ -161,6 +161,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.nodePorts.https`          | Kubernetes HTTPS node port                                                                                                       | `""`                     |
 | `service.externalTrafficPolicy`    | Enable client source IP preservation                                                                                             | `Cluster`                |
 | `ingress.enabled`                  | Set to true to enable ingress record generation                                                                                  | `false`                  |
+| `ingress.ingressClassName`         | Name of the ingress class (Kubernetes 1.18+)                                                                                     | `""`                     |
 | `ingress.pathType`                 | Ingress Path type                                                                                                                | `ImplementationSpecific` |
 | `ingress.apiVersion`               | Override API Version (automatically detected if not set)                                                                         | `""`                     |
 | `ingress.hostname`                 | When the ingress is enabled, a host pointing to this will be created                                                             | `minio.local`            |
