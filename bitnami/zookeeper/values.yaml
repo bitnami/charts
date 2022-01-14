@@ -437,12 +437,12 @@ sidecars: []
 initContainers: []
 ## ZooKeeper Pod Disruption Budget
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/disruptions/
-## @param pdb.enabled Deploy a pdb object for the ZooKeeper pod
+## @param pdb.create Deploy a pdb object for the ZooKeeper pod
 ## @param pdb.minAvailable Minimum available ZooKeeper replicas
 ## @param pdb.maxUnavailable Maximum unavailable ZooKeeper replicas
 ##
 pdb:
-  enabled: false
+  create: false
   minAvailable: ""
   maxUnavailable: 1
 
