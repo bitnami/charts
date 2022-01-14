@@ -25,12 +25,12 @@ In order to replicate the container startup scripts execute this command:
 {{- $replicaCount := int .Values.replicaCount -}}
 {{- $releaseNamespace := .Release.Namespace -}}
 {{- $clusterDomain := .Values.clusterDomain -}}
-{{- $fullname := include "kafka.fullname" . -}}
+{{- $fullname := include "common.names.fullname" . -}}
 {{- $clientProtocol := include "kafka.listenerType" (dict "protocol" .Values.auth.clientProtocol) -}}
-{{- $saslMechanisms := coalesce .Values.auth.sasl.mechanisms .Values.auth.saslMechanisms -}}
-{{- $tlsEndpointIdentificationAlgorithm := default "" (coalesce .Values.auth.tls.endpointIdentificationAlgorithm .Values.auth.tlsEndpointIdentificationAlgorithm) -}}
-{{- $tlsPassword := coalesce .Values.auth.tls.password .Values.auth.jksPassword -}}
-{{- $servicePort := int .Values.service.port -}}
+{{- $saslMechanisms := .Values.auth.sasl.mechanisms -}}
+{{- $tlsEndpointIdentificationAlgorithm := default "" .Values.auth.tls.endpointIdentificationAlgorithm -}}
+{{- $tlsPassword := .Values.auth.tls.password -}}
+{{- $servicePort := int .Values.service.ports.client -}}
 {{- $loadBalancerIPListLength := len .Values.externalAccess.service.loadBalancerIPs -}}
 {{- if and .Values.externalAccess.enabled (not .Values.externalAccess.autoDiscovery.enabled) (not (eq $replicaCount $loadBalancerIPListLength )) (eq .Values.externalAccess.service.type "LoadBalancer") }}
 
@@ -103,7 +103,7 @@ org.apache.kafka.common.security.scram.ScramLoginModule required
 {{- else }}
 org.apache.kafka.common.security.plain.PlainLoginModule required
 {{- end }}
-username="{{ index (coalesce .Values.auth.sasl.jaas.clientUsers .Values.auth.jaas.clientUsers) 0 }}"
+username="{{ index .Values.auth.sasl.jaas.clientUsers 0 }}"
 password="$(kubectl get secret {{ $fullname }}-jaas --namespace {{ $releaseNamespace }} -o jsonpath='{.data.client-passwords}' | base64 --decode | cut -d , -f 1)";
 };
 
@@ -201,7 +201,7 @@ To create a pod that you can use as a Kafka client run the following commands:
     CONSUMER:
         kafka-console-consumer.sh \
             {{ if or (include "kafka.client.saslAuthentication" .) (include "kafka.client.tlsEncryption" .) }}--consumer.config /tmp/client.properties \{{ end }}
-            --bootstrap-server {{ $fullname }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ .Values.service.port }} \
+            --bootstrap-server {{ $fullname }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ .Values.service.ports.client }} \
             --topic test \
             --from-beginning
 
@@ -248,9 +248,5 @@ To connect to your Kafka server from outside the cluster, follow the instruction
 {{- end }}
 {{- end }}
 
-{{- include "common.warnings.rollingTag" .Values.image }}
-{{- include "common.warnings.rollingTag" .Values.externalAccess.autoDiscovery.image }}
-{{- include "common.warnings.rollingTag" .Values.metrics.kafka.image }}
-{{- include "common.warnings.rollingTag" .Values.metrics.jmx.image }}
-{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
+{{- include "kafka.checkRollingTags" . }}
 {{- include "kafka.validateValues" . }}

@@ -1,5 +1,5 @@
 {{- if .Values.externalAccess.enabled }}
-{{- $fullName := include "kafka.fullname" . }}
+{{- $fullName := include "common.names.fullname" . }}
 {{- $replicaCount := .Values.replicaCount | int }}
 {{- $root := . }}
 
@@ -10,7 +10,8 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "kafka.fullname" $ }}-{{ $i }}-external
+  name: {{ printf "%s-%s-external" (include "common.names.fullname" $) $i | trunc 63 | trimSuffix "-" }}
+  namespace: {{ $root.Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" $ | nindent 4 }}
     app.kubernetes.io/component: kafka
     pod: {{ $targetPod }}
@@ -38,13 +39,16 @@ spec:
   {{- end }}
   ports:
     - name: tcp-kafka
-      port: {{ $root.Values.externalAccess.service.port }}
+      port: {{ $root.Values.externalAccess.service.ports.external }}
       {{- if not (empty $root.Values.externalAccess.service.nodePorts) }}
       nodePort: {{ index $root.Values.externalAccess.service.nodePorts $i }}
       {{- else }}
       nodePort: null
       {{- end }}
       targetPort: kafka-external
+    {{- if $root.Values.externalAccess.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" $root.Values.externalAccess.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
   selector: {{- include "common.labels.matchLabels" $ | nindent 4 }}
     app.kubernetes.io/component: kafka
     statefulset.kubernetes.io/pod-name: {{ $targetPod }}
