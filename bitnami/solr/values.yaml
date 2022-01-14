@@ -567,6 +567,9 @@ serviceAccount:
   ## Can be set to false if pods using this serviceAccount do not need to use K8s API
   ##
   automountServiceAccountToken: true
+  ## @param serviceAccount.annotations Additional custom annotations for the ServiceAccount
+  ##
+  annotations: {}
 
 ## @section Solr TLS parameters
 
@@ -887,6 +890,12 @@ metrics:
     ## @param metrics.serviceMonitor.metricRelabelings MetricRelabelConfigs to apply to samples before ingestion
     ##
     metricRelabelings: []
+    ## @param metrics.serviceMonitor.honorLabels Specify honorLabels parameter to add the scrape endpoint
+    ##
+    honorLabels: false
+    ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
+    ##
+    jobLabel: ""
 
 ## @section ZooKeeper parameters
 
