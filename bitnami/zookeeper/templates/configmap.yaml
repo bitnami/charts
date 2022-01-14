@@ -13,5 +13,5 @@ metadata:
   {{- end }}
 data:
   zoo.cfg: |-
-    {{- .Values.configuration | nindent 4 }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.configuration "context" $ ) | nindent 4 }}
 {{- end }}
