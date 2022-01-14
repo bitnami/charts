@@ -104,10 +104,10 @@ fluentd:
 {{/* Validate values of Fluentd - must create serviceAccount to create enable RBAC */}}
 {{- define "fluentd.validateValues.rbac" -}}
 {{- $pspAvailable := (semverCompare "<1.25-0" (include "common.capabilities.kubeVersion" .)) -}}
-{{- if not (typeIs "<nil>" .Values.rbac.create) -}}
-fluentd: rbac.create
+{{- if not (typeIs "<nil>" .Values.rbac) }}
+fluentd: rbac
     Top-level rbac configuration has been removed, as it only applied to the forwarder.
-    Please migrate to forwarder.rbac.create
+    Please migrate to forwarder.rbac
 {{- end -}}
 {{- if and .Values.forwarder.rbac.create (not .Values.forwarder.serviceAccount.create) }}
 fluentd: forwarder.rbac.create
@@ -119,9 +119,9 @@ fluentd: forwarder.rbac.pspEnabled
     Enabling PSP requires RBAC to be created ("forwarder.rbac.create=true" is set)
     Please enable RBAC, or disable creation of PSP (--set forwarder.rbac.create=true) or (--set forwarder.rbac.pspEnabled=false)
 {{- end -}}
-{{- if and $pspAvailable .Values.forwarder.rbac.pspEnabled (not .Values.forwarder.securityContext.enabled) }}
+{{- if and $pspAvailable .Values.forwarder.rbac.pspEnabled (not .Values.forwarder.podSecurityContext.enabled) }}
 fluentd: forwarder.rbac.pspEnabled
-    Enabling PSP requires enabling forwarder pod security context ("forwarder.securityContext.enabled=true")
+    Enabling PSP requires enabling forwarder pod security context ("forwarder.podSecurityContext.enabled=true")
 {{- end -}}
 {{- if and $pspAvailable .Values.forwarder.rbac.pspEnabled (not .Values.forwarder.containerSecurityContext.enabled) }}
 fluentd: forwarder.rbac.pspEnabled
@@ -131,20 +131,10 @@ fluentd: forwarder.rbac.pspEnabled
 
 {{/* Validate values of Fluentd - prefer per component serviceAccounts to top-level definition */}}
 {{- define "fluentd.validateValues.serviceAccount" -}}
-{{- if not (typeIs "<nil>" .Values.serviceAccount.create) -}}
-fluentd: serviceAccount.create:
+{{- if not (typeIs "<nil>" .Values.serviceAccount) -}}
+fluentd: serviceAccount:
     Top-level serviceAccount configuration has been removed, as it only applied to the forwarder.
     Please migrate to forwarder.serviceAccount.create
-{{- end -}}
-{{- if .Values.serviceAccount.name }}
-fluentd: serviceAccount.name
-    Top-level serviceAccount configuration has been removed, as it only applied to the forwarder.
-    Please migrate to forwarder.serviceAccount.name
-{{- end -}}
-{{- if .Values.serviceAccount.annotations }}
-fluentd: serviceAccount.annotations
-    Top-level serviceAccount configuration has been removed, as it only applied to the forwarder.
-    Please migrate to forwarder.serviceAccount.annotations
 {{- end -}}
 {{- end -}}
 
