@@ -19,14 +19,23 @@ metadata:
   {{- end }}
 spec:
   type: {{ .Values.repoServer.service.type }}
+  {{- if and .Values.repoServer.service.clusterIP (eq .Values.repoServer.service.type "ClusterIP") }}
+  clusterIP: {{ .Values.repoServer.service.clusterIP }}
+  {{- end }}
   {{- if (or (eq .Values.repoServer.service.type "LoadBalancer") (eq .Values.repoServer.service.type "NodePort")) }}
   externalTrafficPolicy: {{ .Values.repoServer.service.externalTrafficPolicy | quote }}
   {{- end }}
-  {{ if eq .Values.repoServer.service.type "LoadBalancer" }}
+  {{- if eq .Values.repoServer.service.type "LoadBalancer" }}
   loadBalancerSourceRanges: {{ .Values.repoServer.service.loadBalancerSourceRanges }}
-  {{ end }}
+  {{- end }}
   {{- if (and (eq .Values.repoServer.service.type "LoadBalancer") (not (empty .Values.repoServer.service.loadBalancerIP))) }}
   loadBalancerIP: {{ .Values.repoServer.service.loadBalancerIP }}
+  {{- end }}
+  {{- if .Values.repoServer.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.repoServer.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.repoServer.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.repoServer.service.sessionAffinityConfig "context" $) | nindent 4 }}
   {{- end }}
   ports:
     - name: tcp-repo-server
@@ -38,5 +47,8 @@ spec:
       {{- else if eq .Values.repoServer.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
+    {{- if .Values.repoServer.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.repoServer.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: repo-server

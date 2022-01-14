@@ -77,6 +77,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.tag`         | Argo CD image tag (immutable tags are recommended) | `2.1.5-debian-10-r1` |
 | `image.pullPolicy`  | Argo CD image pull policy                          | `IfNotPresent`       |
 | `image.pullSecrets` | Argo CD image pull secrets                         | `[]`                 |
+| `image.debug`       | Enable Argo CD image debug mode                    | `false`              |
 
 
 ### Argo CD application controller parameters
@@ -84,6 +85,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                                     | Description                                                                                          | Value           |
 | -------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- | --------------- |
 | `controller.replicaCount`                                | Number of Argo CD replicas to deploy                                                                 | `1`             |
+| `controller.startupProbe.enabled`                        | Enable startupProbe on Argo CD nodes                                                                 | `false`         |
+| `controller.startupProbe.initialDelaySeconds`            | Initial delay seconds for startupProbe                                                               | `10`            |
+| `controller.startupProbe.periodSeconds`                  | Period seconds for startupProbe                                                                      | `10`            |
+| `controller.startupProbe.timeoutSeconds`                 | Timeout seconds for startupProbe                                                                     | `1`             |
+| `controller.startupProbe.failureThreshold`               | Failure threshold for startupProbe                                                                   | `3`             |
+| `controller.startupProbe.successThreshold`               | Success threshold for startupProbe                                                                   | `1`             |
 | `controller.livenessProbe.enabled`                       | Enable livenessProbe on Argo CD nodes                                                                | `true`          |
 | `controller.livenessProbe.initialDelaySeconds`           | Initial delay seconds for livenessProbe                                                              | `10`            |
 | `controller.livenessProbe.periodSeconds`                 | Period seconds for livenessProbe                                                                     | `10`            |
@@ -96,6 +103,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.readinessProbe.timeoutSeconds`               | Timeout seconds for readinessProbe                                                                   | `1`             |
 | `controller.readinessProbe.failureThreshold`             | Failure threshold for readinessProbe                                                                 | `3`             |
 | `controller.readinessProbe.successThreshold`             | Success threshold for readinessProbe                                                                 | `1`             |
+| `controller.customStartupProbe`                          | Custom startupProbe that overrides the default one                                                   | `{}`            |
 | `controller.customLivenessProbe`                         | Custom livenessProbe that overrides the default one                                                  | `{}`            |
 | `controller.customReadinessProbe`                        | Custom readinessProbe that overrides the default one                                                 | `{}`            |
 | `controller.resources.limits`                            | The resources limits for the Argo CD containers                                                      | `{}`            |
@@ -104,9 +112,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.podSecurityContext.fsGroup`                  | Set Argo CD pod's Security Context fsGroup                                                           | `1001`          |
 | `controller.containerSecurityContext.enabled`            | Enabled Argo CD containers' Security Context                                                         | `true`          |
 | `controller.containerSecurityContext.runAsUser`          | Set Argo CD containers' Security Context runAsUser                                                   | `1001`          |
+| `controller.containerSecurityContext.runAsNonRoot`       | Set Argo CD container's Security Context runAsNonRoot                                                | `true`          |
 | `controller.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                 | `true`          |
 | `controller.serviceAccount.name`                         | The name of the ServiceAccount to use.                                                               | `""`            |
 | `controller.serviceAccount.automountServiceAccountToken` | Automount service account token for the application controller service account                       | `true`          |
+| `controller.serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.           | `{}`            |
 | `controller.clusterAdminAccess`                          | Enable K8s cluster admin access for the application controller                                       | `true`          |
 | `controller.clusterRoleRules`                            | Use custom rules for the application controller's cluster role                                       | `[]`            |
 | `controller.logFormat`                                   | Format for the Argo CD application controller logs. Options: [text, json]                            | `text`          |
@@ -116,20 +126,34 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.service.type`                                | Argo CD service type                                                                                 | `ClusterIP`     |
 | `controller.service.port`                                | Argo CD application controller service port                                                          | `8082`          |
 | `controller.service.nodePort`                            | Node port for Argo CD application controller service                                                 | `""`            |
+| `controller.service.clusterIP`                           | %%MAIN_CONTAINER_NAME%% service Cluster IP                                                           | `""`            |
 | `controller.service.loadBalancerIP`                      | Argo CD application controller service Load Balancer IP                                              | `""`            |
 | `controller.service.loadBalancerSourceRanges`            | Argo CD application controller service Load Balancer sources                                         | `[]`            |
 | `controller.service.externalTrafficPolicy`               | Argo CD application controller service external traffic policy                                       | `Cluster`       |
 | `controller.service.annotations`                         | Additional custom annotations for Argo CD application controller service                             | `{}`            |
+| `controller.service.extraPorts`                          | Extra ports to expose (normally used with the `sidecar` value)                                       | `[]`            |
+| `controller.service.sessionAffinity`                     | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                 | `None`          |
+| `controller.service.sessionAffinityConfig`               | Additional settings for the sessionAffinity                                                          | `{}`            |
 | `controller.metrics.enabled`                             | Enable Argo CD application controller metrics                                                        | `false`         |
 | `controller.metrics.service.type`                        | Argo CD application controller service type                                                          | `ClusterIP`     |
 | `controller.metrics.service.port`                        | Argo CD application controller metrics service port                                                  | `8082`          |
 | `controller.metrics.service.nodePort`                    | Node port for the application controller service                                                     | `""`            |
+| `controller.metrics.service.clusterIP`                   | Argo CD application controller metrics service Cluster IP                                            | `""`            |
 | `controller.metrics.service.loadBalancerIP`              | Argo CD application controller service Load Balancer IP                                              | `""`            |
 | `controller.metrics.service.loadBalancerSourceRanges`    | Argo CD application controller service Load Balancer sources                                         | `[]`            |
 | `controller.metrics.service.externalTrafficPolicy`       | Argo CD application controller service external traffic policy                                       | `Cluster`       |
 | `controller.metrics.service.annotations`                 | Additional custom annotations for Argo CD application controller service                             | `{}`            |
-| `controller.metrics.serviceMonitor.enabled`              | Enable service monirot for Argo CD application controller                                            | `false`         |
-| `controller.metrics.serviceMonitor.interval`             | Interval for the Argo CD application controller service monitor                                      | `30s`           |
+| `controller.metrics.service.sessionAffinity`             | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                 | `None`          |
+| `controller.metrics.service.sessionAffinityConfig`       | Additional settings for the sessionAffinity                                                          | `{}`            |
+| `controller.metrics.serviceMonitor.enabled`              | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator                         | `false`         |
+| `controller.metrics.serviceMonitor.namespace`            | Namespace which Prometheus is running in                                                             | `""`            |
+| `controller.metrics.serviceMonitor.jobLabel`             | The name of the label on the target service to use as the job name in prometheus.                    | `""`            |
+| `controller.metrics.serviceMonitor.interval`             | Interval at which metrics should be scraped                                                          | `30s`           |
+| `controller.metrics.serviceMonitor.scrapeTimeout`        | Timeout after which the scrape is ended                                                              | `10s`           |
+| `controller.metrics.serviceMonitor.relabelings`          | RelabelConfigs to apply to samples before scraping                                                   | `[]`            |
+| `controller.metrics.serviceMonitor.metricRelabelings`    | MetricRelabelConfigs to apply to samples before ingestion                                            | `[]`            |
+| `controller.metrics.serviceMonitor.selector`             | ServiceMonitor selector labels                                                                       | `{}`            |
+| `controller.metrics.serviceMonitor.honorLabels`          | honorLabels chooses the metric's labels on collisions with target labels                             | `false`         |
 | `controller.metrics.rules.enabled`                       | Enable render extra rules for PrometheusRule object                                                  | `false`         |
 | `controller.metrics.rules.spec`                          | Rules to render into the PrometheusRule object                                                       | `[]`            |
 | `controller.metrics.rules.selector`                      | Selector for the PrometheusRule object                                                               | `{}`            |
@@ -153,6 +177,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.affinity`                                    | Affinity for Argo CD pods assignment                                                                 | `{}`            |
 | `controller.nodeSelector`                                | Node labels for Argo CD pods assignment                                                              | `{}`            |
 | `controller.tolerations`                                 | Tolerations for Argo CD pods assignment                                                              | `[]`            |
+| `controller.schedulerName`                               | Name of the k8s scheduler (other than default)                                                       | `""`            |
+| `controller.topologySpreadConstraints`                   | Topology Spread Constraints for pod assignment                                                       | `[]`            |
 | `controller.updateStrategy.type`                         | Argo CD statefulset strategy type                                                                    | `RollingUpdate` |
 | `controller.priorityClassName`                           | Argo CD pods' priorityClassName                                                                      | `""`            |
 | `controller.lifecycleHooks`                              | for the Argo CD container(s) to automate configuration before or after startup                       | `{}`            |
@@ -170,6 +196,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                                 | Description                                                                                                                     | Value                    |
 | ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
 | `server.replicaCount`                                | Number of Argo CD server replicas to deploy                                                                                     | `1`                      |
+| `server.startupProbe.enabled`                        | Enable startupProbe on Argo CD server nodes                                                                                     | `false`                  |
+| `server.startupProbe.initialDelaySeconds`            | Initial delay seconds for startupProbe                                                                                          | `10`                     |
+| `server.startupProbe.periodSeconds`                  | Period seconds for startupProbe                                                                                                 | `10`                     |
+| `server.startupProbe.timeoutSeconds`                 | Timeout seconds for startupProbe                                                                                                | `1`                      |
+| `server.startupProbe.failureThreshold`               | Failure threshold for startupProbe                                                                                              | `3`                      |
+| `server.startupProbe.successThreshold`               | Success threshold for startupProbe                                                                                              | `1`                      |
 | `server.livenessProbe.enabled`                       | Enable livenessProbe on Argo CD server nodes                                                                                    | `true`                   |
 | `server.livenessProbe.initialDelaySeconds`           | Initial delay seconds for livenessProbe                                                                                         | `10`                     |
 | `server.livenessProbe.periodSeconds`                 | Period seconds for livenessProbe                                                                                                | `10`                     |
@@ -182,6 +214,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.readinessProbe.timeoutSeconds`               | Timeout seconds for readinessProbe                                                                                              | `1`                      |
 | `server.readinessProbe.failureThreshold`             | Failure threshold for readinessProbe                                                                                            | `3`                      |
 | `server.readinessProbe.successThreshold`             | Success threshold for readinessProbe                                                                                            | `1`                      |
+| `server.customStartupProbe`                          | Custom startupProbe that overrides the default one                                                                              | `{}`                     |
 | `server.customLivenessProbe`                         | Custom livenessProbe that overrides the default one                                                                             | `{}`                     |
 | `server.customReadinessProbe`                        | Custom readinessProbe that overrides the default one                                                                            | `{}`                     |
 | `server.resources.limits`                            | The resources limits for the Argo CD server containers                                                                          | `{}`                     |
@@ -190,6 +223,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.podSecurityContext.fsGroup`                  | Set Argo CD server pod's Security Context fsGroup                                                                               | `1001`                   |
 | `server.containerSecurityContext.enabled`            | Enabled Argo CD server containers' Security Context                                                                             | `true`                   |
 | `server.containerSecurityContext.runAsUser`          | Set Argo CD server containers' Security Context runAsUser                                                                       | `1001`                   |
+| `server.containerSecurityContext.runAsNonRoot`       | Set Argo CD server containers' Security Context runAsNonRoot                                                                    | `true`                   |
 | `server.autoscaling.enabled`                         | Enable Argo CD server deployment autoscaling                                                                                    | `false`                  |
 | `server.autoscaling.minReplicas`                     | Argo CD server deployment autoscaling minimum number of replicas                                                                | `1`                      |
 | `server.autoscaling.maxReplicas`                     | Argo CD server deployment autoscaling maximum number of replicas                                                                | `5`                      |
@@ -212,17 +246,28 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.ingress.extraPaths`                          | Extra paths for the Argo CD server ingress                                                                                      | `[]`                     |
 | `server.ingress.extraTls`                            | Extra TLS configuration for the Argo CD server ingress                                                                          | `[]`                     |
 | `server.ingress.secrets`                             | Secrets array to mount into the Ingress                                                                                         | `[]`                     |
+| `server.ingress.ingressClassName`                    | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                   | `""`                     |
 | `server.ingress.selfSigned`                          | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                    | `false`                  |
 | `server.metrics.enabled`                             | Enable metrics for the Argo CD server                                                                                           | `false`                  |
 | `server.metrics.service.type`                        | Argo CD server service type                                                                                                     | `ClusterIP`              |
 | `server.metrics.service.port`                        | Argo CD server metrics service port                                                                                             | `8084`                   |
 | `server.metrics.service.nodePort`                    | Node port for Argo CD server metrics service                                                                                    | `""`                     |
+| `server.metrics.service.clusterIP`                   | Argo CD server metrics service Cluster IP                                                                                       | `""`                     |
 | `server.metrics.service.loadBalancerIP`              | Argo CD server service Load Balancer IP                                                                                         | `""`                     |
 | `server.metrics.service.loadBalancerSourceRanges`    | Argo CD server service Load Balancer sources                                                                                    | `[]`                     |
 | `server.metrics.service.externalTrafficPolicy`       | Argo CD server service external traffic policy                                                                                  | `Cluster`                |
 | `server.metrics.service.annotations`                 | Additional custom annotations for Argo CD server service                                                                        | `{}`                     |
-| `server.metrics.serviceMonitor.enabled`              | Enable service monirot for Argo CD server                                                                                       | `false`                  |
-| `server.metrics.serviceMonitor.interval`             | Interval for the Argo CD server service monitor                                                                                 | `30s`                    |
+| `server.metrics.service.sessionAffinity`             | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                            | `None`                   |
+| `server.metrics.service.sessionAffinityConfig`       | Additional settings for the sessionAffinity                                                                                     | `{}`                     |
+| `server.metrics.serviceMonitor.enabled`              | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator                                                    | `false`                  |
+| `server.metrics.serviceMonitor.namespace`            | Namespace which Prometheus is running in                                                                                        | `""`                     |
+| `server.metrics.serviceMonitor.jobLabel`             | The name of the label on the target service to use as the job name in prometheus.                                               | `""`                     |
+| `server.metrics.serviceMonitor.interval`             | Interval at which metrics should be scraped                                                                                     | `30s`                    |
+| `server.metrics.serviceMonitor.scrapeTimeout`        | Timeout after which the scrape is ended                                                                                         | `10s`                    |
+| `server.metrics.serviceMonitor.relabelings`          | RelabelConfigs to apply to samples before scraping                                                                              | `[]`                     |
+| `server.metrics.serviceMonitor.metricRelabelings`    | MetricRelabelConfigs to apply to samples before ingestion                                                                       | `[]`                     |
+| `server.metrics.serviceMonitor.selector`             | ServiceMonitor selector labels                                                                                                  | `{}`                     |
+| `server.metrics.serviceMonitor.honorLabels`          | honorLabels chooses the metric's labels on collisions with target labels                                                        | `false`                  |
 | `server.ingressGrpc.enabled`                         | Enable the creation of an ingress for the Argo CD gRPC server                                                                   | `false`                  |
 | `server.ingressGrpc.pathType`                        | Path type for the Argo CD gRPC server ingress                                                                                   | `ImplementationSpecific` |
 | `server.ingressGrpc.apiVersion`                      | Ingress API version for the Argo CD gRPC server ingress                                                                         | `""`                     |
@@ -234,6 +279,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.ingressGrpc.extraPaths`                      | Extra paths for the Argo CD gRPC server ingress                                                                                 | `[]`                     |
 | `server.ingressGrpc.extraTls`                        | Extra TLS configuration for the Argo CD gRPC server ingress                                                                     | `[]`                     |
 | `server.ingressGrpc.secrets`                         | Secrets array to mount into the Ingress                                                                                         | `[]`                     |
+| `server.ingressGrpc.ingressClassName`                | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                   | `""`                     |
 | `server.ingressGrpc.selfSigned`                      | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                    | `false`                  |
 | `server.containerPorts.http`                         | Argo CD server HTTP container port                                                                                              | `8080`                   |
 | `server.containerPorts.https`                        | Argo CD server HTTPS container port                                                                                             | `8443`                   |
@@ -243,10 +289,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.service.ports.https`                         | HTTPS port for the gRPC ingress when enabled                                                                                    | `443`                    |
 | `server.service.nodePorts.http`                      | Node port for HTTP                                                                                                              | `""`                     |
 | `server.service.nodePorts.https`                     | Node port for HTTPS                                                                                                             | `""`                     |
+| `server.service.clusterIP`                           | Argo CD service Cluster IP                                                                                                      | `""`                     |
 | `server.service.loadBalancerIP`                      | Argo CD service Load Balancer IP                                                                                                | `""`                     |
 | `server.service.loadBalancerSourceRanges`            | Argo CD service Load Balancer sources                                                                                           | `[]`                     |
 | `server.service.externalTrafficPolicy`               | Argo CD service external traffic policy                                                                                         | `Cluster`                |
 | `server.service.annotations`                         | Additional custom annotations for Argo CD service                                                                               | `{}`                     |
+| `server.service.extraPorts`                          | Extra ports to expose (normally used with the `sidecar` value)                                                                  | `[]`                     |
+| `server.service.sessionAffinity`                     | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                            | `None`                   |
+| `server.service.sessionAffinityConfig`               | Additional settings for the sessionAffinity                                                                                     | `{}`                     |
 | `server.command`                                     | Override default container command (useful when using custom images)                                                            | `[]`                     |
 | `server.args`                                        | Override default container args (useful when using custom images)                                                               | `[]`                     |
 | `server.extraArgs`                                   | concat to the default args                                                                                                      | `[]`                     |
@@ -261,6 +311,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.affinity`                                    | Affinity for Argo CD server pods assignment                                                                                     | `{}`                     |
 | `server.nodeSelector`                                | Node labels for Argo CD server pods assignment                                                                                  | `{}`                     |
 | `server.tolerations`                                 | Tolerations for Argo CD server pods assignment                                                                                  | `[]`                     |
+| `server.schedulerName`                               | Name of the k8s scheduler (other than default)                                                                                  | `""`                     |
+| `server.topologySpreadConstraints`                   | Topology Spread Constraints for pod assignment                                                                                  | `[]`                     |
 | `server.updateStrategy.type`                         | Argo CD server statefulset strategy type                                                                                        | `RollingUpdate`          |
 | `server.priorityClassName`                           | Argo CD server pods' priorityClassName                                                                                          | `""`                     |
 | `server.lifecycleHooks`                              | for the Argo CD server container(s) to automate configuration before or after startup                                           | `{}`                     |
@@ -274,6 +326,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                            | `true`                   |
 | `server.serviceAccount.name`                         | The name of the ServiceAccount to use.                                                                                          | `""`                     |
 | `server.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                                  | `true`                   |
+| `server.serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                                      | `{}`                     |
 
 
 ### Argo CD repo server Parameters
@@ -281,6 +334,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                                     | Description                                                                                          | Value           |
 | -------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- | --------------- |
 | `repoServer.replicaCount`                                | Number of Argo CD repo server replicas to deploy                                                     | `1`             |
+| `repoServer.startupProbe.enabled`                        | Enable startupProbe on Argo CD repo server nodes                                                     | `false`         |
+| `repoServer.startupProbe.initialDelaySeconds`            | Initial delay seconds for startupProbe                                                               | `10`            |
+| `repoServer.startupProbe.periodSeconds`                  | Period seconds for startupProbe                                                                      | `10`            |
+| `repoServer.startupProbe.timeoutSeconds`                 | Timeout seconds for startupProbe                                                                     | `1`             |
+| `repoServer.startupProbe.failureThreshold`               | Failure threshold for startupProbe                                                                   | `3`             |
+| `repoServer.startupProbe.successThreshold`               | Success threshold for startupProbe                                                                   | `1`             |
 | `repoServer.livenessProbe.enabled`                       | Enable livenessProbe on Argo CD repo server nodes                                                    | `true`          |
 | `repoServer.livenessProbe.initialDelaySeconds`           | Initial delay seconds for livenessProbe                                                              | `10`            |
 | `repoServer.livenessProbe.periodSeconds`                 | Period seconds for livenessProbe                                                                     | `10`            |
@@ -293,6 +352,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `repoServer.readinessProbe.timeoutSeconds`               | Timeout seconds for readinessProbe                                                                   | `1`             |
 | `repoServer.readinessProbe.failureThreshold`             | Failure threshold for readinessProbe                                                                 | `3`             |
 | `repoServer.readinessProbe.successThreshold`             | Success threshold for readinessProbe                                                                 | `1`             |
+| `repoServer.customStartupProbe`                          | Custom startupProbe that overrides the default one                                                   | `{}`            |
 | `repoServer.customLivenessProbe`                         | Custom livenessProbe that overrides the default one                                                  | `{}`            |
 | `repoServer.customReadinessProbe`                        | Custom readinessProbe that overrides the default one                                                 | `{}`            |
 | `repoServer.resources.limits`                            | The resources limits for the Argo CD repo server containers                                          | `{}`            |
@@ -301,13 +361,18 @@ The command removes all the Kubernetes components associated with the chart and 
 | `repoServer.podSecurityContext.fsGroup`                  | Set Argo CD repo server pod's Security Context fsGroup                                               | `1001`          |
 | `repoServer.containerSecurityContext.enabled`            | Enabled Argo CD repo server containers' Security Context                                             | `true`          |
 | `repoServer.containerSecurityContext.runAsUser`          | Set Argo CD repo server containers' Security Context runAsUser                                       | `1001`          |
+| `repoServer.containerSecurityContext.runAsNonRoot`       | Set Argo CD repo server containers' Security Context runAsNonRoot                                    | `true`          |
 | `repoServer.service.type`                                | Repo server service type                                                                             | `ClusterIP`     |
 | `repoServer.service.port`                                | Repo server service port                                                                             | `8081`          |
 | `repoServer.service.nodePort`                            | Node port for the repo server service                                                                | `""`            |
+| `repoServer.service.clusterIP`                           | Repo server service Cluster IP                                                                       | `""`            |
 | `repoServer.service.loadBalancerIP`                      | Repo server service Load Balancer IP                                                                 | `""`            |
 | `repoServer.service.loadBalancerSourceRanges`            | Repo server service Load Balancer sources                                                            | `[]`            |
 | `repoServer.service.externalTrafficPolicy`               | Repo server service external traffic policy                                                          | `Cluster`       |
 | `repoServer.service.annotations`                         | Additional custom annotations for Repo server service                                                | `{}`            |
+| `repoServer.service.extraPorts`                          | Extra ports to expose (normally used with the `sidecar` value)                                       | `[]`            |
+| `repoServer.service.sessionAffinity`                     | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                 | `None`          |
+| `repoServer.service.sessionAffinityConfig`               | Additional settings for the sessionAffinity                                                          | `{}`            |
 | `repoServer.logFormat`                                   | Format for the Argo CD repo server logs. Options: [text, json]                                       | `text`          |
 | `repoServer.logLevel`                                    | Log level for the Argo CD repo server                                                                | `info`          |
 | `repoServer.containerPorts.repoServer`                   | Container port for Argo CD repo server                                                               | `8081`          |
@@ -316,12 +381,22 @@ The command removes all the Kubernetes components associated with the chart and 
 | `repoServer.metrics.service.type`                        | Argo CD repo server service type                                                                     | `ClusterIP`     |
 | `repoServer.metrics.service.port`                        | Argo CD repo server metrics service port                                                             | `8084`          |
 | `repoServer.metrics.service.nodePort`                    | Node port for the repo server metrics service                                                        | `""`            |
+| `repoServer.metrics.service.clusterIP`                   | Argo CD repo server metrics service Cluster IP                                                       | `""`            |
 | `repoServer.metrics.service.loadBalancerIP`              | Argo CD repo server service Load Balancer IP                                                         | `""`            |
 | `repoServer.metrics.service.loadBalancerSourceRanges`    | Argo CD repo server service Load Balancer sources                                                    | `[]`            |
 | `repoServer.metrics.service.externalTrafficPolicy`       | Argo CD repo server service external traffic policy                                                  | `Cluster`       |
 | `repoServer.metrics.service.annotations`                 | Additional custom annotations for Argo CD repo server service                                        | `{}`            |
-| `repoServer.metrics.serviceMonitor.enabled`              | Enable service monirot for Argo CD repo server                                                       | `false`         |
-| `repoServer.metrics.serviceMonitor.interval`             | Interval for the Argo CD repo server service monitor                                                 | `30s`           |
+| `repoServer.metrics.service.sessionAffinity`             | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                 | `None`          |
+| `repoServer.metrics.service.sessionAffinityConfig`       | Additional settings for the sessionAffinity                                                          | `{}`            |
+| `repoServer.metrics.serviceMonitor.enabled`              | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator                         | `false`         |
+| `repoServer.metrics.serviceMonitor.namespace`            | Namespace which Prometheus is running in                                                             | `""`            |
+| `repoServer.metrics.serviceMonitor.jobLabel`             | The name of the label on the target service to use as the job name in prometheus.                    | `""`            |
+| `repoServer.metrics.serviceMonitor.interval`             | Interval at which metrics should be scraped                                                          | `30s`           |
+| `repoServer.metrics.serviceMonitor.scrapeTimeout`        | Timeout after which the scrape is ended                                                              | `10s`           |
+| `repoServer.metrics.serviceMonitor.relabelings`          | RelabelConfigs to apply to samples before scraping                                                   | `[]`            |
+| `repoServer.metrics.serviceMonitor.metricRelabelings`    | MetricRelabelConfigs to apply to samples before ingestion                                            | `[]`            |
+| `repoServer.metrics.serviceMonitor.selector`             | ServiceMonitor selector labels                                                                       | `{}`            |
+| `repoServer.metrics.serviceMonitor.honorLabels`          | honorLabels chooses the metric's labels on collisions with target labels                             | `false`         |
 | `repoServer.autoscaling.enabled`                         | Enable Argo CD repo server deployment autoscaling                                                    | `false`         |
 | `repoServer.autoscaling.minReplicas`                     | Argo CD repo server deployment autoscaling minimum number of replicas                                | `1`             |
 | `repoServer.autoscaling.maxReplicas`                     | Argo CD repo server deployment autoscaling maximum number of replicas                                | `5`             |
@@ -330,6 +405,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `repoServer.serviceAccount.create`                       | Specifies whether a ServiceAccount for repo server should be created                                 | `true`          |
 | `repoServer.serviceAccount.name`                         | The name of the ServiceAccount for repo server to use.                                               | `""`            |
 | `repoServer.serviceAccount.automountServiceAccountToken` | Automount service account token for the repo server service account                                  | `true`          |
+| `repoServer.serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.           | `{}`            |
 | `repoServer.command`                                     | Override default container command (useful when using custom images)                                 | `[]`            |
 | `repoServer.args`                                        | Override default container args (useful when using custom images)                                    | `[]`            |
 | `repoServer.extraArgs`                                   | Add extra args to the default repo server args                                                       | `[]`            |
@@ -344,6 +420,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `repoServer.affinity`                                    | Affinity for Argo CD repo server pods assignment                                                     | `{}`            |
 | `repoServer.nodeSelector`                                | Node labels for Argo CD repo server pods assignment                                                  | `{}`            |
 | `repoServer.tolerations`                                 | Tolerations for Argo CD repo server pods assignment                                                  | `[]`            |
+| `repoServer.schedulerName`                               | Name of the k8s scheduler (other than default)                                                       | `""`            |
+| `repoServer.topologySpreadConstraints`                   | Topology Spread Constraints for pod assignment                                                       | `[]`            |
 | `repoServer.updateStrategy.type`                         | Argo CD repo server statefulset strategy type                                                        | `RollingUpdate` |
 | `repoServer.priorityClassName`                           | Argo CD repo server pods' priorityClassName                                                          | `""`            |
 | `repoServer.lifecycleHooks`                              | for the Argo CD repo server container(s) to automate configuration before or after startup           | `{}`            |
@@ -365,8 +443,15 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dex.image.tag`                                   | Dex image tag (immutable tags are recommended)                                                | `2.30.0-debian-10-r77` |
 | `dex.image.pullPolicy`                            | Dex image pull policy                                                                         | `IfNotPresent`         |
 | `dex.image.pullSecrets`                           | Dex image pull secrets                                                                        | `[]`                   |
+| `dex.image.debug`                                 | Enable Dex image debug mode                                                                   | `false`                |
 | `dex.enabled`                                     | Enable the creation of a Dex deployment for SSO                                               | `false`                |
 | `dex.replicaCount`                                | Number of Dex replicas to deploy                                                              | `1`                    |
+| `dex.startupProbe.enabled`                        | Enable startupProbe on Dex nodes                                                              | `false`                |
+| `dex.startupProbe.initialDelaySeconds`            | Initial delay seconds for startupProbe                                                        | `10`                   |
+| `dex.startupProbe.periodSeconds`                  | Period seconds for startupProbe                                                               | `10`                   |
+| `dex.startupProbe.timeoutSeconds`                 | Timeout seconds for startupProbe                                                              | `1`                    |
+| `dex.startupProbe.failureThreshold`               | Failure threshold for startupProbe                                                            | `3`                    |
+| `dex.startupProbe.successThreshold`               | Success threshold for startupProbe                                                            | `1`                    |
 | `dex.livenessProbe.enabled`                       | Enable livenessProbe on Dex nodes                                                             | `true`                 |
 | `dex.livenessProbe.initialDelaySeconds`           | Initial delay seconds for livenessProbe                                                       | `10`                   |
 | `dex.livenessProbe.periodSeconds`                 | Period seconds for livenessProbe                                                              | `10`                   |
@@ -379,6 +464,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dex.readinessProbe.timeoutSeconds`               | Timeout seconds for readinessProbe                                                            | `1`                    |
 | `dex.readinessProbe.failureThreshold`             | Failure threshold for readinessProbe                                                          | `3`                    |
 | `dex.readinessProbe.successThreshold`             | Success threshold for readinessProbe                                                          | `1`                    |
+| `dex.customStartupProbe`                          | Custom startupProbe that overrides the default one                                            | `{}`                   |
 | `dex.customLivenessProbe`                         | Custom livenessProbe that overrides the default one                                           | `{}`                   |
 | `dex.customReadinessProbe`                        | Custom readinessProbe that overrides the default one                                          | `{}`                   |
 | `dex.resources.limits`                            | The resources limits for the Dex containers                                                   | `{}`                   |
@@ -387,15 +473,20 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dex.podSecurityContext.fsGroup`                  | Set Dex pod's Security Context fsGroup                                                        | `1001`                 |
 | `dex.containerSecurityContext.enabled`            | Enabled Dex containers' Security Context                                                      | `true`                 |
 | `dex.containerSecurityContext.runAsUser`          | Set Dex containers' Security Context runAsUser                                                | `1001`                 |
+| `dex.containerSecurityContext.runAsNonRoot`       | Set Dex containers' Security Context runAsNonRoot                                             | `true`                 |
 | `dex.service.type`                                | Dex service type                                                                              | `ClusterIP`            |
 | `dex.service.ports.http`                          | Dex HTTP service port                                                                         | `5556`                 |
 | `dex.service.ports.grpc`                          | Dex grpc service port                                                                         | `5557`                 |
 | `dex.service.nodePorts.http`                      | HTTP node port for the Dex service                                                            | `""`                   |
 | `dex.service.nodePorts.grpc`                      | gRPC node port for the Dex service                                                            | `""`                   |
+| `dex.service.clusterIP`                           | %%MAIN_CONTAINER_NAME%% service Cluster IP                                                    | `""`                   |
 | `dex.service.loadBalancerIP`                      | Dex service Load Balancer IP                                                                  | `""`                   |
 | `dex.service.loadBalancerSourceRanges`            | Dex service Load Balancer sources                                                             | `[]`                   |
 | `dex.service.externalTrafficPolicy`               | Dex service external traffic policy                                                           | `Cluster`              |
 | `dex.service.annotations`                         | Additional custom annotations for Dex service                                                 | `{}`                   |
+| `dex.service.extraPorts`                          | Extra ports to expose (normally used with the `sidecar` value)                                | `[]`                   |
+| `dex.service.sessionAffinity`                     | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                          | `None`                 |
+| `dex.service.sessionAffinityConfig`               | Additional settings for the sessionAffinity                                                   | `{}`                   |
 | `dex.containerPorts.http`                         | Dex container HTTP port                                                                       | `5556`                 |
 | `dex.containerPorts.grpc`                         | Dex gRPC port                                                                                 | `5557`                 |
 | `dex.containerPorts.metrics`                      | Dex metrics port                                                                              | `5558`                 |
@@ -403,15 +494,26 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dex.metrics.service.type`                        | Dex service type                                                                              | `ClusterIP`            |
 | `dex.metrics.service.port`                        | Dex metrics service port                                                                      | `5558`                 |
 | `dex.metrics.service.nodePort`                    | Node port for the Dex service                                                                 | `""`                   |
+| `dex.metrics.service.clusterIP`                   | Dex service metrics service Cluster IP                                                        | `""`                   |
 | `dex.metrics.service.loadBalancerIP`              | Dex service Load Balancer IP                                                                  | `""`                   |
 | `dex.metrics.service.loadBalancerSourceRanges`    | Dex service Load Balancer sources                                                             | `[]`                   |
 | `dex.metrics.service.externalTrafficPolicy`       | Dex service external traffic policy                                                           | `Cluster`              |
 | `dex.metrics.service.annotations`                 | Additional custom annotations for Dex service                                                 | `{}`                   |
-| `dex.metrics.serviceMonitor.enabled`              | Enable service monirot for Dex                                                                | `false`                |
-| `dex.metrics.serviceMonitor.interval`             | Interval for the Dex service monitor                                                          | `30s`                  |
+| `dex.metrics.service.sessionAffinity`             | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                          | `None`                 |
+| `dex.metrics.service.sessionAffinityConfig`       | Additional settings for the sessionAffinity                                                   | `{}`                   |
+| `dex.metrics.serviceMonitor.enabled`              | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator                  | `false`                |
+| `dex.metrics.serviceMonitor.namespace`            | Namespace which Prometheus is running in                                                      | `""`                   |
+| `dex.metrics.serviceMonitor.jobLabel`             | The name of the label on the target service to use as the job name in prometheus.             | `""`                   |
+| `dex.metrics.serviceMonitor.interval`             | Interval at which metrics should be scraped                                                   | `30s`                  |
+| `dex.metrics.serviceMonitor.scrapeTimeout`        | Timeout after which the scrape is ended                                                       | `10s`                  |
+| `dex.metrics.serviceMonitor.relabelings`          | RelabelConfigs to apply to samples before scraping                                            | `[]`                   |
+| `dex.metrics.serviceMonitor.metricRelabelings`    | MetricRelabelConfigs to apply to samples before ingestion                                     | `[]`                   |
+| `dex.metrics.serviceMonitor.selector`             | ServiceMonitor selector labels                                                                | `{}`                   |
+| `dex.metrics.serviceMonitor.honorLabels`          | honorLabels chooses the metric's labels on collisions with target labels                      | `false`                |
 | `dex.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created for Dex                                  | `true`                 |
 | `dex.serviceAccount.name`                         | The name of the ServiceAccount to use.                                                        | `""`                   |
 | `dex.serviceAccount.automountServiceAccountToken` | Automount service account token for the Dex service account                                   | `true`                 |
+| `dex.serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.    | `{}`                   |
 | `dex.command`                                     | Override default container command (useful when using custom images)                          | `[]`                   |
 | `dex.args`                                        | Override default container args (useful when using custom images)                             | `[]`                   |
 | `dex.extraArgs`                                   | Add extra args to the default args for Dex                                                    | `[]`                   |
@@ -426,6 +528,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dex.affinity`                                    | Affinity for Dex pods assignment                                                              | `{}`                   |
 | `dex.nodeSelector`                                | Node labels for Dex pods assignment                                                           | `{}`                   |
 | `dex.tolerations`                                 | Tolerations for Dex pods assignment                                                           | `[]`                   |
+| `dex.schedulerName`                               | Name of the k8s scheduler (other than default)                                                | `""`                   |
+| `dex.topologySpreadConstraints`                   | Topology Spread Constraints for pod assignment                                                | `[]`                   |
 | `dex.updateStrategy.type`                         | Dex statefulset strategy type                                                                 | `RollingUpdate`        |
 | `dex.priorityClassName`                           | Dex pods' priorityClassName                                                                   | `""`                   |
 | `dex.lifecycleHooks`                              | for the Dex container(s) to automate configuration before or after startup                    | `{}`                   |
