@@ -438,10 +438,12 @@ initContainers: []
 ## ZooKeeper Pod Disruption Budget
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/disruptions/
 ## @param pdb.enabled Deploy a pdb object for the ZooKeeper pod
+## @param pdb.minAvailable Minimum available ZooKeeper replicas
 ## @param pdb.maxUnavailable Maximum unavailable ZooKeeper replicas
 ##
 pdb:
   enabled: false
+  minAvailable: ""
   maxUnavailable: 1
 
 ## @section Traffic Exposure parameters
@@ -538,6 +540,9 @@ serviceAccount:
   ## Can be set to false if pods using this serviceAccount do not need to use K8s API
   ##
   automountServiceAccountToken: true
+  ## @param serviceAccount.annotations Additional custom annotations for the ServiceAccount
+  ##
+  annotations: {}
 
 ## @section Persistence parameters
 
@@ -699,6 +704,12 @@ metrics:
     ## @param metrics.serviceMonitor.metricRelabelings MetricRelabelConfigs to apply to samples before ingestion
     ##
     metricRelabelings: []
+    ## @param metrics.serviceMonitor.honorLabels Specify honorLabels parameter to add the scrape endpoint
+    ##
+    honorLabels: false
+    ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
+    ##
+    jobLabel: ""
   ## Prometheus Operator PrometheusRule configuration
   ##
   prometheusRule:

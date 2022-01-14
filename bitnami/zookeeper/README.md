@@ -178,6 +178,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sidecars`                              | Add additional sidecar containers to the ZooKeeper pod(s)                                                                                                                                         | `[]`            |
 | `initContainers`                        | Add additional init containers to the ZooKeeper pod(s)                                                                                                                                            | `[]`            |
 | `pdb.enabled`                           | Deploy a pdb object for the ZooKeeper pod                                                                                                                                                         | `false`         |
+| `pdb.minAvailable`                      | Minimum available ZooKeeper replicas                                                                                                                                                              | `""`            |
 | `pdb.maxUnavailable`                    | Maximum unavailable ZooKeeper replicas                                                                                                                                                            | `1`             |
 
 
@@ -213,6 +214,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.create`                       | Enable creation of ServiceAccount for ZooKeeper pod                    | `false` |
 | `serviceAccount.name`                         | The name of the ServiceAccount to use.                                 | `""`    |
 | `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created | `true`  |
+| `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                   | `{}`    |
 
 
 ### Persistence parameters
@@ -263,6 +265,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                                   | `{}`        |
 | `metrics.serviceMonitor.relabelings`       | RelabelConfigs to apply to samples before scraping                                    | `[]`        |
 | `metrics.serviceMonitor.metricRelabelings` | MetricRelabelConfigs to apply to samples before ingestion                             | `[]`        |
+| `metrics.serviceMonitor.honorLabels`       | Specify honorLabels parameter to add the scrape endpoint                              | `false`     |
+| `metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in prometheus.     | `""`        |
 | `metrics.prometheusRule.enabled`           | Create a PrometheusRule for Prometheus Operator                                       | `false`     |
 | `metrics.prometheusRule.namespace`         | Namespace for the PrometheusRule Resource (defaults to the Release Namespace)         | `""`        |
 | `metrics.prometheusRule.additionalLabels`  | Additional labels that can be used so PrometheusRule will be discovered by Prometheus | `{}`        |
