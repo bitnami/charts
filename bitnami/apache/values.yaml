@@ -5,6 +5,7 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
+## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
 global:
   imageRegistry: ""
@@ -13,6 +14,7 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  storageClass: ""
 
 ## @section Common parameters
 
@@ -49,7 +51,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/apache
-  tag: 2.4.52-debian-10-r20
+  tag: 2.4.52-debian-10-r24
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -77,7 +79,7 @@ image:
 git:
   registry: docker.io
   repository: bitnami/git
-  tag: 2.34.1-debian-10-r43
+  tag: 2.34.1-debian-10-r47
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
@@ -187,6 +189,40 @@ hostAliases:
   - ip: "127.0.0.1"
     hostnames:
       - "status.localhost"
+## @param priorityClassName Apache Server pods' priorityClassName
+##
+priorityClassName: ""
+## @param schedulerName Name of the k8s scheduler (other than default)
+## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+##
+schedulerName: ""
+## Configure Pods Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+## @param podSecurityContext.enabled Enabled Apache Server pods' Security Context
+## @param podSecurityContext.fsGroup Set Apache Server pod's Security Context fsGroup
+##
+podSecurityContext:
+  enabled: true
+  fsGroup: 1001
+## Configure Container Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+## @param containerSecurityContext.enabled Enabled Apache Server containers' Security Context
+## @param containerSecurityContext.runAsUser Set Apache Server containers' Security Context runAsUser
+## @param containerSecurityContext.runAsNonRoot Set Controller container's Security Context runAsNonRoot
+##
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1001
+  runAsNonRoot: true
+## @param command Override default container command (useful when using custom images)
+##
+command: []
+## @param args Override default container args (useful when using custom images)
+##
+args: []
+## @param lifecycleHooks for the Apache server container(s) to automate configuration before or after startup
+##
+lifecycleHooks: {}
 ## Apache pods' resource requests and limits
 ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
 ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -208,7 +244,26 @@ resources:
   ##   memory: 128Mi
   requests: {}
 ## Configure extra options for containers' liveness and readiness probes
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+## Configure extra options for Apache server containers' liveness, readiness and startup probes
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+## @param startupProbe.enabled Enable startupProbe
+## @param startupProbe.path Path to access on the HTTP server
+## @param startupProbe.port Port for startupProbe
+## @param startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+## @param startupProbe.periodSeconds Period seconds for startupProbe
+## @param startupProbe.timeoutSeconds Timeout seconds for startupProbe
+## @param startupProbe.failureThreshold Failure threshold for startupProbe
+## @param startupProbe.successThreshold Success threshold for startupProbe
+##
+startupProbe:
+  enabled: false
+  path: "/"
+  port: http
+  initialDelaySeconds: 180
+  periodSeconds: 20
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
 ## @param livenessProbe.enabled Enable liveness probe
 ## @param livenessProbe.path Path to access on the HTTP server
 ## @param livenessProbe.port Port for livenessProbe
@@ -245,6 +300,15 @@ readinessProbe:
   timeoutSeconds: 5
   failureThreshold: 6
   successThreshold: 1
+## @param customStartupProbe Custom liveness probe for the Web component
+##
+customStartupProbe: {}
+## @param customLivenessProbe Custom liveness probe for the Web component
+##
+customLivenessProbe: {}
+## @param customReadinessProbe Custom rediness probe for the Web component
+##
+customReadinessProbe: {}
 ## @param extraVolumes Array to add extra volumes (evaluated as a template)
 ##
 extraVolumes: []
@@ -254,6 +318,19 @@ extraVolumeMounts: []
 ## @param extraEnvVars Array to add extra environment variables
 ##
 extraEnvVars: []
+## @param extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Apache server nodes
+##
+extraEnvVarsCM: ""
+## @param extraEnvVarsSecret Name of existing Secret containing extra env vars for Apache server nodes
+##
+extraEnvVarsSecret: ""
+## Apache server container port
+## @param containerPorts.http Apache server HTTP container port
+## @param containerPorts.https Apache server HTTPS container port
+##
+containerPorts:
+  http: 8080
+  https: 8443
 ## @param initContainers Add additional init containers to the Apache pods
 ## Example:
 ## initContainers:
@@ -276,6 +353,18 @@ initContainers: []
 ##         containerPort: 1234
 ##
 sidecars: []
+
+## @param updateStrategy.type Apache Server deployment strategy type.
+## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+## e.g:
+## updateStrategy:
+##  type: RollingUpdate
+##  rollingUpdate:
+##    maxSurge: 25%
+##    maxUnavailable: 25%
+##
+updateStrategy:
+  type: RollingUpdate
 
 ## @section Other Parameters
 
@@ -313,12 +402,12 @@ service:
   ## @param service.type Apache Service type
   ##
   type: LoadBalancer
-  ## @param service.port Apache service HTTP port
+  ## @param service.ports.http Apache service HTTP port
+  ## @param service.ports.https Apache service HTTPS port
   ##
-  port: 80
-  ## @param service.httpsPort Apache service HTTPS port
-  ##
-  httpsPort: 443
+  ports:
+    http: 80
+    https: 443
   ## Node ports to expose
   ## @param service.nodePorts.http Node port for HTTP
   ## @param service.nodePorts.https Node port for HTTPS
@@ -326,10 +415,22 @@ service:
   nodePorts:
     http: ""
     https: ""
+  ## @param service.clusterIP Apache service Cluster IP
+  ## e.g.:
+  ## clusterIP: None
+  ##
+  clusterIP: ""
   ## @param service.loadBalancerIP Apache service Load Balancer IP
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
   ##
   loadBalancerIP: ""
+  ## @param service.loadBalancerSourceRanges Apache service Load Balancer sources
+  ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+  ## e.g:
+  ## loadBalancerSourceRanges:
+  ##   - 10.10.10.0/24
+  ##
+  loadBalancerSourceRanges: []
   ## @param service.annotations Additional custom annotations for Apache service
   ## This can be used to set the LoadBalancer service type to internal only.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
@@ -339,6 +440,20 @@ service:
   ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
   externalTrafficPolicy: Cluster
+  ## @param service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
+  ##
+  extraPorts: []
+  ## @param service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+  ## If "ClientIP", consecutive client requests will be directed to the same mongos Pod
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+  ##
+  sessionAffinity: None
+  ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
+  ## sessionAffinityConfig:
+  ##   clientIP:
+  ##     timeoutSeconds: 300
+  ##
+  sessionAffinityConfig: {}
 ## Configure the ingress resource that allows you to access the Apache installation
 ## ref: https://kubernetes.io/docs/user-guide/ingress/
 ##
@@ -400,6 +515,31 @@ ingress:
   ##     path: /
   ##
   hosts: []
+  ## @param ingress.extraHosts An array with additional hostname(s) to be covered with the ingress record
+  ## e.g:
+  ## extraHosts:
+  ##   - name: apache.local
+  ##     path: /
+  ##
+  extraHosts: []
+  ## @param ingress.extraPaths An array with additional arbitrary paths that may need to be added to the ingress under the main host
+  ## e.g:
+  ## extraPaths:
+  ## - path: /*
+  ##   backend:
+  ##     serviceName: ssl-redirect
+  ##     servicePort: use-annotation
+  ##
+  extraPaths: []
+  ## @param ingress.extraTls TLS configuration for additional hostname(s) to be covered with this ingress record
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+  ## e.g:
+  ## extraTls:
+  ## - hosts:
+  ##     - apache.local
+  ##   secretName: apache.local-tls
+  ##
+  extraTls: []
   ## @param ingress.secrets Custom TLS certificates as secrets
   ## NOTE: 'key' and 'certificate' are expected in PEM format
   ## NOTE: 'name' should line up with a 'secretName' set further up
@@ -434,11 +574,12 @@ metrics:
   ## @param metrics.image.tag Apache Exporter image tag (immutable tags are recommended)
   ## @param metrics.image.pullPolicy Apache Exporter image pull policy
   ## @param metrics.image.pullSecrets Apache Exporter image pull secrets
+  ## @param metrics.image.debug Apache Exporter image debug mode
   ##
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.11.0-debian-10-r22
+    tag: 0.11.0-debian-10-r26
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -448,6 +589,9 @@ metrics:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
+    ## Enable debug mode
+    ##
+    debug: false
   ## @param metrics.podAnnotations [object] Additional custom annotations for Apache exporter service
   ##
   podAnnotations:
