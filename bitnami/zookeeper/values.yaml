@@ -286,7 +286,8 @@ lifecycleHooks: {}
 ## ZooKeeper resource requests and limits
 ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
 ## @param resources.limits The resources limits for the ZooKeeper containers
-## @param resources.requests [object] The requested resources for the ZooKeeper containers
+## @param resources.requests.memory The requested memory for the ZooKeeper containers
+## @param resources.requests.cpu The requested cpu for the ZooKeeper containers
 ##
 resources:
   limits: {}
