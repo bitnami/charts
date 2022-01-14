@@ -50,10 +50,10 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/solr
-  tag: 8.10.1-debian-10-r0
+  tag: 8.11.1-debian-10-r24
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -64,9 +64,13 @@ image:
   ##   - myRegistryKeySecretName
   ##
   pullSecrets: []
-## @param coreName Solr core name to be created
+## @param coreName Solr core name to be created (deprecated, will be removed in a future version)
 ##
-coreName: my-core
+coreName: ""
+## @param coreNames Solr core names to be created
+##
+coreNames:
+  - my-core
 ## @param cloudEnabled Enable Solr cloud mode
 ##
 cloudEnabled: true
@@ -169,7 +173,7 @@ readinessProbe:
   failureThreshold: 6
   successThreshold: 1
 ## Solr resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## ref: https://kubernetes.io/docs/user-guide/compute-resources/
 ## We usually recommend not to specify default resources and to leave this as a conscious
 ## choice for the user. This also increases chances charts run on environments with little
 ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -326,7 +330,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r224
+    tag: 10-debian-10-r305
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -335,7 +339,7 @@ volumePermissions:
     pullSecrets: []
     ##   - myRegistryKeySecretName
   ## Init containers' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -476,7 +480,7 @@ service:
   ##
   labels: {}
   ## @param service.loadBalancerIP Load balancer IP for the Solr Service (optional, cloud specific)
-  ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+  ## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
   ##
   loadBalancerIP: ""
   ## @param service.nodePorts.http Node ports for the HTTP service
@@ -489,7 +493,7 @@ service:
     https: ""
 ## Configure the ingress resource that allows you to access the
 ## Solr installation. Set up the URL
-## ref: http://kubernetes.io/docs/user-guide/ingress/
+## ref: https://kubernetes.io/docs/user-guide/ingress/
 ##
 ingress:
   ## @param ingress.enabled Enable ingress controller resource
@@ -498,7 +502,11 @@ ingress:
   ## DEPRECATED: Use ingress.annotations instead of ingress.certManager
   ## certManager: false
   ##
-
+  ## @param ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+  ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+  ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+  ##
+  ingressClassName: ""
   ## @param ingress.pathType Path type for the ingress resource
   ##
   pathType: ImplementationSpecific
@@ -654,7 +662,7 @@ exporter:
   ##
   args: []
   ## Solr resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -810,7 +818,7 @@ exporter:
     ##
     port: 9983
     ## @param exporter.service.loadBalancerIP Load balancer IP for the Solr Exporter Service (optional, cloud specific)
-    ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+    ## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
     ##
     loadBalancerIP: ""
     ## @param exporter.service.nodePorts.http Node ports for the HTTP exporter service

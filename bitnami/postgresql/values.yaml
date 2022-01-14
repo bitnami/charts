@@ -2,6 +2,7 @@
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
 ## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
@@ -31,6 +32,7 @@ global:
     replicationPassword: ""
 
 ## @section Common parameters
+##
 
 ## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
 ##
@@ -41,6 +43,9 @@ fullnameOverride: ""
 ## @param extraDeploy Array of extra objects to deploy with the release (evaluated as a template)
 ##
 extraDeploy: []
+## @param commonLabels Add labels to all the deployed resources
+##
+commonLabels: {}
 ## @param commonAnnotations Add annotations to all the deployed resources
 ##
 commonAnnotations: {}
@@ -61,6 +66,7 @@ diagnosticMode:
     - infinity
 
 ## @section PostgreSQL parameters
+##
 
 ## Bitnami PostgreSQL image version
 ## ref: https://hub.docker.com/r/bitnami/postgresql/tags/
@@ -74,10 +80,10 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/postgresql
-  tag: 11.13.0-debian-10-r67
+  tag: 11.14.0-debian-10-r28
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -108,10 +114,10 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r227
+    tag: 10-debian-10-r305
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -172,7 +178,7 @@ serviceAccount:
   autoMount: false
 ## Pod Security Policy
 ## ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/
-## @param psp.create Create Pod Security Policy
+## @param psp.create Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later
 ##
 psp:
   create: false
@@ -208,6 +214,7 @@ replication:
   uniqueServices: false
 ## @param postgresqlPostgresPassword PostgreSQL admin password (used when `postgresqlUsername` is not `postgres`, in which case`postgres` is the admin username)
 ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#creating-a-database-user-on-first-run (see note!)
+##
 postgresqlPostgresPassword: ""
 ## @param postgresqlUsername PostgreSQL user (has superuser privileges if username is `postgres`)
 ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#setting-the-root-password-on-first-run
@@ -307,9 +314,11 @@ extendedConfConfigMap: ""
 initdbScripts: {}
 ## @param initdbScriptsConfigMap ConfigMap with scripts to be run at first boot
 ## NOTE: This will override initdbScripts
+##
 initdbScriptsConfigMap: ""
 ## @param initdbScriptsSecret Secret with scripts to be run at first boot (in case it contains sensitive information)
 ## NOTE: This can work along initdbScripts or initdbScriptsConfigMap
+##
 initdbScriptsSecret: ""
 ## @param initdbUser Specify the PostgreSQL username to execute the initdb scripts
 ##
@@ -317,6 +326,11 @@ initdbUser: ""
 ## @param initdbPassword Specify the PostgreSQL password to execute the initdb scripts
 ##
 initdbPassword: ""
+
+## @param containerPorts.postgresql PostgreSQL container port
+##
+containerPorts:
+  postgresql: 5432
 ## Audit settings
 ## https://github.com/bitnami/bitnami-docker-postgresql#auditing
 ##
@@ -435,7 +449,7 @@ service:
   ##
   loadBalancerIP: ""
   ## @param service.externalTrafficPolicy Enable client source IP preservation
-  ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+  ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
   externalTrafficPolicy: Cluster
   ## @param service.loadBalancerSourceRanges Addresses that are allowed when service is LoadBalancer
@@ -495,6 +509,11 @@ persistence:
   ##
   accessModes:
     - ReadWriteOnce
+  ## @param persistence.snapshotName Provide a VolumeSnapshot name which to create the PVC
+  ## The same snapshot will be used for the primary and any read replicas
+  ## ref: https://kubernetes.io/docs/concepts/storage/volume-snapshots/
+  ##
+  snapshotName: ""
   ## @param persistence.size PVC Storage Request for PostgreSQL volume
   ##
   size: 8Gi
@@ -505,6 +524,7 @@ persistence:
   ## selector:
   ##   matchLabels:
   ##     app: my-app
+  ##
   selector: {}
 ## @param updateStrategy.type updateStrategy for PostgreSQL StatefulSet and its reads StatefulSets
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
@@ -528,6 +548,7 @@ primary:
   ##
   nodeAffinityPreset:
     ## @param primary.nodeAffinityPreset.type PostgreSQL primary node affinity preset type. Ignored if `primary.affinity` is set. Allowed values: `soft` or `hard`
+    ##
     type: ""
     ## @param primary.nodeAffinityPreset.key PostgreSQL primary node label key to match Ignored if `primary.affinity` is set.
     ## E.g.
@@ -716,7 +737,7 @@ readReplicas:
   ##
   resources: {}
 ## Configure resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## ref: https://kubernetes.io/docs/user-guide/compute-resources/
 ## @param resources.requests [object] The requested resources for the container
 ##
 resources:
@@ -748,7 +769,7 @@ networkPolicy:
   ##    - {key: role, operator: In, values: [frontend]}
   ##
   explicitNamespacesSelector: {}
-## Configure extra options for liveness probe
+## Configure extra options for startup probe
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
 ## @param startupProbe.enabled Enable startupProbe
 ## @param startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
@@ -884,7 +905,7 @@ metrics:
     ## @param metrics.prometheusRule.namespace namespace where prometheusRules resource should be created
     ##
     namespace: ""
-    ## @param metrics.prometheusRule.rules [Rules](https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/) to be created
+    ## @param metrics.prometheusRule.rules Create specified [Rules](https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/)
     ## Make sure to constraint the rules to the current postgresql service.
     ## rules:
     ##   - alert: HugeReplicationLag
@@ -906,7 +927,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/postgres-exporter
-    tag: 0.10.0-debian-10-r95
+    tag: 0.10.0-debian-10-r172
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

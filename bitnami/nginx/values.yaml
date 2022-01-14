@@ -52,10 +52,10 @@ commonAnnotations: {}
 image:
   registry: docker.io
   repository: bitnami/nginx
-  tag: 1.21.3-debian-10-r29
+  tag: 1.21.5-debian-10-r3
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -166,11 +166,11 @@ podSecurityContext:
   ##   value: "10000"
   ##
   sysctls: []
-## NGINX Core containers' Security Context (only main container).
+## NGINX containers' Security Context.
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-## @param containerSecurityContext.enabled Enabled NGINX Core containers' Security Context
-## @param containerSecurityContext.runAsUser Set NGINX Core container's Security Context runAsUser
-## @param containerSecurityContext.runAsNonRoot Set NGINX Core container's Security Context runAsNonRoot
+## @param containerSecurityContext.enabled Enabled NGINX containers' Security Context
+## @param containerSecurityContext.runAsUser Set NGINX container's Security Context runAsUser
+## @param containerSecurityContext.runAsNonRoot Set NGINX container's Security Context runAsNonRoot
 ##
 containerSecurityContext:
   enabled: false
@@ -184,7 +184,7 @@ containerPorts:
   http: 8080
   https: ""
 ## NGINX containers' resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## ref: https://kubernetes.io/docs/user-guide/compute-resources/
 ## We usually recommend not to specify default resources and to leave this as a conscious
 ## choice for the user. This also increases chances charts run on environments with little
 ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -331,10 +331,10 @@ cloneStaticSiteFromGit:
   image:
     registry: docker.io
     repository: bitnami/git
-    tag: 2.33.0-debian-10-r53
+    tag: 2.34.1-debian-10-r33
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -435,7 +435,7 @@ ldapDaemon:
   image:
     registry: docker.io
     repository: bitnami/nginx-ldap-auth-daemon
-    tag: 0.20200116.0-debian-10-r475
+    tag: 0.20200116.0-debian-10-r556
     pullPolicy: IfNotPresent
   ## @param ldapDaemon.port LDAP Auth Daemon port
   ##
@@ -594,12 +594,12 @@ service:
   ##
   annotations: {}
   ## @param service.externalTrafficPolicy Enable client source IP preservation
-  ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+  ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
   externalTrafficPolicy: Cluster
 ## Configure the ingress resource that allows you to access the
 ## Nginx installation. Set up the URL
-## ref: http://kubernetes.io/docs/user-guide/ingress/
+## ref: https://kubernetes.io/docs/user-guide/ingress/
 ##
 ingress:
   ## @param ingress.enabled Set to true to enable ingress record generation
@@ -767,7 +767,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/nginx-exporter
-    tag: 0.9.0-debian-10-r182
+    tag: 0.10.0-debian-10-r8
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -801,7 +801,7 @@ metrics:
       prometheus.io/scrape: "true"
       prometheus.io/port: "{{ .Values.metrics.service.port }}"
   ## NGINX Prometheus exporter resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -848,3 +848,35 @@ metrics:
     ##   prometheus: my-prometheus
     ##
     selector: {}
+    ## @param metrics.serviceMonitor.additionalLabels Additional labels that can be used so PodMonitor will be discovered by Prometheus
+    ##
+    additionalLabels: {}
+    ## @param metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping
+    ##
+    relabelings: []
+    ## @param metrics.serviceMonitor.metricRelabelings MetricRelabelConfigs to apply to samples before ingestion
+    ##
+    metricRelabelings: []
+  ## Prometheus Operator PrometheusRule configuration
+  ##
+  prometheusRule:
+    ## @param metrics.prometheusRule.enabled if `true`, creates a Prometheus Operator PrometheusRule (also requires `metrics.enabled` to be `true` and `metrics.prometheusRule.rules`)
+    ##
+    enabled: false
+    ## @param metrics.prometheusRule.namespace Namespace for the PrometheusRule Resource (defaults to the Release Namespace)
+    ##
+    namespace: ""
+    ## @param metrics.prometheusRule.additionalLabels Additional labels that can be used so PrometheusRule will be discovered by Prometheus
+    ##
+    additionalLabels: {}
+    ## @param metrics.prometheusRule.rules Prometheus Rule definitions
+    ##   - alert: LowInstance
+    ##     expr: up{service="{{ template "common.names.fullname" . }}"} < 1
+    ##     for: 1m
+    ##     labels:
+    ##       severity: critical
+    ##     annotations:
+    ##       description: Service {{ template "common.names.fullname" . }} Tomcat is down since 1m.
+    ##       summary: Tomcat instance is down.
+    ##
+    rules: []

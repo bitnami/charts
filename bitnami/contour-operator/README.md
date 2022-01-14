@@ -13,7 +13,7 @@ $ helm install my-release bitnami/contour-operator
 
 Bitnami charts for Helm are carefully engineered, actively maintained and are the quickest and easiest way to deploy containers on a Kubernetes cluster that are ready to handle production workloads.
 
-This chart bootstraps a [Contour Operator](https://github.com/projectcontour/contour-operator/) Deployment in a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Contour Operator](https://github.com/projectcontour/contour-operator/) Deployment in a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
@@ -152,16 +152,16 @@ This solution allows to easily deploy multiple Contour instances compared to the
 | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | -------------------------- |
 | `image.registry`                        | Contour Operator image registry                                                                                          | `docker.io`                |
 | `image.repository`                      | Contour Operator image repository                                                                                        | `bitnami/contour-operator` |
-| `image.tag`                             | Contour Operator image tag (immutable tags are recommended)                                                              | `1.18.2-scratch-r2`        |
+| `image.tag`                             | Contour Operator image tag (immutable tags are recommended)                                                              | `1.19.1-scratch-r0`        |
 | `image.pullPolicy`                      | Contour Operator image pull policy                                                                                       | `IfNotPresent`             |
 | `image.pullSecrets`                     | Contour Operator image pull secrets                                                                                      | `[]`                       |
 | `contourImage.registry`                 | Contour Image registry                                                                                                   | `docker.io`                |
 | `contourImage.repository`               | Contour Image repository                                                                                                 | `bitnami/contour`          |
-| `contourImage.tag`                      | Contour Image tag (immutable tags are recommended)                                                                       | `1.18.2-debian-10-r0`      |
+| `contourImage.tag`                      | Contour Image tag (immutable tags are recommended)                                                                       | `1.19.1-debian-10-r6`      |
 | `contourImage.pullSecrets`              | Contour Image pull secrets                                                                                               | `[]`                       |
 | `envoyImage.registry`                   | Envoy Image registry                                                                                                     | `docker.io`                |
 | `envoyImage.repository`                 | Envoy Image repository                                                                                                   | `bitnami/envoy`            |
-| `envoyImage.tag`                        | Envoy Image tag (immutable tags are recommended)                                                                         | `1.19.1-debian-10-r42`     |
+| `envoyImage.tag`                        | Envoy Image tag (immutable tags are recommended)                                                                         | `1.19.1-debian-10-r81`     |
 | `envoyImage.pullSecrets`                | Envoy Image pull secrets                                                                                                 | `[]`                       |
 | `replicaCount`                          | Number of Contour Operator replicas to deploy                                                                            | `1`                        |
 | `livenessProbe.enabled`                 | Enable livenessProbe on Contour Operator nodes                                                                           | `true`                     |
@@ -328,7 +328,7 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 ### Sidecars
 
-If additional containers are needed in the same pod as contour-operator (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter. If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/apps/contour-operator/administration/configure-use-sidecars/).
+If additional containers are needed in the same pod as contour-operator (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter. If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/infrastructure/contour-operator/configuration/configure-sidecar-init-containers/).
 
 ### Pod affinity
 
@@ -357,3 +357,19 @@ extraDeploy:
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+
+## License
+
+Copyright &copy; 2022 Bitnami
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

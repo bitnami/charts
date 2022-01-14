@@ -49,11 +49,10 @@ An example Ingress that makes use of the controller:
   apiVersion: networking.k8s.io/v1
   kind: Ingress
   metadata:
-    annotations:
-      kubernetes.io/ingress.class: {{ .Values.ingressClass }}
     name: example
     namespace: {{ .Release.Namespace }}
   spec:
+    ingressClassName: {{ .Values.ingressClassResource.name }}
     rules:
       - host: www.example.com
         http:

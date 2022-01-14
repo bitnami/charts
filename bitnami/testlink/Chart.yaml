@@ -6,7 +6,7 @@ dependencies:
   - condition: mariadb.enabled
     name: mariadb
     repository: https://charts.bitnami.com/bitnami
-    version: 9.x.x
+    version: 10.x.x
   - name: common
     repository: https://charts.bitnami.com/bitnami
     tags:
@@ -27,5 +27,5 @@ maintainers:
 name: testlink
 sources:
   - https://github.com/bitnami/bitnami-docker-testlink
-  - http://www.testlink.org/
-version: 9.2.26
+  - https://www.testlink.org/
+version: 10.0.2

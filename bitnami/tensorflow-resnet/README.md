@@ -11,7 +11,7 @@ $ helm install my-release bitnami/tensorflow-resnet
 
 ## Introduction
 
-This chart bootstraps a TensorFlow Serving ResNet deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a TensorFlow Serving ResNet deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
@@ -19,16 +19,6 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 - Kubernetes 1.12+
 - Helm 3.1.0
-
-## Get this chart
-
-Download the latest release of the chart from the [releases](../../../releases) page.
-
-Alternatively, clone the repo if you wish to use the development snapshot:
-
-```console
-$ git clone https://github.com/bitnami/charts.git
-```
 
 ## Installing the Chart
 
@@ -74,6 +64,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------ | -------------------------------------------------------------------------------------------- | ----- |
 | `nameOverride`     | String to partially override common.names.fullname template (will maintain the release name) | `""`  |
 | `fullnameOverride` | String to fully override common.names.fullname template                                      | `""`  |
+| `extraDeploy`      | Array of extra objects to deploy with the release                                            | `[]`  |
 
 
 ### TensorFlow parameters
@@ -82,12 +73,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------ | ----------------------------------------------------------------------------------------- | ---------------------------- |
 | `server.image.registry`              | TensorFlow Serving image registry                                                         | `docker.io`                  |
 | `server.image.repository`            | TensorFlow Serving image repository                                                       | `bitnami/tensorflow-serving` |
-| `server.image.tag`                   | TensorFlow Serving Image tag (immutable tags are recommended)                             | `2.6.0-debian-10-r21`        |
+| `server.image.tag`                   | TensorFlow Serving Image tag (immutable tags are recommended)                             | `2.6.0-debian-10-r32`        |
 | `server.image.pullPolicy`            | TensorFlow Serving image pull policy                                                      | `IfNotPresent`               |
 | `server.image.pullSecrets`           | Specify docker-registry secret names as an array                                          | `[]`                         |
 | `client.image.registry`              | TensorFlow ResNet image registry                                                          | `docker.io`                  |
 | `client.image.repository`            | TensorFlow ResNet image repository                                                        | `bitnami/tensorflow-resnet`  |
-| `client.image.tag`                   | TensorFlow ResNet Image tag (immutable tags are recommended)                              | `2.6.0-debian-10-r56`        |
+| `client.image.tag`                   | TensorFlow ResNet Image tag (immutable tags are recommended)                              | `2.6.1-debian-10-r0`         |
 | `client.image.pullPolicy`            | TensorFlow ResNet image pull policy                                                       | `IfNotPresent`               |
 | `client.image.pullSecrets`           | Specify docker-registry secret names as an array                                          | `[]`                         |
 | `hostAliases`                        | Deployment pod host aliases                                                               | `[]`                         |
@@ -162,6 +153,12 @@ Find more information about how to deal with common errors related to Bitnami’
 
 ## Upgrading
 
+### To 3.3.0
+
+TensorFlow ResNet's version was updated to `2.7.0`. Although this new version [does not include breaking changes](https://github.com/tensorflow/serving/releases/tag/2.7.0), the client [was updated to work with newer TF Model Garden models](https://github.com/tensorflow/serving/commit/bb1428d53abb53fe938ddf9bb8839d4dfe48d291). Older models may need to adapt their signature [to the newer, common one](https://www.tensorflow.org/hub/common_signatures/images).
+
+As a result, the pretrained model served by this Chart was updated to [Imagenet (ILSVRC-2012-CLS) classification with ResNet 50](https://tfhub.dev/tensorflow/resnet_50/classification/1).
+
 ### To 3.1.0
 
 This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
@@ -183,3 +180,19 @@ $ kubectl delete deployment  tensorflow-resnet --cascade=false
 $ helm upgrade tensorflow-resnet bitnami/tensorflow-resnet
 $ kubectl delete rs "$(kubectl get rs -l app=tensorflow-resnet -o jsonpath='{.items[0].metadata.name}')"
 ```
+
+## License
+
+Copyright &copy; 2022 Bitnami
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

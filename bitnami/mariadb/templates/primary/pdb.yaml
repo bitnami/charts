@@ -1,9 +1,9 @@
-{{- if .Values.primary.pdb.enabled }}
+{{- if .Values.primary.pdb.create }}
 apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
   name: {{ include "mariadb.primary.fullname" . }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: primary
     {{- if .Values.commonLabels }}

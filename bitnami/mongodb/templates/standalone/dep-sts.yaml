@@ -200,32 +200,23 @@ spec:
           env:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
-            {{- if .Values.auth.username }}
-            - name: MONGODB_USERNAME
-              value: {{ .Values.auth.username | quote }}
+            {{- $customUsers := include "mongodb.customUsers" . -}}
+            {{- $customDatabases := include "mongodb.customDatabases" . -}}
+            {{- if not (empty $customUsers) }}
+            - name: MONGODB_EXTRA_USERNAMES
+              value: {{ $customUsers | quote }}
             {{- end }}
-            {{- if .Values.auth.database }}
-            - name: MONGODB_DATABASE
-              value: {{ .Values.auth.database | quote }}
-            {{- end }}
-            {{- if .Values.metrics.username }}
-            - name: MONGODB_METRICS_USERNAME
-              value: {{ .Values.metrics.username | quote }}
+            {{- if not (empty $customDatabases) }}
+            - name: MONGODB_EXTRA_DATABASES
+              value: {{ $customDatabases | quote }}
             {{- end }}
             {{- if .Values.auth.enabled }}
-            {{- if and .Values.auth.username .Values.auth.database }}
-            - name: MONGODB_PASSWORD
+            {{- if and (not (empty $customUsers)) (not (empty $customDatabases)) }}
+            - name: MONGODB_EXTRA_PASSWORDS
               valueFrom:
                 secretKeyRef:
                   name: {{ include "mongodb.secretName" . }}
-                  key: mongodb-password
-            {{- end }}
-            {{- if .Values.metrics.username }}
-            - name: MONGODB_METRICS_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "mongodb.secretName" . }}
-                  key: mongodb-metrics-password
+                  key: mongodb-passwords
             {{- end }}
             - name: MONGODB_ROOT_USER
               value: {{ .Values.auth.rootUser | quote }}
@@ -234,6 +225,17 @@ spec:
                 secretKeyRef:
                   name: {{ include "mongodb.secretName" . }}
                   key: mongodb-root-password
+            {{- end }}
+            {{- if and .Values.metrics.enabled (not (empty .Values.metrics.username)) }}
+            - name: MONGODB_METRICS_USERNAME
+              value: {{ .Values.metrics.username | quote }}
+            {{- if .Values.auth.enabled }}
+            - name: MONGODB_METRICS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "mongodb.secretName" . }}
+                  key: mongodb-metrics-password
+            {{- end }}
             {{- end }}
             - name: ALLOW_EMPTY_PASSWORD
               value: {{ ternary "no" "yes" .Values.auth.enabled | quote }}
@@ -251,9 +253,9 @@ spec:
               value: {{ ternary "yes" "no" .Values.directoryPerDB | quote }}
             {{- $extraFlags := .Values.extraFlags | join " " -}}
             {{- if .Values.tls.enabled }}
-              {{- $extraFlags = printf "%s %s" "--tlsMode=requireTLS --tlsCertificateKeyFile=/certs/mongodb.pem --tlsCAFile=/certs/mongodb-ca-cert" $extraFlags  }}
+              {{- $extraFlags = printf "--tlsMode=%s --tlsCertificateKeyFile=/certs/mongodb.pem --tlsCAFile=/certs/mongodb-ca-cert %s" .Values.tls.mode $extraFlags  }}
             {{- end }}
-            {{- if ne $extraFlags ""}}
+            {{- if ne $extraFlags "" }}
             - name: MONGODB_EXTRA_FLAGS
               value: {{ $extraFlags | quote }}
             {{- end }}
@@ -385,10 +387,44 @@ spec:
           {{- end }}
           command:
             - /bin/bash
-            - -ec
           args:
+            - -ec
             - |
-              /bin/mongodb_exporter --web.listen-address ":{{ .Values.metrics.containerPort }}" --mongodb.uri "{{ include "mongodb.mongodb_exporter.uri" . }}" {{ .Values.metrics.extraFlags }}
+                #!/bin/bash
+
+                set -o errexit
+                set -o nounset
+                set -o pipefail
+
+                retry_while() {
+                    local cmd="${1:?cmd is missing}"
+                    local retries="${2:-12}"
+                    local sleep_time="${3:-5}"
+                    local return_value=1
+
+                    read -r -a command <<< "$cmd"
+                    for ((i = 1 ; i <= retries ; i+=1 )); do
+                        "${command[@]}" && return_value=0 && break
+                        sleep "$sleep_time"
+                    done
+                    return $return_value
+                }
+
+                check_mongodb_connection() {
+                  /bin/mongodb_exporter --test --web.listen-address ":{{ .Values.metrics.containerPort }}" --mongodb.uri "{{ include "mongodb.mongodb_exporter.uri" . }}" {{ .Values.metrics.extraFlags }} >/dev/null 2>&1
+                  ret=$?
+                  if [ $ret -ne 0 ]; then
+                    false
+                  fi
+                }
+
+                echo "Checking MongoDB connection..."
+                if ! retry_while "check_mongodb_connection"; then
+                    echo "Could not connect to the MongoDB server"
+                    return 1
+                else
+                    /bin/mongodb_exporter --web.listen-address ":{{ .Values.metrics.containerPort }}" --mongodb.uri "{{ include "mongodb.mongodb_exporter.uri" . }}" {{ .Values.metrics.extraFlags }}
+                fi
           env:
           {{- if .Values.auth.enabled }}
           {{- if not .Values.metrics.username }}
@@ -478,7 +514,12 @@ spec:
         {{- end }}
   {{- if not .Values.persistence.enabled }}
         - name: datadir
+          {{- if .Values.persistence.medium }}
+          emptyDir:
+            medium: {{ .Values.persistence.medium | quote }}
+          {{- else }}
           emptyDir: {}
+          {{- end }}
   {{- else if .Values.persistence.existingClaim }}
         - name: datadir
           persistentVolumeClaim:

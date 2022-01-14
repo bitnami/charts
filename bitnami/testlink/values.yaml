@@ -51,10 +51,10 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/testlink
-  tag: 1.9.20-debian-10-r522
+  tag: 1.9.20-debian-10-r607
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -146,6 +146,18 @@ sidecars: []
 ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
+## @param priorityClassName TestLink pods' priorityClassName
+##
+priorityClassName: ""
+## @param schedulerName Name of the k8s scheduler (other than default)
+## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+##
+schedulerName: ""
+## @param topologySpreadConstraints Topology Spread Constraints for pod assignment
+## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+## The value is evaluated as a template
+##
+topologySpreadConstraints: []
 ## @param existingSecret Use existing secret for the application password
 ##
 existingSecret: ""
@@ -173,7 +185,7 @@ containerPorts:
 ##
 sessionAffinity: "None"
 ## Enable persistence using Persistent Volume Claims
-## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
 ##
 persistence:
   ## @param persistence.enabled Enable persistence using PVC
@@ -187,11 +199,10 @@ persistence:
   ##   GKE, AWS & OpenStack)
   ##
   storageClass: ""
-  ## @param persistence.accessMode PVC Access Mode for TestLink volume
-  ## Requires persistence.enabled: true
-  ## If defined, PVC must be created manually before volume will be bound
+  ## @param persistence.accessModes PVC Access Mode for TestLink volume
   ##
-  accessMode: ReadWriteOnce
+  accessModes:
+    - ReadWriteOnce
   ## @param persistence.size PVC Storage Request for TestLink volume
   ##
   size: 8Gi
@@ -207,6 +218,10 @@ persistence:
   ## Default: nil.
   ##
   hostPath: ""
+  ## @param persistence.annotations Persistent Volume Claim annotations
+  ##
+  annotations: {}
+
 ## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ##
@@ -244,13 +259,15 @@ affinity: {}
 ##
 nodeSelector: {}
 ## Configure resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## ref: https://kubernetes.io/docs/user-guide/compute-resources/
 ## @param resources.requests [object] The requested resources for the container
+## @param resources.limits The resources limits for the container
 ##
 resources:
   requests:
     memory: 512Mi
     cpu: 300m
+  limits: {}
 ## Configure Pods Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param podSecurityContext.enabled Enable TestLink pods' Security Context
@@ -262,11 +279,31 @@ podSecurityContext:
 ## Configure Container Security Context (only main container)
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ## @param containerSecurityContext.enabled Enable TestLink containers' Security Context
-## @param containerSecurityContext.runAsUser TestLink containers' Security Context
+## @param containerSecurityContext.runAsUser TestLink containers' Security Context runAsUser
+## @param containerSecurityContext.runAsNonRoot TestLink containers' Security Context runAsNonRoot
 ##
 containerSecurityContext:
   enabled: true
   runAsUser: 1001
+  runAsNonRoot: true
+## Configure extra options for startup probe
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+## @param startupProbe.enabled Enable startupProbe
+## @param startupProbe.path Request path for startupProbe
+## @param startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+## @param startupProbe.periodSeconds Period seconds for startupProbe
+## @param startupProbe.timeoutSeconds Timeout seconds for startupProbe
+## @param startupProbe.failureThreshold Failure threshold for startupProbe
+## @param startupProbe.successThreshold Success threshold for startupProbe
+##
+startupProbe:
+  enabled: false
+  path: "/login.php"
+  initialDelaySeconds: 120
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
 ## Configure extra options for liveness probe
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param livenessProbe.enabled Enable livenessProbe
@@ -303,6 +340,9 @@ readinessProbe:
   timeoutSeconds: 3
   failureThreshold: 6
   successThreshold: 1
+## @param customStartupProbe Override default startup probe
+##
+customStartupProbe: {}
 ## @param customLivenessProbe Override default liveness probe
 ##
 customLivenessProbe: {}
@@ -330,12 +370,12 @@ service:
   ## @param service.type Kubernetes Service type
   ##
   type: LoadBalancer
-  ## @param service.port Service HTTP port
+  ## @param service.ports.http Service HTTP port
+  ## @param service.ports.https Service HTTPS port
   ##
-  port: 80
-  ## @param service.httpsPort Service HTTPS port
-  ##
-  httpsPort: 443
+  ports:
+    http: 80
+    https: 443
   ## @param service.clusterIP Service cluster IP
   ##
   clusterIP: ""
@@ -345,7 +385,7 @@ service:
   ##
   loadBalancerSourceRanges: []
   ## @param service.loadBalancerIP Load balancer IP for the TestLink Service (optional, cloud specific)
-  ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+  ## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
   ##
   loadBalancerIP: ""
   ## @param service.nodePorts.http Kubernetes HTTP node port
@@ -358,17 +398,41 @@ service:
     http: ""
     https: ""
   ## @param service.externalTrafficPolicy Enable client source IP preservation
-  ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+  ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
   externalTrafficPolicy: Cluster
+  ## @param service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
+  ##
+  extraPorts: []
+  ## @param service.annotations Additional custom annotations for TestLink service
+  ##
+  annotations: {}
+  ## @param service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+  ## If "ClientIP", consecutive client requests will be directed to the same Pod
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+  ##
+  sessionAffinity: None
+  ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
+  ## sessionAffinityConfig:
+  ##   clientIP:
+  ##     timeoutSeconds: 300
+  ##
+  sessionAffinityConfig: {}
+
 ## Configure the ingress resource that allows you to access the
 ## TestLink installation. Set up the URL
-## ref: http://kubernetes.io/docs/user-guide/ingress/
+## ref: https://kubernetes.io/docs/user-guide/ingress/
 ##
 ingress:
   ## @param ingress.enabled Enable ingress controller resource
   ##
   enabled: false
+  ## @param ingress.pathType Ingress path type
+  ##
+  pathType: ImplementationSpecific
+  ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
+  ##
+  apiVersion: ""
   ## DEPRECATED: Use ingress.annotations instead of ingress.certManager
   ## certManager: false
   ##
@@ -376,6 +440,9 @@ ingress:
   ## @param ingress.hostname Default host for the ingress resource
   ##
   hostname: testlink.local
+  ## @param ingress.path Ingress path
+  ##
+  path: /
   ## @param ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
   ## For a full list of possible ingress annotations, please see
   ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
@@ -388,22 +455,39 @@ ingress:
   ##   cert-manager.io/cluster-issuer: cluster-issuer-name
   ##
   annotations: {}
-  ## @param ingress.hosts The list of additional hostnames to be covered with this ingress record.
-  ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
-  ## hosts:
-  ## - name: testlink.local
-  ##   path: /
-  ##   pathType: ImplementationSpecific
+  ## @param ingress.tls Enable TLS configuration for the host defined at `ingress.hostname` parameter
+  ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.ingress.hostname }}`
+  ## You can:
+  ##   - Use the `ingress.secrets` parameter to create this TLS secret
+  ##   - Relay on cert-manager to create it by setting `ingress.certManager=true`
+  ##   - Relay on Helm to create self-signed certificates by setting `ingress.selfSigned=true`
   ##
-  hosts: []
-  ## @param ingress.tls The tls configuration for the ingress
-  ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
-  ## tls:
+  tls: false
+  ## @param ingress.extraHosts An array with additional hostname(s) to be covered with the ingress record
+  ## e.g:
+  ## extraHosts:
+  ##   - name: testlink.local
+  ##     path: /
+  ##
+  extraHosts: []
+  ## @param ingress.extraPaths An array with additional arbitrary paths that may need to be added to the ingress under the main host
+  ## e.g:
+  ## extraPaths:
+  ## - path: /*
+  ##   backend:
+  ##     serviceName: ssl-redirect
+  ##     servicePort: use-annotation
+  ##
+  extraPaths: []
+  ## @param ingress.extraTls TLS configuration for additional hostname(s) to be covered with this ingress record
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+  ## e.g:
+  ## extraTls:
   ## - hosts:
   ##     - testlink.local
   ##   secretName: testlink.local-tls
   ##
-  tls: []
+  extraTls: []
   ## @param ingress.secrets If you're providing your own certificates, please use this to add the certificates as secrets
   ## key and certificate should start with -----BEGIN CERTIFICATE----- or
   ## -----BEGIN RSA PRIVATE KEY-----
@@ -419,15 +503,109 @@ ingress:
   ##   certificate:
   ##
   secrets: []
-  ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
+  ## @param ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+  ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+  ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
   ##
-  apiVersion: ""
-  ## @param ingress.path Ingress path
+  ingressClassName: ""
+
+## @section NetworkPolicy parameters
+
+## Add networkpolicies
+##
+networkPolicy:
+  ## @param networkPolicy.enabled Enable network policies
+  ## If ingress.enabled or metrics.enabled are true, configure networkPolicy.ingress and networkPolicy.metrics selectors respectively to allow communication
   ##
-  path: /
-  ## @param ingress.pathType Ingress path type
+  enabled: false
+  ## @param networkPolicy.metrics.enabled Enable network policy for metrics (prometheus)
+  ## @param networkPolicy.metrics.namespaceSelector [object] Monitoring namespace selector labels. These labels will be used to identify the prometheus' namespace.
+  ## @param networkPolicy.metrics.podSelector [object] Monitoring pod selector labels. These labels will be used to identify the Prometheus pods.
   ##
-  pathType: ImplementationSpecific
+  metrics:
+    enabled: false
+    ## e.g:
+    ## podSelector:
+    ##   label: monitoring
+    ##
+    podSelector: {}
+    ## e.g:
+    ## namespaceSelector:
+    ##   label: monitoring
+    ##
+    namespaceSelector: {}
+  ## @param networkPolicy.ingress.enabled Enable network policy for Ingress Proxies
+  ## @param networkPolicy.ingress.namespaceSelector [object] Ingress Proxy namespace selector labels. These labels will be used to identify the Ingress Proxy's namespace.
+  ## @param networkPolicy.ingress.podSelector [object] Ingress Proxy pods selector labels. These labels will be used to identify the Ingress Proxy pods.
+  ##
+  ingress:
+    enabled: false
+    ## e.g:
+    ## podSelector:
+    ##   label: ingress
+    ##
+    podSelector: {}
+    ## e.g:
+    ## namespaceSelector:
+    ##   label: ingress
+    ##
+    namespaceSelector: {}
+  ## @param networkPolicy.ingressRules.backendOnlyAccessibleByFrontend Enable ingress rule that makes the backend (mariadb) only accessible by testlink's pods.
+  ## @param networkPolicy.ingressRules.customBackendSelector [object] Backend selector labels. These labels will be used to identify the backend pods.
+  ## @param networkPolicy.ingressRules.accessOnlyFrom.enabled Enable ingress rule that makes testlink only accessible from a particular origin
+  ## @param networkPolicy.ingressRules.accessOnlyFrom.namespaceSelector [object] Namespace selector label that is allowed to access testlink. This label will be used to identified the allowed namespace(s).
+  ## @param networkPolicy.ingressRules.accessOnlyFrom.podSelector [object] Pods selector label that is allowed to access testlink. This label will be used to identified the allowed pod(s).
+  ## @param networkPolicy.ingressRules.customRules [object] Custom network policy ingress rule
+  ##
+  ingressRules:
+    ## mariadb backend only can be accessed from testlink
+    ##
+    backendOnlyAccessibleByFrontend: false
+    ## Additional custom backend selector
+    ## e.g:
+    ## customBackendSelector:
+    ##   - to:
+    ##       - namespaceSelector:
+    ##           matchLabels:
+    ##             label: example
+    ##
+    customBackendSelector: {}
+    ## Allow only from the indicated:
+    accessOnlyFrom:
+      enabled: false
+      ## e.g:
+      ## podSelector:
+      ##   label: access
+      ##
+      podSelector: {}
+      ## e.g:
+      ## namespaceSelector:
+      ##   label: access
+      ##
+      namespaceSelector: {}
+    ## custom ingress rules
+    ## e.g:
+    ## customRules:
+    ##   - from:
+    ##       - namespaceSelector:
+    ##           matchLabels:
+    ##             label: example
+    customRules: {}
+  ## @param networkPolicy.egressRules.denyConnectionsToExternal Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).
+  ## @param networkPolicy.egressRules.customRules Custom network policy rule
+  ##
+  egressRules:
+    # Deny connections to external. This is not compatible with an external database.
+    denyConnectionsToExternal: false
+    ## Additional custom egress rules
+    ## e.g:
+    ## customRules:
+    ##   - to:
+    ##       - namespaceSelector:
+    ##           matchLabels:
+    ##             label: example
+    customRules: {}
+
 
 ## @section Database parameters
 
@@ -462,7 +640,7 @@ mariadb:
     password: ""
   primary:
     ## Enable persistence using Persistent Volume Claims
-    ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+    ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
     ##
     persistence:
       ## @param mariadb.primary.persistence.enabled Enable database persistence using PVC
@@ -507,6 +685,9 @@ externalDatabase:
   ## @param externalDatabase.database Name of the existing database
   ##
   database: bitnami_testlink
+  ## @param externalDatabase.existingSecret Name of an existing secret resource containing the DB password
+  ##
+  existingSecret: ""
 
 ## @section Volume Permissions parameters
 
@@ -526,7 +707,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r215
+    tag: 10-debian-10-r305
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -537,7 +718,7 @@ volumePermissions:
     ##
     pullSecrets: []
   ## Init containers' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -574,7 +755,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.10.1-debian-10-r16
+    tag: 0.11.0-debian-10-r23
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -585,7 +766,7 @@ metrics:
     ##
     pullSecrets: []
   ## @param metrics.resources Metrics exporter resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ##
   resources: {}
   ## @param metrics.podAnnotations [object] Additional annotations for Metrics exporter pod
@@ -644,10 +825,10 @@ certificates:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r215
+    tag: 10-debian-10-r305
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

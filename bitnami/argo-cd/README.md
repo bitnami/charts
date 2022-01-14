@@ -74,7 +74,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | -------------------------------------------------- | -------------------- |
 | `image.registry`    | Argo CD image registry                             | `docker.io`          |
 | `image.repository`  | Argo CD image repository                           | `bitnami/argo-cd`    |
-| `image.tag`         | Argo CD image tag (immutable tags are recommended) | `2.1.5-debian-10-r1` |
+| `image.tag`         | Argo CD image tag (immutable tags are recommended) | `2.1.7-debian-10-r0` |
 | `image.pullPolicy`  | Argo CD image pull policy                          | `IfNotPresent`       |
 | `image.pullSecrets` | Argo CD image pull secrets                         | `[]`                 |
 | `image.debug`       | Enable Argo CD image debug mode                    | `false`              |
@@ -234,7 +234,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.logLevel`                                    | ArgoCD server logs level                                                                                                        | `info`                   |
 | `server.configEnabled`                               | Enable Argo CD server config                                                                                                    | `true`                   |
 | `server.url`                                         | Argo CD server base URL. Required when configuring SSO. Required when enabling dex.                                             | `""`                     |
-| `server.config`                                      | Argo CD server configuration that will end on the argocd-cm Config Map                                                          | `""`                     |
+| `server.config`                                      | Argo CD server configuration that will end on the argocd-cm Config Map                                                          | `{}`                     |
 | `server.ingress.enabled`                             | Enable the creation of an ingress for the Argo CD server                                                                        | `false`                  |
 | `server.ingress.pathType`                            | Path type for the Argo CD server ingress                                                                                        | `ImplementationSpecific` |
 | `server.ingress.apiVersion`                          | Ingress API version for the Argo CD server ingress                                                                              | `""`                     |
@@ -575,7 +575,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r227`     |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r255`     |
 | `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                    |
@@ -590,7 +590,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `rbac.create`                             | Specifies whether RBAC resources should be created                          | `true`                |
 | `redis.image.registry`                    | Argo CD controller image registry                                           | `docker.io`           |
 | `redis.image.repository`                  | Argo CD controller image repository                                         | `bitnami/redis`       |
-| `redis.image.tag`                         | Argo CD controller image tag (immutable tags are recommended)               | `6.2.6-debian-10-r15` |
+| `redis.image.tag`                         | Argo CD controller image tag (immutable tags are recommended)               | `6.2.6-debian-10-r42` |
 | `redis.image.pullPolicy`                  | Argo CD controller image pull policy                                        | `IfNotPresent`        |
 | `redis.image.pullSecrets`                 | Argo CD controller image pull secrets                                       | `[]`                  |
 | `redis.enabled`                           | Enable Redis dependency                                                     | `true`                |
@@ -606,7 +606,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalRedis.existingSecretPasswordKey` | Password key for the existing secret containing the external redis password | `redis-password`      |
 
 
-The above parameters map to the env variables defined in [bitnami/argo-cd](http://github.com/bitnami/bitnami-docker-argo-cd). For more information please refer to the [bitnami/argo-cd](http://github.com/bitnami/bitnami-docker-argo-cd) image documentation.
+The above parameters map to the env variables defined in [bitnami/argo-cd](https://github.com/bitnami/bitnami-docker-argo-cd). For more information please refer to the [bitnami/argo-cd](https://github.com/bitnami/bitnami-docker-argo-cd) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -641,11 +641,11 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 This chart provides support for Ingress resources. If an Ingress controller, such as [nginx-ingress](https://kubeapps.com/charts/stable/nginx-ingress) or [traefik](https://kubeapps.com/charts/stable/traefik), that Ingress controller can be used to serve Argo CD.
 
-To enable Ingress integration, set `server.ingress.enabled` to `true` for the http ingress or `server.grpcIngress.enabled` to `true` for the gRPC ingress. The `xxx.ingress.hostname` property can be used to set the host name. The `xxx.ingress.tls` parameter can be used to add the TLS configuration for this host. It is also possible to have more than one host, with a separate TLS configuration for each host. [Learn more about configuring and using Ingress](https://docs.bitnami.com/kubernetes/apps/argo-cd/configuration/configure-use-ingress/).
+To enable Ingress integration, set `server.ingress.enabled` to `true` for the http ingress or `server.grpcIngress.enabled` to `true` for the gRPC ingress. The `xxx.ingress.hostname` property can be used to set the host name. The `xxx.ingress.tls` parameter can be used to add the TLS configuration for this host. It is also possible to have more than one host, with a separate TLS configuration for each host. [Learn more about configuring and using Ingress](https://docs.bitnami.com/kubernetes/infrastructure/argo-cd/configuration/configure-ingress/).
 
 ### TLS secrets
 
-The chart also facilitates the creation of TLS secrets for use with the Ingress controller, with different options for certificate management. [Learn more about TLS secrets](https://docs.bitnami.com/kubernetes/apps/argo-cd/administration/enable-tls/).
+The chart also facilitates the creation of TLS secrets for use with the Ingress controller, with different options for certificate management. [Learn more about TLS secrets](https://docs.bitnami.com/kubernetes/infrastructure/argo-cd/administration/enable-tls-ingress/).
 
 Apart from the Ingress TLS certificates, Argo CD repo server will auto-generate a secret named `argocd-repo-server-tls`. This secret contains the TLS configuration for the Argo CD components. The secret will be created only if it does not exist, so if you want to add custom TLS configuration you can create a secret with that name before installing the chart.
 
@@ -656,7 +656,7 @@ For more information about each configmap or secret check the references at the 
 
 ### Using SSO
 
-In order to use SSO you need to enable Dex by setting `dex.enabled=true`. You can follow [this guide](https://argoproj.github.io/argo-cd/operator-manual/user-management/#1-register-the-application-in-the-identity-provider) to configure your Argo CD deployment into your identity provider. After that, you need to configure Argo CD like described [here](https://argoproj.github.io/argo-cd/operator-manual/user-management/#2-configure-argo-cd-for-sso). You can set the Dex configuration at `server.config.dex\.config` that will populate the `argocd-cm` config map.
+In order to use SSO you need to enable Dex by setting `dex.enabled=true`. You can follow [this guide](https://argo-cd.readthedocs.io/en/stable/operator-manual/user-management/#1-register-the-application-in-the-identity-provider) to configure your Argo CD deployment into your identity provider. After that, you need to configure Argo CD like described [here](https://argo-cd.readthedocs.io/en/stable/operator-manual/user-management/#2-configure-argo-cd-for-sso). You can set the Dex configuration at `server.config.dex\.config` that will populate the `argocd-cm` config map.
 
 > NOTE: `dex.config` is the key of the object. IF you are using the Helm CLI to set the parameter you need to scape the `.` like `--set server.config.dex\.config`.
 
@@ -677,7 +677,7 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 ### Sidecars
 
-If additional containers are needed in the same pod as argo-cd (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter. If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/apps/argo-cd/administration/configure-use-sidecars/).
+If additional containers are needed in the same pod as argo-cd (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter. If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/infrastructure/argo-cd/configuration/configure-sidecar-init-containers/).
 
 ### Pod affinity
 
@@ -727,3 +727,19 @@ repoServer:
 ```
 
 See [PR#7113](https://github.com/bitnami/charts/pull/7113) for more info about the implemented changes
+
+## License
+
+Copyright &copy; 2022 Bitnami
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

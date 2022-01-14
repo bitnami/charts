@@ -194,7 +194,7 @@ spec:
             successThreshold: {{ .Values.dex.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.dex.readinessProbe.failureThreshold }}
           {{- else if .Values.dex.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.dex.readinessProbe "enabled") "context" $) | nindent 12 }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.dex.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: static-files

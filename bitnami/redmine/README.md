@@ -1,6 +1,6 @@
 # Redmine
 
-[Redmine](http://www.redmine.org) is a free and open source, web-based project management and issue tracking tool.
+[Redmine](https://www.redmine.org) is a free and open source, web-based project management and issue tracking tool.
 
 ## TL;DR
 
@@ -11,9 +11,9 @@ $ helm install my-release bitnami/redmine
 
 ## Introduction
 
-This chart bootstraps a [Redmine](https://github.com/bitnami/bitnami-docker-redmine) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Redmine](https://github.com/bitnami/bitnami-docker-redmine) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-It also packages the [Bitnami MariaDB chart](https://github.com/kubernetes/charts/tree/master/bitnami/mariadb) and the [PostgreSQL chart](https://github.com/kubernetes/charts/tree/master/bitnami/postgresql) which are required for bootstrapping a MariaDB/PostgreSQL deployment for the database requirements of the Redmine application.
+It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) and the [PostgreSQL chart](https://github.com/bitnami/charts/tree/master/bitnami/postgresql) which are required for bootstrapping a MariaDB/PostgreSQL deployment for the database requirements of the Redmine application.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This chart has been tested to work with NGINX Ingress, cert-manager, fluentd and Prometheus on top of the [BKPR](https://kubeprod.io/).
 
@@ -67,20 +67,20 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 
 ### Common parameters
 
-| Name                | Description                                        | Value                |
-| ------------------- | -------------------------------------------------- | -------------------- |
-| `kubeVersion`       | Override Kubernetes version                        | `""`                 |
-| `nameOverride`      | String to partially override common.names.fullname | `""`                 |
-| `fullnameOverride`  | String to fully override common.names.fullname     | `""`                 |
-| `commonLabels`      | Labels to add to all deployed objects              | `{}`                 |
-| `commonAnnotations` | Annotations to add to all deployed objects         | `{}`                 |
-| `extraDeploy`       | Array of extra objects to deploy with the release  | `[]`                 |
-| `image.registry`    | Redmine image registry                             | `docker.io`          |
-| `image.repository`  | Redmine image repository                           | `bitnami/redmine`    |
-| `image.tag`         | Redmine image tag (immutable tags are recommended) | `4.2.3-debian-10-r0` |
-| `image.pullPolicy`  | Redmine image pull policy                          | `IfNotPresent`       |
-| `image.pullSecrets` | Redmine image pull secrets                         | `[]`                 |
-| `image.debug`       | Enable image debug mode                            | `false`              |
+| Name                | Description                                        | Value                 |
+| ------------------- | -------------------------------------------------- | --------------------- |
+| `kubeVersion`       | Override Kubernetes version                        | `""`                  |
+| `nameOverride`      | String to partially override common.names.fullname | `""`                  |
+| `fullnameOverride`  | String to fully override common.names.fullname     | `""`                  |
+| `commonLabels`      | Labels to add to all deployed objects              | `{}`                  |
+| `commonAnnotations` | Annotations to add to all deployed objects         | `{}`                  |
+| `extraDeploy`       | Array of extra objects to deploy with the release  | `[]`                  |
+| `image.registry`    | Redmine image registry                             | `docker.io`           |
+| `image.repository`  | Redmine image repository                           | `bitnami/redmine`     |
+| `image.tag`         | Redmine image tag (immutable tags are recommended) | `4.2.3-debian-10-r36` |
+| `image.pullPolicy`  | Redmine image pull policy                          | `IfNotPresent`        |
+| `image.pullSecrets` | Redmine image pull secrets                         | `[]`                  |
+| `image.debug`       | Enable image debug mode                            | `false`               |
 
 
 ### Redmine Configuration parameters
@@ -326,13 +326,31 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 | `certificates.customCA`                              | Defines a list of secrets to import into the container trust store | `[]`                                     |
 | `certificates.image.registry`                        | Redmine image registry                                             | `docker.io`                              |
 | `certificates.image.repository`                      | Redmine image repository                                           | `bitnami/bitnami-shell`                  |
-| `certificates.image.tag`                             | Redmine image tag (immutable tags are recommended)                 | `10-debian-10-r217`                      |
+| `certificates.image.tag`                             | Redmine image tag (immutable tags are recommended)                 | `10-debian-10-r254`                      |
 | `certificates.image.pullPolicy`                      | Redmine image pull policy                                          | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Redmine image pull secrets                                         | `[]`                                     |
 | `certificates.extraEnvVars`                          | Container sidecar extra environment variables (e.g. proxy)         | `[]`                                     |
 
 
-The above parameters map to the env variables defined in [bitnami/redmine](http://github.com/bitnami/bitnami-docker-redmine). For more information please refer to the [bitnami/redmine](http://github.com/bitnami/bitnami-docker-redmine) image documentation.
+### NetworkPolicy parameters
+
+| Name                                                          | Description                                                                                                                 | Value   |
+| ------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `networkPolicy.enabled`                                       | Enable network policies                                                                                                     | `false` |
+| `networkPolicy.ingress.enabled`                               | Enable network policy for Ingress Proxies                                                                                   | `false` |
+| `networkPolicy.ingress.namespaceSelector`                     | Ingress Proxy namespace selector labels. These labels will be used to identify the Ingress Proxy's namespace.               | `{}`    |
+| `networkPolicy.ingress.podSelector`                           | Ingress Proxy pods selector labels. These labels will be used to identify the Ingress Proxy pods.                           | `{}`    |
+| `networkPolicy.ingressRules.backendOnlyAccessibleByFrontend`  | Enable ingress rule that makes the backend (mariadb) only accessible by Redmine's pods.                                     | `false` |
+| `networkPolicy.ingressRules.customBackendSelector`            | Backend selector labels. These labels will be used to identify the backend pods.                                            | `{}`    |
+| `networkPolicy.ingressRules.accessOnlyFrom.enabled`           | Enable ingress rule that makes Redmine only accessible from a particular origin                                             | `false` |
+| `networkPolicy.ingressRules.accessOnlyFrom.namespaceSelector` | Namespace selector label that is allowed to access Redmine. This label will be used to identified the allowed namespace(s). | `{}`    |
+| `networkPolicy.ingressRules.accessOnlyFrom.podSelector`       | Pods selector label that is allowed to access Redmine. This label will be used to identified the allowed pod(s).            | `{}`    |
+| `networkPolicy.ingressRules.customRules`                      | Custom network policy ingress rule                                                                                          | `{}`    |
+| `networkPolicy.egressRules.denyConnectionsToExternal`         | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).                              | `false` |
+| `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                  | `{}`    |
+
+
+The above parameters map to the env variables defined in [bitnami/redmine](https://github.com/bitnami/bitnami-docker-redmine). For more information please refer to the [bitnami/redmine](https://github.com/bitnami/bitnami-docker-redmine) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -685,3 +703,27 @@ $ kubectl patch deployment redmine-postgresql --type=json -p='[{"op": "remove", 
 # If using mariadb as database
 $ kubectl delete statefulset redmine-mariadb --cascade=false
 ```
+
+## Community supported solution
+
+Please, note this Helm chart is a community-supported solution. This means that the Bitnami team is not actively working on new features/improvements nor providing support through GitHub Issues for this Helm chart. Any new issue will stay open for 20 days to allow the community to contribute, after 15 days without activity the issue will be marked as stale being closed after 5 days.
+
+The Bitnami team will review any PR that is created, feel free to create a PR if you find any issue or want to implement a new feature.
+
+New versions are not going to be affected. Once a new version is released in the upstream project, the Bitnami container image will be updated to use the latest version.
+
+## License
+
+Copyright &copy; 2022 Bitnami
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

@@ -64,17 +64,6 @@ Create the name of the service account to use
 {{- end -}}
 
 {{/*
-Return the appropriate apiVersion for PodSecurityPolicy
-*/}}
-{{- define "nginx-ingress-controller.podSecurityPolicy.apiVersion" -}}
-{{- if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
-{{- print "policy/v1beta1" -}}
-{{- else -}}
-{{- print "extensions/v1beta1" -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
 Return the appropriate apiGroup for PodSecurityPolicy.
 */}}
 {{- define "nginx-ingress-controller.podSecurityPolicy.apiGroup" -}}

@@ -24,6 +24,9 @@ nameOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname template
 ##
 fullnameOverride: ""
+## @param extraDeploy Array of extra objects to deploy with the release
+##
+extraDeploy: []
 
 ## @section PyTorch parameters
 
@@ -39,10 +42,10 @@ fullnameOverride: ""
 image:
   registry: docker.io
   repository: bitnami/pytorch
-  tag: 1.9.1-debian-10-r0
+  tag: 1.10.1-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -68,7 +71,7 @@ image:
 git:
   registry: docker.io
   repository: bitnami/git
-  tag: 2.33.0-debian-10-r64
+  tag: 2.34.1-debian-10-r33
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
@@ -94,7 +97,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r226
+    tag: 10-debian-10-r294
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -105,7 +108,7 @@ volumePermissions:
     ##
     pullSecrets: []
   ## Init container' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -246,7 +249,7 @@ securityContext:
   fsGroup: 1001
   runAsUser: 1001
 ## Configure resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## ref: https://kubernetes.io/docs/user-guide/compute-resources/
 ## We usually recommend not to specify default resources and to leave this as a conscious
 ## choice for the user. This also increases chances charts run on environments with little
 ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -298,7 +301,7 @@ readinessProbe:
   successThreshold: 1
   failureThreshold: 5
 ## Enable persistence using Persistent Volume Claims
-## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
 ##
 persistence:
   ## @param persistence.enabled Use a Persistent Volume Claim to persist data

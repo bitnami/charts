@@ -2,7 +2,7 @@
 
 Contributions are welcome via GitHub Pull Requests. This document outlines the process to help get your contribution accepted.
 
-Any type of contribution is welcome; from new features, bug fixes, documentation improvements or even [adding charts to the repository](#adding-a-new-chart-to-the-repository).
+Any type of contribution is welcome; from new features, bug fixes, documentation improvements or even [adding charts to the repository](#adding-a-new-chart-to-the-repository) (if it's viable once evaluated the feasibility).
 
 ## How to Contribute
 
@@ -18,9 +18,34 @@ When submitting a PR make sure that it:
 - Must follow [Helm best practices](https://helm.sh/docs/chart_best_practices/).
 - Any change to a chart requires a version bump following [semver](https://semver.org/) principles. This is the version that is going to be merged in the GitHub repository, then our CI/CD system is going to publish in the Helm registry a new patch version including your changes and the latest images and dependencies.
 
+#### Sign Your Work
+
+The sign-off is a simple line at the end of the explanation for a commit. All commits needs to be signed. Your signature certifies that you wrote the patch or otherwise have the right to contribute the material. The rules are pretty simple, you only need to certify the guidelines from [developercertificate.org](https://developercertificate.org/).
+
+Then you just add a line to every git commit message:
+
+    Signed-off-by: Joe Smith <joe.smith@example.com>
+
+Use your real name (sorry, no pseudonyms or anonymous contributions.)
+
+If you set your `user.name` and `user.email` git configs, you can sign your commit automatically with `git commit -s`.
+
+Note: If your git config information is set properly then viewing the `git log` information for your commit will look something like this:
+
+```
+Author: Joe Smith <joe.smith@example.com>
+Date:   Thu Feb 2 11:41:15 2018 -0800
+
+    Update README
+
+    Signed-off-by: Joe Smith <joe.smith@example.com>
+```
+
+Notice the `Author` and `Signed-off-by` lines match. If they don't your PR will be rejected by the automated DCO check.
+
 ### Documentation Requirements
 
-- A chart's `README.md` must include configuration options.
+- A chart's `README.md` must include configuration options. The tables of parameters are generated based on the metadata information from the `values.yaml` file, by using [this tool](https://github.com/bitnami-labs/readme-generator-for-helm).
 - A chart's `NOTES.txt` must include relevant post-installation information.
 - The title of the PR starts with chart name (e.g. `[bitnami/chart]`)
 
@@ -38,7 +63,9 @@ When submitting a PR make sure that it:
 
 ### Adding a new chart to the repository
 
-There are only three major requirements to add a new chart in our catalog:
+There are three major technical requirements to add a new Helm chart to our catalog:
 - The chart should use Bitnami based container images. If they don't exist, you can [open a GitHub issue](https://github.com/bitnami/charts/issues/new/choose) and we will work together to create them.
 - Follow the same structure/patterns that the rest of the Bitnami charts (you can find a basic scaffolding in the [`template` directory](https://github.com/bitnami/charts/tree/master/template)) and the [Best Practices for Creating Production-Ready Helm charts](https://docs.bitnami.com/tutorials/production-ready-charts/) guide.
 - Use an [OSI approved license](https://opensource.org/licenses) for all the software.
+
+Please, note we will need to check internally and evaluate the feasibility of adding the new solution to the catalog. Due to limited resources this step could take some time.

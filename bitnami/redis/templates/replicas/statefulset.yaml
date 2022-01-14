@@ -186,7 +186,7 @@ spec:
             periodSeconds: {{ .Values.replica.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ add1 .Values.replica.livenessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.replica.livenessProbe.successThreshold }}
-            failureThreshold: {{ .Values.replica.livenessProbe.failureThreshold}}
+            failureThreshold: {{ .Values.replica.livenessProbe.failureThreshold }}
             exec:
               command:
                 - sh
@@ -434,6 +434,9 @@ spec:
             storage: {{ .Values.replica.persistence.size | quote }}
         {{- if .Values.replica.persistence.selector }}
         selector: {{- include "common.tplvalues.render" (dict "value" .Values.replica.persistence.selector "context" $) | nindent 10 }}
+        {{- end }}
+        {{- if .Values.replica.persistence.dataSource }}
+        dataSource: {{- include "common.tplvalues.render" (dict "value" .Values.replica.persistence.dataSource "context" $) | nindent 10 }}
         {{- end }}
         {{- include "common.storage.class" (dict "persistence" .Values.replica.persistence "global" .Values.global) | nindent 8 }}
   {{- end }}

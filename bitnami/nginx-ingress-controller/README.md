@@ -1,6 +1,6 @@
 # Nginx Ingress Controller
 
-[nginx-ingress](https://github.com/kubernetes/ingress-nginx) is an Ingress controller that uses NGINX to manage external access to HTTP services in a Kubernetes cluster.
+[ingress-nginx](https://github.com/kubernetes/ingress-nginx) is an Ingress controller that uses NGINX to manage external access to HTTP services in a Kubernetes cluster.
 
 ## TL;DR
 
@@ -13,7 +13,7 @@ $ helm install my-release bitnami/nginx-ingress-controller
 
 Bitnami charts for Helm are carefully engineered, actively maintained and are the quickest and easiest way to deploy containers on a Kubernetes cluster that are ready to handle production workloads.
 
-This chart bootstraps a [nginx-ingress](https://github.com/kubernetes/ingress-nginx) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [ingress-nginx](https://github.com/kubernetes/ingress-nginx) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
@@ -72,7 +72,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
 | `image.registry`                       | Nginx Ingress Controller image registry                                                                                                            | `docker.io`                        |
 | `image.repository`                     | Nginx Ingress Controller image repository                                                                                                          | `bitnami/nginx-ingress-controller` |
-| `image.tag`                            | Nginx Ingress Controller image tag (immutable tags are recommended)                                                                                | `1.0.4-debian-10-r4`               |
+| `image.tag`                            | Nginx Ingress Controller image tag (immutable tags are recommended)                                                                                | `1.1.0-debian-10-r0`               |
 | `image.pullPolicy`                     | Nginx Ingress Controller image pull policy                                                                                                         | `IfNotPresent`                     |
 | `image.pullSecrets`                    | Specify docker-registry secret names as an array                                                                                                   | `[]`                               |
 | `containerPorts`                       | Controller container ports to open                                                                                                                 | `{}`                               |
@@ -109,66 +109,66 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Nginx Ingress deployment / daemonset parameters
 
-| Name                                                | Description                                                                                             | Value          |
-| --------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | -------------- |
-| `kind`                                              | Install as Deployment or DaemonSet                                                                      | `Deployment`   |
-| `daemonset.useHostPort`                             | If `kind` is `DaemonSet`, this will enable `hostPort` for `TCP/80` and `TCP/443`                        | `false`        |
-| `daemonset.hostPorts`                               | HTTP and HTTPS ports                                                                                    | `{}`           |
-| `replicaCount`                                      | Desired number of Controller pods                                                                       | `1`            |
-| `updateStrategy`                                    | Strategy to use to update Pods                                                                          | `{}`           |
-| `revisionHistoryLimit`                              | The number of old history to retain to allow rollback                                                   | `10`           |
-| `podSecurityContext.enabled`                        | Enable Controller pods' Security Context                                                                | `true`         |
-| `podSecurityContext.fsGroup`                        | Group ID for the container filesystem                                                                   | `1001`         |
-| `containerSecurityContext.enabled`                  | Enable Controller containers' Security Context                                                          | `true`         |
-| `containerSecurityContext.allowPrivilegeEscalation` | Switch to allow priviledge escalation on the Controller container                                       | `true`         |
-| `containerSecurityContext.runAsUser`                | User ID for the Controller container                                                                    | `1001`         |
-| `containerSecurityContext.capabilities.drop`        | Linux Kernel capabilities that should be dropped                                                        | `[]`           |
-| `containerSecurityContext.capabilities.add`         | Linux Kernel capabilities that should be added                                                          | `[]`           |
-| `minReadySeconds`                                   | How many seconds a pod needs to be ready before killing the next, during update                         | `0`            |
-| `resources.limits`                                  | The resources limits for the Controller container                                                       | `{}`           |
-| `resources.requests`                                | The requested resources for the Controller container                                                    | `{}`           |
-| `livenessProbe.enabled`                             | Enable livenessProbe                                                                                    | `true`         |
-| `livenessProbe.httpGet.path`                        | Request path for livenessProbe                                                                          | `/healthz`     |
-| `livenessProbe.httpGet.port`                        | Port for livenessProbe                                                                                  | `10254`        |
-| `livenessProbe.httpGet.scheme`                      | Scheme for livenessProbe                                                                                | `HTTP`         |
-| `livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                 | `10`           |
-| `livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                        | `10`           |
-| `livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                       | `1`            |
-| `livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                     | `3`            |
-| `livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                     | `1`            |
-| `readinessProbe.enabled`                            | Enable readinessProbe                                                                                   | `true`         |
-| `readinessProbe.httpGet.path`                       | Request path for readinessProbe                                                                         | `/healthz`     |
-| `readinessProbe.httpGet.port`                       | Port for readinessProbe                                                                                 | `10254`        |
-| `readinessProbe.httpGet.scheme`                     | Scheme for readinessProbe                                                                               | `HTTP`         |
-| `readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                | `10`           |
-| `readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                       | `10`           |
-| `readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                      | `1`            |
-| `readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                    | `3`            |
-| `readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                    | `1`            |
-| `customLivenessProbe`                               | Override default liveness probe                                                                         | `{}`           |
-| `customReadinessProbe`                              | Override default readiness probe                                                                        | `{}`           |
-| `lifecycle`                                         | LifecycleHooks to set additional configuration at startup                                               | `{}`           |
-| `podLabels`                                         | Extra labels for Controller pods                                                                        | `{}`           |
-| `podAnnotations`                                    | Annotations for Controller pods                                                                         | `{}`           |
-| `priorityClassName`                                 | Controller priorityClassName                                                                            | `""`           |
-| `hostNetwork`                                       | If the Nginx deployment / daemonset should run on the host's network namespace                          | `false`        |
-| `dnsPolicy`                                         | By default, while using host network, name resolution uses the host's DNS                               | `ClusterFirst` |
-| `terminationGracePeriodSeconds`                     | How many seconds to wait before terminating a pod                                                       | `60`           |
-| `podAffinityPreset`                                 | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                     | `""`           |
-| `podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                | `soft`         |
-| `nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`               | `""`           |
-| `nodeAffinityPreset.key`                            | Node label key to match. Ignored if `affinity` is set.                                                  | `""`           |
-| `nodeAffinityPreset.values`                         | Node label values to match. Ignored if `affinity` is set.                                               | `[]`           |
-| `affinity`                                          | Affinity for pod assignment. Evaluated as a template.                                                   | `{}`           |
-| `nodeSelector`                                      | Node labels for pod assignment. Evaluated as a template.                                                | `{}`           |
-| `tolerations`                                       | Tolerations for pod assignment. Evaluated as a template.                                                | `[]`           |
-| `extraVolumes`                                      | Optionally specify extra list of additional volumes for Controller pods                                 | `[]`           |
-| `extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for Controller container(s)                    | `[]`           |
-| `initContainers`                                    | Add init containers to the controller pods                                                              | `[]`           |
-| `sidecars`                                          | Add sidecars to the controller pods.                                                                    | `[]`           |
-| `customTemplate`                                    | Override NGINX template                                                                                 | `{}`           |
-| `topologySpreadConstraints`                         | Topology spread constraints rely on node labels to identify the topology domain(s) that each Node is in | `[]`           |
-| `podSecurityPolicy.enabled`                         | If true, create & use Pod Security Policy resources                                                     | `false`        |
+| Name                                                | Description                                                                                                                                 | Value          |
+| --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | -------------- |
+| `kind`                                              | Install as Deployment or DaemonSet                                                                                                          | `Deployment`   |
+| `daemonset.useHostPort`                             | If `kind` is `DaemonSet`, this will enable `hostPort` for `TCP/80` and `TCP/443`                                                            | `false`        |
+| `daemonset.hostPorts`                               | HTTP and HTTPS ports                                                                                                                        | `{}`           |
+| `replicaCount`                                      | Desired number of Controller pods                                                                                                           | `1`            |
+| `updateStrategy`                                    | Strategy to use to update Pods                                                                                                              | `{}`           |
+| `revisionHistoryLimit`                              | The number of old history to retain to allow rollback                                                                                       | `10`           |
+| `podSecurityContext.enabled`                        | Enable Controller pods' Security Context                                                                                                    | `true`         |
+| `podSecurityContext.fsGroup`                        | Group ID for the container filesystem                                                                                                       | `1001`         |
+| `containerSecurityContext.enabled`                  | Enable Controller containers' Security Context                                                                                              | `true`         |
+| `containerSecurityContext.allowPrivilegeEscalation` | Switch to allow priviledge escalation on the Controller container                                                                           | `true`         |
+| `containerSecurityContext.runAsUser`                | User ID for the Controller container                                                                                                        | `1001`         |
+| `containerSecurityContext.capabilities.drop`        | Linux Kernel capabilities that should be dropped                                                                                            | `[]`           |
+| `containerSecurityContext.capabilities.add`         | Linux Kernel capabilities that should be added                                                                                              | `[]`           |
+| `minReadySeconds`                                   | How many seconds a pod needs to be ready before killing the next, during update                                                             | `0`            |
+| `resources.limits`                                  | The resources limits for the Controller container                                                                                           | `{}`           |
+| `resources.requests`                                | The requested resources for the Controller container                                                                                        | `{}`           |
+| `livenessProbe.enabled`                             | Enable livenessProbe                                                                                                                        | `true`         |
+| `livenessProbe.httpGet.path`                        | Request path for livenessProbe                                                                                                              | `/healthz`     |
+| `livenessProbe.httpGet.port`                        | Port for livenessProbe                                                                                                                      | `10254`        |
+| `livenessProbe.httpGet.scheme`                      | Scheme for livenessProbe                                                                                                                    | `HTTP`         |
+| `livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                                     | `10`           |
+| `livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                                            | `10`           |
+| `livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                                           | `1`            |
+| `livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                                                         | `3`            |
+| `livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                                                         | `1`            |
+| `readinessProbe.enabled`                            | Enable readinessProbe                                                                                                                       | `true`         |
+| `readinessProbe.httpGet.path`                       | Request path for readinessProbe                                                                                                             | `/healthz`     |
+| `readinessProbe.httpGet.port`                       | Port for readinessProbe                                                                                                                     | `10254`        |
+| `readinessProbe.httpGet.scheme`                     | Scheme for readinessProbe                                                                                                                   | `HTTP`         |
+| `readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                                                    | `10`           |
+| `readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                                                           | `10`           |
+| `readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                                                          | `1`            |
+| `readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                                                        | `3`            |
+| `readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                                                        | `1`            |
+| `customLivenessProbe`                               | Override default liveness probe                                                                                                             | `{}`           |
+| `customReadinessProbe`                              | Override default readiness probe                                                                                                            | `{}`           |
+| `lifecycle`                                         | LifecycleHooks to set additional configuration at startup                                                                                   | `{}`           |
+| `podLabels`                                         | Extra labels for Controller pods                                                                                                            | `{}`           |
+| `podAnnotations`                                    | Annotations for Controller pods                                                                                                             | `{}`           |
+| `priorityClassName`                                 | Controller priorityClassName                                                                                                                | `""`           |
+| `hostNetwork`                                       | If the Nginx deployment / daemonset should run on the host's network namespace                                                              | `false`        |
+| `dnsPolicy`                                         | By default, while using host network, name resolution uses the host's DNS                                                                   | `ClusterFirst` |
+| `terminationGracePeriodSeconds`                     | How many seconds to wait before terminating a pod                                                                                           | `60`           |
+| `podAffinityPreset`                                 | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                         | `""`           |
+| `podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                    | `soft`         |
+| `nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                   | `""`           |
+| `nodeAffinityPreset.key`                            | Node label key to match. Ignored if `affinity` is set.                                                                                      | `""`           |
+| `nodeAffinityPreset.values`                         | Node label values to match. Ignored if `affinity` is set.                                                                                   | `[]`           |
+| `affinity`                                          | Affinity for pod assignment. Evaluated as a template.                                                                                       | `{}`           |
+| `nodeSelector`                                      | Node labels for pod assignment. Evaluated as a template.                                                                                    | `{}`           |
+| `tolerations`                                       | Tolerations for pod assignment. Evaluated as a template.                                                                                    | `[]`           |
+| `extraVolumes`                                      | Optionally specify extra list of additional volumes for Controller pods                                                                     | `[]`           |
+| `extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for Controller container(s)                                                        | `[]`           |
+| `initContainers`                                    | Add init containers to the controller pods                                                                                                  | `[]`           |
+| `sidecars`                                          | Add sidecars to the controller pods.                                                                                                        | `[]`           |
+| `customTemplate`                                    | Override NGINX template                                                                                                                     | `{}`           |
+| `topologySpreadConstraints`                         | Topology spread constraints rely on node labels to identify the topology domain(s) that each Node is in                                     | `[]`           |
+| `podSecurityPolicy.enabled`                         | Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later | `false`        |
 
 
 ### Default backend parameters
@@ -179,7 +179,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `defaultBackend.hostAliases`                        | Add deployment host aliases                                                               | `[]`                   |
 | `defaultBackend.image.registry`                     | Default backend image registry                                                            | `docker.io`            |
 | `defaultBackend.image.repository`                   | Default backend image repository                                                          | `bitnami/nginx`        |
-| `defaultBackend.image.tag`                          | Default backend image tag (immutable tags are recommended)                                | `1.21.3-debian-10-r37` |
+| `defaultBackend.image.tag`                          | Default backend image tag (immutable tags are recommended)                                | `1.21.4-debian-10-r19` |
 | `defaultBackend.image.pullPolicy`                   | Image pull policy                                                                         | `IfNotPresent`         |
 | `defaultBackend.image.pullSecrets`                  | Specify docker-registry secret names as an array                                          | `[]`                   |
 | `defaultBackend.extraArgs`                          | Additional command line arguments to pass to Nginx container                              | `{}`                   |
@@ -363,6 +363,17 @@ In this version you can indicate the key to download the GeoLite2 databases usin
 
 ## Upgrading
 
+### To 9.0.0
+
+- Configuration for routing `Ingress` resources with custom `kubernetes.io/ingress.class` annotation is changed in favor of `IngressClass` resource required in NGINX Ingress Controller 1.x
+  - `ingressClass` parameter is removed and replaced with `ingressClassResource.*` parameters
+  - `ingressClassResource.*` parameters configure `IngressClass` resource only
+  - To configure routing for `Ingress` using custom `kubernetes.io/ingress.class` annotation define `extraArgs.ingress-class` parameter with the annotation value
+
+Consequences:
+
+- Backwards compatibility is not guaranteed. Uninstall & install the chart again to obtain the latest version.
+
 ### To 7.0.0
 
 - Chart labels were adapted to follow the [Helm charts standard labels](https://helm.sh/docs/chart_best_practices/labels/#standard-labels).
@@ -409,3 +420,19 @@ $ kubectl patch deployment nginx-ingress-controller --type=json -p='[{"op": "rem
 # If using daemonsets
 $ kubectl patch daemonset nginx-ingress-controller --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
 ```
+
+## License
+
+Copyright &copy; 2022 Bitnami
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

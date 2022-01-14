@@ -11,7 +11,7 @@ $ helm install my-release bitnami/memcached
 
 ## Introduction
 
-This chart bootstraps a [Memcached](https://github.com/bitnami/bitnami-docker-memcached) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Memcached](https://github.com/bitnami/bitnami-docker-memcached) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
@@ -72,7 +72,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------- | ----------------------------------------------------------------------------------------------- | ---------------------------- |
 | `image.registry`                              | Memcached image registry                                                                        | `docker.io`                  |
 | `image.repository`                            | Memcached image repository                                                                      | `bitnami/memcached`          |
-| `image.tag`                                   | Memcached image tag (immutable tags are recommended)                                            | `1.6.12-debian-10-r0`        |
+| `image.tag`                                   | Memcached image tag (immutable tags are recommended)                                            | `1.6.12-debian-10-r50`       |
 | `image.pullPolicy`                            | Memcached image pull policy                                                                     | `IfNotPresent`               |
 | `image.pullSecrets`                           | Specify docker-registry secret names as an array                                                | `[]`                         |
 | `image.debug`                                 | Enable image debug mode                                                                         | `false`                      |
@@ -129,7 +129,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                             | Start a side-car prometheus exporter                                                            | `false`                      |
 | `metrics.image.registry`                      | Memcached exporter image registry                                                               | `docker.io`                  |
 | `metrics.image.repository`                    | Memcached exporter image repository                                                             | `bitnami/memcached-exporter` |
-| `metrics.image.tag`                           | Memcached exporter image tag (immutable tags are recommended)                                   | `0.9.0-debian-10-r171`       |
+| `metrics.image.tag`                           | Memcached exporter image tag (immutable tags are recommended)                                   | `0.9.0-debian-10-r221`       |
 | `metrics.image.pullPolicy`                    | Image pull policy                                                                               | `IfNotPresent`               |
 | `metrics.image.pullSecrets`                   | Specify docker-registry secret names as an array                                                | `[]`                         |
 | `metrics.podAnnotations`                      | Metrics exporter pod Annotation and Labels                                                      | `{}`                         |
@@ -160,14 +160,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.relabelings`          | Metrics relabelings to add to the scrape endpoint, applied before scraping                      | `[]`                         |
 | `volumePermissions.image.registry`            | Init container volume-permissions image registry                                                | `docker.io`                  |
 | `volumePermissions.image.repository`          | Init container volume-permissions image repository                                              | `bitnami/bitnami-shell`      |
-| `volumePermissions.image.tag`                 | Init container volume-permissions image tag (immutable tags are recommended)                    | `10-debian-10-r206`          |
+| `volumePermissions.image.tag`                 | Init container volume-permissions image tag (immutable tags are recommended)                    | `10-debian-10-r260`          |
 | `volumePermissions.image.pullPolicy`          | Init container volume-permissions image pull policy                                             | `IfNotPresent`               |
 | `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                                | `[]`                         |
 | `volumePermissions.resources.limits`          | Init container volume-permissions resource limits                                               | `{}`                         |
 | `volumePermissions.resources.requests`        | Init container volume-permissions resource requests                                             | `{}`                         |
 
 
-The above parameters map to the environment variables defined in the [bitnami/memcached](http://github.com/bitnami/bitnami-docker-memcached) container image. For more information please refer to the [bitnami/memcached](http://github.com/bitnami/bitnami-docker-memcached) container image documentation.
+The above parameters map to the environment variables defined in the [bitnami/memcached](https://github.com/bitnami/bitnami-docker-memcached) container image. For more information please refer to the [bitnami/memcached](https://github.com/bitnami/bitnami-docker-memcached) container image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -257,3 +257,19 @@ Use the workaround below to upgrade from versions previous to 1.0.0. The followi
 ```console
 $ kubectl patch deployment memcached --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
 ```
+
+## License
+
+Copyright &copy; 2022 Bitnami
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

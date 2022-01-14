@@ -11,7 +11,7 @@ $ helm install my-release bitnami/geode
 
 ## Introduction
 
-This chart bootstraps an [Apache Geode](https://github.com/bitnami/bitnami-docker-geode) cluster on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps an [Apache Geode](https://github.com/bitnami/bitnami-docker-geode) cluster on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
 
@@ -76,7 +76,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ---------------------------------------- | -------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
 | `image.registry`                         | Apache Geode image registry                                                            | `docker.io`                                                 |
 | `image.repository`                       | Apache Geode image repository                                                          | `bitnami/geode`                                             |
-| `image.tag`                              | Apache Geode image tag (immutable tags are recommended)                                | `1.14.0-debian-10-r7`                                       |
+| `image.tag`                              | Apache Geode image tag (immutable tags are recommended)                                | `1.14.0-debian-10-r48`                                      |
 | `image.pullPolicy`                       | Apache Geode image pull policy                                                         | `IfNotPresent`                                              |
 | `image.pullSecrets`                      | Apache Geode image pull secrets                                                        | `[]`                                                        |
 | `image.debug`                            | Enable Apache Geode image debug mode                                                   | `false`                                                     |
@@ -296,7 +296,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r212`     |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r261`     |
 | `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                    |
@@ -311,7 +311,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                               | Expose Apache Geode metrics                                                      | `false`              |
 | `metrics.image.registry`                        | Bitnami HAProxy image registry                                                   | `docker.io`          |
 | `metrics.image.repository`                      | Bitnami HAProxy image repository                                                 | `bitnami/haproxy`    |
-| `metrics.image.tag`                             | Bitnami HAProxy image tag (immutable tags are recommended)                       | `2.4.6-debian-10-r0` |
+| `metrics.image.tag`                             | Bitnami HAProxy image tag (immutable tags are recommended)                       | `2.5.0-debian-10-r1` |
 | `metrics.image.pullPolicy`                      | Bitnami HAProxy image pull policy                                                | `IfNotPresent`       |
 | `metrics.image.pullSecrets`                     | Bitnami HAProxy image pull secrets                                               | `[]`                 |
 | `metrics.containerPort`                         | Metrics container port                                                           | `9914`               |
@@ -356,7 +356,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.allowExternal`                 | Don't require client label for connections                             | `true`  |
 
 
-The above parameters map to the env variables defined in [bitnami/geode](http://github.com/bitnami/bitnami-docker-geode). For more information please refer to the [bitnami/geode](http://github.com/bitnami/bitnami-docker-geode) image documentation.
+The above parameters map to the env variables defined in [bitnami/geode](https://github.com/bitnami/bitnami-docker-geode). For more information please refer to the [bitnami/geode](https://github.com/bitnami/bitnami-docker-geode) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -431,11 +431,11 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/master/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/master/bitnami/contour) you can utilize the ingress controller to serve your application.
 
-To enable Ingress integration, set `ingress.enabled` to `true`. The `ingress.hostname` property can be used to set the host name. The `ingress.tls` parameter can be used to add the TLS configuration for this host. It is also possible to have more than one host, with a separate TLS configuration for each host. [Learn more about configuring and using Ingress](https://docs.bitnami.com/kubernetes/infrastructure/geode/configuration/configure-use-ingress/).
+To enable Ingress integration, set `ingress.enabled` to `true`. The `ingress.hostname` property can be used to set the host name. The `ingress.tls` parameter can be used to add the TLS configuration for this host. It is also possible to have more than one host, with a separate TLS configuration for each host. [Learn more about configuring and using Ingress](https://docs.bitnami.com/kubernetes/infrastructure/geode/configuration/configure-ingress/).
 
 ### TLS secrets
 
-The chart also facilitates the creation of TLS secrets for use with the Ingress controller, with different options for certificate management. [Learn more about TLS secrets](https://docs.bitnami.com/kubernetes/infrastructure/geode/administration/enable-tls/).
+The chart also facilitates the creation of TLS secrets for use with the Ingress controller, with different options for certificate management. [Learn more about TLS secrets](https://docs.bitnami.com/kubernetes/infrastructure/geode/administration/enable-tls-ingress/).
 
 ### Additional environment variables
 
@@ -454,7 +454,7 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 ### Sidecars
 
-If additional containers are needed in the same pod as geode (such as additional metrics or logging exporters), they can be defined using the `XXX.sidecars` parameter(s). If these sidecars export extra ports, extra port definitions can be added using the `XXX.service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/infrastructure/geode/administration/configure-use-sidecars/).
+If additional containers are needed in the same pod as geode (such as additional metrics or logging exporters), they can be defined using the `XXX.sidecars` parameter(s). If these sidecars export extra ports, extra port definitions can be added using the `XXX.service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/infrastructure/geode/configuration/configure-sidecar-init-containers/).
 
 > Note: XXX is placeholder you need to replace with the actual component(s).
 
@@ -468,7 +468,7 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 
 ## Persistence
 
-The [Bitnami geode](https://github.com/bitnami/bitnami-docker-geode) image stores the geode data and configurations at the `/bitnami/geode` path of the container. Persistent Volume Claims are used to keep the data across deployments. [Learn more about persistence in the chart documentation](https://docs.bitnami.com/kubernetes/infrastructure/geode/configuration/chart-persistence/).
+The [Bitnami geode](https://github.com/bitnami/bitnami-docker-geode) image stores the geode data and configurations at the `/bitnami/geode` path of the container. Persistent Volume Claims are used to keep the data across deployments.
 
 ### Adjust permissions of persistent volume mountpoint
 
@@ -481,3 +481,19 @@ As an alternative, this chart supports using an initContainer to change the owne
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+
+## License
+
+Copyright &copy; 2022 Bitnami
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

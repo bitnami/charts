@@ -72,7 +72,7 @@ spec:
             - bash
             - -ec
             - |
-                {{- if (not (empty .Values.galera.bootstrap.bootstrapFromNode))}}
+                {{- if (not (empty .Values.galera.bootstrap.bootstrapFromNode)) }}
                 {{- $fullname := include "common.names.fullname" . }}
                 {{- $bootstrapFromNode := int .Values.galera.bootstrap.bootstrapFromNode }}
                 # Bootstrap from the indicated node
@@ -80,6 +80,8 @@ spec:
                 if [[ "$NODE_ID" -eq "{{ $bootstrapFromNode }}" ]]; then
                     export MARIADB_GALERA_CLUSTER_BOOTSTRAP=yes
                     export MARIADB_GALERA_FORCE_SAFETOBOOTSTRAP={{ ternary "yes" "no" .Values.galera.bootstrap.forceSafeToBootstrap }}
+                else
+                    export MARIADB_GALERA_CLUSTER_BOOTSTRAP=no
                 fi
                 {{- end }}
                 exec /opt/bitnami/scripts/mariadb-galera/entrypoint.sh /opt/bitnami/scripts/mariadb-galera/run.sh
@@ -289,7 +291,7 @@ spec:
             {{- end }}
             {{- if or (.Files.Glob "files/my.cnf") .Values.mariadbConfiguration .Values.configurationConfigMap }}
             - name: mariadb-galera-config
-              mountPath: /opt/bitnami/mariadb/conf/my.cnf
+              mountPath: /bitnami/conf/my.cnf
               subPath: my.cnf
             {{- end }}
             {{- if .Values.tls.enabled }}

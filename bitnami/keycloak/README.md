@@ -13,7 +13,7 @@
 
 Bitnami charts for Helm are carefully engineered, actively maintained and are the quickest and easiest way to deploy containers on a Kubernetes cluster that are ready to handle production workloads.
 
-This chart bootstraps a [Keycloak](https://github.com/bitnami/bitnami-docker-keycloak) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Keycloak](https://github.com/bitnami/bitnami-docker-keycloak) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
@@ -76,7 +76,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------- | --------------------------------------------------------------------------------------------- | ---------------------- |
 | `image.registry`                  | Keycloak image registry                                                                       | `docker.io`            |
 | `image.repository`                | Keycloak image repository                                                                     | `bitnami/keycloak`     |
-| `image.tag`                       | Keycloak image tag (immutable tags are recommended)                                           | `15.0.2-debian-10-r45` |
+| `image.tag`                       | Keycloak image tag (immutable tags are recommended)                                           | `15.0.2-debian-10-r94` |
 | `image.pullPolicy`                | Keycloak image pull policy                                                                    | `IfNotPresent`         |
 | `image.pullSecrets`               | Specify docker-registry secret names as an array                                              | `[]`                   |
 | `image.debug`                     | Specify if debug logs should be enabled                                                       | `false`                |
@@ -123,10 +123,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `keycloakConfigCli.enabled`                               | Whether to enable keycloak-config-cli                                                           | `false`                       |
 | `keycloakConfigCli.image.registry`                        | keycloak-config-cli container image registry                                                    | `docker.io`                   |
 | `keycloakConfigCli.image.repository`                      | keycloak-config-cli container image repository                                                  | `bitnami/keycloak-config-cli` |
-| `keycloakConfigCli.image.tag`                             | keycloak-config-cli container image tag                                                         | `4.3.0-debian-10-r5`          |
+| `keycloakConfigCli.image.tag`                             | keycloak-config-cli container image tag                                                         | `4.3.0-debian-10-r54`         |
 | `keycloakConfigCli.image.pullPolicy`                      | keycloak-config-cli container image pull policy                                                 | `IfNotPresent`                |
 | `keycloakConfigCli.image.pullSecrets`                     | keycloak-config-cli container image pull secrets                                                | `[]`                          |
-| `keycloakConfigCli.annotations`                           | Annotations for keycloak-config-cli job                                                         | `undefined`                   |
+| `keycloakConfigCli.annotations`                           | Annotations for keycloak-config-cli job                                                         | `{}`                          |
 | `keycloakConfigCli.command`                               | Command for running the container (set to default if not set). Use array form                   | `[]`                          |
 | `keycloakConfigCli.args`                                  | Args for running the container (set to default if not set). Use array form                      | `[]`                          |
 | `keycloakConfigCli.hostAliases`                           | Job pod host aliases                                                                            | `[]`                          |
@@ -239,14 +239,15 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.additionalRules`    | Additional NetworkPolicy rules                                                                                                   | `{}`                     |
 
 
-### RBAC parameters
+### RBAC parameter
 
-| Name                    | Description                                               | Value   |
-| ----------------------- | --------------------------------------------------------- | ------- |
-| `serviceAccount.create` | Enable the creation of a ServiceAccount for Keycloak pods | `true`  |
-| `serviceAccount.name`   | Name of the created ServiceAccount                        | `""`    |
-| `rbac.create`           | Whether to create and use RBAC resources or not           | `false` |
-| `rbac.rules`            | Custom RBAC rules                                         | `[]`    |
+| Name                                          | Description                                               | Value   |
+| --------------------------------------------- | --------------------------------------------------------- | ------- |
+| `serviceAccount.create`                       | Enable the creation of a ServiceAccount for Keycloak pods | `true`  |
+| `serviceAccount.name`                         | Name of the created ServiceAccount                        | `""`    |
+| `serviceAccount.automountServiceAccountToken` | Auto-mount the service account token in the pod           | `false` |
+| `rbac.create`                                 | Whether to create and use RBAC resources or not           | `false` |
+| `rbac.rules`                                  | Custom RBAC rules                                         | `[]`    |
 
 
 ### Other parameters
@@ -379,7 +380,7 @@ The chart also facilitates the creation of TLS secrets for use with the Ingress 
 
 ### Use with ingress offloading SSL
 
-If your ingress controller has the SSL Termination, you can add the following env vars in `extraEnvVars` 
+If your ingress controller has the SSL Termination, you can add the following env vars in `extraEnvVars`
 ```yaml
 - name: KEYCLOAK_PROXY_ADDRESS_FORWARDING
   value: "true"
@@ -403,8 +404,27 @@ Find more information about how to deal with common errors related to Bitnami’
 
 ## Upgrading
 
+### To 5.2.0
+If you use `KUBE_PING` as discovery method you have to enable mounting of ServiceAccountTokens by setting `serviceAccount.automountServiceAccountToken` to `true`.
+
 ### To 1.0.0
 
 [On November 13, 2020, Helm v2 support formally ended](https://github.com/helm/charts#status-of-the-project). This major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
 
 [Learn more about this change and related upgrade considerations](https://docs.bitnami.com/kubernetes/apps/keycloak/administration/upgrade-helm3/).
+
+## License
+
+Copyright &copy; 2022 Bitnami
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

@@ -69,10 +69,10 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/wordpress
-  tag: 5.8.1-debian-10-r41
+  tag: 5.8.3-debian-10-r2
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -362,7 +362,7 @@ nodeSelector: {}
 ##
 tolerations: []
 ## WordPress containers' resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## ref: https://kubernetes.io/docs/user-guide/compute-resources/
 ## @param resources.limits The resources limits for the WordPress container
 ## @param resources.requests [object] The requested resources for the WordPress container
 ##
@@ -456,12 +456,44 @@ readinessProbe:
   timeoutSeconds: 5
   failureThreshold: 6
   successThreshold: 1
+## @param startupProbe.enabled Enable startupProbe
+## @skip startupProbe.httpGet
+## @param startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+## @param startupProbe.periodSeconds Period seconds for startupProbe
+## @param startupProbe.timeoutSeconds Timeout seconds for startupProbe
+## @param startupProbe.failureThreshold Failure threshold for startupProbe
+## @param startupProbe.successThreshold Success threshold for startupProbe
+##
+startupProbe:
+  enabled: false
+  httpGet:
+    path: /wp-login.php
+    port: '{{ .Values.wordpressScheme }}'
+    scheme: '{{ .Values.wordpressScheme | upper }}'
+    ## If using an HTTPS-terminating load-balancer, the probes may need to behave
+    ## like the balancer to prevent HTTP 302 responses. According to the Kubernetes
+    ## docs, 302 should be considered "successful", but this issue on GitHub
+    ## (https://github.com/kubernetes/kubernetes/issues/47893) shows that it isn't.
+    ## E.g.
+    ## httpHeaders:
+    ## - name: X-Forwarded-Proto
+    ##   value: https
+    ##
+    httpHeaders: []
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
 ## @param customLivenessProbe Custom livenessProbe that overrides the default one
 ##
 customLivenessProbe: {}
 ## @param customReadinessProbe Custom readinessProbe that overrides the default one
 ##
 customReadinessProbe: {}
+## @param customStartupProbe Custom startupProbe that overrides the default one
+##
+customStartupProbe: {}
 
 ## @section Traffic Exposure Parameters
 
@@ -505,7 +537,7 @@ service:
   ##
   loadBalancerSourceRanges: []
   ## @param service.externalTrafficPolicy WordPress service external traffic policy
-  ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+  ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
   externalTrafficPolicy: Cluster
   ## @param service.annotations Additional custom annotations for WordPress service
@@ -612,7 +644,7 @@ ingress:
 ## @section Persistence Parameters
 
 ## Persistence Parameters
-## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
 ##
 persistence:
   ## @param persistence.enabled Enable persistence using Persistent Volume Claims
@@ -659,7 +691,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r225
+    tag: 10-debian-10-r306
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -670,7 +702,7 @@ volumePermissions:
     ##
     pullSecrets: []
   ## Init container's resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param volumePermissions.resources.limits The resources limits for the init container
   ## @param volumePermissions.resources.requests The requested resources for the init container
   ##
@@ -733,7 +765,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.10.1-debian-10-r27
+    tag: 0.11.0-debian-10-r24
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -744,7 +776,7 @@ metrics:
     ##
     pullSecrets: []
   ## Prometheus exporter container's resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param metrics.resources.limits The resources limits for the Prometheus exporter container
   ## @param metrics.resources.requests The requested resources for the Prometheus exporter container
   ##
@@ -789,6 +821,102 @@ metrics:
     ##
     additionalLabels: {}
 
+## @section NetworkPolicy parameters
+
+## Add networkpolicies
+##
+networkPolicy:
+  ## @param networkPolicy.enabled Enable network policies
+  ## If ingress.enabled or metrics.enabled are true, configure networkPolicy.ingress and networkPolicy.metrics selectors respectively to allow communication
+  ##
+  enabled: false
+  ## @param networkPolicy.metrics.enabled Enable network policy for metrics (prometheus)
+  ## @param networkPolicy.metrics.namespaceSelector [object] Monitoring namespace selector labels. These labels will be used to identify the prometheus' namespace.
+  ## @param networkPolicy.metrics.podSelector [object] Monitoring pod selector labels. These labels will be used to identify the Prometheus pods.
+  ##
+  metrics:
+    enabled: false
+    ## e.g:
+    ## podSelector:
+    ##   label: monitoring
+    ##
+    podSelector: {}
+    ## e.g:
+    ## namespaceSelector:
+    ##   label: monitoring
+    ##
+    namespaceSelector: {}
+  ## @param networkPolicy.ingress.enabled Enable network policy for Ingress Proxies
+  ## @param networkPolicy.ingress.namespaceSelector [object] Ingress Proxy namespace selector labels. These labels will be used to identify the Ingress Proxy's namespace.
+  ## @param networkPolicy.ingress.podSelector [object] Ingress Proxy pods selector labels. These labels will be used to identify the Ingress Proxy pods.
+  ##
+  ingress:
+    enabled: false
+    ## e.g:
+    ## podSelector:
+    ##   label: ingress
+    ##
+    podSelector: {}
+    ## e.g:
+    ## namespaceSelector:
+    ##   label: ingress
+    ##
+    namespaceSelector: {}
+  ## @param networkPolicy.ingressRules.backendOnlyAccessibleByFrontend Enable ingress rule that makes the backend (mariadb) only accessible by testlink's pods.
+  ## @param networkPolicy.ingressRules.customBackendSelector [object] Backend selector labels. These labels will be used to identify the backend pods.
+  ## @param networkPolicy.ingressRules.accessOnlyFrom.enabled Enable ingress rule that makes testlink only accessible from a particular origin
+  ## @param networkPolicy.ingressRules.accessOnlyFrom.namespaceSelector [object] Namespace selector label that is allowed to access testlink. This label will be used to identified the allowed namespace(s).
+  ## @param networkPolicy.ingressRules.accessOnlyFrom.podSelector [object] Pods selector label that is allowed to access testlink. This label will be used to identified the allowed pod(s).
+  ## @param networkPolicy.ingressRules.customRules [object] Custom network policy ingress rule
+  ##
+  ingressRules:
+    ## mariadb backend only can be accessed from testlink
+    ##
+    backendOnlyAccessibleByFrontend: false
+    ## Additional custom backend selector
+    ## e.g:
+    ## customBackendSelector:
+    ##   - to:
+    ##       - namespaceSelector:
+    ##           matchLabels:
+    ##             label: example
+    customBackendSelector: {}
+    ## Allow only from the indicated:
+    accessOnlyFrom:
+      enabled: false
+      ## e.g:
+      ## podSelector:
+      ##   label: access
+      ##
+      podSelector: {}
+      ## e.g:
+      ## namespaceSelector:
+      ##   label: access
+      ##
+      namespaceSelector: {}
+    ## custom ingress rules
+    ## e.g:
+    ## customRules:
+    ##   - from:
+    ##       - namespaceSelector:
+    ##           matchLabels:
+    ##             label: example
+    customRules: {}
+  ## @param networkPolicy.egressRules.denyConnectionsToExternal Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).
+  ## @param networkPolicy.egressRules.customRules [object] Custom network policy rule
+  ##
+  egressRules:
+    # Deny connections to external. This is not compatible with an external database.
+    denyConnectionsToExternal: false
+    ## Additional custom egress rules
+    ## e.g:
+    ## customRules:
+    ##   - to:
+    ##       - namespaceSelector:
+    ##           matchLabels:
+    ##             label: example
+    customRules: {}
+
 ## @section Database Parameters
 
 ## MariaDB chart configuration
@@ -819,7 +947,7 @@ mariadb:
   ##
   primary:
     ## MariaDB Primary Persistence parameters
-    ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+    ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
     ## @param mariadb.primary.persistence.enabled Enable persistence on MariaDB using PVC(s)
     ## @param mariadb.primary.persistence.storageClass Persistent Volume storage class
     ## @param mariadb.primary.persistence.accessModes [array] Persistent Volume access modes

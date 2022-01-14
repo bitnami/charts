@@ -75,12 +75,15 @@ spec:
       {{- if .Values.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.topologySpreadConstraints "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.priorityClassName }}
       priorityClassName: {{ .Values.priorityClassName }}
       {{- end }}
       {{- if .Values.runtimeClassName }}
       runtimeClassName: {{ .Values.runtimeClassName }}
-      {{- end}}
+      {{- end }}
       {{- if .Values.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
@@ -123,6 +126,10 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
+            - name: MY_POD_HOST_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
           volumeMounts:
           - name: certs-volume
             mountPath: /certs/CAs
@@ -134,7 +141,7 @@ spec:
             - |
               /bin/bash <<'EOF'
               my_hostname=$(hostname)
-              svc=$(echo -n "$my_hostname" | sed s/-[0-9]*$//)-headless
+              svc={{ include "mongodb.service.nameOverride" . }}
               cp /certs/CAs/* /certs/
               cat >/certs/openssl.cnf <<EOL
               [req]
@@ -151,10 +158,17 @@ spec:
               DNS.3 = $my_hostname.$svc.$MY_POD_NAMESPACE.svc.{{ .Values.clusterDomain }}
               DNS.4 = localhost
               DNS.5 = 127.0.0.1
+              {{- if .Values.tls.extraDnsNames }}
+              {{- range $key, $dnsName := .Values.tls.extraDnsNames }}
+              {{ $key }} = {{ $dnsName }}
+              {{- end }}
+              {{- end }}
               {{- if .Values.externalAccess.service.loadBalancerIPs }}
               {{- range $key, $val := .Values.externalAccess.service.loadBalancerIPs }}
               IP.{{ $key }} = {{ $val | quote }}
               {{- end }}
+              {{- else }}
+              IP.0 = {{ "$MY_POD_HOST_IP" | quote }}
               {{- end }}
               EOL
 
@@ -231,6 +245,10 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
+            - name: MY_POD_HOST_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
             - name: K8S_SERVICE_NAME
               value: "{{ include "mongodb.service.nameOverride" . }}"
             - name: MONGODB_INITIAL_PRIMARY_HOST
@@ -241,32 +259,23 @@ spec:
             - name: MONGODB_ADVERTISED_HOSTNAME
               value: "$(MY_POD_NAME).$(K8S_SERVICE_NAME).$(MY_POD_NAMESPACE).svc.{{ .Values.clusterDomain }}"
             {{- end }}
-            {{- if .Values.auth.username }}
-            - name: MONGODB_USERNAME
-              value: {{ .Values.auth.username | quote }}
+            {{- $customUsers := include "mongodb.customUsers" . -}}
+            {{- $customDatabases := include "mongodb.customDatabases" . -}}
+            {{- if not (empty $customUsers) }}
+            - name: MONGODB_EXTRA_USERNAMES
+              value: {{ $customUsers | quote }}
             {{- end }}
-            {{- if .Values.auth.database }}
-            - name: MONGODB_DATABASE
-              value: {{ .Values.auth.database | quote }}
-            {{- end }}
-            {{- if .Values.metrics.username }}
-            - name: MONGODB_METRICS_USERNAME
-              value: {{ .Values.metrics.username | quote }}
+            {{- if not (empty $customDatabases) }}
+            - name: MONGODB_EXTRA_DATABASES
+              value: {{ $customDatabases | quote }}
             {{- end }}
             {{- if .Values.auth.enabled }}
-            {{- if and .Values.auth.username .Values.auth.database }}
-            - name: MONGODB_PASSWORD
+            {{- if and (not (empty $customUsers)) (not (empty $customDatabases)) }}
+            - name: MONGODB_EXTRA_PASSWORDS
               valueFrom:
                 secretKeyRef:
                   name: {{ include "mongodb.secretName" . }}
-                  key: mongodb-password
-            {{- end }}
-            {{- if .Values.metrics.username }}
-            - name: MONGODB_METRICS_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "mongodb.secretName" . }}
-                  key: mongodb-metrics-password
+                  key: mongodb-passwords
             {{- end }}
             - name: MONGODB_ROOT_USER
               value: {{ .Values.auth.rootUser | quote }}
@@ -280,6 +289,17 @@ spec:
                 secretKeyRef:
                   name: {{ include "mongodb.secretName" . }}
                   key: mongodb-replica-set-key
+            {{- end }}
+            {{- if and .Values.metrics.enabled (not (empty .Values.metrics.username)) }}
+            - name: MONGODB_METRICS_USERNAME
+              value: {{ .Values.metrics.username | quote }}
+            {{- if .Values.auth.enabled }}
+            - name: MONGODB_METRICS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "mongodb.secretName" . }}
+                  key: mongodb-metrics-password
+            {{- end }}
             {{- end }}
             - name: ALLOW_EMPTY_PASSWORD
               value: {{ ternary "no" "yes" .Values.auth.enabled | quote }}
@@ -297,9 +317,9 @@ spec:
               value: {{ ternary "yes" "no" .Values.directoryPerDB | quote }}
             {{- $extraFlags := .Values.extraFlags | join " " -}}
             {{- if .Values.tls.enabled }}
-              {{- $extraFlags = printf "%s %s" "--tlsMode=requireTLS --tlsCertificateKeyFile=/certs/mongodb.pem --tlsCAFile=/certs/mongodb-ca-cert" $extraFlags  }}
+              {{- $extraFlags = printf "--tlsMode=%s --tlsCertificateKeyFile=/certs/mongodb.pem --tlsCAFile=/certs/mongodb-ca-cert %s" .Values.tls.mode $extraFlags  }}
             {{- end }}
-            {{- if ne $extraFlags ""}}
+            {{- if ne $extraFlags "" }}
             - name: MONGODB_EXTRA_FLAGS
               value: {{ $extraFlags | quote }}
             {{- end }}
@@ -414,6 +434,11 @@ spec:
             - name: scripts
               mountPath: /scripts/setup.sh
               subPath: setup.sh
+            {{ if .Values.replicaSetConfigurationSettings.enabled }}
+            - name: scripts
+              mountPath: /scripts/replicaSetConfigurationSettings.sh
+              subPath: replicaSetConfigurationSettings.sh
+            {{- end }}
             {{- if and .Values.externalAccess.enabled .Values.externalAccess.autoDiscovery.enabled (eq .Values.externalAccess.service.type "LoadBalancer") }}
             - name: shared
               mountPath: /shared
@@ -543,7 +568,12 @@ spec:
         {{- end }}
   {{- if not .Values.persistence.enabled }}
         - name: datadir
+          {{- if .Values.persistence.medium }}
+          emptyDir:
+            medium: {{ .Values.persistence.medium | quote }}
+          {{- else }}
           emptyDir: {}
+          {{- end }}
   {{- else }}
   volumeClaimTemplates:
     - metadata:

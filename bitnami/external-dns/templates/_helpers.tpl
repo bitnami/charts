@@ -200,16 +200,16 @@ Return the name of the Secret used to store the passwords
 {
   {{- if .Values.alibabacloud.regionId }}
   "regionId": "{{ .Values.alibabacloud.regionId }}",
-  {{- end}}
+  {{- end }}
   {{- if .Values.alibabacloud.vpcId }}
   "vpcId": "{{ .Values.alibabacloud.vpcId }}",
-  {{- end}}
+  {{- end }}
   {{- if .Values.alibabacloud.accessKeyId }}
   "accessKeyId": "{{ .Values.alibabacloud.accessKeyId }}",
-  {{- end}}
+  {{- end }}
   {{- if .Values.alibabacloud.accessKeySecret }}
   "accessKeySecret": "{{ .Values.alibabacloud.accessKeySecret }}"
-  {{- end}}
+  {{- end }}
 }
 {{ end }}
 
@@ -228,7 +228,7 @@ region = {{ .Values.aws.region }}
 {
   {{- if .Values.azure.cloud }}
   "cloud": "{{ .Values.azure.cloud }}",
-  {{- end}}
+  {{- end }}
   "tenantId": "{{ .Values.azure.tenantId }}",
   "subscriptionId": "{{ .Values.azure.subscriptionId }}",
   "resourceGroup": "{{ .Values.azure.resourceGroup }}",
@@ -356,17 +356,6 @@ external-dns: infoblox.wapiPassword
     You must provide a WAPI password when provider="infoblox".
     Please set the wapiPassword parameter (--set infoblox.wapiPassword="xxxx")
     or you can provide an existing secret name via infoblox.secretName
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return the appropriate apiVersion for PodSecurityPolicy.
-*/}}
-{{- define "podSecurityPolicy.apiVersion" -}}
-{{- if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
-{{- print "policy/v1beta1" -}}
-{{- else -}}
-{{- print "extensions/v1beta1" -}}
 {{- end -}}
 {{- end -}}
 

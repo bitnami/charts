@@ -51,6 +51,9 @@ spec:
         fsGroup: {{ .Values.influxdb.securityContext.fsGroup }}
       {{- end }}
       {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
+      {{- if .Values.serviceAccount.enabled }}
+      serviceAccountName: {{ default (include "common.names.fullname" . ) .Values.serviceAccount.name }}
+      {{- end }}
       initContainers:
         - name: init-chmod-data
           image: {{ include "influxdb.volumePermissions.image" . }}
@@ -62,9 +65,9 @@ spec:
               mkdir -p /bitnami/influxdb/{data,meta,wal}
               chmod 700 /bitnami/influxdb/{data,meta,wal}
               {{- if eq ( toString ( .Values.volumePermissions.securityContext.runAsUser )) "auto" }}
-                chown -R `id -u`:`id -G` /bitnami/influxdb/{data,meta,wal}
+                chown -R `id -u`:`id -G` /bitnami/influxdb
               {{- else }}
-                chown -R {{ .Values.influxdb.securityContext.runAsUser }}:{{ .Values.influxdb.securityContext.fsGroup }} /bitnami/influxdb/{data,meta,wal}
+                chown -R {{ .Values.influxdb.securityContext.runAsUser }}:{{ .Values.influxdb.securityContext.fsGroup }} /bitnami/influxdb
               {{- end }}
           {{- if eq ( toString ( .Values.volumePermissions.securityContext.runAsUser )) "auto" }}
           securityContext:
@@ -212,7 +215,7 @@ spec:
                   branch=$(influxdb_branch)
 
                   if [[ "$branch" = "2" ]]; then
-                      timeout {{ $livenessTimeout }}s influx --host http://$POD_IP:{{ .Values.influxdb.containerPorts.http }} ping
+                      timeout {{ $livenessTimeout }}s influx ping --host http://$POD_IP:{{ .Values.influxdb.containerPorts.http }}
                   else
                       timeout {{ $livenessTimeout }}s influx -host $POD_IP -port {{ .Values.influxdb.containerPorts.http }} -execute "SHOW DATABASES"
                   fi
@@ -239,7 +242,7 @@ spec:
                   branch=$(influxdb_branch)
 
                   if [[ "$branch" = "2" ]]; then
-                      timeout {{ $readinessTimeout }}s influx --host http://$POD_IP:{{ .Values.influxdb.containerPorts.http }} ping
+                      timeout {{ $readinessTimeout }}s influx ping --host http://$POD_IP:{{ .Values.influxdb.containerPorts.http }}
                   else
                       timeout {{ $readinessTimeout }}s influx -host $POD_IP -port {{ .Values.influxdb.containerPorts.http }} -execute "SHOW DATABASES"
                   fi

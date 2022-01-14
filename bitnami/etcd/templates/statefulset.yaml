@@ -58,6 +58,9 @@ spec:
       {{- if .Values.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
       {{- end }}
+      {{- if .Values.schedulerName }}
+      schedulerName: {{ .Values.schedulerName }}
+      {{- end }}
       {{- if .Values.priorityClassName }}
       priorityClassName: {{ .Values.priorityClassName }}
       {{- end }}
@@ -91,8 +94,7 @@ spec:
       {{- end }}
       containers:
         {{- $replicaCount := int .Values.replicaCount }}
-        {{- $clientPort := int .Values.service.port }}
-        {{- $peerPort := int .Values.service.peerPort }}
+        {{- $peerPort := int .Values.containerPorts.peer }}
         {{- $etcdFullname := include "common.names.fullname" . }}
         {{- $releaseNamespace := .Release.Namespace }}
         {{- $etcdHeadlessServiceName := printf "%s-%s" $etcdFullname "headless" }}
@@ -151,18 +153,18 @@ spec:
             {{- end }}
             - name: ETCD_AUTH_TOKEN
               {{- if eq .Values.auth.token.type "jwt" }}
-              value: {{ printf "jwt,priv-key=/opt/bitnami/etcd/certs/token/%s,sign-method=%s,ttl=%s" .Values.auth.token.privateKey.filename .Values.auth.token.signMethod .Values.auth.token.ttl | quote}}
+              value: {{ printf "jwt,priv-key=/opt/bitnami/etcd/certs/token/%s,sign-method=%s,ttl=%s" .Values.auth.token.privateKey.filename .Values.auth.token.signMethod .Values.auth.token.ttl | quote }}
               {{- else if eq .Values.auth.token.type "simple" }}
               value: "simple"
               {{- end }}
             - name: ETCD_ADVERTISE_CLIENT_URLS
-              value: "{{ $etcdClientProtocol }}://$(MY_POD_NAME).{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.svc.{{ $clusterDomain }}:{{ .Values.service.port }}"
+              value: "{{ $etcdClientProtocol }}://$(MY_POD_NAME).{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.svc.{{ $clusterDomain }}:{{ .Values.containerPorts.client }},{{ $etcdClientProtocol }}://{{ $etcdFullname }}.{{ .Release.Namespace }}.svc.{{ $clusterDomain }}:{{ .Values.service.port }}"
             - name: ETCD_LISTEN_CLIENT_URLS
-              value: "{{ $etcdClientProtocol }}://0.0.0.0:{{ .Values.service.port }}"
+              value: "{{ $etcdClientProtocol }}://0.0.0.0:{{ .Values.containerPorts.client }}"
             - name: ETCD_INITIAL_ADVERTISE_PEER_URLS
-              value: "{{ $etcdPeerProtocol }}://$(MY_POD_NAME).{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.svc.{{ $clusterDomain }}:{{ .Values.service.peerPort }}"
+              value: "{{ $etcdPeerProtocol }}://$(MY_POD_NAME).{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.svc.{{ $clusterDomain }}:{{ .Values.containerPorts.peer }}"
             - name: ETCD_LISTEN_PEER_URLS
-              value: "{{ $etcdPeerProtocol }}://0.0.0.0:{{ .Values.service.peerPort }}"
+              value: "{{ $etcdPeerProtocol }}://0.0.0.0:{{ .Values.containerPorts.peer }}"
             {{- if .Values.autoCompactionMode }}
             - name: ETCD_AUTO_COMPACTION_MODE
               value: {{ .Values.autoCompactionMode | quote }}
@@ -201,10 +203,10 @@ spec:
             - name: ETCD_CLIENT_CERT_AUTH
               value: "true"
             - name: ETCD_TRUSTED_CA_FILE
-              value: "/opt/bitnami/etcd/certs/client/{{ .Values.auth.client.caFilename | default "ca.crt"}}"
+              value: "/opt/bitnami/etcd/certs/client/{{ .Values.auth.client.caFilename | default "ca.crt" }}"
             {{- else if .Values.auth.client.caFilename }}
             - name: ETCD_TRUSTED_CA_FILE
-              value: "/opt/bitnami/etcd/certs/client/{{ .Values.auth.client.caFilename | default "ca.crt"}}"
+              value: "/opt/bitnami/etcd/certs/client/{{ .Values.auth.client.caFilename | default "ca.crt" }}"
             {{- end }}
             {{- end }}
             {{- if and .Values.auth.peer.secureTransport .Values.auth.peer.useAutoTLS }}
@@ -219,10 +221,10 @@ spec:
             - name: ETCD_PEER_CLIENT_CERT_AUTH
               value: "true"
             - name: ETCD_PEER_TRUSTED_CA_FILE
-              value: "/opt/bitnami/etcd/certs/peer/{{ .Values.auth.peer.caFilename | default "ca.crt"}}"
+              value: "/opt/bitnami/etcd/certs/peer/{{ .Values.auth.peer.caFilename | default "ca.crt" }}"
             {{- else if .Values.auth.peer.caFilename }}
             - name: ETCD_PEER_TRUSTED_CA_FILE
-              value: "/opt/bitnami/etcd/certs/peer/{{ .Values.auth.peer.caFilename | default "ca.crt"}}"
+              value: "/opt/bitnami/etcd/certs/peer/{{ .Values.auth.peer.caFilename | default "ca.crt" }}"
             {{- end }}
             {{- end }}
             {{- if .Values.startFromSnapshot.enabled }}

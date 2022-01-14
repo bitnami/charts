@@ -69,10 +69,10 @@ spec:
       {{- if or $.Values.mongos.initContainers $.Values.common.initContainers }}
       initContainers:
         {{- with $.Values.mongos.initContainers }}
-        {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8}}
+        {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8 }}
         {{- end }}
         {{- with $.Values.common.initContainers }}
-        {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8}}
+        {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8 }}
         {{- end }}
       {{- end }}
       containers:
@@ -118,6 +118,8 @@ spec:
             - name: MONGODB_ADVERTISED_HOSTNAME
               value: "$(MONGODB_POD_NAME)"
             {{- end }}
+            - name: MONGODB_PORT_NUMBER
+              value: {{ $.Values.common.containerPorts.mongo | quote }}
             - name: MONGODB_CFG_PRIMARY_HOST
               value: {{ include "mongodb-sharded.configServer.primaryHost" . }}
             - name: MONGODB_CFG_REPLICA_SET_NAME
@@ -177,7 +179,7 @@ spec:
           {{- end }}
           ports:
             - name: mongodb
-              containerPort: 27017
+              containerPort: {{ $.Values.common.containerPorts.mongo }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
@@ -293,10 +295,10 @@ spec:
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
         {{- end }}
         {{- with $.Values.mongos.sidecars }}
-        {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8}}
+        {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8 }}
         {{- end }}
         {{- with $.Values.common.sidecars }}
-        {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8}}
+        {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8 }}
         {{- end }}
       volumes:
         {{- if .Values.usePasswordFile }}

@@ -34,7 +34,9 @@ extraDeploy: []
 ## @param logLevel Set up cert manager log level
 ##
 logLevel: 2
-## Cert Manager leader Election
+## @param clusterResourceNamespace Namespace used to store DNS provider credentials etc. for ClusterIssuer resources. If empty, uses the namespace where the controller is deployed.
+##
+clusterResourceNamespace: ""
 ## @param leaderElection.namespace Namespace which leaderElection works.
 ##
 leaderElection:
@@ -66,10 +68,10 @@ controller:
   image:
     registry: docker.io
     repository: bitnami/cert-manager
-    tag: 1.5.4-debian-10-r0
+    tag: 1.6.1-debian-10-r41
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
     ##
     pullPolicy: IfNotPresent
@@ -95,10 +97,10 @@ controller:
     image:
       registry: docker.io
       repository: bitnami/acmesolver
-      tag: 1.5.3-debian-10-r36
+      tag: 1.6.1-debian-10-r43
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-      ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+      ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
       ##
       pullPolicy: IfNotPresent
       ## Optionally specify an array of imagePullSecrets.
@@ -113,7 +115,7 @@ controller:
       ##
       debug: false
   ## Controller containers' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param controller.resources.limits The resources limits for the Controller container
   ## @param controller.resources.requests The requested resources for the Controller container
   ##
@@ -199,6 +201,18 @@ controller:
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
+  ## @param controller.dnsPolicy Controller pod DNS policy
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-s-dns-policy
+  ##
+  dnsPolicy: ""
+  ## @param controller.dnsConfig Controller pod DNS config. Required if `controller.dnsPolicy` is set to `None`
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-dns-config
+  ## E.g:
+  ## dnsConfig:
+  ##   nameservers:
+  ##     - "1.1.1.1"
+  ##
+  dnsConfig: {}
   ## @param controller.lifecycleHooks Add lifecycle hooks to the Controller deployment
   ##
   lifecycleHooks: {}
@@ -284,10 +298,10 @@ webhook:
   image:
     registry: docker.io
     repository: bitnami/cert-manager-webhook
-    tag: 1.5.3-debian-10-r35
+    tag: 1.6.1-debian-10-r43
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -302,7 +316,7 @@ webhook:
     ##
     debug: false
   ## Webhook containers' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ##
   resources:
     ## @param webhook.resources.limits The resources limits for the Webhook container
@@ -523,10 +537,10 @@ cainjector:
   image:
     registry: docker.io
     repository: bitnami/cainjector
-    tag: 1.5.3-debian-10-r35
+    tag: 1.6.1-debian-10-r42
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -541,7 +555,7 @@ cainjector:
     ##
     debug: false
   ## CAInjector containers' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ##
   resources:
     ## @param cainjector.resources.limits The resources limits for the CAInjector container

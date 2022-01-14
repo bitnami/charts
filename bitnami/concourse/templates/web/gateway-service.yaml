@@ -30,7 +30,7 @@ spec:
     {{- end }}
   {{- end }}
   {{- if and (eq "ClusterIP" .Values.service.workerGateway.type) .Values.service.workerGateway.clusterIP }}
-  {{ with .Values.service.workerGateway.clusterIP }}clusterIP: {{quote . }}{{ end}}
+  {{ with .Values.service.workerGateway.clusterIP }}clusterIP: {{ quote . }}{{ end }}
   {{- end }}
   {{- if and (eq "LoadBalancer" .Values.service.workerGateway.type) .Values.service.workerGateway.loadBalancerIP }}
   loadBalancerIP: {{ .Values.service.workerGateway.loadBalancerIP }}
@@ -40,7 +40,7 @@ spec:
       port: {{ .Values.service.workerGateway.port }}
       targetPort: tsa
       {{- if and (eq "nodePort" .Values.service.workerGateway.type) .Values.service.workerGateway.nodePort }}
-      nodePort: {{ .Values.service.workerGateway.nodePort}}
+      nodePort: {{ .Values.service.workerGateway.nodePort }}
       {{- end }}
   selector:
     app.kubernetes.io/component: web

@@ -67,7 +67,7 @@ spec:
       securityContext: {{- omit .Values.postgresql.securityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       {{- if .Values.serviceAccount.enabled }}
-      serviceAccountName: {{ default (include "common.names.fullname" . ) .Values.serviceAccount.name}}
+      serviceAccountName: {{ default (include "common.names.fullname" . ) .Values.serviceAccount.name }}
       {{- end }}
       {{- if .Values.topologySpreadConstraints }}
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.topologySpreadConstraints "context" .) | nindent 8 }}
@@ -278,7 +278,7 @@ spec:
                 fieldRef:
                   fieldPath: metadata.namespace
             - name: REPMGR_PARTNER_NODES
-              value: {{range $e, $i := until $postgresqlReplicaCount }}{{ $postgresqlFullname }}-{{ $i }}.{{ $postgresqlHeadlessServiceName }}.$(REPMGR_NAMESPACE).svc.{{ $clusterDomain }},{{ end }}
+              value: {{ range $e, $i := until $postgresqlReplicaCount }}{{ $postgresqlFullname }}-{{ $i }}.{{ $postgresqlHeadlessServiceName }}.$(REPMGR_NAMESPACE).svc.{{ $clusterDomain }},{{ end }}
             - name: REPMGR_PRIMARY_HOST
               value: {{ printf "%s-0.%s.$(REPMGR_NAMESPACE).svc.%s" $postgresqlFullname $postgresqlHeadlessServiceName $clusterDomain | quote }}
             - name: REPMGR_NODE_NAME
@@ -333,7 +333,7 @@ spec:
             {{- end }}
           ports:
             - name: postgresql
-              containerPort: {{ .Values.service.port }}
+              containerPort: {{ .Values.postgresql.containerPort }}
               protocol: TCP
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.postgresql.livenessProbe.enabled }}
@@ -431,9 +431,9 @@ spec:
           {{- end }}
           env:
             - name: PG_EXPORTER_WEB_LISTEN_ADDRESS
-              value: :{{ .Values.metrics.service.port }}
+              value: :{{ .Values.metrics.containerPort }}
             - name: DATA_SOURCE_URI
-              value: {{ printf "127.0.0.1:%s/%s?sslmode=disable" .Values.service.port (include "postgresql-ha.postgresqlDatabase" .) | quote }}
+              value: {{ printf "127.0.0.1:%d/%s?sslmode=disable" (.Values.postgresql.containerPort | int64) (include "postgresql-ha.postgresqlDatabase" .) | quote }}
             {{- if .Values.postgresql.usePasswordFile }}
             - name: DATA_SOURCE_PASS_FILE
               value: "/opt/bitnami/postgresql/secrets/postgresql-password"
@@ -451,7 +451,7 @@ spec:
             {{- end }}
           ports:
             - name: metrics
-              containerPort: {{ .Values.metrics.service.port }}
+              containerPort: {{ .Values.metrics.containerPort }}
               protocol: TCP
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.metrics.livenessProbe.enabled }}

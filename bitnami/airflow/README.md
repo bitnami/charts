@@ -10,7 +10,7 @@ $ helm install my-release bitnami/airflow
 
 ## Introduction
 
-This chart bootstraps an [Apache Airflow](https://github.com/bitnami/bitnami-docker-airflow) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps an [Apache Airflow](https://github.com/bitnami/bitnami-docker-airflow) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
@@ -102,7 +102,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dags.configMap`         | Name of an existing config map containing all the DAGs files you want to load in Airflow                                                         | `""`                    |
 | `dags.image.registry`    | Container sidecar registry                                                                                                                       | `docker.io`             |
 | `dags.image.repository`  | Container sidecar image                                                                                                                          | `bitnami/bitnami-shell` |
-| `dags.image.tag`         | Container sidecar image tag                                                                                                                      | `10-debian-10-r225`     |
+| `dags.image.tag`         | Container sidecar image tag                                                                                                                      | `10-debian-10-r252`     |
 | `dags.image.pullPolicy`  | Container sidecar image pull policy                                                                                                              | `IfNotPresent`          |
 | `loadExamples`           | Switch to load some Airflow examples                                                                                                             | `false`                 |
 
@@ -113,7 +113,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ---------------------------------------- | --------------------------------------------------------------------------- | -------------------- |
 | `web.image.registry`                     | Airflow image registry                                                      | `docker.io`          |
 | `web.image.repository`                   | Airflow image repository                                                    | `bitnami/airflow`    |
-| `web.image.tag`                          | Airflow image tag (immutable tags are recommended)                          | `2.2.0-debian-10-r0` |
+| `web.image.tag`                          | Airflow image tag (immutable tags are recommended)                          | `2.2.2-debian-10-r0` |
 | `web.image.pullPolicy`                   | Airflow image pull policy                                                   | `IfNotPresent`       |
 | `web.image.pullSecrets`                  | Airflow image pull secrets                                                  | `[]`                 |
 | `web.image.debug`                        | Enable image debug mode                                                     | `false`              |
@@ -167,7 +167,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------------- | ----------------------------------------------------------------------- | --------------------------- |
 | `scheduler.image.registry`                   | Airflow Scheduler image registry                                        | `docker.io`                 |
 | `scheduler.image.repository`                 | Airflow Scheduler image repository                                      | `bitnami/airflow-scheduler` |
-| `scheduler.image.tag`                        | Airflow Scheduler image tag (immutable tags are recommended)            | `2.2.0-debian-10-r0`        |
+| `scheduler.image.tag`                        | Airflow Scheduler image tag (immutable tags are recommended)            | `2.2.1-debian-10-r15`       |
 | `scheduler.image.pullPolicy`                 | Airflow Scheduler image pull policy                                     | `IfNotPresent`              |
 | `scheduler.image.pullSecrets`                | Airflow Scheduler image pull secrets                                    | `[]`                        |
 | `scheduler.image.debug`                      | Enable image debug mode                                                 | `false`                     |
@@ -200,7 +200,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ------------------------ |
 | `worker.image.registry`                     | Airflow Worker image registry                                                                                        | `docker.io`              |
 | `worker.image.repository`                   | Airflow Worker image repository                                                                                      | `bitnami/airflow-worker` |
-| `worker.image.tag`                          | Airflow Worker image tag (immutable tags are recommended)                                                            | `2.2.0-debian-10-r0`     |
+| `worker.image.tag`                          | Airflow Worker image tag (immutable tags are recommended)                                                            | `2.2.1-debian-10-r15`    |
 | `worker.image.pullPolicy`                   | Airflow Worker image pull policy                                                                                     | `IfNotPresent`           |
 | `worker.image.pullSecrets`                  | Airflow Worker image pull secrets                                                                                    | `[]`                     |
 | `worker.image.debug`                        | Enable image debug mode                                                                                              | `false`                  |
@@ -258,7 +258,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------ | -------------------------------------------------------------------------------------- | ---------------------- |
 | `git.image.registry`           | Git image registry                                                                     | `docker.io`            |
 | `git.image.repository`         | Git image repository                                                                   | `bitnami/git`          |
-| `git.image.tag`                | Git image tag (immutable tags are recommended)                                         | `2.33.0-debian-10-r63` |
+| `git.image.tag`                | Git image tag (immutable tags are recommended)                                         | `2.33.0-debian-10-r87` |
 | `git.image.pullPolicy`         | Git image pull policy                                                                  | `IfNotPresent`         |
 | `git.image.pullSecrets`        | Git image pull secrets                                                                 | `[]`                   |
 | `git.dags.enabled`             | Enable in order to download DAG files from git repositories.                           | `false`                |
@@ -349,7 +349,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                      | Start a side-car prometheus exporter                                      | `false`                       |
 | `metrics.image.registry`               | Airflow Exporter image registry                                           | `docker.io`                   |
 | `metrics.image.repository`             | Airflow Exporter image repository                                         | `bitnami/airflow-exporter`    |
-| `metrics.image.tag`                    | Airflow Exporter image tag (immutable tags are recommended)               | `0.20210126.0-debian-10-r250` |
+| `metrics.image.tag`                    | Airflow Exporter image tag (immutable tags are recommended)               | `0.20210126.0-debian-10-r277` |
 | `metrics.image.pullPolicy`             | Airflow Exporter image pull policy                                        | `IfNotPresent`                |
 | `metrics.image.pullSecrets`            | Airflow Exporter image pull secrets                                       | `[]`                          |
 | `metrics.hostAliases`                  | Deployment pod host aliases                                               | `[]`                          |
@@ -414,7 +414,7 @@ There are two different ways to load your custom DAG files into the Airflow char
 
 #### Option 1: Specify an existing config map
 
-You can manually create a config map containing all your DAG files and then pass the name when deploying Airflow chart. For that, you can pass the option `dagsConfigMap`.
+You can manually create a config map containing all your DAG files and then pass the name when deploying Airflow chart. For that, you can pass the option `dags.configMap`.
 
 #### Option 2: Get your DAG files from a git repository
 
@@ -429,7 +429,7 @@ git.dags.repositories[0].name=REPO-IDENTIFIER
 git.dags.repositories[0].branch=master
 ```
 
-If you use a private repository from GitHub, a possible option to clone the files is using a [Personal Access Token](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token) and using it as part of the URL: https://USERNAME:PERSONAL_ACCESS_TOKEN@github.com/USERNAME/REPOSITORY
+If you use a private repository from GitHub, a possible option to clone the files is using a [Personal Access Token](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token) and using it as part of the URL: `https://USERNAME:PERSONAL_ACCESS_TOKEN@github.com/USERNAME/REPOSITORY`
 
 ### Loading Plugins
 
@@ -677,3 +677,19 @@ This release adds support for LDAP authentication.
 ### To 1.0.0
 
 This release updates the PostgreSQL chart dependency to use PostgreSQL 11.x. You need to migrate the existing PostgreSQL data to this version before upgrading to this release. For more information follow [this link](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#500).
+
+## License
+
+Copyright &copy; 2022 Bitnami
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

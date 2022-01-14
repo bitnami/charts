@@ -51,7 +51,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/phpmyadmin
-  tag: 5.1.1-debian-10-r112
+  tag: 5.1.1-debian-10-r195
   ## Specify a imagePullPolicy
   ##
   pullPolicy: IfNotPresent
@@ -125,7 +125,7 @@ containerSecurityContext:
   enabled: true
   runAsUser: 1001
 ## phpMyAdmin containers' resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources
+## ref: https://kubernetes.io/docs/user-guide/compute-resources
 ## We usually recommend not to specify default resources and to leave this as a conscious
 ## choice for the user. This also increases chances charts run on environments with little
 ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -297,7 +297,7 @@ service:
   ##
   clusterIP: ""
   ## @param service.loadBalancerIP Load balancer IP for the phpMyAdmin Service (optional, cloud specific)
-  ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+  ## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
   ##
   loadBalancerIP: ""
   ## @param service.loadBalancerSourceRanges Addresses that are allowed when service is LoadBalancer
@@ -308,7 +308,7 @@ service:
   ##
   loadBalancerSourceRanges: []
   ## @param service.externalTrafficPolicy Enable client source IP preservation
-  ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+  ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
   externalTrafficPolicy: Cluster
   ## @param service.annotations Provide any additional annotations that may be required for the PhpMyAdmin service
@@ -323,7 +323,11 @@ ingress:
   ## DEPRECATED: Use ingress.annotations instead of ingress.certManager
   ## certManager: false
   ##
-
+  ## @param ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+  ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+  ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+  ##
+  ingressClassName: ""
   ## @param ingress.hostname When the ingress is enabled, a host pointing to this will be created
   ##
   hostname: phpmyadmin.local
@@ -451,7 +455,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.10.1-debian-10-r16
+    tag: 0.11.0-debian-10-r22
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -462,7 +466,7 @@ metrics:
     ##
     pullSecrets: []
   ## @param metrics.resources Metrics exporter resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ##
   resources: {}
   ## Prometheus Exporter service configuration
@@ -520,3 +524,96 @@ metrics:
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
     ##
     additionalLabels: {}
+
+## @section NetworkPolicy parameters
+
+## Add networkpolicies
+##
+networkPolicy:
+  ## @param networkPolicy.enabled Enable network policies
+  ## If ingress.enabled or metrics.enabled are true, configure networkPolicy.ingress and networkPolicy.metrics selectors respectively to allow communication
+  ##
+  enabled: false
+  ## @param networkPolicy.metrics.enabled Enable network policy for metrics (prometheus)
+  ## @param networkPolicy.metrics.namespaceSelector Monitoring namespace selector labels. These labels will be used to identify the prometheus' namespace.
+  ## @param networkPolicy.metrics.podSelector Monitoring pod selector labels. These labels will be used to identify the Prometheus pods.
+  ##
+  metrics:
+    enabled: false
+    ## e.g:
+    ## podSelector:
+    ##   label: monitoring
+    ##
+    podSelector: {}
+    ## e.g:
+    ## namespaceSelector:
+    ##   label: monitoring
+    ##
+    namespaceSelector: {}
+  ## @param networkPolicy.ingress.enabled Enable network policy for Ingress Proxies
+  ## @param networkPolicy.ingress.namespaceSelector Ingress Proxy namespace selector labels. These labels will be used to identify the Ingress Proxy's namespace.
+  ## @param networkPolicy.ingress.podSelector Ingress Proxy pods selector labels. These labels will be used to identify the Ingress Proxy pods.
+  ##
+  ingress:
+    enabled: false
+    ## e.g:
+    ## podSelector:
+    ##   label: ingress
+    ##
+    podSelector: {}
+    ## e.g:
+    ## namespaceSelector:
+    ##   label: ingress
+    ##
+    namespaceSelector: {}
+  ## @param networkPolicy.ingressRules.backendOnlyAccessibleByFrontend Enable ingress rule that makes the backend (mariadb) only accessible by phpMyAdmin's pods.
+  ## @param networkPolicy.ingressRules.customBackendSelector Backend selector labels. These labels will be used to identify the backend pods.
+  ## @param networkPolicy.ingressRules.accessOnlyFrom.enabled Enable ingress rule that makes phpMyAdmin only accessible from a particular origin
+  ## @param networkPolicy.ingressRules.accessOnlyFrom.namespaceSelector Namespace selector label that is allowed to access phpMyAdmin. This label will be used to identified the allowed namespace(s).
+  ## @param networkPolicy.ingressRules.accessOnlyFrom.podSelector Pods selector label that is allowed to access phpMyAdmin. This label will be used to identified the allowed pod(s).
+  ## @param networkPolicy.ingressRules.customRules Custom network policy ingress rule
+  ##
+  ingressRules:
+    ## mariadb backend only can be accessed from phpMyAdmin
+    ##
+    backendOnlyAccessibleByFrontend: false
+    customBackendSelector: {}
+    ## Allow only from the indicated:
+    ##
+    accessOnlyFrom:
+      enabled: false
+      ## e.g:
+      ## namespaceSelector:
+      ##   label: ingress
+      ##
+      namespaceSelector: {}
+      ## e.g:
+      ## podSelector:
+      ##   label: access
+      ##
+      podSelector: {}
+    ## custom ingress rules
+    ## e.g:
+    ## customRules:
+    ##   - from:
+    ##       - namespaceSelector:
+    ##           matchLabels:
+    ##             label: example
+    ##
+    customRules: {}
+  ## @param networkPolicy.egressRules.denyConnectionsToExternal Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).
+  ## @param networkPolicy.egressRules.customRules Custom network policy rule
+  ##
+  egressRules:
+    ## Deny connections to external. This is not compatible with an external database.
+    ##
+    denyConnectionsToExternal: false
+    ## Additional custom egress rules
+    ## e.g:
+    ## customRules:
+    ##   - to:
+    ##       - namespaceSelector:
+    ##           matchLabels:
+    ##             label: example
+    ##
+    customRules: {}

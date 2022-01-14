@@ -11,7 +11,7 @@ $ helm install my-release bitnami/argo-workflows
 
 ## Introduction
 
-This chart bootstraps a [Argo Workflows](https://argoproj.github.io/workflows) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Argo Workflows](https://argoproj.github.io/workflows) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This chart has been tested to work with NGINX Ingress, cert-manager, fluentd and Prometheus on top of the [BKPR](https://kubeprod.io/).
 
@@ -76,7 +76,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | --------------------------- |
 | `server.image.registry`                              | server image registry                                                                                   | `docker.io`                 |
 | `server.image.repository`                            | server image repository                                                                                 | `bitnami/argo-workflow-cli` |
-| `server.image.tag`                                   | server image tag (immutable tags are recommended)                                                       | `3.2.2-scratch-r0`          |
+| `server.image.tag`                                   | server image tag (immutable tags are recommended)                                                       | `3.2.4-scratch-r0`          |
 | `server.image.pullPolicy`                            | server image pull policy                                                                                | `Always`                    |
 | `server.image.pullSecrets`                           | server image pull secrets                                                                               | `[]`                        |
 | `server.enabled`                                     | Enable server deployment                                                                                | `true`                      |
@@ -177,7 +177,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
 | `controller.image.registry`                              | controller image registry                                                                                                     | `docker.io`                        |
 | `controller.image.repository`                            | controller image repository                                                                                                   | `bitnami/argo-workflow-controller` |
-| `controller.image.tag`                                   | controller image tag (immutable tags are recommended)                                                                         | `3.2.2-scratch-r0`                 |
+| `controller.image.tag`                                   | controller image tag (immutable tags are recommended)                                                                         | `3.2.4-scratch-r0`                 |
 | `controller.image.pullPolicy`                            | controller image pull policy                                                                                                  | `IfNotPresent`                     |
 | `controller.image.pullSecrets`                           | controller image pull secrets                                                                                                 | `[]`                               |
 | `controller.replicaCount`                                | Number of controller replicas to deploy                                                                                       | `1`                                |
@@ -281,7 +281,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------- | ------------------------------------------------------------- | ---------------------------- |
 | `executor.image.registry`                   | executor image registry                                       | `docker.io`                  |
 | `executor.image.repository`                 | executor image repository                                     | `bitnami/argo-workflow-exec` |
-| `executor.image.tag`                        | executor image tag (immutable tags are recommended)           | `3.2.1-debian-10-r1`         |
+| `executor.image.tag`                        | executor image tag (immutable tags are recommended)           | `3.2.3-debian-10-r21`        |
 | `executor.image.pullPolicy`                 | executor image pull policy                                    | `Always`                     |
 | `executor.image.pullSecrets`                | executor image pull secrets                                   | `[]`                         |
 | `executor.resources.limits`                 | The resources limits for the init container                   | `{}`                         |
@@ -358,7 +358,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 See https://github.com/bitnami-labs/readme-generator-for-helm to create the table
 
-The above parameters map to the env variables defined in [bitnami/argo-workflow-cli](http://github.com/bitnami/bitnami-docker-argo-workflow-cli). For more information please refer to the [bitnami/argo-workflow-cli](http://github.com/bitnami/bitnami-docker-argo-workflows) image documentation.
+The above parameters map to the env variables defined in [bitnami/argo-workflow-cli](https://github.com/bitnami/bitnami-docker-argo-workflow-cli). For more information please refer to the [bitnami/argo-workflow-cli](https://github.com/bitnami/bitnami-docker-argo-workflow-cli) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -418,11 +418,11 @@ externalDatabase.database=bitnami_wordpress
 
 This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/master/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/master/bitnami/contour) you can utilize the ingress controller to serve your application.
 
-To enable Ingress integration, set `ingress.enabled` to `true`. The `ingress.hostname` property can be used to set the host name. The `ingress.tls` parameter can be used to add the TLS configuration for this host. It is also possible to have more than one host, with a separate TLS configuration for each host. [Learn more about configuring and using Ingress](https://docs.bitnami.com/kubernetes/apps/argo-workflows/configuration/configure-use-ingress/).
+To enable Ingress integration, set `ingress.enabled` to `true`. The `ingress.hostname` property can be used to set the host name. The `ingress.tls` parameter can be used to add the TLS configuration for this host. It is also possible to have more than one host, with a separate TLS configuration for each host. [Learn more about configuring and using Ingress](https://docs.bitnami.com/kubernetes/infrastructure/argo-workflows//configuration/configure-ingress/).
 
 ### TLS secrets
 
-The chart also facilitates the creation of TLS secrets for use with the Ingress controller, with different options for certificate management. [Learn more about TLS secrets](https://docs.bitnami.com/kubernetes/apps/argo-workflows/administration/enable-tls/).
+The chart also facilitates the creation of TLS secrets for use with the Ingress controller, with different options for certificate management. [Learn more about TLS secrets](https://docs.bitnami.com/kubernetes/infrastructure/argo-workflows/administration/enable-tls-ingress/).
 
 ### Additional environment variables
 
@@ -439,7 +439,7 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 ### Sidecars
 
-If additional containers are needed in the same pod as argo-workflows (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter. If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/apps/argo-workflows/administration/configure-use-sidecars/).
+If additional containers are needed in the same pod as argo-workflows (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter. If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/infrastructure/argo-workflows/configuration/configure-sidecar-init-containers/).
 
 ### Pod affinity
 
@@ -450,3 +450,19 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+
+## License
+
+Copyright &copy; 2022 Bitnami
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

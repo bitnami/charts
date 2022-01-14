@@ -13,7 +13,7 @@ $ helm install my-release bitnami/postgresql
 
 ## Introduction
 
-This chart bootstraps a [PostgreSQL](https://github.com/bitnami/bitnami-docker-postgresql) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [PostgreSQL](https://github.com/bitnami/bitnami-docker-postgresql) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This chart has been tested to work with NGINX Ingress, cert-manager, fluentd and Prometheus on top of the [BKPR](https://kubeprod.io/).
 
@@ -76,6 +76,7 @@ $ kubectl delete pvc -l release=my-release
 | `nameOverride`           | String to partially override common.names.fullname template (will maintain the release name) | `""`           |
 | `fullnameOverride`       | String to fully override common.names.fullname template                                      | `""`           |
 | `extraDeploy`            | Array of extra objects to deploy with the release (evaluated as a template)                  | `[]`           |
+| `commonLabels`           | Add labels to all the deployed resources                                                     | `{}`           |
 | `commonAnnotations`      | Add annotations to all the deployed resources                                                | `{}`           |
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)      | `false`        |
 | `diagnosticMode.command` | Command to override all containers in the deployment                                         | `["sleep"]`    |
@@ -88,14 +89,14 @@ $ kubectl delete pvc -l release=my-release
 | --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
 | `image.registry`                              | PostgreSQL image registry                                                                                                                                 | `docker.io`                 |
 | `image.repository`                            | PostgreSQL image repository                                                                                                                               | `bitnami/postgresql`        |
-| `image.tag`                                   | PostgreSQL image tag (immutable tags are recommended)                                                                                                     | `11.13.0-debian-10-r67`     |
+| `image.tag`                                   | PostgreSQL image tag (immutable tags are recommended)                                                                                                     | `11.14.0-debian-10-r17`     |
 | `image.pullPolicy`                            | PostgreSQL image pull policy                                                                                                                              | `IfNotPresent`              |
 | `image.pullSecrets`                           | Specify image pull secrets                                                                                                                                | `[]`                        |
 | `image.debug`                                 | Specify if debug values should be set                                                                                                                     | `false`                     |
 | `volumePermissions.enabled`                   | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                     |
 | `volumePermissions.image.registry`            | Init container volume-permissions image registry                                                                                                          | `docker.io`                 |
 | `volumePermissions.image.repository`          | Init container volume-permissions image repository                                                                                                        | `bitnami/bitnami-shell`     |
-| `volumePermissions.image.tag`                 | Init container volume-permissions image tag (immutable tags are recommended)                                                                              | `10-debian-10-r227`         |
+| `volumePermissions.image.tag`                 | Init container volume-permissions image tag (immutable tags are recommended)                                                                              | `10-debian-10-r265`         |
 | `volumePermissions.image.pullPolicy`          | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`              |
 | `volumePermissions.image.pullSecrets`         | Init container volume-permissions image pull secrets                                                                                                      | `[]`                        |
 | `volumePermissions.securityContext.runAsUser` | User ID for the init container                                                                                                                            | `0`                         |
@@ -108,7 +109,7 @@ $ kubectl delete pvc -l release=my-release
 | `serviceAccount.enabled`                      | Enable service account (Note: Service Account will only be automatically created if `serviceAccount.name` is not set)                                     | `false`                     |
 | `serviceAccount.name`                         | Name of an already existing service account. Setting this value disables the automatic service account creation                                           | `""`                        |
 | `serviceAccount.autoMount`                    | Auto-mount the service account token in the pod                                                                                                           | `false`                     |
-| `psp.create`                                  | Create Pod Security Policy                                                                                                                                | `false`                     |
+| `psp.create`                                  | Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later               | `false`                     |
 | `rbac.create`                                 | Create Role and RoleBinding (required for PSP to work)                                                                                                    | `false`                     |
 | `replication.enabled`                         | Enable replication                                                                                                                                        | `false`                     |
 | `replication.user`                            | Replication user                                                                                                                                          | `repl_user`                 |
@@ -143,6 +144,7 @@ $ kubectl delete pvc -l release=my-release
 | `initdbScriptsSecret`                         | Secret with scripts to be run at first boot (in case it contains sensitive information)                                                                   | `""`                        |
 | `initdbUser`                                  | Specify the PostgreSQL username to execute the initdb scripts                                                                                             | `""`                        |
 | `initdbPassword`                              | Specify the PostgreSQL password to execute the initdb scripts                                                                                             | `""`                        |
+| `containerPorts.postgresql`                   | PostgreSQL container port                                                                                                                                 | `5432`                      |
 | `audit.logHostname`                           | Log client hostnames                                                                                                                                      | `false`                     |
 | `audit.logConnections`                        | Add client log-in operations to the log file                                                                                                              | `false`                     |
 | `audit.logDisconnections`                     | Add client log-outs operations to the log file                                                                                                            | `false`                     |
@@ -191,6 +193,7 @@ $ kubectl delete pvc -l release=my-release
 | `persistence.subPath`                         | The subdirectory of the volume to mount to                                                                                                                | `""`                        |
 | `persistence.storageClass`                    | PVC Storage Class for PostgreSQL volume                                                                                                                   | `""`                        |
 | `persistence.accessModes`                     | PVC Access Mode for PostgreSQL volume                                                                                                                     | `["ReadWriteOnce"]`         |
+| `persistence.snapshotName`                    | Provide a VolumeSnapshot name which to create the PVC                                                                                                     | `""`                        |
 | `persistence.size`                            | PVC Storage Request for PostgreSQL volume                                                                                                                 | `8Gi`                       |
 | `persistence.annotations`                     | Annotations for the PVC                                                                                                                                   | `{}`                        |
 | `persistence.selector`                        | Selector to match an existing Persistent Volume (this value is evaluated as a template)                                                                   | `{}`                        |
@@ -288,10 +291,10 @@ $ kubectl delete pvc -l release=my-release
 | `metrics.prometheusRule.enabled`              | Set this to true to create prometheusRules for Prometheus operator                                                                                        | `false`                     |
 | `metrics.prometheusRule.additionalLabels`     | Additional labels that can be used so prometheusRules will be discovered by Prometheus                                                                    | `{}`                        |
 | `metrics.prometheusRule.namespace`            | namespace where prometheusRules resource should be created                                                                                                | `""`                        |
-| `metrics.prometheusRule.rules`                | (https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/) to be created                                                                | `[]`                        |
+| `metrics.prometheusRule.rules`                | Create specified [Rules](https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/)                                                      | `[]`                        |
 | `metrics.image.registry`                      | PostgreSQL Exporter image registry                                                                                                                        | `docker.io`                 |
 | `metrics.image.repository`                    | PostgreSQL Exporter image repository                                                                                                                      | `bitnami/postgres-exporter` |
-| `metrics.image.tag`                           | PostgreSQL Exporter image tag (immutable tags are recommended)                                                                                            | `0.10.0-debian-10-r95`      |
+| `metrics.image.tag`                           | PostgreSQL Exporter image tag (immutable tags are recommended)                                                                                            | `0.10.0-debian-10-r133`     |
 | `metrics.image.pullPolicy`                    | PostgreSQL Exporter image pull policy                                                                                                                     | `IfNotPresent`              |
 | `metrics.image.pullSecrets`                   | Specify image pull secrets                                                                                                                                | `[]`                        |
 | `metrics.customMetrics`                       | Define additional custom metrics                                                                                                                          | `{}`                        |
@@ -796,3 +799,19 @@ postgres=# alter role USER_NAME with password 'BITNAMI_USER_PASSWORD';
 postgres=# grant all privileges on database DATABASE_NAME to USER_NAME;
 postgres=# alter database DATABASE_NAME owner to USER_NAME;
 ```
+
+## License
+
+Copyright &copy; 2022 Bitnami
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

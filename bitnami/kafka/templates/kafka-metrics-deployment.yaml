@@ -7,7 +7,7 @@
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: {{ template "kafka.fullname" . }}-exporter
+  name: {{ template "kafka.metrics.kafka.fullname" . }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: metrics
     {{- if .Values.commonLabels }}
@@ -25,12 +25,19 @@ spec:
     metadata:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: metrics
+        {{- if .Values.metrics.kafka.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.metrics.kafka.podLabels "context" $) | nindent 8 }}
+        {{- end }}
+      annotations:
+        {{- if .Values.metrics.kafka.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.metrics.kafka.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
     spec:
       {{- include "kafka.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.metrics.kafka.schedulerName }}
       schedulerName: {{ .Values.metrics.kafka.schedulerName | quote }}
       {{- end }}
-      serviceAccountName: {{ template "kafka.serviceAccountName" . }}
+      serviceAccountName: {{ template "kafka.metrics.kafka.serviceAccountName" . }}
       {{- if .Values.metrics.kafka.initContainers }}
       initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.kafka.initContainers "context" $) | nindent 8 }}
       {{- end }}
@@ -38,6 +45,9 @@ spec:
         - name: kafka-exporter
           image: {{ include "kafka.metrics.kafka.image" . }}
           imagePullPolicy: {{ .Values.metrics.kafka.image.pullPolicy | quote }}
+          {{- if .Values.metrics.kafka.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.metrics.kafka.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
@@ -63,7 +73,7 @@ spec:
               --tls.cert-file="/opt/bitnami/kafka-exporter/certs/{{ .Values.metrics.kafka.tlsCert }}" \
               {{- if .Values.metrics.kafka.tlsCaSecret }}
               --tls.ca-file="/opt/bitnami/kafka-exporter/cacert/{{ .Values.metrics.kafka.tlsCaCert }}" \
-              {{- else}}
+              {{- else }}
               --tls.ca-file="/opt/bitnami/kafka-exporter/certs/{{ .Values.metrics.kafka.tlsCaCert }}" \
               {{- end }}
               {{- end }}

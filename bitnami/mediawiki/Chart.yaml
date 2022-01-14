@@ -1,7 +1,7 @@
 annotations:
   category: Wiki
 apiVersion: v2
-appVersion: 1.36.2
+appVersion: 1.37.1
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -13,7 +13,7 @@ dependencies:
     repository: https://charts.bitnami.com/bitnami
     tags:
       - mediawiki-database
-    version: 9.x.x
+    version: 10.x.x
 description: Extremely powerful, scalable software and a feature-rich wiki implementation that uses PHP to process and display data stored in a database.
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/mediawiki
@@ -31,5 +31,5 @@ maintainers:
 name: mediawiki
 sources:
   - https://github.com/bitnami/bitnami-docker-mediawiki
-  - http://www.mediawiki.org/
-version: 12.3.16
+  - https://www.mediawiki.org/
+version: 13.0.1

@@ -9,10 +9,10 @@ metadata:
     {{- end }}
   {{- if or (.Values.service.annotations) (.Values.commonAnnotations) }}
   annotations:
-    {{- if .Values.commonAnnotations}}
+    {{- if .Values.commonAnnotations }}
     {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
     {{- end -}}
-    {{- if .Values.service.annotations}}
+    {{- if .Values.service.annotations }}
     {{- include "common.tplvalues.render" (dict "value" .Values.service.annotations "context" $) | nindent 4 }}
     {{- end -}}
   {{- end }}
@@ -58,7 +58,7 @@ spec:
       targetPort: epmd
       {{- if (eq .Values.service.type "ClusterIP") }}
       nodePort: null
-      {{- else if (and (eq .Values.service.type "NodePort") (not (empty .Values.service.epmdNodePort))) }}
+      {{- else if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.epmdNodePort)) }}
       nodePort: {{ .Values.service.epmdNodePort }}
       {{- end }}
     - name: {{ .Values.service.distPortName }}
@@ -66,7 +66,7 @@ spec:
       targetPort: dist
       {{- if eq .Values.service.type "ClusterIP" }}
       nodePort: null
-      {{- else if (and (eq .Values.service.type "NodePort") (not (empty .Values.service.distNodePort))) }}
+      {{- else if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.distNodePort)) }}
       nodePort: {{ .Values.service.distNodePort }}
       {{- end }}
     {{- if .Values.service.managerPortEnabled }}
@@ -85,7 +85,7 @@ spec:
       targetPort: metrics
       {{- if eq .Values.service.type "ClusterIP" }}
       nodePort: null
-      {{- else if (and (eq .Values.service.type "NodePort") (not (empty .Values.service.metricsNodePort))) }}
+      {{- else if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.metricsNodePort)) }}
       nodePort: {{ .Values.service.metricsNodePort }}
       {{- end }}
     {{- end }}

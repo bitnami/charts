@@ -1,6 +1,6 @@
 # TestLink
 
-[TestLink](http://www.testlink.org) is a web-based test management system that facilitates software quality assurance. It is developed and maintained by Teamtest. The platform offers support for test cases, test suites, test plans, test projects and user management, as well as various reports and statistics.
+[TestLink](https://www.testlink.org) is a web-based test management system that facilitates software quality assurance. It is developed and maintained by Teamtest. The platform offers support for test cases, test suites, test plans, test projects and user management, as well as various reports and statistics.
 
 ## TL;DR
 
@@ -11,9 +11,9 @@ $ helm install my-release bitnami/testlink
 
 ## Introduction
 
-This chart bootstraps a [TestLink](https://github.com/bitnami/bitnami-docker-testlink) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [TestLink](https://github.com/bitnami/bitnami-docker-testlink) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-It also packages the [Bitnami MariaDB chart](https://github.com/kubernetes/charts/tree/master/bitnami/mariadb) which is required for bootstrapping a MariaDB deployment for the database requirements of the TestLink application.
+It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) which is required for bootstrapping a MariaDB deployment for the database requirements of the TestLink application.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This chart has been tested to work with NGINX Ingress, cert-manager, fluentd and Prometheus on top of the [BKPR](https://kubeprod.io/).
 
@@ -71,78 +71,92 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### TestLink parameters
 
-| Name                                 | Description                                                                               | Value                   |
-| ------------------------------------ | ----------------------------------------------------------------------------------------- | ----------------------- |
-| `image.registry`                     | TestLink image registry                                                                   | `docker.io`             |
-| `image.repository`                   | TestLink image repository                                                                 | `bitnami/testlink`      |
-| `image.tag`                          | TestLink Image tag (immutable tags are recommended)                                       | `1.9.20-debian-10-r522` |
-| `image.pullPolicy`                   | TestLink image pull policy                                                                | `IfNotPresent`          |
-| `image.pullSecrets`                  | Specify docker-registry secret names as an array                                          | `[]`                    |
-| `image.debug`                        | Specify if debug logs should be enabled                                                   | `false`                 |
-| `replicaCount`                       | Number of replicas (requires ReadWriteMany PVC support)                                   | `1`                     |
-| `hostAliases`                        | Deployment pod host aliases                                                               | `[]`                    |
-| `testlinkSkipInstall`                | Skip TestLink installation wizard. Useful for migrations and restoring from SQL dump      | `false`                 |
-| `testlinkUsername`                   | User of the application                                                                   | `user`                  |
-| `testlinkPassword`                   | Application password                                                                      | `""`                    |
-| `testlinkEmail`                      | Admin email                                                                               | `user@example.com`      |
-| `testlinkLanguage`                   | Default language                                                                          | `en_US`                 |
-| `allowEmptyPassword`                 | Allow DB blank passwords                                                                  | `true`                  |
-| `command`                            | Override default container command (useful when using custom images)                      | `[]`                    |
-| `args`                               | Override default container args (useful when using custom images)                         | `[]`                    |
-| `updateStrategy.type`                | Update strategy - only really applicable for deployments with RWO PVs attached            | `RollingUpdate`         |
-| `extraEnvVars`                       | An array to add extra environment variables                                               | `[]`                    |
-| `extraEnvVarsCM`                     | ConfigMap containing extra environment variables                                          | `""`                    |
-| `extraEnvVarsSecret`                 | Secret containing extra environment variables                                             | `""`                    |
-| `extraVolumes`                       | Extra volumes to add to the deployment. Requires setting `extraVolumeMounts`              | `[]`                    |
-| `extraVolumeMounts`                  | Extra volume mounts to add to the container. Normally used with `extraVolumes`            | `[]`                    |
-| `initContainers`                     | Extra init containers to add to the deployment                                            | `[]`                    |
-| `sidecars`                           | Extra sidecar containers to add to the deployment                                         | `[]`                    |
-| `tolerations`                        | Tolerations for pod assignment. Evaluated as a template.                                  | `[]`                    |
-| `existingSecret`                     | Use existing secret for the application password                                          | `""`                    |
-| `smtpHost`                           | SMTP host                                                                                 | `""`                    |
-| `smtpPort`                           | SMTP port                                                                                 | `""`                    |
-| `smtpUser`                           | SMTP user                                                                                 | `""`                    |
-| `smtpPassword`                       | SMTP password                                                                             | `""`                    |
-| `smtpProtocol`                       | SMTP Protocol (options: ssl, tls, nil)                                                    | `""`                    |
-| `containerPorts`                     | Container ports                                                                           | `{}`                    |
-| `sessionAffinity`                    | Control where client requests go, to the same pod or round-robin                          | `None`                  |
-| `persistence.enabled`                | Enable persistence using PVC                                                              | `true`                  |
-| `persistence.storageClass`           | TestLink Data Persistent Volume Storage Class                                             | `""`                    |
-| `persistence.accessMode`             | PVC Access Mode for TestLink volume                                                       | `ReadWriteOnce`         |
-| `persistence.size`                   | PVC Storage Request for TestLink volume                                                   | `8Gi`                   |
-| `persistence.existingClaim`          | An Existing PVC name                                                                      | `""`                    |
-| `persistence.hostPath`               | Host mount path for TestLink volume                                                       | `""`                    |
-| `podAffinityPreset`                  | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                    |
-| `podAntiAffinityPreset`              | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`                  |
-| `nodeAffinityPreset.type`            | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                    |
-| `nodeAffinityPreset.key`             | Node label key to match Ignored if `affinity` is set.                                     | `""`                    |
-| `nodeAffinityPreset.values`          | Node label values to match. Ignored if `affinity` is set.                                 | `[]`                    |
-| `affinity`                           | Affinity for pod assignment                                                               | `{}`                    |
-| `nodeSelector`                       | Node labels for pod assignment. Evaluated as a template.                                  | `{}`                    |
-| `resources.requests`                 | The requested resources for the container                                                 | `{}`                    |
-| `podSecurityContext.enabled`         | Enable TestLink pods' Security Context                                                    | `true`                  |
-| `podSecurityContext.fsGroup`         | TestLink pods' group ID                                                                   | `1001`                  |
-| `containerSecurityContext.enabled`   | Enable TestLink containers' Security Context                                              | `true`                  |
-| `containerSecurityContext.runAsUser` | TestLink containers' Security Context                                                     | `1001`                  |
-| `livenessProbe.enabled`              | Enable livenessProbe                                                                      | `true`                  |
-| `livenessProbe.path`                 | Request path for livenessProbe                                                            | `/login.php`            |
-| `livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                   | `120`                   |
-| `livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                          | `10`                    |
-| `livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                         | `5`                     |
-| `livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                       | `6`                     |
-| `livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                       | `1`                     |
-| `readinessProbe.enabled`             | Enable readinessProbe                                                                     | `true`                  |
-| `readinessProbe.path`                | Request path for readinessProbe                                                           | `/login.php`            |
-| `readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                  | `30`                    |
-| `readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                         | `5`                     |
-| `readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                        | `3`                     |
-| `readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                      | `6`                     |
-| `readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                      | `1`                     |
-| `customLivenessProbe`                | Override default liveness probe                                                           | `{}`                    |
-| `customReadinessProbe`               | Override default readiness probe                                                          | `{}`                    |
-| `lifecycleHooks`                     | Lifecycle hooks for the container to automate configuration before or after startup       | `{}`                    |
-| `podAnnotations`                     | Pod annotations                                                                           | `{}`                    |
-| `podLabels`                          | Pod extra labels                                                                          | `{}`                    |
+| Name                                    | Description                                                                               | Value                   |
+| --------------------------------------- | ----------------------------------------------------------------------------------------- | ----------------------- |
+| `image.registry`                        | TestLink image registry                                                                   | `docker.io`             |
+| `image.repository`                      | TestLink image repository                                                                 | `bitnami/testlink`      |
+| `image.tag`                             | TestLink Image tag (immutable tags are recommended)                                       | `1.9.20-debian-10-r582` |
+| `image.pullPolicy`                      | TestLink image pull policy                                                                | `IfNotPresent`          |
+| `image.pullSecrets`                     | Specify docker-registry secret names as an array                                          | `[]`                    |
+| `image.debug`                           | Specify if debug logs should be enabled                                                   | `false`                 |
+| `replicaCount`                          | Number of replicas (requires ReadWriteMany PVC support)                                   | `1`                     |
+| `hostAliases`                           | Deployment pod host aliases                                                               | `[]`                    |
+| `testlinkSkipInstall`                   | Skip TestLink installation wizard. Useful for migrations and restoring from SQL dump      | `false`                 |
+| `testlinkUsername`                      | User of the application                                                                   | `user`                  |
+| `testlinkPassword`                      | Application password                                                                      | `""`                    |
+| `testlinkEmail`                         | Admin email                                                                               | `user@example.com`      |
+| `testlinkLanguage`                      | Default language                                                                          | `en_US`                 |
+| `allowEmptyPassword`                    | Allow DB blank passwords                                                                  | `true`                  |
+| `command`                               | Override default container command (useful when using custom images)                      | `[]`                    |
+| `args`                                  | Override default container args (useful when using custom images)                         | `[]`                    |
+| `updateStrategy.type`                   | Update strategy - only really applicable for deployments with RWO PVs attached            | `RollingUpdate`         |
+| `extraEnvVars`                          | An array to add extra environment variables                                               | `[]`                    |
+| `extraEnvVarsCM`                        | ConfigMap containing extra environment variables                                          | `""`                    |
+| `extraEnvVarsSecret`                    | Secret containing extra environment variables                                             | `""`                    |
+| `extraVolumes`                          | Extra volumes to add to the deployment. Requires setting `extraVolumeMounts`              | `[]`                    |
+| `extraVolumeMounts`                     | Extra volume mounts to add to the container. Normally used with `extraVolumes`            | `[]`                    |
+| `initContainers`                        | Extra init containers to add to the deployment                                            | `[]`                    |
+| `sidecars`                              | Extra sidecar containers to add to the deployment                                         | `[]`                    |
+| `tolerations`                           | Tolerations for pod assignment. Evaluated as a template.                                  | `[]`                    |
+| `priorityClassName`                     | TestLink pods' priorityClassName                                                          | `""`                    |
+| `schedulerName`                         | Name of the k8s scheduler (other than default)                                            | `""`                    |
+| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment                                            | `[]`                    |
+| `existingSecret`                        | Use existing secret for the application password                                          | `""`                    |
+| `smtpHost`                              | SMTP host                                                                                 | `""`                    |
+| `smtpPort`                              | SMTP port                                                                                 | `""`                    |
+| `smtpUser`                              | SMTP user                                                                                 | `""`                    |
+| `smtpPassword`                          | SMTP password                                                                             | `""`                    |
+| `smtpProtocol`                          | SMTP Protocol (options: ssl, tls, nil)                                                    | `""`                    |
+| `containerPorts`                        | Container ports                                                                           | `{}`                    |
+| `sessionAffinity`                       | Control where client requests go, to the same pod or round-robin                          | `None`                  |
+| `persistence.enabled`                   | Enable persistence using PVC                                                              | `true`                  |
+| `persistence.storageClass`              | TestLink Data Persistent Volume Storage Class                                             | `""`                    |
+| `persistence.accessModes`               | PVC Access Mode for TestLink volume                                                       | `["ReadWriteOnce"]`     |
+| `persistence.size`                      | PVC Storage Request for TestLink volume                                                   | `8Gi`                   |
+| `persistence.existingClaim`             | An Existing PVC name                                                                      | `""`                    |
+| `persistence.hostPath`                  | Host mount path for TestLink volume                                                       | `""`                    |
+| `persistence.annotations`               | Persistent Volume Claim annotations                                                       | `{}`                    |
+| `podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                    |
+| `podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`                  |
+| `nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                    |
+| `nodeAffinityPreset.key`                | Node label key to match Ignored if `affinity` is set.                                     | `""`                    |
+| `nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set.                                 | `[]`                    |
+| `affinity`                              | Affinity for pod assignment                                                               | `{}`                    |
+| `nodeSelector`                          | Node labels for pod assignment. Evaluated as a template.                                  | `{}`                    |
+| `resources.requests`                    | The requested resources for the container                                                 | `{}`                    |
+| `resources.limits`                      | The resources limits for the container                                                    | `{}`                    |
+| `podSecurityContext.enabled`            | Enable TestLink pods' Security Context                                                    | `true`                  |
+| `podSecurityContext.fsGroup`            | TestLink pods' group ID                                                                   | `1001`                  |
+| `containerSecurityContext.enabled`      | Enable TestLink containers' Security Context                                              | `true`                  |
+| `containerSecurityContext.runAsUser`    | TestLink containers' Security Context runAsUser                                           | `1001`                  |
+| `containerSecurityContext.runAsNonRoot` | TestLink containers' Security Context runAsNonRoot                                        | `true`                  |
+| `startupProbe.enabled`                  | Enable startupProbe                                                                       | `false`                 |
+| `startupProbe.path`                     | Request path for startupProbe                                                             | `/login.php`            |
+| `startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                    | `120`                   |
+| `startupProbe.periodSeconds`            | Period seconds for startupProbe                                                           | `10`                    |
+| `startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                          | `5`                     |
+| `startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                        | `6`                     |
+| `startupProbe.successThreshold`         | Success threshold for startupProbe                                                        | `1`                     |
+| `livenessProbe.enabled`                 | Enable livenessProbe                                                                      | `true`                  |
+| `livenessProbe.path`                    | Request path for livenessProbe                                                            | `/login.php`            |
+| `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                   | `120`                   |
+| `livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                          | `10`                    |
+| `livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                         | `5`                     |
+| `livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                       | `6`                     |
+| `livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                       | `1`                     |
+| `readinessProbe.enabled`                | Enable readinessProbe                                                                     | `true`                  |
+| `readinessProbe.path`                   | Request path for readinessProbe                                                           | `/login.php`            |
+| `readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                  | `30`                    |
+| `readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                         | `5`                     |
+| `readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                        | `3`                     |
+| `readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                      | `6`                     |
+| `readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                      | `1`                     |
+| `customStartupProbe`                    | Override default startup probe                                                            | `{}`                    |
+| `customLivenessProbe`                   | Override default liveness probe                                                           | `{}`                    |
+| `customReadinessProbe`                  | Override default readiness probe                                                          | `{}`                    |
+| `lifecycleHooks`                        | Lifecycle hooks for the container to automate configuration before or after startup       | `{}`                    |
+| `podAnnotations`                        | Pod annotations                                                                           | `{}`                    |
+| `podLabels`                             | Pod extra labels                                                                          | `{}`                    |
 
 
 ### Traffic Exposure Parameters
@@ -150,23 +164,51 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                               | Description                                                                                                                      | Value                    |
 | ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
 | `service.type`                     | Kubernetes Service type                                                                                                          | `LoadBalancer`           |
-| `service.port`                     | Service HTTP port                                                                                                                | `80`                     |
-| `service.httpsPort`                | Service HTTPS port                                                                                                               | `443`                    |
+| `service.ports.http`               | Service HTTP port                                                                                                                | `80`                     |
+| `service.ports.https`              | Service HTTPS port                                                                                                               | `443`                    |
 | `service.clusterIP`                | Service cluster IP                                                                                                               | `""`                     |
 | `service.loadBalancerSourceRanges` | Control hosts connecting to "LoadBalancer" only                                                                                  | `[]`                     |
 | `service.loadBalancerIP`           | Load balancer IP for the TestLink Service (optional, cloud specific)                                                             | `""`                     |
 | `service.nodePorts.http`           | Kubernetes HTTP node port                                                                                                        | `""`                     |
 | `service.nodePorts.https`          | Kubernetes HTTPS node port                                                                                                       | `""`                     |
 | `service.externalTrafficPolicy`    | Enable client source IP preservation                                                                                             | `Cluster`                |
+| `service.extraPorts`               | Extra ports to expose (normally used with the `sidecar` value)                                                                   | `[]`                     |
+| `service.annotations`              | Additional custom annotations for TestLink service                                                                               | `{}`                     |
+| `service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                             | `None`                   |
+| `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
 | `ingress.enabled`                  | Enable ingress controller resource                                                                                               | `false`                  |
-| `ingress.hostname`                 | Default host for the ingress resource                                                                                            | `testlink.local`         |
-| `ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
-| `ingress.hosts`                    | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
-| `ingress.tls`                      | The tls configuration for the ingress                                                                                            | `[]`                     |
-| `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
-| `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
-| `ingress.path`                     | Ingress path                                                                                                                     | `/`                      |
 | `ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
+| `ingress.hostname`                 | Default host for the ingress resource                                                                                            | `testlink.local`         |
+| `ingress.path`                     | Ingress path                                                                                                                     | `/`                      |
+| `ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.tls`                      | Enable TLS configuration for the host defined at `ingress.hostname` parameter                                                    | `false`                  |
+| `ingress.extraHosts`               | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                     |
+| `ingress.extraPaths`               | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |
+| `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
+| `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
+| `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
+
+
+### NetworkPolicy parameters
+
+| Name                                                          | Description                                                                                                                  | Value   |
+| ------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `networkPolicy.enabled`                                       | Enable network policies                                                                                                      | `false` |
+| `networkPolicy.metrics.enabled`                               | Enable network policy for metrics (prometheus)                                                                               | `false` |
+| `networkPolicy.metrics.namespaceSelector`                     | Monitoring namespace selector labels. These labels will be used to identify the prometheus' namespace.                       | `{}`    |
+| `networkPolicy.metrics.podSelector`                           | Monitoring pod selector labels. These labels will be used to identify the Prometheus pods.                                   | `{}`    |
+| `networkPolicy.ingress.enabled`                               | Enable network policy for Ingress Proxies                                                                                    | `false` |
+| `networkPolicy.ingress.namespaceSelector`                     | Ingress Proxy namespace selector labels. These labels will be used to identify the Ingress Proxy's namespace.                | `{}`    |
+| `networkPolicy.ingress.podSelector`                           | Ingress Proxy pods selector labels. These labels will be used to identify the Ingress Proxy pods.                            | `{}`    |
+| `networkPolicy.ingressRules.backendOnlyAccessibleByFrontend`  | Enable ingress rule that makes the backend (mariadb) only accessible by testlink's pods.                                     | `false` |
+| `networkPolicy.ingressRules.customBackendSelector`            | Backend selector labels. These labels will be used to identify the backend pods.                                             | `{}`    |
+| `networkPolicy.ingressRules.accessOnlyFrom.enabled`           | Enable ingress rule that makes testlink only accessible from a particular origin                                             | `false` |
+| `networkPolicy.ingressRules.accessOnlyFrom.namespaceSelector` | Namespace selector label that is allowed to access testlink. This label will be used to identified the allowed namespace(s). | `{}`    |
+| `networkPolicy.ingressRules.accessOnlyFrom.podSelector`       | Pods selector label that is allowed to access testlink. This label will be used to identified the allowed pod(s).            | `{}`    |
+| `networkPolicy.ingressRules.customRules`                      | Custom network policy ingress rule                                                                                           | `{}`    |
+| `networkPolicy.egressRules.denyConnectionsToExternal`         | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).                               | `false` |
+| `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                   | `{}`    |
 
 
 ### Database parameters
@@ -190,6 +232,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.user`                     | Existing username in the external database                                               | `bn_testlink`       |
 | `externalDatabase.password`                 | Password for the above username                                                          | `""`                |
 | `externalDatabase.database`                 | Name of the existing database                                                            | `bitnami_testlink`  |
+| `externalDatabase.existingSecret`           | Name of an existing secret resource containing the DB password                           | `""`                |
 
 
 ### Volume Permissions parameters
@@ -199,7 +242,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image repository                                                                                                        | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                                                                              | `10-debian-10-r215`     |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                                                                              | `10-debian-10-r280`     |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                                          | `[]`                    |
 | `volumePermissions.resources.limits`   | The resources limits for the container                                                                                                                    | `{}`                    |
@@ -213,7 +256,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`           | Start a side-car prometheus exporter                       | `false`                   |
 | `metrics.image.registry`    | Apache exporter image registry                             | `docker.io`               |
 | `metrics.image.repository`  | Apache exporter image repository                           | `bitnami/apache-exporter` |
-| `metrics.image.tag`         | Apache exporter image tag (immutable tags are recommended) | `0.10.1-debian-10-r16`    |
+| `metrics.image.tag`         | Apache exporter image tag (immutable tags are recommended) | `0.10.1-debian-10-r83`    |
 | `metrics.image.pullPolicy`  | Image pull policy                                          | `IfNotPresent`            |
 | `metrics.image.pullSecrets` | Specify docker-registry secret names as an array           | `[]`                      |
 | `metrics.resources`         | Metrics exporter resource requests and limits              | `{}`                      |
@@ -238,12 +281,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `certificates.extraEnvVarsSecret`                    | Secret containing extra env vars (in case of sensitive data)         | `""`                                     |
 | `certificates.image.registry`                        | Container sidecar registry                                           | `docker.io`                              |
 | `certificates.image.repository`                      | Container sidecar image repository                                   | `bitnami/bitnami-shell`                  |
-| `certificates.image.tag`                             | Container sidecar image tag (immutable tags are recommended)         | `10-debian-10-r215`                      |
+| `certificates.image.tag`                             | Container sidecar image tag (immutable tags are recommended)         | `10-debian-10-r280`                      |
 | `certificates.image.pullPolicy`                      | Container sidecar image pull policy                                  | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Container sidecar image pull secrets                                 | `[]`                                     |
 
 
-The above parameters map to the env variables defined in [bitnami/testlink](http://github.com/bitnami/bitnami-docker-testlink). For more information please refer to the [bitnami/testlink](http://github.com/bitnami/bitnami-docker-testlink) image documentation.
+The above parameters map to the env variables defined in [bitnami/testlink](https://github.com/bitnami/bitnami-docker-testlink). For more information please refer to the [bitnami/testlink](https://github.com/bitnami/bitnami-docker-testlink) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -319,7 +362,7 @@ $ helm install my-release --set persistence.existingClaim=PVC_NAME bitnami/prest
 #### System compatibility
 
 - The local filesystem accessibility to a container in a pod with `hostPath` has been tested on OSX/MacOS with xhyve, and Linux with VirtualBox.
-- Windows has not been tested with the supported VM drivers. Minikube does however officially support [Mounting Host Folders](https://github.com/kubernetes/minikube/blob/master/docs/host_folder_mount.md) per pod. Or you may manually sync your container whenever host files are changed with tools like [docker-sync](https://github.com/EugenMayer/docker-sync) or [docker-bg-sync](https://github.com/cweagans/docker-bg-sync).
+- Windows has not been tested with the supported VM drivers. Minikube does however officially support [Mounting Host Folders](https://minikube.sigs.k8s.io/docs/handbook/mount/) per pod. Or you may manually sync your container whenever host files are changed with tools like [docker-sync](https://github.com/EugenMayer/docker-sync) or [docker-bg-sync](https://github.com/cweagans/docker-bg-sync).
 
 #### Mounting steps
 
@@ -338,6 +381,19 @@ $ helm install my-release --set persistence.existingClaim=PVC_NAME bitnami/prest
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 10.0.0
+
+This major release renames several values in this chart and adds missing features, in order to be inline with the rest of assets in the Bitnami charts repository.
+
+Affected values:
+
+- `service.port` was deprecated. We recommend using `service.ports.http` instead.
+- `service.httpsPort` was deprecated. We recommend using `service.ports.https` instead.
+- `ingress.hosts` was renamed as `ingress.extraHosts`
+- `ingress.tls` is now a boolean flag to enable/disable ingress TLS. Previous `ingress.tls` was renamed as `ingress.extraTls`.
+
+Additionally updates the MariaDB subchart to it newest major, 10.0.0, which contains similar changes. Check [MariaDB Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#to-1000) for more information.
 
 ### To 9.0.0
 
@@ -394,3 +450,19 @@ Use the workaround below to upgrade from versions previous to 3.0.0. The followi
 $ kubectl patch deployment testlink-testlink --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
 $ kubectl delete statefulset testlink-mariadb --cascade=false
 ```
+
+## License
+
+Copyright &copy; 2022 Bitnami
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

@@ -11,7 +11,7 @@ $ helm install my-release bitnami/solr
 
 ## Introduction
 
-This chart bootstraps a [Solr](https://github.com/bitnami/bitnami-docker-solr) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Solr](https://github.com/bitnami/bitnami-docker-solr) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
 
@@ -74,10 +74,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------ | ------------------------------------------------------------- | --------------------- |
 | `image.registry`               | Solr image registry                                           | `docker.io`           |
 | `image.repository`             | Solr image repository                                         | `bitnami/solr`        |
-| `image.tag`                    | Solr image tag (immutable tags are recommended)               | `8.10.1-debian-10-r0` |
+| `image.tag`                    | Solr image tag (immutable tags are recommended)               | `8.11.0-debian-10-r0` |
 | `image.pullPolicy`             | image pull policy                                             | `IfNotPresent`        |
 | `image.pullSecrets`            | Specify docker-registry secret names as an array              | `[]`                  |
-| `coreName`                     | Solr core name to be created                                  | `my-core`             |
+| `coreName`                     | Solr core name to be created (deprecated)                     | `""`                  |
+| `coreNames`                    | Solr core names to be created                                 | `[my-core]`           |
 | `cloudEnabled`                 | Enable Solr cloud mode                                        | `true`                |
 | `cloudBootstrap`               | Enable cloud bootstrap. It will be performed from the node 0. | `true`                |
 | `collection`                   | Solr collection name                                          | `my-collection`       |
@@ -147,7 +148,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                               | Enable init container that changes volume permissions in the registry (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
 | `volumePermissions.image.registry`                        | Init container volume-permissions image registry                                                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`                      | Init container volume-permissions image name                                                                                                        | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                             | Init container volume-permissions image tag                                                                                                         | `10-debian-10-r224`     |
+| `volumePermissions.image.tag`                             | Init container volume-permissions image tag                                                                                                         | `10-debian-10-r253`     |
 | `volumePermissions.image.pullPolicy`                      | Init container volume-permissions image pull policy                                                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                                                    | `[]`                    |
 | `volumePermissions.resources.limits`                      | The resources limits for the container                                                                                                              | `{}`                    |
@@ -193,6 +194,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.nodePorts.http`  | Node ports for the HTTP service                                                                                                  | `""`                     |
 | `service.nodePorts.https` | Node ports for the HTTPS service                                                                                                 | `""`                     |
 | `ingress.enabled`         | Enable ingress controller resource                                                                                               | `false`                  |
+| `ingress.ingressClassName`| Name of the ingress class (Kubernetes 1.18+)                                                                                     | `""`                     |
 | `ingress.pathType`        | Path type for the ingress resource                                                                                               | `ImplementationSpecific` |
 | `ingress.apiVersion`      | Override API Version (automatically detected if not set)                                                                         | `""`                     |
 | `ingress.hostname`        | Default host for the ingress resource                                                                                            | `solr.local`             |
@@ -339,7 +341,7 @@ As an alternative, you can use the preset configurations for pod affinity, pod a
 
 The [Bitnami Solr](https://github.com/bitnami/bitnami-docker-solr) image can persist data. If enabled, the persisted path is `/bitnami/solr` by default.
 
-The chart mounts a [Persistent Volume](http://kubernetes.io/docs/user-guide/persistent-volumes/) at this location. The volume is created using dynamic volume provisioning.
+The chart mounts a [Persistent Volume](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) at this location. The volume is created using dynamic volume provisioning.
 
 ### Add extra volumes
 
@@ -389,3 +391,19 @@ See [PR#7114](https://github.com/bitnami/charts/pull/7114) for more info about t
 ### To 1.0.0
 
 This major updates the Zookeeper subchart to it newest major, 7.0.0, which renames all TLS-related settings. For more information on this subchart's major, please refer to [zookeeper upgrade notes](https://github.com/bitnami/charts/tree/master/bitnami/zookeeper#to-700).
+
+## License
+
+Copyright &copy; 2022 Bitnami
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

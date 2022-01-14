@@ -162,9 +162,9 @@ spec:
           {{- end }}
         {{- end }}
         {{- if and (gt (len .Values.clusters) 1) (not .Values.authProxy.enabled) }}
-          {{ fail "clusters can be configured only when using an auth proxy for cluster oidc authentication."}}
+          {{ fail "clusters can be configured only when using an auth proxy for cluster oidc authentication." }}
         {{- end }}
-        {{- if and .Values.pinnipedProxy.enabled }}
+        {{- if .Values.pinnipedProxy.enabled }}
         - name: pinniped-proxy
           image: {{ include "common.images.image" (dict "imageRoot" .Values.pinnipedProxy.image "global" .Values.global) }}
           imagePullPolicy: {{ .Values.pinnipedProxy.image.pullPolicy | quote }}

@@ -79,7 +79,7 @@ Returns the init container that will clone repositories files from a given list 
 {{- if .Values.containerSecurityContext.enabled }}
   securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 4 }}
 {{- end }}
-{{- if .Values.git.clone.resources}}
+{{- if .Values.git.clone.resources }}
   resources: {{- toYaml .Values.git.clone.resources | nindent 4 }}
 {{- end }}
 {{- if .Values.git.clone.command }}
@@ -98,12 +98,12 @@ Returns the init container that will clone repositories files from a given list 
       [[ -f "/opt/bitnami/scripts/git/entrypoint.sh" ]] && . /opt/bitnami/scripts/git/entrypoint.sh
     {{- if .Values.git.dags.enabled }}
       {{- range .Values.git.dags.repositories }}
-      is_mounted_dir_empty "/dags_{{ include "airflow.git.repository.name" . }}" && git clone {{ .repository }} --branch {{ .branch }} /dags_{{ include "airflow.git.repository.name" . }} || true
+      is_mounted_dir_empty "/dags_{{ include "airflow.git.repository.name" . }}" && git clone {{ .repository }} --branch {{ .branch }} /dags_{{ include "airflow.git.repository.name" . }}
       {{- end }}
     {{- end }}
     {{- if .Values.git.plugins.enabled }}
       {{- range .Values.git.plugins.repositories }}
-      is_mounted_dir_empty "/plugins_{{ include "airflow.git.repository.name" . }}" && git clone {{ .repository }} --branch {{ .branch }} /plugins_{{ include "airflow.git.repository.name" . }} || true
+      is_mounted_dir_empty "/plugins_{{ include "airflow.git.repository.name" . }}" && git clone {{ .repository }} --branch {{ .branch }} /plugins_{{ include "airflow.git.repository.name" . }}
       {{- end }}
     {{- end }}
 {{- end }}
@@ -140,7 +140,7 @@ Returns the a container that will pull and sync repositories files from a given 
 {{- if .Values.containerSecurityContext.enabled }}
   securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 4 }}
 {{- end }}
-{{- if .Values.git.sync.resources}}
+{{- if .Values.git.sync.resources }}
   resources: {{- toYaml .Values.git.sync.resources | nindent 4 }}
 {{- end }}
 {{- if .Values.git.sync.command }}

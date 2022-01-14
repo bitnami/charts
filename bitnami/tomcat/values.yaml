@@ -2,6 +2,7 @@
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
 ## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
@@ -17,6 +18,7 @@ global:
   storageClass: ""
 
 ## @section Common parameters
+##
 
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
@@ -41,6 +43,7 @@ clusterDomain: cluster.local
 extraDeploy: []
 
 ## @section Tomcat parameters
+##
 
 ## Bitnami Tomcat image version
 ## ref: https://hub.docker.com/r/bitnami/tomcat/tags/
@@ -54,10 +57,10 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/tomcat
-  tag: 10.0.12-debian-10-r14
+  tag: 10.0.14-debian-10-r32
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -111,6 +114,7 @@ extraEnvVarsCM: ""
 extraEnvVarsSecret: ""
 
 ## @section Tomcat deployment parameters
+##
 
 ## @param replicaCount Specify number of Tomcat replicas
 ##
@@ -128,9 +132,10 @@ updateStrategy:
   ## Can be set to RollingUpdate or OnDelete
   ##
   type: RollingUpdate
-## @param containerPort HTTP port to expose at container level
+## @param containerPorts.http HTTP port to expose at container level
 ##
-containerPort: 8080
+containerPorts:
+  http: 8080
 ## @param containerExtraPorts Extra ports to expose at container level
 ##
 ## Example:
@@ -151,12 +156,14 @@ podSecurityContext:
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param containerSecurityContext.enabled Enable Tomcat containers' SecurityContext
 ## @param containerSecurityContext.runAsUser User ID for the Tomcat container
+## @param containerSecurityContext.runAsNonRoot Force user to be root in Tomcat container
 ##
 containerSecurityContext:
   enabled: true
   runAsUser: 1001
+  runAsNonRoot: true
 ## Tomcat containers' resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## ref: https://kubernetes.io/docs/user-guide/compute-resources/
 ## We usually recommend not to specify default resources and to leave this as a conscious
 ## choice for the user. This also increases chances charts run on environments with little
 ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -169,6 +176,7 @@ resources:
   ## limits:
   ##    cpu: 500m
   ##    memory: 1Gi
+  ##
   limits: {}
   requests:
     cpu: 300m
@@ -176,8 +184,6 @@ resources:
 ## Configure extra options for liveness probe
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param livenessProbe.enabled Enable livenessProbe
-## @param livenessProbe.httpGet.path Request path for livenessProbe
-## @param livenessProbe.httpGet.port Port for livenessProbe
 ## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
 ## @param livenessProbe.periodSeconds Period seconds for livenessProbe
 ## @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
@@ -186,9 +192,6 @@ resources:
 ##
 livenessProbe:
   enabled: true
-  httpGet:
-    path: /
-    port: http
   initialDelaySeconds: 120
   periodSeconds: 10
   failureThreshold: 6
@@ -197,8 +200,6 @@ livenessProbe:
 ## Configure extra options for readiness probe
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param readinessProbe.enabled Enable readinessProbe
-## @param readinessProbe.httpGet.path Request path for readinessProbe
-## @param readinessProbe.httpGet.port Port for readinessProbe
 ## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
 ## @param readinessProbe.periodSeconds Period seconds for readinessProbe
 ## @param readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
@@ -207,9 +208,22 @@ livenessProbe:
 ##
 readinessProbe:
   enabled: true
-  httpGet:
-    path: /
-    port: http
+  initialDelaySeconds: 30
+  periodSeconds: 5
+  failureThreshold: 3
+  timeoutSeconds: 3
+  successThreshold: 1
+## Configure extra options for startup probe
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-startup-probes/#configure-probes
+## @param startupProbe.enabled Enable startupProbe
+## @param startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+## @param startupProbe.periodSeconds Period seconds for startupProbe
+## @param startupProbe.timeoutSeconds Timeout seconds for startupProbe
+## @param startupProbe.failureThreshold Failure threshold for startupProbe
+## @param startupProbe.successThreshold Success threshold for startupProbe
+##
+startupProbe:
+  enabled: false
   initialDelaySeconds: 30
   periodSeconds: 5
   failureThreshold: 3
@@ -221,6 +235,9 @@ customLivenessProbe: {}
 ## @param customReadinessProbe Override default readiness probe
 ##
 customReadinessProbe: {}
+## @param customStartupProbe Override default startup probe
+##
+customStartupProbe: {}
 ## @param podLabels Extra labels for Tomcat pods
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
@@ -265,6 +282,17 @@ affinity: {}
 ## ref: https://kubernetes.io/docs/user-guide/node-selection/
 ##
 nodeSelector: {}
+## @param schedulerName Alternative scheduler
+## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+##
+schedulerName: ""
+## @param lifecycleHooks [object] Override default etcd container hooks
+##
+lifecycleHooks: {}
+## @param podManagementPolicy podManagementPolicy to manage scaling operation of pods (only in StatefulSet mode)
+## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
+##
+podManagementPolicy: ""
 ## @param tolerations Tolerations for pod assignment. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
@@ -308,7 +336,7 @@ initContainers: []
 ##
 sidecars: []
 ## Enable persistence using Persistent Volume Claims
-## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
 ##
 persistence:
   ## @param persistence.enabled Enable persistence
@@ -339,8 +367,33 @@ persistence:
   ## Applicable when deployment.type is statefulset
   ##
   selectorLabels: {}
-
+networkPolicy:
+  ## @param networkPolicy.enabled Enable creation of NetworkPolicy resources. Only Ingress traffic is filtered for now.
+  ##
+  enabled: false
+  ## @param networkPolicy.allowExternal Don't require client label for connections
+  ## The Policy model to apply. When set to false, only pods with the correct
+  ## client label will have network access to every tomcat port defined on containerPort and containerExtraPorts.
+  ## When true, tomcat will accept connections from any source
+  ## (with the correct destination port).
+  ##
+  allowExternal: true
+  ## @param networkPolicy.explicitNamespacesSelector A Kubernetes LabelSelector to explicitly select namespaces from which traffic could be allowed
+  ## If explicitNamespacesSelector is missing or set to {}, only client Pods that are in the networkPolicy's namespace
+  ## and that match other criteria, the ones that have the good label, can reach the tomcat.
+  ## But sometimes, we want the tomcat to be accessible to clients from other namespaces, in this case, we can use this
+  ## LabelSelector to select these namespaces, note that the networkPolicy's namespace should also be explicitly added.
+  ##
+  ## Example:
+  ## explicitNamespacesSelector:
+  ##   matchLabels:
+  ##     role: frontend
+  ##   matchExpressions:
+  ##    - {key: role, operator: In, values: [frontend]}
+  ##
+  explicitNamespacesSelector: {}
 ## @section Traffic Exposure parameters
+##
 
 ## Service parameters
 ##
@@ -349,18 +402,35 @@ service:
   ## For minikube, set this to NodePort, elsewhere use LoadBalancer
   ##
   type: LoadBalancer
-  ## @param service.port Service HTTP port
+  ## @param service.ports.http Service HTTP port
   ##
-  port: 80
-  ## @param service.nodePort Kubernetes http node port
+  ports:
+    http: 80
+  ## @param service.nodePorts.http Kubernetes http node port
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ##
-  nodePort: ""
+  nodePorts:
+    http: ""
+  ## @param service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
+  ##
+  extraPorts: []
   ## @param service.loadBalancerIP Port Use serviceLoadBalancerIP to request a specific static IP, otherwise leave blank
   ##
   loadBalancerIP: ""
+  ## @param service.clusterIP Service Cluster IP
+  ## e.g.:
+  ## clusterIP: None
+  ##
+  clusterIP: ""
+  ## @param service.loadBalancerSourceRanges Service Load Balancer sources
+  ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+  ## e.g:
+  ## loadBalancerSourceRanges:
+  ##   - 10.10.10.0/24
+  ##
+  loadBalancerSourceRanges: []
   ## @param service.externalTrafficPolicy Enable client source IP preservation
-  ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+  ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
   externalTrafficPolicy: Cluster
   ## @param service.annotations Annotations for Tomcat service
@@ -416,6 +486,23 @@ ingress:
   ##   secretName: tomcat.local-tls
   ##
   extraTls: []
+  ## @param ingress.extraPaths Any additional arbitrary paths that may need to be added to the ingress under the main host.
+  ## For example: The ALB ingress controller requires a special rule for handling SSL redirection.
+  ## extraPaths:
+  ## - path: /*
+  ##   backend:
+  ##     serviceName: ssl-redirect
+  ##     servicePort: use-annotation
+  ##
+  extraPaths: []
+  ## @param ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
+  ##
+  selfSigned: false
+  ## @param ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+  ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+  ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+  ##
+  ingressClassName: ""
   ## @param ingress.secrets If you're providing your own certificates, please use this to add the certificates as secrets
   ## key and certificate should start with -----BEGIN CERTIFICATE----- or -----BEGIN RSA PRIVATE KEY-----
   ## name should line up with a secretName set further up
@@ -443,6 +530,7 @@ ingress:
   pathType: ImplementationSpecific
 
 ## @section Volume Permissions parameters
+##
 
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
@@ -460,7 +548,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r225
+    tag: 10-debian-10-r304
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -471,7 +559,7 @@ volumePermissions:
     ##
     pullSecrets: []
   ## Init container' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -484,11 +572,13 @@ volumePermissions:
     ## limits:
     ##    cpu: 100m
     ##    memory: 128Mi
+    ##
     limits: {}
     ## Examples:
     ## requests:
     ##    cpu: 100m
     ##    memory: 128Mi
+    ##
     requests: {}
 
 ## @section Metrics parameters
@@ -516,10 +606,10 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/jmx-exporter
-      tag: 0.16.1-debian-10-r73
+      tag: 0.16.1-debian-10-r174
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-      ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+      ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
       ##
       pullPolicy: IfNotPresent
       ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
@@ -540,7 +630,7 @@ metrics:
       lowercaseOutputLabelNames: true
       attrNameSnakeCase: true
     ## Prometheus JMX Exporter' resource requests and limits
-    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
     ## We usually recommend not to specify default resources and to leave this as a conscious
     ## choice for the user. This also increases chances charts run on environments with little
     ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -607,3 +697,30 @@ metrics:
     ## @param metrics.podMonitor.relabelings [array] Prometheus relabeling rules
     ##
     relabelings: []
+  ## Custom PrometheusRule to be defined
+  ## The value is evaluated as a template, so, for example, the value can depend on .Release or .Chart
+  ## ref: https://github.com/coreos/prometheus-operator#customresourcedefinitions
+  ##
+  prometheusRule:
+    ## @param metrics.prometheusRule.enabled Set this to true to create prometheusRules for Prometheus operator
+    ##
+    enabled: false
+    ## @param metrics.prometheusRule.additionalLabels Additional labels that can be used so prometheusRules will be discovered by Prometheus
+    ##
+    additionalLabels: {}
+    ## @param metrics.prometheusRule.namespace namespace where prometheusRules resource should be created
+    ##
+    namespace: ""
+    ## @param metrics.prometheusRule.rules Create specified [Rules](https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/)
+    ## Make sure to constraint the rules to the current tomcat service.
+    ## rules:
+    ##   - alert: HugeReplicationLag
+    ##     expr: up{service="{{ template "common.names.fullname" . }}-metrics"} < 1
+    ##     for: 1m
+    ##     labels:
+    ##       severity: critical
+    ##     annotations:
+    ##       description: Service {{ template "common.names.fullname" . }} Tomcat is down since 1m.
+    ##       summary: Tomcat instance is down.
+    ##
+    rules: []

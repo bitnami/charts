@@ -60,8 +60,8 @@ data:
       server {
         {{- if .Values.ipFamily.ipv4.enabled }}
         listen 4443 ssl;
-        {{- end}}
-        {{- if .Values.ipFamily.ipv6.enabled}}
+        {{- end }}
+        {{- if .Values.ipFamily.ipv6.enabled }}
         listen [::]:4443 ssl;
         {{- end }}
         server_tokens off;
@@ -100,7 +100,7 @@ data:
       server {
         {{- if .Values.ipFamily.ipv4.enabled }}
         listen 8443 ssl;
-        {{- end}}
+        {{- end }}
         {{- if .Values.ipFamily.ipv6.enabled }}
         listen [::]:8443 ssl;
         {{- end }}
@@ -236,10 +236,10 @@ data:
       server {
           {{- if .Values.ipFamily.ipv4.enabled }}
           listen 8080;
-          {{- end}}
+          {{- end }}
           {{- if .Values.ipFamily.ipv6.enabled }}
           listen [::]:8080;
-          {{- end}}
+          {{- end }}
           return 301 https://$host$request_uri;
       }
     }

@@ -15,6 +15,9 @@ metadata:
   labels:
     pod: {{ $targetPod }}
   {{- include "common.labels.standard" $root | nindent 4 }}
+  {{- if $root.Values.commonLabels }}
+  {{- include "common.tplvalues.render" ( dict "value" $root.Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- end }}
   annotations:
 
   {{- if $root.Values.commonAnnotations }}
@@ -28,7 +31,7 @@ spec:
   type: ClusterIP
   ports:
     - name: tcp-postgresql
-      port:  {{ template "postgresql.port" $root }}
+      port:  {{ template "postgresql.servicePort" $root }}
       targetPort: tcp-postgresql
   selector:
   {{- include "common.labels.matchLabels" $root | nindent 4 }}
