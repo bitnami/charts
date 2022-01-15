@@ -462,6 +462,11 @@ grafana:
   ## NOTE: Number of replicas. If more than one is selected, a shared database should be configured.
   ##
   replicaCount: 1
+  ## @param grafana.skipCreateAdminAccount Prevent the operator from creating an admin secret
+  ## Ref: https://github.com/grafana-operator/grafana-operator/blob/master/documentation/env_vars.md
+  ## Allowed values: true, false
+  ##
+  skipCreateAdminAccount: false
   ## @param grafana.podAffinityPreset Pod affinity preset
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ## Allowed values: soft, hard
