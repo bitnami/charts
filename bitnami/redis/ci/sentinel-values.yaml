@@ -2,5 +2,3 @@ sentinel:
   enabled: true
 metrics:
   enabled: true
-  sentinel:
-    enabled: true
