@@ -110,7 +110,6 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 | ------------------------------------ | ----------------------------------------------------------------------------------------- | --------------- |
 | `replicaCount`                       | Number of Redmine replicas to deploy                                                      | `1`             |
 | `updateStrategy.type`                | Redmine deployment strategy type                                                          | `RollingUpdate` |
-| `updateStrategy.rollingUpdate`       | Redmine deployment rolling update configuration parameters                                | `nil`           |
 | `schedulerName`                      | Alternate scheduler                                                                       | `""`            |
 | `serviceAccount.create`              | Specifies whether a ServiceAccount should be created                                      | `false`         |
 | `serviceAccount.name`                | The name of the ServiceAccount to create. Defaults to the `redmine.fullname` macro        | `""`            |
