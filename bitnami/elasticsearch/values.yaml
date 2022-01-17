@@ -476,7 +476,7 @@ master:
     ##
     loadBalancerIP: ""
   ## Configure the ingress resource that allows you to access the
-  ## Kibana installation. Set up the URL
+  ## Set up the URL
   ## ref: https://kubernetes.io/docs/user-guide/ingress/
   ##
   ingress:
