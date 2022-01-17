@@ -153,7 +153,6 @@ extraEnvVarsSecret: ""
 ##
 replicaCount: 1
 ## @param updateStrategy.type Redmine deployment strategy type
-## @param updateStrategy.rollingUpdate Redmine deployment rolling update configuration parameters
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
 ## NOTE: Set it to `Recreate` if you use a PV that cannot be mounted on multiple pods
 ## e.g:
@@ -165,7 +164,6 @@ replicaCount: 1
 #    maxUnavailable: 25%
 updateStrategy:
   type: RollingUpdate
-  rollingUpdate: {}
 ## @param schedulerName Alternate scheduler
 ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
 ##
