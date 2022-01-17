@@ -64,7 +64,6 @@ Validate data
 {{- $messages := append $messages (include "fluentd.validateValues.deployment" .) -}}
 {{- $messages := append $messages (include "fluentd.validateValues.ingress" .) -}}
 {{- $messages := append $messages (include "fluentd.validateValues.rbac" .) -}}
-{{- $messages := append $messages (include "fluentd.validateValues.serviceAccount" .) -}}
 {{- $messages := append $messages (include "fluentd.validateValues.tls" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
@@ -104,11 +103,6 @@ fluentd:
 {{/* Validate values of Fluentd - must create serviceAccount to create enable RBAC */}}
 {{- define "fluentd.validateValues.rbac" -}}
 {{- $pspAvailable := (semverCompare "<1.25-0" (include "common.capabilities.kubeVersion" .)) -}}
-{{- if not (typeIs "<nil>" .Values.rbac) }}
-fluentd: rbac
-    Top-level rbac configuration has been removed, as it only applied to the forwarder.
-    Please migrate to forwarder.rbac
-{{- end -}}
 {{- if and .Values.forwarder.rbac.create (not .Values.forwarder.serviceAccount.create) }}
 fluentd: forwarder.rbac.create
     A ServiceAccount is required ("forwarder.rbac.create=true" is set)
@@ -126,15 +120,6 @@ fluentd: forwarder.rbac.pspEnabled
 {{- if and $pspAvailable .Values.forwarder.rbac.pspEnabled (not .Values.forwarder.containerSecurityContext.enabled) }}
 fluentd: forwarder.rbac.pspEnabled
     Enabling PSP requires enabling forwarder container security context ("forwarder.containerSecurityContext.enabled=true")
-{{- end -}}
-{{- end -}}
-
-{{/* Validate values of Fluentd - prefer per component serviceAccounts to top-level definition */}}
-{{- define "fluentd.validateValues.serviceAccount" -}}
-{{- if not (typeIs "<nil>" .Values.serviceAccount) -}}
-fluentd: serviceAccount:
-    Top-level serviceAccount configuration has been removed, as it only applied to the forwarder.
-    Please migrate to forwarder.serviceAccount.create
 {{- end -}}
 {{- end -}}
 
