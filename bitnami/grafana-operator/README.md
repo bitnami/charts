@@ -1,3 +1,5 @@
+<!--- app-name: Grafana Operator -->
+
 # grafana-operator
 
 [Grafana Operator](https://github.com/integr8ly/grafana-operator) is an Operator which introduces Lifecycle Management for Grafana Dashboards and Plugins.

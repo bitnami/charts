@@ -1,3 +1,5 @@
+<!--- app-name: Magento -->
+
 # Magento
 
 [Magento](https://magento.org/) is a feature-rich flexible e-commerce solution. It includes transaction options, multi-store functionality, loyalty programs, product categorization and shopper filtering, promotion rules, and more.

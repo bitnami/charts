@@ -1,3 +1,5 @@
+<!--- app-name: Etcd -->
+
 # etcd
 
 [etcd](https://etcd.io/) is an object-relational database management system (ORDBMS) with an emphasis on extensibility and on standards-compliance.

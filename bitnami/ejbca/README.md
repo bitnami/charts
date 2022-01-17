@@ -1,3 +1,5 @@
+<!--- app-name: EJBCA -->
+
 # EJBCA
 
 [EJBCA](https://www.ejbca.org/) is a free software public key infrastructure certificate authority software package.

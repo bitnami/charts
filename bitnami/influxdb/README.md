@@ -1,3 +1,5 @@
+<!--- app-name: InfluxDB(TM) -->
+
 # InfluxDB&trade;
 
 [InfluxDB&trade;](https://www.influxdata.com/products/influxdb-overview/) is an open source time-series database designed to handle large write and read loads in real-time.

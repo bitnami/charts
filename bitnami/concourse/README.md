@@ -1,3 +1,5 @@
+<!--- app-name: Concourse -->
+
 # Concourse
 
 [Concourse](https://concourse-ci.org/) is an automation system written in Go. It is most commonly used for CI/CD, and is built to scale to any kind of automation pipeline, from simple to complex.

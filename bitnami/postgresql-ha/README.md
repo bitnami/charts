@@ -1,9 +1,8 @@
+<!--- app-name: PostgreSQL HA -->
+
 # PostgreSQL HA
 
-This Helm chart has been developed based on [bitnami/postgresql](https://github.com/bitnami/charts/tree/master/bitnami/postgresql) chart but including some changes to guarantee high availability such as:
-
-- A new deployment, service have been added to deploy [Pgpool-II](https://pgpool.net/mediawiki/index.php/Main_Page) to act as proxy for PostgreSQL backend. It helps to reduce connection overhead, acts as a load balancer for PostgreSQL, and ensures database node failover.
-- Replacing `bitnami/postgresql` with `bitnami/postgresql-repmgr` which includes and configures [repmgr](https://repmgr.org/). Repmgr ensures standby nodes assume the primary role when the primary node is unhealthy.
+[PostgreSQL](https://www.postgresql.org/) is an object-relational database management system (ORDBMS) with an emphasis on extensibility and on standards-compliance.
 
 ## TL;DR
 
@@ -15,6 +14,11 @@ $ helm install my-release bitnami/postgresql-ha
 ## Introduction
 
 This [Helm](https://github.com/kubernetes/helm) chart installs [PostgreSQL](https://www.postgresql.org/) with HA architecture in a Kubernetes cluster. Welcome to [contribute](https://github.com/bitnami/charts/blob/master/CONTRIBUTING.md) to Helm Chart for PostgreSQL HA.
+
+This Helm chart has been developed based on [bitnami/postgresql](https://github.com/bitnami/charts/tree/master/bitnami/postgresql) chart but including some changes to guarantee high availability such as:
+
+- A new deployment, service have been added to deploy [Pgpool-II](https://pgpool.net/mediawiki/index.php/Main_Page) to act as proxy for PostgreSQL backend. It helps to reduce connection overhead, acts as a load balancer for PostgreSQL, and ensures database node failover.
+- Replacing `bitnami/postgresql` with `bitnami/postgresql-repmgr` which includes and configures [repmgr](https://repmgr.org/). Repmgr ensures standby nodes assume the primary role when the primary node is unhealthy.
 
 ## Prerequisites
 
