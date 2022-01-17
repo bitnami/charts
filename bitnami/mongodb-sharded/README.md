@@ -78,7 +78,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
 | `image.registry`                      | MongoDB&reg; Sharded image registry                                                                                                                       | `docker.io`               |
 | `image.repository`                    | MongoDB&reg; Sharded Image name                                                                                                                           | `bitnami/mongodb-sharded` |
-| `image.tag`                           | MongoDB&reg; Sharded image tag (immutable tags are recommended)                                                                                           | `4.4.10-debian-10-r45`    |
+| `image.tag`                           | MongoDB&reg; Sharded image tag (immutable tags are recommended)                                                                                           | `4.4.11-debian-10-r05`    |
 | `image.pullPolicy`                    | MongoDB&reg; Sharded image pull policy                                                                                                                    | `IfNotPresent`            |
 | `image.pullSecrets`                   | Specify docker-registry secret names as an array                                                                                                          | `[]`                      |
 | `image.debug`                         | Specify if debug logs should be enabled                                                                                                                   | `false`                   |
@@ -518,3 +518,19 @@ This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs
 MongoDB&reg; container images were updated to `4.4.x` and it can affect compatibility with older versions of MongoDB&reg;. Refer to the following guide to upgrade your applications:
 
 - [Upgrade a Sharded Cluster to 4.4](https://docs.mongodb.com/manual/release-notes/4.4-upgrade-sharded-cluster/)
+
+## License
+
+Copyright &copy; 2022 Bitnami
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

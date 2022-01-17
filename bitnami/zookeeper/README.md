@@ -127,8 +127,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podSecurityContext.enabled`            | Enable security context (ZooKeeper master pod)                                                                                                                                                    | `true`          |
 | `podSecurityContext.fsGroup`            | Group ID for the container (ZooKeeper master pod)                                                                                                                                                 | `1001`          |
 | `containerSecurityContext.enabled`      | Enable container Security Context                                                                                                                                                                 | `true`          |
-| `containerSecurityContext.runAsNonRoot` | Avoid running as root User                                                                                                                                                                     | `true`          |
 | `containerSecurityContext.runAsUser`    | User ID for the container                                                                                                                                                                         | `1001`          |
+| `containerSecurityContext.runAsNonRoot` | Avoid running as root User                                                                                                                                                                        | `true`          |
 | `initContainers`                        | Extra init container to add to the statefulset                                                                                                                                                    | `[]`            |
 | `podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                               | `""`            |
 | `podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                          | `soft`          |
@@ -212,26 +212,30 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                                                                  | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Init container volume-permissions image pull secrets                                                                 | `[]`                    |
 | `volumePermissions.resources`                          | Init container resource requests/limit                                                                               | `{}`                    |
-| `volumePermissions.containerSecurityContext.runAsUser` | Init container user ID                                                                                               | `0`                     |
+| `volumePermissions.containerSecurityContext.runAsUser` | User ID for the init container                                                                                       | `0`                     |
+
 
 ### Metrics parameters
 
-| Name                                   | Description                                                                                                                               | Value       |
-| -------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
-| `metrics.enabled`                      | Enable prometheus to access zookeeper metrics endpoint                                                                                    | `false`     |
-| `metrics.containerPort`                | Zookeeper Prometheus Exporter container port                                                                                              | `9141`      |
-| `metrics.service.type`                 | Zookeeper Prometheus Exporter service type                                                                                                | `ClusterIP` |
-| `metrics.service.port`                 | Prometheus metrics service port                                                                                                           | `9141`      |
-| `metrics.service.annotations`          | Annotations for the Zookeeper to auto-discover the metrics endpoint                                                                       | `{}`        |
-| `metrics.serviceMonitor.enabled`       | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)                                    | `false`     |
-| `metrics.serviceMonitor.namespace`     | Namespace for the ServiceMonitor Resource (defaults to the Release Namespace)                                                             | `""`        |
-| `metrics.serviceMonitor.interval`      | Interval at which metrics should be scraped.                                                                                              | `""`        |
-| `metrics.serviceMonitor.scrapeTimeout` | Timeout after which the scrape is ended                                                                                                   | `""`        |
-| `metrics.serviceMonitor.selector`      | Prometheus instance selector labels                                                                                                       | `{}`        |
-| `metrics.prometheusRule.enabled`       | if `true`, creates a Prometheus Operator PrometheusRule (also requires `metrics.enabled` to be `true` and `metrics.prometheusRule.rules`) | `false`     |
-| `metrics.prometheusRule.namespace`     | Namespace for the PrometheusRule Resource (defaults to the Release Namespace)                                                             | `""`        |
-| `metrics.prometheusRule.selector`      | Prometheus instance selector labels                                                                                                       | `{}`        |
-| `metrics.prometheusRule.rules`         | Prometheus Rule definitions                                                                                                               | `[]`        |
+| Name                                       | Description                                                                                                                               | Value       |
+| ------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| `metrics.enabled`                          | Enable prometheus to access zookeeper metrics endpoint                                                                                    | `false`     |
+| `metrics.containerPort`                    | Zookeeper Prometheus Exporter container port                                                                                              | `9141`      |
+| `metrics.service.type`                     | Zookeeper Prometheus Exporter service type                                                                                                | `ClusterIP` |
+| `metrics.service.port`                     | Prometheus metrics service port                                                                                                           | `9141`      |
+| `metrics.service.annotations`              | Annotations for the Zookeeper to auto-discover the metrics endpoint                                                                       | `{}`        |
+| `metrics.serviceMonitor.enabled`           | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)                                    | `false`     |
+| `metrics.serviceMonitor.namespace`         | Namespace for the ServiceMonitor Resource (defaults to the Release Namespace)                                                             | `""`        |
+| `metrics.serviceMonitor.interval`          | Interval at which metrics should be scraped.                                                                                              | `""`        |
+| `metrics.serviceMonitor.scrapeTimeout`     | Timeout after which the scrape is ended                                                                                                   | `""`        |
+| `metrics.serviceMonitor.additionalLabels`  | Additional labels that can be used so ServiceMonitor will be discovered by Prometheus                                                     | `{}`        |
+| `metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                                                                                       | `{}`        |
+| `metrics.serviceMonitor.relabelings`       | RelabelConfigs to apply to samples before scraping                                                                                        | `[]`        |
+| `metrics.serviceMonitor.metricRelabelings` | MetricRelabelConfigs to apply to samples before ingestion                                                                                 | `[]`        |
+| `metrics.prometheusRule.enabled`           | if `true`, creates a Prometheus Operator PrometheusRule (also requires `metrics.enabled` to be `true` and `metrics.prometheusRule.rules`) | `false`     |
+| `metrics.prometheusRule.namespace`         | Namespace for the PrometheusRule Resource (defaults to the Release Namespace)                                                             | `""`        |
+| `metrics.prometheusRule.selector`          | Prometheus instance selector labels                                                                                                       | `{}`        |
+| `metrics.prometheusRule.rules`             | Prometheus Rule definitions                                                                                                               | `[]`        |
 
 
 ### TLS/SSL parameters
@@ -424,3 +428,19 @@ Use the workaround below to upgrade from versions previous to 1.0.0. The followi
 ```console
 $ kubectl delete statefulset zookeeper-zookeeper --cascade=false
 ```
+
+## License
+
+Copyright &copy; 2022 Bitnami
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

@@ -165,7 +165,7 @@ spec:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
             - name: POSTGRESQL_PORT_NUMBER
-              value: "{{ template "postgresql.port" . }}"
+              value: {{ .Values.containerPorts.postgresql | quote }}
             - name: POSTGRESQL_VOLUME_DIR
               value: "{{ .Values.persistence.mountPath }}"
             {{- if .Values.postgresqlInitdbArgs }}
@@ -213,7 +213,7 @@ spec:
                   name: {{ template "postgresql.secretName" . }}
                   key: postgresql-replication-password
             {{- end }}
-            {{- if not (eq .Values.replication.synchronousCommit "off")}}
+            {{- if not (eq .Values.replication.synchronousCommit "off") }}
             - name: POSTGRES_SYNCHRONOUS_COMMIT_MODE
               value: {{ .Values.replication.synchronousCommit | quote }}
             - name: POSTGRES_NUM_SYNCHRONOUS_REPLICAS
@@ -280,14 +280,14 @@ spec:
                 secretKeyRef:
                   name: {{ template "postgresql.secretName" . }}
                   key: postgresql-ldap-password
-            {{- end}}
+            {{- end }}
             - name: POSTGRESQL_LDAP_SEARCH_ATTR
               value: {{ .Values.ldap.search_attr }}
             - name: POSTGRESQL_LDAP_SEARCH_FILTER
               value: {{ .Values.ldap.search_filter }}
             - name: POSTGRESQL_LDAP_URL
               value: {{ .Values.ldap.url }}
-            {{- end}}
+            {{- end }}
             - name: POSTGRESQL_ENABLE_TLS
               value: {{ ternary "yes" "no" .Values.tls.enabled | quote }}
             {{- if .Values.tls.enabled }}
@@ -369,7 +369,7 @@ spec:
           {{- end }}
           ports:
             - name: tcp-postgresql
-              containerPort: {{ template "postgresql.port" . }}
+              containerPort: {{ .Values.containerPorts.postgresql }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.startupProbe.enabled }}
           startupProbe:
@@ -378,9 +378,9 @@ spec:
                 - /bin/sh
                 - -c
                 {{- if (include "postgresql.database" .) }}
-                - exec pg_isready -U {{ include "postgresql.username" . | quote }} -d "dbname={{ include "postgresql.database" . }} {{- if and .Values.tls.enabled .Values.tls.certCAFilename }} sslcert={{ include "postgresql.tlsCert" . }} sslkey={{ include "postgresql.tlsCertKey" . }}{{- end }}" -h 127.0.0.1 -p {{ template "postgresql.port" . }}
+                - exec pg_isready -U {{ include "postgresql.username" . | quote }} -d "dbname={{ include "postgresql.database" . }} {{- if and .Values.tls.enabled .Values.tls.certCAFilename }} sslcert={{ include "postgresql.tlsCert" . }} sslkey={{ include "postgresql.tlsCertKey" . }}{{- end }}" -h 127.0.0.1 -p {{ .Values.containerPorts.postgresql }}
                 {{- else }}
-                - exec pg_isready -U {{ include "postgresql.username" . | quote }} {{- if and .Values.tls.enabled .Values.tls.certCAFilename }} -d "sslcert={{ include "postgresql.tlsCert" . }} sslkey={{ include "postgresql.tlsCertKey" . }}"{{- end }} -h 127.0.0.1 -p {{ template "postgresql.port" . }}
+                - exec pg_isready -U {{ include "postgresql.username" . | quote }} {{- if and .Values.tls.enabled .Values.tls.certCAFilename }} -d "sslcert={{ include "postgresql.tlsCert" . }} sslkey={{ include "postgresql.tlsCertKey" . }}"{{- end }} -h 127.0.0.1 -p {{ .Values.containerPorts.postgresql }}
                 {{- end }}
             initialDelaySeconds: {{ .Values.startupProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.startupProbe.periodSeconds }}
@@ -397,9 +397,9 @@ spec:
                 - /bin/sh
                 - -c
                 {{- if (include "postgresql.database" .) }}
-                - exec pg_isready -U {{ include "postgresql.username" . | quote }} -d "dbname={{ include "postgresql.database" . }} {{- if and .Values.tls.enabled .Values.tls.certCAFilename }} sslcert={{ include "postgresql.tlsCert" . }} sslkey={{ include "postgresql.tlsCertKey" . }}{{- end }}" -h 127.0.0.1 -p {{ template "postgresql.port" . }}
+                - exec pg_isready -U {{ include "postgresql.username" . | quote }} -d "dbname={{ include "postgresql.database" . }} {{- if and .Values.tls.enabled .Values.tls.certCAFilename }} sslcert={{ include "postgresql.tlsCert" . }} sslkey={{ include "postgresql.tlsCertKey" . }}{{- end }}" -h 127.0.0.1 -p {{ .Values.containerPorts.postgresql }}
                 {{- else }}
-                - exec pg_isready -U {{ include "postgresql.username" . | quote }} {{- if and .Values.tls.enabled .Values.tls.certCAFilename }} -d "sslcert={{ include "postgresql.tlsCert" . }} sslkey={{ include "postgresql.tlsCertKey" . }}"{{- end }} -h 127.0.0.1 -p {{ template "postgresql.port" . }}
+                - exec pg_isready -U {{ include "postgresql.username" . | quote }} {{- if and .Values.tls.enabled .Values.tls.certCAFilename }} -d "sslcert={{ include "postgresql.tlsCert" . }} sslkey={{ include "postgresql.tlsCertKey" . }}"{{- end }} -h 127.0.0.1 -p {{ .Values.containerPorts.postgresql }}
                 {{- end }}
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
@@ -462,7 +462,7 @@ spec:
               mountPath: /bitnami/postgresql/conf
             {{- end }}
             {{- if .Values.primary.extraVolumeMounts }}
-            {{- toYaml .Values.primary.extraVolumeMounts | nindent 12 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.primary.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
 {{- if .Values.primary.sidecars }}
 {{- include "common.tplvalues.render" ( dict "value" .Values.primary.sidecars "context" $ ) | nindent 8 }}
@@ -483,10 +483,10 @@ spec:
             {{- $sslmode := ternary "require" "disable" .Values.tls.enabled }}
             {{- if and .Values.tls.enabled .Values.tls.certCAFilename }}
             - name: DATA_SOURCE_NAME
-              value: {{ printf "host=127.0.0.1 port=%d user=%s sslmode=%s sslcert=%s sslkey=%s" (int (include "postgresql.port" .)) (include "postgresql.username" .) $sslmode (include "postgresql.tlsCert" .) (include "postgresql.tlsCertKey" .) }}
+              value: {{ printf "host=127.0.0.1 port=%d user=%s sslmode=%s sslcert=%s sslkey=%s" (int (include "postgresql.servicePort" .)) (include "postgresql.username" .) $sslmode (include "postgresql.tlsCert" .) (include "postgresql.tlsCertKey" .) }}
             {{- else }}
             - name: DATA_SOURCE_URI
-              value: {{ printf "127.0.0.1:%d/%s?sslmode=%s" (int (include "postgresql.port" .)) $database $sslmode }}
+              value: {{ printf "127.0.0.1:%d/%s?sslmode=%s" (int (include "postgresql.servicePort" .)) $database $sslmode }}
             {{- end }}
             {{- if .Values.usePasswordFile }}
             - name: DATA_SOURCE_PASS_FILE
@@ -551,7 +551,7 @@ spec:
           {{- end }}
 {{- end }}
       volumes:
-        {{- if or (.Files.Glob "files/postgresql.conf") (.Files.Glob "files/pg_hba.conf") .Values.postgresqlConfiguration .Values.pgHbaConfiguration .Values.configurationConfigMap}}
+        {{- if or (.Files.Glob "files/postgresql.conf") (.Files.Glob "files/pg_hba.conf") .Values.postgresqlConfiguration .Values.pgHbaConfiguration .Values.configurationConfigMap }}
         - name: postgresql-config
           configMap:
             name: {{ template "postgresql.configurationCM" . }}
@@ -625,6 +625,12 @@ spec:
         accessModes:
         {{- range .Values.persistence.accessModes }}
           - {{ . | quote }}
+        {{- end }}
+        {{- if .Values.persistence.snapshotName }}
+        dataSource:
+          name: {{ .Values.persistence.snapshotName }}
+          kind: VolumeSnapshot
+          apiGroup: snapshot.storage.k8s.io
         {{- end }}
         resources:
           requests:

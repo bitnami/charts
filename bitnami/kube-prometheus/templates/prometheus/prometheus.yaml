@@ -54,7 +54,7 @@ spec:
   {{- if index .Values.prometheus "externalUrl" }}
   externalUrl: "{{ .Values.prometheus.externalUrl }}"
   {{- else if and .Values.prometheus.ingress.enabled .Values.prometheus.ingress.hosts }}
-  externalUrl: {{ if .Values.prometheus.ingress.tls }}https{{else}}http{{ end }}://{{ (index .Values.prometheus.ingress.hosts 0).name }}{{ .Values.prometheus.routePrefix }}
+  externalUrl: {{ if .Values.prometheus.ingress.tls }}https{{ else }}http{{ end }}://{{ (index .Values.prometheus.ingress.hosts 0).name }}{{ .Values.prometheus.routePrefix }}
   {{- else }}
   externalUrl: http://{{ template "kube-prometheus.prometheus.fullname" . }}.{{ .Release.Namespace }}:9090{{ .Values.prometheus.routePrefix }}
   {{- end }}
@@ -68,7 +68,7 @@ spec:
     {{- range .Values.prometheus.enableFeatures }}
     - {{ . | quote }}
     {{- end }}
-  {{- end }}  
+  {{- end }}
   {{- if .Values.prometheus.scrapeInterval }}
   scrapeInterval: {{ .Values.prometheus.scrapeInterval }}
   {{- end }}

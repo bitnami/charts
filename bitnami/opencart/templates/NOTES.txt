@@ -57,10 +57,10 @@ host. To configure OpenCart with the URL of your service:
 
 {{- else }}
 
-{{- $port:=.Values.service.port | toString }}
+{{- $port:= (coalesce .Values.service.ports.http .Values.service.port) | toString }}
 
-  echo "Store URL: http://{{ include "opencart.host" . }}{{- if ne $port "80" }}:{{ .Values.service.port }}{{ end }}/"
-  echo "Admin URL: http://{{ include "opencart.host" . }}{{- if ne $port "80" }}:{{ .Values.service.port }}{{ end }}/admin"
+  echo "Store URL: http://{{ include "opencart.host" . }}{{- if ne $port "80" }}:{{ coalesce .Values.service.ports.http .Values.service.port }}{{ end }}/"
+  echo "Admin URL: http://{{ include "opencart.host" . }}{{- if ne $port "80" }}:{{ coalesce .Values.service.ports.http .Values.service.port }}{{ end }}/admin"
 
 {{- end }}
 

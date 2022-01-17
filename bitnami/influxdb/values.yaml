@@ -69,7 +69,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/influxdb
-  tag: 2.1.1-debian-10-r0
+  tag: 2.1.1-debian-10-r39
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -855,7 +855,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r264
+    tag: 10-debian-10-r304
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -984,7 +984,7 @@ backup:
       image:
         registry: docker.io
         repository: bitnami/google-cloud-sdk
-        tag: 0.365.0-debian-10-r11
+        tag: 0.367.0-debian-10-r25
         ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
         ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
         ##
@@ -1021,7 +1021,44 @@ backup:
       image:
         registry: docker.io
         repository: bitnami/azure-cli
-        tag: 2.30.0-debian-10-r25
+        tag: 2.32.0-debian-10-r5
+        ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+        ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+        ##
+        pullPolicy: IfNotPresent
+        ## Optionally specify an array of imagePullSecrets.
+        ## Secrets must be manually created in the namespace.
+        ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+        ## e.g:
+        ## pullSecrets:
+        ##   - myRegistryKeySecretName
+        ##
+        pullSecrets: []
+    aws:
+      ## @param backup.uploadProviders.aws.enabled Enable upload to aws s3 bucket
+      ## @param backup.uploadProviders.aws.accessKeyID Access Key ID to access aws s3
+      ## @param backup.uploadProviders.aws.secretAccessKey Secret Access Key to access aws s3
+      ## @param backup.uploadProviders.aws.region Region of aws s3 bucket
+      ## @param backup.uploadProviders.aws.existingSecret Name of existing secret object
+      ## @param backup.uploadProviders.aws.bucketName aws s3 bucket name
+      enabled: false
+      accessKeyID: ""
+      secretAccessKey: ""
+      region: "us-east-1"
+      existingSecret: ""
+      bucketName: "s3://bucket/influxdb"
+      ## Bitnami AWS CLI image
+      ## ref: https://hub.docker.com/r/bitnami/aws-cli/tags
+      ## @param backup.uploadProviders.aws.image.registry AWS CLI image registry
+      ## @param backup.uploadProviders.aws.image.repository AWS CLI image repository
+      ## @param backup.uploadProviders.aws.image.tag AWS CLI image tag (immutable tags are recommended)
+      ## @param backup.uploadProviders.aws.image.pullPolicy AWS CLI image pull policy
+      ## @param backup.uploadProviders.aws.image.pullSecrets Specify docker-registry secret names as an array
+      ##
+      image:
+        registry: docker.io
+        repository: bitnami/aws-cli
+        tag: 2.4.7-debian-10-r4
         ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
         ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
         ##

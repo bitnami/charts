@@ -32,6 +32,11 @@ spec:
       {{- end }}
       {{- if .Values.imageRenderer.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.imageRenderer.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.imageRenderer.podAffinityPreset "component" "image-renderer" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.imageRenderer.podAntiAffinityPreset "component" "image-renderer" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.imageRenderer.nodeAffinityPreset.type "key" .Values.imageRenderer.nodeAffinityPreset.key "values" .Values.imageRenderer.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.imageRenderer.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.imageRenderer.nodeSelector "context" $) | nindent 8 }}
@@ -82,9 +87,12 @@ spec:
             - name: HTTP_PORT
               value: "8080"
             - name: HTTP_HOST
-              value: "0.0.0.0"
+              value: "::"
             - name: ENABLE_METRICS
               value: {{ ternary "true" "false" .Values.imageRenderer.metrics.enabled | quote }}
+            {{- if .Values.imageRenderer.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.imageRenderer.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
           ports:
             - name: http
               containerPort: 8080

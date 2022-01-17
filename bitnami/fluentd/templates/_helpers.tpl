@@ -84,7 +84,7 @@ fluentd:
 
 {{/* Validate values of Fluentd - if the aggregator index is enabled there must be a port named http in the service */}}
 {{- define "fluentd.validateValues.ingress" -}}
-{{- if and .Values.aggregator.enabled .Values.aggregator.ingress.enabled (not .Values.aggregator.service.ports.http)}}
+{{- if and .Values.aggregator.enabled .Values.aggregator.ingress.enabled (not .Values.aggregator.service.ports.http) }}
 fluentd:
     You have enabled the Ingress for the aggregator. The aggregator service needs to have a port named http for the Ingress to work.
     Please, define it in your `values.yaml` file. For example:

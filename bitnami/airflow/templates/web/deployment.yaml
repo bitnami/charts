@@ -105,13 +105,13 @@ spec:
               value: {{ ternary "yes" "no" .Values.ldap.enabled | quote }}
             {{- if .Values.ldap.enabled }}
             - name: AIRFLOW_LDAP_URI
-              value: {{ .Values.ldap.uri }}
+              value: {{ .Values.ldap.uri | quote }}
             - name: AIRFLOW_LDAP_SEARCH
-              value: {{ .Values.ldap.base }}
+              value: {{ .Values.ldap.base | quote }}
             - name: AIRFLOW_LDAP_UID_FIELD
-              value: {{ .Values.ldap.uidField }}
+              value: {{ .Values.ldap.uidField | quote }}
             - name: AIRFLOW_LDAP_BIND_USER
-              value: {{ .Values.ldap.binddn }}
+              value: {{ .Values.ldap.binddn | quote }}
             - name: AIRFLOW_LDAP_BIND_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -120,7 +120,7 @@ spec:
             - name: AIRFLOW_LDAP_USER_REGISTRATION
               value: {{ .Values.ldap.userRegistration | quote }}
             - name: AIRFLOW_LDAP_USER_REGISTRATION_ROLE
-              value: {{ .Values.ldap.userRegistrationRole }}
+              value: {{ .Values.ldap.userRegistrationRole | quote }}
             - name: AIRFLOW_LDAP_ROLES_MAPPING
               value: {{ .Values.ldap.rolesMapping | quote }}
             - name: AIRFLOW_LDAP_ROLES_SYNC_AT_LOGIN

@@ -104,7 +104,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `primary.args`                               | Override default container args on MySQL Primary container(s) (useful when using custom images)                 | `[]`                |
 | `primary.hostAliases`                        | Deployment pod host aliases                                                                                     | `[]`                |
 | `primary.configuration`                      | Configure MySQL Primary with a custom my.cnf file                                                               | `""`                |
-| `primary.existingConfiguration`              | Name of existing ConfigMap with MySQL Primary configuration.                                                    | `""`                |
+| `primary.existingConfigmap`                  | Name of existing ConfigMap with MySQL Primary configuration.                                                    | `""`                |
 | `primary.updateStrategy`                     | Update strategy type for the MySQL primary statefulset                                                          | `RollingUpdate`     |
 | `primary.rollingUpdatePartition`             | Partition update strategy for MySQL Primary statefulset                                                         | `""`                |
 | `primary.podAnnotations`                     | Additional pod annotations for MySQL primary pods                                                               | `{}`                |
@@ -181,7 +181,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `secondary.command`                            | Override default container command on MySQL Secondary container(s) (useful when using custom images)                | `[]`                |
 | `secondary.args`                               | Override default container args on MySQL Secondary container(s) (useful when using custom images)                   | `[]`                |
 | `secondary.configuration`                      | Configure MySQL Secondary with a custom my.cnf file                                                                 | `""`                |
-| `secondary.existingConfiguration`              | Name of existing ConfigMap with MySQL Secondary configuration.                                                      | `""`                |
+| `secondary.existingConfigmap`                  | Name of existing ConfigMap with MySQL Secondary configuration.                                                      | `""`                |
 | `secondary.updateStrategy`                     | Update strategy type for the MySQL secondary statefulset                                                            | `RollingUpdate`     |
 | `secondary.rollingUpdatePartition`             | Partition update strategy for MySQL Secondary statefulset                                                           | `""`                |
 | `secondary.podAnnotations`                     | Additional pod annotations for MySQL secondary pods                                                                 | `{}`                |
@@ -467,3 +467,19 @@ Use the workaround below to upgrade from versions previous to 3.0.0. The followi
 $ kubectl delete statefulset mysql-master --cascade=false
 $ kubectl delete statefulset mysql-slave --cascade=false
 ```
+
+## License
+
+Copyright &copy; 2022 Bitnami
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

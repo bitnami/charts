@@ -298,6 +298,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.prometheusRule.rules`             | Create specified [rules](https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/), check values for an example. | `[]`                     |
 | `metrics.priorityClassName`                | Metrics exporter pod priorityClassName                                                                                             | `""`                     |
 | `metrics.service.type`                     | Kubernetes Service type (redis metrics)                                                                                            | `ClusterIP`              |
+| `metrics.service.clusterIP`                | Service Cluster IP                                                                                                                 | `""`                     |
 | `metrics.service.loadBalancerIP`           | Use serviceLoadBalancerIP to request a specific static IP, otherwise leave blank                                                   | `""`                     |
 | `metrics.service.annotations`              | Annotations for the services to monitor.                                                                                           | `{}`                     |
 | `metrics.service.labels`                   | Additional labels for the metrics service                                                                                          | `{}`                     |
@@ -632,3 +633,19 @@ This version of the chart adapts the chart to the most recent Bitnami best pract
 ### To 2.0.0
 
 The version `1.0.0` was using a label in the Statefulset's volumeClaimTemplate that didn't allow to upgrade the chart. The version `2.0.0` fixed that issue. Also it adds more docs in the README.md.
+
+## License
+
+Copyright &copy; 2022 Bitnami
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

@@ -293,6 +293,7 @@ This solution allows to easily deploy multiple RabbitMQ instances compared to th
 | `msgTopologyOperator.containerSecurityContext.enabled`            | Enabled RabbitMQ Messaging Topology Operator containers' Security Context                                          | `true`                                    |
 | `msgTopologyOperator.containerSecurityContext.runAsUser`          | Set RabbitMQ Messaging Topology Operator containers' Security Context runAsUser                                    | `1001`                                    |
 | `msgTopologyOperator.containerSecurityContext.runAsNonRoot`       | Force running the container as non root                                                                            | `true`                                    |
+| `msgTopologyOperator.fullnameOverride`                            | String to fully override rmqco.msgTopologyOperator.fullname template                                               | `""`                                      |
 | `msgTopologyOperator.command`                                     | Override default container command (useful when using custom images)                                               | `[]`                                      |
 | `msgTopologyOperator.args`                                        | Override default container args (useful when using custom images)                                                  | `[]`                                      |
 | `msgTopologyOperator.hostAliases`                                 | RabbitMQ Messaging Topology Operator pods host aliases                                                             | `[]`                                      |
@@ -464,3 +465,19 @@ You need to manually delete the old CRD before upgrading the release.
 kubectl delete crd rabbitmqclusters.rabbitmq.com
 helm upgrade my-release bitnami/rabbitmq-cluster-operator
 ```
+
+## License
+
+Copyright &copy; 2022 Bitnami
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

@@ -13,7 +13,7 @@ dependencies:
     repository: https://charts.bitnami.com/bitnami
     tags:
       - phpmyadmin-database
-    version: 9.x.x
+    version: 10.x.x
 description: phpMyAdmin is an mysql administration frontend
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/phpmyadmin
@@ -29,4 +29,4 @@ name: phpmyadmin
 sources:
   - https://github.com/bitnami/bitnami-docker-phpmyadmin
   - https://www.phpmyadmin.net/
-version: 8.3.1
+version: 9.0.0

@@ -66,7 +66,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/kafka
-  tag: 2.8.1-debian-10-r57
+  tag: 2.8.1-debian-10-r99
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -198,6 +198,10 @@ socketSendBufferBytes: 102400
 ## @param zookeeperConnectionTimeoutMs Timeout in ms for connecting to Zookeeper
 ##
 zookeeperConnectionTimeoutMs: 6000
+## @param zookeeperChrootPath Path which puts data under some path in the global ZooKeeper namespace
+## ref: https://kafka.apache.org/documentation/#brokerconfigs_zookeeper.connect
+##
+zookeeperChrootPath: ""
 ## @param authorizerClassName The Authorizer is configured by setting authorizer.class.name=kafka.security.authorizer.AclAuthorizer in server.properties.
 ##
 authorizerClassName: ""
@@ -513,15 +517,18 @@ podSecurityContext:
   enabled: true
   fsGroup: 1001
   runAsUser: 1001
-## @param containerSecurityContext Kafka containers' Security Context
+## Kafka containers' Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+## @param containerSecurityContext.enabled Enable Kafka containers' Security Context
 ## Example:
 ##   containerSecurityContext:
+##     enabled: true
 ##     capabilities:
 ##       drop: ["NET_RAW"]
 ##     readOnlyRootFilesystem: true
 ##
-containerSecurityContext: {}
+containerSecurityContext:
+  enabled: false
 ## Kafka containers' resource requests and limits
 ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
 ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -610,7 +617,51 @@ sidecars: []
 initContainers: []
 
 ## @section Exposure parameters
-
+networkPolicy:
+  ## @param networkPolicy.enabled Enable creation of NetworkPolicy resources.
+  ##
+  enabled: false
+  ## @param networkPolicy.allowExternal Don't require client label for connections
+  ## The Policy model to apply. When set to false, only pods with the correct
+  ## client label will have network access to Kafka port for client connections (service.port).
+  ## When true, kafka will accept connections from any source
+  ## (with the correct destination port).
+  ##
+  allowExternal: true
+  ## @param networkPolicy.explicitNamespacesSelector A Kubernetes LabelSelector to explicitly select namespaces from which traffic could be allowed
+  ## If explicitNamespacesSelector is missing or set to {}, only client Pods that are in the networkPolicy's namespace
+  ## and that match other criteria, the ones that have the good label, can reach the kafka.
+  ## But sometimes, we want the kafka to be accessible to clients from other namespaces, in this case, we can use this
+  ## LabelSelector to select these namespaces, note that the networkPolicy's namespace should also be explicitly added.
+  ##
+  ## Example:
+  ## explicitNamespacesSelector:
+  ##   matchLabels:
+  ##     role: frontend
+  ##   matchExpressions:
+  ##    - {key: role, operator: In, values: [frontend]}
+  ##
+  explicitNamespacesSelector: {}
+  ## @param networkPolicy.externalAccess.from customize the from section for External Access on tcp-external port
+  ## Example:
+  ## - ipBlock:
+  ##    cidr: 172.9.0.0/16
+  ##    except:
+  ##    - 172.9.1.0/24
+  ##
+  externalAccess:
+    from: []
+  ## @param networkPolicy.egressRules.customRules [object] Custom network policy rule
+  ##
+  egressRules:
+    ## Additional custom egress rules
+    ## e.g:
+    ## customRules:
+    ##   - to:
+    ##       - namespaceSelector:
+    ##           matchLabels:
+    ##             label: example
+    customRules: []
 ## Service parameters
 ##
 service:
@@ -671,7 +722,7 @@ externalAccess:
     image:
       registry: docker.io
       repository: bitnami/kubectl
-      tag: 1.19.16-debian-10-r25
+      tag: 1.23.1-debian-10-r26
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -861,7 +912,8 @@ volumePermissions:
   ##
   enabled: false
   ## The security context for the volumePermissions init container
-  ## @param volumePermissions.securityContext.runAsUser User ID for the container
+  ## @param volumePermissions.securityContext.runAsUser User ID for the container.
+  ## Can be set to "auto". "auto" is especially useful for OpenShift which has scc with dynamic user ids (and 0 is not allowed).
   ##
   securityContext:
     runAsUser: 0
@@ -874,7 +926,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r260
+    tag: 10-debian-10-r307
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -930,7 +982,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/kafka-exporter
-      tag: 1.4.2-debian-10-r67
+      tag: 1.4.2-debian-10-r115
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -993,6 +1045,18 @@ metrics:
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
     ##
     podAnnotations: {}
+    ## Prometheus Kafka Exporter containers' Security Context
+    ## @param metrics.kafka.containerSecurityContext.enabled Enable Prometheus Kafka Exporter containers' Security Context
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+    ## Example:
+    ##   containerSecurityContext:
+    ##     enabled: true
+    ##     capabilities:
+    ##       drop: ["NET_RAW"]
+    ##     readOnlyRootFilesystem: true
+    ##
+    containerSecurityContext:
+      enabled: false
     ## Prometheus Kafka Exporter' resource requests and limits
     ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
     ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -1089,7 +1153,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/jmx-exporter
-      tag: 0.16.1-debian-10-r129
+      tag: 0.16.1-debian-10-r177
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1102,6 +1166,19 @@ metrics:
       ##   - myRegistryKeySecretName
       ##
       pullSecrets: []
+
+    ## Prometheus JMX Exporter Containers' Security Context
+    ## @param metrics.jmx.containerSecurityContext.enabled Enable Prometheus JMX Exporter Containers' Security Context
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+    ## Example:
+    ##   containerSecurityContext:
+    ##     enabled: true
+    ##     capabilities:
+    ##       drop: ["NET_RAW"]
+    ##     readOnlyRootFilesystem: true
+    ##
+    containerSecurityContext:
+      enabled: false
     ## Prometheus JMX Exporter' resource requests and limits
     ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
     ## We usually recommend not to specify default resources and to leave this as a conscious

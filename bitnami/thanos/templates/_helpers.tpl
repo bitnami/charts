@@ -364,7 +364,7 @@ Usage:
 ]
 {{- end -}}
 {{- else -}}
-{{- if (typeIs "string" .Values.receive.config)}}
+{{- if (typeIs "string" .Values.receive.config) }}
 {{- .Values.receive.config -}}
 {{- else -}}
 {{- .Values.receive.config | toPrettyJson -}}

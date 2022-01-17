@@ -102,7 +102,7 @@ spec:
           {{- if or .Values.ingest.containerSecurityContext.enabled .Values.ingest.securityContext.enabled }}
           securityContext:
             {{- if .Values.ingest.containerSecurityContext.enabled }}
-            {{- omit .Values.ingest.containerSecurityContext "enabled" | toYaml | nindent 8 }}
+            {{- omit .Values.ingest.containerSecurityContext "enabled" | toYaml | nindent 12 }}
             {{- else }}
             runAsUser: {{ .Values.ingest.securityContext.runAsUser }}
             {{- end }}
@@ -127,7 +127,7 @@ spec:
             - name: ELASTICSEARCH_CLUSTER_MASTER_HOSTS
               {{- $elasticsearchMasterFullname := include "elasticsearch.master.fullname" . }}
               {{- $replicas := int (ternary .Values.master.autoscaling.minReplicas .Values.master.replicas (eq .Values.master.autoscaling.enabled true)) }}
-              value: {{range $i, $e := until $replicas }}{{ $elasticsearchMasterFullname }}-{{ $e }} {{ end }}
+              value: {{ range $i, $e := until $replicas }}{{ $elasticsearchMasterFullname }}-{{ $e }} {{ end }}
             - name: ELASTICSEARCH_MINIMUM_MASTER_NODES
               value: {{ add (div (ternary .Values.master.autoscaling.minReplicas .Values.master.replicas (eq .Values.master.autoscaling.enabled true)) 2) 1 | quote }}
             - name: ELASTICSEARCH_ADVERTISED_HOSTNAME

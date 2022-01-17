@@ -23,5 +23,5 @@ maintainers:
 name: dokuwiki
 sources:
   - https://github.com/bitnami/bitnami-docker-dokuwiki
-  - https://www.dokuwiki.org/
-version: 11.2.14
+  - http://www.dokuwiki.org/
+version: 12.1.1

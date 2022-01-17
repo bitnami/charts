@@ -84,7 +84,7 @@ spec:
         {{- if .Values.initContainers }}
           {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
         {{- end }}
-        {{- if .Values.tls.enabled}}
+        {{- if .Values.tls.enabled }}
         {{- $fullname := include "solr.fullname" . }}
         - name: init-certs
           image: {{ include "solr.image" . }}
@@ -186,8 +186,12 @@ spec:
             - name: SOLR_COLLECTION
               value: {{ .Values.collection | quote }}
             {{- else }}
-            - name: SOLR_CORE
+            - name: SOLR_CORES
+              {{- if .Values.coreName }}
               value: {{ .Values.coreName | quote }}
+              {{- else }}
+              value: {{ .Values.coreNames | join "," | quote }}
+              {{- end }}
             {{- end }}
             - name: SOLR_COLLECTION_SHARDS
               value: {{ .Values.collectionShards | quote }}
@@ -310,7 +314,7 @@ spec:
           {{- range .Values.persistence.extraVolumeClaimTemplates }}
             - name: {{ .name }}
               mountPath: {{ .mountPath }}
-          {{- end}}
+          {{- end }}
         {{- if .Values.sidecars }}
         {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}

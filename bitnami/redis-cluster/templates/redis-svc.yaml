@@ -29,7 +29,7 @@ spec:
   {{- end }}
   {{- if and (eq "LoadBalancer" .Values.service.type) .Values.service.loadBalancerIP }}
   loadBalancerIP: {{ .Values.service.loadBalancerIP }}
-  {{- end}}
+  {{- end }}
   ports:
     - name: tcp-redis
       port: {{ .Values.service.ports.redis }}

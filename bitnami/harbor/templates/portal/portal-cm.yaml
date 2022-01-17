@@ -25,12 +25,12 @@ data:
         scgi_temp_path /tmp/scgi_temp;
         server {
             {{- if .Values.internalTLS.enabled }}
-            {{- if .Values.ipFamily.ipv4.enabled}}
+            {{- if .Values.ipFamily.ipv4.enabled }}
             listen {{ template "harbor.portal.containerPort" . }} ssl;
             {{- end }}
-            {{- if .Values.ipFamily.ipv6.enabled}}
+            {{- if .Values.ipFamily.ipv6.enabled }}
             listen [::]:{{ template "harbor.portal.containerPort" . }} ssl;
-            {{- end }}            
+            {{- end }}
             # SSL
             ssl_certificate /etc/harbor/ssl/portal/tls.crt;
             ssl_certificate_key /etc/harbor/ssl/portal/tls.key;
@@ -44,7 +44,7 @@ data:
             {{- if .Values.ipFamily.ipv4.enabled }}
             listen {{ template "harbor.portal.containerPort" . }};
             {{- end }}
-            {{- if .Values.ipFamily.ipv6.enabled}}
+            {{- if .Values.ipFamily.ipv6.enabled }}
             listen [::]:{{ template "harbor.portal.containerPort" . }};
             {{- end }}
             {{- end }}

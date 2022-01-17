@@ -37,7 +37,7 @@ spec:
       targetPort: {{ .Values.collectd.service.port }}
       protocol: UDP
       name: udp
-      {{- if (and (or (eq .Values.collectd.service.type "NodePort") (eq .Values.collectd.service.type "LoadBalancer")) (not (empty .Values.collectd.service.nodePort)))}}
+      {{- if (and (or (eq .Values.collectd.service.type "NodePort") (eq .Values.collectd.service.type "LoadBalancer")) (not (empty .Values.collectd.service.nodePort))) }}
       nodePort: {{ .Values.collectd.service.nodePort }}
       {{- else if eq .Values.collectd.service.type "ClusterIP" }}
       nodePort: null
