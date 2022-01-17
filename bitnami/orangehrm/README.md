@@ -4,6 +4,10 @@
 
 [OrangeHRM](https://www.orangehrm.com) is a free HR management system that offers a wealth of modules to suit the needs of your business.
 
+## This Helm chart is deprecated
+
+The upstream project only works with deprecated PHP versions.
+
 ## TL;DR
 
 ```console
