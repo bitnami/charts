@@ -507,7 +507,7 @@ master:
     ##   kubernetes.io/ingress.class: nginx
     ##   cert-manager.io/cluster-issuer: cluster-issuer-name
     ##
-    annotations: { }
+    annotations: {}
     ## @param master.ingress.tls Enable TLS configuration for the hostname defined at master.ingress.hostname parameter
     ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.master.ingress.hostname }}
     ## You can use the master.ingress.secrets parameter to create this TLS secret or relay on cert-manager to create it
