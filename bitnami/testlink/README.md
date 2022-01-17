@@ -1,6 +1,8 @@
+<!--- app-name: TestLink -->
+
 # TestLink
 
-[TestLink](https://www.testlink.org) is a web-based test management system that facilitates software quality assurance. It is developed and maintained by Teamtest. The platform offers support for test cases, test suites, test plans, test projects and user management, as well as various reports and statistics.
+[TestLink](https://www.testlink.org) is a web-based test management system that facilitates software quality assurance.
 
 ## TL;DR
 
@@ -12,6 +14,8 @@ $ helm install my-release bitnami/testlink
 ## Introduction
 
 This chart bootstraps a [TestLink](https://github.com/bitnami/bitnami-docker-testlink) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+
+TestLink is developed and maintained by Teamtest. The platform offers support for test cases, test suites, test plans, test projects and user management, as well as various reports and statistics.
 
 It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) which is required for bootstrapping a MariaDB deployment for the database requirements of the TestLink application.
 

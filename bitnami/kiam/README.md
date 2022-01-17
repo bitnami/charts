@@ -1,3 +1,5 @@
+<!--- app-name: Kiam -->
+
 # kiam
 
 [kiam](https://github.com/uswitch/kiam) is a Kubernetes agent that allows to associate IAM roles to pods.

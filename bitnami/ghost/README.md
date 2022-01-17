@@ -1,3 +1,5 @@
+<!--- app-name: Ghost -->
+
 # Ghost
 
 [Ghost](https://ghost.org/) is an open source publishing platform designed to create blogs, magazines, and news sites. It includes a simple markdown editor with preview, theming, and SEO built-in to simplify editing.

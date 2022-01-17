@@ -1,3 +1,5 @@
+<!--- app-name: Wavefront -->
+
 # Wavefront Collector for Kubernetes
 
 [Wavefront](https://wavefront.com) is a cloud-native monitoring and analytics platform that provides three dimensional microservices observability with metrics, histograms and OpenTracing-compatible distributed tracing.

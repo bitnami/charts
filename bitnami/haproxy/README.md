@@ -1,3 +1,5 @@
+<!--- app-name: HAProxy -->
+
 # HAProxy
 
 [HAProxy](https://www.haproxy.org/) is a TCP proxy and a HTTP reverse proxy. It supports SSL termination and offloading, TCP and HTTP normalization, traffic regulation, caching and protection against DDoS attacks.

@@ -1,4 +1,19 @@
+<!--- app-name: Harbor -->
+
 # Harbor
+
+Harbor is an open source trusted cloud-native registry to store, sign, and scan content. It adds functionalities like security, identity, and management to the open source Docker distribution.
+
+## TL;DR
+
+```
+$ helm repo add bitnami https://charts.bitnami.com/bitnami
+$ helm install my-release bitnami/harbor
+```
+
+## Introduction
+
+This [Helm](https://github.com/kubernetes/helm) chart installs [Harbor](https://github.com/goharbor/harbor) in a Kubernetes cluster. Welcome to [contribute](https://github.com/bitnami/charts/blob/master/CONTRIBUTING.md) to Helm Chart for Harbor.
 
 This Helm chart has been developed based on [goharbor/harbor-helm](https://github.com/goharbor/harbor-helm) chart but including some features common to the Bitnami chart library.
 For example, the following changes have been introduced:
@@ -11,17 +26,6 @@ For example, the following changes have been introduced:
   - non-root by default
   - published for debian-10 and ol-7
 - This chart support the Harbor optional components Chartmuseum, Clair and Notary integrations.
-
-## TL;DR
-
-```
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/harbor
-```
-
-## Introduction
-
-This [Helm](https://github.com/kubernetes/helm) chart installs [Harbor](https://github.com/goharbor/harbor) in a Kubernetes cluster. Welcome to [contribute](https://github.com/bitnami/charts/blob/master/CONTRIBUTING.md) to Helm Chart for Harbor.
 
 ## Prerequisites
 

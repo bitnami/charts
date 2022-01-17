@@ -1,3 +1,5 @@
+<!--- app-name: Kube State Metrics -->
+
 # kube-state-metrics
 
 [kube-state-metrics](https://github.com/kubernetes/kube-state-metrics) is a simple service that listens to the Kubernetes API server and generates metrics about the state of the objects.

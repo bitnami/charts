@@ -1,3 +1,5 @@
+<!--- app-name: Apache ZooKeeper -->
+
 # ZooKeeper
 
 [ZooKeeper](https://zookeeper.apache.org/) is a centralized service for maintaining configuration information, naming, providing distributed synchronization, and providing group services. All of these kinds of services are used in some form or other by distributed applications.

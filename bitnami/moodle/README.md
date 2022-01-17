@@ -1,3 +1,5 @@
+<!--- app-name: Bitnami LMS powered by Moodle(TM) LMS -->
+
 # Moodle&trade; LMS
 
 [Moodle&trade;](https://www.moodle.org) LMS is a learning platform designed to provide educators, administrators and learners with a single robust, secure and integrated system to create personalized learning environments.

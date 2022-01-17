@@ -1,3 +1,5 @@
+<!--- app-name: Kubernetes Event Exporter -->
+
 # Kubernetes Event Exporter
 
 [Kubernetes Event Exporter](https://github.com/opsgenie/kubernetes-event-exporter) allows exporting the often missed Kubernetes events to various outputs so that they can be used for observability or alerting purposes.
