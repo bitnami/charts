@@ -1263,6 +1263,10 @@ Find more information about how to deal with common errors related to Bitnami’
 
 ## Upgrading
 
+### To 9.0.0
+
+This major updates the MinIO&reg; subchart to its newest major, 10.0.0. This subchart's major doesn't include any changes affecting its use as a subchart for Thanos, only needing the standard upgrade process from chart's version `8.X`.
+
 ### To 8.0.0
 
 The chart was changed to adapt to the common Bitnami chart standards. Now it includes common elements such as sidecar and init container support, custom commands, custom liveness/readiness probes, extra environment variables support, extra pod annotations and labels, among others. In addition, other remarkable changes were to harmonize the values structure:
