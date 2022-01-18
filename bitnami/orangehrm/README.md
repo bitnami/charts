@@ -1,6 +1,12 @@
+<!--- app-name: OrangeHRM -->
+
 # OrangeHRM
 
-[OrangeHRM](https://www.orangehrm.com) is a free HR management system that offers a wealth of modules to suit the needs of your business. This widely-used system is feature-rich, intuitive and provides an essential HR management platform along with free documentation and access to a broad community of users.
+[OrangeHRM](https://www.orangehrm.com) is a free HR management system that offers a wealth of modules to suit the needs of your business.
+
+## This Helm chart is deprecated
+
+The upstream project only works with deprecated PHP versions.
 
 ## TL;DR
 
@@ -12,6 +18,8 @@ $ helm install my-release bitnami/orangehrm
 ## Introduction
 
 This chart bootstraps a [OrangeHRM](https://github.com/bitnami/bitnami-docker-orangehrm) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+
+OrangeHRM is a widely-used feature-rich system, intuitive and provides an essential HR management platform along with free documentation and access to a broad community of users.
 
 It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) which is required for bootstrapping a MariaDB deployment for the database requirements of the OrangeHRM application.
 

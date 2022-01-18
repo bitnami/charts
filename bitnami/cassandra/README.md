@@ -1,3 +1,5 @@
+<!--- app-name: Apache Cassandra -->
+
 # cassandra
 
 [Apache Cassandra](https://cassandra.apache.org) is a free and open-source distributed database management system designed to handle large amounts of data across many commodity servers or datacenters.
@@ -302,10 +304,10 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 This chart supports TLS between client and server and between nodes, as explained below:
 
-* For internode cluster encryption, set the `cluster.internodeEncryption` chart parameter to a value different from `none`. Available values are `all`, `dc` or `rack`.
-* For client-server encryption, set the `cluster.clientEncryption` chart parameter to `true`.
+* For internode cluster encryption, set the `tls.internodeEncryption` chart parameter to a value different from `none`. Available values are `all`, `dc` or `rack`.
+* For client-server encryption, set the `tls.clientEncryption` chart parameter to `true`.
 
-In both cases, it is also necessary to create a secret containing the keystore and truststore certificates and their corresponding protection passwords. This secret is to be passed to the chart via the `tlsEncryptionSecretName` parameter at deployment-time.
+In both cases, it is also necessary to create a secret containing the keystore and truststore certificates and their corresponding protection passwords. This secret is to be passed to the chart via the `tls.existingSecret` parameter at deployment-time.
 
 Refer to the chart documentation for more [information on creating the secret and a TLS deployment example](https://docs.bitnami.com/kubernetes/infrastructure/cassandra/administration/enable-tls/).
 

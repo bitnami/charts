@@ -8,7 +8,7 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: alertmanager
+      app.kubernetes.io/name: alertmanager
       alertmanager: {{ template "kube-prometheus.alertmanager.fullname" . }}
   {{- if .Values.alertmanager.podDisruptionBudget.minAvailable }}
   minAvailable: {{ .Values.alertmanager.podDisruptionBudget.minAvailable }}
