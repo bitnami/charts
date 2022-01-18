@@ -68,7 +68,7 @@ controller:
   image:
     registry: docker.io
     repository: bitnami/cert-manager
-    tag: 1.6.1-debian-10-r68
+    tag: 1.6.1-debian-10-r70
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -97,7 +97,7 @@ controller:
     image:
       registry: docker.io
       repository: bitnami/acmesolver
-      tag: 1.6.1-debian-10-r71
+      tag: 1.6.1-debian-10-r72
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -185,6 +185,15 @@ controller:
   ## @param controller.priorityClassName Controller pod priority class name
   ##
   priorityClassName: ""
+  ## @param controller.schedulerName Name of the k8s scheduler (other than default)
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param controller.topologySpreadConstraints Topology Spread Constraints for pod assignment
+  ## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+  ## The value is evaluated as a template
+  ##
+  topologySpreadConstraints: []
   ## @param controller.hostAliases Custom host aliases for Controller pods
   ## ref: https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -277,6 +286,9 @@ controller:
     ## @param controller.serviceAccount.annotations Additional custom annotations for the ServiceAccount
     ##
     annotations: {}
+    ## @param controller.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+    ##
+    automountServiceAccountToken: true
 
 ## @section Webhook deployment parameters
 
@@ -298,7 +310,7 @@ webhook:
   image:
     registry: docker.io
     repository: bitnami/cert-manager-webhook
-    tag: 1.6.1-debian-10-r70
+    tag: 1.6.1-debian-10-r72
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -436,6 +448,15 @@ webhook:
   ## @param webhook.priorityClassName Webhook pod priority class name
   ##
   priorityClassName: ""
+  ## @param webhook.schedulerName Name of the k8s scheduler (other than default)
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param webhook.topologySpreadConstraints Topology Spread Constraints for pod assignment
+  ## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+  ## The value is evaluated as a template
+  ##
+  topologySpreadConstraints: []
   ## @param webhook.hostAliases Custom host aliases for Webhook pods
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -515,6 +536,9 @@ webhook:
     ## @param webhook.serviceAccount.annotations Additional custom annotations for the ServiceAccount
     ##
     annotations: {}
+    ## @param webhook.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+    ##
+    automountServiceAccountToken: true
 
 ## @section CAInjector deployment parameters
 
@@ -537,7 +561,7 @@ cainjector:
   image:
     registry: docker.io
     repository: bitnami/cainjector
-    tag: 1.6.1-debian-10-r70
+    tag: 1.6.1-debian-10-r71
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -623,6 +647,15 @@ cainjector:
   ## @param cainjector.priorityClassName CAInjector pod priority class name
   ##
   priorityClassName: ""
+  ## @param cainjector.schedulerName Name of the k8s scheduler (other than default)
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param cainjector.topologySpreadConstraints Topology Spread Constraints for pod assignment
+  ## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+  ## The value is evaluated as a template
+  ##
+  topologySpreadConstraints: []
   ## @param cainjector.hostAliases Custom host aliases for CAInjector pods
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -701,6 +734,9 @@ cainjector:
     ## @param cainjector.serviceAccount.annotations Additional custom annotations for the ServiceAccount
     ##
     annotations: {}
+    ## @param cainjector.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+    ##
+    automountServiceAccountToken: true
 
 ## @section Metrics Parameters
 
@@ -719,21 +755,59 @@ metrics:
     prometheus.io/path: "/metrics"
     prometheus.io/scrape: "true"
     prometheus.io/port: "{{ .Values.controller.containerPort }}"
-  ## @param metrics.serviceMonitor.enabled Create ServiceMonitor resource(s) for scraping metrics using PrometheusOperator
-  ## @param metrics.serviceMonitor.namespace The namespace in which the ServiceMonitor will be created
-  ## @param metrics.serviceMonitor.interval The interval at which metrics should be scraped
-  ## @param metrics.serviceMonitor.path The path which the ServiceMonitor will monitor
-  ## @param metrics.serviceMonitor.scrapeTimeout The timeout after which the scrape is ended
-  ## @param metrics.serviceMonitor.targetPort The port in which the ServiceMonitor will monitor
-  ## @param metrics.serviceMonitor.additionalLabels Additional labels that can be used so ServiceMonitor resource(s) can be discovered by Prometheus
+
+  ## Prometheus Operator ServiceMonitor resource
+  ##
   serviceMonitor:
-    enabled: false
-    namespace: ""
-    interval: 60s
+    ## @param metrics.serviceMonitor.path The path which the ServiceMonitor will monitor
+    ##
     path: /metrics
-    scrapeTimeout: 30s
+    ## @param metrics.serviceMonitor.targetPort The port in which the ServiceMonitor will monitor
+    ##
     targetPort: 9402
+    ## @param metrics.serviceMonitor.enabled Create ServiceMonitor Resource for scraping metrics using PrometheusOperator
+    ##
+    enabled: false
+    ## @param metrics.serviceMonitor.namespace Namespace which Prometheus is running in
+    ## e.g:
+    ## namespace: monitoring
+    ##
+    namespace: ""
+    ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
+    ##
+    jobLabel: ""
+    ## @param metrics.serviceMonitor.interval Interval at which metrics should be scraped
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ##
+    interval: 60s
+    ## @param metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ##
+    scrapeTimeout: 30s
+    ## @param metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+    ##
+    relabelings: []
+    ## @param metrics.serviceMonitor.metricRelabelings MetricRelabelConfigs to apply to samples before ingestion
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+    ##
+    metricRelabelings: []
+    ## @param metrics.serviceMonitor.selector ServiceMonitor selector labels
+    ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+    ##
+    ## selector:
+    ##   prometheus: my-prometheus
+    ##
+    selector: {}
+    ## @param metrics.serviceMonitor.labels Extra labels for the ServiceMonitor
+    ##
+    labels: {}
+    ## @param metrics.serviceMonitor.additionalLabels DEPRECATED. Use metrics.serviceMonitor.labels instead.
+    ##
     additionalLabels: {}
+    ## @param metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
+    ##
+    honorLabels: false
 
 ## @section Other Parameters
 
