@@ -492,7 +492,7 @@ data:
         if [ -z "$port" ]; then
             case $type in
                 "SENTINEL")
-                    echo {{ .Values.sentinel.containerPort.sentinel }}
+                    echo {{ .Values.sentinel.containerPorts.sentinel }}
                     ;;
                 "REDIS")
                     echo {{ .Values.master.containerPorts.redis }}
