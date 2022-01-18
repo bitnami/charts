@@ -183,6 +183,21 @@ spec:
             - name: redis
               containerPort: {{ .Values.replica.containerPorts.redis }}
           {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.replica.startupProbe.enabled }}
+          startupProbe:
+            initialDelaySeconds: {{ .Values.replica.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.replica.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ add1 .Values.replica.startupProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.replica.startupProbe.successThreshold }}
+            failureThreshold: {{ .Values.replica.startupProbe.failureThreshold }}
+            exec:
+              command:
+                - sh
+                - -c
+                - /health/ping_liveness_local_and_master.sh {{ .Values.replica.startupProbe.timeoutSeconds }}
+          {{- else if .Values.replica.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.replica.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
           {{- if .Values.replica.livenessProbe.enabled }}
           livenessProbe:
             initialDelaySeconds: {{ .Values.replica.livenessProbe.initialDelaySeconds }}
@@ -196,7 +211,7 @@ spec:
                 - -c
                 - /health/ping_liveness_local_and_master.sh {{ .Values.replica.livenessProbe.timeoutSeconds }}
           {{- else if .Values.replica.customLivenessProbe }}
-          livenessProbe: {{- toYaml .Values.replica.customLivenessProbe | nindent 12 }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.replica.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.replica.readinessProbe.enabled }}
           readinessProbe:
@@ -211,7 +226,7 @@ spec:
                 - -c
                 - /health/ping_readiness_local_and_master.sh {{ .Values.replica.readinessProbe.timeoutSeconds }}
           {{- else if .Values.replica.customReadinessProbe }}
-          readinessProbe: {{- toYaml .Values.replica.customReadinessProbe | nindent 12 }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.replica.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           {{- if .Values.replica.resources }}

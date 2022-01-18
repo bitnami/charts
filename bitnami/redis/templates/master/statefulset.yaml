@@ -166,6 +166,22 @@ spec:
               containerPort: {{ .Values.master.containerPorts.redis }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.master.livenessProbe.enabled }}
+          startupProbe:
+            initialDelaySeconds: {{ .Values.master.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.master.startupProbe.periodSeconds }}
+            # One second longer than command timeout should prevent generation of zombie processes.
+            timeoutSeconds: {{ add1 .Values.master.startupProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.master.startupProbe.successThreshold }}
+            failureThreshold: {{ .Values.master.startupProbe.failureThreshold }}
+            exec:
+              command:
+                - sh
+                - -c
+                - /health/ping_liveness_local.sh {{ .Values.master.startupProbe.timeoutSeconds }}
+          {{- else if .Values.master.customstartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.master.customstartupProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.master.livenessProbe.enabled }}
           livenessProbe:
             initialDelaySeconds: {{ .Values.master.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.master.livenessProbe.periodSeconds }}
@@ -179,7 +195,7 @@ spec:
                 - -c
                 - /health/ping_liveness_local.sh {{ .Values.master.livenessProbe.timeoutSeconds }}
           {{- else if .Values.master.customLivenessProbe }}
-          livenessProbe: {{- toYaml .Values.master.customLivenessProbe | nindent 12 }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.master.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.master.readinessProbe.enabled }}
           readinessProbe:
@@ -194,7 +210,7 @@ spec:
                 - -c
                 - /health/ping_readiness_local.sh {{ .Values.master.readinessProbe.timeoutSeconds }}
           {{- else if .Values.master.customReadinessProbe }}
-          readinessProbe: {{- toYaml .Values.master.customReadinessProbe | nindent 12 }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.master.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           {{- if .Values.master.resources }}

@@ -187,6 +187,20 @@ master:
     redis: 6379
   ## Configure extra options for Redis&trade; containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param master.startupProbe.enabled Enable startupProbe on Redis&trade; master nodes
+  ## @param master.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param master.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param master.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param master.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param master.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 20
+    periodSeconds: 5
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
   ## @param master.livenessProbe.enabled Enable livenessProbe on Redis&trade; master nodes
   ## @param master.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
   ## @param master.livenessProbe.periodSeconds Period seconds for livenessProbe
@@ -215,6 +229,9 @@ master:
     timeoutSeconds: 1
     successThreshold: 1
     failureThreshold: 5
+  ## @param master.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
   ## @param master.customLivenessProbe Custom livenessProbe that overrides the default one
   ##
   customLivenessProbe: {}
@@ -499,6 +516,20 @@ replica:
     redis: 6379
   ## Configure extra options for Redis&trade; containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param replica.startupProbe.enabled Enable startupProbe on Redis&trade; replicas nodes
+  ## @param replica.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param replica.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param replica.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param replica.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param replica.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 20
+    periodSeconds: 5
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
   ## @param replica.livenessProbe.enabled Enable livenessProbe on Redis&trade; replicas nodes
   ## @param replica.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
   ## @param replica.livenessProbe.periodSeconds Period seconds for livenessProbe
@@ -527,6 +558,9 @@ replica:
     timeoutSeconds: 1
     successThreshold: 1
     failureThreshold: 5
+  ## @param replica.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
   ## @param replica.customLivenessProbe Custom livenessProbe that overrides the default one
   ##
   customLivenessProbe: {}
