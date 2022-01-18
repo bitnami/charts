@@ -373,14 +373,16 @@ Find more information about how to deal with common errors related to Bitnami’
 
 ### To 15.0.0
 
+This major release updates the MariaDB subchart to it newest major, 10.0.0. Check [MariaDB Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#to-1000) for more information.
+
+### To 15.0.0
+
 This major release renames several values in this chart and adds missing features, in order to be inline with the rest of assets in the Bitnami charts repository.
 
 Affected values:
 
 - `service.port` was deprecated, we recommend using `service.ports.http` instead.
 - `service.httpsPort` was deprecated, we recommend using `service.ports.https` instead.
-
-Additionally, updates the MariaDB subchart to it newest major, 10.0.0, which contains similar changes.
 
 ### To 14.0.0
 
