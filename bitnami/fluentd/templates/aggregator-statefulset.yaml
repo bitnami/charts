@@ -3,18 +3,26 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: {{ include "common.names.fullname" . }}
-  {{- if .Values.aggregator.annotations }}
-  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.aggregator.annotations "context" $) | nindent 4 }}
-  {{- end }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: aggregator
     ## Istio Labels: https://istio.io/docs/ops/deployment/requirements/
     app: aggregator
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  annotations:
+    {{- if .Values.aggregator.annotations }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.aggregator.annotations "context" $) | nindent 4 }}
+    {{- end }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- if .Values.commonAnnotations }}
+    {{- end }}
 spec:
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: aggregator
   serviceName: {{ include "common.names.fullname" . }}-headless
+  podManagementPolicy: {{ .Values.aggregator.podManagementPolicy }}
   replicas: {{ .Values.aggregator.replicaCount }}
   updateStrategy: {{- toYaml .Values.aggregator.updateStrategy | nindent 4 }}
   template:
@@ -36,8 +44,8 @@ spec:
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.aggregator.hostAliases "context" $) | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ template "fluentd.aggregator.serviceAccountName" . }}
-      {{- if .Values.aggregator.securityContext.enabled }}
-      securityContext: {{- omit .Values.aggregator.securityContext "enabled" | toYaml | nindent 8 }}
+      {{- if .Values.aggregator.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.aggregator.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       {{- if .Values.aggregator.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.aggregator.affinity "context" $) | nindent 8 }}
@@ -53,21 +61,39 @@ spec:
       {{- if .Values.aggregator.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.aggregator.tolerations "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.aggregator.schedulerName }}
+      schedulerName: {{ .Values.aggregator.schedulerName }}
+      {{- end }}
+      {{- if .Values.aggregator.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.aggregator.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.aggregator.priorityClassName }}
+      priorityClassName: {{ .Values.aggregator.priorityClassName | quote }}
+      {{- end }}
       {{- if .Values.aggregator.initContainers }}
-      initContainers:
-      {{- include "common.tplvalues.render" ( dict "value" .Values.aggregator.initContainers "context" $ ) | nindent 8 }}
+      initContainers: {{- include "common.tplvalues.render" ( dict "value" .Values.aggregator.initContainers "context" $ ) | nindent 8 }}
       {{- end }}
       terminationGracePeriodSeconds: {{ .Values.aggregator.terminationGracePeriodSeconds }}
       containers:
         - name: fluentd
           image: {{ include "fluentd.aggregator.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
-          {{- if .Values.aggregator.lifecycle }}
-          lifecycle: {{- include "common.tplvalues.render" ( dict "value" .Values.aggregator.lifecycle "context" $ ) | nindent 12 }}
+          {{- if .Values.aggregator.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.aggregator.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{ end }}
+          {{- if .Values.aggregator.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" ( dict "value" .Values.aggregator.lifecycleHooks "context" $ ) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else }}
+          {{- if .Values.aggregator.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.aggregator.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.aggregator.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.aggregator.args "context" $) | nindent 12 }}
+          {{- end }}
           {{- end }}
           env:
             - name: BITNAMI_DEBUG
@@ -76,9 +102,21 @@ spec:
               value: {{ .Values.aggregator.configFile }}
             - name: FLUENTD_OPT
               value: {{ .Values.aggregator.extraArgs | quote }}
-            {{- if .Values.aggregator.extraEnv }}
-            {{- toYaml .Values.aggregator.extraEnv | nindent 12 }}
+            {{- if .Values.aggregator.extraEnvVars }}
+            {{- toYaml .Values.aggregator.extraEnvVars | nindent 12 }}
             {{- end }}
+          envFrom:
+            {{- if .Values.aggregator.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.aggregator.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.aggregator.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.aggregator.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- if .Values.aggregator.resources }}
+          resources: {{- toYaml .Values.aggregator.resources | nindent 12 }}
+          {{- end }}
           ports:
             {{- if .Values.aggregator.port }}
             - name: tcp
@@ -94,6 +132,19 @@ spec:
               protocol: TCP
             {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.aggregator.startupProbe.enabled }}
+          startupProbe:
+            httpGet:
+              path: {{ .Values.aggregator.startupProbe.httpGet.path }}
+              port: {{ .Values.aggregator.startupProbe.httpGet.port }}
+            initialDelaySeconds: {{ .Values.aggregator.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.aggregator.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.aggregator.startupProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.aggregator.startupProbe.successThreshold }}
+            failureThreshold: {{ .Values.aggregator.startupProbe.failureThreshold }}
+          {{- else if .Values.aggregator.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.aggregator.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
           {{- if .Values.aggregator.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
@@ -104,6 +155,8 @@ spec:
             timeoutSeconds: {{ .Values.aggregator.livenessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.aggregator.livenessProbe.successThreshold }}
             failureThreshold: {{ .Values.aggregator.livenessProbe.failureThreshold }}
+          {{- else if .Values.aggregator.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.aggregator.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.aggregator.readinessProbe.enabled }}
           readinessProbe:
@@ -115,16 +168,10 @@ spec:
             timeoutSeconds: {{ .Values.aggregator.readinessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.aggregator.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.aggregator.readinessProbe.failureThreshold }}
+          {{- else if .Values.aggregator.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.aggregator.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
-          {{- if .Values.aggregator.resources }}
-          resources: {{- toYaml .Values.aggregator.resources | nindent 12 }}
-          {{- end }}
-          {{- if .Values.aggregator.containerSecurityContext.enabled }}
-          # yamllint disable rule:indentation
-          securityContext: {{- omit .Values.aggregator.containerSecurityContext "enabled" | toYaml | nindent 12 }}
-          # yamllint enable rule:indentation
-          {{ end }}
           volumeMounts:
             - name: fluentd-config
               mountPath: /opt/bitnami/fluentd/conf
@@ -169,11 +216,20 @@ spec:
     {{- if or .Values.aggregator.persistence.enabled }}
     - metadata:
         name: {{ include "common.names.fullname" . }}-buffer
+        {{- if .Values.aggregator.persistence.annotations }}
+        annotations: {{- include "common.tplvalues.render" (dict "value" .Values.aggregator.persistence.annotations "context" $) | nindent 10 }}
+        {{- end }}
       spec:
-        accessModes: [{{ .Values.aggregator.persistence.accessMode }}]
+        accessModes:
+          {{- range .Values.aggregator.persistence.accessModes }}
+            - {{ . | quote }}
+          {{- end }}
         resources:
           requests:
             storage: {{ .Values.aggregator.persistence.size }}
+        {{- if .Values.aggregator.persistence.selector }}
+        selector: {{- include "common.tplvalues.render" ( dict "value" .Values.aggregator.persistence.selector "context" $) | nindent 10 }}
+        {{- end }}
         {{- include "common.storage.class" (dict "persistence" .Values.aggregator.persistence "global" .Values.global) | nindent 8 }}
     {{- end }}
     {{- if .Values.aggregator.extraVolumeClaimTemplates }}
