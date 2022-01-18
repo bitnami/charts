@@ -53,7 +53,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/argo-cd
-  tag: 2.2.2-debian-10-r8
+  tag: 2.2.3-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1339,7 +1339,7 @@ dex:
   image:
     registry: docker.io
     repository: bitnami/dex
-    tag: 2.30.2-debian-10-r52
+    tag: 2.30.2-debian-10-r59
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1819,7 +1819,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r305
+    tag: 10-debian-10-r312
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1870,7 +1870,7 @@ redis:
   image:
     registry: docker.io
     repository: bitnami/redis
-    tag: 6.2.6-debian-10-r95
+    tag: 6.2.6-debian-10-r103
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
