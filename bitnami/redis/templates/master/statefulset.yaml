@@ -165,7 +165,7 @@ spec:
             - name: redis
               containerPort: {{ .Values.master.containerPorts.redis }}
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.master.livenessProbe.enabled }}
+          {{- if .Values.master.startupProbe.enabled }}
           startupProbe:
             initialDelaySeconds: {{ .Values.master.startupProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.master.startupProbe.periodSeconds }}
@@ -178,8 +178,8 @@ spec:
                 - sh
                 - -c
                 - /health/ping_liveness_local.sh {{ .Values.master.startupProbe.timeoutSeconds }}
-          {{- else if .Values.master.customstartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.master.customstartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.master.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.master.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.master.livenessProbe.enabled }}
           livenessProbe:
