@@ -152,7 +152,7 @@ spec:
             {{- if .Values.kubeResources.volumeattachments }}
             - --resources=volumeattachments
             {{- end }}
-            {{- if .Values.namespace }}
+            {{- if .Values.namespaces }}
             - --namespaces={{ .Values.namespaces }}
             {{- end }}
             {{- range $key, $value := .Values.extraArgs }}
