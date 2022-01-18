@@ -173,7 +173,7 @@ spec:
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.master.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.master.livenessProbe.enabled }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.master.startupProbe "enabled") "context" $) | nindent 12 }}
+          livenessProbe:
             initialDelaySeconds: {{ .Values.master.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.master.livenessProbe.periodSeconds }}
             # One second longer than command timeout should prevent generation of zombie processes.
