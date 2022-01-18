@@ -1,3 +1,5 @@
+<!--- app-name: Apache Solr -->
+
 # Solr
 
 [Solr](https://lucene.apache.org/solr/) is highly reliable, scalable and fault tolerant, providing distributed indexing, replication and load-balanced querying, automated failover and recovery, centralized configuration and more..

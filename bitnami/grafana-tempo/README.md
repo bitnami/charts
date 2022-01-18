@@ -1,3 +1,5 @@
+<!--- app-name: Grafana Tempo -->
+
 # grafana-tempo
 
 [Grafana Tempo](https://github.com/grafana/tempo) is a an open source high-scale distributed tracing backend. It only requires object storage and supports integration with Grafana, Prometheus and Loki.

@@ -1,8 +1,8 @@
+<!--- app-name: PostgreSQL -->
+
 # PostgreSQL
 
 [PostgreSQL](https://www.postgresql.org/) is an object-relational database management system (ORDBMS) with an emphasis on extensibility and on standards-compliance.
-
-For HA, please see [this repo](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha)
 
 ## TL;DR
 
@@ -14,6 +14,8 @@ $ helm install my-release bitnami/postgresql
 ## Introduction
 
 This chart bootstraps a [PostgreSQL](https://github.com/bitnami/bitnami-docker-postgresql) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+
+For HA, please see [this repo](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha)
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This chart has been tested to work with NGINX Ingress, cert-manager, fluentd and Prometheus on top of the [BKPR](https://kubeprod.io/).
 

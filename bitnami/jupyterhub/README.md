@@ -1,3 +1,5 @@
+<!--- app-name: JupyterHub -->
+
 # JupyterHub
 
 [JupyterHub](https://github.com/jupyterhub/jupyterhub) is a multi-user version of the notebook designed for companies, classrooms and research labs.
