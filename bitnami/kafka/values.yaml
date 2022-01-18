@@ -18,6 +18,9 @@ global:
 
 ## @section Common parameters
 
+## @param kubeVersion Override Kubernetes version
+##
+kubeVersion: ""
 ## @param nameOverride String to partially override common.names.fullname
 ##
 nameOverride: ""
@@ -1307,9 +1310,9 @@ metrics:
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ##
     scrapeTimeout: ""
-    ## @param metrics.serviceMonitor.additionalLabels Additional labels that can be used so ServiceMonitor will be discovered by Prometheus
+    ## @param metrics.serviceMonitor.labels Additional labels that can be used so ServiceMonitor will be discovered by Prometheus
     ##
-    additionalLabels: {}
+    labels: {}
     ## @param metrics.serviceMonitor.selector Prometheus instance selector labels
     ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
     ##
