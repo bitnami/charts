@@ -38,6 +38,12 @@ spec:
       {{- if .Values.webhook.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.webhook.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
+      {{- if .Values.webhook.schedulerName }}
+      schedulerName: {{ .Values.webhook.schedulerName }}
+      {{- end }}
+      {{- if .Values.webhook.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.webhook.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
       {{- if .Values.webhook.priorityClassName }}
       priorityClassName: {{ .Values.webhook.priorityClassName | quote }}
       {{- end }}
