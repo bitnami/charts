@@ -219,7 +219,7 @@ controller:
     ##
     nodePort: ""
 
-    ## @param controller.service.clusterIP %%MAIN_CONTAINER_NAME%% service Cluster IP
+    ## @param controller.service.clusterIP Argo CD application controller service Cluster IP
     ## e.g.:
     ## clusterIP: None
     ##
@@ -1783,7 +1783,7 @@ dex:
       http: ""
       grpc: ""
 
-    ## @param dex.service.clusterIP %%MAIN_CONTAINER_NAME%% service Cluster IP
+    ## @param dex.service.clusterIP Dex service Cluster IP
     ## e.g.:
     ## clusterIP: None
     ##
