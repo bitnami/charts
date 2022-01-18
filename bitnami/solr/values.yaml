@@ -18,6 +18,9 @@ global:
 
 ## @section Common parameters
 
+## @param kubeVersion Override Kubernetes version
+##
+kubeVersion: ""
 ## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
 ##
 nameOverride: ""
