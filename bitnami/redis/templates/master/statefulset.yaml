@@ -70,8 +70,8 @@ spec:
       {{- if .Values.master.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.master.tolerations "context" $) | nindent 8 }}
       {{- end }}
-      {{- if .Values.master.spreadConstraints }}
-      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.master.spreadConstraints "context" $) | nindent 8 }}
+      {{- if .Values.master.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.master.topologySpreadConstraints "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.master.shareProcessNamespace }}
       shareProcessNamespace: {{ .Values.master.shareProcessNamespace }}
@@ -130,7 +130,7 @@ spec:
               value: {{ ternary "yes" "no" .Values.tls.enabled | quote }}
             {{- if .Values.tls.enabled }}
             - name: REDIS_TLS_PORT
-              value: {{ .Values.master.containerPort | quote }}
+              value: {{ .Values.master.containerPorts.redis | quote }}
             - name:  REDIS_TLS_AUTH_CLIENTS
               value: {{ ternary "yes" "no" .Values.tls.authClients | quote }}
             - name:  REDIS_TLS_CERT_FILE
@@ -145,7 +145,7 @@ spec:
             {{- end }}
             {{- else }}
             - name: REDIS_PORT
-              value: {{ .Values.master.containerPort | quote }}
+              value: {{ .Values.master.containerPorts.redis | quote }}
             {{- end }}
             {{- if .Values.master.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.master.extraEnvVars "context" $) | nindent 12 }}
@@ -163,8 +163,15 @@ spec:
           {{- end }}
           ports:
             - name: redis
-              containerPort: {{ .Values.master.containerPort }}
+              containerPort: {{ .Values.master.containerPorts.redis }}
           {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.master.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.master.startupProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: redis
+          {{- else if .Values.master.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.master.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
           {{- if .Values.master.livenessProbe.enabled }}
           livenessProbe:
             initialDelaySeconds: {{ .Values.master.livenessProbe.initialDelaySeconds }}
@@ -179,7 +186,7 @@ spec:
                 - -c
                 - /health/ping_liveness_local.sh {{ .Values.master.livenessProbe.timeoutSeconds }}
           {{- else if .Values.master.customLivenessProbe }}
-          livenessProbe: {{- toYaml .Values.master.customLivenessProbe | nindent 12 }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.master.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.master.readinessProbe.enabled }}
           readinessProbe:
@@ -194,7 +201,7 @@ spec:
                 - -c
                 - /health/ping_readiness_local.sh {{ .Values.master.readinessProbe.timeoutSeconds }}
           {{- else if .Values.master.customReadinessProbe }}
-          readinessProbe: {{- toYaml .Values.master.customReadinessProbe | nindent 12 }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.master.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           {{- if .Values.master.resources }}
@@ -264,7 +271,7 @@ spec:
             {{- end }}
             {{- if .Values.tls.enabled }}
             - name: REDIS_ADDR
-              value: rediss://{{ .Values.metrics.redisTargetHost }}:{{ .Values.master.containerPort }}
+              value: rediss://{{ .Values.metrics.redisTargetHost }}:{{ .Values.master.containerPorts.redis }}
               {{- if .Values.tls.authClients }}
             - name: REDIS_EXPORTER_TLS_CLIENT_KEY_FILE
               value: {{ template "redis.tlsCertKey" . }}

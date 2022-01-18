@@ -29,10 +29,10 @@ data:
         if [ -z "$port" ]; then
             case $type in
                 "SENTINEL")
-                    echo {{ .Values.sentinel.containerPort }}
+                    echo {{ .Values.sentinel.containerPorts.sentinel }}
                     ;;
                 "REDIS")
-                    echo {{ .Values.master.containerPort }}
+                    echo {{ .Values.master.containerPorts.redis }}
                     ;;
             esac
         else
@@ -218,10 +218,10 @@ data:
         if [ -z "$port" ]; then
             case $type in
                 "SENTINEL")
-                    echo {{ .Values.sentinel.containerPort }}
+                    echo {{ .Values.sentinel.containerPorts.sentinel }}
                     ;;
                 "REDIS")
-                    echo {{ .Values.master.containerPort }}
+                    echo {{ .Values.master.containerPorts.redis }}
                     ;;
             esac
         else
@@ -492,10 +492,10 @@ data:
         if [ -z "$port" ]; then
             case $type in
                 "SENTINEL")
-                    echo {{ .Values.sentinel.containerPort }}
+                    echo {{ .Values.sentinel.containerPorts.sentinel }}
                     ;;
                 "REDIS")
-                    echo {{ .Values.master.containerPort }}
+                    echo {{ .Values.master.containerPorts.redis }}
                     ;;
             esac
         else
