@@ -143,12 +143,12 @@ To connect to your database from outside the cluster execute the following comma
         Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "common.names.fullname" . }}'
 
     export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
-    {{ if .Values.auth.enabled }}REDISCLI_AUTH="$REDIS_PASSWORD" {{ end }}redis-cli -h $SERVICE_IP -p {{ .Values.sentinel.service.port.redis }} {{- if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
+    {{ if .Values.auth.enabled }}REDISCLI_AUTH="$REDIS_PASSWORD" {{ end }}redis-cli -h $SERVICE_IP -p {{ .Values.sentinel.service.ports.redis }} {{- if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
 
 {{- else if contains "ClusterIP" .Values.sentinel.service.type }}
 
-    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "common.names.fullname" . }} {{ .Values.sentinel.service.port.redis }}:{{ .Values.sentinel.service.port.redis }} &
-    {{ if .Values.auth.enabled }}REDISCLI_AUTH="$REDIS_PASSWORD" {{ end }}redis-cli -h 127.0.0.1 -p {{ .Values.sentinel.service.port.redis }} {{- if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
+    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "common.names.fullname" . }} {{ .Values.sentinel.service.ports.redis }}:{{ .Values.sentinel.service.ports.redis }} &
+    {{ if .Values.auth.enabled }}REDISCLI_AUTH="$REDIS_PASSWORD" {{ end }}redis-cli -h 127.0.0.1 -p {{ .Values.sentinel.service.ports.redis }} {{- if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
 
 {{- end }}
 {{- else }}

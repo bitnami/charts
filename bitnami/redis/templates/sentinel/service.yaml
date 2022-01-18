@@ -52,7 +52,7 @@ spec:
       {{- else if eq .Values.sentinel.service.type "NodePort" }}
       port: {{ $redisport }}
       {{- else}}
-      port: {{ .Values.sentinel.service.port.redis }}
+      port: {{ .Values.sentinel.service.ports.redis }}
       {{- end }}
       targetPort: {{ .Values.replica.containerPorts.redis }}
       {{- if and (or (eq .Values.sentinel.service.type "NodePort") (eq .Values.sentinel.service.type "LoadBalancer")) .Values.sentinel.service.nodePorts.redis }}
