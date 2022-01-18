@@ -371,9 +371,9 @@ Find more information about how to deal with common errors related to Bitnami’
 
 ## Upgrading
 
-### To 15.0.0
+### To 16.0.0
 
-This major release updates the MariaDB subchart to it newest major, 10.0.0. Check [MariaDB Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#to-1000) for more information.
+This major release updates the MariaDB subchart to its newest major, 10.0.0. Check [MariaDB Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#to-1000) for more information.
 
 ### To 15.0.0
 
