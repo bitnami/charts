@@ -70,8 +70,8 @@ spec:
       {{- if .Values.master.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.master.tolerations "context" $) | nindent 8 }}
       {{- end }}
-      {{- if .Values.master.spreadConstraints }}
-      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.master.spreadConstraints "context" $) | nindent 8 }}
+      {{- if .Values.master.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.master.topologySpreadConstraints "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.master.shareProcessNamespace }}
       shareProcessNamespace: {{ .Values.master.shareProcessNamespace }}
@@ -130,7 +130,7 @@ spec:
               value: {{ ternary "yes" "no" .Values.tls.enabled | quote }}
             {{- if .Values.tls.enabled }}
             - name: REDIS_TLS_PORT
-              value: {{ .Values.master.containerPort | quote }}
+              value: {{ .Values.master.containerPorts.redis | quote }}
             - name:  REDIS_TLS_AUTH_CLIENTS
               value: {{ ternary "yes" "no" .Values.tls.authClients | quote }}
             - name:  REDIS_TLS_CERT_FILE
@@ -145,7 +145,7 @@ spec:
             {{- end }}
             {{- else }}
             - name: REDIS_PORT
-              value: {{ .Values.master.containerPort | quote }}
+              value: {{ .Values.master.containerPorts.redis | quote }}
             {{- end }}
             {{- if .Values.master.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.master.extraEnvVars "context" $) | nindent 12 }}
@@ -163,7 +163,7 @@ spec:
           {{- end }}
           ports:
             - name: redis
-              containerPort: {{ .Values.master.containerPort }}
+              containerPort: {{ .Values.master.containerPorts.redis }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.master.livenessProbe.enabled }}
           livenessProbe:
@@ -264,7 +264,7 @@ spec:
             {{- end }}
             {{- if .Values.tls.enabled }}
             - name: REDIS_ADDR
-              value: rediss://{{ .Values.metrics.redisTargetHost }}:{{ .Values.master.containerPort }}
+              value: rediss://{{ .Values.metrics.redisTargetHost }}:{{ .Values.master.containerPorts.redis }}
               {{- if .Values.tls.authClients }}
             - name: REDIS_EXPORTER_TLS_CLIENT_KEY_FILE
               value: {{ template "redis.tlsCertKey" . }}
