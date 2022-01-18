@@ -95,7 +95,7 @@ image:
 ## @param extraArgs Additional command line arguments to pass to kube-state-metrics
 ##
 extraArgs: {}
-## @param namespaces Comma-separated list of namespaces to be enabled. Defaults to all namespaces
+## @param namespaces Comma-separated list of namespaces to be enabled. Defaults to all namespaces. Evaluated as a template.
 ##
 namespaces: ""
 ## kube-state-metrics resources to be enabled
