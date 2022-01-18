@@ -40,7 +40,7 @@ To connect to your Solr cluster from outside the cluster, perform the following 
 
     export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
     export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "common.names.fullname" . }})
-    echo "Solr URL: ${NODE_IP}[${NODE_PORT}]"
+    echo "Solr URL: ${NODE_IP}:${NODE_PORT}"
 
 {{- else if contains "LoadBalancer" .Values.service.type }}
 
@@ -50,14 +50,14 @@ To connect to your Solr cluster from outside the cluster, perform the following 
         Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ include "common.names.fullname" . }}'
 
     export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
-    echo "Solr URL: ${SERVICE_IP}[{{ .Values.service.ports.http }}]"
+    echo "Solr URL: ${SERVICE_IP}:{{ .Values.service.ports.http }}"
 
 {{- else if contains "ClusterIP" .Values.service.type }}
 
 1. Create a port-forward to the Solr client port:
 
     kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "common.names.fullname" . }} {{ .Values.service.ports.http }}:{{ .Values.service.ports.http }} &
-    echo "Solr URL: 127.0.0.1[{{ .Values.service.ports.http }}]"
+    echo "Solr URL: 127.0.0.1:{{ .Values.service.ports.http }}"
 
 {{- end }}
 
