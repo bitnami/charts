@@ -51,13 +51,8 @@ spec:
       port: {{ .Values.sentinel.service.nodePorts.redis }}
       {{- else if eq .Values.sentinel.service.type "NodePort" }}
       port: {{ $redisport }}
-<<<<<<< HEAD
-      {{- else }}
-      port: {{ .Values.sentinel.service.port }}
-=======
       {{- else}}
       port: {{ .Values.sentinel.service.port.redis }}
->>>>>>> 5e98d807d ([bitnami/redis] Chart standardised)
       {{- end }}
       targetPort: {{ .Values.replica.containerPorts.redis }}
       {{- if and (or (eq .Values.sentinel.service.type "NodePort") (eq .Values.sentinel.service.type "LoadBalancer")) .Values.sentinel.service.nodePorts.redis }}
@@ -73,7 +68,7 @@ spec:
       {{- else if eq .Values.sentinel.service.type "NodePort" }}
       port:  {{ $sentinelport }}
       {{- else }}
-      port: {{ .Values.sentinel.service.sentinelPort }}
+      port: {{ .Values.sentinel.service.ports.sentinel }}
       {{- end }}
       targetPort: {{ .Values.sentinel.containerPorts.sentinel }}
       {{- if and (or (eq .Values.sentinel.service.type "NodePort") (eq .Values.sentinel.service.type "LoadBalancer")) .Values.sentinel.service.nodePorts.sentinel }}

@@ -34,7 +34,7 @@ spec:
   {{- end }}
   ports:
     - name: tcp-redis
-      port: {{ coalesce .Values.replica.service.ports.redis .Values.replica.service.port }}
+      port: {{ .Values.replica.service.ports.redis }}
       targetPort: redis
       {{- if and (or (eq .Values.replica.service.type "NodePort") (eq .Values.replica.service.type "LoadBalancer")) .Values.replica.service.nodePorts.redis}}
       nodePort: {{ .Values.replica.service.nodePorts.redis}}
