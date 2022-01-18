@@ -166,23 +166,14 @@ spec:
               containerPort: {{ .Values.master.containerPorts.redis }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.master.startupProbe.enabled }}
-          startupProbe:
-            initialDelaySeconds: {{ .Values.master.startupProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.master.startupProbe.periodSeconds }}
-            # One second longer than command timeout should prevent generation of zombie processes.
-            timeoutSeconds: {{ add1 .Values.master.startupProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.master.startupProbe.successThreshold }}
-            failureThreshold: {{ .Values.master.startupProbe.failureThreshold }}
-            exec:
-              command:
-                - sh
-                - -c
-                - /health/ping_liveness_local.sh {{ .Values.master.startupProbe.timeoutSeconds }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.master.startupProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: redis
           {{- else if .Values.master.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.master.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.master.livenessProbe.enabled }}
-          livenessProbe:
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.master.startupProbe "enabled") "context" $) | nindent 12 }}
             initialDelaySeconds: {{ .Values.master.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.master.livenessProbe.periodSeconds }}
             # One second longer than command timeout should prevent generation of zombie processes.
