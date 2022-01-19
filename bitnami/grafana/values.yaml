@@ -416,7 +416,7 @@ grafana:
   ##    imagePullPolicy: Always
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
-  initContainers: {}
+  initContainers: []
   ## @param grafana.extraVolumes Additional volumes for the Grafana pod
   ## Example:
   ## extraVolumes:
@@ -948,7 +948,7 @@ imageRenderer:
   ##    imagePullPolicy: Always
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
-  initContainers: {}
+  initContainers: []
   ## @param imageRenderer.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for %%MAIN_CONTAINER_NAME%% nodes
   ##
   extraEnvVarsCM: ""
