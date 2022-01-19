@@ -1261,7 +1261,7 @@ metrics:
     ##
     annotations:
       prometheus.io/scrape: 'true'
-      prometheus.io/port: '{{ coalesce .Values.metrics.service.ports.http .Values.metrics.service.httpPort }}'
+      prometheus.io/port: '{{ .Values.metrics.service.ports.http }}'
       prometheus.io/path: '/metrics/proxy'
     ## @param metrics.service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
     ## If "ClientIP", consecutive client requests will be directed to the same Pod

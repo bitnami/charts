@@ -1,3 +1,5 @@
+<!--- app-name: Prometheus Operator -->
+
 # kube-prometheus
 
 [kube-prometheus](https://github.com/prometheus-operator/kube-prometheus) collects Kubernetes manifests to provide easy to operate end-to-end Kubernetes cluster monitoring with Prometheus using the Prometheus Operator.

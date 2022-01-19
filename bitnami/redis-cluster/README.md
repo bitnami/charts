@@ -1,3 +1,5 @@
+<!--- app-name: Redis(TM) Cluster -->
+
 
 # Redis&trade; Cluster Chart packaged by Bitnami
 

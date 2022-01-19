@@ -1,3 +1,5 @@
+<!--- app-name: Grafana Operator -->
+
 # grafana-operator
 
 [Grafana Operator](https://github.com/integr8ly/grafana-operator) is an Operator which introduces Lifecycle Management for Grafana Dashboards and Plugins.
@@ -19,7 +21,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 ## Prerequisites
 
-- Kubernetes 1.16+
+- Kubernetes 1.19+
 - Helm 3.1.0
 
 ## Installing the Chart
@@ -194,6 +196,7 @@ For more information, refer to the [documentation on the differences between the
 | `grafana.resources.limits`                                  | The resources limits for the container                                                        | `{}`                     |
 | `grafana.resources.requests`                                | The requested resources for the container                                                     | `{}`                     |
 | `grafana.replicaCount`                                      | Specify the amount of replicas running                                                        | `1`                      |
+| `grafana.skipCreateAdminAccount`                            | Prevent the operator from creating an admin secret                                            | `false`                  |
 | `grafana.podAffinityPreset`                                 | Pod affinity preset                                                                           | `""`                     |
 | `grafana.podAntiAffinityPreset`                             | Pod anti-affinity preset                                                                      | `soft`                   |
 | `grafana.nodeAffinityPreset.type`                           | Set nodeAffinity preset type                                                                  | `""`                     |
