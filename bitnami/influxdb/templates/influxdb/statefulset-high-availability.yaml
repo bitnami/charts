@@ -1,10 +1,10 @@
 {{- if eq .Values.architecture "high-availability" }}
-apiVersion: apps/v1
+apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
   name: {{ include "common.names.fullname" . }}
-  labels:
-    {{- include "common.labels.standard" . | nindent 4 }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: influxdb
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -16,22 +16,27 @@ spec:
   serviceName: {{ include "common.names.fullname" . }}-headless
   podManagementPolicy: {{ .Values.influxdb.podManagementPolicy }}
   replicas: {{ .Values.influxdb.replicaCount }}
-  updateStrategy:
-    type: {{ .Values.influxdb.updateStrategy }}
-    {{- if (eq "OnDelete" .Values.influxdb.updateStrategy) }}
-    rollingUpdate: null
-    {{- end }}
+  {{- if .Values.influxdb.updateStrategy }}
+  updateStrategy: {{- toYaml .Values.influxdb.updateStrategy | nindent 4 }}
+  {{- end }}
   selector:
-    matchLabels:
-      {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: influxdb
   template:
     metadata:
-      labels:
-        {{ include "common.labels.standard" . | nindent 8 }}
+      {{- if .Values.influxdb.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.influxdb.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+      labels: {{ include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: influxdb
+        {{- if .Values.influxdb.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.influxdb.podLabels "context" $) | nindent 8 }}
+        {{- end }}
     spec:
       {{- include "influxdb.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.influxdb.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.influxdb.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.influxdb.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.influxdb.affinity "context" $) | nindent 8 }}
       {{- else }}
@@ -46,15 +51,21 @@ spec:
       {{- if .Values.influxdb.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.influxdb.tolerations "context" $) | nindent 8 }}
       {{- end }}
-      {{- if .Values.influxdb.securityContext.enabled }}
-      securityContext:
-        fsGroup: {{ .Values.influxdb.securityContext.fsGroup }}
+      {{- if .Values.influxdb.schedulerName }}
+      schedulerName: {{ .Values.influxdb.schedulerName }}
       {{- end }}
-      {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
+      {{- if .Values.influxdb.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.influxdb.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      priorityClassName: {{ .Values.influxdb.priorityClassName | quote }}
+      {{- if .Values.influxdb.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.influxdb.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
       {{- if .Values.serviceAccount.enabled }}
       serviceAccountName: {{ default (include "common.names.fullname" . ) .Values.serviceAccount.name }}
       {{- end }}
       initContainers:
+        {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
         - name: init-chmod-data
           image: {{ include "influxdb.volumePermissions.image" . }}
           imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
@@ -78,18 +89,30 @@ spec:
           volumeMounts:
             - name: data
               mountPath: /bitnami/influxdb
-      {{- end }}
+        {{- end }}
+        {{- if .Values.influxdb.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.influxdb.initContainers "context" $) | nindent 8 }}
+        {{- end }}
       containers:
         - name: influxdb
           image: {{ include "influxdb.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
-          {{- if .Values.influxdb.securityContext.enabled }}
-          securityContext:
-            runAsUser: {{ .Values.influxdb.securityContext.runAsUser }}
-          {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else }}
+          {{- if .Values.influxdb.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.influxdb.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.influxdb.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.influxdb.args "context" $) | nindent 12 }}
+          {{- end }}
+          {{- end }}
+          {{- if .Values.influxdb.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.influxdb.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.influxdb.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.influxdb.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           env:
             - name: BITNAMI_DEBUG
@@ -185,7 +208,16 @@ spec:
               value: {{ .Values.auth.user.bucket | quote }}
             {{- end }}
             {{- if .Values.influxdb.extraEnvVars }}
-            {{- tpl (toYaml .Values.influxdb.extraEnvVars) $ | nindent 12 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.influxdb.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.influxdb.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ .Values.influxdb.extraEnvVarsCM }}
+            {{- end }}
+            {{- if .Values.influxdb.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ .Values.influxdb.extraEnvVarsSecret }}
             {{- end }}
           ports:
             - name: http
@@ -195,6 +227,33 @@ spec:
               containerPort: {{ .Values.influxdb.containerPorts.rpc }}
               protocol: TCP
           {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.influxdb.startupProbe.enabled }}
+          {{- $startupTimeout := sub (int .Values.influxdb.startupProbe.timeoutSeconds) 1 }}
+          startupProbe: {{- omit .Values.influxdb.startupProbe "enabled" | toYaml | nindent 12 }}
+            exec:
+              command:
+                - bash
+                - -c
+                - |
+                  . /opt/bitnami/scripts/libinfluxdb.sh
+
+                  influxdb_env
+
+                  {{- if .Values.auth.enabled }}
+                  export INFLUX_USERNAME="$INFLUXDB_ADMIN_USER"
+                  export INFLUX_PASSWORD="$INFLUXDB_ADMIN_USER_PASSWORD"
+                  {{- end }}
+
+                  branch=$(influxdb_branch)
+
+                  if [[ "$branch" = "2" ]]; then
+                      timeout {{ $startupTimeout }}s influx --host http://$POD_IP:{{ .Values.influxdb.containerPorts.http }} ping
+                  else
+                      timeout {{ $startupTimeout }}s influx -host $POD_IP -port {{ .Values.influxdb.containerPorts.http }} -execute "SHOW DATABASES"
+                  fi
+          {{- else if .Values.influxdb.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.influxdb.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
           {{- if .Values.influxdb.livenessProbe.enabled }}
           {{- $livenessTimeout := sub (int .Values.influxdb.livenessProbe.timeoutSeconds) 1 }}
           livenessProbe: {{- omit .Values.influxdb.livenessProbe "enabled" | toYaml | nindent 12 }}
@@ -275,8 +334,11 @@ spec:
               mountPath: /bitnami/influxdb
             {{- end }}
           {{- if .Values.influxdb.extraVolumeMounts }}
-            {{- include "common.tplvalues.render" (dict "value" .Values.influxdb.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.influxdb.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
+        {{- if .Values.influxdb.sidecars }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.influxdb.sidecars "context" $) | trim | nindent 8 }}
+        {{- end }}
       volumes:
         {{- if or (.Files.Glob "files/conf/influxdb.conf") .Values.influxdb.configuration .Values.influxdb.existingConfiguration }}
         - name: influxdb-config
@@ -298,9 +360,9 @@ spec:
           secret:
             secretName: {{ include "influxdb.secretName" . }}
         {{- end }}
-      {{- if .Values.influxdb.extraVolumes }}
+        {{- if .Values.influxdb.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.influxdb.extraVolumes "context" $) | nindent 8 }}
-      {{- end }}
+        {{- end }}
   {{- if and .Values.persistence.enabled .Values.persistence.existingClaim }}
         - name: data
           persistentVolumeClaim:
@@ -312,6 +374,9 @@ spec:
   volumeClaimTemplates:
     - metadata:
         name: data
+        {{- if .Values.persistence.annotations }}
+        annotations: {{- include "common.tplvalues.render" (dict "value" .Values.persistence.annotations "context" $) | nindent 10 }}
+        {{- end }}
       spec:
         accessModes:
         {{- range .Values.persistence.accessModes }}
