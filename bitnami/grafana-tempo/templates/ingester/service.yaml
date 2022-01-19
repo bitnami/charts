@@ -19,6 +19,7 @@ metadata:
   {{- end }}
 spec:
   type: {{ .Values.ingester.service.type }}
+  sessionAffinity: {{ .Values.ingester.service.sessionAffinity }}
   {{- if .Values.ingester.service.clusterIP }}
   clusterIP: {{ .Values.ingester.service.clusterIP }}
   {{- end }}
@@ -33,7 +34,7 @@ spec:
   {{- end }}
   ports:
     - name: http
-      port: {{ .Values.ingester.service.port }}
+      port: {{ .Values.ingester.service.ports.http }}
       targetPort: http
       protocol: TCP
       {{- if (and (or (eq .Values.ingester.service.type "NodePort") (eq .Values.ingester.service.type "LoadBalancer")) (not (empty .Values.ingester.service.nodePorts.http))) }}
@@ -42,7 +43,7 @@ spec:
       nodePort: null
       {{- end }}
     - name: grpc
-      port: {{ .Values.ingester.service.grpcPort }}
+      port: {{ .Values.ingester.service.ports.grpc }}
       targetPort: grpc
       protocol: TCP
       {{- if (and (or (eq .Values.ingester.service.type "NodePort") (eq .Values.ingester.service.type "LoadBalancer")) (not (empty .Values.ingester.service.nodePorts.grpc))) }}
@@ -50,5 +51,8 @@ spec:
       {{- else if eq .Values.ingester.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
+    {{- if .Values.ingester.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.ingester.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: ingester
