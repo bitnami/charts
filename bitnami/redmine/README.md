@@ -66,6 +66,7 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
+
 ### Common parameters
 
 | Name                | Description                                        | Value                 |
@@ -78,10 +79,11 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 | `extraDeploy`       | Array of extra objects to deploy with the release  | `[]`                  |
 | `image.registry`    | Redmine image registry                             | `docker.io`           |
 | `image.repository`  | Redmine image repository                           | `bitnami/redmine`     |
-| `image.tag`         | Redmine image tag (immutable tags are recommended) | `4.2.3-debian-10-r36` |
+| `image.tag`         | Redmine image tag (immutable tags are recommended) | `4.2.3-debian-10-r88` |
 | `image.pullPolicy`  | Redmine image pull policy                          | `IfNotPresent`        |
 | `image.pullSecrets` | Redmine image pull secrets                         | `[]`                  |
 | `image.debug`       | Enable image debug mode                            | `false`               |
+
 
 ### Redmine Configuration parameters
 
@@ -105,6 +107,7 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 | `extraEnvVars`          | Array with extra environment variables to add to the Redmine container | `[]`               |
 | `extraEnvVarsCM`        | Name of existing ConfigMap containing extra env vars                   | `""`               |
 | `extraEnvVarsSecret`    | Name of existing Secret containing extra env vars                      | `""`               |
+
 
 ### Redmine deployment parameters
 
@@ -162,6 +165,7 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 | `customReadinessProbe`               | Custom readinessProbe that overrides the default one                                      | `{}`            |
 | `customStartupProbe`                 | Custom startupProbe that overrides the default one                                        | `{}`            |
 
+
 ### Traffic Exposure Parameters
 
 | Name                               | Description                                                                                                                      | Value                    |
@@ -188,6 +192,7 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 | `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
 | `ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
 
+
 ### Persistence Parameters
 
 | Name                                          | Description                                                                                     | Value   |
@@ -203,6 +208,7 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 | `volumePermissions.resources.requests`        | The requested resources for the init container                                                  | `{}`    |
 | `volumePermissions.securityContext.runAsUser` | Set init container's Security Context runAsUser                                                 | `0`     |
 
+
 ### Other Parameters
 
 | Name                                 | Description                                                    | Value   |
@@ -215,6 +221,7 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 | `autoscaling.maxReplicas`            | Maximum number of Redmine replicas                             | `11`    |
 | `autoscaling.targetCPU`              | Target CPU utilization percentage                              | `50`    |
 | `autoscaling.targetMemory`           | Target Memory utilization percentage                           | `50`    |
+
 
 ### Database Parameters
 
@@ -249,6 +256,7 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 | `externalDatabase.password`                 | External Database user password                                                                                                          | `""`              |
 | `externalDatabase.database`                 | External Database database name                                                                                                          | `bitnami_redmine` |
 | `externalDatabase.existingSecret`           | Use an existing secret for external db password. Must contain the keys `redmine-password` or `mariadb-password` depending on the DB type | `""`              |
+
 
 ### Mail Receiver/Cron Job Parameters
 
@@ -305,6 +313,7 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 | `mailReceiver.nodeSelector`                          | Node labels for pod assignment                                                                                                                | `{}`                      |
 | `mailReceiver.tolerations`                           | Tolerations for pod assignment                                                                                                                | `[]`                      |
 
+
 ### Custom Certificates parameters
 
 | Name                                                 | Description                                                        | Value                                    |
@@ -318,10 +327,11 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 | `certificates.customCA`                              | Defines a list of secrets to import into the container trust store | `[]`                                     |
 | `certificates.image.registry`                        | Redmine image registry                                             | `docker.io`                              |
 | `certificates.image.repository`                      | Redmine image repository                                           | `bitnami/bitnami-shell`                  |
-| `certificates.image.tag`                             | Redmine image tag (immutable tags are recommended)                 | `10-debian-10-r254`                      |
+| `certificates.image.tag`                             | Redmine image tag (immutable tags are recommended)                 | `10-debian-10-r309`                      |
 | `certificates.image.pullPolicy`                      | Redmine image pull policy                                          | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Redmine image pull secrets                                         | `[]`                                     |
 | `certificates.extraEnvVars`                          | Container sidecar extra environment variables (e.g. proxy)         | `[]`                                     |
+
 
 ### NetworkPolicy parameters
 
@@ -339,6 +349,7 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 | `networkPolicy.ingressRules.customRules`                      | Custom network policy ingress rule                                                                                          | `{}`    |
 | `networkPolicy.egressRules.denyConnectionsToExternal`         | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).                              | `false` |
 | `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                  | `{}`    |
+
 
 The above parameters map to the env variables defined in [bitnami/redmine](https://github.com/bitnami/bitnami-docker-redmine). For more information please refer to the [bitnami/redmine](https://github.com/bitnami/bitnami-docker-redmine) image documentation.
 

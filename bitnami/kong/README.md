@@ -56,6 +56,7 @@ To uninstall/delete the `my-release` deployment:
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
+
 ### Common parameters
 
 | Name                     | Description                                                                                              | Value           |
@@ -71,13 +72,14 @@ To uninstall/delete the `my-release` deployment:
 | `diagnosticMode.command` | Command to override all containers in the deployment                                                     | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                                        | `["infinity"]`  |
 
+
 ### Deployment parameters
 
 | Name                                    | Description                                                                                                                                                                      | Value                 |
 | --------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`                        | kong image registry                                                                                                                                                              | `docker.io`           |
 | `image.repository`                      | kong image repository                                                                                                                                                            | `bitnami/kong`        |
-| `image.tag`                             | kong image tag (immutable tags are recommended)                                                                                                                                  | `2.6.0-debian-10-r58` |
+| `image.tag`                             | kong image tag (immutable tags are recommended)                                                                                                                                  | `2.7.0-debian-10-r12` |
 | `image.pullPolicy`                      | kong image pull policy                                                                                                                                                           | `IfNotPresent`        |
 | `image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                                                                                 | `[]`                  |
 | `image.debug`                           | Enable image debug mode                                                                                                                                                          | `false`               |
@@ -111,6 +113,7 @@ To uninstall/delete the `my-release` deployment:
 | `pdb.enabled`                           | Deploy a pdb object for the Kong pod                                                                                                                                             | `false`               |
 | `pdb.maxUnavailable`                    | Maximum unavailable Kong replicas (expressed in percentage)                                                                                                                      | `50%`                 |
 
+
 ### Traffic Exposure Parameters
 
 | Name                            | Description                                                                                                                      | Value                    |
@@ -143,6 +146,7 @@ To uninstall/delete the `my-release` deployment:
 | `ingress.extraTls`              | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
 | `ingress.secrets`               | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
 
+
 ### Kong Container Parameters
 
 | Name                                      | Description                                                                                                                | Value  |
@@ -173,6 +177,7 @@ To uninstall/delete the `my-release` deployment:
 | `kong.resources.limits`                   | The resources limits for the container                                                                                     | `{}`   |
 | `kong.resources.requests`                 | The requested resources for the container                                                                                  | `{}`   |
 
+
 ### Kong Migration job Parameters
 
 | Name                           | Description                                                                                                                | Value |
@@ -188,6 +193,7 @@ To uninstall/delete the `my-release` deployment:
 | `migration.resources.limits`   | The resources limits for the container                                                                                     | `{}`  |
 | `migration.resources.requests` | The requested resources for the container                                                                                  | `{}`  |
 
+
 ### Kong Ingress Controller Container Parameters
 
 | Name                                                   | Description                                                                                                                                   | Value                             |
@@ -196,7 +202,7 @@ To uninstall/delete the `my-release` deployment:
 | `ingressController.customResourceDeletePolicy`         | Add custom CRD resource delete policy (for Helm 2 support)                                                                                    | `{}`                              |
 | `ingressController.image.registry`                     | Kong Ingress Controller image registry                                                                                                        | `docker.io`                       |
 | `ingressController.image.repository`                   | Kong Ingress Controller image name                                                                                                            | `bitnami/kong-ingress-controller` |
-| `ingressController.image.tag`                          | Kong Ingress Controller image tag                                                                                                             | `1.3.1-debian-10-r163`            |
+| `ingressController.image.tag`                          | Kong Ingress Controller image tag                                                                                                             | `2.1.1-debian-10-r0`              |
 | `ingressController.image.pullPolicy`                   | kong ingress controller image pull policy                                                                                                     | `IfNotPresent`                    |
 | `ingressController.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                                              | `[]`                              |
 | `ingressController.proxyReadyTimeout`                  | Maximum time (in seconds) to wait for the Kong container to be ready                                                                          | `300`                             |
@@ -226,6 +232,7 @@ To uninstall/delete the `my-release` deployment:
 | `ingressController.resources.limits`                   | The resources limits for the container                                                                                                        | `{}`                              |
 | `ingressController.resources.requests`                 | The requested resources for the container                                                                                                     | `{}`                              |
 
+
 ### PostgreSQL Parameters
 
 | Name                            | Description                                                                                                                    | Value   |
@@ -239,6 +246,7 @@ To uninstall/delete the `my-release` deployment:
 | `postgresql.postgresqlDatabase` | Database name to be used by Kong                                                                                               | `kong`  |
 | `postgresql.postgresqlUsername` | Username to be created by the PostgreSQL bundled chart                                                                         | `kong`  |
 
+
 ### Cassandra Parameters
 
 | Name                          | Description                                                                                                                   | Value   |
@@ -251,6 +259,7 @@ To uninstall/delete the `my-release` deployment:
 | `cassandra.external.user`     | Username of the external cassandra installation                                                                               | `""`    |
 | `cassandra.external.password` | Password of the external cassandra installation                                                                               | `""`    |
 | `cassandra.existingSecret`    | Use an existing secret file with the Cassandra password (can be used with the bundled chart or with an existing installation) | `""`    |
+
 
 ### Metrics Parameters
 
@@ -267,6 +276,7 @@ To uninstall/delete the `my-release` deployment:
 | `metrics.serviceMonitor.scrapeTimeout`  | Timeout after which the scrape is ended                                                                | `""`        |
 | `metrics.serviceMonitor.selector`       | Prometheus instance selector labels                                                                    | `{}`        |
 | `metrics.serviceMonitor.rbac.enabled`   | Whether to enable RBAC                                                                                 | `true`      |
+
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

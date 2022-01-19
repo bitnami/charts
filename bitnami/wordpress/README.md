@@ -77,14 +77,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### WordPress Image parameters
 
-| Name                | Description                                          | Value                 |
-| ------------------- | ---------------------------------------------------- | --------------------- |
-| `image.registry`    | WordPress image registry                             | `docker.io`           |
-| `image.repository`  | WordPress image repository                           | `bitnami/wordpress`   |
-| `image.tag`         | WordPress image tag (immutable tags are recommended) | `5.8.2-debian-10-r16` |
-| `image.pullPolicy`  | WordPress image pull policy                          | `IfNotPresent`        |
-| `image.pullSecrets` | WordPress image pull secrets                         | `[]`                  |
-| `image.debug`       | Enable image debug mode                              | `false`               |
+| Name                | Description                                          | Value                |
+| ------------------- | ---------------------------------------------------- | -------------------- |
+| `image.registry`    | WordPress image registry                             | `docker.io`          |
+| `image.repository`  | WordPress image repository                           | `bitnami/wordpress`  |
+| `image.tag`         | WordPress image tag (immutable tags are recommended) | `5.8.3-debian-10-r2` |
+| `image.pullPolicy`  | WordPress image pull policy                          | `IfNotPresent`       |
+| `image.pullSecrets` | WordPress image pull secrets                         | `[]`                 |
+| `image.debug`       | Enable image debug mode                              | `false`              |
 
 
 ### WordPress Configuration parameters
@@ -183,15 +183,15 @@ The command removes all the Kubernetes components associated with the chart and 
 | `readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                        | `5`             |
 | `readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                      | `6`             |
 | `readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                      | `1`             |
-| `startupProbe.enabled`                  | Enable startupProbe                                                                       | `true`          |
+| `startupProbe.enabled`                  | Enable startupProbe                                                                       | `false`         |
 | `startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                    | `30`            |
 | `startupProbe.periodSeconds`            | Period seconds for startupProbe                                                           | `10`            |
 | `startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                          | `5`             |
 | `startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                        | `6`             |
-| `starupProbe.successThreshold`          | Success threshold for startupProbe                                                        | `1`             |
+| `startupProbe.successThreshold`         | Success threshold for startupProbe                                                        | `1`             |
 | `customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                       | `{}`            |
 | `customReadinessProbe`                  | Custom readinessProbe that overrides the default one                                      | `{}`            |
-| `customStartupProbe`                    | Custom startupProbe that overrides the default one                                      | `{}`            |
+| `customStartupProbe`                    | Custom startupProbe that overrides the default one                                        | `{}`            |
 
 
 ### Traffic Exposure Parameters
@@ -238,7 +238,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                   | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`            | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`          | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r263`     |
+| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r306`     |
 | `volumePermissions.image.pullPolicy`          | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`         | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`          | The resources limits for the init container                                                     | `{}`                    |
@@ -267,7 +267,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                         | Start a sidecar prometheus exporter to expose metrics                        | `false`                   |
 | `metrics.image.registry`                  | Apache Exporter image registry                                               | `docker.io`               |
 | `metrics.image.repository`                | Apache Exporter image repository                                             | `bitnami/apache-exporter` |
-| `metrics.image.tag`                       | Apache Exporter image tag (immutable tags are recommended)                   | `0.10.1-debian-10-r66`    |
+| `metrics.image.tag`                       | Apache Exporter image tag (immutable tags are recommended)                   | `0.11.0-debian-10-r24`    |
 | `metrics.image.pullPolicy`                | Apache Exporter image pull policy                                            | `IfNotPresent`            |
 | `metrics.image.pullSecrets`               | Apache Exporter image pull secrets                                           | `[]`                      |
 | `metrics.resources.limits`                | The resources limits for the Prometheus exporter container                   | `{}`                      |
