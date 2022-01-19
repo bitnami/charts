@@ -1,5 +1,0 @@
-# Test values file for generating all of the yaml and check that
-# the rendering is correct
-
-metrics:
-  enabled: true
