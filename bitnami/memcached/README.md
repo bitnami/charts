@@ -74,7 +74,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------- | ----------------------------------------------------------------------------------------------- | ---------------------------- |
 | `image.registry`                              | Memcached image registry                                                                        | `docker.io`                  |
 | `image.repository`                            | Memcached image repository                                                                      | `bitnami/memcached`          |
-| `image.tag`                                   | Memcached image tag (immutable tags are recommended)                                            | `1.6.12-debian-10-r50`       |
+| `image.tag`                                   | Memcached image tag (immutable tags are recommended)                                            | `1.6.13-debian-10-r0`        |
 | `image.pullPolicy`                            | Memcached image pull policy                                                                     | `IfNotPresent`               |
 | `image.pullSecrets`                           | Specify docker-registry secret names as an array                                                | `[]`                         |
 | `image.debug`                                 | Enable image debug mode                                                                         | `false`                      |
@@ -131,7 +131,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                             | Start a side-car prometheus exporter                                                            | `false`                      |
 | `metrics.image.registry`                      | Memcached exporter image registry                                                               | `docker.io`                  |
 | `metrics.image.repository`                    | Memcached exporter image repository                                                             | `bitnami/memcached-exporter` |
-| `metrics.image.tag`                           | Memcached exporter image tag (immutable tags are recommended)                                   | `0.9.0-debian-10-r221`       |
+| `metrics.image.tag`                           | Memcached exporter image tag (immutable tags are recommended)                                   | `0.9.0-debian-10-r268`       |
 | `metrics.image.pullPolicy`                    | Image pull policy                                                                               | `IfNotPresent`               |
 | `metrics.image.pullSecrets`                   | Specify docker-registry secret names as an array                                                | `[]`                         |
 | `metrics.podAnnotations`                      | Metrics exporter pod Annotation and Labels                                                      | `{}`                         |
@@ -162,7 +162,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.relabelings`          | Metrics relabelings to add to the scrape endpoint, applied before scraping                      | `[]`                         |
 | `volumePermissions.image.registry`            | Init container volume-permissions image registry                                                | `docker.io`                  |
 | `volumePermissions.image.repository`          | Init container volume-permissions image repository                                              | `bitnami/bitnami-shell`      |
-| `volumePermissions.image.tag`                 | Init container volume-permissions image tag (immutable tags are recommended)                    | `10-debian-10-r260`          |
+| `volumePermissions.image.tag`                 | Init container volume-permissions image tag (immutable tags are recommended)                    | `10-debian-10-r307`          |
 | `volumePermissions.image.pullPolicy`          | Init container volume-permissions image pull policy                                             | `IfNotPresent`               |
 | `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                                | `[]`                         |
 | `volumePermissions.resources.limits`          | Init container volume-permissions resource limits                                               | `{}`                         |

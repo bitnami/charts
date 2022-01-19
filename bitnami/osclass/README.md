@@ -73,14 +73,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Osclass Image parameters
 
-| Name                | Description                                        | Value                 |
-| ------------------- | -------------------------------------------------- | --------------------- |
-| `image.registry`    | Osclass image registry                             | `docker.io`           |
-| `image.repository`  | Osclass image repository                           | `bitnami/osclass`     |
-| `image.tag`         | Osclass image tag (immutable tags are recommended) | `8.0.0-debian-10-r25` |
-| `image.pullPolicy`  | Osclass image pull policy                          | `IfNotPresent`        |
-| `image.pullSecrets` | Osclass image pull secrets                         | `[]`                  |
-| `image.debug`       | Enable Bitnami debug mode in Osclass image         | `false`               |
+| Name                | Description                                        | Value                |
+| ------------------- | -------------------------------------------------- | -------------------- |
+| `image.registry`    | Osclass image registry                             | `docker.io`          |
+| `image.repository`  | Osclass image repository                           | `bitnami/osclass`    |
+| `image.tag`         | Osclass image tag (immutable tags are recommended) | `8.0.1-debian-10-r6` |
+| `image.pullPolicy`  | Osclass image pull policy                          | `IfNotPresent`       |
+| `image.pullSecrets` | Osclass image pull secrets                         | `[]`                 |
+| `image.debug`       | Enable Bitnami debug mode in Osclass image         | `false`              |
 
 
 ### Osclass Configuration parameters
@@ -149,7 +149,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `certificates.extraEnvVarsSecret`                    | Secret with extra environment variables                                                   | `""`                                     |
 | `certificates.image.registry`                        | Apache Exporter image registry                                                            | `docker.io`                              |
 | `certificates.image.repository`                      | Apache Exporter image repository                                                          | `bitnami/bitnami-shell`                  |
-| `certificates.image.tag`                             | Apache Exporter image tag (immutable tags are recommended)                                | `10-debian-10-r282`                      |
+| `certificates.image.tag`                             | Apache Exporter image tag (immutable tags are recommended)                                | `10-debian-10-r305`                      |
 | `certificates.image.pullPolicy`                      | Apache Exporter image pull policy                                                         | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Apache Exporter image pull secrets                                                        | `[]`                                     |
 | `lifecycleHooks`                                     | lifecycleHooks for the container to automate configuration before or after startup.       | `{}`                                     |
@@ -245,7 +245,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`         | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`       | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`              | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r282`     |
+| `volumePermissions.image.tag`              | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r305`     |
 | `volumePermissions.image.pullPolicy`       | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`      | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`       | The resources limits for the init container                                                     | `{}`                    |
@@ -273,7 +273,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                          | Start a sidecar prometheus exporter to expose metrics                             | `false`                   |
 | `metrics.image.registry`                   | Apache Exporter image registry                                                    | `docker.io`               |
 | `metrics.image.repository`                 | Apache Exporter image repository                                                  | `bitnami/apache-exporter` |
-| `metrics.image.tag`                        | Apache Exporter image tag (immutable tags are recommended)                        | `0.10.1-debian-10-r84`    |
+| `metrics.image.tag`                        | Apache Exporter image tag (immutable tags are recommended)                        | `0.11.0-debian-10-r23`    |
 | `metrics.image.pullPolicy`                 | Apache Exporter image pull policy                                                 | `IfNotPresent`            |
 | `metrics.image.pullSecrets`                | Apache Exporter image pull secrets                                                | `[]`                      |
 | `metrics.resources.limits`                 | The resources limits for the Prometheus exporter container                        | `{}`                      |

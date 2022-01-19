@@ -112,7 +112,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ------------------------------------------------------- | ---------------------- |
 | `image.registry`    | OAuth2 Proxy image registry                             | `docker.io`            |
 | `image.repository`  | OAuth2 Proxy image repository                           | `bitnami/oauth2-proxy` |
-| `image.tag`         | OAuth2 Proxy image tag (immutable tags are recommended) | `7.2.1-debian-10-r0`   |
+| `image.tag`         | OAuth2 Proxy image tag (immutable tags are recommended) | `7.2.1-debian-10-r26`  |
 | `image.pullPolicy`  | OAuth2 Proxy image pull policy                          | `IfNotPresent`         |
 | `image.pullSecrets` | OAuth2 Proxy image pull secrets                         | `[]`                   |
 
