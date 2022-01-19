@@ -447,9 +447,6 @@ persistence:
   ## @param persistence.enabled Enable Memcached data persistence using PVC. If false, use emptyDir
   ##
   enabled: false
-  ## @param persistence.existingClaim Name of an existing PVC to use (only when deploying a single replica)
-  ##
-  existingClaim: ""
   ## @param persistence.storageClass PVC Storage Class for Memcached data volume
   ## If defined, storageClassName: <storageClass>
   ## If set to "-", storageClassName: "", which disables dynamic provisioning
@@ -658,9 +655,9 @@ metrics:
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ##
     scrapeTimeout: ""
-    ## @param metrics.serviceMonitor.additionalLabels Additional labels that can be used so ServiceMonitor will be discovered by Prometheus
+    ## @param metrics.serviceMonitor.labels Additional labels that can be used so ServiceMonitor will be discovered by Prometheus
     ##
-    additionalLabels: {}
+    labels: {}
     ## @param metrics.serviceMonitor.selector Prometheus instance selector labels
     ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
     ##
