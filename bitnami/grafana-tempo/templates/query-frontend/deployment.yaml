@@ -192,24 +192,22 @@ spec:
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.queryFrontend.query.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.queryFrontend.query.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /ready
-              port: {{ .Values.queryFrontend.query.containerPorts.jaegerUI }}
+            tcpSocket:
+              port: jaeger-ui
           {{- else if .Values.queryFrontend.query.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.query.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.queryFrontend.query.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.queryFrontend.query.readinessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /ready
-              port: {{ .Values.queryFrontend.query.containerPorts.jaegerUI }}
+            tcpSocket:
+              port: jaeger-ui
           {{- else if .Values.queryFrontend.query.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.query.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.queryFrontend.query.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.queryFrontend.query.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
-              port: http
+              port: jaeger-ui
           {{- else if .Values.queryFrontend.query.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.query.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}

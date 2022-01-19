@@ -110,7 +110,7 @@ spec:
           {{- if .Values.vulture.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.vulture.livenessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
-              path: /ready
+              path: /metrics
               port: {{ .Values.vulture.containerPorts.http }}
           {{- else if .Values.vulture.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.vulture.customLivenessProbe "context" $) | nindent 12 }}
@@ -118,7 +118,7 @@ spec:
           {{- if .Values.vulture.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.vulture.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
-              path: /ready
+              path: /metrics
               port: {{ .Values.vulture.containerPorts.http }}
           {{- else if .Values.vulture.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.vulture.customReadinessProbe "context" $) | nindent 12 }}
