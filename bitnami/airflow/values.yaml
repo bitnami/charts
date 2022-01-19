@@ -603,6 +603,9 @@ worker:
   ## @param worker.extraVolumes Add extra volumes
   ##
   extraVolumes: []
+  ## @param worker.extraVolumeClaimTemplates Add extra volumes claim templates for worker statefule set
+  ##
+  extraVolumeClaimTemplates: []
   ## @param worker.extraEnvVars Add extra environment variables
   ##
   extraEnvVars: []
