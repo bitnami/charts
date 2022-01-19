@@ -22,7 +22,7 @@ spec:
   type: ClusterIP
   ports:
     - name: metrics
-      port: {{ .Values.metrics.service.port }}
+      port: {{ .Values.metrics.service.ports.metrics }}
       protocol: TCP
       targetPort: metrics
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
