@@ -69,7 +69,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/influxdb
-  tag: 2.1.1-debian-10-r47
+  tag: 2.1.1-debian-10-r48
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -186,24 +186,9 @@ influxdb:
   ## @param influxdb.initdbScriptsSecret Secret with initdb scripts that contain sensitive information (Note: can be used with `initdbScriptsConfigMap` or `initdbScripts`)
   ##
   initdbScriptsSecret: ""
-  ## @param influxdb.extraEnvVars Array containing extra env vars to configure InfluxDB&trade;
-  ## For example:
-  ## extraEnvVars:
-  ##  - name: INFLUXDB_DATA_QUERY_LOG_ENABLED
-  ##    value: "true"
-  ##
-  extraEnvVars: []
   ## @param influxdb.replicaCount The number of InfluxDB&trade; replicas to deploy
   ##
   replicaCount: 1
-  ## @param influxdb.updateStrategy Update strategy, can be set to RollingUpdate or OnDelete by default.
-  ## ref: https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#updating-statefulsets
-  ##
-  updateStrategy: RollingUpdate
-  ## @param influxdb.podManagementPolicy Pod Management Policy [`OrderedReady` or `Parallel`]
-  ## ref: https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#parallel-pod-management
-  ##
-  podManagementPolicy: OrderedReady
   ## @param influxdb.podAffinityPreset InfluxDB&trade; Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
@@ -243,22 +228,61 @@ influxdb:
   ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-  ## @param influxdb.extraVolumes Array of extra volumes to be added to the deployment (evaluated as template). Requires setting extraVolumeMounts
+  ## @param influxdb.podAnnotations Annotations for InfluxDB&trade; pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
-  extraVolumes: []
-  ## @param influxdb.extraVolumeMounts Array of extra volume mounts to be added to the container (evaluated as template). Normally used with extraVolumes.
+  podAnnotations: {}
+  ## @param influxdb.podLabels Extra labels for InfluxDB&trade; pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
-  extraVolumeMounts: []
-  ## K8s Security Context for InfluxDB&trade; pods
-  ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
-  ## @param influxdb.securityContext.enabled Enable security context for InfluxDB&trade;
-  ## @param influxdb.securityContext.fsGroup Group ID for the InfluxDB&trade; filesystem
-  ## @param influxdb.securityContext.runAsUser User ID for the InfluxDB&trade; container
+  podLabels: {}
+  ## @param influxdb.hostAliases InfluxDB&trade; pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
-  securityContext:
+  hostAliases: []
+  ## @param influxdb.updateStrategy.type InfluxDB&trade; statefulset/deployment strategy type
+  ## Statefulset ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ## Deployment ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+  ##
+  updateStrategy:
+    ## StrategyType
+    ## Can be set to RollingUpdate or OnDelete
+    ##
+    type: RollingUpdate
+  ## @param influxdb.priorityClassName InfluxDB&trade; pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param influxdb.schedulerName Name of the k8s scheduler (other than default)
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param influxdb.topologySpreadConstraints Topology Spread Constraints for pod assignment
+  ## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+  ## The value is evaluated as a template
+  ##
+  topologySpreadConstraints: []
+  ## @param influxdb.podManagementPolicy podManagementPolicy to manage scaling operation of InfluxDB&trade; pods
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
+  ##
+  podManagementPolicy: OrderedReady
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param influxdb.podSecurityContext.enabled Enabled InfluxDB&trade; pods' Security Context
+  ## @param influxdb.podSecurityContext.fsGroup Set InfluxDB&trade; pod's Security Context fsGroup
+  ##
+  podSecurityContext:
     enabled: true
     fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param influxdb.containerSecurityContext.enabled Enabled InfluxDB&trade; containers' Security Context
+  ## @param influxdb.containerSecurityContext.runAsUser Set InfluxDB&trade; containers' Security Context runAsUser
+  ## @param influxdb.containerSecurityContext.runAsNonRoot Set Controller container's Security Context runAsNonRoot
+  ##
+  containerSecurityContext:
+    enabled: true
     runAsUser: 1001
+    runAsNonRoot: true
   ## InfluxDB&trade; pods' resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -279,8 +303,57 @@ influxdb:
     ##    cpu: 100m
     ##    memory: 128Mi
     requests: {}
-  ## InfluxDB&trade; pods' liveness probe
-  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ## @param influxdb.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param influxdb.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param influxdb.lifecycleHooks for the InfluxDB&trade; container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param influxdb.extraEnvVars Array containing extra env vars to configure InfluxDB&trade;
+  ## For example:
+  ## extraEnvVars:
+  ##  - name: INFLUXDB_DATA_QUERY_LOG_ENABLED
+  ##    value: "true"
+  ##
+  extraEnvVars: []
+  ## @param influxdb.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for InfluxDB&trade; nodes
+  ##
+  extraEnvVarsCM: ""
+  ## @param influxdb.extraEnvVarsSecret Name of existing Secret containing extra env vars for InfluxDB&trade; nodes
+  ##
+  extraEnvVarsSecret: ""
+  ## @param influxdb.extraVolumes Array of extra volumes to be added to the deployment (evaluated as template). Requires setting extraVolumeMounts
+  ##
+  extraVolumes: []
+  ## @param influxdb.extraVolumeMounts Array of extra volume mounts to be added to the container (evaluated as template). Normally used with extraVolumes.
+  ##
+  extraVolumeMounts: []
+  ## @param influxdb.containerPorts.http InfluxDB&trade; container HTTP port
+  ## @param influxdb.containerPorts.rpc InfluxDB&trade; container RPC port
+  ##
+  containerPorts:
+    http: 8086
+    rpc: 8088
+
+  ## Configure extra options for InfluxDB&trade; containers' liveness, readiness and startup probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+  ## @param influxdb.startupProbe.enabled Enable startupProbe
+  ## @param influxdb.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param influxdb.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param influxdb.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param influxdb.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param influxdb.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 180
+    periodSeconds: 45
+    timeoutSeconds: 30
+    successThreshold: 1
+    failureThreshold: 6
   ## @param influxdb.livenessProbe.enabled Enable livenessProbe
   ## @param influxdb.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
   ## @param influxdb.livenessProbe.periodSeconds Period seconds for livenessProbe
@@ -295,8 +368,6 @@ influxdb:
     timeoutSeconds: 30
     successThreshold: 1
     failureThreshold: 6
-  ## InfluxDB&trade; pods' readiness probe
-  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ## @param influxdb.readinessProbe.enabled Enable readinessProbe
   ## @param influxdb.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
   ## @param influxdb.readinessProbe.periodSeconds Period seconds for readinessProbe
@@ -311,29 +382,49 @@ influxdb:
     timeoutSeconds: 30
     successThreshold: 1
     failureThreshold: 6
+  ## @param influxdb.customStartupProbe Override default startup probe
+  ##
+  customStartupProbe: {}
   ## @param influxdb.customLivenessProbe Override default liveness probe
   ##
   customLivenessProbe: {}
   ## @param influxdb.customReadinessProbe Override default readiness probe
   ##
   customReadinessProbe: {}
-  ## @param influxdb.containerPorts [object] Container ports
+  ## @param influxdb.sidecars Add additional sidecar containers to the InfluxDB&trade; pod(s)
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
   ##
-  containerPorts:
-    http: 8086
-    rpc: 8088
+  sidecars: []
+  ## @param influxdb.initContainers Add additional init containers to the InfluxDB&trade; pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+
   ## Service parameters
   ##
   service:
     ## @param influxdb.service.type Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`)
     ##
     type: ClusterIP
-    ## @param influxdb.service.port InfluxDB&trade; HTTP port
+    ## @param influxdb.service.ports.http InfluxDB&trade; HTTP port
+    ## @param influxdb.service.ports.rpc InfluxDB&trade; RPC port
     ##
-    port: 8086
-    ## @param influxdb.service.rpcPort InfluxDB&trade; RPC port
-    ##
-    rpcPort: 8088
+    ports:
+      http: 8086
+      rpc: 8088
     ## @param influxdb.service.nodePorts [object] Specify the nodePort(s) value for the LoadBalancer and NodePort service types.
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     ##
@@ -356,12 +447,21 @@ influxdb:
     ## clusterIP: None
     ##
     clusterIP: ""
+    ## @param influxdb.service.externalTrafficPolicy InfluxDB&trade; service external traffic policy
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param influxdb.service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
+    ##
+    extraPorts: []
     ## @param influxdb.service.annotations Annotations for InfluxDB&trade; service
     ##
     annotations: {}
-    ## @param influxdb.service.sessionAffinity Session affinity for the InfluxDB&trade; service
-    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#proxy-mode-userspace
-    sessionAffinity: ""
+    ## @param influxdb.service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+    ## If "ClientIP", consecutive client requests will be directed to the same Pod
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+    ##
+    sessionAffinity: None
     ## @param influxdb.service.sessionAffinityConfig Additional settings for the sessionAffinity
     ## sessionAffinityConfig:
     ##   clientIP:
@@ -424,10 +524,29 @@ relay:
   ## @param relay.replicaCount The number of InfluxDB Relay&trade; replicas to deploy
   ##
   replicaCount: 1
-  ## @param relay.updateStrategy Update strategy, can be set to RollingUpdate or OnDelete by default.
-  ## ref: https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#updating-statefulsets
+  ## @param relay.updateStrategy.type InfluxDB Relay&trade; deployment strategy type.
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+  ## e.g:
+  ## updateStrategy:
+  ##  type: RollingUpdate
+  ##  rollingUpdate:
+  ##    maxSurge: 25%
+  ##    maxUnavailable: 25%
   ##
-  updateStrategy: RollingUpdate
+  updateStrategy:
+    type: RollingUpdate
+  ## @param relay.podAnnotations Annotations for InfluxDB Relay&trade; pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param relay.podLabels Extra labels for InfluxDB Relay&trade; pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param relay.hostAliases InfluxDB Relay&trade; pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
   ## @param relay.podAffinityPreset InfluxDB Relay&trade; Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
@@ -467,22 +586,36 @@ relay:
   ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-  ## @param relay.extraVolumes Array of extra volumes to be added to the deployment (evaluated as template). Requires setting extraVolumeMounts
+  ## @param relay.priorityClassName InfluxDB Relay&trade; pods' priorityClassName
   ##
-  extraVolumes: []
-  ## @param relay.extraVolumeMounts Array of extra volume mounts to be added to the container (evaluated as template). Normally used with extraVolumes.
+  priorityClassName: ""
+  ## @param relay.schedulerName Name of the k8s scheduler (other than default)
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
-  extraVolumeMounts: []
-  ## K8s Security Context for InfluxDB&trade; pods
-  ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
-  ## @param relay.securityContext.enabled Enable security context for InfluxDB Relay&trade;
-  ## @param relay.securityContext.fsGroup Group ID for the InfluxDB Relay&trade; filesystem
-  ## @param relay.securityContext.runAsUser User ID for the InfluxDB Relay&trade; container
+  schedulerName: ""
+  ## @param relay.topologySpreadConstraints Topology Spread Constraints for pod assignment
+  ## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+  ## The value is evaluated as a template
   ##
-  securityContext:
+  topologySpreadConstraints: []
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param relay.podSecurityContext.enabled Enabled InfluxDB Relay&trade; pods' Security Context
+  ## @param relay.podSecurityContext.fsGroup Set InfluxDB Relay&trade; pod's Security Context fsGroup
+  ##
+  podSecurityContext:
     enabled: true
     fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param relay.containerSecurityContext.enabled Enabled InfluxDB Relay&trade; containers' Security Context
+  ## @param relay.containerSecurityContext.runAsUser Set InfluxDB Relay&trade; containers' Security Context runAsUser
+  ## @param relay.containerSecurityContext.runAsNonRoot Set Controller container's Security Context runAsNonRoot
+  ##
+  containerSecurityContext:
+    enabled: true
     runAsUser: 1001
+    runAsNonRoot: true
   ## InfluxDB Relay&trade; pods' resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -503,8 +636,51 @@ relay:
     ##    cpu: 100m
     ##    memory: 128Mi
     requests: {}
-  ## InfluxDB Relay&trade; pods' liveness probe
-  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ## @param relay.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param relay.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param relay.lifecycleHooks for the InfluxDB Relay&trade; container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param relay.extraEnvVars Array containing extra env vars to configure InfluxDB Relay&trade;
+  ## For example:
+  ## extraEnvVars:
+  ##  - name: INFLUXDB_DATA_QUERY_LOG_ENABLED
+  ##    value: "true"
+  ##
+  extraEnvVars: []
+  ## @param relay.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for InfluxDB Relay&trade; nodes
+  ##
+  extraEnvVarsCM: ""
+  ## @param relay.extraEnvVarsSecret Name of existing Secret containing extra env vars for InfluxDB Relay&trade; nodes
+  ##
+  extraEnvVarsSecret: ""
+  ## @param relay.extraVolumes Array of extra volumes to be added to the deployment (evaluated as template). Requires setting extraVolumeMounts
+  ##
+  extraVolumes: []
+  ## @param relay.extraVolumeMounts Array of extra volume mounts to be added to the container (evaluated as template). Normally used with extraVolumes.
+  ##
+  extraVolumeMounts: []
+
+  ## Configure extra options for InfluxDB Relay&trade; containers' liveness, readiness and startup probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+  ## @param relay.startupProbe.enabled Enable startupProbe
+  ## @param relay.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param relay.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param relay.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param relay.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param relay.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 6
   ## @param relay.livenessProbe.enabled Enable livenessProbe
   ## @param relay.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
   ## @param relay.livenessProbe.periodSeconds Period seconds for livenessProbe
@@ -519,8 +695,6 @@ relay:
     timeoutSeconds: 5
     successThreshold: 1
     failureThreshold: 6
-  ## InfluxDB Relay&trade; pods' readiness probe
-  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ## @param relay.readinessProbe.enabled Enable readinessProbe
   ## @param relay.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
   ## @param relay.readinessProbe.periodSeconds Period seconds for readinessProbe
@@ -535,6 +709,9 @@ relay:
     timeoutSeconds: 5
     successThreshold: 1
     failureThreshold: 6
+  ## @param relay.customStartupProbe Override default startup probe
+  ##
+  customStartupProbe: {}
   ## @param relay.customLivenessProbe Override default liveness probe
   ##
   customLivenessProbe: {}
@@ -545,19 +722,42 @@ relay:
   ##
   containerPorts:
     http: 9096
+  ## @param relay.sidecars Add additional sidecar containers to the InfluxDB Relay&trade; pod(s)
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param relay.initContainers Add additional init containers to the InfluxDB Relay&trade; pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
   ## Service parameters
   ##
   service:
     ## @param relay.service.type Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`)
     ##
     type: ClusterIP
-    ## @param relay.service.port InfluxDB Relay&trade; HTTP port
+    ## @param relay.service.ports.http InfluxDB Relay&trade; HTTP port
     ##
-    port: 9096
-    ## @param relay.service.nodePort Kubernetes HTTP node port
+    ports:
+      http: 9096
+    ## @param relay.service.nodePorts.http Kubernetes HTTP node port
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     ##
-    nodePort: ""
+    nodePorts:
+      http: ""
     ## @param relay.service.loadBalancerIP loadBalancerIP if service type is `LoadBalancer`
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
@@ -577,6 +777,24 @@ relay:
     ## @param relay.service.annotations Annotations for InfluxDB Relay&trade; service
     ##
     annotations: {}
+    ## @param relay.service.externalTrafficPolicy InfluxDB Relay&trade; service external traffic policy
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param relay.service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
+    ##
+    extraPorts: []
+    ## @param relay.service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+    ## If "ClientIP", consecutive client requests will be directed to the same mongos Pod
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+    ##
+    sessionAffinity: None
+    ## @param relay.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
 
 ## @section InfluxDB Collectd&trade; parameters
 
@@ -613,10 +831,28 @@ collectd:
     ## clusterIP: None
     ##
     clusterIP: ""
+    ## @param collectd.service.externalTrafficPolicy InfluxDB Collectd&trade; service external traffic policy
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param collectd.service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
+    ##
+    extraPorts: []
     ## @param collectd.service.annotations Annotations for InfluxDB Collectd&trade; service
     ##   metallb.universe.tf/allow-shared-ip: "true"
     ##
     annotations: {}
+    ## @param collectd.service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+    ## If "ClientIP", consecutive client requests will be directed to the same mongos Pod
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+    ##
+    sessionAffinity: None
+    ## @param collectd.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
 
 ## @section Exposing parameters
 
@@ -700,6 +936,11 @@ ingress:
   ##   certificate:
   ##
   secrets: []
+  ## @param ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+  ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+  ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+  ##
+  ingressClassName: ""
 
 ## @section Metrics parameters
 
@@ -741,8 +982,27 @@ metrics:
     ##
     annotations:
       prometheus.io/scrape: "true"
-      prometheus.io/port: "{{ .Values.influxdb.service.port }}"
+      prometheus.io/port: "{{ .Values.metrics.service.port }}"
       prometheus.io/path: "/metrics"
+    ## @param metrics.service.externalTrafficPolicy Service external traffic policy
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param metrics.service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
+    ##
+    extraPorts: []
+    ## @param metrics.service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+    ## If "ClientIP", consecutive client requests will be directed to the same mongos Pod
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+    ##
+    sessionAffinity: None
+    ## @param metrics.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
+
   ## Prometheus Operator ServiceMonitor configuration
   ##
   serviceMonitor:
@@ -766,6 +1026,14 @@ metrics:
     ## scrapeTimeout: 10s
     ##
     scrapeTimeout: ""
+    ## @param metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+    ##
+    relabelings: []
+    ## @param metrics.serviceMonitor.metricRelabelings MetricRelabelConfigs to apply to samples before ingestion
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+    ##
+    metricRelabelings: []
     ## @param metrics.serviceMonitor.selector Prometheus instance selector labels
     ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
     ## e.g:
@@ -773,6 +1041,9 @@ metrics:
     ##   prometheus: my-prometheus
     ##
     selector: {}
+    ## @param metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
+    ##
+    honorLabels: false
 ## NetworkPolicy parameters
 ##
 networkPolicy:
@@ -810,6 +1081,9 @@ persistence:
   ## @param persistence.size Size of data volume
   ##
   size: 8Gi
+  ## @param persistence.annotations Persistent Volume Claim annotations
+  ##
+  annotations: {}
 
 ## Pod Service Account
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
