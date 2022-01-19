@@ -676,7 +676,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.namespace`         | Namespace for the ServiceMonitor Resource (defaults to the Release Namespace)         | `""`    |
 | `metrics.serviceMonitor.interval`          | Interval at which metrics should be scraped.                                          | `""`    |
 | `metrics.serviceMonitor.scrapeTimeout`     | Timeout after which the scrape is ended                                               | `""`    |
-| `metrics.serviceMonitor.additionalLabels`  | Additional labels that can be used so ServiceMonitor will be discovered by Prometheus | `{}`    |
+| `metrics.serviceMonitor.labels`            | Additional labels that can be used so ServiceMonitor will be discovered by Prometheus | `{}`    |
 | `metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                                   | `{}`    |
 | `metrics.serviceMonitor.relabelings`       | RelabelConfigs to apply to samples before scraping                                    | `[]`    |
 | `metrics.serviceMonitor.metricRelabelings` | MetricRelabelConfigs to apply to samples before ingestion                             | `[]`    |
