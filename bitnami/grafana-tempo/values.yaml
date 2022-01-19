@@ -1543,7 +1543,7 @@ queryFrontend:
     ## @param queryFrontend.query.configuration [string] Query sidecar configuration
     ##
     configuration: |
-      backend: 127.0.0.1:{{ .Values.tempo.containerPort }}
+      backend: 127.0.0.1:{{ .Values.tempo.containerPorts.web }}
     ## @param queryFrontend.query.containerPorts.jaegerMetrics queryFrontend query sidecar Jaeger metrics container port
     ## @param queryFrontend.query.containerPorts.jaegerUI queryFrontend query sidecar Jaeger UI container port
     ##
