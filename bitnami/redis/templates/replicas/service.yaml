@@ -34,13 +34,16 @@ spec:
   {{- end }}
   ports:
     - name: tcp-redis
-      port: {{ .Values.replica.service.port }}
+      port: {{ .Values.replica.service.ports.redis }}
       targetPort: redis
-      {{- if and (or (eq .Values.replica.service.type "NodePort") (eq .Values.replica.service.type "LoadBalancer")) .Values.replica.service.nodePort }}
-      nodePort: {{ .Values.replica.service.nodePort }}
+      {{- if and (or (eq .Values.replica.service.type "NodePort") (eq .Values.replica.service.type "LoadBalancer")) .Values.replica.service.nodePorts.redis}}
+      nodePort: {{ .Values.replica.service.nodePorts.redis}}
       {{- else if eq .Values.replica.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
+    {{- if .Values.replica.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.replica.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: replica
 {{- end }}
