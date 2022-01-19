@@ -105,6 +105,21 @@ dokuwikiFullName: User Name
 ## ref: https://github.com/bitnami/bitnami-docker-dokuwiki#environment-variables
 ##
 dokuwikiWikiName: My Wiki
+## @param customPostInitScripts Custom post-init.d user scripts
+## ref: https://github.com/bitnami/bitnami-docker-dokuwiki/tree/master/20200729/debian-10/rootfs/post-init.d
+## NOTE: supported formats are `.sh` or `.php`
+## NOTE: scripts are exclusively executed during the 1st boot of the container
+## e.g:
+## customPostInitScripts:
+##   custom-post-init.sh: |
+##     #!/bin/bash
+##     echo "Hello from custom-post-init.sh"
+##   .htaccess: |
+##     RewriteEngine On
+##     RewriteBase /
+##     ...
+##
+customPostInitScripts: {}
 
 ## @param updateStrategy Strategy to use to update Pods
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
