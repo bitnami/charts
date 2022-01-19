@@ -489,7 +489,7 @@ In case the master crashes, the replicas will wait until the master node is resp
 
 #### Standalone
 
-When installing the chart with `architecture=standalone`, it will deploy a standalone Redis&trade; StatefulSet (only one node allowed) and a Redis&trade; replicas StatefulSet. A single service will be exposed:
+When installing the chart with `architecture=standalone`, it will deploy a standalone Redis&trade; StatefulSet (only one node allowed). A single service will be exposed:
 
 - Redis&trade; Master service: Points to the master, where read-write operations can be performed
 
