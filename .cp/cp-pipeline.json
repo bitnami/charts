@@ -1,0 +1,40 @@
+{
+  "phases": {
+    "package": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/wordpress"
+        }
+      },
+      "actions": [
+        {
+          "action_id": "helm-package"
+        },
+        {
+          "action_id": "linter-packaging",
+          "params": {
+            "kind": "HELM"
+          }
+        }
+      ]
+    },
+    "verify": {
+      "context": {
+        "runtime_parameters": "d29yZHByZXNzUGFzc3dvcmQ6IFMzOUJLV2pTa2gKbWFyaWFkYjoKICBhdXRoOgogICAgcGFzc3dvcmQ6IFZxbDVSR2RjbzQKICAgIHJvb3RQYXNzd29yZDogVUM1eVUwWUE2Sgo=",
+      },
+      "actions": [
+        {
+          "action_id": "trivy",
+          "params": {
+            "config": {
+              "threshold": "CRITICAL",
+              "vuln_type": ["OS"]
+            }
+          }
+        }
+      ]
+    }
+  }
+}
+
