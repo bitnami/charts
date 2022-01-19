@@ -1,0 +1,20 @@
+name: 'build-test'
+on: # rebuild any PRs and main branch changes
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+    paths:
+      - 'bitnami/wordpress/*'
+env:
+  CSP_API_URL: https://console.cloud.vmware.com
+  CSP_API_TOKEN: ${{ secrets.CSP_API_TOKEN }}
+  VIB_PUBLIC_URL: https://cp.bromelia.vmware.com
+
+jobs:
+  cp-verify: # make sure build/ci work properly
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: vmware-samples/vmware-image-builder-examples/vib-action@github-action-martinpe
