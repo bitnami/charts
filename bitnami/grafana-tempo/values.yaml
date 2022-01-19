@@ -177,7 +177,7 @@ tempo:
         {{- end }}
     querier:
       frontend_worker:
-        frontend_address: {{ include "grafana-tempo.query-frontend.fullname" . }}-headless:{{ .Values.queryFrontend.service.grpcPort }}
+        frontend_address: {{ include "grafana-tempo.query-frontend.fullname" . }}-headless:{{ .Values.queryFrontend.service.ports.grpc }}
     ingester:
       lifecycler:
         ring:
