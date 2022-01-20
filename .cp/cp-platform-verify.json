@@ -66,22 +66,7 @@
               }
             }
           }
-        },
-        {
-          "action_id": "jmeter",
-          "params": {
-            "config": {
-              "test_plan_file": "/.cp/wordpress/jmeter/wordpress.jmx",
-              "endpoint": "lb-wordpress-https",
-              "app_protocol": "HTTPS",
-              "env": {
-                "wordpress.username": "user",
-                "wordpress.password": "S39BKWjSkh"
-              }
-            }
-          }
         }
-
       ]
     }
   }
