@@ -103,7 +103,7 @@ auth:
   ##     management-password: myManagementPasswordKey
   ##     database-password: myDatabasePasswordKey
   ##     tls-keystore-password: myTlsKeystorePasswordKey
-  ##     tls-truestore-password: myTlsTruestorePasswordKey
+  ##     tls-truststore-password: myTlsTruststorePasswordKey
   ##
   existingSecret: ""
   ## @param auth.existingSecretPerPassword Override `existingSecret` and other secret values
