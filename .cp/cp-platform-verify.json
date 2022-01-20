@@ -34,7 +34,54 @@
             "endpoint": "lb-wordpress-http",
             "app_protocol": "HTTP"
           }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.cp/wordpress/goss"
+            },
+            "config": {
+              "remote": {
+                "workload": "deploy-wordpress"
+              },
+              "wait": {
+                "file": "goss-wait.yaml"
+              }
+            }
+          }
+        },
+        {
+          "action_id": "cypress",
+          "params": {
+            "resources": {
+              "path": "/.cp/wordpress/cypress"
+            },
+            "config": {
+              "endpoint": "lb-wordpress-https",
+              "app_protocol": "HTTPS",
+              "env": {
+                "username": "user",
+                "password": "S39BKWjSkh"
+              }
+            }
+          }
+        },
+        {
+          "action_id": "jmeter",
+          "params": {
+            "config": {
+              "test_plan_file": "/.cp/wordpress/jmeter/wordpress.jmx",
+              "endpoint": "lb-wordpress-https",
+              "app_protocol": "HTTPS",
+              "env": {
+                "wordpress.username": "user",
+                "wordpress.password": "S39BKWjSkh"
+              }
+            }
+          }
         }
+
       ]
     }
   }
