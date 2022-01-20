@@ -4,7 +4,7 @@ on: # rebuild any PRs and main branch changes
     branches:
       - master
     types:
-      - opened
+      - [assigned, opened, synchronize, reopened]
     paths:
       - 'bitnami/wordpress/*'
 env:
@@ -13,8 +13,25 @@ env:
   VIB_PUBLIC_URL: https://cp.bromelia.vmware.com
 
 jobs:
-  cp-verify: # make sure build/ci work properly
+  cp-validate: # make sure chart is linted/safe
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: vmware-samples/vmware-image-builder-examples/vib-action@github-action-martinpe
+
+  cp-k8s-verify: # verify in multiple target platforms
+    runs-on: ubuntu-latest
+    needs: [vib-validate]
+    strategy:
+      matrix:
+       include:
+         - target-platform: gke
+           target-platform-id: 91d398a2-25c4-4cda-8732-75a3cfc179a1
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@v2
+      - uses: vmware-samples/vmware-image-builder-examples/vib-action@github-action-martinpe
+        with: 
+          pipeline: cp-k8s-verify.json
+        env: 
+          TARGET_PLATFORM: ${{ matrix.target-platform-id }}
