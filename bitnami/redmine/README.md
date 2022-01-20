@@ -1,3 +1,5 @@
+<!--- app-name: Redmine -->
+
 # Redmine
 
 [Redmine](https://www.redmine.org) is a free and open source, web-based project management and issue tracking tool.
@@ -19,8 +21,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 ## Prerequisites
 
-- Kubernetes 1.12+
-- Helm 3.1.0
+- Kubernetes 1.19+
+- Helm 3.2.0+
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -77,7 +79,7 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 | `extraDeploy`       | Array of extra objects to deploy with the release  | `[]`                  |
 | `image.registry`    | Redmine image registry                             | `docker.io`           |
 | `image.repository`  | Redmine image repository                           | `bitnami/redmine`     |
-| `image.tag`         | Redmine image tag (immutable tags are recommended) | `4.2.3-debian-10-r36` |
+| `image.tag`         | Redmine image tag (immutable tags are recommended) | `4.2.3-debian-10-r88` |
 | `image.pullPolicy`  | Redmine image pull policy                          | `IfNotPresent`        |
 | `image.pullSecrets` | Redmine image pull secrets                         | `[]`                  |
 | `image.debug`       | Enable image debug mode                            | `false`               |
@@ -113,7 +115,6 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 | ------------------------------------ | ----------------------------------------------------------------------------------------- | --------------- |
 | `replicaCount`                       | Number of Redmine replicas to deploy                                                      | `1`             |
 | `updateStrategy.type`                | Redmine deployment strategy type                                                          | `RollingUpdate` |
-| `updateStrategy.rollingUpdate`       | Redmine deployment rolling update configuration parameters                                | `{}`            |
 | `schedulerName`                      | Alternate scheduler                                                                       | `""`            |
 | `serviceAccount.create`              | Specifies whether a ServiceAccount should be created                                      | `false`         |
 | `serviceAccount.name`                | The name of the ServiceAccount to create. Defaults to the `redmine.fullname` macro        | `""`            |
@@ -326,7 +327,7 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 | `certificates.customCA`                              | Defines a list of secrets to import into the container trust store | `[]`                                     |
 | `certificates.image.registry`                        | Redmine image registry                                             | `docker.io`                              |
 | `certificates.image.repository`                      | Redmine image repository                                           | `bitnami/bitnami-shell`                  |
-| `certificates.image.tag`                             | Redmine image tag (immutable tags are recommended)                 | `10-debian-10-r254`                      |
+| `certificates.image.tag`                             | Redmine image tag (immutable tags are recommended)                 | `10-debian-10-r309`                      |
 | `certificates.image.pullPolicy`                      | Redmine image pull policy                                          | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Redmine image pull secrets                                         | `[]`                                     |
 | `certificates.extraEnvVars`                          | Container sidecar extra environment variables (e.g. proxy)         | `[]`                                     |
@@ -386,6 +387,7 @@ Redmine writes uploaded files to a persistent volume. By default that volume can
 
 > **Important**: When running more than one instance of Redmine they must share the same `secret_key_base` to have sessions working acreoss all instances.
 > This can be achieved by setting
+>
 > ```
 >   extraEnvVars:
 >    - name: SECRET_KEY_BASE
@@ -457,12 +459,10 @@ extraVolumeMounts:
 livenessProbe:
   enabled: true
   path: /redmine/
-...
-
+---
 readinessProbe:
   enabled: true
   path: /redmine/
-...
 ```
 
 ## Persistence
@@ -497,8 +497,8 @@ deployment. Will load all certificates files it finds in the secret.
 ```yaml
 certificates:
   customCAs:
-  - secret: my-ca-1
-  - secret: my-ca-2
+    - secret: my-ca-1
+    - secret: my-ca-2
 ```
 
 #### Secret
@@ -556,13 +556,15 @@ image:
   repository: bitnami/redmine
   tag: 4.2.2
 ```
+
 VS
+
 ```yaml
 image:
   registry: docker.io
   repository: bitnami/redmine
   tag: 4.2.2
-...
+---
 mailReceiver:
   image:
     registry: docker.io
@@ -593,9 +595,9 @@ Full compatibility is not guaranteed due to the amount of involved changes, howe
 #### What changes were introduced in this major version?
 
 - Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
-- Move dependency information from the *requirements.yaml* to the *Chart.yaml*
-- After running `helm dependency update`, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
-- The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
+- Move dependency information from the _requirements.yaml_ to the _Chart.yaml_
+- After running `helm dependency update`, a _Chart.lock_ file is generated containing the same structure used in the previous _requirements.lock_
+- The different fields present in the _Chart.yaml_ file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
 - PostgreSQL dependency version was bumped to a new major version `10.X.X`, which includes changes that do no longer guarantee backwards compatibility. Check [PostgreSQL Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#upgrading) for more information.
 - MariaDB dependency version was bumped to a new major version `9.X.X`, which includes changes that do no longer guarantee backwards compatibility. Check [MariaDB Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#upgrading) for more information.
 - Inclusion of the`bitnami/common` library chart, standardizations and adaptation of labels to follow helm's standards.
@@ -610,9 +612,9 @@ Full compatibility is not guaranteed due to the amount of involved changes, howe
 
 As a consequence, backwards compatibility from previous versions is not guaranteed during the upgrade. To upgrade to this new version `15.0.0` there are two alternatives:
 
-* Install a new Redmine chart and follow the [official guide on how to backup/restore](https://www.redmine.org/projects/redmine/wiki/RedmineBackupRestore).
+- Install a new Redmine chart and follow the [official guide on how to backup/restore](https://www.redmine.org/projects/redmine/wiki/RedmineBackupRestore).
 
-* Reuse the PVC used to hold the PostgreSQL/MariaDB data on your previous release. To do so, follow the instructions below.
+- Reuse the PVC used to hold the PostgreSQL/MariaDB data on your previous release. To do so, follow the instructions below.
 
 **Upgrade instructions**
 

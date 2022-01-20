@@ -1,6 +1,8 @@
+<!--- app-name: phpMyAdmin -->
+
 # phpMyAdmin
 
-[phpMyAdmin](https://www.phpmyadmin.net/) is a free and open source administration tool for MySQL and MariaDB. As a portable web application written primarily in PHP, it has become one of the most popular MySQL administration tools, especially for web hosting services.
+[phpMyAdmin](https://www.phpmyadmin.net/) is a free and open source administration tool for MySQL and MariaDB.
 
 ## TL;DR
 
@@ -13,12 +15,14 @@ $ helm install my-release bitnami/phpmyadmin
 
 This chart bootstraps a [phpMyAdmin](https://github.com/bitnami/bitnami-docker-phpmyadmin) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
+As a portable web application written primarily in PHP, phpMyAdmin has become one of the most popular MySQL administration tools, especially for web hosting services.
+
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This chart has been tested to work with NGINX Ingress, cert-manager, fluentd and Prometheus on top of the [BKPR](https://kubeprod.io/).
 
 ## Prerequisites
 
 - Kubernetes 1.8+ with Beta APIs enabled
-- Helm 3.1.0
+- Helm 3.2.0+
 
 ## Installing the Chart
 
@@ -71,7 +75,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------- | --------------------------------------------------------------------------------- | ---------------------- |
 | `image.registry`     | phpMyAdmin image registry                                                         | `docker.io`            |
 | `image.repository`   | phpMyAdmin image repository                                                       | `bitnami/phpmyadmin`   |
-| `image.tag`          | phpMyAdmin image tag (immutable tags are recommended)                             | `5.1.1-debian-10-r195` |
+| `image.tag`          | phpMyAdmin image tag (immutable tags are recommended)                             | `5.1.1-debian-10-r201` |
 | `image.pullPolicy`   | Image pull policy                                                                 | `IfNotPresent`         |
 | `image.pullSecrets`  | Specify docker-registry secret names as an array                                  | `[]`                   |
 | `image.debug`        | Enable phpmyadmin image debug mode                                                | `false`                |
@@ -200,7 +204,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                          | Start a side-car prometheus exporter                                              | `false`                   |
 | `metrics.image.registry`                   | Apache exporter image registry                                                    | `docker.io`               |
 | `metrics.image.repository`                 | Apache exporter image repository                                                  | `bitnami/apache-exporter` |
-| `metrics.image.tag`                        | Apache exporter image tag (immutable tags are recommended)                        | `0.11.0-debian-10-r22`    |
+| `metrics.image.tag`                        | Apache exporter image tag (immutable tags are recommended)                        | `0.11.0-debian-10-r26`    |
 | `metrics.image.pullPolicy`                 | Image pull policy                                                                 | `IfNotPresent`            |
 | `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                                  | `[]`                      |
 | `metrics.resources`                        | Metrics exporter resource requests and limits                                     | `{}`                      |

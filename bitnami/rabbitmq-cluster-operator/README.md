@@ -1,6 +1,8 @@
+<!--- app-name: RabbitMQ Cluster Operator -->
+
 # rabbitmq-cluster-operator
 
-[The RabbitMQ Cluster Kubernetes Operator](https://github.com/rabbitmq/cluster-operator) automates provisioning, management, and operations of RabbitMQ clusters running on Kubernetes.
+[The RabbitMQ Cluster Operator](https://github.com/rabbitmq/cluster-operator) automates provisioning, management, and operations of RabbitMQ clusters running on Kubernetes.
 
 ## TL;DR
 
@@ -19,8 +21,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 ## Prerequisites
 
-- Kubernetes 1.12+
-- Helm 3.1.0
+- Kubernetes 1.19+
+- Helm 3.2.0+
 - PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
@@ -153,15 +155,15 @@ This solution allows to easily deploy multiple RabbitMQ instances compared to th
 | ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | ---------------------------------------- |
 | `rabbitmqImage.registry`                                      | RabbitMQ Image registry                                                                                 | `docker.io`                              |
 | `rabbitmqImage.repository`                                    | RabbitMQ Image repository                                                                               | `bitnami/rabbitmq`                       |
-| `rabbitmqImage.tag`                                           | RabbitMQ Image tag (immutable tags are recommended)                                                     | `3.8.23-debian-10-r35`                   |
+| `rabbitmqImage.tag`                                           | RabbitMQ Image tag (immutable tags are recommended)                                                     | `3.8.27-debian-10-r6`                    |
 | `rabbitmqImage.pullSecrets`                                   | RabbitMQ Image pull secrets                                                                             | `[]`                                     |
 | `credentialUpdaterImage.registry`                             | RabbitMQ Default User Credential Updater Image registry                                                 | `docker.io`                              |
 | `credentialUpdaterImage.repository`                           | RabbitMQ Default User Credential Updater Image repository                                               | `bitnami/rmq-default-credential-updater` |
-| `credentialUpdaterImage.tag`                                  | RabbitMQ Default User Credential Updater Image tag (immutable tags are recommended)                     | `1.0.0-scratch-r0`                       |
+| `credentialUpdaterImage.tag`                                  | RabbitMQ Default User Credential Updater Image tag (immutable tags are recommended)                     | `1.0.1-scratch-r0`                       |
 | `credentialUpdaterImage.pullSecrets`                          | RabbitMQ Default User Credential Updater Image pull secrets                                             | `[]`                                     |
 | `clusterOperator.image.registry`                              | RabbitMQ Cluster Operator image registry                                                                | `docker.io`                              |
 | `clusterOperator.image.repository`                            | RabbitMQ Cluster Operator image repository                                                              | `bitnami/rabbitmq-cluster-operator`      |
-| `clusterOperator.image.tag`                                   | RabbitMQ Cluster Operator image tag (immutable tags are recommended)                                    | `1.10.0-scratch-r2`                      |
+| `clusterOperator.image.tag`                                   | RabbitMQ Cluster Operator image tag (immutable tags are recommended)                                    | `1.11.0-scratch-r0`                      |
 | `clusterOperator.image.pullPolicy`                            | RabbitMQ Cluster Operator image pull policy                                                             | `IfNotPresent`                           |
 | `clusterOperator.image.pullSecrets`                           | RabbitMQ Cluster Operator image pull secrets                                                            | `[]`                                     |
 | `clusterOperator.replicaCount`                                | Number of RabbitMQ Cluster Operator replicas to deploy                                                  | `1`                                      |

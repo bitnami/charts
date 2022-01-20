@@ -1,3 +1,5 @@
+<!--- app-name: NGINX Ingress Controller -->
+
 # Nginx Ingress Controller
 
 [ingress-nginx](https://github.com/kubernetes/ingress-nginx) is an Ingress controller that uses NGINX to manage external access to HTTP services in a Kubernetes cluster.
@@ -19,8 +21,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 ## Prerequisites
 
-- Kubernetes 1.12+
-- Helm 3.1.0
+- Kubernetes 1.19+
+- Helm 3.2.0+
 
 ## Installing the Chart
 
@@ -72,7 +74,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
 | `image.registry`                       | Nginx Ingress Controller image registry                                                                                                            | `docker.io`                        |
 | `image.repository`                     | Nginx Ingress Controller image repository                                                                                                          | `bitnami/nginx-ingress-controller` |
-| `image.tag`                            | Nginx Ingress Controller image tag (immutable tags are recommended)                                                                                | `1.1.0-debian-10-r0`               |
+| `image.tag`                            | Nginx Ingress Controller image tag (immutable tags are recommended)                                                                                | `1.1.1-debian-10-r0`               |
 | `image.pullPolicy`                     | Nginx Ingress Controller image pull policy                                                                                                         | `IfNotPresent`                     |
 | `image.pullSecrets`                    | Specify docker-registry secret names as an array                                                                                                   | `[]`                               |
 | `containerPorts`                       | Controller container ports to open                                                                                                                 | `{}`                               |
@@ -179,7 +181,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `defaultBackend.hostAliases`                        | Add deployment host aliases                                                               | `[]`                   |
 | `defaultBackend.image.registry`                     | Default backend image registry                                                            | `docker.io`            |
 | `defaultBackend.image.repository`                   | Default backend image repository                                                          | `bitnami/nginx`        |
-| `defaultBackend.image.tag`                          | Default backend image tag (immutable tags are recommended)                                | `1.21.4-debian-10-r19` |
+| `defaultBackend.image.tag`                          | Default backend image tag (immutable tags are recommended)                                | `1.21.5-debian-10-r14` |
 | `defaultBackend.image.pullPolicy`                   | Image pull policy                                                                         | `IfNotPresent`         |
 | `defaultBackend.image.pullSecrets`                  | Specify docker-registry secret names as an array                                          | `[]`                   |
 | `defaultBackend.extraArgs`                          | Additional command line arguments to pass to Nginx container                              | `{}`                   |

@@ -1,3 +1,5 @@
+<!--- app-name: Redis(TM) -->
+
 # Redis&trade; Chart packaged by Bitnami
 
 [Redis&trade;](http://redis.io/) is an advanced key-value cache and store. It is often referred to as a data structure server since keys can contain strings, hashes, lists, sets, sorted sets, bitmaps and hyperloglogs.
@@ -34,8 +36,8 @@ The main features of each chart are the following:
 
 ## Prerequisites
 
-- Kubernetes 1.12+
-- Helm 3.1.0
+- Kubernetes 1.19+
+- Helm 3.2.0+
 - PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
@@ -90,14 +92,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Redis&trade; Image parameters
 
-| Name                | Description                                             | Value                 |
-| ------------------- | ------------------------------------------------------- | --------------------- |
-| `image.registry`    | Redis&trade; image registry                             | `docker.io`           |
-| `image.repository`  | Redis&trade; image repository                           | `bitnami/redis`       |
-| `image.tag`         | Redis&trade; image tag (immutable tags are recommended) | `6.2.6-debian-10-r53` |
-| `image.pullPolicy`  | Redis&trade; image pull policy                          | `IfNotPresent`        |
-| `image.pullSecrets` | Redis&trade; image pull secrets                         | `[]`                  |
-| `image.debug`       | Enable image debug mode                                 | `false`               |
+| Name                | Description                                             | Value                  |
+| ------------------- | ------------------------------------------------------- | ---------------------- |
+| `image.registry`    | Redis&trade; image registry                             | `docker.io`            |
+| `image.repository`  | Redis&trade; image repository                           | `bitnami/redis`        |
+| `image.tag`         | Redis&trade; image tag (immutable tags are recommended) | `6.2.6-debian-10-r103` |
+| `image.pullPolicy`  | Redis&trade; image pull policy                          | `IfNotPresent`         |
+| `image.pullSecrets` | Redis&trade; image pull secrets                         | `[]`                   |
+| `image.debug`       | Enable image debug mode                                 | `false`                |
 
 
 ### Redis&trade; common configuration parameters
@@ -128,7 +130,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `master.extraEnvVars`                       | Array with extra environment variables to add to Redis&trade; master nodes                        | `[]`                     |
 | `master.extraEnvVarsCM`                     | Name of existing ConfigMap containing extra env vars for Redis&trade; master nodes                | `""`                     |
 | `master.extraEnvVarsSecret`                 | Name of existing Secret containing extra env vars for Redis&trade; master nodes                   | `""`                     |
-| `master.containerPort`                      | Container port to open on Redis&trade; master nodes                                               | `6379`                   |
+| `master.containerPorts.redis`               | Container port to open on Redis&trade; master nodes                                               | `6379`                   |
+| `master.startupProbe.enabled`               | Enable startupProbe on Redis&trade; master nodes                                                  | `false`                  |
+| `master.startupProbe.initialDelaySeconds`   | Initial delay seconds for startupProbe                                                            | `20`                     |
+| `master.startupProbe.periodSeconds`         | Period seconds for startupProbe                                                                   | `5`                      |
+| `master.startupProbe.timeoutSeconds`        | Timeout seconds for startupProbe                                                                  | `5`                      |
+| `master.startupProbe.failureThreshold`      | Failure threshold for startupProbe                                                                | `5`                      |
+| `master.startupProbe.successThreshold`      | Success threshold for startupProbe                                                                | `1`                      |
 | `master.livenessProbe.enabled`              | Enable livenessProbe on Redis&trade; master nodes                                                 | `true`                   |
 | `master.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                           | `20`                     |
 | `master.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                  | `5`                      |
@@ -141,6 +149,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `master.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                | `1`                      |
 | `master.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                              | `5`                      |
 | `master.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                              | `1`                      |
+| `master.customStartupProbe`                 | Custom startupProbe that overrides the default one                                                | `{}`                     |
 | `master.customLivenessProbe`                | Custom livenessProbe that overrides the default one                                               | `{}`                     |
 | `master.customReadinessProbe`               | Custom readinessProbe that overrides the default one                                              | `{}`                     |
 | `master.resources.limits`                   | The resources limits for the Redis&trade; master containers                                       | `{}`                     |
@@ -164,7 +173,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `master.affinity`                           | Affinity for Redis&trade; master pods assignment                                                  | `{}`                     |
 | `master.nodeSelector`                       | Node labels for Redis&trade; master pods assignment                                               | `{}`                     |
 | `master.tolerations`                        | Tolerations for Redis&trade; master pods assignment                                               | `[]`                     |
-| `master.spreadConstraints`                  | Spread Constraints for Redis&trade; master pod assignment                                         | `[]`                     |
+| `master.topologySpreadConstraints`          | Spread Constraints for Redis&trade; master pod assignment                                         | `{}`                     |
 | `master.lifecycleHooks`                     | for the Redis&trade; master container(s) to automate configuration before or after startup        | `{}`                     |
 | `master.extraVolumes`                       | Optionally specify extra list of additional volumes for the Redis&trade; master pod(s)            | `[]`                     |
 | `master.extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for the Redis&trade; master container(s) | `[]`                     |
@@ -182,9 +191,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `master.persistence.dataSource`             | Custom PVC data source                                                                            | `{}`                     |
 | `master.persistence.existingClaim`          | Use a existing PVC which must be created manually before bound                                    | `""`                     |
 | `master.service.type`                       | Redis&trade; master service type                                                                  | `ClusterIP`              |
-| `master.service.port`                       | Redis&trade; master service port                                                                  | `6379`                   |
-| `master.service.nodePort`                   | Node port for Redis&trade; master                                                                 | `""`                     |
+| `master.service.ports.redis`                | Redis&trade; master service port                                                                  | `6379`                   |
+| `master.service.nodePorts.redis`            | Node port for Redis&trade; master                                                                 | `""`                     |
 | `master.service.externalTrafficPolicy`      | Redis&trade; master service external traffic policy                                               | `Cluster`                |
+| `master.service.extraPorts`                 | Extra ports to expose (normally used with the `sidecar` value)                                    | `[]`                     |
 | `master.service.clusterIP`                  | Redis&trade; master service Cluster IP                                                            | `""`                     |
 | `master.service.loadBalancerIP`             | Redis&trade; master service Load Balancer IP                                                      | `""`                     |
 | `master.service.loadBalancerSourceRanges`   | Redis&trade; master service Load Balancer sources                                                 | `[]`                     |
@@ -206,7 +216,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `replica.extraEnvVars`                       | Array with extra environment variables to add to Redis&trade; replicas nodes                        | `[]`                     |
 | `replica.extraEnvVarsCM`                     | Name of existing ConfigMap containing extra env vars for Redis&trade; replicas nodes                | `""`                     |
 | `replica.extraEnvVarsSecret`                 | Name of existing Secret containing extra env vars for Redis&trade; replicas nodes                   | `""`                     |
-| `replica.containerPort`                      | Container port to open on Redis&trade; replicas nodes                                               | `6379`                   |
+| `replica.containerPorts.redis`               | Container port to open on Redis&trade; replicas nodes                                               | `6379`                   |
+| `replica.startupProbe.enabled`               | Enable startupProbe on Redis&trade; replicas nodes                                                  | `false`                  |
+| `replica.startupProbe.initialDelaySeconds`   | Initial delay seconds for startupProbe                                                              | `20`                     |
+| `replica.startupProbe.periodSeconds`         | Period seconds for startupProbe                                                                     | `5`                      |
+| `replica.startupProbe.timeoutSeconds`        | Timeout seconds for startupProbe                                                                    | `5`                      |
+| `replica.startupProbe.failureThreshold`      | Failure threshold for startupProbe                                                                  | `5`                      |
+| `replica.startupProbe.successThreshold`      | Success threshold for startupProbe                                                                  | `1`                      |
 | `replica.livenessProbe.enabled`              | Enable livenessProbe on Redis&trade; replicas nodes                                                 | `true`                   |
 | `replica.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                             | `20`                     |
 | `replica.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                    | `5`                      |
@@ -219,6 +235,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `replica.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                  | `1`                      |
 | `replica.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                                | `5`                      |
 | `replica.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                | `1`                      |
+| `replica.customStartupProbe`                 | Custom startupProbe that overrides the default one                                                  | `{}`                     |
 | `replica.customLivenessProbe`                | Custom livenessProbe that overrides the default one                                                 | `{}`                     |
 | `replica.customReadinessProbe`               | Custom readinessProbe that overrides the default one                                                | `{}`                     |
 | `replica.resources.limits`                   | The resources limits for the Redis&trade; replicas containers                                       | `{}`                     |
@@ -230,6 +247,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `replica.schedulerName`                      | Alternate scheduler for Redis&trade; replicas pods                                                  | `""`                     |
 | `replica.updateStrategy.type`                | Redis&trade; replicas statefulset strategy type                                                     | `RollingUpdate`          |
 | `replica.priorityClassName`                  | Redis&trade; replicas pods' priorityClassName                                                       | `""`                     |
+| `replica.podManagementPolicy`                | podManagementPolicy to manage scaling operation of %%MAIN_CONTAINER_NAME%% pods                     | `""`                     |
 | `replica.hostAliases`                        | Redis&trade; replicas pods host aliases                                                             | `[]`                     |
 | `replica.podLabels`                          | Extra labels for Redis&trade; replicas pods                                                         | `{}`                     |
 | `replica.podAnnotations`                     | Annotations for Redis&trade; replicas pods                                                          | `{}`                     |
@@ -242,7 +260,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `replica.affinity`                           | Affinity for Redis&trade; replicas pods assignment                                                  | `{}`                     |
 | `replica.nodeSelector`                       | Node labels for Redis&trade; replicas pods assignment                                               | `{}`                     |
 | `replica.tolerations`                        | Tolerations for Redis&trade; replicas pods assignment                                               | `[]`                     |
-| `replica.spreadConstraints`                  | Spread Constraints for Redis&trade; replicas pod assignment                                         | `[]`                     |
+| `replica.topologySpreadConstraints`          | Spread Constraints for Redis&trade; replicas pod assignment                                         | `{}`                     |
 | `replica.lifecycleHooks`                     | for the Redis&trade; replica container(s) to automate configuration before or after startup         | `{}`                     |
 | `replica.extraVolumes`                       | Optionally specify extra list of additional volumes for the Redis&trade; replicas pod(s)            | `[]`                     |
 | `replica.extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for the Redis&trade; replicas container(s) | `[]`                     |
@@ -259,9 +277,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `replica.persistence.selector`               | Additional labels to match for the PVC                                                              | `{}`                     |
 | `replica.persistence.dataSource`             | Custom PVC data source                                                                              | `{}`                     |
 | `replica.service.type`                       | Redis&trade; replicas service type                                                                  | `ClusterIP`              |
-| `replica.service.port`                       | Redis&trade; replicas service port                                                                  | `6379`                   |
-| `replica.service.nodePort`                   | Node port for Redis&trade; replicas                                                                 | `""`                     |
+| `replica.service.ports.redis`                | Redis&trade; replicas service port                                                                  | `6379`                   |
+| `replica.service.nodePorts.redis`            | Node port for Redis&trade; replicas                                                                 | `""`                     |
 | `replica.service.externalTrafficPolicy`      | Redis&trade; replicas service external traffic policy                                               | `Cluster`                |
+| `replica.service.extraPorts`                 | Extra ports to expose (normally used with the `sidecar` value)                                      | `[]`                     |
 | `replica.service.clusterIP`                  | Redis&trade; replicas service Cluster IP                                                            | `""`                     |
 | `replica.service.loadBalancerIP`             | Redis&trade; replicas service Load Balancer IP                                                      | `""`                     |
 | `replica.service.loadBalancerSourceRanges`   | Redis&trade; replicas service Load Balancer sources                                                 | `[]`                     |
@@ -281,7 +300,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sentinel.enabled`                            | Use Redis&trade; Sentinel on Redis&trade; pods.                                                                                             | `false`                  |
 | `sentinel.image.registry`                     | Redis&trade; Sentinel image registry                                                                                                        | `docker.io`              |
 | `sentinel.image.repository`                   | Redis&trade; Sentinel image repository                                                                                                      | `bitnami/redis-sentinel` |
-| `sentinel.image.tag`                          | Redis&trade; Sentinel image tag (immutable tags are recommended)                                                                            | `6.2.6-debian-10-r54`    |
+| `sentinel.image.tag`                          | Redis&trade; Sentinel image tag (immutable tags are recommended)                                                                            | `6.2.6-debian-10-r100`   |
 | `sentinel.image.pullPolicy`                   | Redis&trade; Sentinel image pull policy                                                                                                     | `IfNotPresent`           |
 | `sentinel.image.pullSecrets`                  | Redis&trade; Sentinel image pull secrets                                                                                                    | `[]`                     |
 | `sentinel.image.debug`                        | Enable image debug mode                                                                                                                     | `false`                  |
@@ -298,7 +317,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sentinel.extraEnvVars`                       | Array with extra environment variables to add to Redis&trade; Sentinel nodes                                                                | `[]`                     |
 | `sentinel.extraEnvVarsCM`                     | Name of existing ConfigMap containing extra env vars for Redis&trade; Sentinel nodes                                                        | `""`                     |
 | `sentinel.extraEnvVarsSecret`                 | Name of existing Secret containing extra env vars for Redis&trade; Sentinel nodes                                                           | `""`                     |
-| `sentinel.containerPort`                      | Container port to open on Redis&trade; Sentinel nodes                                                                                       | `26379`                  |
+| `sentinel.containerPorts.sentinel`            | Container port to open on Redis&trade; Sentinel nodes                                                                                       | `26379`                  |
+| `sentinel.startupProbe.enabled`               | Enable startupProbe on Redis&trade; Sentinel nodes                                                                                          | `false`                  |
+| `sentinel.startupProbe.initialDelaySeconds`   | Initial delay seconds for startupProbe                                                                                                      | `20`                     |
+| `sentinel.startupProbe.periodSeconds`         | Period seconds for startupProbe                                                                                                             | `5`                      |
+| `sentinel.startupProbe.timeoutSeconds`        | Timeout seconds for startupProbe                                                                                                            | `5`                      |
+| `sentinel.startupProbe.failureThreshold`      | Failure threshold for startupProbe                                                                                                          | `5`                      |
+| `sentinel.startupProbe.successThreshold`      | Success threshold for startupProbe                                                                                                          | `1`                      |
 | `sentinel.livenessProbe.enabled`              | Enable livenessProbe on Redis&trade; Sentinel nodes                                                                                         | `true`                   |
 | `sentinel.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                                                     | `20`                     |
 | `sentinel.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                                                            | `5`                      |
@@ -311,6 +336,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sentinel.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                                                          | `1`                      |
 | `sentinel.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                                                                        | `5`                      |
 | `sentinel.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                                                        | `1`                      |
+| `sentinel.customStartupProbe`                 | Custom startupProbe that overrides the default one                                                                                          | `{}`                     |
 | `sentinel.customLivenessProbe`                | Custom livenessProbe that overrides the default one                                                                                         | `{}`                     |
 | `sentinel.customReadinessProbe`               | Custom readinessProbe that overrides the default one                                                                                        | `{}`                     |
 | `sentinel.resources.limits`                   | The resources limits for the Redis&trade; Sentinel containers                                                                               | `{}`                     |
@@ -321,11 +347,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sentinel.extraVolumes`                       | Optionally specify extra list of additional volumes for the Redis&trade; Sentinel                                                           | `[]`                     |
 | `sentinel.extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for the Redis&trade; Sentinel container(s)                                         | `[]`                     |
 | `sentinel.service.type`                       | Redis&trade; Sentinel service type                                                                                                          | `ClusterIP`              |
-| `sentinel.service.port`                       | Redis&trade; service port for Redis&trade;                                                                                                  | `6379`                   |
-| `sentinel.service.sentinelPort`               | Redis&trade; service port for Sentinel                                                                                                      | `26379`                  |
+| `sentinel.service.ports.redis`                | Redis&trade; service port for Redis&trade;                                                                                                  | `6379`                   |
+| `sentinel.service.ports.sentinel`             | Redis&trade; service port for Redis&trade; Sentinel                                                                                         | `26379`                  |
 | `sentinel.service.nodePorts.redis`            | Node port for Redis&trade;                                                                                                                  | `""`                     |
 | `sentinel.service.nodePorts.sentinel`         | Node port for Sentinel                                                                                                                      | `""`                     |
 | `sentinel.service.externalTrafficPolicy`      | Redis&trade; Sentinel service external traffic policy                                                                                       | `Cluster`                |
+| `sentinel.service.extraPorts`                 | Extra ports to expose (normally used with the `sidecar` value)                                                                              | `[]`                     |
 | `sentinel.service.clusterIP`                  | Redis&trade; Sentinel service Cluster IP                                                                                                    | `""`                     |
 | `sentinel.service.loadBalancerIP`             | Redis&trade; Sentinel service Load Balancer IP                                                                                              | `""`                     |
 | `sentinel.service.loadBalancerSourceRanges`   | Redis&trade; Sentinel service Load Balancer sources                                                                                         | `[]`                     |
@@ -372,7 +399,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                            | Start a sidecar prometheus exporter to expose Redis&trade; metrics                               | `false`                  |
 | `metrics.image.registry`                     | Redis&trade; Exporter image registry                                                             | `docker.io`              |
 | `metrics.image.repository`                   | Redis&trade; Exporter image repository                                                           | `bitnami/redis-exporter` |
-| `metrics.image.tag`                          | Redis&trade; Redis&trade; Exporter image tag (immutable tags are recommended)                    | `1.31.4-debian-10-r11`   |
+| `metrics.image.tag`                          | Redis&trade; Redis&trade; Exporter image tag (immutable tags are recommended)                    | `1.33.0-debian-10-r27`   |
 | `metrics.image.pullPolicy`                   | Redis&trade; Exporter image pull policy                                                          | `IfNotPresent`           |
 | `metrics.image.pullSecrets`                  | Redis&trade; Exporter image pull secrets                                                         | `[]`                     |
 | `metrics.redisTargetHost`                    | A way to specify an alternative Redis&trade; hostname                                            | `localhost`              |
@@ -388,6 +415,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.service.type`                       | Redis&trade; exporter service type                                                               | `ClusterIP`              |
 | `metrics.service.port`                       | Redis&trade; exporter service port                                                               | `9121`                   |
 | `metrics.service.externalTrafficPolicy`      | Redis&trade; exporter service external traffic policy                                            | `Cluster`                |
+| `metrics.service.extraPorts`                 | Extra ports to expose (normally used with the `sidecar` value)                                   | `[]`                     |
 | `metrics.service.loadBalancerIP`             | Redis&trade; exporter service Load Balancer IP                                                   | `""`                     |
 | `metrics.service.loadBalancerSourceRanges`   | Redis&trade; exporter service Load Balancer sources                                              | `[]`                     |
 | `metrics.service.annotations`                | Additional custom annotations for Redis&trade; exporter service                                  | `{}`                     |
@@ -412,7 +440,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r265`     |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r312`     |
 | `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                    |
@@ -421,13 +449,23 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sysctl.enabled`                                       | Enable init container to modify Kernel settings                                                 | `false`                 |
 | `sysctl.image.registry`                                | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `sysctl.image.repository`                              | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `sysctl.image.tag`                                     | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r265`     |
+| `sysctl.image.tag`                                     | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r312`     |
 | `sysctl.image.pullPolicy`                              | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `sysctl.image.pullSecrets`                             | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `sysctl.command`                                       | Override default init-sysctl container command (useful when using custom images)                | `[]`                    |
 | `sysctl.mountHostSys`                                  | Mount the host `/sys` folder to `/host-sys`                                                     | `false`                 |
 | `sysctl.resources.limits`                              | The resources limits for the init container                                                     | `{}`                    |
 | `sysctl.resources.requests`                            | The requested resources for the init container                                                  | `{}`                    |
+
+
+### useExternalDNS Parameters
+
+| Name                                   | Description                                                                                                                              | Value                               |
+| -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------- |
+| `useExternalDNS.enabled`               | Enable various syntax that would enable external-dns to work.  Note this requires a working installation of `external-dns` to be usable. | `false`                             |
+| `useExternalDNS.additionalAnnotations` | Extra annotations to be utilized when `external-dns` is enabled.                                                                         | `{}`                                |
+| `useExternalDNS.annotationKey`         | The annotation key utilized when `external-dns` is enabled.                                                                              | `external-dns.alpha.kubernetes.io/` |
+| `useExternalDNS.suffix`                | The DNS suffix utilized when `external-dns` is enabled.  Note that we prepend the suffix with the full name of the release.              | `""`                                |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
@@ -461,6 +499,30 @@ Bitnami will release a new chart updating its containers if a new version of the
 ### Use a different Redis&trade; version
 
 To modify the application version used in this chart, specify a different version of the image using the `image.tag` parameter and/or a different repository using the `image.repository` parameter. Refer to the [chart documentation for more information on these parameters and how to use them with images from a private registry](https://docs.bitnami.com/kubernetes/infrastructure/redis/configuration/change-image-version/).
+
+### External DNS
+
+This chart is equipped to allow leveraging the ExternalDNS project. Doing so will enable ExternalDNS to publish the FQDN for each instance, in the format of `<pod-name>.<release-name>.<dns-suffix>`.
+Example, when using the following configuration:
+
+```yaml
+useExternalDNS:
+  enabled: true
+  suffix: prod.example.org
+  additionalAnnotations:
+    ttl: 10
+```
+
+On a cluster where the name of the Helm release is `a`, the hostname of a Pod is generated as: `a-redis-node-0.a-redis.prod.example.org`. The IP of that FQDN will match that of the associated Pod. This modifies the following parameters of the Redis/Sentinel configuration using this new FQDN:
+
+* `replica-announce-ip`
+* `known-sentinel`
+* `known-replica`
+* `announce-ip`
+
+:warning: This requires a working installation of `external-dns` to be fully functional. :warning:
+
+See the [official ExternalDNS documentation](https://github.com/kubernetes-sigs/external-dns) for additional configuration options.
 
 ### Cluster topologies
 
@@ -570,6 +632,23 @@ Find more information about how to deal with common errors related to Bitnami’
 ## Upgrading
 
 A major chart version change (like v1.2.3 -> v2.0.0) indicates that there is an incompatible breaking change needing manual actions.
+
+### To 16.0.0
+
+This major release renames several values in this chart and adds missing features, in order to be inline with the rest of assets in the Bitnami charts repository.
+
+Affected values:
+  - `master.service.port` renamed as `master.service.ports.redis`.
+  - `master.service.nodePort` renamed as `master.service.nodePorts.redis`.
+  - `replica.service.port` renamed as `replica.service.ports.redis`.
+  - `replica.service.nodePort` renamed as `replica.service.nodePorts.redis`.
+  - `sentinel.service.port` renamed as `sentinel.service.ports.redis`.
+  - `sentinel.service.sentinelPort` renamed as `sentinel.service.ports.sentinel`.
+  - `master.containerPort` renamed as `master.containerPorts.redis`.
+  - `replica.containerPort` renamed as `replica.containerPorts.redis`.
+  - `sentinel.containerPort` renamed as `sentinel.containerPorts.sentinel`.
+  - `master.spreadConstraints` renamed as `master.topologySpreadConstraints`
+  - `replica.spreadConstraints` renamed as `replica.topologySpreadConstraints`
 
 ### To 15.0.0
 

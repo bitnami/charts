@@ -22,9 +22,11 @@ spec:
       app.kubernetes.io/component: vulture
   template:
     metadata:
-      {{- if .Values.vulture.podAnnotations }}
-      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.vulture.podAnnotations "context" $) | nindent 8 }}
-      {{- end }}
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/tempo-configmap.yaml") . | sha256sum }}
+        {{- if .Values.vulture.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.vulture.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: vulture
         {{- if .Values.vulture.podLabels }}
@@ -50,8 +52,14 @@ spec:
       {{- if .Values.vulture.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.vulture.tolerations "context" .) | nindent 8 }}
       {{- end }}
+      {{- if .Values.vulture.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.vulture.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
       {{- if .Values.vulture.priorityClassName }}
       priorityClassName: {{ .Values.vulture.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.vulture.schedulerName }}
+      schedulerName: {{ .Values.vulture.schedulerName }}
       {{- end }}
       {{- if .Values.vulture.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.vulture.podSecurityContext "enabled" | toYaml | nindent 8 }}
@@ -78,9 +86,9 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.vulture.args "context" $) | nindent 12 }}
           {{- else }}
           args:
-            - -prometheus-listen-address=0.0.0.0:{{ .Values.vulture.containerPort }}
+            - -prometheus-listen-address=0.0.0.0:{{ .Values.vulture.containerPorts.http }}
             - -tempo-push-url=http://{{ template "grafana-tempo.distributor.fullname" . }}
-            - -tempo-query-url=http://{{ template "grafana-tempo.query-frontend.fullname" . }}:{{ .Values.queryFrontend.service.port }}
+            - -tempo-query-url=http://{{ template "grafana-tempo.query-frontend.fullname" . }}:{{ .Values.queryFrontend.service.ports.http }}
           {{- end }}
           {{- if .Values.vulture.extraEnvVars }}
           env: {{- include "common.tplvalues.render" (dict "value" .Values.vulture.extraEnvVars "context" $) | nindent 12 }}
@@ -95,41 +103,38 @@ spec:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.vulture.extraEnvVarsSecret "context" $) }}
             {{- end }}
           ports:
-            - containerPort: {{ .Values.vulture.containerPort }}
+            - containerPort: {{ .Values.vulture.containerPorts.http }}
               name: http
           {{- if .Values.vulture.resources }}
           resources: {{- toYaml .Values.vulture.resources | nindent 12 }}
           {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.vulture.livenessProbe.enabled }}
-          livenessProbe:
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.vulture.livenessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /metrics
-              port: http
-            initialDelaySeconds: {{ .Values.vulture.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.vulture.livenessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.vulture.livenessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.vulture.livenessProbe.successThreshold }}
-            failureThreshold: {{ .Values.vulture.livenessProbe.failureThreshold }}
+              port: {{ .Values.vulture.containerPorts.http }}
           {{- else if .Values.vulture.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.vulture.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.vulture.readinessProbe.enabled }}
-          readinessProbe:
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.vulture.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /metrics
-              port: http
-            initialDelaySeconds: {{ .Values.vulture.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.vulture.readinessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.vulture.readinessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.vulture.readinessProbe.successThreshold }}
-            failureThreshold: {{ .Values.vulture.readinessProbe.failureThreshold }}
+              port: {{ .Values.vulture.containerPorts.http }}
           {{- else if .Values.vulture.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.vulture.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
+          {{- if .Values.vulture.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.vulture.startupProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: http
+          {{- else if .Values.vulture.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.vulture.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- end }}
           {{- if .Values.vulture.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.vulture.lifecycleHooks "context" $) | nindent 12 }}
-          {{- end }}
           {{- end }}
           volumeMounts:
             - name: tempo-config

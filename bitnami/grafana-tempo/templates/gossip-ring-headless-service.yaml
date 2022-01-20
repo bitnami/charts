@@ -23,7 +23,7 @@ spec:
   clusterIP: None
   ports:
     - name: http
-      port: {{ .Values.tempo.gossipRing.service.port }}
+      port: {{ .Values.tempo.gossipRing.service.ports.http }}
       targetPort: http-memberlist
       protocol: TCP
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}

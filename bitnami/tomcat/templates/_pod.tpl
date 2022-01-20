@@ -133,7 +133,7 @@ containers:
       - name: data
         mountPath: /bitnami/tomcat
       {{- if .Values.extraVolumeMounts }}
-      {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 4 }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 6 }}
       {{- end }}
 {{- if .Values.sidecars }}
 {{ include "common.tplvalues.render" ( dict "value" .Values.sidecars "context" $) }}
@@ -181,9 +181,6 @@ volumes:
   {{- if .Values.extraVolumes }}
   {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 2 }}
   {{- end }}
-{{- if .Values.extraVolumes }}
-{{ include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) }}
-{{- end }}
 {{- if .Values.extraPodSpec }}
 {{- include "common.tplvalues.render" (dict "value" .Values.extraPodSpec "context" $) }}
 {{- end }}

@@ -29,10 +29,10 @@ data:
         if [ -z "$port" ]; then
             case $type in
                 "SENTINEL")
-                    echo {{ .Values.sentinel.containerPort }}
+                    echo {{ .Values.sentinel.containerPorts.sentinel }}
                     ;;
                 "REDIS")
-                    echo {{ .Values.master.containerPort }}
+                    echo {{ .Values.master.containerPorts.redis }}
                     ;;
             esac
         else
@@ -43,7 +43,9 @@ data:
     get_full_hostname() {
         hostname="$1"
 
-        {{- if eq .Values.sentinel.service.type "NodePort" }}
+        {{- if .Values.useExternalDNS.enabled }}
+        echo "${hostname}.{{- include "redis.externalDNS.suffix" . }}"
+        {{- else if eq .Values.sentinel.service.type "NodePort" }}
         echo "${hostname}.{{- .Release.Namespace }}"
         {{- else }}
         echo "${hostname}.${HEADLESS_SERVICE}"
@@ -86,7 +88,7 @@ data:
         fi
 
         info "about to run the command: $sentinel_info_command"
-        retry_while "eval $sentinel_info_command"
+         eval $sentinel_info_command
     }
 
     {{- if and .Values.replica.containerSecurityContext.runAsUser (eq (.Values.replica.containerSecurityContext.runAsUser | int) 0) }}
@@ -218,10 +220,10 @@ data:
         if [ -z "$port" ]; then
             case $type in
                 "SENTINEL")
-                    echo {{ .Values.sentinel.containerPort }}
+                    echo {{ .Values.sentinel.containerPorts.sentinel }}
                     ;;
                 "REDIS")
-                    echo {{ .Values.master.containerPort }}
+                    echo {{ .Values.master.containerPorts.redis }}
                     ;;
             esac
         else
@@ -232,7 +234,9 @@ data:
     get_full_hostname() {
         hostname="$1"
 
-        {{- if eq .Values.sentinel.service.type "NodePort" }}
+        {{- if .Values.useExternalDNS.enabled }}
+        echo "${hostname}.{{- include "redis.externalDNS.suffix" . }}"
+        {{- else if eq .Values.sentinel.service.type "NodePort" }}
         echo "${hostname}.{{- .Release.Namespace }}"
         {{- else }}
         echo "${hostname}.${HEADLESS_SERVICE}"
@@ -361,7 +365,9 @@ data:
     get_full_hostname() {
         hostname="$1"
 
-        {{- if eq .Values.sentinel.service.type "NodePort" }}
+        {{- if .Values.useExternalDNS.enabled }}
+        echo "${hostname}.{{- include "redis.externalDNS.suffix" . }}"
+        {{- else if eq .Values.sentinel.service.type "NodePort" }}
         echo "${hostname}.{{- .Release.Namespace }}"
         {{- else }}
         echo "${hostname}.${HEADLESS_SERVICE}"
@@ -492,10 +498,10 @@ data:
         if [ -z "$port" ]; then
             case $type in
                 "SENTINEL")
-                    echo {{ .Values.sentinel.containerPort }}
+                    echo {{ .Values.sentinel.containerPorts.sentinel }}
                     ;;
                 "REDIS")
-                    echo {{ .Values.master.containerPort }}
+                    echo {{ .Values.master.containerPorts.redis }}
                     ;;
             esac
         else
@@ -506,7 +512,9 @@ data:
     get_full_hostname() {
         hostname="$1"
 
-        {{- if eq .Values.sentinel.service.type "NodePort" }}
+        {{- if .Values.useExternalDNS.enabled }}
+        echo "${hostname}.{{- include "redis.externalDNS.suffix" . }}"
+        {{- else if eq .Values.sentinel.service.type "NodePort" }}
         echo "${hostname}.{{- .Release.Namespace }}"
         {{- else }}
         echo "${hostname}.${HEADLESS_SERVICE}"

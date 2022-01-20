@@ -1,3 +1,5 @@
+<!--- app-name: Spring Cloud Data Flow -->
+
 # Spring Cloud Data Flow
 
 [Spring Cloud Data Flow](https://dataflow.spring.io/) is a microservices-based Streaming and Batch data processing pipeline in Cloud Foundry and Kubernetes.
@@ -17,8 +19,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 ## Prerequisites
 
-- Kubernetes 1.12+
-- Helm 3.1.0
+- Kubernetes 1.19+
+- Helm 3.2.0+
 - PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
@@ -72,14 +74,14 @@ helm uninstall my-release
 | --------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
 | `server.image.registry`                             | Spring Cloud Dataflow image registry                                                                                             | `docker.io`                                          |
 | `server.image.repository`                           | Spring Cloud Dataflow image repository                                                                                           | `bitnami/spring-cloud-dataflow`                      |
-| `server.image.tag`                                  | Spring Cloud Dataflow image tag (immutable tags are recommended)                                                                 | `2.9.1-debian-10-r54`                                |
+| `server.image.tag`                                  | Spring Cloud Dataflow image tag (immutable tags are recommended)                                                                 | `2.9.1-debian-10-r60`                                |
 | `server.image.pullPolicy`                           | Spring Cloud Dataflow image pull policy                                                                                          | `IfNotPresent`                                       |
 | `server.image.pullSecrets`                          | Specify docker-registry secret names as an array                                                                                 | `[]`                                                 |
 | `server.image.debug`                                | Enable image debug mode                                                                                                          | `false`                                              |
 | `server.hostAliases`                                | Deployment pod host aliases                                                                                                      | `[]`                                                 |
 | `server.composedTaskRunner.image.registry`          | Spring Cloud Dataflow Composed Task Runner image registry                                                                        | `docker.io`                                          |
 | `server.composedTaskRunner.image.repository`        | Spring Cloud Dataflow Composed Task Runner image repository                                                                      | `bitnami/spring-cloud-dataflow-composed-task-runner` |
-| `server.composedTaskRunner.image.tag`               | Spring Cloud Dataflow Composed Task Runner image tag (immutable tags are recommended)                                            | `2.9.1-debian-10-r59`                                |
+| `server.composedTaskRunner.image.tag`               | Spring Cloud Dataflow Composed Task Runner image tag (immutable tags are recommended)                                            | `2.9.1-debian-10-r65`                                |
 | `server.configuration.streamingEnabled`             | Enables or disables streaming data processing                                                                                    | `true`                                               |
 | `server.configuration.batchEnabled`                 | Enables or disables batch data (tasks and schedules) processing                                                                  | `true`                                               |
 | `server.configuration.accountName`                  | The name of the account to configure for the Kubernetes platform                                                                 | `default`                                            |
@@ -187,7 +189,7 @@ helm uninstall my-release
 | `skipper.hostAliases`                        | Deployment pod host aliases                                                                               | `[]`                           |
 | `skipper.image.registry`                     | Spring Cloud Skipper image registry                                                                       | `docker.io`                    |
 | `skipper.image.repository`                   | Spring Cloud Skipper image repository                                                                     | `bitnami/spring-cloud-skipper` |
-| `skipper.image.tag`                          | Spring Cloud Skipper image tag (immutable tags are recommended)                                           | `2.8.1-debian-10-r58`          |
+| `skipper.image.tag`                          | Spring Cloud Skipper image tag (immutable tags are recommended)                                           | `2.8.1-debian-10-r64`          |
 | `skipper.image.pullPolicy`                   | Spring Cloud Skipper image pull policy                                                                    | `IfNotPresent`                 |
 | `skipper.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                          | `[]`                           |
 | `skipper.image.debug`                        | Enable image debug mode                                                                                   | `false`                        |
@@ -306,7 +308,7 @@ helm uninstall my-release
 | `metrics.enabled`                            | Enable Prometheus metrics                                                                                                  | `false`                            |
 | `metrics.image.registry`                     | Prometheus Rsocket Proxy image registry                                                                                    | `docker.io`                        |
 | `metrics.image.repository`                   | Prometheus Rsocket Proxy image repository                                                                                  | `bitnami/prometheus-rsocket-proxy` |
-| `metrics.image.tag`                          | Prometheus Rsocket Proxy image tag (immutable tags are recommended)                                                        | `1.3.0-debian-10-r365`             |
+| `metrics.image.tag`                          | Prometheus Rsocket Proxy image tag (immutable tags are recommended)                                                        | `1.3.0-debian-10-r371`             |
 | `metrics.image.pullPolicy`                   | Prometheus Rsocket Proxy image pull policy                                                                                 | `IfNotPresent`                     |
 | `metrics.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                           | `[]`                               |
 | `metrics.resources.limits`                   | The resources limits for the Prometheus Rsocket Proxy container                                                            | `{}`                               |
@@ -383,7 +385,7 @@ helm uninstall my-release
 | `waitForBackends.enabled`            | Wait for the database and other services (such as Kafka or RabbitMQ) used when enabling streaming | `true`                 |
 | `waitForBackends.image.registry`     | Init container wait-for-backend image registry                                                    | `docker.io`            |
 | `waitForBackends.image.repository`   | Init container wait-for-backend image name                                                        | `bitnami/kubectl`      |
-| `waitForBackends.image.tag`          | Init container wait-for-backend image tag                                                         | `1.23.1-debian-10-r12` |
+| `waitForBackends.image.tag`          | Init container wait-for-backend image tag                                                         | `1.23.1-debian-10-r18` |
 | `waitForBackends.image.pullPolicy`   | Init container wait-for-backend image pull policy                                                 | `IfNotPresent`         |
 | `waitForBackends.image.pullSecrets`  | Specify docker-registry secret names as an array                                                  | `[]`                   |
 | `waitForBackends.resources.limits`   | Init container wait-for-backend resource limits                                                   | `{}`                   |

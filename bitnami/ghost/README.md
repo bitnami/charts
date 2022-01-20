@@ -1,3 +1,5 @@
+<!--- app-name: Ghost -->
+
 # Ghost
 
 [Ghost](https://ghost.org/) is an open source publishing platform designed to create blogs, magazines, and news sites. It includes a simple markdown editor with preview, theming, and SEO built-in to simplify editing.
@@ -19,8 +21,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 ## Prerequisites
 
-- Kubernetes 1.12+
-- Helm 3.1.0
+- Kubernetes 1.19+
+- Helm 3.2.0+
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -76,7 +78,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ------------------------------------------------ | --------------------- |
 | `image.registry`    | Ghost image registry                             | `docker.io`           |
 | `image.repository`  | Ghost image repository                           | `bitnami/ghost`       |
-| `image.tag`         | Ghost image tag (immutable tags are recommended) | `4.24.0-debian-10-r2` |
+| `image.tag`         | Ghost image tag (immutable tags are recommended) | `4.32.3-debian-10-r0` |
 | `image.pullPolicy`  | Ghost image pull policy                          | `IfNotPresent`        |
 | `image.pullSecrets` | Ghost image pull secrets                         | `[]`                  |
 | `image.debug`       | Enable image debug mode                          | `false`               |
@@ -210,7 +212,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                   | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`            | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`          | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r265`     |
+| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r308`     |
 | `volumePermissions.image.pullPolicy`          | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`         | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`          | The resources limits for the init container                                                     | `{}`                    |
@@ -369,6 +371,10 @@ Find more information about how to deal with common errors related to Bitnami’
 
 ## Upgrading
 
+### To 16.0.0
+
+This major release updates the MariaDB subchart to its newest major, 10.0.0. Check [MariaDB Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#to-1000) for more information.
+
 ### To 15.0.0
 
 This major release renames several values in this chart and adds missing features, in order to be inline with the rest of assets in the Bitnami charts repository.
@@ -377,8 +383,6 @@ Affected values:
 
 - `service.port` was deprecated, we recommend using `service.ports.http` instead.
 - `service.httpsPort` was deprecated, we recommend using `service.ports.https` instead.
-
-Additionally, updates the MariaDB subchart to it newest major, 10.0.0, which contains similar changes.
 
 ### To 14.0.0
 

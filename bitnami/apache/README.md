@@ -1,8 +1,8 @@
+<!--- app-name: Apache -->
+
 # Apache
 
 The [Apache HTTP Server Project](https://httpd.apache.org/) is an effort to develop and maintain an open-source HTTP server for modern operating systems including UNIX and Windows NT. The goal of this project is to provide a secure, efficient and extensible server that provides HTTP services in sync with the current HTTP standards.
-
-The Apache HTTP Server ("httpd") was launched in 1995 and it has been the most popular web server on the Internet since April 1996. It has celebrated its 20th birthday as a project in February 2015.
 
 ## TL;DR
 
@@ -17,12 +17,14 @@ Bitnami charts for Helm are carefully engineered, actively maintained and are th
 
 This chart bootstraps a [Apache](https://github.com/bitnami/bitnami-docker-apache) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
+The Apache HTTP Server ("httpd") was launched in 1995 and it has been the most popular web server on the Internet since April 1996. It has celebrated its 20th birthday as a project in February 2015.
+
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
 ## Prerequisites
 
-- Kubernetes 1.12+
-- Helm 3.1.0
+- Kubernetes 1.19+
+- Helm 3.2.0+
 
 ## Installing the Chart
 
@@ -76,13 +78,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ---------------------- |
 | `image.registry`                        | Apache image registry                                                                                                    | `docker.io`            |
 | `image.repository`                      | Apache image repository                                                                                                  | `bitnami/apache`       |
-| `image.tag`                             | Apache image tag (immutable tags are recommended)                                                                        | `2.4.52-debian-10-r20` |
+| `image.tag`                             | Apache image tag (immutable tags are recommended)                                                                        | `2.4.52-debian-10-r24` |
 | `image.pullPolicy`                      | Apache image pull policy                                                                                                 | `IfNotPresent`         |
 | `image.pullSecrets`                     | Apache image pull secrets                                                                                                | `[]`                   |
 | `image.debug`                           | Enable image debug mode                                                                                                  | `false`                |
 | `git.registry`                          | Git image registry                                                                                                       | `docker.io`            |
 | `git.repository`                        | Git image name                                                                                                           | `bitnami/git`          |
-| `git.tag`                               | Git image tag                                                                                                            | `2.34.1-debian-10-r43` |
+| `git.tag`                               | Git image tag                                                                                                            | `2.34.1-debian-10-r47` |
 | `git.pullPolicy`                        | Git image pull policy                                                                                                    | `IfNotPresent`         |
 | `git.pullSecrets`                       | Specify docker-registry secret names as an array                                                                         | `[]`                   |
 | `replicaCount`                          | Number of replicas of the Apache deployment                                                                              | `1`                    |
@@ -215,7 +217,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                          | Start a sidecar prometheus exporter to expose Apache metrics                                                                              | `false`                   |
 | `metrics.image.registry`                   | Apache Exporter image registry                                                                                                            | `docker.io`               |
 | `metrics.image.repository`                 | Apache Exporter image repository                                                                                                          | `bitnami/apache-exporter` |
-| `metrics.image.tag`                        | Apache Exporter image tag (immutable tags are recommended)                                                                                | `0.11.0-debian-10-r22`    |
+| `metrics.image.tag`                        | Apache Exporter image tag (immutable tags are recommended)                                                                                | `0.11.0-debian-10-r26`    |
 | `metrics.image.pullPolicy`                 | Apache Exporter image pull policy                                                                                                         | `IfNotPresent`            |
 | `metrics.image.pullSecrets`                | Apache Exporter image pull secrets                                                                                                        | `[]`                      |
 | `metrics.image.debug`                      | Apache Exporter image debug mode                                                                                                          | `false`                   |

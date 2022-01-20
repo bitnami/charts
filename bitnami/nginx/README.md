@@ -1,3 +1,5 @@
+<!--- app-name: NGINX Open Source -->
+
 # NGINX
 
 [NGINX](https://nginx.org) (pronounced "engine-x") is an open source reverse proxy server for HTTP, HTTPS, SMTP, POP3, and IMAP protocols, as well as a load balancer, HTTP cache, and a web server (origin server).
@@ -19,8 +21,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 ## Prerequisites
 
-- Kubernetes 1.12+
-- Helm 3.1.0
+- Kubernetes 1.19+
+- Helm 3.2.0+
 
 ## Installing the Chart
 
@@ -70,20 +72,20 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### NGINX parameters
 
-| Name                 | Description                                                          | Value                  |
-| -------------------- | -------------------------------------------------------------------- | ---------------------- |
-| `image.registry`     | NGINX image registry                                                 | `docker.io`            |
-| `image.repository`   | NGINX image repository                                               | `bitnami/nginx`        |
-| `image.tag`          | NGINX image tag (immutable tags are recommended)                     | `1.21.4-debian-10-r27` |
-| `image.pullPolicy`   | NGINX image pull policy                                              | `IfNotPresent`         |
-| `image.pullSecrets`  | Specify docker-registry secret names as an array                     | `[]`                   |
-| `image.debug`        | Set to true if you would like to see extra information on logs       | `false`                |
-| `hostAliases`        | Deployment pod host aliases                                          | `[]`                   |
-| `command`            | Override default container command (useful when using custom images) | `[]`                   |
-| `args`               | Override default container args (useful when using custom images)    | `[]`                   |
-| `extraEnvVars`       | Extra environment variables to be set on NGINX containers            | `[]`                   |
-| `extraEnvVarsCM`     | ConfigMap with extra environment variables                           | `""`                   |
-| `extraEnvVarsSecret` | Secret with extra environment variables                              | `""`                   |
+| Name                 | Description                                                          | Value                 |
+| -------------------- | -------------------------------------------------------------------- | --------------------- |
+| `image.registry`     | NGINX image registry                                                 | `docker.io`           |
+| `image.repository`   | NGINX image repository                                               | `bitnami/nginx`       |
+| `image.tag`          | NGINX image tag (immutable tags are recommended)                     | `1.21.5-debian-10-r3` |
+| `image.pullPolicy`   | NGINX image pull policy                                              | `IfNotPresent`        |
+| `image.pullSecrets`  | Specify docker-registry secret names as an array                     | `[]`                  |
+| `image.debug`        | Set to true if you would like to see extra information on logs       | `false`               |
+| `hostAliases`        | Deployment pod host aliases                                          | `[]`                  |
+| `command`            | Override default container command (useful when using custom images) | `[]`                  |
+| `args`               | Override default container args (useful when using custom images)    | `[]`                  |
+| `extraEnvVars`       | Extra environment variables to be set on NGINX containers            | `[]`                  |
+| `extraEnvVarsCM`     | ConfigMap with extra environment variables                           | `""`                  |
+| `extraEnvVarsSecret` | Secret with extra environment variables                              | `""`                  |
 
 
 ### NGINX deployment parameters
@@ -147,27 +149,27 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Custom NGINX application parameters
 
-| Name                                       | Description                                                                                       | Value                 |
-| ------------------------------------------ | ------------------------------------------------------------------------------------------------- | --------------------- |
-| `cloneStaticSiteFromGit.enabled`           | Get the server static content from a Git repository                                               | `false`               |
-| `cloneStaticSiteFromGit.image.registry`    | Git image registry                                                                                | `docker.io`           |
-| `cloneStaticSiteFromGit.image.repository`  | Git image repository                                                                              | `bitnami/git`         |
-| `cloneStaticSiteFromGit.image.tag`         | Git image tag (immutable tags are recommended)                                                    | `2.34.1-debian-10-r6` |
-| `cloneStaticSiteFromGit.image.pullPolicy`  | Git image pull policy                                                                             | `IfNotPresent`        |
-| `cloneStaticSiteFromGit.image.pullSecrets` | Specify docker-registry secret names as an array                                                  | `[]`                  |
-| `cloneStaticSiteFromGit.repository`        | Git Repository to clone static content from                                                       | `""`                  |
-| `cloneStaticSiteFromGit.branch`            | Git branch to checkout                                                                            | `""`                  |
-| `cloneStaticSiteFromGit.interval`          | Interval for sidecar container pull from the Git repository                                       | `60`                  |
-| `cloneStaticSiteFromGit.gitClone.command`  | Override default container command for git-clone-repository                                       | `[]`                  |
-| `cloneStaticSiteFromGit.gitClone.args`     | Override default container args for git-clone-repository                                          | `[]`                  |
-| `cloneStaticSiteFromGit.gitSync.command`   | Override default container command for git-repo-syncer                                            | `[]`                  |
-| `cloneStaticSiteFromGit.gitSync.args`      | Override default container args for git-repo-syncer                                               | `[]`                  |
-| `cloneStaticSiteFromGit.extraEnvVars`      | Additional environment variables to set for the in the containers that clone static site from git | `[]`                  |
-| `cloneStaticSiteFromGit.extraVolumeMounts` | Add extra volume mounts for the Git containers                                                    | `[]`                  |
-| `serverBlock`                              | Custom server block to be added to NGINX configuration                                            | `""`                  |
-| `existingServerBlockConfigmap`             | ConfigMap with custom server block to be added to NGINX configuration                             | `""`                  |
-| `staticSiteConfigmap`                      | Name of existing ConfigMap with the server static site content                                    | `""`                  |
-| `staticSitePVC`                            | Name of existing PVC with the server static site content                                          | `""`                  |
+| Name                                       | Description                                                                                       | Value                  |
+| ------------------------------------------ | ------------------------------------------------------------------------------------------------- | ---------------------- |
+| `cloneStaticSiteFromGit.enabled`           | Get the server static content from a Git repository                                               | `false`                |
+| `cloneStaticSiteFromGit.image.registry`    | Git image registry                                                                                | `docker.io`            |
+| `cloneStaticSiteFromGit.image.repository`  | Git image repository                                                                              | `bitnami/git`          |
+| `cloneStaticSiteFromGit.image.tag`         | Git image tag (immutable tags are recommended)                                                    | `2.34.1-debian-10-r33` |
+| `cloneStaticSiteFromGit.image.pullPolicy`  | Git image pull policy                                                                             | `IfNotPresent`         |
+| `cloneStaticSiteFromGit.image.pullSecrets` | Specify docker-registry secret names as an array                                                  | `[]`                   |
+| `cloneStaticSiteFromGit.repository`        | Git Repository to clone static content from                                                       | `""`                   |
+| `cloneStaticSiteFromGit.branch`            | Git branch to checkout                                                                            | `""`                   |
+| `cloneStaticSiteFromGit.interval`          | Interval for sidecar container pull from the Git repository                                       | `60`                   |
+| `cloneStaticSiteFromGit.gitClone.command`  | Override default container command for git-clone-repository                                       | `[]`                   |
+| `cloneStaticSiteFromGit.gitClone.args`     | Override default container args for git-clone-repository                                          | `[]`                   |
+| `cloneStaticSiteFromGit.gitSync.command`   | Override default container command for git-repo-syncer                                            | `[]`                   |
+| `cloneStaticSiteFromGit.gitSync.args`      | Override default container args for git-repo-syncer                                               | `[]`                   |
+| `cloneStaticSiteFromGit.extraEnvVars`      | Additional environment variables to set for the in the containers that clone static site from git | `[]`                   |
+| `cloneStaticSiteFromGit.extraVolumeMounts` | Add extra volume mounts for the Git containers                                                    | `[]`                   |
+| `serverBlock`                              | Custom server block to be added to NGINX configuration                                            | `""`                   |
+| `existingServerBlockConfigmap`             | ConfigMap with custom server block to be added to NGINX configuration                             | `""`                   |
+| `staticSiteConfigmap`                      | Name of existing ConfigMap with the server static site content                                    | `""`                   |
+| `staticSitePVC`                            | Name of existing PVC with the server static site content                                          | `""`                   |
 
 
 ### LDAP parameters
@@ -177,7 +179,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ldapDaemon.enabled`                            | Enable LDAP Auth Daemon proxy                                                            | `false`                          |
 | `ldapDaemon.image.registry`                     | LDAP AUth Daemon Image registry                                                          | `docker.io`                      |
 | `ldapDaemon.image.repository`                   | LDAP Auth Daemon Image repository                                                        | `bitnami/nginx-ldap-auth-daemon` |
-| `ldapDaemon.image.tag`                          | LDAP Auth Daemon Image tag (immutable tags are recommended)                              | `0.20200116.0-debian-10-r528`    |
+| `ldapDaemon.image.tag`                          | LDAP Auth Daemon Image tag (immutable tags are recommended)                              | `0.20200116.0-debian-10-r556`    |
 | `ldapDaemon.image.pullPolicy`                   | LDAP Auth Daemon Image pull policy                                                       | `IfNotPresent`                   |
 | `ldapDaemon.port`                               | LDAP Auth Daemon port                                                                    | `8888`                           |
 | `ldapDaemon.ldapConfig.uri`                     | LDAP Server URI, `ldap[s]:/<hostname>:<port>`                                            | `""`                             |
@@ -246,7 +248,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.port`                             | NGINX Container Status Port scraped by Prometheus Exporter                                                                                | `""`                     |
 | `metrics.image.registry`                   | NGINX Prometheus exporter image registry                                                                                                  | `docker.io`              |
 | `metrics.image.repository`                 | NGINX Prometheus exporter image repository                                                                                                | `bitnami/nginx-exporter` |
-| `metrics.image.tag`                        | NGINX Prometheus exporter image tag (immutable tags are recommended)                                                                      | `0.9.0-debian-10-r235`   |
+| `metrics.image.tag`                        | NGINX Prometheus exporter image tag (immutable tags are recommended)                                                                      | `0.10.0-debian-10-r8`    |
 | `metrics.image.pullPolicy`                 | NGINX Prometheus exporter image pull policy                                                                                               | `IfNotPresent`           |
 | `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                                                                                          | `[]`                     |
 | `metrics.podAnnotations`                   | Additional annotations for NGINX Prometheus exporter pod(s)                                                                               | `{}`                     |
