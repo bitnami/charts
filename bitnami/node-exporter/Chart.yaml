@@ -24,4 +24,4 @@ sources:
   - https://github.com/bitnami/bitnami-docker-node-exporter
   - https://github.com/prometheus/node_exporter
   - https://prometheus.io/
-version: 2.4.0
+version: 2.4.1
