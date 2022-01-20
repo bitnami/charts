@@ -24,7 +24,7 @@ jobs:
 
   cp-k8s-verify: # verify in multiple target platforms
     runs-on: ubuntu-latest
-    needs: [vib-validate]
+    needs: [cp-validate]
     strategy:
       matrix:
        include:
