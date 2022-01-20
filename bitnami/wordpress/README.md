@@ -2,7 +2,7 @@
 
 # WordPress
 
-Important change 2
+Important change 3
 
 [WordPress](https://wordpress.org/) is one of the most versatile open source content management systems on the market. A publishing platform for building blogs and websites.
 
