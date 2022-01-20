@@ -274,3 +274,18 @@ redis: tls.enabled
     enable auto-generated certificates.
 {{- end -}}
 {{- end -}}
+
+{{/* Define the suffix utilized for external-dns */}}
+{{- define "redis.externalDNS.suffix" -}}
+{{ printf "%s.%s" (include "common.names.fullname" .) .Values.useExternalDNS.suffix }}
+{{- end -}}
+
+{{/* Compile all annotations utilized for external-dns */}}
+{{- define "redis.externalDNS.annotations" -}}
+{{- if .Values.useExternalDNS.enabled }}
+{{ .Values.useExternalDNS.annotationKey }}hostname: {{ include "redis.externalDNS.suffix" . }}
+{{- range $key, $val := .Values.useExternalDNS.additionalAnnotations }}
+{{ $.Values.useExternalDNS.annotationKey }}{{ $key }}: {{ $val | quote }}
+{{- end }}
+{{- end }}
+{{- end }}
