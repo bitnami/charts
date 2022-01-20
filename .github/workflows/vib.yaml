@@ -4,7 +4,10 @@ on: # rebuild any PRs and main branch changes
     branches:
       - master
     types:
-      - [assigned, opened, synchronize, reopened]
+      - assigned 
+      - opened 
+      - synchronize 
+      - reopened
     paths:
       - 'bitnami/wordpress/*'
 env:
