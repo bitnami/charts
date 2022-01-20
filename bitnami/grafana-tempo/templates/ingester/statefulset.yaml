@@ -22,9 +22,11 @@ spec:
   serviceName: {{ template "grafana-tempo.ingester.fullname" . }}
   template:
     metadata:
-      {{- if .Values.ingester.podAnnotations }}
-      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.ingester.podAnnotations "context" $) | nindent 8 }}
-      {{- end }}
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/tempo-configmap.yaml") . | sha256sum }}
+        {{- if .Values.ingester.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.ingester.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: ingester
         tempo-gossip-member: "true"
