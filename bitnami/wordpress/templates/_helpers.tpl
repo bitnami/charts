@@ -161,7 +161,7 @@ Return the MariaDB Secret Name
         {{- printf "%s" (include "wordpress.mariadb.fullname" .) -}}
     {{- end -}}
 {{- else if .Values.externalDatabase.existingSecret -}}
-    {{- printf "%s" .Values.externalDatabase.existingSecret -}}
+    {{- include "common.tplvalues.render" (dict "value" .Values.externalDatabase.existingSecret "context" $) -}}
 {{- else -}}
     {{- printf "%s-externaldb" (include "common.names.fullname" .) -}}
 {{- end -}}
