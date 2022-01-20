@@ -341,6 +341,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.image.tag`                          | MongoDB&reg; exporter image tag                                                    | `0.11.2-debian-10-r354`    |
 | `metrics.image.pullPolicy`                   | MongoDB&reg; exporter image pull policy                                            | `Always`                   |
 | `metrics.image.pullSecrets`                  | MongoDB&reg; exporter image pull secrets                                           | `[]`                       |
+| `metrics.useTLS`                             | Whether to connect to MongoDB&reg; with TLS                                        | `false`                       |
 | `metrics.extraArgs`                          | String with extra arguments to the metrics exporter                                | `""`                       |
 | `metrics.resources`                          | Metrics exporter resource requests and limits                                      | `{}`                       |
 | `metrics.livenessProbe.enabled`              | Enable livenessProbe                                                               | `false`                    |
