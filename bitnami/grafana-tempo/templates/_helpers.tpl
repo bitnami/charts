@@ -142,18 +142,28 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- define "grafana-tempo.memcached.url" -}}
 {{- $port := "" -}}
 {{- if .Values.externalMemcached.host -}}
-{{- $servicePortString := printf "%v" .Values.externalMemcached.port -}}
-{{- if (not (eq $servicePortString "11211")) -}}
-  {{- $port = printf ":%s" $servicePortString -}}
-{{- end -}}
-{{- printf "%s%s" .Values.externalMemcached.host $port }}
+  {{- $servicePortString := printf "%v" .Values.externalMemcached.port -}}
+  {{- if (not (eq $servicePortString "11211")) -}}
+    {{- $port = printf ":%s" $servicePortString -}}
+  {{- end -}}
+  {{- printf "%s%s" .Values.externalMemcached.host $port }}
 {{- else -}}
-{{- $servicePortString := printf "%v" .Values.memcached.service.port -}}
-{{- if (not (eq $servicePortString "11211")) -}}
-  {{- $port = printf ":%s" $servicePortString -}}
+  {{- $servicePortString := printf "%v" .Values.memcached.service.ports.memcached -}}
+  {{- if (not (eq $servicePortString "11211")) -}}
+    {{- $port = printf ":%s" $servicePortString -}}
+  {{- end -}}
+  {{- printf "%s%s" (include "grafana-tempo.memcached.fullname" .) $port }}
 {{- end -}}
-{{- printf "%s%s" (include "grafana-tempo.memcached.fullname" .) $port }}
 {{- end -}}
+
+{{/*
+Check if there are rolling tags in the images
+*/}}
+{{- define "grafana-tempo.checkRollingTags" -}}
+{{- include "common.warnings.rollingTag" .Values.tempo.image }}
+{{- include "common.warnings.rollingTag" .Values.queryFrontend.query.image }}
+{{- include "common.warnings.rollingTag" .Values.vulture.image }}
+{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
 {{- end -}}
 
 {{/*
