@@ -21,9 +21,11 @@ spec:
       app.kubernetes.io/component: query-frontend
   template:
     metadata:
-      {{- if .Values.queryFrontend.podAnnotations }}
-      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.podAnnotations "context" $) | nindent 8 }}
-      {{- end }}
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/tempo-configmap.yaml") . | sha256sum }}
+        {{- if .Values.queryFrontend.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: query-frontend
         tempo-gossip-member: "true"
