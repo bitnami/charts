@@ -4,6 +4,7 @@ metadata:
   name: {{ include "elasticsearch.data.fullname" . }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: data
+  annotations: {{ include "common.tplvalues.render" ( dict "value" .Values.data.service.annotations "context" $) | nindent 4 }}
 spec:
   type: ClusterIP
   publishNotReadyAddresses: true

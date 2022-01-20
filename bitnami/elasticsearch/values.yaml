@@ -1007,6 +1007,13 @@ data:
   ## @param data.sidecars Extra sidecar containers to add to the Elasticsearch data pod(s)
   ##
   sidecars: []
+  ## Service parameters for data-eligible node(s)
+  ##
+  service:
+    ## @param data.service.annotations Annotations for data-eligible nodes service
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+    ##
+    annotations: {}
   ## Enable persistence using Persistent Volume Claims
   ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
