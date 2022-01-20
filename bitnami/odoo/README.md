@@ -21,8 +21,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 ## Prerequisites
 
-- Kubernetes 1.12+
-- Helm 3.1.0
+- Kubernetes 1.19+
+- Helm 3.2.0+
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -71,7 +71,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraDeploy`       | Array of extra objects to deploy with the release  | `[]`                         |
 | `image.registry`    | Odoo image registry                                | `docker.io`                  |
 | `image.repository`  | Odoo image repository                              | `bitnami/odoo`               |
-| `image.tag`         | Odoo image tag (immutable tags are recommended)    | `15.0.20211110-debian-10-r0` |
+| `image.tag`         | Odoo image tag (immutable tags are recommended)    | `15.0.20220110-debian-10-r1` |
 | `image.pullPolicy`  | Odoo image pull policy                             | `IfNotPresent`               |
 | `image.pullSecrets` | Odoo image pull secrets                            | `[]`                         |
 | `image.debug`       | Enable image debug mode                            | `false`                      |

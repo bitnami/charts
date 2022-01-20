@@ -23,8 +23,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 ## Prerequisites
 
-- Kubernetes 1.12+ in AWS
-- Helm 3.1.0
+- Kubernetes 1.19+ in AWS
+- Helm 3.2.0+
 
 ## Installing the Chart
 
@@ -77,7 +77,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ------------------------------------------------ | ---------------------- |
 | `image.registry`    | kiam image registry                              | `docker.io`            |
 | `image.repository`  | kiam image name                                  | `bitnami/kiam`         |
-| `image.tag`         | kiam image tag                                   | `3.6.0-debian-10-r372` |
+| `image.tag`         | kiam image tag                                   | `3.6.0-debian-10-r415` |
 | `image.pullPolicy`  | kiam image pull policy                           | `IfNotPresent`         |
 | `image.pullSecrets` | Specify docker-registry secret names as an array | `[]`                   |
 

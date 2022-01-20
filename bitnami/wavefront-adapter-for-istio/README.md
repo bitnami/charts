@@ -20,8 +20,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 ## Prerequisites
 
-- Kubernetes 1.15+
-- Helm 3.1.0
+- Kubernetes 1.19+
+- Helm 3.2.0+
 - Istio v1.4, v1.5 and v1.6 with `Mixer` support
 
 In order to enable the `Mixer` in Istio versions starting from v1.5, execute the following commands:
@@ -83,7 +83,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------- |
 | `image.registry`                        | Adapter image registry                                                                    | `docker.io`                           |
 | `image.repository`                      | Adapter image repository                                                                  | `bitnami/wavefront-adapter-for-istio` |
-| `image.tag`                             | Adapter image tag (immutabe tags are recommended)                                         | `0.1.5-debian-10-r222`                |
+| `image.tag`                             | Adapter image tag (immutabe tags are recommended)                                         | `0.1.5-debian-10-r273`                |
 | `image.pullPolicy`                      | Adapter image pull policy                                                                 | `IfNotPresent`                        |
 | `image.pullSecrets`                     | Adapter image pull secrets                                                                | `[]`                                  |
 | `image.debug`                           | Enable image debug mode                                                                   | `false`                               |

@@ -2,7 +2,7 @@
 
 # Wavefront HPA Adapter for Kubernetes
 
-[Wavefront HPA Adapter for Kubernetes](https://github.com/wavefrontHQ/wavefront-kubernetes-adapter) Wavefront HPA Adapter for Kubernetes is a Kubernetes Horizontal Pod Autoscaler adapter. 
+[Wavefront HPA Adapter for Kubernetes](https://github.com/wavefrontHQ/wavefront-kubernetes-adapter) Wavefront HPA Adapter for Kubernetes is a Kubernetes Horizontal Pod Autoscaler adapter.
 
 ## TL;DR
 
@@ -22,8 +22,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 ## Prerequisites
 
-- Kubernetes 1.12+
-- Helm 3.1.0
+- Kubernetes 1.19+
+- Helm 3.2.0+
 
 ## Installing the Chart
 
@@ -72,7 +72,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------ |
 | `image.registry`                        | Adapter image registry                                                                    | `docker.io`                          |
 | `image.repository`                      | Adapter image repository                                                                  | `bitnami/wavefront-hpa-adapter`      |
-| `image.tag`                             | Adapter image tag (immutabe tags are recommended)                                         | `0.9.8-scratch-r6`                   |
+| `image.tag`                             | Adapter image tag (immutabe tags are recommended)                                         | `0.9.8-scratch-r9`                   |
 | `image.pullPolicy`                      | Adapter image pull policy                                                                 | `IfNotPresent`                       |
 | `image.pullSecrets`                     | Adapter image pull secrets                                                                | `[]`                                 |
 | `image.debug`                           | Enable image debug mode                                                                   | `false`                              |

@@ -17,8 +17,8 @@ This chart bootstraps a kubewatch deployment on a [Kubernetes](https://kubernete
 
 ## Prerequisites
 
-- Kubernetes 1.12+
-- Helm 3.1.0
+- Kubernetes 1.19+
+- Helm 3.2.0+
 
 ## Installing the Chart
 
@@ -67,7 +67,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ---------------------------------------- | -------------------------------------------------------------------- | ---------------------- |
 | `image.registry`                         | Kubewatch image registry                                             | `docker.io`            |
 | `image.repository`                       | Kubewatch image repository                                           | `bitnami/kubewatch`    |
-| `image.tag`                              | Kubewatch image tag (immutable tags are recommended)                 | `0.1.0-debian-10-r457` |
+| `image.tag`                              | Kubewatch image tag (immutable tags are recommended)                 | `0.1.0-debian-10-r484` |
 | `image.pullPolicy`                       | Kubewatch image pull policy                                          | `IfNotPresent`         |
 | `image.pullSecrets`                      | Specify docker-registry secret names as an array                     | `[]`                   |
 | `hostAliases`                            | Add deployment host aliases                                          | `[]`                   |

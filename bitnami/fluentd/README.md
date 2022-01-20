@@ -19,8 +19,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 ## Prerequisites
 
-- Kubernetes 1.12+
-- Helm 3.1.0
+- Kubernetes 1.19+
+- Helm 3.2.0+
 - PV provisioner support in the underlying infrastructure
 
 > Note: Please, note that the forwarder runs the container as root by default setting the `forwarder.securityContext.runAsUser` to `0` (_root_ user)
@@ -81,7 +81,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------- |
 | `image.registry`                                               | Fluentd image registry                                                                                                                                             | `docker.io`                                                |
 | `image.repository`                                             | Fluentd image repository                                                                                                                                           | `bitnami/fluentd`                                          |
-| `image.tag`                                                    | Fluentd image tag (immutable tags are recommended)                                                                                                                 | `1.14.4-debian-10-r4`                                      |
+| `image.tag`                                                    | Fluentd image tag (immutable tags are recommended)                                                                                                                 | `1.14.4-debian-10-r11`                                     |
 | `image.pullPolicy`                                             | Fluentd image pull policy                                                                                                                                          | `IfNotPresent`                                             |
 | `image.pullSecrets`                                            | Fluentd image pull secrets                                                                                                                                         | `[]`                                                       |
 | `image.debug`                                                  | Enable image debug mode                                                                                                                                            | `false`                                                    |

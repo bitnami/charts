@@ -19,8 +19,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 ## Prerequisites
 
-- Kubernetes 1.12+
-- Helm 3.1.0
+- Kubernetes 1.19+
+- Helm 3.2.0+
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -79,7 +79,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
 | `image.registry`                       | Kibana image registry                                                                                                                                     | `docker.io`              |
 | `image.repository`                     | Kibana image repository                                                                                                                                   | `bitnami/kibana`         |
-| `image.tag`                            | Kibana image tag (immutable tags are recommended)                                                                                                         | `7.16.2-debian-10-r0`    |
+| `image.tag`                            | Kibana image tag (immutable tags are recommended)                                                                                                         | `7.16.2-debian-10-r20`   |
 | `image.pullPolicy`                     | Kibana image pull policy                                                                                                                                  | `IfNotPresent`           |
 | `image.pullSecrets`                    | Specify docker-registry secret names as an array                                                                                                          | `[]`                     |
 | `replicaCount`                         | Number of replicas of the Kibana Pod                                                                                                                      | `1`                      |
@@ -99,7 +99,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                  |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `docker.io`              |
 | `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                                                              | `bitnami/bitnami-shell`  |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `10-debian-10-r284`      |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `10-debian-10-r305`      |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`           |
 | `volumePermissions.image.pullSecrets`  | Init container volume-permissions image pull secrets                                                                                                      | `[]`                     |
 | `volumePermissions.resources`          | Volume Permissions resources                                                                                                                              | `{}`                     |

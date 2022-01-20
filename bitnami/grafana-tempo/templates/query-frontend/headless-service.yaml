@@ -18,11 +18,11 @@ spec:
   clusterIP: None
   ports:
     - name: http
-      port: {{ .Values.queryFrontend.service.port }}
+      port: {{ .Values.queryFrontend.service.ports.http }}
       targetPort: http
       protocol: TCP
     - name: grpc
-      port: {{ .Values.queryFrontend.service.grpcPort }}
+      port: {{ .Values.queryFrontend.service.ports.grpc }}
       targetPort: grpc
       protocol: TCP
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}

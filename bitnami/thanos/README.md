@@ -19,8 +19,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 ## Prerequisites
 
-- Kubernetes 1.12+
-- Helm 3.1.0
+- Kubernetes 1.19+
+- Helm 3.2.0+
 - PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
@@ -107,7 +107,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | ----------------------------- | ----------------------------------------------------------------------------------------- | ------------------- |
 | `image.registry`              | Thanos image registry                                                                     | `docker.io`         |
 | `image.repository`            | Thanos image repository                                                                   | `bitnami/thanos`    |
-| `image.tag`                   | Thanos image tag (immutable tags are recommended)                                         | `0.23.1-scratch-r3` |
+| `image.tag`                   | Thanos image tag (immutable tags are recommended)                                         | `0.24.0-scratch-r0` |
 | `image.pullPolicy`            | Thanos image pull policy                                                                  | `IfNotPresent`      |
 | `image.pullSecrets`           | Specify docker-registry secret names as an array                                          | `[]`                |
 | `objstoreConfig`              | The [objstore configuration](https://thanos.io/tip/thanos/storage.md/)                    | `""`                |
@@ -1040,7 +1040,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `volumePermissions.enabled`           | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`    | Init container volume-permissions image registry                                                | `docker.io`             |
 | `volumePermissions.image.repository`  | Init container volume-permissions image repository                                              | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                     | `10-debian-10-r242`     |
+| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                     | `10-debian-10-r287`     |
 | `volumePermissions.image.pullPolicy`  | Init container volume-permissions image pull policy                                             | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets` | Specify docker-registry secret names as an array                                                | `[]`                    |
 
@@ -1055,13 +1055,13 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `minio.defaultBuckets`    | Comma, semi-colon or space separated list of MinIO&reg; buckets to create | `thanos` |
 
 
-### NetworkPolicy parameters
+### NetWorkPolicy parameters
 
-| Name                      | Description                                                               | Value    |
-| ------------------------- | ------------------------------------------------------------------------- | -------- |
-| `networkPolicy.enabled`                    | Enable creation of NetworkPolicy resources.                                                                              | `false`             |
-| `networkPolicy.allowExternal`              | Don't require client label for connections                                                                               | `true`              |
-| `networkPolicy.explicitNamespacesSelector` | A Kubernetes LabelSelector to explicitly select namespaces from which traffic could be allowed                           | `{}`                |
+| Name                                       | Description                                                                                    | Value   |
+| ------------------------------------------ | ---------------------------------------------------------------------------------------------- | ------- |
+| `networkPolicy.enabled`                    | Enable creation of NetworkPolicy resources. Only Ingress traffic is filtered for now.          | `false` |
+| `networkPolicy.allowExternal`              | Don't require client label for connections                                                     | `true`  |
+| `networkPolicy.explicitNamespacesSelector` | A Kubernetes LabelSelector to explicitly select namespaces from which traffic could be allowed | `{}`    |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,

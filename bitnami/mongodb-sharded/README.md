@@ -25,8 +25,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 ## Prerequisites
 
-- Kubernetes 1.12+
-- Helm 3.1.0
+- Kubernetes 1.19+
+- Helm 3.2.0+
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -82,7 +82,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
 | `image.registry`                      | MongoDB&reg; Sharded image registry                                                                                                                       | `docker.io`               |
 | `image.repository`                    | MongoDB&reg; Sharded Image name                                                                                                                           | `bitnami/mongodb-sharded` |
-| `image.tag`                           | MongoDB&reg; Sharded image tag (immutable tags are recommended)                                                                                           | `4.4.11-debian-10-r05`    |
+| `image.tag`                           | MongoDB&reg; Sharded image tag (immutable tags are recommended)                                                                                           | `4.4.11-debian-10-r6`     |
 | `image.pullPolicy`                    | MongoDB&reg; Sharded image pull policy                                                                                                                    | `IfNotPresent`            |
 | `image.pullSecrets`                   | Specify docker-registry secret names as an array                                                                                                          | `[]`                      |
 | `image.debug`                         | Specify if debug logs should be enabled                                                                                                                   | `false`                   |
@@ -115,7 +115,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`           | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                   |
 | `volumePermissions.image.registry`    | Init container volume-permissions image registry                                                                                                          | `docker.io`               |
 | `volumePermissions.image.repository`  | Init container volume-permissions image name                                                                                                              | `bitnami/bitnami-shell`   |
-| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                                                                               | `10-debian-10-r265`       |
+| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                                                                               | `10-debian-10-r308`       |
 | `volumePermissions.image.pullPolicy`  | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`            |
 | `volumePermissions.image.pullSecrets` | Init container volume-permissions image pull secrets                                                                                                      | `[]`                      |
 | `volumePermissions.resources`         | Init container resource requests/limit                                                                                                                    | `{}`                      |
@@ -342,7 +342,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                            | Start a side-car prometheus exporter                                               | `false`                    |
 | `metrics.image.registry`                     | MongoDB&reg; exporter image registry                                               | `docker.io`                |
 | `metrics.image.repository`                   | MongoDB&reg; exporter image name                                                   | `bitnami/mongodb-exporter` |
-| `metrics.image.tag`                          | MongoDB&reg; exporter image tag                                                    | `0.11.2-debian-10-r354`    |
+| `metrics.image.tag`                          | MongoDB&reg; exporter image tag                                                    | `0.11.2-debian-10-r397`    |
 | `metrics.image.pullPolicy`                   | MongoDB&reg; exporter image pull policy                                            | `Always`                   |
 | `metrics.image.pullSecrets`                  | MongoDB&reg; exporter image pull secrets                                           | `[]`                       |
 | `metrics.extraArgs`                          | String with extra arguments to the metrics exporter                                | `""`                       |

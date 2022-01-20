@@ -19,8 +19,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 ## Prerequisites
 
-- Kubernetes 1.12+
-- Helm 3.1.0
+- Kubernetes 1.19+
+- Helm 3.2.0+
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -156,42 +156,42 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 
 ### Grafana parameters
 
-| Name                               | Description                                                                       | Value                 |
-| ---------------------------------- | --------------------------------------------------------------------------------- | --------------------- |
-| `image.registry`                   | Grafana image registry                                                            | `docker.io`           |
-| `image.repository`                 | Grafana image repository                                                          | `bitnami/grafana`     |
-| `image.tag`                        | Grafana image tag (immutable tags are recommended)                                | `8.3.3-debian-10-r13` |
-| `image.pullPolicy`                 | Grafana image pull policy                                                         | `IfNotPresent`        |
-| `image.pullSecrets`                | Grafana image pull secrets                                                        | `[]`                  |
-| `hostAliases`                      | Add deployment host aliases                                                       | `[]`                  |
-| `admin.user`                       | Grafana admin username                                                            | `admin`               |
-| `admin.password`                   | Admin password. If a password is not provided a random password will be generated | `""`                  |
-| `admin.existingSecret`             | Name of the existing secret containing admin password                             | `""`                  |
-| `admin.existingSecretPasswordKey`  | Password key on the existing secret                                               | `password`            |
-| `smtp.enabled`                     | Enable SMTP configuration                                                         | `false`               |
-| `smtp.user`                        | SMTP user                                                                         | `user`                |
-| `smtp.password`                    | SMTP password                                                                     | `password`            |
-| `smtp.host`                        | Custom host for the smtp server                                                   | `""`                  |
-| `smtp.fromAddress`                 | From address                                                                      | `""`                  |
-| `smtp.fromName`                    | From name                                                                         | `""`                  |
-| `smtp.skipVerify`                  | Enable skip verify                                                                | `false`               |
-| `smtp.existingSecret`              | Name of existing secret containing SMTP credentials (user and password)           | `""`                  |
-| `smtp.existingSecretUserKey`       | User key on the existing secret                                                   | `user`                |
-| `smtp.existingSecretPasswordKey`   | Password key on the existing secret                                               | `password`            |
-| `plugins`                          | Grafana plugins to be installed in deployment time separated by commas            | `""`                  |
-| `ldap.enabled`                     | Enable LDAP for Grafana                                                           | `false`               |
-| `ldap.allowSignUp`                 | Allows LDAP sign up for Grafana                                                   | `false`               |
-| `ldap.configuration`               | Specify content for ldap.toml configuration file                                  | `""`                  |
-| `ldap.configMapName`               | Name of the ConfigMap with the ldap.toml configuration file for Grafana           | `""`                  |
-| `ldap.secretName`                  | Name of the Secret with the ldap.toml configuration file for Grafana              | `""`                  |
-| `config.useGrafanaIniFile`         | Allows to load a `grafana.ini` file                                               | `false`               |
-| `config.grafanaIniConfigMap`       | Name of the ConfigMap containing the `grafana.ini` file                           | `""`                  |
-| `config.grafanaIniSecret`          | Name of the Secret containing the `grafana.ini` file                              | `""`                  |
-| `dashboardsProvider.enabled`       | Enable the use of a Grafana dashboard provider                                    | `false`               |
-| `dashboardsProvider.configMapName` | Name of a ConfigMap containing a custom dashboard provider                        | `""`                  |
-| `dashboardsConfigMaps`             | Array with the names of a series of ConfigMaps containing dashboards files        | `[]`                  |
-| `datasources.secretName`           | Secret name containing custom datasource files                                    | `""`                  |
-| `notifiers.configMapName`          | Name of a ConfigMap containing Grafana notifiers configuration                    | `""`                  |
+| Name                               | Description                                                                       | Value                |
+| ---------------------------------- | --------------------------------------------------------------------------------- | -------------------- |
+| `image.registry`                   | Grafana image registry                                                            | `docker.io`          |
+| `image.repository`                 | Grafana image repository                                                          | `bitnami/grafana`    |
+| `image.tag`                        | Grafana image tag (immutable tags are recommended)                                | `8.3.4-debian-10-r0` |
+| `image.pullPolicy`                 | Grafana image pull policy                                                         | `IfNotPresent`       |
+| `image.pullSecrets`                | Grafana image pull secrets                                                        | `[]`                 |
+| `hostAliases`                      | Add deployment host aliases                                                       | `[]`                 |
+| `admin.user`                       | Grafana admin username                                                            | `admin`              |
+| `admin.password`                   | Admin password. If a password is not provided a random password will be generated | `""`                 |
+| `admin.existingSecret`             | Name of the existing secret containing admin password                             | `""`                 |
+| `admin.existingSecretPasswordKey`  | Password key on the existing secret                                               | `password`           |
+| `smtp.enabled`                     | Enable SMTP configuration                                                         | `false`              |
+| `smtp.user`                        | SMTP user                                                                         | `user`               |
+| `smtp.password`                    | SMTP password                                                                     | `password`           |
+| `smtp.host`                        | Custom host for the smtp server                                                   | `""`                 |
+| `smtp.fromAddress`                 | From address                                                                      | `""`                 |
+| `smtp.fromName`                    | From name                                                                         | `""`                 |
+| `smtp.skipVerify`                  | Enable skip verify                                                                | `false`              |
+| `smtp.existingSecret`              | Name of existing secret containing SMTP credentials (user and password)           | `""`                 |
+| `smtp.existingSecretUserKey`       | User key on the existing secret                                                   | `user`               |
+| `smtp.existingSecretPasswordKey`   | Password key on the existing secret                                               | `password`           |
+| `plugins`                          | Grafana plugins to be installed in deployment time separated by commas            | `""`                 |
+| `ldap.enabled`                     | Enable LDAP for Grafana                                                           | `false`              |
+| `ldap.allowSignUp`                 | Allows LDAP sign up for Grafana                                                   | `false`              |
+| `ldap.configuration`               | Specify content for ldap.toml configuration file                                  | `""`                 |
+| `ldap.configMapName`               | Name of the ConfigMap with the ldap.toml configuration file for Grafana           | `""`                 |
+| `ldap.secretName`                  | Name of the Secret with the ldap.toml configuration file for Grafana              | `""`                 |
+| `config.useGrafanaIniFile`         | Allows to load a `grafana.ini` file                                               | `false`              |
+| `config.grafanaIniConfigMap`       | Name of the ConfigMap containing the `grafana.ini` file                           | `""`                 |
+| `config.grafanaIniSecret`          | Name of the Secret containing the `grafana.ini` file                              | `""`                 |
+| `dashboardsProvider.enabled`       | Enable the use of a Grafana dashboard provider                                    | `false`              |
+| `dashboardsProvider.configMapName` | Name of a ConfigMap containing a custom dashboard provider                        | `""`                 |
+| `dashboardsConfigMaps`             | Array with the names of a series of ConfigMaps containing dashboards files        | `[]`                 |
+| `datasources.secretName`           | Secret name containing custom datasource files                                    | `""`                 |
+| `notifiers.configMapName`          | Name of a ConfigMap containing Grafana notifiers configuration                    | `""`                 |
 
 
 ### Grafana Deployment parameters
@@ -342,7 +342,7 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `imageRenderer.enabled`                                 | Enable using a remote rendering service to render PNG images                                                                              | `false`                          |
 | `imageRenderer.image.registry`                          | Grafana Image Renderer image registry                                                                                                     | `docker.io`                      |
 | `imageRenderer.image.repository`                        | Grafana Image Renderer image repository                                                                                                   | `bitnami/grafana-image-renderer` |
-| `imageRenderer.image.tag`                               | Grafana Image Renderer image tag (immutable tags are recommended)                                                                         | `3.3.0-debian-10-r36`            |
+| `imageRenderer.image.tag`                               | Grafana Image Renderer image tag (immutable tags are recommended)                                                                         | `3.3.0-debian-10-r57`            |
 | `imageRenderer.image.pullPolicy`                        | Grafana Image Renderer image pull policy                                                                                                  | `IfNotPresent`                   |
 | `imageRenderer.image.pullSecrets`                       | Grafana image Renderer pull secrets                                                                                                       | `[]`                             |
 | `imageRenderer.replicaCount`                            | Number of Grafana Image Renderer Pod replicas                                                                                             | `1`                              |
@@ -375,7 +375,7 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `imageRenderer.service.externalTrafficPolicy`           | Grafana service external traffic policy                                                                                                   | `Cluster`                        |
 | `imageRenderer.service.extraPorts`                      | Extra port to expose on Redmine service                                                                                                   | `[]`                             |
 | `imageRenderer.metrics.enabled`                         | Enable the export of Prometheus metrics                                                                                                   | `false`                          |
-| `imageRenderer.metrics.annotations`                     | Prometheus annotations                                                                                                                    | `{}`                             |
+| `imageRenderer.metrics.annotations`                     | Annotations for Prometheus metrics service[object] Prometheus annotations                                                                 | `{}`                             |
 | `imageRenderer.metrics.serviceMonitor.enabled`          | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)                                    | `false`                          |
 | `imageRenderer.metrics.serviceMonitor.namespace`        | Namespace in which Prometheus is running                                                                                                  | `""`                             |
 | `imageRenderer.metrics.serviceMonitor.interval`         | Interval at which metrics should be scraped.                                                                                              | `""`                             |
@@ -398,7 +398,7 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r291`     |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r312`     |
 | `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                    |

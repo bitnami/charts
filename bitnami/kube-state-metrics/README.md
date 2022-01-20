@@ -19,8 +19,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 ## Prerequisites
 
-- Kubernetes 1.12+
-- Helm 3.1.0
+- Kubernetes 1.19+
+- Helm 3.2.0+
 
 ## Installing the Chart
 
@@ -82,11 +82,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.name`                           | The name of the ServiceAccount to create                                                                                                                           | `""`                         |
 | `image.registry`                                | kube-state-metrics image registry                                                                                                                                  | `docker.io`                  |
 | `image.repository`                              | kube-state-metrics image repository                                                                                                                                | `bitnami/kube-state-metrics` |
-| `image.tag`                                     | kube-state-metrics Image tag (immutable tags are recommended)                                                                                                      | `2.2.4-debian-10-r0`         |
+| `image.tag`                                     | kube-state-metrics Image tag (immutable tags are recommended)                                                                                                      | `2.3.0-debian-10-r31`        |
 | `image.pullPolicy`                              | kube-state-metrics image pull policy                                                                                                                               | `IfNotPresent`               |
 | `image.pullSecrets`                             | Specify docker-registry secret names as an array                                                                                                                   | `[]`                         |
 | `extraArgs`                                     | Additional command line arguments to pass to kube-state-metrics                                                                                                    | `{}`                         |
-| `namespaces`                                    | Comma-separated list of namespaces to be enabled. Defaults to all namespaces                                                                                       | `""`                         |
+| `namespaces`                                    | Comma-separated list of namespaces to be enabled. Defaults to all namespaces. Evaluated as a template.                                                             | `""`                         |
 | `kubeResources.certificatesigningrequests`      | Enable the `certificatesigningrequests` resource                                                                                                                   | `true`                       |
 | `kubeResources.configmaps`                      | Enable the `configmaps` resource                                                                                                                                   | `true`                       |
 | `kubeResources.cronjobs`                        | Enable the `cronjobs` resource                                                                                                                                     | `true`                       |

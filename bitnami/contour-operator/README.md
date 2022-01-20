@@ -22,7 +22,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.19+
-- Helm 3.1.0
+- Helm 3.2.0+
 
 ## Installing the Chart
 
@@ -154,16 +154,16 @@ This solution allows to easily deploy multiple Contour instances compared to the
 | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | -------------------------- |
 | `image.registry`                        | Contour Operator image registry                                                                                          | `docker.io`                |
 | `image.repository`                      | Contour Operator image repository                                                                                        | `bitnami/contour-operator` |
-| `image.tag`                             | Contour Operator image tag (immutable tags are recommended)                                                              | `1.19.1-scratch-r0`        |
+| `image.tag`                             | Contour Operator image tag (immutable tags are recommended)                                                              | `1.19.1-scratch-r3`        |
 | `image.pullPolicy`                      | Contour Operator image pull policy                                                                                       | `IfNotPresent`             |
 | `image.pullSecrets`                     | Contour Operator image pull secrets                                                                                      | `[]`                       |
 | `contourImage.registry`                 | Contour Image registry                                                                                                   | `docker.io`                |
 | `contourImage.repository`               | Contour Image repository                                                                                                 | `bitnami/contour`          |
-| `contourImage.tag`                      | Contour Image tag (immutable tags are recommended)                                                                       | `1.19.1-debian-10-r6`      |
+| `contourImage.tag`                      | Contour Image tag (immutable tags are recommended)                                                                       | `1.19.1-debian-10-r63`     |
 | `contourImage.pullSecrets`              | Contour Image pull secrets                                                                                               | `[]`                       |
 | `envoyImage.registry`                   | Envoy Image registry                                                                                                     | `docker.io`                |
 | `envoyImage.repository`                 | Envoy Image repository                                                                                                   | `bitnami/envoy`            |
-| `envoyImage.tag`                        | Envoy Image tag (immutable tags are recommended)                                                                         | `1.19.1-debian-10-r81`     |
+| `envoyImage.tag`                        | Envoy Image tag (immutable tags are recommended)                                                                         | `1.19.1-debian-10-r136`    |
 | `envoyImage.pullSecrets`                | Envoy Image pull secrets                                                                                                 | `[]`                       |
 | `replicaCount`                          | Number of Contour Operator replicas to deploy                                                                            | `1`                        |
 | `livenessProbe.enabled`                 | Enable livenessProbe on Contour Operator nodes                                                                           | `true`                     |

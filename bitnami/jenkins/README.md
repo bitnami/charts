@@ -19,8 +19,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 ## Prerequisites
 
-- Kubernetes 1.12+
-- Helm 3.1.0
+- Kubernetes 1.19+
+- Helm 3.2.0+
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -73,14 +73,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Jenkins Image parameters
 
-| Name                | Description                                        | Value                   |
-| ------------------- | -------------------------------------------------- | ----------------------- |
-| `image.registry`    | Jenkins image registry                             | `docker.io`             |
-| `image.repository`  | Jenkins image repository                           | `bitnami/jenkins`       |
-| `image.tag`         | Jenkins image tag (immutable tags are recommended) | `2.303.3-debian-10-r21` |
-| `image.pullPolicy`  | Jenkins image pull policy                          | `IfNotPresent`          |
-| `image.pullSecrets` | Jenkins image pull secrets                         | `[]`                    |
-| `image.debug`       | Enable image debug mode                            | `false`                 |
+| Name                | Description                                        | Value                  |
+| ------------------- | -------------------------------------------------- | ---------------------- |
+| `image.registry`    | Jenkins image registry                             | `docker.io`            |
+| `image.repository`  | Jenkins image repository                           | `bitnami/jenkins`      |
+| `image.tag`         | Jenkins image tag (immutable tags are recommended) | `2.319.2-debian-10-r0` |
+| `image.pullPolicy`  | Jenkins image pull policy                          | `IfNotPresent`         |
+| `image.pullSecrets` | Jenkins image pull secrets                         | `[]`                   |
+| `image.debug`       | Enable image debug mode                            | `false`                |
 
 
 ### Jenkins Configuration parameters
@@ -187,7 +187,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                   | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`            | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`          | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r265`     |
+| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r311`     |
 | `volumePermissions.image.pullPolicy`          | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`         | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`          | The resources limits for the init container                                                     | `{}`                    |
@@ -202,7 +202,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                            | Start a sidecar prometheus exporter to expose Jenkins metrics                                    | `false`                       |
 | `metrics.image.registry`                     | Jenkins Exporter image registry                                                                  | `docker.io`                   |
 | `metrics.image.repository`                   | Jenkins Exporter image repository                                                                | `bitnami/jenkins-exporter`    |
-| `metrics.image.tag`                          | Jenkins Jenkins Exporter image tag (immutable tags are recommended)                              | `0.20171225.0-debian-10-r633` |
+| `metrics.image.tag`                          | Jenkins Jenkins Exporter image tag (immutable tags are recommended)                              | `0.20171225.0-debian-10-r678` |
 | `metrics.image.pullPolicy`                   | Jenkins Exporter image pull policy                                                               | `IfNotPresent`                |
 | `metrics.image.pullSecrets`                  | Jenkins Exporter image pull secrets                                                              | `[]`                          |
 | `metrics.containerSecurityContext.enabled`   | Enabled Jenkins exporter containers' Security Context                                            | `true`                        |

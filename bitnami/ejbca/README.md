@@ -21,8 +21,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 ## Prerequisites
 
-- Kubernetes 1.12+
-- Helm 3.1.0
+- Kubernetes 1.19+
+- Helm 3.2.0+
 - PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
@@ -79,7 +79,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | ----------------------------------------------------------------------------------------- | ----------------------- |
 | `image.registry`                        | EJBCA image registry                                                                      | `docker.io`             |
 | `image.repository`                      | EJBCA image name                                                                          | `bitnami/ejbca`         |
-| `image.tag`                             | EJBCA image tag                                                                           | `7.4.3-2-debian-10-r69` |
+| `image.tag`                             | EJBCA image tag                                                                           | `7.4.3-2-debian-10-r92` |
 | `image.pullPolicy`                      | EJBCA image pull policy                                                                   | `IfNotPresent`          |
 | `image.pullSecrets`                     | Specify docker-registry secret names as an array                                          | `[]`                    |
 | `image.debug`                           | Enable image debug mode                                                                   | `false`                 |

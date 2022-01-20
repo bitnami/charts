@@ -19,8 +19,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 ## Prerequisites
 
-- Kubernetes 1.12+
-- Helm 3.1.0
+- Kubernetes 1.19+
+- Helm 3.2.0+
 - PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
@@ -78,7 +78,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------- |
 | `image.registry`                           | Kafka image registry                                                                                                                                 | `docker.io`                         |
 | `image.repository`                         | Kafka image repository                                                                                                                               | `bitnami/kafka`                     |
-| `image.tag`                                | Kafka image tag (immutable tags are recommended)                                                                                                     | `2.8.1-debian-10-r73`               |
+| `image.tag`                                | Kafka image tag (immutable tags are recommended)                                                                                                     | `2.8.1-debian-10-r99`               |
 | `image.pullPolicy`                         | Kafka image pull policy                                                                                                                              | `IfNotPresent`                      |
 | `image.pullSecrets`                        | Specify docker-registry secret names as an array                                                                                                     | `[]`                                |
 | `image.debug`                              | Set to true if you would like to see extra information on logs                                                                                       | `false`                             |
@@ -207,39 +207,39 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Exposure parameters
 
-| Name                                              | Description                                                                                    | Value                 |
-| ------------------------------------------------- | ---------------------------------------------------------------------------------------------- | --------------------- |
-| `networkPolicy.enabled`                           | Enable creation of NetworkPolicy resources.                                                    | `false`               |
-| `networkPolicy.allowExternal`                     | Don't require client label for connections                                                     | `true`                |
-| `networkPolicy.explicitNamespacesSelector`        | A Kubernetes LabelSelector to explicitly select namespaces from which traffic could be allowed | `{}`                  |
-| `networkPolicy.externalAccess.from`               | customize the from section for External Access on tcp-external port                            | `[]`                  |
-| `networkPolicy.egressRules.customRules`           | Custom network policy rule                                                                     | `{}`                  |
-| `service.type`                                    | Kubernetes Service type                                                                        | `ClusterIP`           |
-| `service.port`                                    | Kafka port for client connections                                                              | `9092`                |
-| `service.internalPort`                            | Kafka port for inter-broker connections                                                        | `9093`                |
-| `service.externalPort`                            | Kafka port for external connections                                                            | `9094`                |
-| `service.nodePorts`                               | Specify the nodePort value for the LoadBalancer and NodePort service types.                    | `{}`                  |
-| `service.loadBalancerIP`                          | loadBalancerIP for Kafka Service                                                               | `""`                  |
-| `service.loadBalancerSourceRanges`                | Address(es) that are allowed when service is LoadBalancer                                      | `[]`                  |
-| `service.annotations`                             | Service annotations                                                                            | `{}`                  |
-| `externalAccess.enabled`                          | Enable Kubernetes external cluster access to Kafka brokers                                     | `false`               |
-| `externalAccess.autoDiscovery.enabled`            | Enable using an init container to auto-detect external IPs/ports by querying the K8s API       | `false`               |
-| `externalAccess.autoDiscovery.image.registry`     | Init container auto-discovery image registry                                                   | `docker.io`           |
-| `externalAccess.autoDiscovery.image.repository`   | Init container auto-discovery image repository                                                 | `bitnami/kubectl`     |
-| `externalAccess.autoDiscovery.image.tag`          | Init container auto-discovery image tag (immutable tags are recommended)                       | `1.23.0-debian-10-r5` |
-| `externalAccess.autoDiscovery.image.pullPolicy`   | Init container auto-discovery image pull policy                                                | `IfNotPresent`        |
-| `externalAccess.autoDiscovery.image.pullSecrets`  | Init container auto-discovery image pull secrets                                               | `[]`                  |
-| `externalAccess.autoDiscovery.resources.limits`   | Init container auto-discovery resource limits                                                  | `{}`                  |
-| `externalAccess.autoDiscovery.resources.requests` | Init container auto-discovery resource requests                                                | `{}`                  |
-| `externalAccess.service.type`                     | Kubernetes Service type for external access. It can be NodePort or LoadBalancer                | `LoadBalancer`        |
-| `externalAccess.service.port`                     | Kafka port used for external access when service type is LoadBalancer                          | `9094`                |
-| `externalAccess.service.loadBalancerIPs`          | Array of load balancer IPs for each Kafka broker. Length must be the same as replicaCount      | `[]`                  |
-| `externalAccess.service.loadBalancerSourceRanges` | Address(es) that are allowed when service is LoadBalancer                                      | `[]`                  |
-| `externalAccess.service.nodePorts`                | Array of node ports used for each Kafka broker. Length must be the same as replicaCount        | `[]`                  |
-| `externalAccess.service.useHostIPs`               | Use service host IPs to configure Kafka external listener when service type is NodePort        | `false`               |
-| `externalAccess.service.domain`                   | Domain or external ip used to configure Kafka external listener when service type is NodePort  | `""`                  |
-| `externalAccess.service.annotations`              | Service annotations for external access                                                        | `{}`                  |
-| `externalAccess.service.usePodIPs`                | using the MY_POD_IP address for external access.                                               | `false`               |
+| Name                                              | Description                                                                                    | Value                  |
+| ------------------------------------------------- | ---------------------------------------------------------------------------------------------- | ---------------------- |
+| `networkPolicy.enabled`                           | Enable creation of NetworkPolicy resources.                                                    | `false`                |
+| `networkPolicy.allowExternal`                     | Don't require client label for connections                                                     | `true`                 |
+| `networkPolicy.explicitNamespacesSelector`        | A Kubernetes LabelSelector to explicitly select namespaces from which traffic could be allowed | `{}`                   |
+| `networkPolicy.externalAccess.from`               | customize the from section for External Access on tcp-external port                            | `[]`                   |
+| `networkPolicy.egressRules.customRules`           | Custom network policy rule                                                                     | `{}`                   |
+| `service.type`                                    | Kubernetes Service type                                                                        | `ClusterIP`            |
+| `service.port`                                    | Kafka port for client connections                                                              | `9092`                 |
+| `service.internalPort`                            | Kafka port for inter-broker connections                                                        | `9093`                 |
+| `service.externalPort`                            | Kafka port for external connections                                                            | `9094`                 |
+| `service.nodePorts`                               | Specify the nodePort value for the LoadBalancer and NodePort service types.                    | `{}`                   |
+| `service.loadBalancerIP`                          | loadBalancerIP for Kafka Service                                                               | `""`                   |
+| `service.loadBalancerSourceRanges`                | Address(es) that are allowed when service is LoadBalancer                                      | `[]`                   |
+| `service.annotations`                             | Service annotations                                                                            | `{}`                   |
+| `externalAccess.enabled`                          | Enable Kubernetes external cluster access to Kafka brokers                                     | `false`                |
+| `externalAccess.autoDiscovery.enabled`            | Enable using an init container to auto-detect external IPs/ports by querying the K8s API       | `false`                |
+| `externalAccess.autoDiscovery.image.registry`     | Init container auto-discovery image registry                                                   | `docker.io`            |
+| `externalAccess.autoDiscovery.image.repository`   | Init container auto-discovery image repository                                                 | `bitnami/kubectl`      |
+| `externalAccess.autoDiscovery.image.tag`          | Init container auto-discovery image tag (immutable tags are recommended)                       | `1.23.1-debian-10-r26` |
+| `externalAccess.autoDiscovery.image.pullPolicy`   | Init container auto-discovery image pull policy                                                | `IfNotPresent`         |
+| `externalAccess.autoDiscovery.image.pullSecrets`  | Init container auto-discovery image pull secrets                                               | `[]`                   |
+| `externalAccess.autoDiscovery.resources.limits`   | Init container auto-discovery resource limits                                                  | `{}`                   |
+| `externalAccess.autoDiscovery.resources.requests` | Init container auto-discovery resource requests                                                | `{}`                   |
+| `externalAccess.service.type`                     | Kubernetes Service type for external access. It can be NodePort or LoadBalancer                | `LoadBalancer`         |
+| `externalAccess.service.port`                     | Kafka port used for external access when service type is LoadBalancer                          | `9094`                 |
+| `externalAccess.service.loadBalancerIPs`          | Array of load balancer IPs for each Kafka broker. Length must be the same as replicaCount      | `[]`                   |
+| `externalAccess.service.loadBalancerSourceRanges` | Address(es) that are allowed when service is LoadBalancer                                      | `[]`                   |
+| `externalAccess.service.nodePorts`                | Array of node ports used for each Kafka broker. Length must be the same as replicaCount        | `[]`                   |
+| `externalAccess.service.useHostIPs`               | Use service host IPs to configure Kafka external listener when service type is NodePort        | `false`                |
+| `externalAccess.service.domain`                   | Domain or external ip used to configure Kafka external listener when service type is NodePort  | `""`                   |
+| `externalAccess.service.annotations`              | Service annotations for external access                                                        | `{}`                   |
+| `externalAccess.service.usePodIPs`                | using the MY_POD_IP address for external access.                                               | `false`                |
 
 
 ### Persistence parameters
@@ -279,10 +279,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                          | Description                                                                                                          | Value                   |
 | --------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ----------------------- |
 | `volumePermissions.enabled`                   | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`                 |
-| `volumePermissions.securityContext.runAsUser` | User ID for the container                                                                                            | `0`                     |
+| `volumePermissions.securityContext.runAsUser` | User ID for the container.                                                                                           | `0`                     |
 | `volumePermissions.image.registry`            | Init container volume-permissions image registry                                                                     | `docker.io`             |
 | `volumePermissions.image.repository`          | Init container volume-permissions image name                                                                         | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Init container volume-permissions image tag                                                                          | `10-debian-10-r279`     |
+| `volumePermissions.image.tag`                 | Init container volume-permissions image tag                                                                          | `10-debian-10-r307`     |
 | `volumePermissions.image.pullPolicy`          | Init container volume-permissions image pull policy                                                                  | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                                                     | `[]`                    |
 | `volumePermissions.resources.limits`          | Init container volume-permissions resource  limits                                                                   | `{}`                    |
@@ -296,7 +296,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.kafka.enabled`                                     | Whether or not to create a standalone Kafka exporter to expose Kafka metrics                                                     | `false`                                                                                 |
 | `metrics.kafka.image.registry`                              | Kafka exporter image registry                                                                                                    | `docker.io`                                                                             |
 | `metrics.kafka.image.repository`                            | Kafka exporter image repository                                                                                                  | `bitnami/kafka-exporter`                                                                |
-| `metrics.kafka.image.tag`                                   | Kafka exporter image tag (immutable tags are recommended)                                                                        | `1.4.2-debian-10-r87`                                                                   |
+| `metrics.kafka.image.tag`                                   | Kafka exporter image tag (immutable tags are recommended)                                                                        | `1.4.2-debian-10-r115`                                                                  |
 | `metrics.kafka.image.pullPolicy`                            | Kafka exporter image pull policy                                                                                                 | `IfNotPresent`                                                                          |
 | `metrics.kafka.image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                                 | `[]`                                                                                    |
 | `metrics.kafka.serviceAccount.create`                       | Enable creation of ServiceAccount for Kafka exporter pods                                                                        | `true`                                                                                  |
@@ -328,7 +328,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.jmx.enabled`                                       | Whether or not to expose JMX metrics to Prometheus                                                                               | `false`                                                                                 |
 | `metrics.jmx.image.registry`                                | JMX exporter image registry                                                                                                      | `docker.io`                                                                             |
 | `metrics.jmx.image.repository`                              | JMX exporter image repository                                                                                                    | `bitnami/jmx-exporter`                                                                  |
-| `metrics.jmx.image.tag`                                     | JMX exporter image tag (immutable tags are recommended)                                                                          | `0.16.1-debian-10-r149`                                                                 |
+| `metrics.jmx.image.tag`                                     | JMX exporter image tag (immutable tags are recommended)                                                                          | `0.16.1-debian-10-r177`                                                                 |
 | `metrics.jmx.image.pullPolicy`                              | JMX exporter image pull policy                                                                                                   | `IfNotPresent`                                                                          |
 | `metrics.jmx.image.pullSecrets`                             | Specify docker-registry secret names as an array                                                                                 | `[]`                                                                                    |
 | `metrics.jmx.containerSecurityContext.enabled`              | Enable Prometheus JMX Exporter Containers' Security Context                                                                      | `false`                                                                                 |

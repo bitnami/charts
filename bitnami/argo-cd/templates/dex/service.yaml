@@ -20,14 +20,23 @@ metadata:
   {{- end }}
 spec:
   type: {{ .Values.dex.service.type }}
+  {{- if and .Values.dex.service.clusterIP (eq .Values.dex.service.type "ClusterIP") }}
+  clusterIP: {{ .Values.dex.service.clusterIP }}
+  {{- end }}
   {{- if (or (eq .Values.dex.service.type "LoadBalancer") (eq .Values.dex.service.type "NodePort")) }}
   externalTrafficPolicy: {{ .Values.dex.service.externalTrafficPolicy | quote }}
   {{- end }}
-  {{ if eq .Values.dex.service.type "LoadBalancer" }}
+  {{- if eq .Values.dex.service.type "LoadBalancer" }}
   loadBalancerSourceRanges: {{ .Values.dex.service.loadBalancerSourceRanges }}
-  {{ end }}
+  {{- end }}
   {{- if (and (eq .Values.dex.service.type "LoadBalancer") (not (empty .Values.dex.service.loadBalancerIP))) }}
   loadBalancerIP: {{ .Values.dex.service.loadBalancerIP }}
+  {{- end }}
+  {{- if .Values.dex.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.dex.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.dex.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.dex.service.sessionAffinityConfig "context" $) | nindent 4 }}
   {{- end }}
   ports:
     - name: http
@@ -48,6 +57,9 @@ spec:
       {{- else if eq .Values.dex.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
+    {{- if .Values.dex.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.dex.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: dex
 {{- end }}

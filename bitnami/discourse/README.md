@@ -23,8 +23,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 ## Prerequisites
 
-- Kubernetes 1.12+
-- Helm 3.1.0
+- Kubernetes 1.19+
+- Helm 3.2.0+
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -94,7 +94,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ---------------------------------------------- | --------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`                               | Discourse image registry                                                                                  | `docker.io`           |
 | `image.repository`                             | Discourse image repository                                                                                | `bitnami/discourse`   |
-| `image.tag`                                    | Discourse image tag                                                                                       | `2.7.11-debian-10-r0` |
+| `image.tag`                                    | Discourse image tag                                                                                       | `2.7.13-debian-10-r0` |
 | `image.pullPolicy`                             | Discourse image pull policy                                                                               | `IfNotPresent`        |
 | `image.pullSecrets`                            | Discourse image pull secrets                                                                              | `[]`                  |
 | `image.debug`                                  | Specify if debug logs should be enabled                                                                   | `false`               |

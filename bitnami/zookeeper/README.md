@@ -19,8 +19,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 ## Prerequisites
 
-- Kubernetes 1.12+
-- Helm 3.1.0
+- Kubernetes 1.19+
+- Helm 3.2.0+
 - PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
@@ -80,7 +80,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------- | -------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
 | `image.registry`            | ZooKeeper image registry                                                                                                   | `docker.io`             |
 | `image.repository`          | ZooKeeper image repository                                                                                                 | `bitnami/zookeeper`     |
-| `image.tag`                 | ZooKeeper image tag (immutable tags are recommended)                                                                       | `3.7.0-debian-10-r257`  |
+| `image.tag`                 | ZooKeeper image tag (immutable tags are recommended)                                                                       | `3.7.0-debian-10-r265`  |
 | `image.pullPolicy`          | ZooKeeper image pull policy                                                                                                | `IfNotPresent`          |
 | `image.pullSecrets`         | Specify docker-registry secret names as an array                                                                           | `[]`                    |
 | `image.debug`               | Specify if debug values should be set                                                                                      | `false`                 |
@@ -240,7 +240,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume | `false`                 |
 | `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                | `docker.io`             |
 | `volumePermissions.image.repository`                   | Init container volume-permissions image repository                              | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)    | `10-debian-10-r304`     |
+| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)    | `10-debian-10-r312`     |
 | `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                             | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Init container volume-permissions image pull secrets                            | `[]`                    |
 | `volumePermissions.resources.limits`                   | Init container volume-permissions resource limits                               | `{}`                    |

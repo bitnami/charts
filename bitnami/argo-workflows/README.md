@@ -19,8 +19,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 ## Prerequisites
 
-- Kubernetes 1.12+
-- Helm 3.1.0
+- Kubernetes 1.19+
+- Helm 3.2.0+
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -78,7 +78,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | --------------------------- |
 | `server.image.registry`                              | server image registry                                                                                   | `docker.io`                 |
 | `server.image.repository`                            | server image repository                                                                                 | `bitnami/argo-workflow-cli` |
-| `server.image.tag`                                   | server image tag (immutable tags are recommended)                                                       | `3.2.4-scratch-r0`          |
+| `server.image.tag`                                   | server image tag (immutable tags are recommended)                                                       | `3.2.6-scratch-r1`          |
 | `server.image.pullPolicy`                            | server image pull policy                                                                                | `Always`                    |
 | `server.image.pullSecrets`                           | server image pull secrets                                                                               | `[]`                        |
 | `server.enabled`                                     | Enable server deployment                                                                                | `true`                      |
@@ -179,7 +179,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
 | `controller.image.registry`                              | controller image registry                                                                                                     | `docker.io`                        |
 | `controller.image.repository`                            | controller image repository                                                                                                   | `bitnami/argo-workflow-controller` |
-| `controller.image.tag`                                   | controller image tag (immutable tags are recommended)                                                                         | `3.2.4-scratch-r0`                 |
+| `controller.image.tag`                                   | controller image tag (immutable tags are recommended)                                                                         | `3.2.6-scratch-r0`                 |
 | `controller.image.pullPolicy`                            | controller image pull policy                                                                                                  | `IfNotPresent`                     |
 | `controller.image.pullSecrets`                           | controller image pull secrets                                                                                                 | `[]`                               |
 | `controller.replicaCount`                                | Number of controller replicas to deploy                                                                                       | `1`                                |
@@ -283,7 +283,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------- | ------------------------------------------------------------- | ---------------------------- |
 | `executor.image.registry`                   | executor image registry                                       | `docker.io`                  |
 | `executor.image.repository`                 | executor image repository                                     | `bitnami/argo-workflow-exec` |
-| `executor.image.tag`                        | executor image tag (immutable tags are recommended)           | `3.2.3-debian-10-r21`        |
+| `executor.image.tag`                        | executor image tag (immutable tags are recommended)           | `3.2.6-debian-10-r24`        |
 | `executor.image.pullPolicy`                 | executor image pull policy                                    | `Always`                     |
 | `executor.image.pullSecrets`                | executor image pull secrets                                   | `[]`                         |
 | `executor.resources.limits`                 | The resources limits for the init container                   | `{}`                         |
