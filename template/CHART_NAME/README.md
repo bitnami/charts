@@ -15,8 +15,8 @@ $ helm install my-release bitnami/%%CHART_NAME%%
 
 ## Prerequisites
 
-- Kubernetes 1.12+
-- Helm 3.1.0
+- Kubernetes 1.19+
+- Helm 3.2.0+
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 

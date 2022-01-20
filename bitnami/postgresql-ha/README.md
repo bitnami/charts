@@ -22,8 +22,8 @@ This Helm chart has been developed based on [bitnami/postgresql](https://github.
 
 ## Prerequisites
 
-- Kubernetes 1.12+
-- Helm 3.1.0
+- Kubernetes 1.19+
+- Helm 3.2.0+
 
 ## Installing the Chart
 
