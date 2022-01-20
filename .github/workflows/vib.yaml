@@ -30,6 +30,7 @@ jobs:
          - target-platform: gke
            target-platform-id: 91d398a2-25c4-4cda-8732-75a3cfc179a1
       fail-fast: false
+      name: K8s verify ${{ matrix.target-platform}}
     steps:
       - uses: actions/checkout@v2
       - uses: vmware-samples/vmware-image-builder-examples/vib-action@github-action-martinpe
