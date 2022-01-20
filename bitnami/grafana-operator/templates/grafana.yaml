@@ -93,6 +93,7 @@ spec:
     envFrom: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.envFrom "context" $ ) | nindent 6 }}
     {{- end }}
     replicas: {{ .Values.grafana.replicaCount }}
+    skipCreateAdminAccount: {{ .Values.grafana.skipCreateAdminAccount }}
     {{- if .Values.grafana.podSecurityContext.enabled }}
     securityContext: {{- omit .Values.grafana.podSecurityContext "enabled" | toYaml | nindent 6 }}
     {{- end }}

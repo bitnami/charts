@@ -220,7 +220,7 @@ Compile all warnings into a single message, and call fail.
 */}}
 {{- define "redis.validateValues" -}}
 {{- $messages := list -}}
-{{- $messages := append $messages (include "redis.validateValues.spreadConstraints" .) -}}
+{{- $messages := append $messages (include "redis.validateValues.topologySpreadConstraints" .) -}}
 {{- $messages := append $messages (include "redis.validateValues.architecture" .) -}}
 {{- $messages := append $messages (include "redis.validateValues.podSecurityPolicy.create" .) -}}
 {{- $messages := append $messages (include "redis.validateValues.tls" .) -}}
@@ -233,9 +233,9 @@ Compile all warnings into a single message, and call fail.
 {{- end -}}
 
 {{/* Validate values of Redis&trade; - spreadConstrainsts K8s version */}}
-{{- define "redis.validateValues.spreadConstraints" -}}
-{{- if and (semverCompare "<1.16-0" .Capabilities.KubeVersion.GitVersion) .Values.replica.spreadConstraints -}}
-redis: spreadConstraints
+{{- define "redis.validateValues.topologySpreadConstraints" -}}
+{{- if and (semverCompare "<1.16-0" .Capabilities.KubeVersion.GitVersion) .Values.replica.topologySpreadConstraints -}}
+redis: topologySpreadConstraints
     Pod Topology Spread Constraints are only available on K8s  >= 1.16
     Find more information at https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
 {{- end -}}

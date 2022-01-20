@@ -1,3 +1,5 @@
+<!--- app-name: EJBCA -->
+
 # EJBCA
 
 [EJBCA](https://www.ejbca.org/) is a free software public key infrastructure certificate authority software package.
@@ -77,7 +79,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | ----------------------------------------------------------------------------------------- | ----------------------- |
 | `image.registry`                        | EJBCA image registry                                                                      | `docker.io`             |
 | `image.repository`                      | EJBCA image name                                                                          | `bitnami/ejbca`         |
-| `image.tag`                             | EJBCA image tag                                                                           | `7.4.3-2-debian-10-r69` |
+| `image.tag`                             | EJBCA image tag                                                                           | `7.4.3-2-debian-10-r92` |
 | `image.pullPolicy`                      | EJBCA image pull policy                                                                   | `IfNotPresent`          |
 | `image.pullSecrets`                     | Specify docker-registry secret names as an array                                          | `[]`                    |
 | `image.debug`                           | Enable image debug mode                                                                   | `false`                 |

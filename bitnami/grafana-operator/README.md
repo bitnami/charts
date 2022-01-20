@@ -1,3 +1,5 @@
+<!--- app-name: Grafana Operator -->
+
 # grafana-operator
 
 [Grafana Operator](https://github.com/integr8ly/grafana-operator) is an Operator which introduces Lifecycle Management for Grafana Dashboards and Plugins.
@@ -19,7 +21,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 ## Prerequisites
 
-- Kubernetes 1.16+
+- Kubernetes 1.19+
 - Helm 3.1.0
 
 ## Installing the Chart
@@ -66,6 +68,7 @@ For more information, refer to the [documentation on the differences between the
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 
+
 ### Common parameters
 
 | Name                | Description                                                                                               | Value |
@@ -75,6 +78,7 @@ For more information, refer to the [documentation on the differences between the
 | `extraDeploy`       | Array of extra objects to deploy with the release                                                         | `[]`  |
 | `commonLabels`      | Common Labels which are applied to every resource deployed                                                | `{}`  |
 | `commonAnnotations` | Common Annotations which are applied to every ressource deployed                                          | `{}`  |
+
 
 ### Grafana Operator parameters
 
@@ -98,7 +102,7 @@ For more information, refer to the [documentation on the differences between the
 | `operator.updateStrategy.type`                               | Set up update strategy for Grafana Operator installation.                                                                                 | `Recreate`                 |
 | `operator.image.registry`                                    | Grafana Operator image registry                                                                                                           | `docker.io`                |
 | `operator.image.repository`                                  | Grafana Operator image name                                                                                                               | `bitnami/grafana-operator` |
-| `operator.image.tag`                                         | Grafana Operator image tag                                                                                                                | `4.1.1-debian-10-r23`      |
+| `operator.image.tag`                                         | Grafana Operator image tag                                                                                                                | `4.1.1-debian-10-r35`      |
 | `operator.image.pullPolicy`                                  | Grafana Operator image pull policy                                                                                                        | `IfNotPresent`             |
 | `operator.image.pullSecrets`                                 | Grafana Operator image pull secrets                                                                                                       | `[]`                       |
 | `operator.leaderElect`                                       | Enables or disables the operator leader Election.                                                                                         | `true`                     |
@@ -169,6 +173,7 @@ For more information, refer to the [documentation on the differences between the
 | `operator.startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                                                        | `3`                        |
 | `operator.startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                                                        | `1`                        |
 
+
 ### Grafana parameters
 
 | Name                                                        | Description                                                                                   | Value                    |
@@ -176,7 +181,7 @@ For more information, refer to the [documentation on the differences between the
 | `grafana.enabled`                                           | Enabled the deployment of the Grafana CRD object into the cluster                             | `true`                   |
 | `grafana.image.registry`                                    | Grafana image registry                                                                        | `docker.io`              |
 | `grafana.image.repository`                                  | Grafana image name                                                                            | `bitnami/grafana`        |
-| `grafana.image.tag`                                         | Grafana image tag                                                                             | `8.3.3-debian-10-r22`    |
+| `grafana.image.tag`                                         | Grafana image tag                                                                             | `8.3.3-debian-10-r32`    |
 | `grafana.image.pullSecrets`                                 | Grafana image pull secrets                                                                    | `[]`                     |
 | `grafana.serviceAccount`                                    | Additional service account configuration                                                      | `{}`                     |
 | `grafana.podSecurityContext.enabled`                        | Enable pods security context                                                                  | `true`                   |
@@ -194,6 +199,7 @@ For more information, refer to the [documentation on the differences between the
 | `grafana.resources.limits`                                  | The resources limits for the container                                                        | `{}`                     |
 | `grafana.resources.requests`                                | The requested resources for the container                                                     | `{}`                     |
 | `grafana.replicaCount`                                      | Specify the amount of replicas running                                                        | `1`                      |
+| `grafana.skipCreateAdminAccount`                            | Prevent the operator from creating an admin secret                                            | `false`                  |
 | `grafana.podAffinityPreset`                                 | Pod affinity preset                                                                           | `""`                     |
 | `grafana.podAntiAffinityPreset`                             | Pod anti-affinity preset                                                                      | `soft`                   |
 | `grafana.nodeAffinityPreset.type`                           | Set nodeAffinity preset type                                                                  | `""`                     |
@@ -217,7 +223,7 @@ For more information, refer to the [documentation on the differences between the
 | `grafana.ingress.tlsSecret`                                 | The name for the secret to use for the tls termination                                        | `grafana.local-tls`      |
 | `grafana.persistence.enabled`                               | Enable persistent storage for the grafana deployment                                          | `false`                  |
 | `grafana.persistence.storageClass`                          | Define the storageClass for the persistent storage if not defined default is used             | `""`                     |
-| `grafana.persistence.accessModes`                           | Define the accessModes for the persistent storage                                             | `[ReadWriteOnce]`        |
+| `grafana.persistence.accessModes`                           | Define the accessModes for the persistent storage                                             | `["ReadWriteOnce"]`      |
 | `grafana.persistence.annotations`                           | Add annotations to the persistent volume                                                      | `{}`                     |
 | `grafana.persistence.size`                                  | Define the size of the PersistentVolumeClaim to request for                                   | `10Gi`                   |
 | `grafana.config`                                            | grafana.ini configuration for the instance for this to configure please look at upstream docs | `{}`                     |
@@ -242,6 +248,7 @@ For more information, refer to the [documentation on the differences between the
 | `grafana.extraVolumes`                                      | Optionally specify extra list of additional volumes for the grafana pod(s)                    | `[]`                     |
 | `grafana.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the grafana container(s)         | `[]`                     |
 | `grafana.sidecars`                                          | Add additional sidecar containers to the grafana pod(s)                                       | `[]`                     |
+
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

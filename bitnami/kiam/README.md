@@ -1,3 +1,5 @@
+<!--- app-name: Kiam -->
+
 # kiam
 
 [kiam](https://github.com/uswitch/kiam) is a Kubernetes agent that allows to associate IAM roles to pods.
@@ -75,7 +77,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ------------------------------------------------ | ---------------------- |
 | `image.registry`    | kiam image registry                              | `docker.io`            |
 | `image.repository`  | kiam image name                                  | `bitnami/kiam`         |
-| `image.tag`         | kiam image tag                                   | `3.6.0-debian-10-r372` |
+| `image.tag`         | kiam image tag                                   | `3.6.0-debian-10-r415` |
 | `image.pullPolicy`  | kiam image pull policy                           | `IfNotPresent`         |
 | `image.pullSecrets` | Specify docker-registry secret names as an array | `[]`                   |
 

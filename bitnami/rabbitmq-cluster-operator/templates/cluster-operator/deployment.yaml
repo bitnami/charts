@@ -92,9 +92,13 @@ spec:
                 fieldRef:
                   fieldPath: metadata.namespace
             - name: DEFAULT_RABBITMQ_IMAGE
-              value: {{ template "rmqco.rabbitmq.image" . }}
+              value: {{ include "rmqco.rabbitmq.image" . }}
             - name: DEFAULT_USER_UPDATER_IMAGE
-              value: {{ template "rmqco.defaultCredentialUpdater.image" . }}
+              value: {{ include "rmqco.defaultCredentialUpdater.image" . }}
+            {{- if (include "rmqco.imagePullSecrets.string" .) }}
+            - name: DEFAULT_IMAGE_PULL_SECRETS
+              value: {{ include "rmqco.imagePullSecrets.string" . | quote }}
+            {{- end }}
             {{- if .Values.clusterOperator.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.clusterOperator.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}

@@ -1,3 +1,5 @@
+<!--- app-name: Node Exporter -->
+
 # Node Exporter
 
 [Node Exporter](https://github.com/prometheus/node_exporter) is a Prometheus exporter for hardware and OS metrics exposed by *NIX kernels, written in Go with pluggable metric collectors.
@@ -79,7 +81,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.name`                         | The name of the ServiceAccount to create                                                                                                                           | `""`                    |
 | `image.registry`                              | Node Exporter image registry                                                                                                                                       | `docker.io`             |
 | `image.repository`                            | Node Exporter image repository                                                                                                                                     | `bitnami/node-exporter` |
-| `image.tag`                                   | Node Exporter Image tag (immutable tags are recommended)                                                                                                           | `1.3.0-debian-10-r0`    |
+| `image.tag`                                   | Node Exporter Image tag (immutable tags are recommended)                                                                                                           | `1.3.1-debian-10-r28`   |
 | `image.pullPolicy`                            | Node Exporter image pull policy                                                                                                                                    | `IfNotPresent`          |
 | `image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                                                                   | `[]`                    |
 | `extraArgs`                                   | Additional command line arguments to pass to node-exporter                                                                                                         | `{}`                    |

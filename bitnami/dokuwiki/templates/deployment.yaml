@@ -254,6 +254,10 @@ spec:
               readOnly: true
             {{- end }}
             {{- end }}
+            {{- if .Values.customPostInitScripts }}
+            - mountPath: /docker-entrypoint-init.d
+              name: custom-postinit
+            {{- end }}
             {{- if .Values.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
@@ -317,6 +321,12 @@ spec:
             claimName: {{ default (include "common.names.fullname" .) .Values.persistence.existingClaim }}
         {{- else }}
           emptyDir: {}
+        {{- end }}
+        {{- if .Values.customPostInitScripts }}
+        - name: custom-postinit
+          configMap:
+            name: {{ printf "%s-postinit" (include "common.names.fullname" .) }}
+            defaultMode: 0755
         {{- end }}
         {{- if .Values.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}

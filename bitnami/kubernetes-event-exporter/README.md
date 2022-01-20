@@ -1,3 +1,5 @@
+<!--- app-name: Kubernetes Event Exporter -->
+
 # Kubernetes Event Exporter
 
 [Kubernetes Event Exporter](https://github.com/opsgenie/kubernetes-event-exporter) allows exporting the often missed Kubernetes events to various outputs so that they can be used for observability or alerting purposes.
@@ -69,7 +71,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `replicaCount`                                    | Desired number of pod replicas                                                            | `1`                                 |
 | `image.registry`                                  | Container image registry                                                                  | `docker.io`                         |
 | `image.repository`                                | Container image name                                                                      | `bitnami/kubernetes-event-exporter` |
-| `image.tag`                                       | Container image tag                                                                       | `0.11.0-debian-10-r0`               |
+| `image.tag`                                       | Container image tag                                                                       | `0.11.0-debian-10-r32`              |
 | `image.pullPolicy`                                | Container image pull policy                                                               | `IfNotPresent`                      |
 | `image.pullSecrets`                               | Specify docker-registry secret names as an array                                          | `[]`                                |
 | `hostAliases`                                     | Add deployment host aliases                                                               | `[]`                                |

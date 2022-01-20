@@ -1,3 +1,5 @@
+<!--- app-name: Wavefront Adapter for Istio -->
+
 # Wavefront Adapter for Istio
 
 [Wavefront Adapter for Istio](https://github.com/vmware/wavefront-adapter-for-istio/) is a lightweight Istio adapter that exposes Istio metrics to Wavefront.
@@ -81,7 +83,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------- |
 | `image.registry`                        | Adapter image registry                                                                    | `docker.io`                           |
 | `image.repository`                      | Adapter image repository                                                                  | `bitnami/wavefront-adapter-for-istio` |
-| `image.tag`                             | Adapter image tag (immutabe tags are recommended)                                         | `0.1.5-debian-10-r222`                |
+| `image.tag`                             | Adapter image tag (immutabe tags are recommended)                                         | `0.1.5-debian-10-r273`                |
 | `image.pullPolicy`                      | Adapter image pull policy                                                                 | `IfNotPresent`                        |
 | `image.pullSecrets`                     | Adapter image pull secrets                                                                | `[]`                                  |
 | `image.debug`                           | Enable image debug mode                                                                   | `false`                               |

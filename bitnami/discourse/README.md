@@ -1,3 +1,5 @@
+<!--- app-name: Discourse(R) -->
+
 # Discourse&reg;
 
 [Discourse](https://www.discourse.org/) is an open source discussion platform. It can be used as a mailing list, discussion forum, long-form chat room, and more.
@@ -92,7 +94,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ---------------------------------------------- | --------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`                               | Discourse image registry                                                                                  | `docker.io`           |
 | `image.repository`                             | Discourse image repository                                                                                | `bitnami/discourse`   |
-| `image.tag`                                    | Discourse image tag                                                                                       | `2.7.11-debian-10-r0` |
+| `image.tag`                                    | Discourse image tag                                                                                       | `2.7.13-debian-10-r0` |
 | `image.pullPolicy`                             | Discourse image pull policy                                                                               | `IfNotPresent`        |
 | `image.pullSecrets`                            | Discourse image pull secrets                                                                              | `[]`                  |
 | `image.debug`                                  | Specify if debug logs should be enabled                                                                   | `false`               |

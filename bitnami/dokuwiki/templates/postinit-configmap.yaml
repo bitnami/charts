@@ -1,8 +1,9 @@
-{{- if and .Values.persistence.enabled .Values.persistence.hostPath (not .Values.persistence.existingClaim) -}}
+{{- if .Values.customPostInitScripts }}
 apiVersion: v1
-kind: PersistentVolume
+kind: ConfigMap
 metadata:
-  name: {{ include "common.names.fullname" . }}-orangehrm
+  name: {{ printf "%s-postinit" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -10,11 +11,8 @@ metadata:
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
-spec:
-  accessModes:
-    - {{ .Values.persistence.accessMode | quote }}
-  capacity:
-    storage: {{ .Values.persistence.size | quote }}
-  hostPath:
-    path: {{ .Values.persistence.hostPath | quote }}
-{{- end -}}
+data:
+  {{- if .Values.customPostInitScripts }}
+  {{- include "common.tplvalues.render" (dict "value" .Values.customPostInitScripts "context" $) | nindent 2 }}
+  {{- end }}
+{{- end }}
