@@ -17,8 +17,8 @@ This chart bootstraps a [Kubernetes Event Exporter](https://github.com/opsgenie/
 
 ## Prerequisites
 
-- Kubernetes 1.12+
-- Helm 3.1.0
+- Kubernetes 1.19+
+- Helm 3.2.0+
 
 ## Installing the Chart
 

@@ -2,7 +2,7 @@
 
 # PyTorch
 
-[PyTorch](https://pytorch.org/) is a deep learning platform that accelerates the transition from research prototyping to production deployment. 
+[PyTorch](https://pytorch.org/) is a deep learning platform that accelerates the transition from research prototyping to production deployment.
 
 ## TL;DR
 
@@ -21,8 +21,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 ## Prerequisites
 
-- Kubernetes 1.12+
-- Helm 3.1.0
+- Kubernetes 1.19+
+- Helm 3.2.0+
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
