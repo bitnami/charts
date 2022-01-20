@@ -2,7 +2,7 @@
 
 # phpMyAdmin
 
-[phpMyAdmin](https://www.phpmyadmin.net/) is a free and open source administration tool for MySQL and MariaDB. 
+[phpMyAdmin](https://www.phpmyadmin.net/) is a free and open source administration tool for MySQL and MariaDB.
 
 ## TL;DR
 
@@ -22,7 +22,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.8+ with Beta APIs enabled
-- Helm 3.1.0
+- Helm 3.2.0+
 
 ## Installing the Chart
 

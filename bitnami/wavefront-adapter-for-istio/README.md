@@ -20,8 +20,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 ## Prerequisites
 
-- Kubernetes 1.15+
-- Helm 3.1.0
+- Kubernetes 1.19+
+- Helm 3.2.0+
 - Istio v1.4, v1.5 and v1.6 with `Mixer` support
 
 In order to enable the `Mixer` in Istio versions starting from v1.5, execute the following commands:
