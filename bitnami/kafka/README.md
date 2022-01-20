@@ -758,9 +758,8 @@ Find more information about how to deal with common errors related to Bitnami’
 
 ### To 15.0.0
 
-This major release renames several values in this chart and adds missing features, in order to be inline with the rest of assets in the Bitnami charts repository.
-
-Some affected values are:
+This major release bumps Kafka major version to `3.x` series.
+It also renames several values in this chart and adds missing features, in order to be inline with the rest of assets in the Bitnami charts repository. Some affected values are:
 
 - `service.port`, `service.internalPort` and `service.externalPort` have been regrouped under the `service.ports` map.
 - `metrics.kafka.service.port` has been regrouped under the `metrics.kafka.service.ports` map.
