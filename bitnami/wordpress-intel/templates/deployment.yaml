@@ -159,9 +159,9 @@ spec:
               value: {{ .Values.wordpressAutoUpdateLevel | quote }}
             - name: WORDPRESS_PLUGINS
               value: {{ join "," .Values.wordpressPlugins | quote }}
-            - name: APACHE_HTTP_PORT_NUMBER
+            - name: NGINX_HTTP_PORT_NUMBER
               value: {{ .Values.containerPorts.http | quote }}
-            - name: APACHE_HTTPS_PORT_NUMBER
+            - name: NGINX_HTTPS_PORT_NUMBER
               value: {{ .Values.containerPorts.https | quote }}
             {{- if .Values.multisite.enable }}
             - name: WORDPRESS_ENABLE_MULTISITE
@@ -261,10 +261,7 @@ spec:
           {{- else if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
           {{- else }}
-          command:
-            - /bin/apache_exporter
-            - --scrape_uri
-            - http://status.localhost:8080/server-status/?auto
+          command: ['/usr/bin/exporter', '-nginx.scrape-uri', 'http://127.0.0.1:{{- default .Values.containerPorts.http .Values.metrics.port }}/status']
           {{- end }}
           ports:
             - name: metrics

@@ -65,26 +65,6 @@ Return true if a secret object should be created for WordPress configuration
 {{- end -}}
 
 {{/*
-Return the WordPress Apache configuration configmap
-*/}}
-{{- define "wordpress.apache.configmapName" -}}
-{{- if .Values.existingApacheConfigurationConfigMap -}}
-    {{- printf "%s" (tpl .Values.existingApacheConfigurationConfigMap $) -}}
-{{- else -}}
-    {{- printf "%s-apache-configuration" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return true if a secret object should be created for Apache configuration
-*/}}
-{{- define "wordpress.apache.createConfigmap" -}}
-{{- if and .Values.apacheConfiguration (not .Values.existingApacheConfigurationConfigMap) }}
-    {{- true -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
 Return the MariaDB Hostname
 */}}
 {{- define "wordpress.databaseHost" -}}
