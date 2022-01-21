@@ -1,9 +1,13 @@
 <!--- app-name: Apache Geode -->
 
-# Apache Geode
+# Apache Geode packaged by Bitnami
 
-[Apache Geode](https://geode.apache.org/) is a data management platform that provides advanced capabilities for data-intensive applications.
+Apache Geode is a data management platform that provides advanced capabilities for data-intensive applications.
 
+[Overview of Apache Geode](https://geode.apache.org/)
+
+Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
+                           
 ## TL;DR
 
 ```console
@@ -386,39 +390,39 @@ helm install my-release -f values.yaml bitnami/geode
 This chart an Apache Geode cluster including a _locator_ statefulset with N _Locator_ nodes, and a _server_ statefulset with M Cache server nodes. The schema below represents the architecture when you used an Ingress controller to expose the Apache Geode Pulse dashboard:
 
 ```
-      ┌──────────────────┐
-      │     Ingress      │
-      │    Controller    │
-      └────────┬─────────┘
-               │ / HTTP monitoring
-               │   dashboard
-               │
-        ┌──────┘
-        │                           ┌────────────────────┐
-        │ (port 7070)               │    Geode client    │
-        ▼                           │        pods        │─────┐
-  ┌───────────────────┐             └───┬────────────────┘     │
-  │     Locator       │                 │                      │
-  │       svc         │                 │                      │
-  └───┬───────────────┘                 │ / server             │ / write
-      │                                 │   discovery          |   read
-      ▼                                 │                      │
-┌──────────────┐                        │    ┌──────────────┐  │
-│   Locator    │                        │    │   Locator    │  │
-│              │◀───────────────────────└───▶│              │  │
-│     Pod      │                             │     Pod      │  │
-└──────────────┘                             └──────────────┘  │
-      ▲                                             ▲          │
-  ┌───└───────────────────────────────────┌─────────┘          │
-  │                                       │                    │
-  │ / configuration      ┌─────────────────────────────────────┘
-  │   service            │                │                    │
-  │                      │                │                    │
-┌─┴─────────────┐        │              ┌───────────────┐      │
-│ Cache server  │        │              │ Cache server  │      │
-│               │◀───────┘              │               │◀─────┘
-│     Pod       │                       │    Pod        │
-└───────────────┘                       └───────────────┘
+      ������������������������������������������������������������
+      ���     Ingress      ���
+      ���    Controller    ���
+      ������������������������������������������������������������
+               ��� / HTTP monitoring
+               ���   dashboard
+               ���
+        ������������������������
+        ���                           ������������������������������������������������������������������
+        ��� (port 7070)               ���    Geode client    ���
+        ���                           ���        pods        ���������������������
+  ���������������������������������������������������������������             ������������������������������������������������������������������     ���
+  ���     Locator       ���                 ���                      ���
+  ���       svc         ���                 ���                      ���
+  ���������������������������������������������������������������                 ��� / server             ��� / write
+      ���                                 ���   discovery          |   read
+      ���                                 ���                      ���
+������������������������������������������������                        ���    ������������������������������������������������  ���
+���   Locator    ���                        ���    ���   Locator    ���  ���
+���              ���������������������������������������������������������������������������������������������              ���  ���
+���     Pod      ���                             ���     Pod      ���  ���
+������������������������������������������������                             ������������������������������������������������  ���
+      ���                                             ���          ���
+  ���������������������������������������������������������������������������������������������������������������������������������������������������������          ���
+  ���                                       ���                    ���
+  ��� / configuration      ���������������������������������������������������������������������������������������������������������������������
+  ���   service            ���                ���                    ���
+  ���                      ���                ���                    ���
+���������������������������������������������������        ���              ���������������������������������������������������      ���
+��� Cache server  ���        ���              ��� Cache server  ���      ���
+���               ������������������������������              ���               ������������������������
+���     Pod       ���                       ���    Pod        ���
+���������������������������������������������������                       ���������������������������������������������������
 ```
 
 > Note: when using several Locator nodes, it is recommended to configure sticky sessions using `--set locator.service.sessionAffinity="ClientIP"` or configuring the IngressController accordingly to access the Pulse monitoring dashboard.
