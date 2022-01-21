@@ -241,7 +241,7 @@ To connect to your Kafka server from outside the cluster, follow the instruction
 
         echo "$(kubectl get svc --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ template "kafka.name" . }},app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=kafka,pod" -o jsonpath='{.items[*].status.loadBalancer.ingress[0].ip}' | tr ' ' '\n')"
 
-    Kafka Brokers port: {{ .Values.externalAccess.service.port }}
+    Kafka Brokers port: {{ .Values.externalAccess.service.ports.external }}
 
 {{- end }}
 {{- end }}

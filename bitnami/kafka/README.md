@@ -573,7 +573,7 @@ You have two alternatives to use LoadBalancer services:
 ```console
 externalAccess.enabled=true
 externalAccess.service.type=LoadBalancer
-externalAccess.service.port=9094
+externalAccess.service.ports.external=9094
 externalAccess.autoDiscovery.enabled=true
 serviceAccount.create=true
 rbac.create=true
@@ -586,7 +586,7 @@ Note: This option requires creating RBAC rules on clusters where RBAC policies a
 ```console
 externalAccess.enabled=true
 externalAccess.service.type=LoadBalancer
-externalAccess.service.port=9094
+externalAccess.service.ports.external=9094
 externalAccess.service.loadBalancerIPs[0]='external-ip-1'
 externalAccess.service.loadBalancerIPs[1]='external-ip-2'}
 ```

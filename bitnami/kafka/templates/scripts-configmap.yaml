@@ -90,7 +90,7 @@ data:
     {{- else }}
     export EXTERNAL_ACCESS_IP=$(echo '{{ .Values.externalAccess.service.loadBalancerIPs }}' | tr -d '[]' | cut -d ' ' -f "$(($ID + 1))")
     {{- end }}
-    export EXTERNAL_ACCESS_PORT={{ .Values.externalAccess.service.port }}
+    export EXTERNAL_ACCESS_PORT={{ .Values.externalAccess.service.ports.external }}
     {{- else if eq .Values.externalAccess.service.type "NodePort" }}
     {{- if and .Values.externalAccess.service.usePodIPs .Values.externalAccess.autoDiscovery.enabled }}
     export EXTERNAL_ACCESS_IP="${MY_POD_IP}"
