@@ -1,7 +1,5 @@
 # WordPress
 
- is one of the most versatile open source content management systems on the market. A publishing platform for building blogs and websites.
-
 [WordPress](https://wordpress.org/) for Intel is the most popular blogging application combined with cryptography acceleration for 3rd gen Xeon Scalable Processors (Ice Lake) to get a breakthrough performance improvement.
 
 ## TL;DR
@@ -13,7 +11,7 @@ $ helm install my-release bitnami/wordpress-intel
 
 ## Introduction
 
-This chart bootstraps a [WordPress](https://github.com/bitnami/bitnami-docker-wordpress) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [WordPress Intel](https://github.com/bitnami/bitnami-docker-wordpress-intel) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) which is required for bootstrapping a MariaDB deployment for the database requirements of the WordPress application, and the [Bitnami Memcached chart](https://github.com/bitnami/charts/tree/master/bitnami/memcached) that can be used to cache database queries.
 
@@ -327,7 +325,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalCache.port`                       | External cache server port                                                | `11211`             |
 
 
-The above parameters map to the env variables defined in [bitnami/wordpress](https://github.com/bitnami/bitnami-docker-wordpress). For more information please refer to the [bitnami/wordpress](https://github.com/bitnami/bitnami-docker-wordpress) image documentation.
+The above parameters map to the env variables defined in [bitnami/wordpress-intel](https://github.com/bitnami/bitnami-docker-wordpress-intel). For more information please refer to the [bitnami/wordpress-intel](https://github.com/bitnami/bitnami-docker-wordpress-intel) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -413,7 +411,7 @@ The chart also facilitates the creation of TLS secrets for use with the Ingress 
 
 ## Persistence
 
-The [Bitnami WordPress](https://github.com/bitnami/bitnami-docker-wordpress) image stores the WordPress data and configurations at the `/bitnami` path of the container. Persistent Volume Claims are used to keep the data across deployments.
+The [Bitnami WordPress Intel](https://github.com/bitnami/bitnami-docker-wordpress-intel) image stores the WordPress data and configurations at the `/bitnami` path of the container. Persistent Volume Claims are used to keep the data across deployments.
 
 If you encounter errors when working with persistent volumes, refer to our [troubleshooting guide for persistent volumes](https://docs.bitnami.com/kubernetes/faq/troubleshooting/troubleshooting-persistence-volumes/).
 

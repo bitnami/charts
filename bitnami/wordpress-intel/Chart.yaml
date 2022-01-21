@@ -6,11 +6,11 @@ dependencies:
   - condition: mariadb.enabled
     name: mariadb
     repository: https://charts.bitnami.com/bitnami
-    version: 9.x.x
+    version: 10.x.x
   - condition: memcached.enabled
     name: memcached
     repository: https://charts.bitnami.com/bitnami
-    version: 5.x.x
+    version: 6.x.x
   - name: common
     repository: https://charts.bitnami.com/bitnami
     tags:
@@ -31,8 +31,8 @@ keywords:
 maintainers:
   - email: containers@bitnami.com
     name: Bitnami
-name: wordpress
+name: wordpress-intel
 sources:
   - https://github.com/bitnami/bitnami-docker-wordpress
   - https://wordpress.org/
-version: 12.2.7
+version: 0.1.0
