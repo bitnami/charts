@@ -1,6 +1,6 @@
 # NGINX
 
-[NGINX](https://nginx.org) (pronounced "engine-x") is an open source reverse proxy server for HTTP, HTTPS, SMTP, POP3, and IMAP protocols, as well as a load balancer, HTTP cache, and a web server (origin server).
+[NGINX Open Source for Intel](https://github.com/intel/asynch_mode_nginx) is a lightweight server, combined with cryptography acceleration for 3rd gen Xeon Scalable Processors (Ice Lake) to get a breakthrough performance improvement.
 
 ## TL;DR
 
@@ -16,6 +16,14 @@ Bitnami charts for Helm are carefully engineered, actively maintained and are th
 This chart bootstraps a [NGINX Open Source with Intel Optimizations](https://github.com/bitnami/bitnami-docker-nginx-intel) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
+
+## Why use Intel optimized containers
+
+Encryption is becoming pervasive with most organizations increasingly adopting encryption for application execution, data in flight, and data storage. Intel® 3rd gen Xeon® Scalable Processor (Ice Lake) cores and architecture, offers several new instructions for encryption acceleration. These new instructions, coupled with algorithmic and software innovations, deliver breakthrough performance for the industry's most widely deployed cryptographic ciphers.
+
+This solution accelerates the processing of the Transport Layer Security (TLS) significantly by using built-in Intel crypto acceleration included in the latest Intel 3rd gen Xeon Scalable Processor (Ice Lake). For more information, refer to [Intel's documentation](https://www.intel.com/content/www/us/en/developer/articles/guide/nginx-https-with-crypto-ni-tuning-guide.html).
+
+It requires a 3rd gen Xeon Scalable Processor (Ice Lake) to get a breakthrough performance improvement.
 
 ## Prerequisites
 
