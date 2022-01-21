@@ -16,7 +16,7 @@ dependencies:
     tags:
       - bitnami-common
     version: 1.x.x
-description: Web publishing platform for building blogs and websites.
+description: WordPress is the world's most popular blogging and content management platform. Powerful yet simple, everyone from students to global corporations use it to build beautiful, functional websites.
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/wordpress
 icon: https://bitnami.com/assets/stacks/wordpress/img/wordpress-stack-220x234.png
@@ -35,4 +35,4 @@ name: wordpress
 sources:
   - https://github.com/bitnami/bitnami-docker-wordpress
   - https://wordpress.org/
-version: 13.0.3
+version: 13.0.4
