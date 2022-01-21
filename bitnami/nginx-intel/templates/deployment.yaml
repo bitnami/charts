@@ -69,14 +69,14 @@ spec:
           {{- end }}
           {{- if .Values.cloneStaticSiteFromGit.gitClone.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.cloneStaticSiteFromGit.gitClone.command "context" $) | nindent 12 }}
-          {{- else}}
+          {{- else }}
           command:
             - /bin/bash
             - -ec
             - |
               [[ -f "/opt/bitnami/scripts/git/entrypoint.sh" ]] && source "/opt/bitnami/scripts/git/entrypoint.sh"
               git clone {{ .Values.cloneStaticSiteFromGit.repository }} --branch {{ .Values.cloneStaticSiteFromGit.branch }} /app
-          {{- end}}
+          {{- end }}
           {{- if .Values.cloneStaticSiteFromGit.gitClone.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.cloneStaticSiteFromGit.gitClone.args "context" $) | nindent 12 }}
           {{- end }}
@@ -99,7 +99,7 @@ spec:
           {{- end }}
           {{- if .Values.cloneStaticSiteFromGit.gitSync.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.cloneStaticSiteFromGit.gitSync.command "context" $) | nindent 12 }}
-          {{- else}}
+          {{- else }}
           command:
             - /bin/bash
             - -ec
@@ -109,7 +109,7 @@ spec:
                   cd /app && git pull origin {{ .Values.cloneStaticSiteFromGit.branch }}
                   sleep {{ .Values.cloneStaticSiteFromGit.interval }}
               done
-          {{- end}}
+          {{- end }}
           {{- if .Values.cloneStaticSiteFromGit.gitSync.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.cloneStaticSiteFromGit.gitSync.args "context" $) | nindent 12 }}
           {{- end }}
@@ -126,7 +126,7 @@ spec:
       {{- else }}
       {{- with .Values.initContainers }}
       initContainers:
-      {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8}}
+      {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8 }}
       {{- end }}
       containers:
       {{- end }}
@@ -193,7 +193,7 @@ spec:
           resources: {{- toYaml .Values.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
-            {{- if or .Values.serverBlock .Values.existingServerBlockConfigmap .Values.ldapDaemon.enabled}}
+            {{- if or .Values.serverBlock .Values.existingServerBlockConfigmap .Values.ldapDaemon.enabled }}
             - name: nginx-server-block-paths
               mountPath: /opt/bitnami/nginx/conf/server_blocks
             {{- end }}
@@ -218,7 +218,7 @@ spec:
           imagePullPolicy: {{ .Values.ldapDaemon.image.pullPolicy | quote }}
           env:
             - name: NGINXLDAP_PORT_NUMBER
-              value: {{ .Values.ldapDaemon.port | quote}}
+              value: {{ .Values.ldapDaemon.port | quote }}
             - name: NGINXLDAP_LDAP_URI
               value: {{ .Values.ldapDaemon.ldapConfig.uri | quote }}
             - name: NGINXLDAP_LDAP_BASE_DN
@@ -291,7 +291,7 @@ spec:
           {{- end }}
         {{- end }}
         {{- with .Values.sidecars }}
-        {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8}}
+        {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8 }}
         {{- end }}
       volumes:
         - name: nginx-server-block-paths
