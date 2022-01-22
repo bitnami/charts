@@ -1,9 +1,13 @@
 <!--- app-name: MariaDB Galera -->
 
-# MariaDB Galera
+# MariaDB Galera packaged by Bitnami
 
-[MariaDB Galera](https://mariadb.com/kb/en/library/what-is-mariadb-galera-cluster/) is a multi-master database cluster solution for synchronous replication and high availability.
+MariaDB Galera is a multi-master database cluster solution for synchronous replication and high availability.
 
+[Overview of MariaDB Galera](https://mariadb.com/kb/en/library/galera-cluster/)
+
+Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
+                           
 ## TL;DR
 
 ```bash
@@ -513,7 +517,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 
 ## Troubleshooting
 
-Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+Find more information about how to deal with common errors related to Bitnami���s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
 
