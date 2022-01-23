@@ -144,10 +144,11 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
           {{- end }}
           ports:
+            {{- if not .Values.security.ssl.enabled }}
             - name: http
               containerPort: {{ .Values.worker.webPort }}
               protocol: TCP
-            {{- if .Values.security.ssl.enabled }}
+            {{- else }}
             - name: https
               containerPort: {{ .Values.worker.webPortHttps }}
               protocol: TCP
