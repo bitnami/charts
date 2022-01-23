@@ -751,6 +751,10 @@ service:
   ##
   tlsNodePort: ""
 
+  ## @param service.distPortEnabled Erlang distribution server port
+  ##
+  distPortEnabled: true
+
   ## @param service.distPort Erlang distribution server port
   ## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
   ##
@@ -798,6 +802,10 @@ service:
   ## metricsNodePort: 30674
   ##
   metricsNodePort: ""
+
+  ## @param service.epmdPortEnabled RabbitMQ EPMD Discovery service port
+  ##
+  epmdPortEnabled: true
 
   ## @param service.epmdNodePort Node port override for `epmd` port, if serviceType is `NodePort`
   ## e.g:
