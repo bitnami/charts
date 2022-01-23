@@ -232,7 +232,7 @@ spec:
             - name: SPARK_SSL_PROTOCOL
               value: {{ .Values.security.ssl.protocol | quote }}
             - name: SPARK_WEBUI_SSL_PORT
-              value: {{ .Values.master.webPortHttps }}
+              value: {{ .Values.master.webPortHttps | quote }}
             {{- end }}
             {{- if .Values.master.extraEnvVars }}
             {{- toYaml .Values.master.extraEnvVars | nindent 12 }}
