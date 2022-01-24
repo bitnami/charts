@@ -1,7 +1,7 @@
 annotations:
   category: Infrastructure
 apiVersion: v2
-appVersion: 2.8.1
+appVersion: 3.0.0
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -12,7 +12,7 @@ dependencies:
     name: zookeeper
     repository: https://charts.bitnami.com/bitnami
     version: 8.x.x
-description: Apache Kafka is a distributed streaming platform.
+description: Apache Kafka is a distributed streaming platform designed to build real-time pipelines and can be used as a message broker or as a replacement for a log aggregation solution for big data applications.
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/kafka
 icon: https://bitnami.com/assets/stacks/kafka/img/kafka-stack-220x234.png
