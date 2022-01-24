@@ -1,0 +1,12 @@
+# Test values file for generating hidden section of the yaml
+# and check that the rendering is correct
+replicaCount: 3
+auth:
+  clientProtocol: tls
+  interBrokerProtocol: mtls
+  tls:
+    type: jks
+    existingSecrets:
+      - kafka-secret-0
+      - kafka-secret-1
+      - kafka-secret-2
