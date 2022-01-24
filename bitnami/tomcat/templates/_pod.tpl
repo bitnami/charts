@@ -97,7 +97,7 @@ containers:
       - name: http
         containerPort: {{ .Values.containerPorts.http }}
       {{- if .Values.containerExtraPorts }}
-      {{- include "common.tplvalues.render" (dict "value" .Values.containerExtraPorts "context" $) | nindent 4 }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.containerExtraPorts "context" $) | nindent 6 }}
       {{- end }}
     {{- if .Values.livenessProbe.enabled }}
     livenessProbe:
