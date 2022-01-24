@@ -21,6 +21,9 @@ metadata:
     {{- end }}
   {{- end }}
 spec:
+  {{- if and .Values.ingress.className (eq "true" (include "common.ingress.supportsIngressClassname" .)) }}
+  ingressClassName: {{ .Values.ingress.className }}
+  {{ end }}
   rules:
     {{- if .Values.ingress.hostname }}
     - host: {{ .Values.ingress.hostname }}
