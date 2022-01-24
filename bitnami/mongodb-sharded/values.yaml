@@ -1142,6 +1142,8 @@ metrics:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
+  ## @param metrics.useTLS Whether to connect to MongoDB&reg; with TLS
+  useTLS: false
   ## @param metrics.extraArgs String with extra arguments to the metrics exporter
   ## ref: https://github.com/dcu/mongodb_exporter/blob/master/mongodb_exporter.go
   ##
