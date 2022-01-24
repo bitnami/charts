@@ -1,9 +1,13 @@
 <!--- app-name: NGINX Open Source -->
 
-# NGINX
+# NGINX Open Source packaged by Bitnami
 
-[NGINX](https://nginx.org) (pronounced "engine-x") is an open source reverse proxy server for HTTP, HTTPS, SMTP, POP3, and IMAP protocols, as well as a load balancer, HTTP cache, and a web server (origin server).
+NGINX Open Source is a web server that can be also used as a reverse proxy, load balancer, and HTTP cache. Recommended for high-demanding sites due to its ability to provide faster content. 
 
+[Overview of NGINX Open Source](http://nginx.org)
+
+Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
+                           
 ## TL;DR
 
 ```bash
@@ -343,10 +347,10 @@ In addition, you can also set an external ConfigMap with the configuration file.
 In some scenarios, you may require users to authenticate in order to gain access to protected resources. By enabling LDAP, NGINX will make use of an Authorization Daemon to proxy those identification requests against a given LDAP Server.
 
 ```
-                ┌────────────────┐           ┌────────────────┐           ┌────────────────┐
-                │     NGINX      │  ----->   │     NGINX      │  ----->   │      LDAP      │
-                │     server     │  <-----   |  ldap daemon   │  <-----   |     server     │
-                └────────────────┘           └────────────────┘           └────────────────┘
+                ������������������������������������������������������           ������������������������������������������������������           ������������������������������������������������������
+                ���     NGINX      ���  ----->   ���     NGINX      ���  ----->   ���      LDAP      ���
+                ���     server     ���  <-----   |  ldap daemon   ���  <-----   |     server     ���
+                ������������������������������������������������������           ������������������������������������������������������           ������������������������������������������������������
 
 ```
 
@@ -460,7 +464,7 @@ For annotations, please see [this document](https://github.com/kubernetes/ingres
 
 ## Troubleshooting
 
-Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+Find more information about how to deal with common errors related to Bitnami���s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
 

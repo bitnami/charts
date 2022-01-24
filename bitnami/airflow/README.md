@@ -217,6 +217,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `worker.podLabels`                          | Add extra labels to the web's pods                                                                                   | `{}`                     |
 | `worker.extraVolumeMounts`                  | Add extra volume mounts                                                                                              | `[]`                     |
 | `worker.extraVolumes`                       | Add extra volumes                                                                                                    | `[]`                     |
+| `worker.extraVolumeClaimTemplates`          | Add extra volumes claim templates for worker statefule set                                                           | `[]`                     |
 | `worker.extraEnvVars`                       | Add extra environment variables                                                                                      | `[]`                     |
 | `worker.extraEnvVarsCM`                     | ConfigMap with extra environment variables                                                                           | `""`                     |
 | `worker.extraEnvVarsSecret`                 | Secret with extra environment variables                                                                              | `""`                     |
