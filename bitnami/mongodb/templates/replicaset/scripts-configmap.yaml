@@ -126,7 +126,7 @@ data:
     {{- end }}
     {{- else if eq .Values.externalAccess.hidden.service.type "NodePort" }}
     ID="${MY_POD_NAME#"{{ $fullname }}-hidden-"}"
-    export MONGODB_ADVERTISED_PORT_NUMBER=$(echo '{{ .Values.externalAccess.hidden.service.nodePorts }}' | tr -d '[]' | cut -d ' ' -f "$(($ID + 1))"
+    export MONGODB_ADVERTISED_PORT_NUMBER=$(echo '{{ .Values.externalAccess.hidden.service.nodePorts }}' | tr -d '[]' | cut -d ' ' -f "$(($ID + 1))")
     {{- if .Values.externalAccess.hidden.service.domain }}
     export MONGODB_ADVERTISED_HOSTNAME={{ .Values.externalAccess.hidden.service.domain }}
     {{- else }}
