@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: vmware-samples/vmware-image-builder-examples/vib-action@github-action-martinpe
+      - uses: vmware-samples/vmware-image-builder-examples/vib-action@main
 
   cp-k8s-verify: # verify in multiple target platforms
     runs-on: ubuntu-latest
