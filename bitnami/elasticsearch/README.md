@@ -331,6 +331,7 @@ $ helm delete --purge my-release
 | `data.customReadinessProbe`                  | Override default readiness probe                                                                                                                  | `{}`                |
 | `data.initContainers`                        | Extra init containers to add to the Elasticsearch data pod(s)                                                                                     | `[]`                |
 | `data.sidecars`                              | Extra sidecar containers to add to the Elasticsearch data pod(s)                                                                                  | `[]`                |
+| `data.service.annotations`                   | Annotations for data-eligible nodes service                                                                                                       | `{}`                |
 | `data.persistence.enabled`                   | Enable persistence using a `PersistentVolumeClaim`                                                                                                | `true`              |
 | `data.persistence.storageClass`              | Persistent Volume Storage Class                                                                                                                   | `""`                |
 | `data.persistence.existingClaim`             | Existing Persistent Volume Claim                                                                                                                  | `""`                |
