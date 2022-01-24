@@ -8,7 +8,7 @@ dependencies:
   tags:
   - bitnami-common
   version: 1.x.x
-description: Chart for the nginx server with Intel optimizations
+description: NGINX Open Source for Intel is a lightweight server, combined with cryptography acceleration for 3rd gen Xeon Scalable Processors (Ice Lake) to get a breakthrough performance improvement.
 home: https://github.com/bitnami/charts/tree/master/bitnami/nginx-intel
 icon: https://bitnami.com/assets/stacks/nginx/img/nginx-stack-220x234.png
 keywords:
