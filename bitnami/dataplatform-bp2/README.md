@@ -542,7 +542,7 @@ Regular upgrade is compatible from previous versions.
 
 ## Upgrading
 
-### To 10.0.0
+### To 11.0.0
 
 This major release adds the environment variable for spark and updated the heap memory for spark.
 
