@@ -87,10 +87,10 @@ data:
 {{- if .Values.tls.enabled }}
         -p $REDIS_SENTINEL_TLS_PORT_NUMBER \
         --tls \
-        --cacert {{ template "redis.tlsCACert" . }} \
+        --cacert "$REDIS_SENTINEL_TLS_CA_FILE" \
         {{- if .Values.tls.authClients }}
-          --cert {{ template "redis.tlsCert" . }} \
-          --key {{ template "redis.tlsCertKey" . }} \
+          --cert "$REDIS_SENTINEL_TLS_CERT_FILE" \
+          --key "$REDIS_SENTINEL_TLS_KEY_FILE" \
         {{- end }}
 {{- else }}
         -p $REDIS_SENTINEL_PORT \
