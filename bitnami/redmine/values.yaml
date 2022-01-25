@@ -391,6 +391,10 @@ ingress:
   ## @param ingress.enabled Enable ingress record generation for Redmine
   ##
   enabled: false
+  ## @param ingress.className Set the ingressClassName which will be used for this ingress
+  ## The newer ingressClassName field on Ingresses is a replacement for that "kubernetes.io/ingress.class" annotation (Kubernetes 1.18+).
+  ## When using this filed you need to create the IngressClass resource with the corresponding name.
+  className: ""
   ## DEPRECATED: Use ingress.annotations instead of ingress.certManager
   ## certManager: false
   ##
