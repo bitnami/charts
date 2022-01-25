@@ -1,17 +1,4 @@
-<!--- app-name: Data Platform Blueprint 2 -->
-
 # Data Platform Blueprint 2 with Kafka-Spark-Elasticsearch
-
-This Helm chart enables the fully automated Kubernetes deployment of such multi-stack data platform, covering the following software components: Kafka, Spark, Elasticsearch, Kibana, Logstash and Signature state controller
-
-## TL;DR
-
-```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/dataplatform-bp2
-```
-
-## Introduction
 
 Enterprise applications increasingly rely on large amounts of data, that needs be distributed, processed, and stored.
 Open source and commercial supported software stacks are available to implement a data platform, that can offer common data management services, accelerating the development and deployment of data hungry business applications.
@@ -35,6 +22,15 @@ In addition to the Pod resource optimizations, this blueprint is validated and t
 
 This blueprint, in its default configuration, deploys the data platform on a Kubernetes cluster with three worker nodes. Use cases for this data platform setup include: data and application evaluation, development, and functional testing.
 
+## TL;DR
+
+```console
+$ helm repo add bitnami https://charts.bitnami.com/bitnami
+$ helm install my-release bitnami/dataplatform-bp2
+```
+
+## Introduction
+
 This chart bootstraps Data Platform Blueprint-2 deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Once the chart is installed, the deployed data platform cluster comprises of:
@@ -49,8 +45,8 @@ The data platform can be optionally deployed with the Tanzu observability framew
 
 ## Prerequisites
 
-- Kubernetes 1.19+
-- Helm 3.2.0+
+- Kubernetes 1.12+
+- Helm 3.1.0
 - PV provisioner support in the underlying infrastructure
 
 ## Kubernetes Cluster requirements
@@ -99,152 +95,151 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common parameters
 
-| Name                | Description                                       | Value |
-| ------------------- | ------------------------------------------------- | ----- |
-| `commonLabels`      | Labels to add to all deployed objects             | `{}`  |
-| `commonAnnotations` | Annotations to add to all deployed objects        | `{}`  |
-| `extraDeploy`       | Array of extra objects to deploy with the release | `[]`  |
+| Name                | Description                                | Value |
+| ------------------- | ------------------------------------------ | ----- |
+| `commonLabels`      | Labels to add to all deployed objects      | `{}`  |
+| `commonAnnotations` | Annotations to add to all deployed objects | `{}`  |
 
 
 ### Data Platform Chart parameters
 
-| Name                                                          | Description                                                                                                      | Value                           |
-| ------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | ------------------------------- |
-| `dataplatform.serviceAccount.create`                          | Specifies whether a ServiceAccount should be created                                                             | `true`                          |
-| `dataplatform.serviceAccount.name`                            | The name of the ServiceAccount to create                                                                         | `""`                            |
-| `dataplatform.serviceAccount.automountServiceAccountToken`    | Allows auto mount of ServiceAccountToken on the serviceAccount created                                           | `true`                          |
-| `dataplatform.rbac.create`                                    | Whether to create & use RBAC resources or not                                                                    | `true`                          |
-| `dataplatform.exporter.enabled`                               | Start a prometheus exporter                                                                                      | `true`                          |
-| `dataplatform.exporter.image.registry`                        | dataplatform exporter image registry                                                                             | `docker.io`                     |
-| `dataplatform.exporter.image.repository`                      | dataplatform exporter image repository                                                                           | `bitnami/dataplatform-exporter` |
-| `dataplatform.exporter.image.tag`                             | dataplatform exporter image tag (immutable tags are recommended)                                                 | `1.0.1-scratch-r5`              |
-| `dataplatform.exporter.image.pullPolicy`                      | dataplatform exporter image pull policy                                                                          | `IfNotPresent`                  |
-| `dataplatform.exporter.image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                 | `[]`                            |
-| `dataplatform.exporter.config`                                | Data Platform Metrics Configuration emitted in Prometheus format                                                 | `""`                            |
-| `dataplatform.exporter.livenessProbe.enabled`                 | Enable livenessProbe                                                                                             | `true`                          |
-| `dataplatform.exporter.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                          | `10`                            |
-| `dataplatform.exporter.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                                 | `5`                             |
-| `dataplatform.exporter.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                                | `15`                            |
-| `dataplatform.exporter.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                              | `15`                            |
-| `dataplatform.exporter.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                              | `1`                             |
-| `dataplatform.exporter.readinessProbe.enabled`                | Enable readinessProbe                                                                                            | `true`                          |
-| `dataplatform.exporter.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                         | `10`                            |
-| `dataplatform.exporter.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                                | `5`                             |
-| `dataplatform.exporter.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                               | `15`                            |
-| `dataplatform.exporter.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                             | `15`                            |
-| `dataplatform.exporter.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                             | `15`                            |
-| `dataplatform.exporter.startupProbe.enabled`                  | Enable startupProbe                                                                                              | `false`                         |
-| `dataplatform.exporter.startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                           | `10`                            |
-| `dataplatform.exporter.startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                                  | `5`                             |
-| `dataplatform.exporter.startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                                 | `15`                            |
-| `dataplatform.exporter.startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                               | `15`                            |
-| `dataplatform.exporter.startupProbe.successThreshold`         | Success threshold for startupProbe                                                                               | `15`                            |
-| `dataplatform.exporter.containerPorts.http`                   | Data Platform Prometheus exporter port                                                                           | `9090`                          |
-| `dataplatform.exporter.priorityClassName`                     | exporter priorityClassName                                                                                       | `""`                            |
-| `dataplatform.exporter.command`                               | Override Data Platform Exporter entrypoint string.                                                               | `[]`                            |
-| `dataplatform.exporter.args`                                  | Arguments for the provided command if needed                                                                     | `[]`                            |
-| `dataplatform.exporter.resources.limits`                      | The resources limits for the container                                                                           | `{}`                            |
-| `dataplatform.exporter.resources.requests`                    | The requested resources for the container                                                                        | `{}`                            |
-| `dataplatform.exporter.containerSecurityContext.enabled`      | Enable Data Platform exporter containers' Security Context                                                       | `true`                          |
-| `dataplatform.exporter.containerSecurityContext.runAsUser`    | User ID for the containers.                                                                                      | `1001`                          |
-| `dataplatform.exporter.containerSecurityContext.runAsNonRoot` | Enable Data Platform exporter containers' Security Context runAsNonRoot                                          | `true`                          |
-| `dataplatform.exporter.podSecurityContext.enabled`            | Enable Data Platform exporter pods' Security Context                                                             | `true`                          |
-| `dataplatform.exporter.podSecurityContext.fsGroup`            | Group ID for the pods.                                                                                           | `1001`                          |
-| `dataplatform.exporter.podAffinityPreset`                     | Data Platform exporter pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                            |
-| `dataplatform.exporter.podAntiAffinityPreset`                 | Data Platform exporter pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`                          |
-| `dataplatform.exporter.nodeAffinityPreset.type`               | Data Platform exporter node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                            |
-| `dataplatform.exporter.nodeAffinityPreset.key`                | Data Platform exporter node label key to match Ignored if `affinity` is set.                                     | `""`                            |
-| `dataplatform.exporter.nodeAffinityPreset.values`             | Data Platform exporter node label values to match. Ignored if `affinity` is set.                                 | `[]`                            |
-| `dataplatform.exporter.affinity`                              | Affinity settings for exporter pod assignment. Evaluated as a template                                           | `{}`                            |
-| `dataplatform.exporter.nodeSelector`                          | Node labels for exporter pods assignment. Evaluated as a template                                                | `{}`                            |
-| `dataplatform.exporter.tolerations`                           | Tolerations for exporter pods assignment. Evaluated as a template                                                | `[]`                            |
-| `dataplatform.exporter.podLabels`                             | Additional labels for Metrics exporter pod                                                                       | `{}`                            |
-| `dataplatform.exporter.podAnnotations`                        | Additional annotations for Metrics exporter pod                                                                  | `{}`                            |
-| `dataplatform.exporter.customLivenessProbe`                   | Override default liveness probe                                                                                  | `{}`                            |
-| `dataplatform.exporter.customReadinessProbe`                  | Override default readiness probe                                                                                 | `{}`                            |
-| `dataplatform.exporter.customStartupProbe`                    | Override default startup probe                                                                                   | `{}`                            |
-| `dataplatform.exporter.updateStrategy.type`                   | Update strategy - only really applicable for deployments with RWO PVs attached                                   | `RollingUpdate`                 |
-| `dataplatform.exporter.updateStrategy.rollingUpdate`          | Deployment rolling update configuration parameters                                                               | `{}`                            |
-| `dataplatform.exporter.extraEnvVars`                          | Additional environment variables to set                                                                          | `[]`                            |
-| `dataplatform.exporter.extraEnvVarsCM`                        | ConfigMap with extra environment variables                                                                       | `""`                            |
-| `dataplatform.exporter.extraEnvVarsSecret`                    | Secret with extra environment variables                                                                          | `""`                            |
-| `dataplatform.exporter.extraVolumes`                          | Extra volumes to add to the deployment                                                                           | `[]`                            |
-| `dataplatform.exporter.extraVolumeMounts`                     | Extra volume mounts to add to the container                                                                      | `[]`                            |
-| `dataplatform.exporter.initContainers`                        | Add init containers to the %%MAIN_CONTAINER_NAME%% pods                                                          | `[]`                            |
-| `dataplatform.exporter.sidecars`                              | Add sidecars to the %%MAIN_CONTAINER_NAME%% pods                                                                 | `[]`                            |
-| `dataplatform.exporter.service.type`                          | Service type for default Data Platform Prometheus exporter service                                               | `ClusterIP`                     |
-| `dataplatform.exporter.service.annotations`                   | Exporter service annotations                                                                                     | `{}`                            |
-| `dataplatform.exporter.service.labels`                        | Additional labels for Data Platform exporter service                                                             | `{}`                            |
-| `dataplatform.exporter.service.ports.http`                    | Kubernetes Service port                                                                                          | `9090`                          |
-| `dataplatform.exporter.service.loadBalancerIP`                | Load balancer IP for the Data Platform Exporter Service (optional, cloud specific)                               | `""`                            |
-| `dataplatform.exporter.service.nodePorts.http`                | Node ports for the HTTP exporter service                                                                         | `""`                            |
-| `dataplatform.exporter.service.loadBalancerSourceRanges`      | Exporter Load Balancer Source ranges                                                                             | `[]`                            |
-| `dataplatform.exporter.hostAliases`                           | Deployment pod host aliases                                                                                      | `[]`                            |
-| `dataplatform.emitter.enabled`                                | Start Data Platform metrics emitter                                                                              | `true`                          |
-| `dataplatform.emitter.image.registry`                         | Data Platform emitter image registry                                                                             | `docker.io`                     |
-| `dataplatform.emitter.image.repository`                       | Data Platform emitter image repository                                                                           | `bitnami/dataplatform-emitter`  |
-| `dataplatform.emitter.image.tag`                              | Data Platform emitter image tag (immutable tags are recommended)                                                 | `1.0.1-scratch-r8`              |
-| `dataplatform.emitter.image.pullPolicy`                       | Data Platform emitter image pull policy                                                                          | `IfNotPresent`                  |
-| `dataplatform.emitter.image.pullSecrets`                      | Specify docker-registry secret names as an array                                                                 | `[]`                            |
-| `dataplatform.emitter.livenessProbe.enabled`                  | Enable livenessProbe                                                                                             | `true`                          |
-| `dataplatform.emitter.livenessProbe.initialDelaySeconds`      | Initial delay seconds for livenessProbe                                                                          | `10`                            |
-| `dataplatform.emitter.livenessProbe.periodSeconds`            | Period seconds for livenessProbe                                                                                 | `5`                             |
-| `dataplatform.emitter.livenessProbe.timeoutSeconds`           | Timeout seconds for livenessProbe                                                                                | `15`                            |
-| `dataplatform.emitter.livenessProbe.failureThreshold`         | Failure threshold for livenessProbe                                                                              | `15`                            |
-| `dataplatform.emitter.livenessProbe.successThreshold`         | Success threshold for livenessProbe                                                                              | `1`                             |
-| `dataplatform.emitter.readinessProbe.enabled`                 | Enable readinessProbe                                                                                            | `true`                          |
-| `dataplatform.emitter.readinessProbe.initialDelaySeconds`     | Initial delay seconds for readinessProbe                                                                         | `10`                            |
-| `dataplatform.emitter.readinessProbe.periodSeconds`           | Period seconds for readinessProbe                                                                                | `5`                             |
-| `dataplatform.emitter.readinessProbe.timeoutSeconds`          | Timeout seconds for readinessProbe                                                                               | `15`                            |
-| `dataplatform.emitter.readinessProbe.failureThreshold`        | Failure threshold for readinessProbe                                                                             | `15`                            |
-| `dataplatform.emitter.readinessProbe.successThreshold`        | Success threshold for readinessProbe                                                                             | `15`                            |
-| `dataplatform.emitter.startupProbe.enabled`                   | Enable startupProbe                                                                                              | `false`                         |
-| `dataplatform.emitter.startupProbe.initialDelaySeconds`       | Initial delay seconds for startupProbe                                                                           | `10`                            |
-| `dataplatform.emitter.startupProbe.periodSeconds`             | Period seconds for startupProbe                                                                                  | `5`                             |
-| `dataplatform.emitter.startupProbe.timeoutSeconds`            | Timeout seconds for startupProbe                                                                                 | `15`                            |
-| `dataplatform.emitter.startupProbe.failureThreshold`          | Failure threshold for startupProbe                                                                               | `15`                            |
-| `dataplatform.emitter.startupProbe.successThreshold`          | Success threshold for startupProbe                                                                               | `15`                            |
-| `dataplatform.emitter.containerPorts.http`                    | Data Platform emitter port                                                                                       | `8091`                          |
-| `dataplatform.emitter.priorityClassName`                      | exporter priorityClassName                                                                                       | `""`                            |
-| `dataplatform.emitter.command`                                | Override Data Platform entrypoint string.                                                                        | `[]`                            |
-| `dataplatform.emitter.args`                                   | Arguments for the provided command if needed                                                                     | `[]`                            |
-| `dataplatform.emitter.resources.limits`                       | The resources limits for the container                                                                           | `{}`                            |
-| `dataplatform.emitter.resources.requests`                     | The requested resources for the container                                                                        | `{}`                            |
-| `dataplatform.emitter.containerSecurityContext.enabled`       | Enable Data Platform emitter containers' Security Context                                                        | `true`                          |
-| `dataplatform.emitter.containerSecurityContext.runAsUser`     | User ID for the containers.                                                                                      | `1001`                          |
-| `dataplatform.emitter.containerSecurityContext.runAsNonRoot`  | Enable Data Platform emitter containers' Security Context runAsNonRoot                                           | `true`                          |
-| `dataplatform.emitter.podSecurityContext.enabled`             | Enable Data Platform emitter pods' Security Context                                                              | `true`                          |
-| `dataplatform.emitter.podSecurityContext.fsGroup`             | Group ID for the pods.                                                                                           | `1001`                          |
-| `dataplatform.emitter.podAffinityPreset`                      | Data Platform emitter pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`        | `""`                            |
-| `dataplatform.emitter.podAntiAffinityPreset`                  | Data Platform emitter pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`   | `soft`                          |
-| `dataplatform.emitter.nodeAffinityPreset.type`                | Data Platform emitter node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `""`                            |
-| `dataplatform.emitter.nodeAffinityPreset.key`                 | Data Platform emitter node label key to match Ignored if `affinity` is set.                                      | `""`                            |
-| `dataplatform.emitter.nodeAffinityPreset.values`              | Data Platform emitter node label values to match. Ignored if `affinity` is set.                                  | `[]`                            |
-| `dataplatform.emitter.affinity`                               | Affinity settings for emitter pod assignment. Evaluated as a template                                            | `{}`                            |
-| `dataplatform.emitter.nodeSelector`                           | Node labels for emitter pods assignment. Evaluated as a template                                                 | `{}`                            |
-| `dataplatform.emitter.tolerations`                            | Tolerations for emitter pods assignment. Evaluated as a template                                                 | `[]`                            |
-| `dataplatform.emitter.podLabels`                              | Additional labels for Metrics emitter pod                                                                        | `{}`                            |
-| `dataplatform.emitter.podAnnotations`                         | Additional annotations for Metrics emitter pod                                                                   | `{}`                            |
-| `dataplatform.emitter.customLivenessProbe`                    | Override default liveness probe%%MAIN_CONTAINER_NAME%%                                                           | `{}`                            |
-| `dataplatform.emitter.customReadinessProbe`                   | Override default readiness probe%%MAIN_CONTAINER_NAME%%                                                          | `{}`                            |
-| `dataplatform.emitter.customStartupProbe`                     | Override default startup probe                                                                                   | `{}`                            |
-| `dataplatform.emitter.updateStrategy.type`                    | Update strategy - only really applicable for deployments with RWO PVs attached                                   | `RollingUpdate`                 |
-| `dataplatform.emitter.updateStrategy.rollingUpdate`           | Deployment rolling update configuration parameters                                                               | `{}`                            |
-| `dataplatform.emitter.extraEnvVars`                           | Additional environment variables to set                                                                          | `[]`                            |
-| `dataplatform.emitter.extraEnvVarsCM`                         | ConfigMap with extra environment variables                                                                       | `""`                            |
-| `dataplatform.emitter.extraEnvVarsSecret`                     | Secret with extra environment variables                                                                          | `""`                            |
-| `dataplatform.emitter.extraVolumes`                           | Extra volumes to add to the deployment                                                                           | `[]`                            |
-| `dataplatform.emitter.extraVolumeMounts`                      | Extra volume mounts to add to the container                                                                      | `[]`                            |
-| `dataplatform.emitter.initContainers`                         | Add init containers to the %%MAIN_CONTAINER_NAME%% pods                                                          | `[]`                            |
-| `dataplatform.emitter.sidecars`                               | Add sidecars to the %%MAIN_CONTAINER_NAME%% pods                                                                 | `[]`                            |
-| `dataplatform.emitter.service.type`                           | Service type for default Data Platform metrics emitter service                                                   | `ClusterIP`                     |
-| `dataplatform.emitter.service.annotations`                    | annotations for Data Platform emitter service                                                                    | `{}`                            |
-| `dataplatform.emitter.service.labels`                         | Additional labels for Data Platform emitter service                                                              | `{}`                            |
-| `dataplatform.emitter.service.ports.http`                     | Kubernetes Service port                                                                                          | `8091`                          |
-| `dataplatform.emitter.service.loadBalancerIP`                 | Load balancer IP for the dataplatform emitter Service (optional, cloud specific)                                 | `""`                            |
-| `dataplatform.emitter.service.nodePorts.http`                 | Node ports for the HTTP emitter service                                                                          | `""`                            |
-| `dataplatform.emitter.service.loadBalancerSourceRanges`       | Data Platform Emitter Load Balancer Source ranges                                                                | `[]`                            |
-| `dataplatform.emitter.hostAliases`                            | Deployment pod host aliases                                                                                      | `[]`                            |
+| Name                                                          | Description                                                                                                      | Value                                       |
+| ------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
+| `dataplatform.serviceAccount.create`                          | Specifies whether a ServiceAccount should be created                                                             | `true`                                      |
+| `dataplatform.serviceAccount.name`                            | The name of the ServiceAccount to create                                                                         | `""`                                        |
+| `dataplatform.serviceAccount.automountServiceAccountToken`    | Allows auto mount of ServiceAccountToken on the serviceAccount created                                           | `true`                                      |
+| `dataplatform.rbac.create`                                    | Whether to create & use RBAC resources or not                                                                    | `true`                                      |
+| `dataplatform.exporter.enabled`                               | Start a prometheus exporter                                                                                      | `true`                                      |
+| `dataplatform.exporter.image.registry`                        | dataplatform exporter image registry                                                                             | `harbor-repo.vmware.com`                    |
+| `dataplatform.exporter.image.repository`                      | dataplatform exporter image repository                                                                           | `octo_data_platforms/dataplatform-exporter` |
+| `dataplatform.exporter.image.tag`                             | dataplatform exporter image tag (immutable tags are recommended)                                                 | `1.0.0`                                     |
+| `dataplatform.exporter.image.pullPolicy`                      | dataplatform exporter image pull policy                                                                          | `IfNotPresent`                              |
+| `dataplatform.exporter.image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                 | `[]`                                        |
+| `dataplatform.exporter.config`                                | Data Platform Metrics Configuration emitted in Prometheus format                                                 | `""`                                        |
+| `dataplatform.exporter.livenessProbe.enabled`                 | Enable livenessProbe                                                                                             | `true`                                      |
+| `dataplatform.exporter.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                          | `10`                                        |
+| `dataplatform.exporter.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                                 | `5`                                         |
+| `dataplatform.exporter.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                                | `15`                                        |
+| `dataplatform.exporter.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                              | `15`                                        |
+| `dataplatform.exporter.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                              | `1`                                         |
+| `dataplatform.exporter.readinessProbe.enabled`                | Enable readinessProbe                                                                                            | `true`                                      |
+| `dataplatform.exporter.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                         | `10`                                        |
+| `dataplatform.exporter.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                                | `5`                                         |
+| `dataplatform.exporter.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                               | `15`                                        |
+| `dataplatform.exporter.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                             | `15`                                        |
+| `dataplatform.exporter.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                             | `15`                                        |
+| `dataplatform.exporter.startupProbe.enabled`                  | Enable startupProbe                                                                                              | `false`                                     |
+| `dataplatform.exporter.startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                           | `10`                                        |
+| `dataplatform.exporter.startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                                  | `5`                                         |
+| `dataplatform.exporter.startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                                 | `15`                                        |
+| `dataplatform.exporter.startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                               | `15`                                        |
+| `dataplatform.exporter.startupProbe.successThreshold`         | Success threshold for startupProbe                                                                               | `15`                                        |
+| `dataplatform.exporter.containerPorts.http`                   | Data Platform Prometheus exporter port                                                                           | `9090`                                      |
+| `dataplatform.exporter.priorityClassName`                     | exporter priorityClassName                                                                                       | `""`                                        |
+| `dataplatform.exporter.command`                               | Override Data Platform Exporter entrypoint string.                                                               | `[]`                                        |
+| `dataplatform.exporter.args`                                  | Arguments for the provided command if needed                                                                     | `[]`                                        |
+| `dataplatform.exporter.resources.limits`                      | The resources limits for the container                                                                           | `{}`                                        |
+| `dataplatform.exporter.resources.requests`                    | The requested resources for the container                                                                        | `{}`                                        |
+| `dataplatform.exporter.containerSecurityContext.enabled`      | Enable Data Platform exporter containers' Security Context                                                       | `true`                                      |
+| `dataplatform.exporter.containerSecurityContext.runAsUser`    | User ID for the containers.                                                                                      | `1001`                                      |
+| `dataplatform.exporter.containerSecurityContext.runAsNonRoot` | Enable Data Platform exporter containers' Security Context runAsNonRoot                                          | `true`                                      |
+| `dataplatform.exporter.podSecurityContext.enabled`            | Enable Data Platform exporter pods' Security Context                                                             | `true`                                      |
+| `dataplatform.exporter.podSecurityContext.fsGroup`            | Group ID for the pods.                                                                                           | `1001`                                      |
+| `dataplatform.exporter.podAffinityPreset`                     | Data Platform exporter pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                                        |
+| `dataplatform.exporter.podAntiAffinityPreset`                 | Data Platform exporter pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`                                      |
+| `dataplatform.exporter.nodeAffinityPreset.type`               | Data Platform exporter node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                                        |
+| `dataplatform.exporter.nodeAffinityPreset.key`                | Data Platform exporter node label key to match Ignored if `affinity` is set.                                     | `""`                                        |
+| `dataplatform.exporter.nodeAffinityPreset.values`             | Data Platform exporter node label values to match. Ignored if `affinity` is set.                                 | `[]`                                        |
+| `dataplatform.exporter.affinity`                              | Affinity settings for exporter pod assignment. Evaluated as a template                                           | `{}`                                        |
+| `dataplatform.exporter.nodeSelector`                          | Node labels for exporter pods assignment. Evaluated as a template                                                | `{}`                                        |
+| `dataplatform.exporter.tolerations`                           | Tolerations for exporter pods assignment. Evaluated as a template                                                | `[]`                                        |
+| `dataplatform.exporter.podLabels`                             | Additional labels for Metrics exporter pod                                                                       | `{}`                                        |
+| `dataplatform.exporter.podAnnotations`                        | Additional annotations for Metrics exporter pod                                                                  | `{}`                                        |
+| `dataplatform.exporter.customLivenessProbe`                   | Override default liveness probe                                                                                  | `{}`                                        |
+| `dataplatform.exporter.customReadinessProbe`                  | Override default readiness probe                                                                                 | `{}`                                        |
+| `dataplatform.exporter.customStartupProbe`                    | Override default startup probe                                                                                   | `{}`                                        |
+| `dataplatform.exporter.updateStrategy.type`                   | Update strategy - only really applicable for deployments with RWO PVs attached                                   | `RollingUpdate`                             |
+| `dataplatform.exporter.updateStrategy.rollingUpdate`          | Deployment rolling update configuration parameters                                                               | `{}`                                        |
+| `dataplatform.exporter.extraEnvVars`                          | Additional environment variables to set                                                                          | `[]`                                        |
+| `dataplatform.exporter.extraEnvVarsCM`                        | ConfigMap with extra environment variables                                                                       | `""`                                        |
+| `dataplatform.exporter.extraEnvVarsSecret`                    | Secret with extra environment variables                                                                          | `""`                                        |
+| `dataplatform.exporter.extraVolumes`                          | Extra volumes to add to the deployment                                                                           | `[]`                                        |
+| `dataplatform.exporter.extraVolumeMounts`                     | Extra volume mounts to add to the container                                                                      | `[]`                                        |
+| `dataplatform.exporter.initContainers`                        | Add init containers to the %%MAIN_CONTAINER_NAME%% pods                                                          | `[]`                                        |
+| `dataplatform.exporter.sidecars`                              | Add sidecars to the %%MAIN_CONTAINER_NAME%% pods                                                                 | `[]`                                        |
+| `dataplatform.exporter.service.type`                          | Service type for default Data Platform Prometheus exporter service                                               | `ClusterIP`                                 |
+| `dataplatform.exporter.service.annotations`                   | Exporter service annotations                                                                                     | `{}`                                        |
+| `dataplatform.exporter.service.labels`                        | Additional labels for Data Platform exporter service                                                             | `{}`                                        |
+| `dataplatform.exporter.service.ports.http`                    | Kubernetes Service port                                                                                          | `9090`                                      |
+| `dataplatform.exporter.service.loadBalancerIP`                | Load balancer IP for the Data Platform Exporter Service (optional, cloud specific)                               | `""`                                        |
+| `dataplatform.exporter.service.nodePorts.http`                | Node ports for the HTTP exporter service                                                                         | `""`                                        |
+| `dataplatform.exporter.service.loadBalancerSourceRanges`      | Exporter Load Balancer Source ranges                                                                             | `[]`                                        |
+| `dataplatform.exporter.hostAliases`                           | Deployment pod host aliases                                                                                      | `[]`                                        |
+| `dataplatform.emitter.enabled`                                | Start Data Platform metrics emitter                                                                              | `true`                                      |
+| `dataplatform.emitter.image.registry`                         | Data Platform emitter image registry                                                                             | `harbor-repo.vmware.com`                    |
+| `dataplatform.emitter.image.repository`                       | Data Platform emitter image repository                                                                           | `octo_data_platforms/dataplatform-emitter`  |
+| `dataplatform.emitter.image.tag`                              | Data Platform emitter image tag (immutable tags are recommended)                                                 | `2.1.1`                                     |
+| `dataplatform.emitter.image.pullPolicy`                       | Data Platform emitter image pull policy                                                                          | `IfNotPresent`                              |
+| `dataplatform.emitter.image.pullSecrets`                      | Specify docker-registry secret names as an array                                                                 | `[]`                                        |
+| `dataplatform.emitter.livenessProbe.enabled`                  | Enable livenessProbe                                                                                             | `true`                                      |
+| `dataplatform.emitter.livenessProbe.initialDelaySeconds`      | Initial delay seconds for livenessProbe                                                                          | `10`                                        |
+| `dataplatform.emitter.livenessProbe.periodSeconds`            | Period seconds for livenessProbe                                                                                 | `5`                                         |
+| `dataplatform.emitter.livenessProbe.timeoutSeconds`           | Timeout seconds for livenessProbe                                                                                | `15`                                        |
+| `dataplatform.emitter.livenessProbe.failureThreshold`         | Failure threshold for livenessProbe                                                                              | `15`                                        |
+| `dataplatform.emitter.livenessProbe.successThreshold`         | Success threshold for livenessProbe                                                                              | `1`                                         |
+| `dataplatform.emitter.readinessProbe.enabled`                 | Enable readinessProbe                                                                                            | `true`                                      |
+| `dataplatform.emitter.readinessProbe.initialDelaySeconds`     | Initial delay seconds for readinessProbe                                                                         | `10`                                        |
+| `dataplatform.emitter.readinessProbe.periodSeconds`           | Period seconds for readinessProbe                                                                                | `5`                                         |
+| `dataplatform.emitter.readinessProbe.timeoutSeconds`          | Timeout seconds for readinessProbe                                                                               | `15`                                        |
+| `dataplatform.emitter.readinessProbe.failureThreshold`        | Failure threshold for readinessProbe                                                                             | `15`                                        |
+| `dataplatform.emitter.readinessProbe.successThreshold`        | Success threshold for readinessProbe                                                                             | `15`                                        |
+| `dataplatform.emitter.startupProbe.enabled`                   | Enable startupProbe                                                                                              | `false`                                     |
+| `dataplatform.emitter.startupProbe.initialDelaySeconds`       | Initial delay seconds for startupProbe                                                                           | `10`                                        |
+| `dataplatform.emitter.startupProbe.periodSeconds`             | Period seconds for startupProbe                                                                                  | `5`                                         |
+| `dataplatform.emitter.startupProbe.timeoutSeconds`            | Timeout seconds for startupProbe                                                                                 | `15`                                        |
+| `dataplatform.emitter.startupProbe.failureThreshold`          | Failure threshold for startupProbe                                                                               | `15`                                        |
+| `dataplatform.emitter.startupProbe.successThreshold`          | Success threshold for startupProbe                                                                               | `15`                                        |
+| `dataplatform.emitter.containerPorts.http`                    | Data Platform emitter port                                                                                       | `8091`                                      |
+| `dataplatform.emitter.priorityClassName`                      | exporter priorityClassName                                                                                       | `""`                                        |
+| `dataplatform.emitter.command`                                | Override Data Platform entrypoint string.                                                                        | `[]`                                        |
+| `dataplatform.emitter.args`                                   | Arguments for the provided command if needed                                                                     | `[]`                                        |
+| `dataplatform.emitter.resources.limits`                       | The resources limits for the container                                                                           | `{}`                                        |
+| `dataplatform.emitter.resources.requests`                     | The requested resources for the container                                                                        | `{}`                                        |
+| `dataplatform.emitter.containerSecurityContext.enabled`       | Enable Data Platform emitter containers' Security Context                                                        | `true`                                      |
+| `dataplatform.emitter.containerSecurityContext.runAsUser`     | User ID for the containers.                                                                                      | `1001`                                      |
+| `dataplatform.emitter.containerSecurityContext.runAsNonRoot`  | Enable Data Platform emitter containers' Security Context runAsNonRoot                                           | `true`                                      |
+| `dataplatform.emitter.podSecurityContext.enabled`             | Enable Data Platform emitter pods' Security Context                                                              | `true`                                      |
+| `dataplatform.emitter.podSecurityContext.fsGroup`             | Group ID for the pods.                                                                                           | `1001`                                      |
+| `dataplatform.emitter.podAffinityPreset`                      | Data Platform emitter pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`        | `""`                                        |
+| `dataplatform.emitter.podAntiAffinityPreset`                  | Data Platform emitter pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`   | `soft`                                      |
+| `dataplatform.emitter.nodeAffinityPreset.type`                | Data Platform emitter node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `""`                                        |
+| `dataplatform.emitter.nodeAffinityPreset.key`                 | Data Platform emitter node label key to match Ignored if `affinity` is set.                                      | `""`                                        |
+| `dataplatform.emitter.nodeAffinityPreset.values`              | Data Platform emitter node label values to match. Ignored if `affinity` is set.                                  | `[]`                                        |
+| `dataplatform.emitter.affinity`                               | Affinity settings for emitter pod assignment. Evaluated as a template                                            | `{}`                                        |
+| `dataplatform.emitter.nodeSelector`                           | Node labels for emitter pods assignment. Evaluated as a template                                                 | `{}`                                        |
+| `dataplatform.emitter.tolerations`                            | Tolerations for emitter pods assignment. Evaluated as a template                                                 | `[]`                                        |
+| `dataplatform.emitter.podLabels`                              | Additional labels for Metrics emitter pod                                                                        | `{}`                                        |
+| `dataplatform.emitter.podAnnotations`                         | Additional annotations for Metrics emitter pod                                                                   | `{}`                                        |
+| `dataplatform.emitter.customLivenessProbe`                    | Override default liveness probe%%MAIN_CONTAINER_NAME%%                                                           | `{}`                                        |
+| `dataplatform.emitter.customReadinessProbe`                   | Override default readiness probe%%MAIN_CONTAINER_NAME%%                                                          | `{}`                                        |
+| `dataplatform.emitter.customStartupProbe`                     | Override default startup probe                                                                                   | `{}`                                        |
+| `dataplatform.emitter.updateStrategy.type`                    | Update strategy - only really applicable for deployments with RWO PVs attached                                   | `RollingUpdate`                             |
+| `dataplatform.emitter.updateStrategy.rollingUpdate`           | Deployment rolling update configuration parameters                                                               | `{}`                                        |
+| `dataplatform.emitter.extraEnvVars`                           | Additional environment variables to set                                                                          | `[]`                                        |
+| `dataplatform.emitter.extraEnvVarsCM`                         | ConfigMap with extra environment variables                                                                       | `""`                                        |
+| `dataplatform.emitter.extraEnvVarsSecret`                     | Secret with extra environment variables                                                                          | `""`                                        |
+| `dataplatform.emitter.extraVolumes`                           | Extra volumes to add to the deployment                                                                           | `[]`                                        |
+| `dataplatform.emitter.extraVolumeMounts`                      | Extra volume mounts to add to the container                                                                      | `[]`                                        |
+| `dataplatform.emitter.initContainers`                         | Add init containers to the %%MAIN_CONTAINER_NAME%% pods                                                          | `[]`                                        |
+| `dataplatform.emitter.sidecars`                               | Add sidecars to the %%MAIN_CONTAINER_NAME%% pods                                                                 | `[]`                                        |
+| `dataplatform.emitter.service.type`                           | Service type for default Data Platform metrics emitter service                                                   | `ClusterIP`                                 |
+| `dataplatform.emitter.service.annotations`                    | annotations for Data Platform emitter service                                                                    | `{}`                                        |
+| `dataplatform.emitter.service.labels`                         | Additional labels for Data Platform emitter service                                                              | `{}`                                        |
+| `dataplatform.emitter.service.ports.http`                     | Kubernetes Service port                                                                                          | `8091`                                      |
+| `dataplatform.emitter.service.loadBalancerIP`                 | Load balancer IP for the dataplatform emitter Service (optional, cloud specific)                                 | `""`                                        |
+| `dataplatform.emitter.service.nodePorts.http`                 | Node ports for the HTTP emitter service                                                                          | `""`                                        |
+| `dataplatform.emitter.service.loadBalancerSourceRanges`       | Data Platform Emitter Load Balancer Source ranges                                                                | `[]`                                        |
+| `dataplatform.emitter.hostAliases`                            | Deployment pod host aliases                                                                                      | `[]`                                        |
 
 
 ### Kafka parameters
@@ -282,23 +277,27 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Spark parameters
 
-| Name                                     | Description                            | Value   |
-| ---------------------------------------- | -------------------------------------- | ------- |
-| `spark.enabled`                          | Enable Spark subchart                  | `true`  |
-| `spark.master.webPort`                   | Web port for spark master              | `8080`  |
-| `spark.master.resources.limits`          | Spark master resource limits           | `{}`    |
-| `spark.master.resources.requests.cpu`    | Spark master CPUs                      | `250m`  |
-| `spark.master.resources.requests.memory` | Spark master requested memory          | `5Gi`   |
-| `spark.master.affinity.podAntiAffinity`  | Anti affinity rules set for resiliency | `{}`    |
-| `spark.worker.replicaCount`              | Number of spark workers                | `2`     |
-| `spark.worker.webPort`                   | Web port for spark master              | `8081`  |
-| `spark.worker.resources.limits`          | Spark master resource limits           | `{}`    |
-| `spark.worker.resources.requests.cpu`    | Spark master CPUs                      | `250m`  |
-| `spark.worker.resources.requests.memory` | Spark master requested memory          | `5Gi`   |
-| `spark.worker.affinity.podAntiAffinity`  | Anti affinity rules set for resiliency | `{}`    |
-| `spark.metrics.enabled`                  | Enable Prometheus exporter for Spark   | `false` |
-| `spark.metrics.masterAnnotations`        | Annotations for Spark master exporter  | `{}`    |
-| `spark.metrics.workerAnnotations`        | Annotations for Spark worker exporter  | `{}`    |
+| Name                                     | Description                            | Value                 |
+| ---------------------------------------- | -------------------------------------- | --------------------- |
+| `spark.enabled`                          | Enable Spark subchart                  | `true`                |
+| `spark.master.webPort`                   | Web port for spark master              | `8080`                |
+| `spark.master.resources.limits`          | Spark master resource limits           | `{}`                  |
+| `spark.master.resources.requests.cpu`    | Spark master CPUs                      | `250m`                |
+| `spark.master.resources.requests.memory` | Spark master requested memory          | `5Gi`                 |
+| `spark.master.affinity.podAntiAffinity`  | Anti affinity rules set for resiliency | `{}`                  |
+| `spark.master.extraEnvVars[0].name`      | name of the environment variable       | `SPARK_DAEMON_MEMORY` |
+| `spark.master.extraEnvVars[0].value`     | value of the environment variable      | `4096m`               |
+| `spark.worker.replicaCount`              | Number of spark workers                | `2`                   |
+| `spark.worker.webPort`                   | Web port for spark master              | `8081`                |
+| `spark.worker.resources.limits`          | Spark master resource limits           | `{}`                  |
+| `spark.worker.resources.requests.cpu`    | Spark master CPUs                      | `250m`                |
+| `spark.worker.resources.requests.memory` | Spark master requested memory          | `5Gi`                 |
+| `spark.worker.affinity.podAntiAffinity`  | Anti affinity rules set for resiliency | `{}`                  |
+| `spark.worker.extraEnvVars[0].name`      | name of the environment variable       | `SPARK_DAEMON_MEMORY` |
+| `spark.worker.extraEnvVars[0].value`     | value of the environment variable      | `4096m`               |
+| `spark.metrics.enabled`                  | Enable Prometheus exporter for Spark   | `false`               |
+| `spark.metrics.masterAnnotations`        | Annotations for Spark master exporter  | `{}`                  |
+| `spark.metrics.workerAnnotations`        | Annotations for Spark worker exporter  | `{}`                  |
 
 
 ### Elasticsearch parameters
@@ -354,25 +353,22 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Tanzu Observability (Wavefront) parameters
 
-| Name                                                 | Description                                         | Value                                |
-| ---------------------------------------------------- | --------------------------------------------------- | ------------------------------------ |
-| `wavefront.enabled`                                  | Enable Tanzu Observability Framework                | `false`                              |
-| `wavefront.clusterName`                              | Cluster name                                        | `KUBERNETES_CLUSTER_NAME`            |
-| `wavefront.wavefront.url`                            | Tanzu Observability cluster URL                     | `https://YOUR_CLUSTER.wavefront.com` |
-| `wavefront.wavefront.token`                          | Tanzu Observability access token                    | `YOUR_API_TOKEN`                     |
-| `wavefront.wavefront.existingSecret`                 | Tanzu Observability existing secret                 | `""`                                 |
-| `wavefront.collector.resources.limits`               | Wavefront collector metrics resource limits         | `{}`                                 |
-| `wavefront.collector.resources.requests.cpu`         | Wavefront collector metrics CPUs                    | `200m`                               |
-| `wavefront.collector.resources.requests.memory`      | Wavefront collector metrics requested memory        | `10Mi`                               |
-| `wavefront.collector.discovery.enabled`              | Enable wavefront discovery                          | `true`                               |
-| `wavefront.collector.discovery.enableRuntimeConfigs` | Enable runtime configs for wavefront discovery      | `true`                               |
-| `wavefront.collector.discovery.config`               | Wavefront discovery config                          | `[]`                                 |
-| `wavefront.collector.discovery.enabled`              | Rules based and Prometheus endpoints auto-discovery | `true`                               |
-| `wavefront.collector.discovery.enableRuntimeConfigs` | Enable runtime discovery rules                      | `true`                               |
-| `wavefront.collector.discovery.config`               | Configuration for rules based auto-discovery        | `[]`                                 |
-| `wavefront.proxy.resources.limits`                   | Wavefront Proxy metrics resource limits             | `{}`                                 |
-| `wavefront.proxy.resources.requests.cpu`             | Wavefront Proxy metrics CPUs                        | `100m`                               |
-| `wavefront.proxy.resources.requests.memory`          | Wavefront Proxy metrics requested memory            | `5Gi`                                |
+| Name                                                 | Description                                    | Value                                |
+| ---------------------------------------------------- | ---------------------------------------------- | ------------------------------------ |
+| `wavefront.enabled`                                  | Enable Tanzu Observability Framework           | `false`                              |
+| `wavefront.clusterName`                              | Cluster name                                   | `KUBERNETES_CLUSTER_NAME`            |
+| `wavefront.wavefront.url`                            | Tanzu Observability cluster URL                | `https://YOUR_CLUSTER.wavefront.com` |
+| `wavefront.wavefront.token`                          | Tanzu Observability access token               | `YOUR_API_TOKEN`                     |
+| `wavefront.wavefront.existingSecret`                 | Tanzu Observability existing secret            | `""`                                 |
+| `wavefront.collector.resources.limits`               | Wavefront collector metrics resource limits    | `{}`                                 |
+| `wavefront.collector.resources.requests.cpu`         | Wavefront collector metrics CPUs               | `200m`                               |
+| `wavefront.collector.resources.requests.memory`      | Wavefront collector metrics requested memory   | `10Mi`                               |
+| `wavefront.collector.discovery.enabled`              | Enable wavefront discovery                     | `true`                               |
+| `wavefront.collector.discovery.enableRuntimeConfigs` | Enable runtime configs for wavefront discovery | `true`                               |
+| `wavefront.collector.discovery.config`               | Wavefront discovery config                     | `[]`                                 |
+| `wavefront.proxy.resources.limits`                   | Wavefront Proxy metrics resource limits        | `{}`                                 |
+| `wavefront.proxy.resources.requests.cpu`             | Wavefront Proxy metrics CPUs                   | `100m`                               |
+| `wavefront.proxy.resources.requests.memory`          | Wavefront Proxy metrics requested memory       | `5Gi`                                |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
@@ -395,9 +391,9 @@ $ helm install my-release -f values.yaml bitnami/dataplatform-bp2
 
 ### Data Platform Deployment with Observability Framework
 
-In the default deployment, the helm chart deploys the data platform with [Metrics Emitter](https://hub.docker.com/r/bitnami/dataplatform-emitter) and [Prometheus Exporter](https://hub.docker.com/r/bitnami/dataplatform-exporter) which emit the health metrics of the data platform which can be integrated with your observability solution.
+In the default deployment, the helm chart deploys the data platform with [Metrics Emitter](https://hub.docker.com/r/bitnami/dataplatform-emitter) and [Prometheus Exporter](https://hub.docker.com/r/bitnami/dataplatform-exporter) which emit the health metrics of the data platform and can be integrated with your observability solution.
 
-- To deploy the data platform with Tanzu Observability Framework with the Wavefront Collector with enabled annotation based discovery feature for all the applications (Kafka/Spark/Elasticsearch/Logstash) in the data platform, make sure that auto discovery `wavefront.collector.discovery.enabled=true` is enabled, It should be enabled by default and specify the 'enabled' parameter using the ` --set <component>.metrics.enabled=true` argument to helm install. For Example,
+- To deploy the data platform with Tanzu Observability Framework with annotation based auto discovery feature in the Wavefront Collector for all the applications (Kafka/Spark/Elasticsearch/Logstash) in the data platform, specify the 'enabled' parameter for the applications (Kafka/Spark/Elasticsearch/Logstash) using the ` --set <component>.metrics.enabled=true` argument to helm install. For Example:
 
 ```console
 $ helm install my-release bitnami/dataplatform-bp2 \
@@ -411,9 +407,9 @@ $ helm install my-release bitnami/dataplatform-bp2 \
     --set wavefront.wavefront.url=https://<YOUR_CLUSTER>.wavefront.com \
     --set wavefront.wavefront.token=<YOUR_API_TOKEN>
 ```
-> **NOTE**: When Annotation based discovery feature is enabled in the Wavefront Collector, it scrapes metrics from all the pods in the cluster that have Prometheus annotation enabled.
+> **NOTE**: Annotation based auto discovery feature is enabled by default. When it is enabled, wavefront collector scrapes metrics from all the pods that have Prometheus annotation enabled. For more details: https://github.com/wavefrontHQ/wavefront-collector-for-kubernetes/blob/master/docs/discovery.md#annotation-based-discovery
 
-- To deploy the data platform with Tanzu Observability Framework without the annotation based discovery feature in Wavefront Collector for all the applications (Kafka/Spark/Elasticsearch/Logstash) in the data platform, uncomment the config section in the wavefront deployment from the data platform values.yml file, and specify the 'enable' parameter to 'false' using the `--set wavefront.collector.discovery.enabled=false`  with `helm install` command, below is an example:
+- To deploy the data platform with Tanzu Observability Framework with Rule based discovery feature in Wavefront Collector for all the applications (Kafka/Spark/Elasticsearch/Logstash) in the data platform, uncomment the config section in the wavefront deployment from the data platform values.yml file, and specify the `'discovery.enabled'` parameter to 'false' using the `--set wavefront.collector.discovery.enabled=false` with helm install command, below is an example:
 
 ```console
 $ helm install my-release bitnami/dataplatform-bp2 \
@@ -428,11 +424,13 @@ $ helm install my-release bitnami/dataplatform-bp2 \
     --set wavefront.wavefront.url=https://<YOUR_CLUSTER>.wavefront.com \
     --set wavefront.wavefront.token=<YOUR_API_TOKEN>
 ```
+> **NOTE**: For more details on rules based auto discovery feature visit: https://github.com/wavefrontHQ/wavefront-collector-for-kubernetes/blob/master/docs/discovery.md#rule-based-discovery
+
 ### For using an existing Wavefront deployment
 
-- To enable the auto discovery feature in wavefront for the existing wavefront deployment, make sure that auto discovery `enableDiscovery: true` and annotation based discovery `discovery.disable_annotation_discovery: false` are enabled in the Wavefront Collector ConfigMap. They should be enabled by default.
+- To enable the annotation based auto discovery feature in wavefront for the existing wavefront deployment, make sure that auto discovery `enableDiscovery: true` and annotation based discovery `discovery.disable_annotation_discovery: false` are configured in the Wavefront Collector ConfigMap.
 
-- To not use the annotation based discovery feature in wavefront, edit the Wavefront Collector ConfigMap and add the following snippet under discovery plugins. Once done, restart the wavefront collectors DaemonSet.
+- To use rules based auto discovery feature in wavefront, edit the Wavefront Collector ConfigMap and add the following snippet under discovery plugins and make sure that the parameter `enable_runtime_plugins ` is set to true . Once done, restart the wavefront collectors DaemonSet.
 
 ```console
 $ kubectl edit configmap wavefront-collector-config -n wavefront
@@ -514,6 +512,12 @@ Below is the command to restart the DaemonSets
 $ kubectl rollout restart daemonsets wavefront-collector -n wavefront
 ```
 
+> **Recommendation**: It is a recommended best practice to allocate the storage for the application based on the application requirement. By default persistent volumes are allocates 8Gi of space. To update the PVC storage use below command:
+
+```console
+$ kubectl patch pvc <pvc_name> -n <namespace> -p '{"spec":{"resources":{"requests":{"storage": "<required_storage>"}}}}'
+```
+
 ## Configuration and installation details
 
 ### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
@@ -537,6 +541,10 @@ Elasticsearch dependency version was bumped to a new major version changing the 
 Regular upgrade is compatible from previous versions.
 
 ## Upgrading
+
+### To 10.0.0
+
+This major release adds the environment variable for spark and updated the heap memory for spark.
 
 ### To 9.0.0
 
