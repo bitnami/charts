@@ -1,17 +1,4 @@
-<!--- app-name: Data Platform Blueprint 1 -->
-
 # Data Platform Blueprint 1 with Kafka-Spark-Solr
-
-This Helm chart enables the fully automated Kubernetes deployment of such multi-stack data platform including Zookeeper, Kafka, Solr, Spark and dataplatform exporters
-
-## TL;DR
-
-```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/dataplatform-bp1
-```
-
-## Introduction
 
 Enterprise applications increasingly rely on large amounts of data, that needs be distributed, processed, and stored.
 Open source and commercial supported software stacks are available to implement a data platform, that can offer
@@ -36,6 +23,15 @@ In addition to the Pod resource optimizations, this blueprint is validated and t
 
 This blueprint, in its default configuration, deploys the data platform, on a Kubernetes cluster with three worker nodes. Use cases for this data platform setup include: data and application evaluation, development, and functional testing.
 
+## TL;DR
+
+```console
+$ helm repo add bitnami https://charts.bitnami.com/bitnami
+$ helm install my-release bitnami/dataplatform-bp1
+```
+
+## Introduction
+
 This chart bootstraps Data Platform Blueprint-1 deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Once the chart is installed, the deployed data platform cluster comprises of:
@@ -49,8 +45,8 @@ The data platform can be optionally deployed with the Tanzu observability framew
 
 ## Prerequisites
 
-- Kubernetes 1.19+
-- Helm 3.2.0+
+- Kubernetes 1.12+
+- Helm 3.1.0
 - PV provisioner support in the underlying infrastructure
 
 ## Kubernetes Cluster requirements
@@ -73,6 +69,8 @@ $ helm install my-release bitnami/dataplatform-bp1
 These commands deploy Data Platform on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists recommended configurations of the parameters to bring up an optimal and resilient data platform. Please refer the individual charts for the remaining set of configurable parameters.
 
 > **Tip**: List all releases using `helm list`
+
+> **Recommendation**: It is a recommended best practice to create a dedicated namespace for the data platform cluster and deploy the data platform helm chart in the same.
 
 ## Uninstalling the Chart
 
@@ -304,21 +302,25 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Spark chart parameters
 
-| Name                                    | Description                                                                               | Value   |
-| --------------------------------------- | ----------------------------------------------------------------------------------------- | ------- |
-| `spark.enabled`                         | Switch to enable or disable the Spark helm chart                                          | `true`  |
-| `spark.master.webPort`                  | Specify the port where the web interface will listen on the master                        | `8080`  |
-| `spark.master.resources.limits`         | The resources limits for the container                                                    | `{}`    |
-| `spark.master.resources.requests`       | The resources limits for the container                                                    | `{}`    |
-| `spark.master.affinity.podAntiAffinity` | Zookeeper pods Anti Affinity rules for best possible resiliency (evaluated as a template) | `{}`    |
-| `spark.worker.replicaCount`             | Set the number of workers                                                                 | `2`     |
-| `spark.worker.webPort`                  | Specify the port where the web interface will listen on the worker                        | `8081`  |
-| `spark.worker.affinity.podAntiAffinity` | Zookeeper pods Anti Affinity rules for best possible resiliency (evaluated as a template) | `{}`    |
-| `spark.worker.resources.limits`         | The resources limits for the container                                                    | `{}`    |
-| `spark.worker.resources.requests`       | The resources limits for the container                                                    | `{}`    |
-| `spark.metrics.enabled`                 | Start a side-car Prometheus exporter                                                      | `false` |
-| `spark.metrics.masterAnnotations`       | Annotations for enabling prometheus to access the metrics endpoint of the master nodes    | `{}`    |
-| `spark.metrics.workerAnnotations`       | Annotations for enabling prometheus to access the metrics endpoint of the worker nodes    | `{}`    |
+| Name                                    | Description                                                                               | Value                 |
+| --------------------------------------- | ----------------------------------------------------------------------------------------- | --------------------- |
+| `spark.enabled`                         | Switch to enable or disable the Spark helm chart                                          | `true`                |
+| `spark.master.webPort`                  | Specify the port where the web interface will listen on the master                        | `8080`                |
+| `spark.master.resources.limits`         | The resources limits for the container                                                    | `{}`                  |
+| `spark.master.resources.requests`       | The resources limits for the container                                                    | `{}`                  |
+| `spark.master.affinity.podAntiAffinity` | Zookeeper pods Anti Affinity rules for best possible resiliency (evaluated as a template) | `{}`                  |
+| `spark.master.extraEnvVars[0].name`     | name of the environment variable                                                          | `SPARK_DAEMON_MEMORY` |
+| `spark.master.extraEnvVars[0].value`    | value of the environment variable                                                         | `4096m`               |
+| `spark.worker.replicaCount`             | Set the number of workers                                                                 | `2`                   |
+| `spark.worker.webPort`                  | Specify the port where the web interface will listen on the worker                        | `8081`                |
+| `spark.worker.affinity.podAntiAffinity` | Zookeeper pods Anti Affinity rules for best possible resiliency (evaluated as a template) | `{}`                  |
+| `spark.worker.extraEnvVars[0].name`     | name of the environment variable                                                          | `SPARK_DAEMON_MEMORY` |
+| `spark.worker.extraEnvVars[0].value`    | value of the environment variable                                                         | `4096m`               |
+| `spark.worker.resources.limits`         | The resources limits for the container                                                    | `{}`                  |
+| `spark.worker.resources.requests`       | The resources limits for the container                                                    | `{}`                  |
+| `spark.metrics.enabled`                 | Start a side-car Prometheus exporter                                                      | `false`               |
+| `spark.metrics.masterAnnotations`       | Annotations for enabling prometheus to access the metrics endpoint of the master nodes    | `{}`                  |
+| `spark.metrics.workerAnnotations`       | Annotations for enabling prometheus to access the metrics endpoint of the worker nodes    | `{}`                  |
 
 
 ### Tanzu Observability (Wavefront) chart parameters
@@ -361,7 +363,8 @@ $ helm install my-release -f values.yaml bitnami/dataplatform-bp1
 
 In the default deployment, the helm chart deploys the data platform with [Metrics Emitter](https://hub.docker.com/r/bitnami/dataplatform-emitter) and [Prometheus Exporter](https://hub.docker.com/r/bitnami/dataplatform-exporter) which emit the health metrics of the data platform which can be integrated with your observability solution.
 
-- To deploy the data platform with Tanzu Observability Framework with the Wavefront Collector with enabled annotation based discovery feature for all the applications (Kafka/Spark/Elasticsearch/Logstash) in the data platform, make sure that auto discovery `wavefront.collector.discovery.enabled=true` is enabled, It should be enabled by default and specify the 'enabled' parameter using the `--set <component>.metrics.enabled=true` argument to helm install. For Example,
+- To deploy the data platform with Tanzu Observability Framework with annotation based auto discovery feature in the Wavefront Collector for all the applications (Kafka/Spark/Solr) in the data platform, specify the 'enabled' parameter for the applications (Kafka/Spark/Solr) using the ` --set <component>.metrics.enabled=true` argument to helm install. For Example:
+
 
 ```console
 $ helm install my-release bitnami/dataplatform-bp1 \
@@ -374,9 +377,9 @@ $ helm install my-release bitnami/dataplatform-bp1 \
     --set wavefront.wavefront.url=https://<YOUR_CLUSTER>.wavefront.com \
     --set wavefront.wavefront.token=<YOUR_API_TOKEN>
 ```
-> **NOTE**: When the annotation based discovery feature is enabled in the Wavefront Collector, it scrapes metrics from all the pods that have Prometheus annotation enabled.
+> **NOTE**: Annotation based auto discovery feature is enabled by default. When it is enabled, wavefront collector scrapes metrics from all the pods that have Prometheus annotation enabled. For more details: https://github.com/wavefrontHQ/wavefront-collector-for-kubernetes/blob/master/docs/discovery.md#annotation-based-discovery
 
-- To deploy the data platform with Tanzu Observability Framework without the annotation based discovery feature in Wavefront Collector for all the applications (Kafka/Spark/Elasticsearch/Logstash) in the data platform, uncomment the config section in the wavefront deployment from the data platform values.yml file, and specify the 'enable' parameter to 'false' using the `--set wavefront.collector.discovery.enabled=false`  with helm install command, below is an example:
+- To deploy the data platform with Tanzu Observability Framework with Rule based discovery feature in Wavefront Collector for all the applications (Kafka/Spark/Solr) in the data platform, uncomment the config section in the wavefront deployment from the data platform values.yml file, and specify the `'discovery.enabled'` parameter to 'false' using the `--set wavefront.collector.discovery.enabled=false` with helm install command, below is an example:
 
 ```console
 
@@ -391,12 +394,13 @@ $ helm install my-release bitnami/dataplatform-bp1 \
     --set wavefront.wavefront.url=https://<YOUR_CLUSTER>.wavefront.com \
     --set wavefront.wavefront.token=<YOUR_API_TOKEN>
 ```
+> **NOTE**: For more details on rules based auto discovery feature visit: https://github.com/wavefrontHQ/wavefront-collector-for-kubernetes/blob/master/docs/discovery.md#rule-based-discovery
 
 ### For using an existing Wavefront deployment
 
-- To enable the annotation discovery feature in wavefront for the existing wavefront deployment,  make sure that auto discovery `enableDiscovery: true` and annotation based discovery `discovery.disable_annotation_discovery: false` are enabled in the Wavefront Collector ConfigMap. They should be enabled by default.
+- To enable the annotation based auto discovery feature in wavefront for the existing wavefront deployment, make sure that auto discovery `enableDiscovery: true` and annotation based discovery `discovery.disable_annotation_discovery: false` are configured in the Wavefront Collector ConfigMap.
 
-- To not use the annotation based discovery feature in wavefront, edit the Wavefront Collector ConfigMap and add the following snippet under discovery plugins. Once done, restart the wavefront collectors DaemonSet.
+- To use rules based auto discovery feature in wavefront, edit the Wavefront Collector ConfigMap and add the following snippet under discovery plugins and make sure that the parameter `enable_runtime_plugins`  is set to true . Once done, restart the wavefront collectors DaemonSet.
 
 ```console
 $ kubectl edit configmap wavefront-collector-config -n wavefront
@@ -468,6 +472,12 @@ Below is the command to restart the DaemonSets
 $ kubectl rollout restart daemonsets wavefront-collector -n wavefront
 ```
 
+> **Recommendation**: It is a recommended best practice to allocate the storage for the application based on the application requirement. By default persistent volumes are allocates 8Gi of space. To update the PVC storage use below command:
+
+```console
+$ kubectl patch pvc <pvc_name> -n <namespace> -p '{"spec":{"resources":{"requests":{"storage": "<required_storage>"}}}}'
+```
+
 ## Configuration and installation details
 
 ### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
@@ -483,6 +493,10 @@ Find more information about how to deal with common errors related to Bitnami’
 In order to render complete information about the deployment including all the sub-charts, please use --render-subchart-notes flag while installing the chart.
 
 ## Upgrading
+
+### To 10.0.0
+
+This major release adds the environment variable for spark and updated the heap memory for spark.
 
 ### To 9.0.0
 
@@ -535,3 +549,4 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
+

@@ -4,9 +4,16 @@
   "properties": {
     "kafka": {
       "type": "object",
-      "title": "Kafka Metrics Details",
+      "title": "Kafka",
+      "description": "Please provide Kafka deployment parameters",
       "form": true,
       "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Enable Kafka",
+          "form": true,
+          "description": "Whether to enable kafka application stack"
+        },
         "metrics": {
           "type": "object",
           "properties": {
@@ -17,7 +24,11 @@
                   "type": "boolean",
                   "form": true,
                   "title": "Enable metrics for Kafka",
-                  "description": "Whether to enable metrics for Kafka. Switch this off in case Kafka metrics are not needed"
+                  "description": "Whether to enable metrics for Kafka. Switch this off in case Kafka metrics are not needed",
+                  "hidden": {
+                    "value": false,
+                    "path": "kafka/enabled"
+                  }
                 }
               }
             },
@@ -28,19 +39,30 @@
                   "type": "boolean",
                   "form": true,
                   "title": "Enable JMX metrics for Kafka",
-                  "description": "Whether to enable JMX metrics for Kafka. Switch this off in case Kafka JMX metrics are not needed"
+                  "description": "Whether to enable JMX metrics for Kafka. Switch this off in case Kafka JMX metrics are not needed",
+                  "hidden": {
+                    "value": false,
+                    "path": "kafka/enabled"
+                  }
                 }
               }
             }
           }
         }
       }
-    },     
+    },
     "spark": {
       "type": "object",
-      "title": "Spark Metrics Details",
+      "title": "Spark",
       "form": true,
+      "description": "Please provide Spark deployment parameters",
       "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Enable Spark",
+          "form": true,
+          "description": "Whether to enable Spark application stack"
+        },
         "metrics": {
           "type": "object",
           "properties": {
@@ -48,17 +70,28 @@
               "type": "boolean",
               "form": true,
               "title": "Enable metrics for Spark",
-              "description": "Whether to enable metrics for Spark. Switch this off in case Spark metrics are not needed"
+              "description": "Whether to enable metrics for Spark. Switch this off in case Spark metrics are not needed",
+              "hidden": {
+                "value": false,
+                "path": "spark/enabled"
+              }
             }
           }
         }
       }
-    },      
+    },
     "solr": {
       "type": "object",
-      "title": "Solr Metrics Details",
+      "title": "Solr",
+      "description": "Please provide Solr deployment parameters",
       "form": true,
       "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Enable Solr",
+          "form": true,
+          "description": "Whether to Solr Spark application stack"
+        },
         "exporter": {
           "type": "object",
           "properties": {
@@ -66,59 +99,63 @@
               "type": "boolean",
               "form": true,
               "title": "Enable metrics for Solr",
-              "description": "Whether to enable metrics for Solr. Switch this off in case Solr metrics are not needed"
+              "description": "Whether to enable metrics for Solr. Switch this off in case Solr metrics are not needed",
+              "hidden": {
+                "value": false,
+                "path": "solr/enabled"
+              }
             }
           }
         }
       }
-    },    
-      "wavefront": {
-        "type": "object",
-        "title": "Tanzu Observability Details",
-        "form": true,
-        "properties": {
-          "enabled": {
-            "type": "boolean",
-            "title": "Deploy Tanzu observability for the data platform cluster including configuration for metrics exporters for all the components. Check https://docs.wavefront.com/kubernetes.html for more details",
-            "form": true,
-            "description": "Whether to deploy a Tanzu observability as part of data platform. Switch this off in case Tanzu Observability is not needed. Check https://docs.wavefront.com/kubernetes.html for more details."
+    },
+    "wavefront": {
+      "type": "object",
+      "title": "Tanzu Observability Details",
+      "form": true,
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Deploy Tanzu observability for the data platform cluster including configuration for metrics exporters for all the components. Check https://docs.wavefront.com/kubernetes.html for more details",
+          "form": true,
+          "description": "Whether to deploy a Tanzu observability as part of data platform. Switch this off in case Tanzu Observability is not needed. Check https://docs.wavefront.com/kubernetes.html for more details."
+        },
+        "clusterName": {
+          "type": "string",
+          "title": "Provide the kubernetes cluster name to be configured in Tanzu Observability",
+          "form": true,
+          "hidden": {
+            "value": false,
+            "path": "wavefront/enabled"
           },
-          "clusterName": {
-            "type": "string",
-            "title": "Provide the kubernetes cluster name to be configured in Tanzu Observability",
-            "form": true,
-            "hidden": {
-              "value": false,
-              "path": "wavefront/enabled"
-            },            
-            "description": "Kubernetes cluster name to be configured in Tanzu Observability, if not provided it will be defaulted to KUBERNETES_CLUSTER_NAME"
-          },          
-          "wavefront": {
-            "type": "object",
-            "properties": {
-              "url": {
-                "type": "string",
-                "title": "Provide the Tanzu Observability cluster url to be configured",
-                "form": true,
-                "hidden": {
-                  "value": false,
-                  "path": "wavefront/enabled"
-                },                
-                "description": "Tanzu Observability cluster url to be configured to export the metrics to"
-                },
-              "token": {
-                "type": "string",
-                "title": "Provide the Tanzu Observability user API token to be used for the cluster url provided above",
-                "form": true,
-                "hidden": {
-                  "value": false,
-                  "path": "wavefront/enabled"
-                },                
-                "description": "Tanzu Observability user API token to be used for the cluster url provided above"
-                }
+          "description": "Kubernetes cluster name to be configured in Tanzu Observability, if not provided it will be defaulted to KUBERNETES_CLUSTER_NAME"
+        },
+        "wavefront": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "title": "Provide the Tanzu Observability cluster url to be configured",
+              "form": true,
+              "hidden": {
+                "value": false,
+                "path": "wavefront/enabled"
+              },
+              "description": "Tanzu Observability cluster url to be configured to export the metrics to"
+            },
+            "token": {
+              "type": "string",
+              "title": "Provide the Tanzu Observability user API token to be used for the cluster url provided above",
+              "form": true,
+              "hidden": {
+                "value": false,
+                "path": "wavefront/enabled"
+              },
+              "description": "Tanzu Observability user API token to be used for the cluster url provided above"
             }
-          }            
+          }
         }
       }
+    }
   }
 }

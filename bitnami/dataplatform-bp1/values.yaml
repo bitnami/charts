@@ -1009,6 +1009,15 @@ spark:
                   values:
                     - "{{ .Release.Name }}"
             topologyKey: "kubernetes.io/hostname"
+    ## @param spark.master.extraEnvVars[0].name name of the environment variable
+    ## @param spark.master.extraEnvVars[0].value value of the environment variable
+    ## For example:
+    ## extraEnvVars:
+    ##  - name: SPARK_DAEMON_JAVA_OPTS
+    ##    value: -Dx=y
+    extraEnvVars:
+      - name: SPARK_DAEMON_MEMORY
+        value: 4096m
   ## Spark worker specific configuration
   ##
   worker:
@@ -1037,6 +1046,15 @@ spark:
                   values:
                     - "{{ .Release.Name }}"
             topologyKey: "kubernetes.io/hostname"
+    ## @param spark.worker.extraEnvVars[0].name name of the environment variable
+    ## @param spark.worker.extraEnvVars[0].value value of the environment variable
+    ## For example:
+    ## extraEnvVars:
+    ##  - name: SPARK_DAEMON_JAVA_OPTS
+    ##    value: -Dx=y
+    extraEnvVars:
+      - name: SPARK_DAEMON_MEMORY
+        value: 4096m
     ## @param spark.worker.resources.limits The resources limits for the container
     ## @param spark.worker.resources.requests [object] The resources limits for the container
     ##
