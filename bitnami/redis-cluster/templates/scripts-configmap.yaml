@@ -37,6 +37,10 @@ data:
 {{- end }}
         ping
     )
+    if [ $? == 124 ]; then
+      echo "Timed out"
+      exit 1
+    fi
     if [ "$response" != "PONG" ]; then
       echo "$response"
       exit 1
@@ -58,6 +62,10 @@ data:
   {{- end }}
           CLUSTER INFO | grep cluster_state | tr -d '[:space:]'
       )
+      if [ $? == 124 ]; then
+        echo "Timed out"
+        exit 1
+      fi
       if [ "$response" != "cluster_state:ok" ]; then
         echo "$response"
         exit 1
@@ -88,7 +96,12 @@ data:
 {{- end }}
         ping
     )
-    if [ "$response" != "PONG" ] && [ "$response" != "LOADING Redis is loading the dataset in memory" ]; then
+    if [ $? == 124 ]; then
+      echo "Timed out"
+      exit 1
+    fi
+    responseFirstWord=$(echo $response | head -n1 | awk '{print $1;}')
+    if [ "$response" != "PONG" ] && [ "$responseFirstWord" != "LOADING" ] && [ "$responseFirstWord" != "MASTERDOWN" ]; then
       echo "$response"
       exit 1
     fi
