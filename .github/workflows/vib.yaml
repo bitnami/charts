@@ -24,7 +24,6 @@ jobs:
 
   vib-k8s-verify: # verify in multiple target platforms
     runs-on: ubuntu-latest
-    environment: vmware-image-builder
     needs: [vib-validate]
     strategy:
       matrix:
