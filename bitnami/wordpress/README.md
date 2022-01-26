@@ -1,4 +1,5 @@
 <!--- app-name: WordPress -->
+<!--- vib-integration: true -->
 
 # WordPress packaged by Bitnami
 
