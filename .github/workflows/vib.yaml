@@ -2,7 +2,7 @@ name: 'vib'
 on: # rebuild any PRs and main branch changes
   pull_request:
     branches:
-      - vib 
+      - master 
     types:
       - assigned 
       - opened 
