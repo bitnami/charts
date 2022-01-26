@@ -106,6 +106,9 @@ spec:
               mc admin bucket quota {{ $minioAlias }}/{{ $bucket.name }} --{{ .type }} {{ .size }};
               {{- end }}
 
+              {{- $versioning := ternary ("enable") ("suspend") (and (not (empty $bucket.versioning)) $bucket.versioning) }}
+              mc version {{ $versioning }} {{ $minioAlias }}/{{ $bucket.name }}
+              
               {{- if $bucket.tags }}
               {{- $target := printf "%s/%s" $minioAlias $bucket.name }}
               {{- $tags := list }}

@@ -274,6 +274,7 @@ provisioning:
   ##     region: us-east-1
   ##     # Only when mode is 'distributed'
   ##     # ref: https://docs.minio.io/docs/distributed-minio-quickstart-guide
+  ##     versioning: false
   ##     withLock: true
   ##     # Only when mode is 'distributed'
   ##     # ref: https://docs.minio.io/docs/distributed-minio-quickstart-guide
