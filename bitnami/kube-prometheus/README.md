@@ -448,7 +448,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `exporters.node-exporter.enabled`                         | Enable node-exporter                                                                                                            | `true`        |
 | `exporters.kube-state-metrics.enabled`                    | Enable kube-state-metrics                                                                                                       | `true`        |
 | `node-exporter`                                           | Node Exporter deployment configuration                                                                                          | `{}`          |
-| `kube-state-metrics`                                      | Node Exporter deployment configuration                                                                                          | `{}`          |
+| `kube-state-metrics`                                      | Kube State Metrics deployment configuration                                                                                          | `{}`          |
 | `kubelet.enabled`                                         | Create a ServiceMonitor to scrape kubelet service                                                                               | `true`        |
 | `kubelet.namespace`                                       | Namespace where kubelet service is deployed. Related configuration `operator.kubeletService.namespace`                          | `kube-system` |
 | `kubelet.serviceMonitor.https`                            | Enable scraping of the kubelet over HTTPS                                                                                       | `true`        |
