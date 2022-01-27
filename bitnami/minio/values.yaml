@@ -263,7 +263,7 @@ provisioning:
   ##     policies:
   ##       - readwrite
   groups: []
-  ## @param provisioning.buckets MinIO&reg; buckets, lifecycle, quota and tags provisioning
+  ## @param provisioning.buckets MinIO&reg; buckets,versioning lifecycle, quota and tags provisioning
   ## Buckets https://docs.min.io/docs/minio-client-complete-guide.html#mb
   ## Lifecycle https://docs.min.io/docs/minio-client-complete-guide.html#ilm
   ## Quotas https://docs.min.io/docs/minio-admin-complete-guide.html#bucket
@@ -275,7 +275,9 @@ provisioning:
   ##     # Only when mode is 'distributed'
   ##     # ref: https://docs.minio.io/docs/distributed-minio-quickstart-guide
   ##     versioning: false
-  ##     withLock: true
+  ##     # Versioning is automatically enabled if withLock is true 
+  ##     # ref: https://docs.min.io/docs/minio-bucket-versioning-guide.html
+  ##     withLock: true 
   ##     # Only when mode is 'distributed'
   ##     # ref: https://docs.minio.io/docs/distributed-minio-quickstart-guide
   ##     lifecycle:
