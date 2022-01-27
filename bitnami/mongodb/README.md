@@ -1,11 +1,13 @@
-<!--- app-name: MongoDB(R) -->
+<!--- app-name: MongoDB(&reg;) -->
 
-# MongoDB&reg; packaged by Bitnami
+# MongoDB(R) packaged by Bitnami
 
-[MongoDB&reg;](https://www.mongodb.com/) is a cross-platform document-oriented database. Classified as a NoSQL database, MongoDB&reg; eschews the traditional table-based relational database structure in favor of JSON-like documents with dynamic schemas, making the integration of data in certain types of applications easier and faster.
+MongoDB(R) is a relational open source NoSQL database. Easy to use, it stores data in JSON-like documents. Automated scalability and high-performance. Ideal for developing cloud native applications.
 
-Disclaimer: The respective trademarks mentioned in the offering are owned by the respective companies. We do not provide a commercial license for any of these products. This listing has an open-source license. MongoDB&reg;  is run and maintained by MongoDB, which is a completely separate project from Bitnami.
+[Overview of MongoDB(&reg;)](http://www.mongodb.org)
 
+Disclaimer: The respective trademarks mentioned in the offering are owned by the respective companies. We do not provide a commercial license for any of these products. This listing has an open-source license. MongoDB(R) is run and maintained by MongoDB, which is a completely separate project from Bitnami.
+                           
 ## TL;DR
 
 ```bash
@@ -428,7 +430,7 @@ Refer to the [chart documentation for more information on each of these architec
 | `metrics.enabled`                            | Enable using a sidecar Prometheus exporter                                                                            | `false`                    |
 | `metrics.image.registry`                     | MongoDB&reg; Prometheus exporter image registry                                                                       | `docker.io`                |
 | `metrics.image.repository`                   | MongoDB&reg; Prometheus exporter image repository                                                                     | `bitnami/mongodb-exporter` |
-| `metrics.image.tag`                          | MongoDB&reg; Prometheus exporter image tag (immutable tags are recommended)                                           | `0.11.2-debian-10-r393`    |
+| `metrics.image.tag`                          | MongoDB&reg; Prometheus exporter image tag (immutable tags are recommended)                                           | `0.30.0-debian-10-r53`     |
 | `metrics.image.pullPolicy`                   | MongoDB&reg; Prometheus exporter image pull policy                                                                    | `IfNotPresent`             |
 | `metrics.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                      | `[]`                       |
 | `metrics.username`                           | String with username for the metrics exporter                                                                         | `""`                       |
@@ -558,7 +560,7 @@ As an alternative, you can use the preset configurations for pod affinity, pod a
 
 ## Troubleshooting
 
-Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+Find more information about how to deal with common errors related to Bitnami���s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
 
@@ -569,6 +571,11 @@ $ helm upgrade my-release bitnami/mongodb --set auth.rootPassword=[PASSWORD] (--
 ```
 
 > Note: you need to substitute the placeholders [PASSWORD] and [REPLICASETKEY] with the values obtained in the installation notes.
+
+### To 11.0.0
+
+In this version, the mongodb-exporter bundled as part of this Helm chart was updated to a new version which, even it is not a major change, can contain breaking changes (from `0.11.X` to `0.30.X`).
+Please visit the release notes from the upstream project at https://github.com/percona/mongodb_exporter/releases
 
 ### To 10.0.0
 
