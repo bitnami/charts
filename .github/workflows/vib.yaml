@@ -2,7 +2,8 @@ name: 'vib'
 on: # rebuild any PRs and main branch changes
   pull_request:
     branches:
-      - vib 
+      - master
+      - bitnami:master
     types:
       - assigned 
       - opened 
