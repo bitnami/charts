@@ -3,7 +3,8 @@ on: # rebuild any PRs and main branch changes
   pull_request:
     branches:
       - master
-      - bitnami:master 
+      - bitnami:master
+      - vib
     types:
       - assigned 
       - opened 
