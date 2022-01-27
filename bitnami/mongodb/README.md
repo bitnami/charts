@@ -428,7 +428,7 @@ Refer to the [chart documentation for more information on each of these architec
 | `metrics.enabled`                            | Enable using a sidecar Prometheus exporter                                                                            | `false`                    |
 | `metrics.image.registry`                     | MongoDB&reg; Prometheus exporter image registry                                                                       | `docker.io`                |
 | `metrics.image.repository`                   | MongoDB&reg; Prometheus exporter image repository                                                                     | `bitnami/mongodb-exporter` |
-| `metrics.image.tag`                          | MongoDB&reg; Prometheus exporter image tag (immutable tags are recommended)                                           | `0.11.2-debian-10-r393`    |
+| `metrics.image.tag`                          | MongoDB&reg; Prometheus exporter image tag (immutable tags are recommended)                                           | `0.30.0-debian-10-r53`     |
 | `metrics.image.pullPolicy`                   | MongoDB&reg; Prometheus exporter image pull policy                                                                    | `IfNotPresent`             |
 | `metrics.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                      | `[]`                       |
 | `metrics.username`                           | String with username for the metrics exporter                                                                         | `""`                       |
@@ -569,6 +569,11 @@ $ helm upgrade my-release bitnami/mongodb --set auth.rootPassword=[PASSWORD] (--
 ```
 
 > Note: you need to substitute the placeholders [PASSWORD] and [REPLICASETKEY] with the values obtained in the installation notes.
+
+### To 11.0.0
+
+In this version, the mongodb-exporter bundled as part of this Helm chart was updated to a new version which, even it is not a major change, can contain breaking changes (from `0.11.X` to `0.30.X`).
+Please visit the release notes from the upstream project at https://github.com/percona/mongodb_exporter/releases
 
 ### To 10.0.0
 
