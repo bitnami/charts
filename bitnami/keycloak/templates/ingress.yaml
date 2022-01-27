@@ -44,12 +44,16 @@ spec:
             {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (include "keycloak.fullname" $) "servicePort" $.Values.ingress.servicePort "context" $) | nindent 14 }}
     {{- end }}
-  {{- if or (and .Values.ingress.tls (or (include "keycloak.ingress.certManagerRequest" .Values.ingress.annotations) .Values.ingress.selfSigned)) .Values.ingress.extraTls }}
+  {{- if or (and .Values.ingress.tls (or (include "keycloak.ingress.certManagerRequest" .Values.ingress.annotations) .Values.ingress.selfSigned)) .Values.ingress.extraTls .Values.ingress.existingSecret }}
   tls:
-    {{- if and .Values.ingress.tls (or (include "keycloak.ingress.certManagerRequest" .Values.ingress.annotations) .Values.ingress.selfSigned) }}
+    {{- if or (and .Values.ingress.tls (or (include "keycloak.ingress.certManagerRequest" .Values.ingress.annotations) .Values.ingress.selfSigned)) .Values.ingress.existingSecret }}
     - hosts:
         - {{ .Values.ingress.hostname | quote }}
+    {{- if and .Values.ingress.tls (or (include "keycloak.ingress.certManagerRequest" .Values.ingress.annotations) .Values.ingress.selfSigned) }}
       secretName: {{ printf "%s-tls" .Values.ingress.hostname }}
+    {{- else if .Values.ingress.existingSecret }}
+      secretName: {{ .Values.ingress.existingSecret }}
+    {{- end }}
     {{- end }}
     {{- if .Values.ingress.extraTls }}
     {{- include "common.tplvalues.render" (dict "value" .Values.ingress.extraTls "context" $) | nindent 4 }}
