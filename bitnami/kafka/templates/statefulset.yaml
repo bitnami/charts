@@ -282,6 +282,8 @@ spec:
               value: {{ .Values.deleteTopicEnable | quote }}
             - name: KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE
               value: {{ .Values.autoCreateTopicsEnable | quote }}
+            - name: KAFKA_CFG_UNCLEAN_LEADER_ELECTION_ENABLE
+              value: {{ .Values.uncleanLeaderElectionEnable | quote }}
             - name: KAFKA_HEAP_OPTS
               value: {{ .Values.heapOpts | quote }}
             - name: KAFKA_CFG_LOG_FLUSH_INTERVAL_MESSAGES
@@ -296,10 +298,16 @@ spec:
               value: {{ .Values.logRetentionHours | quote }}
             - name: KAFKA_CFG_MESSAGE_MAX_BYTES
               value: {{ .Values.maxMessageBytes | replace "_" "" | quote }}
+            - name: KAFKA_CFG_REPLICA_FETCH_MIN_BYTES
+              value: {{ .Values.replicaFetchMinBytes | replace "_" "" | quote }}
+            - name: KAFKA_CFG_REPLICA_FETCH_MAX_BYTES
+              value: {{ .Values.replicaFetchMaxBytes | replace "_" "" | quote }}
             - name: KAFKA_CFG_LOG_SEGMENT_BYTES
               value: {{ .Values.logSegmentBytes | replace "_" "" | quote }}
             - name: KAFKA_CFG_LOG_DIRS
               value: {{ .Values.logsDirs | quote }}
+            - name: KAFKA_CFG_MIN_INSYNC_REPLICAS
+              value: {{ .Values.minInsyncReplicas | quote }}
             - name: KAFKA_CFG_DEFAULT_REPLICATION_FACTOR
               value: {{ .Values.defaultReplicationFactor | quote }}
             - name: KAFKA_CFG_OFFSETS_TOPIC_REPLICATION_FACTOR

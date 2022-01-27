@@ -139,6 +139,9 @@ deleteTopicEnable: false
 ## @param autoCreateTopicsEnable Switch to enable auto creation of topics. Enabling auto creation of topics not recommended for production or similar environments
 ##
 autoCreateTopicsEnable: true
+## @param uncleanLeaderElectionEnable Switch to enable replicas not in the ISR set to be elected as leader as a last resort, even though doing so may result in data loss
+##
+uncleanLeaderElectionEnable: false
 ## @param logFlushIntervalMessages The number of messages to accept before forcing a flush of data to disk
 ##
 logFlushIntervalMessages: _10000
@@ -163,6 +166,15 @@ logsDirs: /bitnami/kafka/data
 ## @param maxMessageBytes The largest record batch size allowed by Kafka
 ##
 maxMessageBytes: _1000012
+## @param replicaFetchMinBytes The minimum number of bytes expected for each fetch response
+##
+replicaFetchMinBytes: _1
+## @param replicaFetchMaxBytes The number of bytes of messages to attempt to fetch for each partition
+##
+replicaFetchMaxBytes: _10485760
+## @param minInsyncReplicas Minimum number of replicas that must acknowledge a write for being considered successful
+##
+minInsyncReplicas: 1
 ## @param defaultReplicationFactor Default replication factors for automatically created topics
 ##
 defaultReplicationFactor: 1
