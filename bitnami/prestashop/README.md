@@ -1,9 +1,13 @@
 <!--- app-name: PrestaShop -->
 
-# PrestaShop
+# PrestaShop packaged by Bitnami
 
-[PrestaShop](https://prestashop.com/) is a popular open source e-commerce solution. Professional tools are easily accessible to increase online sales including instant guest checkout, abandoned cart reminders and automated Email marketing.
+PrestaShop is a powerful open source eCommerce platform used by over 250,000 online storefronts worldwide. It is easily customizable, responsive, and includes powerful tools to drive online sales.
 
+[Overview of PrestaShop](http://www.prestashop.com)
+
+Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
+                           
 ## TL;DR
 
 ```console
@@ -408,15 +412,15 @@ One needs to explicitly turn on SSL in the Prestashop administration panel, else
 To enable SSL on all pages, follow these steps:
 
 - Browse to the administration panel and log in.
-- Click “Shop Parameters” in the left navigation panel.
-- Set the option “Enable SSL” to “Yes”.
-- Click the “Save” button.
-- Set the (now enabled) option “Enable SSL on all pages” to “Yes”.
-- Click the “Save” button.
+- Click ���Shop Parameters��� in the left navigation panel.
+- Set the option ���Enable SSL��� to ���Yes���.
+- Click the ���Save��� button.
+- Set the (now enabled) option ���Enable SSL on all pages��� to ���Yes���.
+- Click the ���Save��� button.
 
 ## Troubleshooting
 
-Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+Find more information about how to deal with common errors related to Bitnami���s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
 
