@@ -4,7 +4,6 @@ on: # rebuild any PRs and main branch changes
     branches:
       - master
       - bitnami:master
-      - vib
     types:
       - assigned 
       - opened 
