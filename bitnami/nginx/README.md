@@ -347,10 +347,10 @@ In addition, you can also set an external ConfigMap with the configuration file.
 In some scenarios, you may require users to authenticate in order to gain access to protected resources. By enabling LDAP, NGINX will make use of an Authorization Daemon to proxy those identification requests against a given LDAP Server.
 
 ```
-                ������������������������������������������������������           ������������������������������������������������������           ������������������������������������������������������
-                ���     NGINX      ���  ----->   ���     NGINX      ���  ----->   ���      LDAP      ���
-                ���     server     ���  <-----   |  ldap daemon   ���  <-----   |     server     ���
-                ������������������������������������������������������           ������������������������������������������������������           ������������������������������������������������������
+                ������������������������������������������������������������������������������������������������������������������������������������������������������������������           ������������������������������������������������������������������������������������������������������������������������������������������������������������������           ������������������������������������������������������������������������������������������������������������������������������������������������������������������
+                ���������     NGINX      ���������  ----->   ���������     NGINX      ���������  ----->   ���������      LDAP      ���������
+                ���������     server     ���������  <-----   |  ldap daemon   ���������  <-----   |     server     ���������
+                ������������������������������������������������������������������������������������������������������������������������������������������������������������������           ������������������������������������������������������������������������������������������������������������������������������������������������������������������           ������������������������������������������������������������������������������������������������������������������������������������������������������������������
 
 ```
 
@@ -464,7 +464,7 @@ For annotations, please see [this document](https://github.com/kubernetes/ingres
 
 ## Troubleshooting
 
-Find more information about how to deal with common errors related to Bitnami���s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+Find more information about how to deal with common errors related to Bitnami���������s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
 

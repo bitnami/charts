@@ -1,0 +1,74 @@
+{
+  "phases": {
+    "package": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/wordpress"
+        }
+      },
+      "actions": [
+        {
+          "action_id": "helm-package"
+        }
+      ]
+    },
+    "verify": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/wordpress"
+        },
+        "runtime_parameters": "d29yZHByZXNzUGFzc3dvcmQ6IFMzOUJLV2pTa2gKbWFyaWFkYjoKICBhdXRoOgogICAgcGFzc3dvcmQ6IFZxbDVSR2RjbzQKICAgIHJvb3RQYXNzd29yZDogVUM1eVUwWUE2Sgo=",
+        "target_platform": {
+          "target_platform_id": "{TARGET_PLATFORM}",
+          "size": {
+            "name": "S4"
+          }
+        }
+      },
+      "actions": [
+        {
+          "action_id": "health-check",
+          "params": {
+            "endpoint": "lb-wordpress-http",
+            "app_protocol": "HTTP"
+          }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/wordpress/goss"
+            },
+            "config": {
+              "remote": {
+                "workload": "deploy-wordpress"
+              },
+              "wait": {
+                "file": "goss-wait.yaml"
+              }
+            }
+          }
+        },
+        {
+          "action_id": "cypress",
+          "params": {
+            "resources": {
+              "path": "/.vib/wordpress/cypress"
+            },
+            "config": {
+              "endpoint": "lb-wordpress-https",
+              "app_protocol": "HTTPS",
+              "env": {
+                "username": "user",
+                "password": "S39BKWjSkh"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}
+
