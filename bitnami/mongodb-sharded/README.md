@@ -1,11 +1,13 @@
-<!--- app-name: MongoDB(R) Sharded -->
+<!--- app-name: MongoDB(&reg;) Sharded -->
 
-# MongoDB&reg; Sharded packaged by Bitnami
+# MongoDB(R) Sharded packaged by Bitnami
 
-[MongoDB&reg; Sharded](https://www.mongodb.com/) is a cross-platform document-oriented database.
+MongoDB(R) is an open source NoSQL database that uses JSON for data storage. MongoDB(TM) Sharded improves scalability and reliability for large datasets by distributing data across multiple machines.
 
-Disclaimer: The respective trademarks mentioned in the offering are owned by the respective companies. We do not provide a commercial license for any of these products. This listing has an open-source license. MongoDB&reg;  is run and maintained by MongoDB, which is a completely separate project from Bitnami.
+[Overview of MongoDB(&reg;) Sharded](http://www.mongodb.org)
 
+Disclaimer: The respective trademarks mentioned in the offering are owned by the respective companies. We do not provide a commercial license for any of these products. This listing has an open-source license. MongoDB(R) is run and maintained by MongoDB, which is a completely separate project from Bitnami.
+                           
 ## TL;DR
 
 ```bash
@@ -481,7 +483,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 
 ## Troubleshooting
 
-Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+Find more information about how to deal with common errors related to Bitnami���s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
 
