@@ -1,9 +1,13 @@
 <!--- app-name: Argo Workflows -->
 
-# Argo Workflows Chart packaged by Bitnami
+# Argo Workflows packaged by Bitnami
 
-[Argo Workflows](https://argoproj.github.io/workflows) allows to orchestrate parallel jobs in kubernetes.
+Argo Workflows is meant to orchestrate Kubernetes jobs in parallel. It uses DAG and step-based workflows
 
+[Overview of Argo Workflows](https://argoproj.github.io/workflows)
+
+Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
+                           
 ## TL;DR
 
 ```console
