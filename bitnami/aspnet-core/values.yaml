@@ -615,7 +615,11 @@ healthIngress:
   ## DEPRECATED: Use healthIngress.annotations instead of healthIngress.certManager
   ## certManager: false
   ##
-
+  ## @param healthIngress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+  ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+  ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+  ##
+  ingressClassName: ""
   ## @param healthIngress.extraHosts n array with additional hostname(s) to be covered with the ingress record
   ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
   ## extraHosts:
