@@ -618,6 +618,9 @@ pgpool:
   ## The secret must contain the keys "usernames" and "passwords" respectively.
   ##
   customUsersSecret: ""
+  ## @param pgpool.existingSecret Pgpool admin password using existing secret
+  ##
+  existingSecret: ""
   ## @param pgpool.srCheckDatabase Name of the database to perform streaming replication checks
   ##
   srCheckDatabase: postgres
