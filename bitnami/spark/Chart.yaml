@@ -1,14 +1,14 @@
 annotations:
   category: Infrastructure
 apiVersion: v2
-appVersion: 3.2.0
+appVersion: 3.2.1
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
     tags:
       - bitnami-common
     version: 1.x.x
-description: Spark is a fast and general-purpose cluster computing system.
+description: Apache Spark is a high-performance engine for large-scale computing tasks, such as data processing, machine learning and real-time data streaming. It includes APIs for Java, Python, Scala and R.
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/spark
 icon: https://bitnami.com/assets/stacks/spark/img/spark-stack-220x234.png
@@ -22,4 +22,4 @@ name: spark
 sources:
   - https://github.com/bitnami/bitnami-docker-spark
   - https://spark.apache.org/
-version: 5.8.4
+version: 5.8.5
