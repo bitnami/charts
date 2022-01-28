@@ -1,3 +1,5 @@
+<!--- app-name: Thanos -->
+
 # Thanos
 
 [Thanos](https://thanos.io/) is a highly available metrics system that can be added on top of existing Prometheus deployments, providing a global query view across all Prometheus installations.
@@ -17,8 +19,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 ## Prerequisites
 
-- Kubernetes 1.12+
-- Helm 3.1.0
+- Kubernetes 1.19+
+- Helm 3.2.0+
 - PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
@@ -105,7 +107,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | ----------------------------- | ----------------------------------------------------------------------------------------- | ------------------- |
 | `image.registry`              | Thanos image registry                                                                     | `docker.io`         |
 | `image.repository`            | Thanos image repository                                                                   | `bitnami/thanos`    |
-| `image.tag`                   | Thanos image tag (immutable tags are recommended)                                         | `0.23.1-scratch-r3` |
+| `image.tag`                   | Thanos image tag (immutable tags are recommended)                                         | `0.24.0-scratch-r0` |
 | `image.pullPolicy`            | Thanos image pull policy                                                                  | `IfNotPresent`      |
 | `image.pullSecrets`           | Specify docker-registry secret names as an array                                          | `[]`                |
 | `objstoreConfig`              | The [objstore configuration](https://thanos.io/tip/thanos/storage.md/)                    | `""`                |
@@ -1038,7 +1040,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `volumePermissions.enabled`           | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`    | Init container volume-permissions image registry                                                | `docker.io`             |
 | `volumePermissions.image.repository`  | Init container volume-permissions image repository                                              | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                     | `10-debian-10-r242`     |
+| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                     | `10-debian-10-r287`     |
 | `volumePermissions.image.pullPolicy`  | Init container volume-permissions image pull policy                                             | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets` | Specify docker-registry secret names as an array                                                | `[]`                    |
 
@@ -1053,13 +1055,13 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `minio.defaultBuckets`    | Comma, semi-colon or space separated list of MinIO&reg; buckets to create | `thanos` |
 
 
-### NetworkPolicy parameters
+### NetWorkPolicy parameters
 
-| Name                      | Description                                                               | Value    |
-| ------------------------- | ------------------------------------------------------------------------- | -------- |
-| `networkPolicy.enabled`                    | Enable creation of NetworkPolicy resources.                                                                              | `false`             |
-| `networkPolicy.allowExternal`              | Don't require client label for connections                                                                               | `true`              |
-| `networkPolicy.explicitNamespacesSelector` | A Kubernetes LabelSelector to explicitly select namespaces from which traffic could be allowed                           | `{}`                |
+| Name                                       | Description                                                                                    | Value   |
+| ------------------------------------------ | ---------------------------------------------------------------------------------------------- | ------- |
+| `networkPolicy.enabled`                    | Enable creation of NetworkPolicy resources. Only Ingress traffic is filtered for now.          | `false` |
+| `networkPolicy.allowExternal`              | Don't require client label for connections                                                     | `true`  |
+| `networkPolicy.explicitNamespacesSelector` | A Kubernetes LabelSelector to explicitly select namespaces from which traffic could be allowed | `{}`    |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
@@ -1167,7 +1169,7 @@ timePartitioning:
 
 ### Integrate Thanos with Prometheus and Alertmanager
 
-You can intregrate Thanos with Prometheus & Alertmanager using this chart and the [Bitnami kube-prometheus chart](https://github.com/bitnami/charts/tree/master/bitnami/kube-prometheus) following the steps below:
+You can integrate Thanos with Prometheus & Alertmanager using this chart and the [Bitnami kube-prometheus chart](https://github.com/bitnami/charts/tree/master/bitnami/kube-prometheus) following the steps below:
 
 > Note: in this example we will use MinIO&reg; (subchart) as the Objstore. Every component will be deployed in the "monitoring" namespace.
 
@@ -1262,6 +1264,10 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 9.0.0
+
+This major updates the MinIO&reg; subchart to its newest major, 10.0.0. This subchart's major doesn't include any changes affecting its use as a subchart for Thanos, only needing the standard upgrade process from chart's version `8.X`.
 
 ### To 8.0.0
 
@@ -1463,3 +1469,19 @@ ingress.secrets[0].name -> querier.ingress.secrets[0].name
 ingress.secrets[0].certificate -> querier.ingress.secrets[0].certificate
 ingress.secrets[0].key -> querier.ingress.secrets[0].key
 ```
+
+## License
+
+Copyright &copy; 2022 Bitnami
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

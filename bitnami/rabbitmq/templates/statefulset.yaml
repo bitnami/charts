@@ -338,7 +338,7 @@ spec:
             items:
               - key: rabbitmq.conf
                 path: rabbitmq.conf
-              {{- if .Values.advancedConfiguration}}
+              {{- if .Values.advancedConfiguration }}
               - key: advanced.config
                 path: advanced.config
               {{- end }}

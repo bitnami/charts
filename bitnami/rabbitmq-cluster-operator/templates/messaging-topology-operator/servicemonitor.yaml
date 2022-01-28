@@ -2,8 +2,10 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: {{ include "common.names.fullname" . }}-messaging-topology-operator
+  name: {{ template "rmqco.msgTopologyOperator.fullname" . }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: messaging-topology-operator
+    app.kubernetes.io/part-of: rabbitmq
     {{- if .Values.msgTopologyOperator.metrics.serviceMonitor.additionalLabels }}
     {{- include "common.tplvalues.render" (dict "value" .Values.msgTopologyOperator.metrics.serviceMonitor.additionalLabels "context" $) | nindent 4 }}
     {{- end }}
@@ -19,7 +21,6 @@ spec:
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: messaging-topology-operator
-      app.kubernetes.io/part-of: rabbitmq
       # We need an extra label for the ServiceMonitor to scrape it correctly
       type: metrics
       {{- if .Values.msgTopologyOperator.metrics.serviceMonitor.selector }}
@@ -29,7 +30,7 @@ spec:
     matchNames:
       - {{ .Release.Namespace }}
   endpoints:
-    - port: http-metrics
+    - port: http
       {{- if .Values.msgTopologyOperator.metrics.serviceMonitor.interval }}
       interval: {{ .Values.msgTopologyOperator.metrics.serviceMonitor.interval }}
       {{- end }}

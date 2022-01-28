@@ -38,6 +38,12 @@ spec:
       {{- if .Values.cainjector.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.cainjector.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
+      {{- if .Values.cainjector.schedulerName }}
+      schedulerName: {{ .Values.cainjector.schedulerName }}
+      {{- end }}
+      {{- if .Values.cainjector.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.cainjector.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
       {{- if .Values.cainjector.priorityClassName }}
       priorityClassName: {{ .Values.cainjector.priorityClassName | quote }}
       {{- end }}

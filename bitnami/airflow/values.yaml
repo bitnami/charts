@@ -205,7 +205,7 @@ dags:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r274
+    tag: 10-debian-10-r300
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -229,7 +229,7 @@ web:
   image:
     registry: docker.io
     repository: bitnami/airflow
-    tag: 2.2.2-debian-10-r9
+    tag: 2.2.3-debian-10-r16
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -418,7 +418,7 @@ scheduler:
   image:
     registry: docker.io
     repository: bitnami/airflow-scheduler
-    tag: 2.2.2-debian-10-r21
+    tag: 2.2.3-debian-10-r14
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -550,7 +550,7 @@ worker:
   image:
     registry: docker.io
     repository: bitnami/airflow-worker
-    tag: 2.2.2-debian-10-r21
+    tag: 2.2.3-debian-10-r14
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -603,6 +603,9 @@ worker:
   ## @param worker.extraVolumes Add extra volumes
   ##
   extraVolumes: []
+  ## @param worker.extraVolumeClaimTemplates Add extra volumes claim templates for worker statefule set
+  ##
+  extraVolumeClaimTemplates: []
   ## @param worker.extraEnvVars Add extra environment variables
   ##
   extraEnvVars: []
@@ -759,7 +762,7 @@ git:
   image:
     registry: docker.io
     repository: bitnami/git
-    tag: 2.34.1-debian-10-r13
+    tag: 2.34.1-debian-10-r39
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -913,6 +916,7 @@ ldap:
 ## @param ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
 ## @param ingress.hosts [array] The list of hostnames to be covered with this ingress record.
 ## @param ingress.secrets If you're providing your own certificates, use this to add the certificates as secrets
+## @param ingress.ingressClassName Set the ingerssClassName on the ingress record for k8s 1.18+
 ##
 ingress:
   enabled: false
@@ -933,6 +937,10 @@ ingress:
   ##   cert-manager.io/cluster-issuer: cluster-issuer-name
   ##
   annotations: {}
+  ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+  ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+  ##
+  ingressClassName: ""
   ## Most likely this will be just one host, but in the event more hosts are needed, this is an array
   ##
   hosts:
@@ -1057,7 +1065,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/airflow-exporter
-    tag: 0.20210126.0-debian-10-r300
+    tag: 0.20210126.0-debian-10-r326
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

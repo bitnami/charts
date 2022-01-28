@@ -180,6 +180,21 @@ Get the password key to be retrieved from Redis&trade; secret.
 {{- end -}}
 {{- end -}}
 
+
+{{/*
+Returns the available value for certain key in an existing secret (if it exists),
+otherwise it generates a random value.
+*/}}
+{{- define "getValueFromSecret" }}
+    {{- $len := (default 16 .Length) | int -}}
+    {{- $obj := (lookup "v1" "Secret" .Namespace .Name).data -}}
+    {{- if $obj }}
+        {{- index $obj .Key | b64dec -}}
+    {{- else -}}
+        {{- randAlphaNum $len -}}
+    {{- end -}}
+{{- end }}
+
 {{/*
 Return Redis&trade; password
 */}}
@@ -189,7 +204,7 @@ Return Redis&trade; password
 {{- else if not (empty .Values.auth.password) -}}
     {{- .Values.auth.password -}}
 {{- else -}}
-    {{- randAlphaNum 10 -}}
+    {{- include "getValueFromSecret" (dict "Namespace" .Release.Namespace "Name" (include "common.names.fullname" .) "Length" 10 "Key" "redis-password")  -}}
 {{- end -}}
 {{- end -}}
 
@@ -205,7 +220,7 @@ Compile all warnings into a single message, and call fail.
 */}}
 {{- define "redis.validateValues" -}}
 {{- $messages := list -}}
-{{- $messages := append $messages (include "redis.validateValues.spreadConstraints" .) -}}
+{{- $messages := append $messages (include "redis.validateValues.topologySpreadConstraints" .) -}}
 {{- $messages := append $messages (include "redis.validateValues.architecture" .) -}}
 {{- $messages := append $messages (include "redis.validateValues.podSecurityPolicy.create" .) -}}
 {{- $messages := append $messages (include "redis.validateValues.tls" .) -}}
@@ -218,9 +233,9 @@ Compile all warnings into a single message, and call fail.
 {{- end -}}
 
 {{/* Validate values of Redis&trade; - spreadConstrainsts K8s version */}}
-{{- define "redis.validateValues.spreadConstraints" -}}
-{{- if and (semverCompare "<1.16-0" .Capabilities.KubeVersion.GitVersion) .Values.replica.spreadConstraints -}}
-redis: spreadConstraints
+{{- define "redis.validateValues.topologySpreadConstraints" -}}
+{{- if and (semverCompare "<1.16-0" .Capabilities.KubeVersion.GitVersion) .Values.replica.topologySpreadConstraints -}}
+redis: topologySpreadConstraints
     Pod Topology Spread Constraints are only available on K8s  >= 1.16
     Find more information at https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
 {{- end -}}
@@ -259,3 +274,18 @@ redis: tls.enabled
     enable auto-generated certificates.
 {{- end -}}
 {{- end -}}
+
+{{/* Define the suffix utilized for external-dns */}}
+{{- define "redis.externalDNS.suffix" -}}
+{{ printf "%s.%s" (include "common.names.fullname" .) .Values.useExternalDNS.suffix }}
+{{- end -}}
+
+{{/* Compile all annotations utilized for external-dns */}}
+{{- define "redis.externalDNS.annotations" -}}
+{{- if .Values.useExternalDNS.enabled }}
+{{ .Values.useExternalDNS.annotationKey }}hostname: {{ include "redis.externalDNS.suffix" . }}
+{{- range $key, $val := .Values.useExternalDNS.additionalAnnotations }}
+{{ $.Values.useExternalDNS.annotationKey }}{{ $key }}: {{ $val | quote }}
+{{- end }}
+{{- end }}
+{{- end }}

@@ -20,10 +20,10 @@ metadata:
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
     {{- end }}
 spec:
-  rules:
   {{- if and .Values.proxy.ingress.ingressClassName (include "common.ingress.supportsIngressClassname" .) }}
   ingressClassName: {{ .Values.proxy.ingress.ingressClassName | quote }}
   {{- end }}
+  rules:
     {{- if .Values.proxy.ingress.hostname }}
     - host: {{ .Values.proxy.ingress.hostname | quote }}
       http:

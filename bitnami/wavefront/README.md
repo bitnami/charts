@@ -1,3 +1,5 @@
+<!--- app-name: Wavefront -->
+
 # Wavefront Collector for Kubernetes
 
 [Wavefront](https://wavefront.com) is a cloud-native monitoring and analytics platform that provides three dimensional microservices observability with metrics, histograms and OpenTracing-compatible distributed tracing.
@@ -22,8 +24,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 ## Prerequisites
 
-- Kubernetes 1.12+
-- Helm 3.1.0
+- Kubernetes 1.19+
+- Helm 3.2.0+
 - PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
@@ -97,7 +99,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `collector.enabled`                               | Setup and enable the Wavefront collector to gather metrics                                                              | `true`                                   |
 | `collector.image.registry`                        | Wavefront collector Image registry                                                                                      | `docker.io`                              |
 | `collector.image.repository`                      | Wavefront collector Image repository                                                                                    | `bitnami/wavefront-kubernetes-collector` |
-| `collector.image.tag`                             | Wavefront collector Image tag (immutable tags are recommended)                                                          | `1.7.4-scratch-r0`                       |
+| `collector.image.tag`                             | Wavefront collector Image tag (immutable tags are recommended)                                                          | `1.7.5-scratch-r3`                       |
 | `collector.image.pullPolicy`                      | Image pull policy                                                                                                       | `IfNotPresent`                           |
 | `collector.image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                        | `[]`                                     |
 | `collector.hostAliases`                           | Deployment pod host aliases                                                                                             | `[]`                                     |
@@ -163,7 +165,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `proxy.enabled`                               | Setup and enable Wavefront proxy to send metrics through                                                                                | `true`                    |
 | `proxy.image.registry`                        | Wavefront proxy image registry                                                                                                          | `docker.io`               |
 | `proxy.image.repository`                      | Wavefront proxy image repository                                                                                                        | `bitnami/wavefront-proxy` |
-| `proxy.image.tag`                             | Wavefront proxy image tag (immutable tags are recommended)                                                                              | `10.9.0-debian-10-r38`    |
+| `proxy.image.tag`                             | Wavefront proxy image tag (immutable tags are recommended)                                                                              | `10.13.0-debian-10-r8`    |
 | `proxy.image.pullPolicy`                      | Wavefront proxy image pull policy                                                                                                       | `IfNotPresent`            |
 | `proxy.image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                                        | `[]`                      |
 | `proxy.hostAliases`                           | Deployment pod host aliases                                                                                                             | `[]`                      |
@@ -316,3 +318,19 @@ The wavefront-collector container has been moved to scratch. From now on the con
 [On November 13, 2020, Helm v2 support formally ended](https://github.com/helm/charts#status-of-the-project). This major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
 
 [Learn more about this change and related upgrade considerations](https://docs.bitnami.com/kubernetes/apps/wavefront/administration/upgrade-helm3/).
+
+## License
+
+Copyright &copy; 2022 Bitnami
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

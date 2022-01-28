@@ -59,7 +59,7 @@ Return the Database Hostname
 {{- if .Values.postgresql.enabled }}
     {{- printf "%s" (include "sonarqube.postgresql.fullname" .) -}}
 {{- else -}}
-    {{- .Values.externalDatabase.host | quote -}}
+    {{- .Values.externalDatabase.host  -}}
 {{- end -}}
 {{- end -}}
 
@@ -81,7 +81,7 @@ Return the Database Name
 {{- if .Values.postgresql.enabled }}
     {{- printf "%s" .Values.postgresql.postgresqlDatabase -}}
 {{- else -}}
-    {{- .Values.externalDatabase.database | quote -}}
+    {{- .Values.externalDatabase.database -}}
 {{- end -}}
 {{- end -}}
 
@@ -92,7 +92,7 @@ Return the Database User
 {{- if .Values.postgresql.enabled }}
     {{- printf "%s" .Values.postgresql.postgresqlUsername -}}
 {{- else -}}
-    {{- .Values.externalDatabase.user | quote -}}
+    {{- .Values.externalDatabase.user -}}
 {{- end -}}
 {{- end -}}
 

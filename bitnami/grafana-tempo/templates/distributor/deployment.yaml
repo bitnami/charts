@@ -21,9 +21,11 @@ spec:
       app.kubernetes.io/component: distributor
   template:
     metadata:
-      {{- if .Values.distributor.podAnnotations }}
-      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.distributor.podAnnotations "context" $) | nindent 8 }}
-      {{- end }}
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/tempo-configmap.yaml") . | sha256sum }}
+        {{- if .Values.distributor.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.distributor.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: distributor
         tempo-gossip-member: "true"
@@ -50,8 +52,14 @@ spec:
       {{- if .Values.distributor.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.distributor.tolerations "context" .) | nindent 8 }}
       {{- end }}
+      {{- if .Values.distributor.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.distributor.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
       {{- if .Values.distributor.priorityClassName }}
       priorityClassName: {{ .Values.distributor.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.distributor.schedulerName }}
+      schedulerName: {{ .Values.distributor.schedulerName }}
       {{- end }}
       {{- if .Values.distributor.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.distributor.podSecurityContext "enabled" | toYaml | nindent 8 }}
@@ -95,11 +103,11 @@ spec:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.distributor.extraEnvVarsSecret "context" $) }}
             {{- end }}
           ports:
-            - containerPort: {{ .Values.tempo.containerPort }}
+            - containerPort: {{ .Values.tempo.containerPorts.web }}
               name: http
-            - containerPort: {{ .Values.tempo.gossipRing.containerPort }}
+            - containerPort: {{ .Values.tempo.containerPorts.gossipRing }}
               name: http-memberlist
-            - containerPort: {{ .Values.tempo.grpcContainerPort }}
+            - containerPort: {{ .Values.tempo.containerPorts.grpc }}
               name: grpc
             {{- if .Values.tempo.traces.jaeger.thriftCompact }}
             - containerPort: 6831
@@ -146,34 +154,31 @@ spec:
           {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.distributor.livenessProbe.enabled }}
-          livenessProbe:
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.distributor.livenessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /ready
-              port: http
-            initialDelaySeconds: {{ .Values.distributor.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.distributor.livenessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.distributor.livenessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.distributor.livenessProbe.successThreshold }}
-            failureThreshold: {{ .Values.distributor.livenessProbe.failureThreshold }}
+              port: {{ .Values.tempo.containerPorts.web }}
           {{- else if .Values.distributor.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.distributor.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.distributor.readinessProbe.enabled }}
-          readinessProbe:
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.distributor.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /ready
-              port: http
-            initialDelaySeconds: {{ .Values.distributor.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.distributor.readinessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.distributor.readinessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.distributor.readinessProbe.successThreshold }}
-            failureThreshold: {{ .Values.distributor.readinessProbe.failureThreshold }}
+              port: {{ .Values.tempo.containerPorts.web }}
           {{- else if .Values.distributor.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.distributor.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
+          {{- if .Values.distributor.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.distributor.startupProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: http
+          {{- else if .Values.distributor.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.distributor.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- end }}
           {{- if .Values.distributor.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.distributor.lifecycleHooks "context" $) | nindent 12 }}
-          {{- end }}
           {{- end }}
           volumeMounts:
             - name: tempo-config

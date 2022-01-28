@@ -1,8 +1,8 @@
+<!--- app-name: MariaDB -->
+
 # MariaDB
 
 [MariaDB](https://mariadb.org) is one of the most popular database servers in the world. It’s made by the original developers of MySQL and guaranteed to stay open source. Notable users include Wikipedia, Facebook and Google.
-
-MariaDB is developed as open source software and as a relational database it provides an SQL interface for accessing data. The latest versions of MariaDB also include GIS and JSON features.
 
 ## TL;DR
 
@@ -15,12 +15,14 @@ $ helm install my-release bitnami/mariadb
 
 This chart bootstraps a [MariaDB](https://github.com/bitnami/bitnami-docker-mariadb) replication cluster deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
+MariaDB is developed as open source software and as a relational database it provides an SQL interface for accessing data. The latest versions of MariaDB also include GIS and JSON features.
+
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This chart has been tested to work with NGINX Ingress, cert-manager, fluentd and Prometheus on top of the [BKPR](https://kubeprod.io/).
 
 ## Prerequisites
 
-- Kubernetes 1.12+
-- Helm 3.1.0
+- Kubernetes 1.19+
+- Helm 3.2.0+
 - PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
@@ -79,7 +81,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
 | `image.registry`           | MariaDB image registry                                                                                                                                                                                                                                                        | `docker.io`             |
 | `image.repository`         | MariaDB image repository                                                                                                                                                                                                                                                      | `bitnami/mariadb`       |
-| `image.tag`                | MariaDB image tag (immutable tags are recommended)                                                                                                                                                                                                                            | `10.5.13-debian-10-r18` |
+| `image.tag`                | MariaDB image tag (immutable tags are recommended)                                                                                                                                                                                                                            | `10.5.13-debian-10-r58` |
 | `image.pullPolicy`         | MariaDB image pull policy                                                                                                                                                                                                                                                     | `IfNotPresent`          |
 | `image.pullSecrets`        | Specify docker-registry secret names as an array                                                                                                                                                                                                                              | `[]`                    |
 | `image.debug`              | Specify if debug logs should be enabled                                                                                                                                                                                                                                       | `false`                 |
@@ -292,7 +294,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                     | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image repository                                                                   | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                                         | `10-debian-10-r265`     |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                                         | `10-debian-10-r305`     |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                  | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                     | `[]`                    |
 | `volumePermissions.resources.limits`   | Init container volume-permissions resource limits                                                                    | `{}`                    |
@@ -301,41 +303,45 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Metrics parameters
 
-| Name                                         | Description                                                                       | Value                     |
-| -------------------------------------------- | --------------------------------------------------------------------------------- | ------------------------- |
-| `metrics.enabled`                            | Start a side-car prometheus exporter                                              | `false`                   |
-| `metrics.image.registry`                     | Exporter image registry                                                           | `docker.io`               |
-| `metrics.image.repository`                   | Exporter image repository                                                         | `bitnami/mysqld-exporter` |
-| `metrics.image.tag`                          | Exporter image tag (immutable tags are recommended)                               | `0.13.0-debian-10-r169`   |
-| `metrics.image.pullPolicy`                   | Exporter image pull policy                                                        | `IfNotPresent`            |
-| `metrics.image.pullSecrets`                  | Specify docker-registry secret names as an array                                  | `[]`                      |
-| `metrics.annotations`                        | Annotations for the Exporter pod                                                  | `{}`                      |
-| `metrics.extraArgs`                          | Extra args to be passed to mysqld_exporter                                        | `{}`                      |
-| `metrics.containerSecurityContext.enabled`   | Enable security context for MariaDB metrics container                             | `false`                   |
-| `metrics.resources.limits`                   | The resources limits for MariaDB prometheus exporter containers                   | `{}`                      |
-| `metrics.resources.requests`                 | The requested resources for MariaDB prometheus exporter containers                | `{}`                      |
-| `metrics.livenessProbe.enabled`              | Enable livenessProbe                                                              | `true`                    |
-| `metrics.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                           | `120`                     |
-| `metrics.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                  | `10`                      |
-| `metrics.livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                 | `1`                       |
-| `metrics.livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                               | `3`                       |
-| `metrics.livenessProbe.successThreshold`     | Success threshold for livenessProbe                                               | `1`                       |
-| `metrics.readinessProbe.enabled`             | Enable readinessProbe                                                             | `true`                    |
-| `metrics.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                          | `30`                      |
-| `metrics.readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                 | `10`                      |
-| `metrics.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                | `1`                       |
-| `metrics.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                              | `3`                       |
-| `metrics.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                              | `1`                       |
-| `metrics.serviceMonitor.enabled`             | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator      | `false`                   |
-| `metrics.serviceMonitor.namespace`           | Namespace which Prometheus is running in                                          | `""`                      |
-| `metrics.serviceMonitor.jobLabel`            | The name of the label on the target service to use as the job name in prometheus. | `""`                      |
-| `metrics.serviceMonitor.interval`            | Interval at which metrics should be scraped                                       | `30s`                     |
-| `metrics.serviceMonitor.scrapeTimeout`       | Specify the timeout after which the scrape is ended                               | `""`                      |
-| `metrics.serviceMonitor.relabelings`         | RelabelConfigs to apply to samples before scraping                                | `[]`                      |
-| `metrics.serviceMonitor.metricRelabelings`   | MetricRelabelConfigs to apply to samples before ingestion                         | `[]`                      |
-| `metrics.serviceMonitor.honorLabels`         | honorLabels chooses the metric's labels on collisions with target labels          | `false`                   |
-| `metrics.serviceMonitor.selector`            | ServiceMonitor selector labels                                                    | `{}`                      |
-| `metrics.serviceMonitor.labels`              | Extra labels for the ServiceMonitor                                               | `{}`                      |
+| Name                                         | Description                                                                                                                               | Value                     |
+| -------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
+| `metrics.enabled`                            | Start a side-car prometheus exporter                                                                                                      | `false`                   |
+| `metrics.image.registry`                     | Exporter image registry                                                                                                                   | `docker.io`               |
+| `metrics.image.repository`                   | Exporter image repository                                                                                                                 | `bitnami/mysqld-exporter` |
+| `metrics.image.tag`                          | Exporter image tag (immutable tags are recommended)                                                                                       | `0.13.0-debian-10-r209`   |
+| `metrics.image.pullPolicy`                   | Exporter image pull policy                                                                                                                | `IfNotPresent`            |
+| `metrics.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                                          | `[]`                      |
+| `metrics.annotations`                        | Annotations for the Exporter pod                                                                                                          | `{}`                      |
+| `metrics.extraArgs`                          | Extra args to be passed to mysqld_exporter                                                                                                | `{}`                      |
+| `metrics.containerSecurityContext.enabled`   | Enable security context for MariaDB metrics container                                                                                     | `false`                   |
+| `metrics.resources.limits`                   | The resources limits for MariaDB prometheus exporter containers                                                                           | `{}`                      |
+| `metrics.resources.requests`                 | The requested resources for MariaDB prometheus exporter containers                                                                        | `{}`                      |
+| `metrics.livenessProbe.enabled`              | Enable livenessProbe                                                                                                                      | `true`                    |
+| `metrics.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                                                   | `120`                     |
+| `metrics.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                                                          | `10`                      |
+| `metrics.livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                                                                         | `1`                       |
+| `metrics.livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                                                                       | `3`                       |
+| `metrics.livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                                                                       | `1`                       |
+| `metrics.readinessProbe.enabled`             | Enable readinessProbe                                                                                                                     | `true`                    |
+| `metrics.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                                                                  | `30`                      |
+| `metrics.readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                                                                         | `10`                      |
+| `metrics.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                                                        | `1`                       |
+| `metrics.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                                                                      | `3`                       |
+| `metrics.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                                                      | `1`                       |
+| `metrics.serviceMonitor.enabled`             | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator                                                              | `false`                   |
+| `metrics.serviceMonitor.namespace`           | Namespace which Prometheus is running in                                                                                                  | `""`                      |
+| `metrics.serviceMonitor.jobLabel`            | The name of the label on the target service to use as the job name in prometheus.                                                         | `""`                      |
+| `metrics.serviceMonitor.interval`            | Interval at which metrics should be scraped                                                                                               | `30s`                     |
+| `metrics.serviceMonitor.scrapeTimeout`       | Specify the timeout after which the scrape is ended                                                                                       | `""`                      |
+| `metrics.serviceMonitor.relabelings`         | RelabelConfigs to apply to samples before scraping                                                                                        | `[]`                      |
+| `metrics.serviceMonitor.metricRelabelings`   | MetricRelabelConfigs to apply to samples before ingestion                                                                                 | `[]`                      |
+| `metrics.serviceMonitor.honorLabels`         | honorLabels chooses the metric's labels on collisions with target labels                                                                  | `false`                   |
+| `metrics.serviceMonitor.selector`            | ServiceMonitor selector labels                                                                                                            | `{}`                      |
+| `metrics.serviceMonitor.labels`              | Extra labels for the ServiceMonitor                                                                                                       | `{}`                      |
+| `metrics.prometheusRule.enabled`             | if `true`, creates a Prometheus Operator PrometheusRule (also requires `metrics.enabled` to be `true` and `metrics.prometheusRule.rules`) | `false`                   |
+| `metrics.prometheusRule.namespace`           | Namespace for the PrometheusRule Resource (defaults to the Release Namespace)                                                             | `""`                      |
+| `metrics.prometheusRule.additionalLabels`    | Additional labels that can be used so PrometheusRule will be discovered by Prometheus                                                     | `{}`                      |
+| `metrics.prometheusRule.rules`               | Prometheus Rule definitions                                                                                                               | `[]`                      |
 
 
 ### NetworkPolicy parameters
@@ -514,3 +520,19 @@ Use the workaround below to upgrade from versions previous to 5.0.0. The followi
 ```console
 $ kubectl delete statefulset opencart-mariadb --cascade=false
 ```
+
+## License
+
+Copyright &copy; 2022 Bitnami
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

@@ -1,7 +1,7 @@
 annotations:
   category: Infrastructure
 apiVersion: v2
-appVersion: 3.2.4
+appVersion: 3.2.7
 dependencies:
   - condition: postgresql.enabled
     name: postgresql
@@ -16,7 +16,7 @@ dependencies:
     tags:
       - bitnami-common
     version: 1.x.x
-description: Argo Workflows is meant to orchestrate Kubernetes jobs in parallel
+description: Argo Workflows is meant to orchestrate Kubernetes jobs in parallel. It uses DAG and step-based workflows
 engine: gotpl
 home: https://argoproj.github.io/workflows/
 icon: https://bitnami.com/assets/stacks/argo-workflow-cli/img/argo-workflow-cli-stack-220x234.png
@@ -35,4 +35,4 @@ sources:
   - https://github.com/bitnami/bitnami-docker-argo-workflow-controller
   - https://github.com/bitnami/bitnami-docker-argo-workflow-exec
   - https://argoproj.github.io/workflows/
-version: 0.1.9
+version: 0.2.3

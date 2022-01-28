@@ -1,3 +1,5 @@
+<!--- app-name: Wavefront Adapter for Istio -->
+
 # Wavefront Adapter for Istio
 
 [Wavefront Adapter for Istio](https://github.com/vmware/wavefront-adapter-for-istio/) is a lightweight Istio adapter that exposes Istio metrics to Wavefront.
@@ -18,8 +20,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 ## Prerequisites
 
-- Kubernetes 1.15+
-- Helm 3.1.0
+- Kubernetes 1.19+
+- Helm 3.2.0+
 - Istio v1.4, v1.5 and v1.6 with `Mixer` support
 
 In order to enable the `Mixer` in Istio versions starting from v1.5, execute the following commands:
@@ -81,7 +83,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------- |
 | `image.registry`                        | Adapter image registry                                                                    | `docker.io`                           |
 | `image.repository`                      | Adapter image repository                                                                  | `bitnami/wavefront-adapter-for-istio` |
-| `image.tag`                             | Adapter image tag (immutabe tags are recommended)                                         | `0.1.5-debian-10-r222`                |
+| `image.tag`                             | Adapter image tag (immutabe tags are recommended)                                         | `0.1.5-debian-10-r273`                |
 | `image.pullPolicy`                      | Adapter image pull policy                                                                 | `IfNotPresent`                        |
 | `image.pullSecrets`                     | Adapter image pull secrets                                                                | `[]`                                  |
 | `image.debug`                           | Enable image debug mode                                                                   | `false`                               |
@@ -217,3 +219,19 @@ $ helm upgrade my-release bitnami/wavefront-adapter-for-istio
 ### To 1.0.0
 
 This major updates the wavefront subchart to it newest major, 3.0.0, which contains a new major for kube-state-metrics. For more information on this subchart's major, please refer to [wavefront upgrade notes](https://github.com/bitnami/charts/tree/master/bitnami/wavefront#to-300).
+
+## License
+
+Copyright &copy; 2022 Bitnami
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

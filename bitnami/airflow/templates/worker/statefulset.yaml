@@ -197,4 +197,8 @@ spec:
       {{- if .Values.worker.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.worker.extraVolumes "context" $) | nindent 8 }}
       {{- end }}
+  volumeClaimTemplates:
+  {{- if .Values.worker.extraVolumeClaimTemplates }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.worker.extraVolumeClaimTemplates "context" $) | nindent 8 }}
+  {{- end }}
 {{- end }}

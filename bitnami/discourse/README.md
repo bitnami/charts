@@ -1,3 +1,5 @@
+<!--- app-name: Discourse(R) -->
+
 # Discourse&reg;
 
 [Discourse](https://www.discourse.org/) is an open source discussion platform. It can be used as a mailing list, discussion forum, long-form chat room, and more.
@@ -21,8 +23,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 ## Prerequisites
 
-- Kubernetes 1.12+
-- Helm 3.1.0
+- Kubernetes 1.19+
+- Helm 3.2.0+
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -92,7 +94,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ---------------------------------------------- | --------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`                               | Discourse image registry                                                                                  | `docker.io`           |
 | `image.repository`                             | Discourse image repository                                                                                | `bitnami/discourse`   |
-| `image.tag`                                    | Discourse image tag                                                                                       | `2.7.11-debian-10-r0` |
+| `image.tag`                                    | Discourse image tag                                                                                       | `2.7.13-debian-10-r0` |
 | `image.pullPolicy`                             | Discourse image pull policy                                                                               | `IfNotPresent`        |
 | `image.pullSecrets`                            | Discourse image pull secrets                                                                              | `[]`                  |
 | `image.debug`                                  | Specify if debug logs should be enabled                                                                   | `false`               |
@@ -660,3 +662,19 @@ Please, note this Helm chart is a community-supported solution. This means that 
 The Bitnami team will review any PR that is created, feel free to create a PR if you find any issue or want to implement a new feature.
 
 New versions are not going to be affected. Once a new version is released in the upstream project, the Bitnami container image will be updated to use the latest version.
+
+## License
+
+Copyright &copy; 2022 Bitnami
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

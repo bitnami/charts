@@ -142,7 +142,11 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
           {{- end }}
           ports:
+            {{- if .Values.security.ssl.enabled }}
+            - name: https
+            {{- else }}
             - name: http
+            {{- end }}
               containerPort: {{ .Values.master.webPort }}
               protocol: TCP
             - name: cluster
@@ -168,7 +172,7 @@ spec:
             {{- if .Values.metrics.enabled }}
             - name: SPARK_METRICS_ENABLED
               value: "true"
-            {{- end}}
+            {{- end }}
             - name: SPARK_DAEMON_MEMORY
               value: {{ .Values.master.daemonMemoryLimit | quote }}
             {{- if .Values.master.clusterPort }}

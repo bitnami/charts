@@ -152,8 +152,8 @@ spec:
             {{- if .Values.kubeResources.volumeattachments }}
             - --resources=volumeattachments
             {{- end }}
-            {{- if .Values.namespace }}
-            - --namespaces={{ .Values.namespaces }}
+            {{- if .Values.namespaces }}
+            - --namespaces={{- include "common.tplvalues.render" ( dict "value" .Values.namespaces "context" $ ) }}
             {{- end }}
             {{- range $key, $value := .Values.extraArgs }}
             {{- if $value }}

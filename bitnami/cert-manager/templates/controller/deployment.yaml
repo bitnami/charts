@@ -41,6 +41,12 @@ spec:
       {{- if .Values.controller.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.controller.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
+      {{- if .Values.controller.schedulerName }}
+      schedulerName: {{ .Values.controller.schedulerName }}
+      {{- end }}
+      {{- if .Values.controller.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.controller.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
       {{- if .Values.controller.priorityClassName }}
       priorityClassName: {{ .Values.controller.priorityClassName | quote }}
       {{- end }}
@@ -78,7 +84,11 @@ spec:
           {{- else }}
           args:
             - --v={{ .Values.logLevel }}
+          {{- if .Values.clusterResourceNamespace }}
+            - --cluster-resource-namespace={{ .Values.clusterResourceNamespace }}
+          {{- else }}
             - --cluster-resource-namespace=$(POD_NAMESPACE)
+          {{- end }}
             - --leader-election-namespace={{ .Values.leaderElection.namespace }}
             - --acme-http01-solver-image={{ template "certmanager.acmesolver.image" . }}
           {{- end }}
@@ -124,3 +134,9 @@ spec:
         {{- if .Values.controller.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.controller.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
+      {{- if .Values.controller.dnsPolicy }}
+      dnsPolicy: {{ .Values.controller.dnsPolicy }}
+      {{- end }}
+      {{- if .Values.controller.dnsConfig }}
+      dnsConfig: {{- include "common.tplvalues.render" (dict "value" .Values.controller.dnsConfig "context" $) | nindent 8 }}
+      {{- end }}

@@ -72,7 +72,7 @@ spec:
             - bash
             - -ec
             - |
-                {{- if (not (empty .Values.galera.bootstrap.bootstrapFromNode))}}
+                {{- if (not (empty .Values.galera.bootstrap.bootstrapFromNode)) }}
                 {{- $fullname := include "common.names.fullname" . }}
                 {{- $bootstrapFromNode := int .Values.galera.bootstrap.bootstrapFromNode }}
                 # Bootstrap from the indicated node
@@ -291,7 +291,7 @@ spec:
             {{- end }}
             {{- if or (.Files.Glob "files/my.cnf") .Values.mariadbConfiguration .Values.configurationConfigMap }}
             - name: mariadb-galera-config
-              mountPath: /opt/bitnami/mariadb/conf/my.cnf
+              mountPath: /bitnami/conf/my.cnf
               subPath: my.cnf
             {{- end }}
             {{- if .Values.tls.enabled }}

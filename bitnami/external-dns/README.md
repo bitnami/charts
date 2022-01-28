@@ -1,3 +1,5 @@
+<!--- app-name: ExternalDNS -->
+
 # external-dns
 
 [ExternalDNS](https://github.com/kubernetes-sigs/external-dns) is a Kubernetes addon that configures public DNS servers with information about exposed Kubernetes services to make them discoverable.
@@ -18,7 +20,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.19+
-- Helm 3.1.0
+- Helm 3.2.0+
 
 ## Installing the Chart
 
@@ -64,13 +66,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraDeploy`       | Array of extra objects to deploy with the release (evaluated as a template).                 | `[]`            |
 | `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)                         | `""`            |
 
+
 ### external-dns parameters
 
 | Name                                          | Description                                                                                                                                                                  | Value                     |
 | --------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
 | `image.registry`                              | ExternalDNS image registry                                                                                                                                                   | `docker.io`               |
 | `image.repository`                            | ExternalDNS image repository                                                                                                                                                 | `bitnami/external-dns`    |
-| `image.tag`                                   | ExternalDNS Image tag (immutable tags are recommended)                                                                                                                       | `0.10.1-debian-10-r33`    |
+| `image.tag`                                   | ExternalDNS Image tag (immutable tags are recommended)                                                                                                                       | `0.10.2-debian-10-r27`    |
 | `image.pullPolicy`                            | ExternalDNS image pull policy                                                                                                                                                | `IfNotPresent`            |
 | `image.pullSecrets`                           | ExternalDNS image pull secrets                                                                                                                                               | `[]`                      |
 | `hostAliases`                                 | Deployment pod host aliases                                                                                                                                                  | `[]`                      |
@@ -148,7 +151,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `google.serviceAccountSecret`                 | When using the Google provider, specify the existing secret which contains credentials.json (optional)                                                                       | `""`                      |
 | `google.serviceAccountSecretKey`              | When using the Google provider with an existing secret, specify the key name (optional)                                                                                      | `credentials.json`        |
 | `google.serviceAccountKey`                    | When using the Google provider, specify the service account key JSON file. In this case a new secret will be created holding this service account (optional)                 | `""`                      |
-| `google.zoneVisibility`                       | When using the Google provider, fiter for zones of a specific visibility (private or public)                 | `""`                      |
+| `google.zoneVisibility`                       | When using the Google provider, fiter for zones of a specific visibility (private or public)                                                                                 | `""`                      |
 | `hetzner.token`                               | When using the Hetzner provider, specify your token here. (required when `hetzner.secretName` is not provided. In this case a new secret will be created holding the token.) | `""`                      |
 | `hetzner.secretName`                          | When using the Hetzner provider, specify the existing secret which contains your token. Disables the usage of `hetzner.token` (optional)                                     | `""`                      |
 | `hetzner.secretKey`                           | When using the Hetzner provider with an existing secret, specify the key name (optional)                                                                                     | `hetzner_token`           |
@@ -258,7 +261,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `rbac.create`                                 | Whether to create & use RBAC resources or not                                                                                                                                | `true`                    |
 | `rbac.clusterRole`                            | Whether to create Cluster Role. When set to false creates a Role in `namespace`                                                                                              | `true`                    |
 | `rbac.apiVersion`                             | Version of the RBAC API                                                                                                                                                      | `v1`                      |
-| `rbac.pspEnabled`                             | PodSecurityPolicy                                                                                                                                                            | `false`                   |
+| `rbac.pspEnabled`                             | Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later                                  | `false`                   |
 | `containerSecurityContext`                    | Security context for the container                                                                                                                                           | `{}`                      |
 | `podSecurityContext.enabled`                  | Enable pod security context                                                                                                                                                  | `true`                    |
 | `podSecurityContext.fsGroup`                  | Group ID for the container                                                                                                                                                   | `1001`                    |
@@ -277,7 +280,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `readinessProbe.timeoutSeconds`               | Timeout seconds for readinessProbe                                                                                                                                           | `5`                       |
 | `readinessProbe.failureThreshold`             | Failure threshold for readinessProbe                                                                                                                                         | `6`                       |
 | `readinessProbe.successThreshold`             | Success threshold for readinessProbe                                                                                                                                         | `1`                       |
-| `startupProbe.enabled`                        | Enable startupProbe                                                                                                                                                          | `true`                    |
+| `startupProbe.enabled`                        | Enable startupProbe                                                                                                                                                          | `false`                   |
 | `startupProbe.initialDelaySeconds`            | Initial delay seconds for startupProbe                                                                                                                                       | `5`                       |
 | `startupProbe.periodSeconds`                  | Period seconds for startupProbe                                                                                                                                              | `10`                      |
 | `startupProbe.timeoutSeconds`                 | Timeout seconds for startupProbe                                                                                                                                             | `5`                       |
@@ -435,3 +438,19 @@ Other mayor changes included in this major version are:
   - `aws.credentialsPath` -> `aws.credentials.mountPath`
   - `designate.customCA.directory` -> `designate.customCA.mountPath`
 - Support to Prometheus metrics is added.
+
+## License
+
+Copyright &copy; 2022 Bitnami
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

@@ -35,7 +35,7 @@ spec:
   {{- end }}
   ports:
     - name: tcp-postgresql
-      port: {{ template "postgresql.port" . }}
+      port: {{ template "postgresql.servicePort" . }}
       targetPort: tcp-postgresql
       {{- if $serviceNodePort }}
       nodePort: {{ $serviceNodePort }}

@@ -1,3 +1,5 @@
+<!--- app-name: Kiam -->
+
 # kiam
 
 [kiam](https://github.com/uswitch/kiam) is a Kubernetes agent that allows to associate IAM roles to pods.
@@ -21,8 +23,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 ## Prerequisites
 
-- Kubernetes 1.12+ in AWS
-- Helm 3.1.0
+- Kubernetes 1.19+ in AWS
+- Helm 3.2.0+
 
 ## Installing the Chart
 
@@ -75,7 +77,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ------------------------------------------------ | ---------------------- |
 | `image.registry`    | kiam image registry                              | `docker.io`            |
 | `image.repository`  | kiam image name                                  | `bitnami/kiam`         |
-| `image.tag`         | kiam image tag                                   | `3.6.0-debian-10-r372` |
+| `image.tag`         | kiam image tag                                   | `3.6.0-debian-10-r415` |
 | `image.pullPolicy`  | kiam image pull policy                           | `IfNotPresent`         |
 | `image.pullSecrets` | Specify docker-registry secret names as an array | `[]`                   |
 
@@ -398,3 +400,19 @@ If managing TLS secrets outside of Helm, it is possible to create a TLS secret (
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+
+## License
+
+Copyright &copy; 2022 Bitnami
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

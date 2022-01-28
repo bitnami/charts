@@ -1,3 +1,5 @@
+<!--- app-name: HashiCorp Consul -->
+
 # HashiCorp Consul Helm Chart
 
 [HashiCorp Consul](https://www.consul.io/) has multiple components, but as a whole, it is a tool for discovering and configuring services in your infrastructure
@@ -17,8 +19,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 ## Prerequisites
 
-- Kubernetes 1.12+
-- Helm 3.1.0
+- Kubernetes 1.19+
+- Helm 3.2.0+
 - PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
@@ -76,38 +78,38 @@ $ helm delete --purge my-release
 
 ### HashiCorp Consul parameters
 
-| Name                        | Description                                                                                  | Value                  |
-| --------------------------- | -------------------------------------------------------------------------------------------- | ---------------------- |
-| `image.registry`            | HashiCorp Consul image registry                                                              | `docker.io`            |
-| `image.repository`          | HashiCorp Consul image repository                                                            | `bitnami/consul`       |
-| `image.tag`                 | HashiCorp Consul image tag (immutable tags are recommended)                                  | `1.10.4-debian-10-r16` |
-| `image.pullPolicy`          | HashiCorp Consul image pull policy                                                           | `IfNotPresent`         |
-| `image.pullSecrets`         | HashiCorp Consul image pull secrets                                                          | `[]`                   |
-| `image.debug`               | Enable image debug mode                                                                      | `false`                |
-| `datacenterName`            | Datacenter name for Consul. If not supplied, will use the Consul                             | `dc1`                  |
-| `domain`                    | Consul domain name                                                                           | `consul`               |
-| `raftMultiplier`            | Multiplier used to scale key Raft timing parameters                                          | `1`                    |
-| `gossipKey`                 | Gossip key for all members. The key must be 16-bytes, can be generated with $(consul keygen) | `""`                   |
-| `tlsEncryptionSecretName`   | Name of existing secret with TLS encryption data                                             | `""`                   |
-| `hostAliases`               | Deployment pod host aliases                                                                  | `[]`                   |
-| `configuration`             | HashiCorp Consul configuration to be injected as ConfigMap                                   | `""`                   |
-| `existingConfigmap`         | ConfigMap with HashiCorp Consul configuration                                                | `""`                   |
-| `localConfig`               | Extra configuration that will be added to the default one                                    | `""`                   |
-| `podLabels`                 | Pod labels                                                                                   | `{}`                   |
-| `priorityClassName`         | Priority class assigned to the Pods                                                          | `""`                   |
-| `schedulerName`             | Alternative scheduler                                                                        | `""`                   |
-| `topologySpreadConstraints` | Topology Spread Constraints for pod assignment                                               | `[]`                   |
-| `command`                   | Command for running the container (set to default if not set). Use array form                | `[]`                   |
-| `args`                      | Args for running the container (set to default if not set). Use array form                   | `[]`                   |
-| `extraEnvVars`              | Extra environment variables to be set on HashiCorp Consul container                          | `[]`                   |
-| `extraEnvVarsCM`            | Name of existing ConfigMap containing extra env vars                                         | `""`                   |
-| `extraEnvVarsSecret`        | Name of existing Secret containing extra env vars                                            | `""`                   |
-| `containerPorts.http`       | Port to open for HTTP in Consul                                                              | `8500`                 |
-| `containerPorts.dns`        | Port to open for DNS server in Consul                                                        | `8600`                 |
-| `containerPorts.rpc`        | Port to open for RPC in Consul                                                               | `8400`                 |
-| `containerPorts.rpcServer`  | Port to open for RPC Server in Consul                                                        | `8300`                 |
-| `containerPorts.serfLAN`    | Port to open for Serf LAN in Consul                                                          | `8301`                 |
-| `lifecycleHooks`            | Add lifecycle hooks to the deployment                                                        | `{}`                   |
+| Name                        | Description                                                                                  | Value                 |
+| --------------------------- | -------------------------------------------------------------------------------------------- | --------------------- |
+| `image.registry`            | HashiCorp Consul image registry                                                              | `docker.io`           |
+| `image.repository`          | HashiCorp Consul image repository                                                            | `bitnami/consul`      |
+| `image.tag`                 | HashiCorp Consul image tag (immutable tags are recommended)                                  | `1.11.2-debian-10-r0` |
+| `image.pullPolicy`          | HashiCorp Consul image pull policy                                                           | `IfNotPresent`        |
+| `image.pullSecrets`         | HashiCorp Consul image pull secrets                                                          | `[]`                  |
+| `image.debug`               | Enable image debug mode                                                                      | `false`               |
+| `datacenterName`            | Datacenter name for Consul. If not supplied, will use the Consul                             | `dc1`                 |
+| `domain`                    | Consul domain name                                                                           | `consul`              |
+| `raftMultiplier`            | Multiplier used to scale key Raft timing parameters                                          | `1`                   |
+| `gossipKey`                 | Gossip key for all members. The key must be 16-bytes, can be generated with $(consul keygen) | `""`                  |
+| `tlsEncryptionSecretName`   | Name of existing secret with TLS encryption data                                             | `""`                  |
+| `hostAliases`               | Deployment pod host aliases                                                                  | `[]`                  |
+| `configuration`             | HashiCorp Consul configuration to be injected as ConfigMap                                   | `""`                  |
+| `existingConfigmap`         | ConfigMap with HashiCorp Consul configuration                                                | `""`                  |
+| `localConfig`               | Extra configuration that will be added to the default one                                    | `""`                  |
+| `podLabels`                 | Pod labels                                                                                   | `{}`                  |
+| `priorityClassName`         | Priority class assigned to the Pods                                                          | `""`                  |
+| `schedulerName`             | Alternative scheduler                                                                        | `""`                  |
+| `topologySpreadConstraints` | Topology Spread Constraints for pod assignment                                               | `[]`                  |
+| `command`                   | Command for running the container (set to default if not set). Use array form                | `[]`                  |
+| `args`                      | Args for running the container (set to default if not set). Use array form                   | `[]`                  |
+| `extraEnvVars`              | Extra environment variables to be set on HashiCorp Consul container                          | `[]`                  |
+| `extraEnvVarsCM`            | Name of existing ConfigMap containing extra env vars                                         | `""`                  |
+| `extraEnvVarsSecret`        | Name of existing Secret containing extra env vars                                            | `""`                  |
+| `containerPorts.http`       | Port to open for HTTP in Consul                                                              | `8500`                |
+| `containerPorts.dns`        | Port to open for DNS server in Consul                                                        | `8600`                |
+| `containerPorts.rpc`        | Port to open for RPC in Consul                                                               | `8400`                |
+| `containerPorts.rpcServer`  | Port to open for RPC Server in Consul                                                        | `8300`                |
+| `containerPorts.serfLAN`    | Port to open for Serf LAN in Consul                                                          | `8301`                |
+| `lifecycleHooks`            | Add lifecycle hooks to the deployment                                                        | `{}`                  |
 
 
 ### Statefulset parameters
@@ -207,7 +209,7 @@ $ helm delete --purge my-release
 | `volumePermissions.enabled`            | Enable init container that changes the owner and group of the persistent volume | `false`                 |
 | `volumePermissions.image.registry`     | Bitnami Shell image registry                                                    | `docker.io`             |
 | `volumePermissions.image.repository`   | Bitnami Shell image repository                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Bitnami Shell image tag (immutable tags are recommended)                        | `10-debian-10-r264`     |
+| `volumePermissions.image.tag`          | Bitnami Shell image tag (immutable tags are recommended)                        | `10-debian-10-r307`     |
 | `volumePermissions.image.pullPolicy`   | Bitnami Shell image pull policy                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Bitnami Shell image pull secrets                                                | `[]`                    |
 | `volumePermissions.resources.limits`   | The resources limits for the container                                          | `{}`                    |
@@ -221,7 +223,7 @@ $ helm delete --purge my-release
 | `metrics.enabled`                          | Start a side-car prometheus exporter                                                                                        | `false`                   |
 | `metrics.image.registry`                   | HashiCorp Consul Prometheus Exporter image registry                                                                         | `docker.io`               |
 | `metrics.image.repository`                 | HashiCorp Consul Prometheus Exporter image repository                                                                       | `bitnami/consul-exporter` |
-| `metrics.image.tag`                        | HashiCorp Consul Prometheus Exporter image tag (immutable tags are recommended)                                             | `0.7.1-debian-10-r465`    |
+| `metrics.image.tag`                        | HashiCorp Consul Prometheus Exporter image tag (immutable tags are recommended)                                             | `0.7.1-debian-10-r508`    |
 | `metrics.image.pullPolicy`                 | HashiCorp Consul Prometheus Exporter image pull policy                                                                      | `IfNotPresent`            |
 | `metrics.image.pullSecrets`                | HashiCorp Consul Prometheus Exporter image pull secrets                                                                     | `[]`                      |
 | `metrics.service.type`                     | Kubernetes Service type                                                                                                     | `ClusterIP`               |
@@ -493,3 +495,19 @@ Use the workaround below to upgrade from versions previous to 2.0.0. The followi
 ```console
 $ kubectl delete statefulset consul --cascade=false
 ```
+
+## License
+
+Copyright &copy; 2022 Bitnami
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

@@ -1,3 +1,5 @@
+<!--- app-name: Redis(TM) Cluster -->
+
 
 # Redis&trade; Cluster Chart packaged by Bitnami
 
@@ -32,8 +34,8 @@ The main features of each chart are the following:
 
 ## Prerequisites
 
-- Kubernetes 1.12+
-- Helm 3.1.0
+- Kubernetes 1.19+
+- Helm 3.2.0+
 - PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
@@ -91,7 +93,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.args`                         | Args to override all containers in the deployment                                                                                                   | `["infinity"]`          |
 | `image.registry`                              | Redis&trade; cluster image registry                                                                                                                 | `docker.io`             |
 | `image.repository`                            | Redis&trade; cluster image repository                                                                                                               | `bitnami/redis-cluster` |
-| `image.tag`                                   | Redis&trade; cluster image tag (immutable tags are recommended)                                                                                     | `6.2.6-debian-10-r49`   |
+| `image.tag`                                   | Redis&trade; cluster image tag (immutable tags are recommended)                                                                                     | `6.2.6-debian-10-r95`   |
 | `image.pullPolicy`                            | Redis&trade; cluster image pull policy                                                                                                              | `IfNotPresent`          |
 | `image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                                                    | `[]`                    |
 | `image.debug`                                 | Enable image debug mode                                                                                                                             | `false`                 |
@@ -151,7 +153,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                   | Enable init container that changes volume permissions in the registry (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
 | `volumePermissions.image.registry`            | Init container volume-permissions image registry                                                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`          | Init container volume-permissions image repository                                                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Init container volume-permissions image tag                                                                                                         | `10-debian-10-r261`     |
+| `volumePermissions.image.tag`                 | Init container volume-permissions image tag                                                                                                         | `10-debian-10-r306`     |
 | `volumePermissions.image.pullPolicy`          | Init container volume-permissions image pull policy                                                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                                                                                    | `[]`                    |
 | `volumePermissions.resources.limits`          | The resources limits for the container                                                                                                              | `{}`                    |
@@ -275,7 +277,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                          | Start a side-car prometheus exporter                                                                                               | `false`                  |
 | `metrics.image.registry`                   | Redis&trade; exporter image registry                                                                                               | `docker.io`              |
 | `metrics.image.repository`                 | Redis&trade; exporter image name                                                                                                   | `bitnami/redis-exporter` |
-| `metrics.image.tag`                        | Redis&trade; exporter image tag                                                                                                    | `1.31.4-debian-10-r7`    |
+| `metrics.image.tag`                        | Redis&trade; exporter image tag                                                                                                    | `1.33.0-debian-10-r21`   |
 | `metrics.image.pullPolicy`                 | Redis&trade; exporter image pull policy                                                                                            | `IfNotPresent`           |
 | `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                                                                                   | `[]`                     |
 | `metrics.resources`                        | Metrics exporter resource requests and limits                                                                                      | `{}`                     |
@@ -301,6 +303,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.service.loadBalancerIP`           | Use serviceLoadBalancerIP to request a specific static IP, otherwise leave blank                                                   | `""`                     |
 | `metrics.service.annotations`              | Annotations for the services to monitor.                                                                                           | `{}`                     |
 | `metrics.service.labels`                   | Additional labels for the metrics service                                                                                          | `{}`                     |
+| `metrics.service.clusterIP`                | Service Cluster IP                                                                                                                 | `""`                     |
 
 
 ### Sysctl Image parameters
@@ -311,7 +314,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sysctlImage.command`            | sysctlImage command to execute                     | `[]`                    |
 | `sysctlImage.registry`           | sysctlImage Init container registry                | `docker.io`             |
 | `sysctlImage.repository`         | sysctlImage Init container repository              | `bitnami/bitnami-shell` |
-| `sysctlImage.tag`                | sysctlImage Init container tag                     | `10-debian-10-r261`     |
+| `sysctlImage.tag`                | sysctlImage Init container tag                     | `10-debian-10-r306`     |
 | `sysctlImage.pullPolicy`         | sysctlImage Init container pull policy             | `IfNotPresent`          |
 | `sysctlImage.pullSecrets`        | Specify docker-registry secret names as an array   | `[]`                    |
 | `sysctlImage.mountHostSys`       | Mount the host `/sys` folder to `/host-sys`        | `false`                 |
@@ -632,3 +635,19 @@ This version of the chart adapts the chart to the most recent Bitnami best pract
 ### To 2.0.0
 
 The version `1.0.0` was using a label in the Statefulset's volumeClaimTemplate that didn't allow to upgrade the chart. The version `2.0.0` fixed that issue. Also it adds more docs in the README.md.
+
+## License
+
+Copyright &copy; 2022 Bitnami
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

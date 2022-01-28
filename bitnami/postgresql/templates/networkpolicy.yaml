@@ -19,7 +19,7 @@ spec:
   ingress:
     # Allow inbound connections
     - ports:
-        - port: {{ template "postgresql.port" . }}
+        - port: {{ template "postgresql.servicePort" . }}
       {{- if not .Values.networkPolicy.allowExternal }}
       from:
         - podSelector:

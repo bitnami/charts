@@ -122,7 +122,7 @@ diagnosticMode:
 postgresqlImage:
   registry: docker.io
   repository: bitnami/postgresql-repmgr
-  tag: 11.14.0-debian-10-r12
+  tag: 11.14.0-debian-10-r59
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -576,7 +576,7 @@ postgresql:
 pgpoolImage:
   registry: docker.io
   repository: bitnami/pgpool
-  tag: 4.2.6-debian-10-r11
+  tag: 4.3.0-debian-10-r1
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -618,6 +618,9 @@ pgpool:
   ## The secret must contain the keys "usernames" and "passwords" respectively.
   ##
   customUsersSecret: ""
+  ## @param pgpool.existingSecret Pgpool admin password using existing secret
+  ##
+  existingSecret: ""
   ## @param pgpool.srCheckDatabase Name of the database to perform streaming replication checks
   ##
   srCheckDatabase: postgres
@@ -863,6 +866,14 @@ pgpool:
   ## ref: https://github.com/bitnami/bitnami-docker-pgpool#configuration
   ##
   numInitChildren: ""
+  ## @param pgpool.reservedConnections Number of reserved connections. When zero, excess connection block. When non-zero, excess connections are refused with an error message.
+  ## When this parameter is set to 1 or greater, incoming connections from clients are not accepted with error message
+  ## "Sorry, too many clients already", rather than blocked if the number of current connections from clients is more than
+  ## (num_init_children - reserved_connections).
+  ## ref: https://github.com/bitnami/bitnami-docker-pgpool#configuration
+  ##
+  reservedConnections: 1
+
   ## @param pgpool.maxPool The maximum number of cached connections in each child process (PGPOOL_MAX_POOL)
   ## ref: https://github.com/bitnami/bitnami-docker-pgpool#configuration
   ##
@@ -901,7 +912,7 @@ pgpool:
   ##   port = '5432'
   ##   ...
   ##
-  configuration: {}
+  configuration: ""
   ## @param pgpool.configurationCM ConfigMap with Pgpool configuration
   ## NOTE: This will override pgpool.configuration parameter
   ## The file used must be named `pgpool.conf`
@@ -996,7 +1007,7 @@ ldap:
 metricsImage:
   registry: docker.io
   repository: bitnami/postgres-exporter
-  tag: 0.10.0-debian-10-r133
+  tag: 0.10.0-debian-10-r176
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -1208,7 +1219,7 @@ metrics:
 volumePermissionsImage:
   registry: docker.io
   repository: bitnami/bitnami-shell
-  tag: 10-debian-10-r265
+  tag: 10-debian-10-r308
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##

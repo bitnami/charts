@@ -1,3 +1,5 @@
+<!--- app-name: Kubernetes Event Exporter -->
+
 # Kubernetes Event Exporter
 
 [Kubernetes Event Exporter](https://github.com/opsgenie/kubernetes-event-exporter) allows exporting the often missed Kubernetes events to various outputs so that they can be used for observability or alerting purposes.
@@ -15,8 +17,8 @@ This chart bootstraps a [Kubernetes Event Exporter](https://github.com/opsgenie/
 
 ## Prerequisites
 
-- Kubernetes 1.12+
-- Helm 3.1.0
+- Kubernetes 1.19+
+- Helm 3.2.0+
 
 ## Installing the Chart
 
@@ -69,7 +71,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `replicaCount`                                    | Desired number of pod replicas                                                            | `1`                                 |
 | `image.registry`                                  | Container image registry                                                                  | `docker.io`                         |
 | `image.repository`                                | Container image name                                                                      | `bitnami/kubernetes-event-exporter` |
-| `image.tag`                                       | Container image tag                                                                       | `0.11.0-debian-10-r0`               |
+| `image.tag`                                       | Container image tag                                                                       | `0.11.0-debian-10-r32`              |
 | `image.pullPolicy`                                | Container image pull policy                                                               | `IfNotPresent`                      |
 | `image.pullSecrets`                               | Specify docker-registry secret names as an array                                          | `[]`                                |
 | `hostAliases`                                     | Add deployment host aliases                                                               | `[]`                                |
@@ -129,3 +131,19 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+
+## License
+
+Copyright &copy; 2022 Bitnami
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

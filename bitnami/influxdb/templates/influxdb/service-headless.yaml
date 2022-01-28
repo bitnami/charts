@@ -9,18 +9,24 @@ metadata:
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
-  {{- if .Values.commonAnnotations }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- if or .Values.influxdb.service.annotations .Values.commonAnnotations }}
+  annotations:
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.influxdb.service.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.influxdb.service.annotations "context" $) | nindent 4 }}
+    {{- end }}
   {{- end }}
 spec:
   type: ClusterIP
   clusterIP: None
   ports:
-    - port: {{ .Values.influxdb.service.port }}
+    - port: {{ coalesce .Values.influxdb.service.ports.http .Values.influxdb.service.port }}
       targetPort: http
       protocol: TCP
       name: http
-    - port: {{ .Values.influxdb.service.rpcPort }}
+    - port: {{ coalesce .Values.influxdb.service.ports.rpc .Values.influxdb.service.rpcPort }}
       targetPort: rpc
       protocol: TCP
       name: rpc
