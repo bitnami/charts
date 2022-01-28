@@ -23,7 +23,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 You can choose any of the two Redis&trade; Helm charts for deploying a Redis&trade; cluster.
 
-1. [Redis&trade; Helm Chart](https://github.com/bitnami/charts/tree/master/bitnami/redis) will deploy a master-slave cluster, with the [option](https://github.com/bitnami/charts/tree/master/bitnami/redis#redistm-sentinel-configuration-parameters) of enabling using Redis&trade; Sentinel.
+1. [Redis&trade; Helm Chart](https://github.com/bitnami/charts/tree/master/bitnami/redis) will deploy a master-slave cluster, with the [option](https://github.com/bitnami/charts/tree/master/bitnami/redis#redis-sentinel-configuration-parameters) of enabling using Redis&trade; Sentinel.
 2. [Redis&trade; Cluster Helm Chart](https://github.com/bitnami/charts/tree/master/bitnami/redis-cluster) will deploy a Redis&trade; Cluster topology with sharding.
 
 The main features of each chart are the following:
