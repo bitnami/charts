@@ -1,8 +1,8 @@
-{{- if .Values.rbac.create }}
-kind: RoleBinding
-apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
+{{- if and .Values.primary.initdb.scripts (not .Values.primary.initdb.scriptsConfigMap) }}
+apiVersion: v1
+kind: ConfigMap
 metadata:
-  name: {{ include "common.names.fullname" . }}
+  name: {{ printf "%s-init-scripts" (include "postgresql.primary.fullname" .) }}
   namespace: {{ .Release.Namespace }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
@@ -11,12 +11,5 @@ metadata:
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
-roleRef:
-  kind: Role
-  name: {{ include "common.names.fullname" . }}
-  apiGroup: rbac.authorization.k8s.io
-subjects:
-  - kind: ServiceAccount
-    name: {{ include "postgresql.serviceAccountName" . }}
-    namespace: {{ .Release.Namespace }}
+data: {{- include "common.tplvalues.render" (dict "value" .Values.primary.initdb.scripts "context" .) | nindent 2 }}
 {{- end }}

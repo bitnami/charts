@@ -24,62 +24,60 @@ In order to replicate the container startup scripts execute this command:
 
 {{- else }}
 
-PostgreSQL can be accessed via port {{ template "postgresql.servicePort" . }} on the following DNS names from within your cluster:
+PostgreSQL can be accessed via port {{ include "postgresql.service.port" . }} on the following DNS names from within your cluster:
 
-    {{ template "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local - Read/Write connection
-{{- if .Values.replication.enabled }}
-{{- if .Values.replication.singleService }}
-    {{ template "common.names.fullname" . }}-read.{{ .Release.Namespace }}.svc.cluster.local - Read only connection
-{{- end }}
-{{- if .Values.replication.uniqueServices }}
-{{- $replicaCount := .Values.replication.readReplicas | int }}
-{{- $root := . }}
-{{- range $i, $e := until $replicaCount }}
-    {{ template "common.names.fullname" $root }}-read-{{ $i }}.{{ $root.Release.Namespace }}.svc.cluster.local - Read only connection to replica {{ $i }}
-{{- end }}
-{{- end }}
+    {{ include "postgresql.primary.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local - Read/Write connection
+
+{{- if eq .Values.architecture "replication" }}
+
+    {{ include "postgresql.readReplica.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local - Read only connection
+
 {{- end }}
 
-{{- if not (eq (include "postgresql.username" .) "postgres")  }}
+{{- $customUser := include "postgresql.username" . }}
+{{- if and (not (empty $customUser)) (ne $customUser "postgres") .Values.auth.enablePostgresUser }}
 
 To get the password for "postgres" run:
 
-    export POSTGRES_ADMIN_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "postgresql.secretName" . }} -o jsonpath="{.data.postgresql-postgres-password}" | base64 --decode)
+    export POSTGRES_ADMIN_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "postgresql.secretName" . }} -o jsonpath="{.data.postgres-password}" | base64 --decode)
+
+To get the password for "{{ $customUser }}" run:
+
+    export POSTGRES_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "postgresql.secretName" . }} -o jsonpath="{.data.password}" | base64 --decode)
+
+{{- else }}
+
+To get the password for "{{ default "postgres" $customUser }}" run:
+
+    export POSTGRES_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "postgresql.secretName" . }} -o jsonpath="{.data.{{ ternary "password" "postgres-password" (and (not (empty $customUser)) (ne $customUser "postgres")) }}}" | base64 --decode)
+
 {{- end }}
-
-To get the password for "{{ template "postgresql.username" . }}" run:
-
-    export POSTGRES_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "postgresql.secretName" . }} -o jsonpath="{.data.postgresql-password}" | base64 --decode)
 
 To connect to your database run the following command:
 
-    kubectl run {{ template "common.names.fullname" . }}-client --rm --tty -i --restart='Never' --namespace {{ .Release.Namespace }} --image {{ template "postgresql.image" . }} --env="PGPASSWORD=$POSTGRES_PASSWORD" {{- if and (.Values.networkPolicy.enabled) (not .Values.networkPolicy.allowExternal) }}
-   --labels="{{ template "common.names.fullname" . }}-client=true" {{- end }} --command -- psql --host {{ template "common.names.fullname" . }} -U {{ .Values.postgresqlUsername }} -d {{- if .Values.postgresqlDatabase }} {{ .Values.postgresqlDatabase }}{{- else }} postgres{{- end }} -p {{ template "postgresql.servicePort" . }}
-
-{{ if and (.Values.networkPolicy.enabled) (not .Values.networkPolicy.allowExternal) }}
-Note: Since NetworkPolicy is enabled, only pods with label {{ template "common.names.fullname" . }}-client=true" will be able to connect to this PostgreSQL cluster.
-{{- end }}
+    kubectl run {{ include "common.names.fullname" . }}-client --rm --tty -i --restart='Never' --namespace {{ .Release.Namespace }} --image {{ include "postgresql.image" . }} --env="PGPASSWORD=$POSTGRES_PASSWORD" \
+      --command -- psql --host {{ include "postgresql.primary.fullname" . }} -U {{ default "postgres" $customUser }} -d {{- if include "postgresql.database" . }} {{ include "postgresql.database" . }}{{- else }} postgres{{- end }} -p {{ include "postgresql.service.port" . }}
 
 To connect to your database from outside the cluster execute the following commands:
 
-{{- if contains "NodePort" .Values.service.type }}
+{{- if contains "NodePort" .Values.primary.service.type }}
 
     export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
-    export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "common.names.fullname" . }})
-    {{ if (include "postgresql.password" . )  }}PGPASSWORD="$POSTGRES_PASSWORD" {{ end }}psql --host $NODE_IP --port $NODE_PORT -U {{ .Values.postgresqlUsername }} -d {{- if .Values.postgresqlDatabase }} {{ .Values.postgresqlDatabase }}{{- else }} postgres{{- end }}
+    export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "postgresql.primary.fullname" . }})
+    PGPASSWORD="$POSTGRES_PASSWORD" psql --host $NODE_IP --port $NODE_PORT -U {{ default "postgres" $customUser }} -d {{- if include "postgresql.database" . }} {{ include "postgresql.database" . }}{{- else }} postgres{{- end }}
 
-{{- else if contains "LoadBalancer" .Values.service.type }}
+{{- else if contains "LoadBalancer" .Values.primary.service.type }}
 
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "common.names.fullname" . }}'
+        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ include "postgresql.primary.fullname" . }}'
 
-    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
-    {{ if (include "postgresql.password" . ) }}PGPASSWORD="$POSTGRES_PASSWORD" {{ end }}psql --host $SERVICE_IP --port {{ template "postgresql.servicePort" . }} -U {{ .Values.postgresqlUsername }} -d {{- if .Values.postgresqlDatabase }} {{ .Values.postgresqlDatabase }}{{- else }} postgres{{- end }}
+    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "postgresql.primary.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+    PGPASSWORD="$POSTGRES_PASSWORD" psql --host $SERVICE_IP --port {{ include "postgresql.service.port" . }} -U {{ default "postgres" $customUser }} -d {{- if include "postgresql.database" . }} {{ include "postgresql.database" . }}{{- else }} postgres{{- end }}
 
-{{- else if contains "ClusterIP" .Values.service.type }}
+{{- else if contains "ClusterIP" .Values.primary.service.type }}
 
-    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "common.names.fullname" . }} {{ template "postgresql.servicePort" . }}:{{ template "postgresql.servicePort" . }} &
-    {{ if (include "postgresql.password" . ) }}PGPASSWORD="$POSTGRES_PASSWORD" {{ end }}psql --host 127.0.0.1 -U {{ .Values.postgresqlUsername }} -d {{- if .Values.postgresqlDatabase }} {{ .Values.postgresqlDatabase }}{{- else }} postgres{{- end }} -p {{ template "postgresql.servicePort" . }}
+    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "postgresql.primary.fullname" . }} {{ include "postgresql.service.port" . }}:{{ include "postgresql.service.port" . }} &
+    PGPASSWORD="$POSTGRES_PASSWORD" psql --host 127.0.0.1 -U {{ default "postgres" $customUser }} -d {{- if include "postgresql.database" . }} {{ include "postgresql.database" . }}{{- else }} postgres{{- end }} -p {{ include "postgresql.service.port" . }}
 
 {{- end }}
 {{- end }}
