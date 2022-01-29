@@ -1205,7 +1205,7 @@ metrics:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-  ## @param metrics.command Override default metrics container command (useful when using custom images)
+  ## @param metrics.command Override default metrics container init command (useful when using custom images)
   ##
   command: []
   ## @param metrics.redisTargetHost A way to specify an alternative Redis&trade; hostname
