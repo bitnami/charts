@@ -1,11 +1,13 @@
-<!--- app-name: MongoDB(R) Sharded -->
+<!--- app-name: MongoDB(&reg;) Sharded -->
 
-# MongoDB&reg; Sharded packaged by Bitnami
+# MongoDB(R) Sharded packaged by Bitnami
 
-[MongoDB&reg; Sharded](https://www.mongodb.com/) is a cross-platform document-oriented database.
+MongoDB(R) is an open source NoSQL database that uses JSON for data storage. MongoDB(TM) Sharded improves scalability and reliability for large datasets by distributing data across multiple machines.
 
-Disclaimer: The respective trademarks mentioned in the offering are owned by the respective companies. We do not provide a commercial license for any of these products. This listing has an open-source license. MongoDB&reg;  is run and maintained by MongoDB, which is a completely separate project from Bitnami.
+[Overview of MongoDB(&reg;) Sharded](http://www.mongodb.org)
 
+Disclaimer: The respective trademarks mentioned in the offering are owned by the respective companies. We do not provide a commercial license for any of these products. This listing has an open-source license. MongoDB(R) is run and maintained by MongoDB, which is a completely separate project from Bitnami.
+                           
 ## TL;DR
 
 ```bash
@@ -342,10 +344,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                            | Start a side-car prometheus exporter                                               | `false`                    |
 | `metrics.image.registry`                     | MongoDB&reg; exporter image registry                                               | `docker.io`                |
 | `metrics.image.repository`                   | MongoDB&reg; exporter image name                                                   | `bitnami/mongodb-exporter` |
-| `metrics.image.tag`                          | MongoDB&reg; exporter image tag                                                    | `0.11.2-debian-10-r397`    |
+| `metrics.image.tag`                          | MongoDB&reg; exporter image tag                                                    | `0.30.0-debian-10-r53`     |
 | `metrics.image.pullPolicy`                   | MongoDB&reg; exporter image pull policy                                            | `Always`                   |
 | `metrics.image.pullSecrets`                  | MongoDB&reg; exporter image pull secrets                                           | `[]`                       |
-| `metrics.useTLS`                             | Whether to connect to MongoDB&reg; with TLS                                        | `false`                       |
+| `metrics.useTLS`                             | Whether to connect to MongoDB&reg; with TLS                                        | `false`                    |
 | `metrics.extraArgs`                          | String with extra arguments to the metrics exporter                                | `""`                       |
 | `metrics.resources`                          | Metrics exporter resource requests and limits                                      | `{}`                       |
 | `metrics.livenessProbe.enabled`              | Enable livenessProbe                                                               | `false`                    |
@@ -481,7 +483,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 
 ## Troubleshooting
 
-Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
 
@@ -492,6 +494,11 @@ $ helm upgrade my-release bitnami/mongodb-sharded --set mongodbRootPassword=[PAS
 ```
 
 > Note: you need to substitute the placeholders [PASSWORD] and [REPLICASETKEY] with the values obtained in the installation notes.
+
+### To 4.0.0
+
+In this version, the mongodb-exporter bundled as part of this Helm chart was updated to a new version which, even it is not a major change, can contain breaking changes (from `0.11.X` to `0.30.X`).
+Please visit the release notes from the upstream project at https://github.com/percona/mongodb_exporter/releases
 
 ### To 3.1.0
 

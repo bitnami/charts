@@ -1,8 +1,9 @@
 name: 'vib'
 on: # rebuild any PRs and main branch changes
-  pull_request:
+  pull_request_target:
     branches:
-      - vib 
+      - master
+      - bitnami:master
     types:
       - assigned 
       - opened 
@@ -19,6 +20,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          ref: ${{github.event.pull_request.head.ref}}
+          repository: ${{github.event.pull_request.head.repo.full_name}}
       - uses: vmware-samples/vmware-image-builder-examples/vib-action@main
 
   vib-k8s-verify: # verify in multiple target platforms
@@ -38,6 +42,9 @@ jobs:
     name: K8s verify ${{ matrix.target-platform}}
     steps:
       - uses: actions/checkout@v2
+        with:
+          ref: ${{github.event.pull_request.head.ref}}
+          repository: ${{github.event.pull_request.head.repo.full_name}}
       - uses: vmware-samples/vmware-image-builder-examples/vib-action@main
         with: 
           pipeline: vib-platform-verify.json

@@ -1,12 +1,12 @@
 dependencies:
 - name: postgresql
   repository: https://charts.bitnami.com/bitnami
-  version: 10.16.1
+  version: 10.16.2
 - name: mysql
   repository: https://charts.bitnami.com/bitnami
-  version: 8.8.21
+  version: 8.8.23
 - name: common
   repository: https://charts.bitnami.com/bitnami
-  version: 1.10.3
-digest: sha256:4ab8f33bc1d84d82bad21f730a793f6a9bc43945dec6bbb755868f0dd8f1ec86
-generated: "2022-01-18T12:47:54.92587094Z"
+  version: 1.10.4
+digest: sha256:db6191b7644160c0ac424b386840e875b162466f883678e8a7bd622dee56ea9e
+generated: "2022-01-28T03:53:41.80369135Z"

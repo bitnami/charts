@@ -1,9 +1,13 @@
 <!--- app-name: Prometheus Operator -->
 
-# kube-prometheus
+# Prometheus Operator packaged by Bitnami
 
-[kube-prometheus](https://github.com/prometheus-operator/kube-prometheus) collects Kubernetes manifests to provide easy to operate end-to-end Kubernetes cluster monitoring with Prometheus using the Prometheus Operator.
+Prometheus Operator provides easy monitoring definitions for Kubernetes services and deployment and management of Prometheus instances.
 
+[Overview of Prometheus Operator](https://github.com/coreos/prometheus-operator)
+
+Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
+                           
 ## TL;DR
 
 ```bash
@@ -434,7 +438,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `exporters.node-exporter.enabled`                         | Enable node-exporter                                                                                                            | `true`        |
 | `exporters.kube-state-metrics.enabled`                    | Enable kube-state-metrics                                                                                                       | `true`        |
 | `node-exporter`                                           | Node Exporter deployment configuration                                                                                          | `{}`          |
-| `kube-state-metrics`                                      | Node Exporter deployment configuration                                                                                          | `{}`          |
+| `kube-state-metrics`                                      | Kube State Metrics deployment configuration                                                                                          | `{}`          |
 | `kubelet.enabled`                                         | Create a ServiceMonitor to scrape kubelet service                                                                               | `true`        |
 | `kubelet.namespace`                                       | Namespace where kubelet service is deployed. Related configuration `operator.kubeletService.namespace`                          | `kube-system` |
 | `kubelet.serviceMonitor.https`                            | Enable scraping of the kubelet over HTTPS                                                                                       | `true`        |
@@ -562,7 +566,7 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 
 ## Troubleshooting
 
-Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
 

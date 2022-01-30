@@ -12,6 +12,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ template "common.names.fullname" $ }}-{{ $i }}-svc
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" $ | nindent 4 }}
     pod: {{ $targetPod }}
     {{- if $root.Values.commonLabels }}

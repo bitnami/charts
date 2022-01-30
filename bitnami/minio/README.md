@@ -1,11 +1,13 @@
-<!--- app-name: Bitnami Object Storage based on MinIO(R) -->
+<!--- app-name: Bitnami Object Storage based on MinIO(&reg;) -->
 
-# Bitnami Object Storage Helm Chart based on MinIO&reg;
+# Bitnami Object Storage based on MinIO(R)
 
-[MinIO&reg;](https://min.io) is an object storage server, compatible with Amazon S3 cloud storage service, mainly used for storing unstructured data (such as photos, videos, log files, etc.)
+MinIO(R) is an object storage server, compatible with Amazon S3 cloud storage service, mainly used for storing unstructured data (such as photos, videos, log files, etc.).
 
-Disclaimer: All software products, projects and company names are trademark&trade; or registered&reg; trademarks of their respective holders, and use of them does not imply any affiliation or endorsement. This software is licensed to you subject to one or more open source licenses and VMware provides the software on an AS-IS basis. MinIO&reg; is a registered trademark of the MinIO, Inc. in the US and other countries. Bitnami is not affiliated, associated, authorized, endorsed by, or in any way officially connected with MinIO, Inc. MinIO&reg; is licensed under GNU AGPL v3.0.
+[Overview of Bitnami Object Storage based on MinIO(&reg;)](https://min.io/)
 
+Disclaimer: All software products, projects and company names are trademark(TM) or registered(R) trademarks of their respective holders, and use of them does not imply any affiliation or endorsement. This software is licensed to you subject to one or more open source licenses and VMware provides the software on an AS-IS basis. MinIO(R) is a registered trademark of the MinIO Inc. in the US and other countries. Bitnami is not affiliated, associated, authorized, endorsed by, or in any way officially connected with MinIO Inc. MinIO(R) is licensed under GNU AGPL v3.0.
+                           
 ## TL;DR
 
 ```console
@@ -79,13 +81,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
 | `image.registry`           | MinIO&reg; image registry                                                                                                                                                                                 | `docker.io`             |
 | `image.repository`         | MinIO&reg; image repository                                                                                                                                                                               | `bitnami/minio`         |
-| `image.tag`                | MinIO&reg; image tag (immutable tags are recommended)                                                                                                                                                     | `2022.1.8-debian-10-r1` |
+| `image.tag`                | MinIO&reg; image tag (immutable tags are recommended)                                                                                                                                                     | `2022.1.8-debian-10-r7` |
 | `image.pullPolicy`         | Image pull policy                                                                                                                                                                                         | `IfNotPresent`          |
 | `image.pullSecrets`        | Specify docker-registry secret names as an array                                                                                                                                                          | `[]`                    |
 | `image.debug`              | Specify if debug logs should be enabled                                                                                                                                                                   | `false`                 |
 | `clientImage.registry`     | MinIO&reg; Client image registry                                                                                                                                                                          | `docker.io`             |
 | `clientImage.repository`   | MinIO&reg; Client image repository                                                                                                                                                                        | `bitnami/minio-client`  |
-| `clientImage.tag`          | MinIO&reg; Client image tag (immutable tags are recommended)                                                                                                                                              | `2022.1.7-debian-10-r1` |
+| `clientImage.tag`          | MinIO&reg; Client image tag (immutable tags are recommended)                                                                                                                                              | `2022.1.7-debian-10-r8` |
 | `mode`                     | MinIO&reg; server mode (`standalone` or `distributed`)                                                                                                                                                    | `standalone`            |
 | `auth.rootUser`            | MinIO&reg; root username                                                                                                                                                                                  | `admin`                 |
 | `auth.rootPassword`        | Password for MinIO&reg; root user                                                                                                                                                                         | `""`                    |
@@ -127,7 +129,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `provisioning.resources.requests`       | The requested resources for the container                                                                                                                                                     | `{}`            |
 | `provisioning.users`                    | MinIO&reg; users provisioning                                                                                                                                                                 | `[]`            |
 | `provisioning.groups`                   | MinIO&reg; groups provisioning                                                                                                                                                                | `[]`            |
-| `provisioning.buckets`                  | MinIO&reg; buckets, lifecycle, quota and tags provisioning                                                                                                                                    | `[]`            |
+| `provisioning.buckets`                  | MinIO&reg; buckets, versioning, lifecycle, quota and tags provisioning                                                                                                                        | `[]`            |
 | `provisioning.config`                   | MinIO&reg; config provisioning                                                                                                                                                                | `[]`            |
 | `hostAliases`                           | MinIO&reg; pod host aliases                                                                                                                                                                   | `[]`            |
 | `containerPorts.api`                    | MinIO&reg; container port to open for MinIO&reg; API                                                                                                                                          | `9000`          |
@@ -247,7 +249,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                                                     | `docker.io`             |
 | `volumePermissions.image.repository`                   | Init container volume-permissions image repository                                                                   | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)                                         | `10-debian-10-r305`     |
+| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)                                         | `10-debian-10-r313`     |
 | `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                                                                  | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                     | `[]`                    |
 | `volumePermissions.resources.limits`                   | Init container volume-permissions resource limits                                                                    | `{}`                    |

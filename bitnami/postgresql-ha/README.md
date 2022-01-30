@@ -221,6 +221,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `pgpool.passwords`                          | Comma or semicolon separated list of the associated passwords for the users above                                                        | `""`                 |
 | `pgpool.hostAliases`                        | Deployment pod host aliases                                                                                                              | `[]`                 |
 | `pgpool.customUsersSecret`                  | Name of a secret containing the usernames and passwords of accounts that will be added to pgpool_passwd                                  | `""`                 |
+| `pgpool.existingSecret`                     | Pgpool admin password using existing secret                                                                                              | `""`                 |
 | `pgpool.srCheckDatabase`                    | Name of the database to perform streaming replication checks                                                                             | `postgres`           |
 | `pgpool.labels`                             | Labels to add to the Deployment. Evaluated as template                                                                                   | `{}`                 |
 | `pgpool.podLabels`                          | Labels to add to the pods. Evaluated as template                                                                                         | `{}`                 |
