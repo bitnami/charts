@@ -6,7 +6,7 @@ dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
     version: 1.x.x
-description: Chart for PostgreSQL with HA architecture (using Replication Manager (repmgr) and Pgpool).
+description: This PostgreSQL cluster solution includes the PostgreSQL replication manager, an open-source tool for managing replication and failover on PostgreSQL clusters.
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha
 icon: https://bitnami.com/assets/stacks/postgresql/img/postgresql-stack-220x234.png
@@ -27,4 +27,4 @@ name: postgresql-ha
 sources:
   - https://github.com/bitnami/bitnami-docker-postgresql
   - https://www.postgresql.org/
-version: 8.2.7
+version: 8.2.8
