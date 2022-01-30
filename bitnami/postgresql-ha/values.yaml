@@ -122,7 +122,7 @@ diagnosticMode:
 postgresqlImage:
   registry: docker.io
   repository: bitnami/postgresql-repmgr
-  tag: 11.14.0-debian-10-r59
+  tag: 11.14.0-debian-10-r74
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -576,7 +576,7 @@ postgresql:
 pgpoolImage:
   registry: docker.io
   repository: bitnami/pgpool
-  tag: 4.3.0-debian-10-r1
+  tag: 4.3.0-debian-10-r17
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -1007,7 +1007,7 @@ ldap:
 metricsImage:
   registry: docker.io
   repository: bitnami/postgres-exporter
-  tag: 0.10.0-debian-10-r176
+  tag: 0.10.1-debian-10-r11
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -1219,7 +1219,7 @@ metrics:
 volumePermissionsImage:
   registry: docker.io
   repository: bitnami/bitnami-shell
-  tag: 10-debian-10-r308
+  tag: 10-debian-10-r323
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
