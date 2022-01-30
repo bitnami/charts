@@ -17,38 +17,18 @@ spec:
   ingressClassName: {{ .Values.prometheus.ingress.ingressClassName | quote }}
   {{- end }}
   rules:
-    {{- if .Values.prometheus.ingress.hostname }}
-    - host: {{ .Values.prometheus.ingress.hostname }}
+    {{- range .Values.prometheus.ingress.hosts }}
+    - host: {{ .name }}
       http:
         paths:
-          {{- if .Values.prometheus.ingress.extraPaths }}
-          {{- toYaml .Values.prometheus.ingress.extraPaths | nindent 10 }}
+        - path: {{ default "/" .path }}
+          {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
+          pathType: {{ default "ImplementationSpecific" .pathType }}
           {{- end }}
-          - path: {{ .Values.prometheus.ingress.path }}
-            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
-            pathType: {{ .Values.prometheus.ingress.pathType }}
-            {{- end }}
-            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "kube-prometheus.prometheus.fullname" $) "servicePort" "http" "context" $)  | nindent 14 }}
+          backend: {{- include "common.ingress.backend" (dict "serviceName" (include "kube-prometheus.prometheus.fullname" $) "servicePort" "http" "context" $) | nindent 14 }}
     {{- end }}
-    {{- range .Values.prometheus.ingress.extraHosts }}
-    - host: {{ .name | quote }}
-      http:
-        paths:
-          - path: {{ default "/" .path }}
-            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
-            pathType: {{ default "ImplementationSpecific" .pathType }}
-            {{- end }}
-            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "kube-prometheus.prometheus.fullname" $) "servicePort" "http" "context" $) | nindent 14 }}
-    {{- end }}
-  {{- if or .Values.prometheus.ingress.tls .Values.prometheus.ingress.extraTls }}
+  {{- if .Values.prometheus.ingress.tls }}
   tls:
-    {{- if .Values.prometheus.ingress.tls }}
-    - hosts:
-        - {{ .Values.prometheus.ingress.hostname }}
-      secretName: {{ printf "%s-tls" .Values.prometheus.ingress.hostname }}
-    {{- end }}
-    {{- if .Values.prometheus.ingress.extraTls }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.prometheus.ingress.extraTls "context" $ ) | nindent 4 }}
-    {{- end }}
+{{ toYaml .Values.prometheus.ingress.tls | indent 4 }}
   {{- end }}
-{{- end }}
+{{- end -}}
