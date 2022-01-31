@@ -17,7 +17,7 @@ $ helm install my-release bitnami/mongodb-sharded
 
 ## Introduction
 
-This chart bootstraps a [MongoDB&reg; Sharded](https://github.com/bitnami/bitnami-docker-mongodb-sharded) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [MongoDB(&reg;) Sharded](https://github.com/bitnami/bitnami-docker-mongodb-sharded) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Classified as a NoSQL database, MongoDB&reg; eschews the traditional table-based relational database structure in favor of JSON-like documents with dynamic schemas, making the integration of data in certain types of applications easier and faster.
 
@@ -78,14 +78,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]`  |
 
 
-### MongoDB&reg; Sharded parameters
+### MongoDB(&reg;) Sharded parameters
 
 | Name                                  | Description                                                                                                                                               | Value                     |
 | ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
-| `image.registry`                      | MongoDB&reg; Sharded image registry                                                                                                                       | `docker.io`               |
-| `image.repository`                    | MongoDB&reg; Sharded Image name                                                                                                                           | `bitnami/mongodb-sharded` |
-| `image.tag`                           | MongoDB&reg; Sharded image tag (immutable tags are recommended)                                                                                           | `4.4.11-debian-10-r6`     |
-| `image.pullPolicy`                    | MongoDB&reg; Sharded image pull policy                                                                                                                    | `IfNotPresent`            |
+| `image.registry`                      | MongoDB(&reg;) Sharded image registry                                                                                                                       | `docker.io`               |
+| `image.repository`                    | MongoDB(&reg;) Sharded Image name                                                                                                                           | `bitnami/mongodb-sharded` |
+| `image.tag`                           | MongoDB(&reg;) Sharded image tag (immutable tags are recommended)                                                                                           | `4.4.11-debian-10-r6`     |
+| `image.pullPolicy`                    | MongoDB(&reg;) Sharded image pull policy                                                                                                                    | `IfNotPresent`            |
 | `image.pullSecrets`                   | Specify docker-registry secret names as an array                                                                                                          | `[]`                      |
 | `image.debug`                         | Specify if debug logs should be enabled                                                                                                                   | `false`                   |
 | `mongodbRootPassword`                 | MongoDB&reg; root password                                                                                                                                | `""`                      |
@@ -483,7 +483,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 
 ## Troubleshooting
 
-Find more information about how to deal with common errors related to Bitnami���s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
 
