@@ -435,7 +435,7 @@ Refer to the [documentation on using an external database with WordPress](https:
 
 This chart provides support for using Memcached to cache database queries and objects improving the website performance. To enable this feature, set `wordpressConfigureCache` and `memcached.enabled` parameters to `true`.
 
-When this features is enabled, a Memcached server will be deployed in your K8s cluster using the Bitnami Memcached chart and the [W3 Total Cache](https://wordpress.org/plugins/w3-total-cache/) plugin will be activated and configured to use the Memcached server for database caching.
+When this feature is enabled, a Memcached server will be deployed in your K8s cluster using the Bitnami Memcached chart and the [W3 Total Cache](https://wordpress.org/plugins/w3-total-cache/) plugin will be activated and configured to use the Memcached server for database caching.
 
 It is also possible to use an external cache server rather than installing one inside your cluster. To achieve this, the chart allows you to specify credentials for an external cache server with the [`externalCache` parameter](#database-parameters). You should also disable the Memcached installation with the `memcached.enabled` option. Here is an example:
 
