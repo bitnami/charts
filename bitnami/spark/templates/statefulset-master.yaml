@@ -142,13 +142,15 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
           {{- end }}
           ports:
-            {{- if .Values.security.ssl.enabled }}
-            - name: https
-            {{- else }}
+            {{- if not .Values.security.ssl.enabled }}
             - name: http
-            {{- end }}
               containerPort: {{ .Values.master.webPort }}
               protocol: TCP
+            {{- else }}
+            - name: https
+              containerPort: {{ .Values.master.webPortHttps }}
+              protocol: TCP
+            {{- end }}
             - name: cluster
               containerPort: {{ .Values.master.clusterPort }}
           volumeMounts:
@@ -226,6 +228,8 @@ spec:
               value: {{ .Values.security.ssl.needClientAuth | quote }}
             - name: SPARK_SSL_PROTOCOL
               value: {{ .Values.security.ssl.protocol | quote }}
+            - name: SPARK_WEBUI_SSL_PORT
+              value: {{ .Values.master.webPortHttps | quote }}
             {{- end }}
             {{- if .Values.master.extraEnvVars }}
             {{- toYaml .Values.master.extraEnvVars | nindent 12 }}
