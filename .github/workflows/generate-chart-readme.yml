@@ -5,7 +5,7 @@ on:
     branches:
       - master
     paths:
-      - 'bitnami/**/values.yaml'
+      - 'bitnami/*/values.yaml'
 
 jobs:
   generate-chart-readme:
