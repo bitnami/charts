@@ -387,44 +387,10 @@ spec:
           {{- end }}
           command:
             - /bin/bash
-          args:
             - -ec
+          args:
             - |
-                #!/bin/bash
-
-                set -o errexit
-                set -o nounset
-                set -o pipefail
-
-                retry_while() {
-                    local cmd="${1:?cmd is missing}"
-                    local retries="${2:-12}"
-                    local sleep_time="${3:-5}"
-                    local return_value=1
-
-                    read -r -a command <<< "$cmd"
-                    for ((i = 1 ; i <= retries ; i+=1 )); do
-                        "${command[@]}" && return_value=0 && break
-                        sleep "$sleep_time"
-                    done
-                    return $return_value
-                }
-
-                check_mongodb_connection() {
-                  /bin/mongodb_exporter --test --web.listen-address ":{{ .Values.metrics.containerPort }}" --mongodb.uri "{{ include "mongodb.mongodb_exporter.uri" . }}" {{ .Values.metrics.extraFlags }} >/dev/null 2>&1
-                  ret=$?
-                  if [ $ret -ne 0 ]; then
-                    false
-                  fi
-                }
-
-                echo "Checking MongoDB connection..."
-                if ! retry_while "check_mongodb_connection"; then
-                    echo "Could not connect to the MongoDB server"
-                    return 1
-                else
-                    /bin/mongodb_exporter --web.listen-address ":{{ .Values.metrics.containerPort }}" --mongodb.uri "{{ include "mongodb.mongodb_exporter.uri" . }}" {{ .Values.metrics.extraFlags }}
-                fi
+              /bin/mongodb_exporter --web.listen-address ":{{ .Values.metrics.containerPort }}" --mongodb.uri "{{ include "mongodb.mongodb_exporter.uri" . }}" {{ .Values.metrics.extraFlags }}
           env:
           {{- if .Values.auth.enabled }}
           {{- if not .Values.metrics.username }}
