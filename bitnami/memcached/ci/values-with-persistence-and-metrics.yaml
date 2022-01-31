@@ -1,0 +1,10 @@
+# Test values file for generating hidden section of the yaml
+# and check that the rendering is correct
+architecture: high-availability
+replicaCount: 3
+persistence:
+  enabled: true
+metrics:
+  enabled: true
+  serviceMonitor:
+    enabled: true

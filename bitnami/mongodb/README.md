@@ -1,9 +1,13 @@
-# MongoDB&reg; packaged by Bitnami
+<!--- app-name: MongoDB(&reg;) -->
 
-[MongoDB&reg;](https://www.mongodb.com/) is a cross-platform document-oriented database. Classified as a NoSQL database, MongoDB&reg; eschews the traditional table-based relational database structure in favor of JSON-like documents with dynamic schemas, making the integration of data in certain types of applications easier and faster.
+# MongoDB(R) packaged by Bitnami
 
-Disclaimer: The respective trademarks mentioned in the offering are owned by the respective companies. We do not provide a commercial license for any of these products. This listing has an open-source license. MongoDB&reg;  is run and maintained by MongoDB, which is a completely separate project from Bitnami.
+MongoDB(R) is a relational open source NoSQL database. Easy to use, it stores data in JSON-like documents. Automated scalability and high-performance. Ideal for developing cloud native applications.
 
+[Overview of MongoDB(&reg;)](http://www.mongodb.org)
+
+Disclaimer: The respective trademarks mentioned in the offering are owned by the respective companies. We do not provide a commercial license for any of these products. This listing has an open-source license. MongoDB(R) is run and maintained by MongoDB, which is a completely separate project from Bitnami.
+                           
 ## TL;DR
 
 ```bash
@@ -19,8 +23,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 ## Prerequisites
 
-- Kubernetes 1.12+
-- Helm 3.1.0
+- Kubernetes 1.19+
+- Helm 3.2.0+
 - PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
@@ -89,7 +93,7 @@ Refer to the [chart documentation for more information on each of these architec
 | ---------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
 | `image.registry`       | MongoDB&reg; image registry                                                                                                   | `docker.io`            |
 | `image.repository`     | MongoDB&reg; image registry                                                                                                   | `bitnami/mongodb`      |
-| `image.tag`            | MongoDB&reg; image tag (immutable tags are recommended)                                                                       | `4.4.10-debian-10-r44` |
+| `image.tag`            | MongoDB&reg; image tag (immutable tags are recommended)                                                                       | `4.4.11-debian-10-r12` |
 | `image.pullPolicy`     | MongoDB&reg; image pull policy                                                                                                | `IfNotPresent`         |
 | `image.pullSecrets`    | Specify docker-registry secret names as an array                                                                              | `[]`                   |
 | `image.debug`          | Set to true if you would like to see extra information on logs                                                                | `false`                |
@@ -114,7 +118,7 @@ Refer to the [chart documentation for more information on each of these architec
 | `tls.caKey`            | CA certificate private key (base64 encoded)                                                                                   | `""`                   |
 | `tls.image.registry`   | Init container TLS certs setup image registry                                                                                 | `docker.io`            |
 | `tls.image.repository` | Init container TLS certs setup image repository                                                                               | `bitnami/nginx`        |
-| `tls.image.tag`        | Init container TLS certs setup image tag (immutable tags are recommended)                                                     | `1.21.4-debian-10-r25` |
+| `tls.image.tag`        | Init container TLS certs setup image tag (immutable tags are recommended)                                                     | `1.21.5-debian-10-r12` |
 | `tls.image.pullPolicy` | Init container TLS certs setup image pull policy                                                                              | `IfNotPresent`         |
 | `tls.extraDnsNames`    | Add extra dns names to the CA, can solve x509 auth issue for pod clients                                                      | `[]`                   |
 | `tls.mode`             | Allows to set the tls mode which should be used when tls is enabled (options: `allowTLS`, `preferTLS`, `requireTLS`)          | `requireTLS`           |
@@ -161,10 +165,10 @@ Refer to the [chart documentation for more information on each of these architec
 | `nodeAffinityPreset.type`               | MongoDB&reg; Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`            |
 | `nodeAffinityPreset.key`                | MongoDB&reg; Node label key to match Ignored if `affinity` is set.                                     | `""`            |
 | `nodeAffinityPreset.values`             | MongoDB&reg; Node label values to match. Ignored if `affinity` is set.                                 | `[]`            |
-| `topologySpreadConstraints`             | MongoDB&reg; Spread Constraints for Pods.                                                              | `[]`            |
 | `affinity`                              | MongoDB&reg; Affinity for pod assignment                                                               | `{}`            |
 | `nodeSelector`                          | MongoDB&reg; Node labels for pod assignment                                                            | `{}`            |
 | `tolerations`                           | MongoDB&reg; Tolerations for pod assignment                                                            | `[]`            |
+| `topologySpreadConstraints`             | MongoDB&reg; Spread Constraints for Pods                                                               | `[]`            |
 | `podLabels`                             | MongoDB&reg; pod labels                                                                                | `{}`            |
 | `podAnnotations`                        | MongoDB&reg; Pod annotations                                                                           | `{}`            |
 | `priorityClassName`                     | Name of the existing priority class to be used by MongoDB&reg; pod(s)                                  | `""`            |
@@ -209,42 +213,42 @@ Refer to the [chart documentation for more information on each of these architec
 
 ### Traffic exposure parameters
 
-| Name                                                     | Description                                                                                                                                   | Value                   |
-| -------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| `service.nameOverride`                                   | MongoDB&reg; service name                                                                                                                     | `""`                    |
-| `service.type`                                           | Kubernetes Service type                                                                                                                       | `ClusterIP`             |
-| `service.port`                                           | MongoDB&reg; service port                                                                                                                     | `27017`                 |
-| `service.portName`                                       | MongoDB&reg; service port name                                                                                                                | `mongodb`               |
-| `service.nodePort`                                       | Port to bind to for NodePort and LoadBalancer service types                                                                                   | `""`                    |
-| `service.clusterIP`                                      | MongoDB&reg; service cluster IP                                                                                                               | `""`                    |
-| `service.externalIPs`                                    | Specify the externalIP value ClusterIP service type.                                                                                          | `[]`                    |
-| `service.loadBalancerIP`                                 | loadBalancerIP for MongoDB&reg; Service                                                                                                       | `""`                    |
-| `service.loadBalancerSourceRanges`                       | Address(es) that are allowed when service is LoadBalancer                                                                                     | `[]`                    |
-| `service.annotations`                                    | Provide any additional annotations that may be required                                                                                       | `{}`                    |
-| `externalAccess.enabled`                                 | Enable Kubernetes external cluster access to MongoDB&reg; nodes (only for replicaset architecture)                                            | `false`                 |
-| `externalAccess.autoDiscovery.enabled`                   | Enable using an init container to auto-detect external IPs by querying the K8s API                                                            | `false`                 |
-| `externalAccess.autoDiscovery.image.registry`            | Init container auto-discovery image registry                                                                                                  | `docker.io`             |
-| `externalAccess.autoDiscovery.image.repository`          | Init container auto-discovery image repository                                                                                                | `bitnami/kubectl`       |
-| `externalAccess.autoDiscovery.image.tag`                 | Init container auto-discovery image tag (immutable tags are recommended)                                                                      | `1.19.16-debian-10-r30` |
-| `externalAccess.autoDiscovery.image.pullPolicy`          | Init container auto-discovery image pull policy                                                                                               | `IfNotPresent`          |
-| `externalAccess.autoDiscovery.image.pullSecrets`         | Init container auto-discovery image pull secrets                                                                                              | `[]`                    |
-| `externalAccess.autoDiscovery.resources.limits`          | Init container auto-discovery resource limits                                                                                                 | `{}`                    |
-| `externalAccess.autoDiscovery.resources.requests`        | Init container auto-discovery resource requests                                                                                               | `{}`                    |
-| `externalAccess.service.type`                            | Kubernetes Service type for external access. Allowed values: NodePort, LoadBalancer or ClusterIP                                              | `LoadBalancer`          |
-| `externalAccess.service.port`                            | MongoDB&reg; port used for external access when service type is LoadBalancer                                                                  | `27017`                 |
-| `externalAccess.service.loadBalancerIPs`                 | Array of load balancer IPs for MongoDB&reg; nodes                                                                                             | `[]`                    |
-| `externalAccess.service.loadBalancerSourceRanges`        | Address(es) that are allowed when service is LoadBalancer                                                                                     | `[]`                    |
-| `externalAccess.service.nodePorts`                       | Array of node ports used to configure MongoDB&reg; advertised hostname when service type is NodePort                                          | `[]`                    |
-| `externalAccess.service.domain`                          | Domain or external IP used to configure MongoDB&reg; advertised hostname when service type is NodePort                                        | `""`                    |
-| `externalAccess.service.annotations`                     | Service annotations for external access                                                                                                       | `{}`                    |
-| `externalAccess.hidden.enabled`                          | Enable Kubernetes external cluster access to MongoDB&reg; hidden nodes                                                                        | `false`                 |
-| `externalAccess.hidden.service.type`                     | Kubernetes Service type for external access. Allowed values: NodePort or LoadBalancer                                                         | `LoadBalancer`          |
-| `externalAccess.hidden.service.port`                     | MongoDB&reg; port used for external access when service type is LoadBalancer                                                                  | `27017`                 |
-| `externalAccess.hidden.service.loadBalancerIPs`          | Array of load balancer IPs for MongoDB&reg; nodes                                                                                             | `[]`                    |
-| `externalAccess.hidden.service.loadBalancerSourceRanges` | Address(es) that are allowed when service is LoadBalancer                                                                                     | `[]`                    |
-| `externalAccess.hidden.service.nodePorts`                | Array of node ports used to configure MongoDB&reg; advertised hostname when service type is NodePort. Length must be the same as replicaCount | `[]`                    |
-| `externalAccess.hidden.service.domain`                   | Domain or external IP used to configure MongoDB&reg; advertised hostname when service type is NodePort                                        | `""`                    |
-| `externalAccess.hidden.service.annotations`              | Service annotations for external access                                                                                                       | `{}`                    |
+| Name                                                     | Description                                                                                                                                   | Value                  |
+| -------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
+| `service.nameOverride`                                   | MongoDB&reg; service name                                                                                                                     | `""`                   |
+| `service.type`                                           | Kubernetes Service type                                                                                                                       | `ClusterIP`            |
+| `service.port`                                           | MongoDB&reg; service port                                                                                                                     | `27017`                |
+| `service.portName`                                       | MongoDB&reg; service port name                                                                                                                | `mongodb`              |
+| `service.nodePort`                                       | Port to bind to for NodePort and LoadBalancer service types                                                                                   | `""`                   |
+| `service.clusterIP`                                      | MongoDB&reg; service cluster IP                                                                                                               | `""`                   |
+| `service.externalIPs`                                    | Specify the externalIP value ClusterIP service type.                                                                                          | `[]`                   |
+| `service.loadBalancerIP`                                 | loadBalancerIP for MongoDB&reg; Service                                                                                                       | `""`                   |
+| `service.loadBalancerSourceRanges`                       | Address(es) that are allowed when service is LoadBalancer                                                                                     | `[]`                   |
+| `service.annotations`                                    | Provide any additional annotations that may be required                                                                                       | `{}`                   |
+| `externalAccess.enabled`                                 | Enable Kubernetes external cluster access to MongoDB&reg; nodes (only for replicaset architecture)                                            | `false`                |
+| `externalAccess.autoDiscovery.enabled`                   | Enable using an init container to auto-detect external IPs by querying the K8s API                                                            | `false`                |
+| `externalAccess.autoDiscovery.image.registry`            | Init container auto-discovery image registry                                                                                                  | `docker.io`            |
+| `externalAccess.autoDiscovery.image.repository`          | Init container auto-discovery image repository                                                                                                | `bitnami/kubectl`      |
+| `externalAccess.autoDiscovery.image.tag`                 | Init container auto-discovery image tag (immutable tags are recommended)                                                                      | `1.23.1-debian-10-r23` |
+| `externalAccess.autoDiscovery.image.pullPolicy`          | Init container auto-discovery image pull policy                                                                                               | `IfNotPresent`         |
+| `externalAccess.autoDiscovery.image.pullSecrets`         | Init container auto-discovery image pull secrets                                                                                              | `[]`                   |
+| `externalAccess.autoDiscovery.resources.limits`          | Init container auto-discovery resource limits                                                                                                 | `{}`                   |
+| `externalAccess.autoDiscovery.resources.requests`        | Init container auto-discovery resource requests                                                                                               | `{}`                   |
+| `externalAccess.service.type`                            | Kubernetes Service type for external access. Allowed values: NodePort, LoadBalancer or ClusterIP                                              | `LoadBalancer`         |
+| `externalAccess.service.port`                            | MongoDB&reg; port used for external access when service type is LoadBalancer                                                                  | `27017`                |
+| `externalAccess.service.loadBalancerIPs`                 | Array of load balancer IPs for MongoDB&reg; nodes                                                                                             | `[]`                   |
+| `externalAccess.service.loadBalancerSourceRanges`        | Address(es) that are allowed when service is LoadBalancer                                                                                     | `[]`                   |
+| `externalAccess.service.nodePorts`                       | Array of node ports used to configure MongoDB&reg; advertised hostname when service type is NodePort                                          | `[]`                   |
+| `externalAccess.service.domain`                          | Domain or external IP used to configure MongoDB&reg; advertised hostname when service type is NodePort                                        | `""`                   |
+| `externalAccess.service.annotations`                     | Service annotations for external access                                                                                                       | `{}`                   |
+| `externalAccess.hidden.enabled`                          | Enable Kubernetes external cluster access to MongoDB&reg; hidden nodes                                                                        | `false`                |
+| `externalAccess.hidden.service.type`                     | Kubernetes Service type for external access. Allowed values: NodePort or LoadBalancer                                                         | `LoadBalancer`         |
+| `externalAccess.hidden.service.port`                     | MongoDB&reg; port used for external access when service type is LoadBalancer                                                                  | `27017`                |
+| `externalAccess.hidden.service.loadBalancerIPs`          | Array of load balancer IPs for MongoDB&reg; nodes                                                                                             | `[]`                   |
+| `externalAccess.hidden.service.loadBalancerSourceRanges` | Address(es) that are allowed when service is LoadBalancer                                                                                     | `[]`                   |
+| `externalAccess.hidden.service.nodePorts`                | Array of node ports used to configure MongoDB&reg; advertised hostname when service type is NodePort. Length must be the same as replicaCount | `[]`                   |
+| `externalAccess.hidden.service.domain`                   | Domain or external IP used to configure MongoDB&reg; advertised hostname when service type is NodePort                                        | `""`                   |
+| `externalAccess.hidden.service.annotations`              | Service annotations for external access                                                                                                       | `{}`                   |
 
 
 ### Persistence parameters
@@ -287,7 +291,7 @@ Refer to the [chart documentation for more information on each of these architec
 | `volumePermissions.enabled`                   | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`            | Init container volume-permissions image registry                                                                     | `docker.io`             |
 | `volumePermissions.image.repository`          | Init container volume-permissions image repository                                                                   | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Init container volume-permissions image tag (immutable tags are recommended)                                         | `10-debian-10-r265`     |
+| `volumePermissions.image.tag`                 | Init container volume-permissions image tag (immutable tags are recommended)                                         | `10-debian-10-r304`     |
 | `volumePermissions.image.pullPolicy`          | Init container volume-permissions image pull policy                                                                  | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                                                     | `[]`                    |
 | `volumePermissions.resources.limits`          | Init container volume-permissions resource limits                                                                    | `{}`                    |
@@ -426,7 +430,7 @@ Refer to the [chart documentation for more information on each of these architec
 | `metrics.enabled`                            | Enable using a sidecar Prometheus exporter                                                                            | `false`                    |
 | `metrics.image.registry`                     | MongoDB&reg; Prometheus exporter image registry                                                                       | `docker.io`                |
 | `metrics.image.repository`                   | MongoDB&reg; Prometheus exporter image repository                                                                     | `bitnami/mongodb-exporter` |
-| `metrics.image.tag`                          | MongoDB&reg; Prometheus exporter image tag (immutable tags are recommended)                                           | `0.11.2-debian-10-r354`    |
+| `metrics.image.tag`                          | MongoDB&reg; Prometheus exporter image tag (immutable tags are recommended)                                           | `0.30.0-debian-10-r53`     |
 | `metrics.image.pullPolicy`                   | MongoDB&reg; Prometheus exporter image pull policy                                                                    | `IfNotPresent`             |
 | `metrics.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                      | `[]`                       |
 | `metrics.username`                           | String with username for the metrics exporter                                                                         | `""`                       |
@@ -556,7 +560,7 @@ As an alternative, you can use the preset configurations for pod affinity, pod a
 
 ## Troubleshooting
 
-Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
 
@@ -567,6 +571,11 @@ $ helm upgrade my-release bitnami/mongodb --set auth.rootPassword=[PASSWORD] (--
 ```
 
 > Note: you need to substitute the placeholders [PASSWORD] and [REPLICASETKEY] with the values obtained in the installation notes.
+
+### To 11.0.0
+
+In this version, the mongodb-exporter bundled as part of this Helm chart was updated to a new version which, even it is not a major change, can contain breaking changes (from `0.11.X` to `0.30.X`).
+Please visit the release notes from the upstream project at https://github.com/percona/mongodb_exporter/releases
 
 ### To 10.0.0
 

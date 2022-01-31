@@ -1,4 +1,4 @@
-{{- if .Values.tlsCerts }}
+{{- if .Values.config.tlsCerts }}
 apiVersion: v1
 kind: ConfigMap
 metadata:

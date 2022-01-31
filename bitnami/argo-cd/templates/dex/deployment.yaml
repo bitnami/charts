@@ -50,6 +50,12 @@ spec:
       {{- if .Values.dex.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.dex.tolerations "context" .) | nindent 8 }}
       {{- end }}
+      {{- if .Values.dex.schedulerName }}
+      schedulerName: {{ .Values.dex.schedulerName }}
+      {{- end }}
+      {{- if .Values.dex.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.controller.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
       {{- if .Values.dex.priorityClassName }}
       priorityClassName: {{ .Values.dex.priorityClassName | quote }}
       {{- end }}
@@ -150,6 +156,19 @@ spec:
             {{- end }}
           {{- if .Values.dex.resources }}
           resources: {{- toYaml .Values.dex.resources | nindent 12 }}
+          {{- end }}
+          {{- if .Values.dex.startupProbe.enabled }}
+          startupProbe:
+            httpGet:
+              path: /healthz
+              port: {{ .Values.dex.containerPorts.http }}
+            initialDelaySeconds: {{ .Values.dex.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.dex.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.dex.startupProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.dex.startupProbe.successThreshold }}
+            failureThreshold: {{ .Values.dex.startupProbe.failureThreshold }}
+          {{- else if .Values.dex.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.dex.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.dex.livenessProbe.enabled }}
           livenessProbe:

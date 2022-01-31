@@ -19,14 +19,23 @@ metadata:
   {{- end }}
 spec:
   type: {{ .Values.server.service.type }}
+  {{- if and .Values.server.service.clusterIP (eq .Values.server.service.type "ClusterIP") }}
+  clusterIP: {{ .Values.server.service.clusterIP }}
+  {{- end }}
   {{- if (or (eq .Values.server.service.type "LoadBalancer") (eq .Values.server.service.type "NodePort")) }}
   externalTrafficPolicy: {{ .Values.server.service.externalTrafficPolicy | quote }}
   {{- end }}
-  {{ if eq .Values.server.service.type "LoadBalancer" }}
+  {{- if eq .Values.server.service.type "LoadBalancer" }}
   loadBalancerSourceRanges: {{ .Values.server.service.loadBalancerSourceRanges }}
-  {{ end }}
+  {{- end }}
   {{- if (and (eq .Values.server.service.type "LoadBalancer") (not (empty .Values.server.service.loadBalancerIP))) }}
   loadBalancerIP: {{ .Values.server.service.loadBalancerIP }}
+  {{- end }}
+  {{- if .Values.server.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.server.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.server.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.server.service.sessionAffinityConfig "context" $) | nindent 4 }}
   {{- end }}
   ports:
     - name: http
@@ -48,5 +57,8 @@ spec:
       {{- else if eq .Values.server.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
+    {{- if .Values.server.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.server.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: server

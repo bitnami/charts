@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "common.names.fullname" . }}-server-block
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+data:
+  server-blocks-paths.conf: |-
+    include  "/opt/bitnami/nginx/conf/server_blocks/ldap/*.conf";
+    include  "/opt/bitnami/nginx/conf/server_blocks/common/*.conf";
+{{- if and .Values.serverBlock (not .Values.existingServerBlockConfigmap) }}
+  server-block.conf: |-
+{{ include "common.tplvalues.render" ( dict "value" .Values.serverBlock "context" $ ) | indent 4 }}
+{{- end }}

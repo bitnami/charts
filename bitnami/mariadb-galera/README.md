@@ -1,7 +1,13 @@
-# MariaDB Galera
+<!--- app-name: MariaDB Galera -->
 
-[MariaDB Galera](https://mariadb.com/kb/en/library/what-is-mariadb-galera-cluster/) is a multi-master database cluster solution for synchronous replication and high availability.
+# MariaDB Galera packaged by Bitnami
 
+MariaDB Galera is a multi-master database cluster solution for synchronous replication and high availability.
+
+[Overview of MariaDB Galera](https://mariadb.com/kb/en/library/galera-cluster/)
+
+Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
+                           
 ## TL;DR
 
 ```bash
@@ -18,7 +24,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.10+
-- Helm 3.1.0
+- Helm 3.2.0+
 - PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
@@ -101,7 +107,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.loadBalancerSourceRanges`          | Addresses that are allowed when svc is `LoadBalancer`                                                                                                                                         | `[]`                      |
 | `service.annotations`                       | Additional annotations for MariaDB Galera service                                                                                                                                             | `{}`                      |
 | `service.headless.annotations`              | Annotations for the headless service.                                                                                                                                                         | `{}`                      |
-| `service.headless.publishNotReadyAddresses` | Publish not Ready MariaDB Galera pods' IPs in the headless service.                                                                                                                           | `false`                   |
+| `service.headless.publishNotReadyAddresses` | Publish not Ready MariaDB Galera pods' IPs in the headless service.                                                                                                                           | `true`                    |
 | `serviceAccount.create`                     | Specify whether a ServiceAccount should be created                                                                                                                                            | `false`                   |
 | `serviceAccount.name`                       | The name of the ServiceAccount to create                                                                                                                                                      | `""`                      |
 | `extraEnvVars`                              | Array containing extra env vars to configure MariaDB Galera replicas                                                                                                                          | `[]`                      |
@@ -511,7 +517,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 
 ## Troubleshooting
 
-Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
 

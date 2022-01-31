@@ -32,8 +32,9 @@
 <!-- If there's anything else that's important and relevant to your pull
 request, mention that information here.-->
 
-**Checklist** 
+**Checklist**
 <!-- [Place an '[X]' (no spaces) in all applicable fields. Please remove unrelated fields.] -->
 - [ ] Chart version bumped in `Chart.yaml` according to [semver](http://semver.org/).
-- [ ] Variables are documented in the README.md
+- [ ] Variables are documented in the values.yaml and added to the README.md using (readme-generator-for-helm)[https://github.com/bitnami-labs/readme-generator-for-helm]
 - [ ] Title of the PR starts with chart name (e.g. [bitnami/<name_of_the_chart>])
+- [ ] All commits signed off and in agreement of [Developer Certificate of Origin (DCO)](https://github.com/bitnami/charts/blob/master/CONTRIBUTING.md#sign-your-work)
