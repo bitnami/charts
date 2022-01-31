@@ -314,7 +314,7 @@ For a complete walkthrough of the process using a custom application, refer to t
 
 Spark offers configuration to enable running Spark Master as reverse proxy for worker and application UIs. This can be useful as the Spark Master UI may otherwise use private IPv4 addresses for links to Spark workers and Spark apps.
 
-Coupled with a `ingress` options, you can set `master.configOptions` and `worker.configOptions` to tell Spark to reverse proxy the worker and application UIs to enable access without requiring direct access to their hosts:
+Coupled with `ingress` configuration, you can set `master.configOptions` and `worker.configOptions` to tell Spark to reverse proxy the worker and application UIs to enable access without requiring direct access to their hosts:
 
 ```yaml
 master:
