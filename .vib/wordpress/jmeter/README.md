@@ -42,7 +42,6 @@ $ HEAP="-Xms1g -Xmx1g -XX:MaxMetaspaceSize=256m" jmeter -n \
     -Jwordpress.password=ComplicatedPassword123!4
 ```
 You will see load test results in the `dist/` directory.
-
 # Development
 
 Use BlazeMeter browser extension to capture the HTTP requests and the values you need. Modify the recorded requests to fit your needs.
