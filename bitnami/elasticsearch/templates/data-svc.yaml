@@ -9,9 +9,9 @@ spec:
   type: ClusterIP
   publishNotReadyAddresses: true
   ports:
-    - name: http
+    - name: {{ if .Values.security.enabled }}https{{ else }}http{{ end }}
       port: 9200
-      targetPort: http
+      targetPort: {{ if .Values.security.enabled }}https{{ else }}http{{ end }}
     - name: tcp-transport
       port: 9300
       targetPort: transport

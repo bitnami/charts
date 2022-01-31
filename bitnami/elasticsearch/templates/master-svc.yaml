@@ -12,9 +12,9 @@ spec:
   {{- end }}
   publishNotReadyAddresses: true
   ports:
-    - name: http
+    - name: {{ if .Values.security.enabled }}https{{ else }}http{{ end }}
       port: 9200
-      targetPort: http
+      targetPort: {{ if .Values.security.enabled }}https{{ else }}http{{ end }}
     - name: tcp-transport
       port: {{ .Values.master.service.port }}
       targetPort: transport

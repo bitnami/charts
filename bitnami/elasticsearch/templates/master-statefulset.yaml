@@ -183,7 +183,7 @@ spec:
             {{- end }}
           {{- end }}
           ports:
-            - name: http
+            - name: {{ if .Values.security.enabled }}https{{ else }}http{{ end }}
               containerPort: 9200
             - name: transport
               containerPort: 9300
