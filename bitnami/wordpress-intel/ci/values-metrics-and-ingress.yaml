@@ -1,0 +1,9 @@
+ingress:
+  enabled: true
+  tls: true
+
+service:
+  type: ClusterIP
+
+metrics:
+  enabled: true
