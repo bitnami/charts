@@ -8,7 +8,7 @@ spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
-  serviceName: {{ template "common.names.fullname" . }}
+  serviceName: {{ printf "%s-headless" (include "common.names.fullname" .) }}
   updateStrategy:
     type: {{ .Values.updateStrategy.type }}
     {{- if (eq "Recreate" .Values.updateStrategy.type) }}
@@ -72,7 +72,7 @@ spec:
             - bash
             - -ec
             - |
-                {{- if (not (empty .Values.galera.bootstrap.bootstrapFromNode)) }}
+                {{- if .Values.galera.bootstrap.forceBootstrap }}
                 {{- $fullname := include "common.names.fullname" . }}
                 {{- $bootstrapFromNode := int .Values.galera.bootstrap.bootstrapFromNode }}
                 # Bootstrap from the indicated node
@@ -98,8 +98,16 @@ spec:
               value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
             - name: MARIADB_GALERA_CLUSTER_NAME
               value: {{ .Values.galera.name | quote }}
+
+            {{- $fullName := include "common.names.fullname" . }}
+            {{- $releaseName := .Release.Namespace }}
+            {{- $clusterDomain := .Values.clusterDomain }}
+            {{- $initialCluster := list }}
+            {{- range $e, $i := until (int .Values.replicaCount) }}
+            {{- $initialCluster = append $initialCluster (printf "%s-%d.%s-headless.%s.svc.%s" $fullName $i $fullName $releaseName $clusterDomain) }}
+            {{- end }}
             - name: MARIADB_GALERA_CLUSTER_ADDRESS
-              value: "gcomm://{{ template "common.names.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
+              value: {{ printf "gcomm://%s" (join "," $initialCluster) | quote }}
             - name: MARIADB_ROOT_USER
               value: {{ .Values.rootUser.user | quote }}
             {{- if .Values.usePasswordFiles }}

@@ -92,7 +92,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
 | `image.registry`                            | MariaDB Galera image registry                                                                                                                                                                 | `docker.io`               |
 | `image.repository`                          | MariaDB Galera image repository                                                                                                                                                               | `bitnami/mariadb-galera`  |
-| `image.tag`                                 | MariaDB Galera image tag (immutable tags are recommended)                                                                                                                                     | `10.6.5-debian-10-r35`    |
+| `image.tag`                                 | MariaDB Galera image tag (immutable tags are recommended)                                                                                                                                     | `10.6.5-debian-10-r55`    |
 | `image.pullPolicy`                          | MariaDB Galera image pull policy                                                                                                                                                              | `IfNotPresent`            |
 | `image.pullSecrets`                         | Specify docker-registry secret names as an array                                                                                                                                              | `[]`                      |
 | `image.debug`                               | Specify if debug logs should be enabled                                                                                                                                                       | `false`                   |
@@ -128,7 +128,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `db.name`                                   | Name for new database to create                                                                                                                                                               | `my_database`             |
 | `db.forcePassword`                          | Option to force users to specify a password. That is required for 'helm upgrade' to work properly.                                                                                            | `false`                   |
 | `galera.name`                               | Galera cluster name                                                                                                                                                                           | `galera`                  |
-| `galera.bootstrap.bootstrapFromNode`        | Node to bootstrap from, you will need to change this parameter in case you want to bootstrap from other node                                                                                  | `""`                      |
+| `galera.bootstrap.forceBootstrap`           | Option to force the boostraping from the indicated node in `galera.bootstarp.bootstrapFromNode`                                                                                               | `false`                   |
+| `galera.bootstrap.bootstrapFromNode`        | Node to bootstrap from, you will need to change this parameter in case you want to bootstrap from other node                                                                                  | `0`                       |
 | `galera.bootstrap.forceSafeToBootstrap`     | Force `safe_to_bootstrap: 1` in `grastate.date` file                                                                                                                                          | `false`                   |
 | `galera.mariabackup.user`                   | MariaBackup username                                                                                                                                                                          | `mariabackup`             |
 | `galera.mariabackup.password`               | MariaBackup password. Password is ignored if existingSecret is specified.                                                                                                                     | `""`                      |
@@ -208,7 +209,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                           | Start a side-car prometheus exporter                                                                                                                                                          | `false`                   |
 | `metrics.image.registry`                    | MariaDB Prometheus exporter image registry                                                                                                                                                    | `docker.io`               |
 | `metrics.image.repository`                  | MariaDB Prometheus exporter image repository                                                                                                                                                  | `bitnami/mysqld-exporter` |
-| `metrics.image.tag`                         | MariaDB Prometheus exporter image tag (immutable tags are recommended)                                                                                                                        | `0.13.0-debian-10-r191`   |
+| `metrics.image.tag`                         | MariaDB Prometheus exporter image tag (immutable tags are recommended)                                                                                                                        | `0.13.0-debian-10-r219`   |
 | `metrics.image.pullPolicy`                  | MariaDB Prometheus exporter image pull policy                                                                                                                                                 | `IfNotPresent`            |
 | `metrics.image.pullSecrets`                 | MariaDB Prometheus exporter image pull secrets                                                                                                                                                | `[]`                      |
 | `metrics.extraFlags`                        | MariaDB Prometheus exporter additional command line flags                                                                                                                                     | `[]`                      |
@@ -435,7 +436,7 @@ data-my-galera-mariadb-galera-2   Bound    pvc-61644bc9-2d7d-4e84-bf32-35e59d909
 The following command will print the content of `grastate.dat` for the persistent volume claim `data-my-galera-mariadb-galera-2`. This needs to be run for each of the pvc. You will need to change this name accordingly with yours for each PVC.
 
 ```bash
-kubectl run --generator=run-pod/v1 -i --rm --tty volpod --overrides='
+kubectl run -i --rm --tty volpod --overrides='
 {
     "apiVersion": "v1",
     "kind": "Pod",
@@ -478,7 +479,7 @@ safe_to_bootstrap: 1
 
 There are two possible scenarios:
 
-#### Only one node with `safe_to_bootstrap: 1`
+##### Only one node with `safe_to_bootstrap: 1`
 
 In this case you will need the node number `N` and run:
 
@@ -486,20 +487,33 @@ In this case you will need the node number `N` and run:
 helm install my-release bitnami/mariadb-galera \
 --set rootUser.password=XXXX \
 --set galera.mariabackup.password=YYYY \
+--set galera.bootstrap.forceBootstrap=true \
 --set galera.bootstrap.bootstrapFromNode=N \
 --set podManagementPolicy=Parallel
 ```
 
-#### All the nodes with `safe_to_bootstrap: 0`
+##### All the nodes with `safe_to_bootstrap: 0`
 
 In this case the cluster was not stopped cleanly and you need to pick one to force the bootstrap from. The one to be chosen in the one with the highest `seqno` in `/bitnami/mariadb/data/grastate.dat`. The following example shows how to force bootstrap from node 3.
 
 ```bash
 helm install my-release bitnami/mariadb-galera \
 --set rootUser.password=XXXX \
---set galera.mariabackup.password=YYYY
+--set galera.mariabackup.password=YYYY \
+--set galera.bootstrap.forceBootstrap=true \
 --set galera.bootstrap.bootstrapFromNode=3 \
 --set galera.bootstrap.forceSafeToBootstrap=true \
+--set podManagementPolicy=Parallel
+```
+
+#### Remove the forced boostraping
+
+After you have started the cluster by forcing the bootstraping on one of the nodes, you will need to remove the forcing so the node can restart with normality.
+
+```
+helm upgrade my-release bitnami/mariadb-galera \
+--set rootUser.password=XXXX \
+--set galera.mariabackup.password=YYYY \
 --set podManagementPolicy=Parallel
 ```
 
