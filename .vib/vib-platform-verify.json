@@ -74,7 +74,7 @@
               "path": "/.vib/wordpress/jmeter"
             },
             "config": {
-              "test_plan_file": ".vib/wordpress/jmeter/wordpress.jmx",
+              "test_plan_file": "/.vib/wordpress/jmeter/wordpress.jmx",
               "endpoint": "lb-wordpress-https",
               "app_protocol": "HTTPS",
               "env": {
