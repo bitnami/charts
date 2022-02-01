@@ -71,7 +71,7 @@
           "action_id": "jmeter",
           "params": {
             "config": {
-              "test_plan_file": "/.vib/wordpress/wordpress.jmx",
+              "test_plan_file": ".vib/wordpress/wordpress.jmx",
               "endpoint": "lb-wordpress-https",
               "app_protocol": "HTTPS",
               "env": {
