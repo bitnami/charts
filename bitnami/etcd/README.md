@@ -1,9 +1,13 @@
 <!--- app-name: Etcd -->
 
-# etcd
+# Etcd packaged by Bitnami
 
-[etcd](https://etcd.io/) is an object-relational database management system (ORDBMS) with an emphasis on extensibility and on standards-compliance.
+etcd is a distributed key-value store designed to securely store data across a cluster. etcd is widely used in production on account of its reliability, fault-tolerance and ease of use.
 
+[Overview of Etcd](https://coreos.com/etcd)
+
+Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
+                           
 ## TL;DR
 
 ```console
@@ -107,7 +111,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `auth.peer.certFilename`               | Name of the file containing the peer certificate                                                | `cert.pem`            |
 | `auth.peer.certKeyFilename`            | Name of the file containing the peer certificate private key                                    | `key.pem`             |
 | `auth.peer.caFilename`                 | Name of the file containing the peer CA certificate                                             | `""`                  |
-| `autoCompactionMode`                   | Auto compaction mode, by default periodic. Valid values: ‘periodic’, ‘revision’.                | `""`                  |
+| `autoCompactionMode`                   | Auto compaction mode, by default periodic. Valid values: ���periodic���, ���revision���.                | `""`                  |
 | `autoCompactionRetention`              | Auto compaction retention for mvcc key value store in hour, by default 0, means disabled        | `""`                  |
 | `initialClusterState`                  | Initial cluster state. Allowed values: 'new' or 'existing'                                      | `""`                  |
 | `maxProcs`                             | Limits the number of operating system threads that can execute user-level                       | `""`                  |
@@ -378,8 +382,8 @@ extraEnvVars:
 
 Since etcd keeps an exact history of its keyspace, this history should be periodically compacted to avoid performance degradation and eventual storage space exhaustion. Compacting the keyspace history drops all information about keys superseded prior to a given keyspace revision. The space used by these keys then becomes available for additional writes to the keyspace.
 
-`autoCompactionMode`, by default periodic. Valid values: ‘periodic’, ‘revision’.
-- 'periodic' for duration based retention, defaulting to hours if no time unit is provided (e.g. ‘5m’).
+`autoCompactionMode`, by default periodic. Valid values: ���periodic���, ���revision���.
+- 'periodic' for duration based retention, defaulting to hours if no time unit is provided (e.g. ���5m���).
 - 'revision' for revision number based retention.
 `autoCompactionRetention` for mvcc key value store in hour, by default 0, means disabled.
 
@@ -428,7 +432,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 
 ## Troubleshooting
 
-Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+Find more information about how to deal with common errors related to Bitnami���s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
 
