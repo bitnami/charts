@@ -8,12 +8,16 @@ metadata:
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
+    {{- if .Values.metrics.podMonitor.additionalLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.podMonitor.additionalLabels "context" $ ) | nindent 4 }}
+    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
+  {{- if .Values.metrics.podMonitor.podTargetLabels }}
   podTargetLabels: {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.podMonitor.podTargetLabels "context" $ ) | nindent 4 }}
+  {{- end }}
   podMetricsEndpoints:
 {{- range $key, $val := .Values.metrics.jmx.ports }}
     - port: {{ $key | quote }}
