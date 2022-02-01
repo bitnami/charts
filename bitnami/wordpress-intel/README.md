@@ -1,3 +1,5 @@
+<!--- app-name: WordPress for Intel -->
+
 # WordPress
 
 [WordPress](https://wordpress.org/) for Intel is the most popular blogging application combined with cryptography acceleration for 3rd gen Xeon Scalable Processors (Ice Lake) to get a breakthrough performance improvement.
