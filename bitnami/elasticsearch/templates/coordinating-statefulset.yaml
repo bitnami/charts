@@ -161,7 +161,7 @@ spec:
             {{- end }}
           {{- end }}
           ports:
-            - name: {{ if .Values.security.enabled }}https{{ else }}http{{ end }}
+            - name: {{ include "elasticsearch.httpPortName" . }}
               containerPort: 9200
             - name: transport
               containerPort: 9300

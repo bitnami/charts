@@ -9,9 +9,9 @@ spec:
   type: ClusterIP
   publishNotReadyAddresses: true
   ports:
-    - name: {{ if .Values.security.enabled }}https{{ else }}http{{ end }}
+    - name: {{ include "elasticsearch.httpPortName" . }}
       port: 9200
-      targetPort: {{ if .Values.security.enabled }}https{{ else }}http{{ end }}
+      targetPort: {{ include "elasticsearch.httpPortName" . }}
     - name: tcp-transport
       port: 9300
       targetPort: transport
