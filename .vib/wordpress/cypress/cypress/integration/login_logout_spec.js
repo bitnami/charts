@@ -28,7 +28,7 @@ describe('Login-logout test', () => {
       cy.get('#user_pass').type(user.password).should('have.value', user.password);
     })
     cy.get('#wp-submit').click();
-    cy.get('#login_error').should('contain.text', `Error: The password you entered for the username ${Cypress.env('username')} is incorrect. Lost your password?`);
+    cy.get('#login_error').should('be.visible');
   })
 
   it('allows to log out.', () => {
