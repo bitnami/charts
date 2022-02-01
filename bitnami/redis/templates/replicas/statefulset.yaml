@@ -257,6 +257,8 @@ spec:
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.metrics.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.command "context" $) | nindent 12 }}
           {{- else }}
           command:
             - /bin/bash
