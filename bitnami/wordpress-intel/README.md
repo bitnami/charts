@@ -1,9 +1,13 @@
 <!--- app-name: WordPress for Intel -->
 
-# WordPress
+# WordPress for Intel packaged by Bitnami
 
-[WordPress](https://wordpress.org/) for Intel is the most popular blogging application combined with cryptography acceleration for 3rd gen Xeon Scalable Processors (Ice Lake) to get a breakthrough performance improvement.
+WordPress for Intel is the most popular blogging application combined with cryptography acceleration for 3rd gen Xeon Scalable Processors (Ice Lake) to get a breakthrough performance improvement.
 
+[Overview of WordPress for Intel](http://www.wordpress.org/)
+
+Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
+                           
 ## TL;DR
 
 ```console
@@ -21,9 +25,9 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 ## Why use Intel optimized containers
 
-Encryption is becoming pervasive with most organizations increasingly adopting encryption for application execution, data in flight, and data storage. Intel® 3rd gen Xeon® Scalable Processor (Ice Lake) cores and architecture, offers several new instructions for encryption acceleration. These new instructions, coupled with algorithmic and software innovations, deliver breakthrough performance for the industry's most widely deployed cryptographic ciphers.
+Encryption is becoming pervasive with most organizations increasingly adopting encryption for application execution, data in flight, and data storage. Intel�� 3rd gen Xeon�� Scalable Processor (Ice Lake) cores and architecture, offers several new instructions for encryption acceleration. These new instructions, coupled with algorithmic and software innovations, deliver breakthrough performance for the industry's most widely deployed cryptographic ciphers.
 
-This solution accelerates the processing of the Transport Layer Security (TLS) significantly by using built-in Intel crypto acceleration included in the latest Intel 3rd gen Xeon Scalable Processor (Ice Lake). For more information, refer to [Intel’s documentation](https://software.intel.com/content/www/us/en/develop/articles/wordpress-tuning-guide-on-xeon-systems.html).
+This solution accelerates the processing of the Transport Layer Security (TLS) significantly by using built-in Intel crypto acceleration included in the latest Intel 3rd gen Xeon Scalable Processor (Ice Lake). For more information, refer to [Intel���s documentation](https://software.intel.com/content/www/us/en/develop/articles/wordpress-tuning-guide-on-xeon-systems.html).
 
 It requires a 3rd gen Xeon Scalable Processor (Ice Lake) to get a breakthrough performance improvement.
 
