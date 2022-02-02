@@ -183,7 +183,7 @@ spec:
             {{- end }}
           {{- end }}
           ports:
-            - name: http
+            - name: {{ include "elasticsearch.httpPortName" . }}
               containerPort: 9200
             - name: transport
               containerPort: 9300
