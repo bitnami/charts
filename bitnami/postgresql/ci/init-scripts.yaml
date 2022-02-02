@@ -1,0 +1,8 @@
+primary:
+  initdb:
+    args: --data-checksums
+    postgresqlWalDir: /bitnami/wal-dir/
+    scripts:
+      my_init_script.sh: |
+        #!/bin/sh
+        echo "Success"
