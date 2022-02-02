@@ -135,13 +135,3 @@ Return the SMTP Secret Name
     {{ default "default" .Values.serviceAccount.name }}
 {{- end -}}
 {{- end -}}
-
-{{/*
-Return true if cert-manager required annotations for TLS signed certificates are set in the Ingress annotations
-Ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
-*/}}
-{{- define "odoo.ingress.certManagerRequest" -}}
-{{ if or (hasKey . "cert-manager.io/cluster-issuer") (hasKey . "cert-manager.io/issuer") }}
-    {{- true -}}
-{{- end -}}
-{{- end -}}
