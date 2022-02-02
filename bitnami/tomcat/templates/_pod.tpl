@@ -135,10 +135,7 @@ containers:
       {{- if .Values.extraVolumeMounts }}
       {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 6 }}
       {{- end }}
-{{- if .Values.sidecars }}
-{{ include "common.tplvalues.render" ( dict "value" .Values.sidecars "context" $) }}
-{{- end }}
-{{- if .Values.metrics.jmx.enabled }}
+  {{- if .Values.metrics.jmx.enabled }}
   - name: jmx-exporter
     image: {{ template "tomcat.metrics.jmx.image" . }}
     imagePullPolicy: {{ .Values.metrics.jmx.image.pullPolicy | quote }}
@@ -163,7 +160,7 @@ containers:
     volumeMounts:
       - name: jmx-config
         mountPath: /etc/jmx-tomcat
-{{- end }}
+  {{- end }}
   {{- if .Values.sidecars }}
   {{- include "common.tplvalues.render" ( dict "value" .Values.sidecars "context" $) | nindent 2 }}
   {{- end }}
@@ -180,7 +177,7 @@ volumes:
   {{- end }}
   {{- if and .Values.metrics.jmx.enabled .Values.metrics.jmx.config (not .Values.metrics.jmx.existingConfigmap) }}
   - configMap:
-      name: {{ template "tomcat.fullname" . }}-jmx-configuration
+      name: {{ include "tomcat.metrics.jmx.configmapName" . }}
     name: jmx-config
   {{- end }}
   {{- if and .Values.metrics.jmx.enabled .Values.metrics.jmx.existingConfigmap }}
