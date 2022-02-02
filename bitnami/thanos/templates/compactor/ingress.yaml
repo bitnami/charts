@@ -41,9 +41,9 @@ spec:
             {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (printf "%s-%s"  (include "common.names.fullname" .) "compactor") "servicePort" "http" "context" $)  | nindent 14 }}
     {{- end }}
-  {{- if or (and .Values.compactor.ingress.tls (or (include "thanos.ingress.certManagerRequest" .Values.compactor.ingress.annotations) .Values.compactor.ingress.selfSigned)) .Values.compactor.ingress.extraTls }}
+  {{- if or (and .Values.compactor.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.compactor.ingress.annotations )) .Values.compactor.ingress.selfSigned)) .Values.compactor.ingress.extraTls }}
   tls:
-    {{- if and .Values.compactor.ingress.tls (or (include "thanos.ingress.certManagerRequest" .Values.compactor.ingress.annotations) .Values.compactor.ingress.selfSigned) }}
+    {{- if and .Values.compactor.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.compactor.ingress.annotations )) .Values.compactor.ingress.selfSigned) }}
     - hosts:
         - {{ .Values.compactor.ingress.hostname }}
       secretName: {{ printf "%s-tls" .Values.compactor.ingress.hostname }}
