@@ -1,12 +1,8 @@
 /// <reference types="cypress" />
-describe('Admin page', () => {
+describe('Edit page ', () => {
 
   beforeEach(() => {
-    cy.visit('/wp-login.php')
-    cy.wait(500)
-    cy.get('#user_login').type(Cypress.env('username')).should('have.value', Cypress.env('username'));
-    cy.get('#user_pass').type(Cypress.env('password')).should('have.value', Cypress.env('password'));
-    cy.get('#wp-submit').click();
+    cy.login();
     cy.visit('/wp-admin/index.php')
   })
 
