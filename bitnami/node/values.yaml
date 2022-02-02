@@ -36,6 +36,9 @@ commonAnnotations: {}
 
 ## @section Node parameters
 
+## @param installCommand Override default container install command (useful when using custom images or repositories)
+##
+installCommand: ['/bin/bash', '-ec', 'npm install']
 ## @param command Override default container command (useful when using custom images)
 ##
 command: ['/bin/bash', '-ec', 'npm start']

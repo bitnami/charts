@@ -77,6 +77,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                                    | Description                                                                                                          | Value                             |
 | --------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | --------------------------------- |
+| `installCommand`                        | Override default container install command (useful when using custom images or repositories)                         | `["/bin/bash","-ec","npm install"]` |
 | `command`                               | Override default container command (useful when using custom images)                                                 | `["/bin/bash","-ec","npm start"]` |
 | `args`                                  | Override default container args (useful when using custom images)                                                    | `[]`                              |
 | `hostAliases`                           | Deployment pod host aliases                                                                                          | `[]`                              |
