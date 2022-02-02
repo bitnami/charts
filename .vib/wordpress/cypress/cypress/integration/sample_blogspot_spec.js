@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 describe('Hello World post', () => {
-  
+
   beforeEach(() => {
     cy.visit('/')
   })
@@ -30,6 +30,7 @@ describe('Hello World post', () => {
     cy.fixture('helloworld').then((hw) => {
       cy.get('#comment').type(hw.comment).should('have.value', hw.comment);
     })
+
     cy.fixture('user').then((user) => {
       cy.get('#author').type(user.username).should('have.value', user.username);
       cy.get('#email').type(user.email).should('have.value', user.email);
