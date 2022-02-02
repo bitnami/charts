@@ -173,6 +173,10 @@ spec:
                 secretKeyRef:
                   name: {{ template "rabbitmq.secretErlangName" . }}
                   key: rabbitmq-erlang-cookie
+            {{- if and .Values.clustering.rebalance (gt (.Values.replicaCount | int) 1) }}
+            - name: RABBITMQ_CLUSTER_REBALANCE
+              value: "true"
+            {{- end }}
             {{- if .Values.loadDefinition.enabled }}
             - name: RABBITMQ_LOAD_DEFINITIONS
               value: "yes"
@@ -268,19 +272,6 @@ spec:
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           lifecycle:
-          {{- if and .Values.clustering.rebalance (gt (.Values.replicaCount | int) 1) }}
-            postStart:
-              exec:
-                command:
-                  - /bin/bash
-                  - -ec
-                  - |
-                    until rabbitmqctl cluster_status >/dev/null; do
-                        echo "Waiting for cluster readiness..."
-                        sleep 5
-                    done
-                    rabbitmq-queues rebalance "all"
-          {{- end }}
             preStop:
               exec:
                 command:
