@@ -509,6 +509,25 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 To modify the application version used in this chart, specify a different version of the image using the `image.tag` parameter and/or a different repository using the `image.repository` parameter. Refer to the [chart documentation for more information on these parameters and how to use them with images from a private registry](https://docs.bitnami.com/kubernetes/infrastructure/redis/configuration/change-image-version/).
 
+### Bootstrapping with an External Cluster
+
+This chart is equipped with the ability to bring online a set of Pods that connect to an existing Redis deployment that lies outside of Kubernetes.  This effectively creates a hybrid Redis Deployment where both Pods in Kubernetes and Instances such as Virtual Machines can partake in a single Redis Deployment. This is helpful in situations where one may be migrating Redis from Virtual Machines into Kubernetes, for example.  To take advantage of this, use the following as an example configuration:
+
+```yaml
+replica:
+  externalMaster:
+    enabled: true
+    host: external-redis-0.internal
+sentinel:
+  externalMaster:
+    enabled: true
+    host: external-redis-0.internal
+```
+
+:warning: This is currently limited to clusters in which Sentinel and Redis run on the same node! :warning:
+
+Once the Kubernetes Redis Deployment is online and confirmed to be working with the existing cluster, the configuration can then be removed and the cluster will remain connected.
+
 ### External DNS
 
 This chart is equipped to allow leveraging the ExternalDNS project. Doing so will enable ExternalDNS to publish the FQDN for each instance, in the format of `<pod-name>.<release-name>.<dns-suffix>`.
