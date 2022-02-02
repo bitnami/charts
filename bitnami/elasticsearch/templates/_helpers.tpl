@@ -351,6 +351,17 @@ Return the Elasticsearch TLS password secret name
 {{- end -}}
 
 {{/*
+Return the name of the http port. Whether or not security is enabeld: http or https
+*/}}
+{{- define "elasticsearch.httpPortName" -}}
+{{- if .Values.security.enabled }}
+    {{- "https" -}}
+{{- else -}}
+    {{- "http" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Add environment variables to configure database values
 */}}
 {{- define "elasticsearch.configure.security" -}}
