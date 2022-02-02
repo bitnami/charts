@@ -1,9 +1,0 @@
-apiVersion: v1
-kind: Secret
-metadata:
-  name: mariadb-galera-sec
-type: Opaque
-data:
-  mariadb-root-password: bXlSb290UGFzc3dvcmQK
-  mariadb-password: bXlEYlBhc3N3b3JkCg==
-  mariadb-galera-mariabackup-password: bXlCYWNrdXBQYXNzd29yZAo=

@@ -8,7 +8,7 @@ spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
-  serviceName: {{ printf "%s-headless" (include "common.names.fullname" .) }}
+  serviceName: {{ printf "%s-headless" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   updateStrategy:
     type: {{ .Values.updateStrategy.type }}
     {{- if (eq "Recreate" .Values.updateStrategy.type) }}
@@ -98,7 +98,6 @@ spec:
               value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
             - name: MARIADB_GALERA_CLUSTER_NAME
               value: {{ .Values.galera.name | quote }}
-
             {{- $fullName := include "common.names.fullname" . }}
             {{- $releaseName := .Release.Namespace }}
             {{- $clusterDomain := .Values.clusterDomain }}
