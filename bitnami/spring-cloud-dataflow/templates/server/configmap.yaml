@@ -70,6 +70,9 @@ data:
                     {{- if .Values.deployer.imagePullSecrets }}
                     imagePullSecrets: {{- toYaml .Values.deployer.imagePullSecrets | nindent 22 }}
                     {{- end }}
+                    {{- if .Values.deployer.secretRefs }}
+                    secretRefs: {{- toYaml .Values.deployer.secretRefs | nindent 22 }}
+                    {{- end }}
           {{- end }}
           {{- if .Values.server.configuration.containerRegistries }}
           container:

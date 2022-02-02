@@ -187,17 +187,6 @@ Return the Redis secret name
 {{- end -}}
 
 {{/*
-Return true if cert-manager required annotations for TLS signed certificates are set in the Ingress annotations
-Ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
-*/}}
-{{- define "kubeapps.ingress.certManagerRequest" -}}
-{{ if or (hasKey . "cert-manager.io/cluster-issuer") (hasKey . "cert-manager.io/issuer") }}
-    {{- true -}}
-{{- end -}}
-{{- end -}}
-
-
-{{/*
 Compile all warnings into a single message, and call fail.
 */}}
 {{- define "kubeapps.validateValues" -}}
@@ -215,7 +204,7 @@ Compile all warnings into a single message, and call fail.
 Validate values of Kubeapps - TLS configuration for Ingress
 */}}
 {{- define "kubeapps.validateValues.ingress.tls" -}}
-{{- if and .Values.ingress.enabled .Values.ingress.tls (not (include "kubeapps.ingress.certManagerRequest" .Values.ingress.annotations)) (not .Values.ingress.selfSigned) (empty .Values.ingress.extraTls) }}
+{{- if and .Values.ingress.enabled .Values.ingress.tls (not (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.ingress.annotations ))) (not .Values.ingress.selfSigned) (empty .Values.ingress.extraTls) }}
 kubeapps: ingress.tls
     You enabled the TLS configuration for the default ingress hostname but
     you did not enable any of the available mechanisms to create the TLS secret

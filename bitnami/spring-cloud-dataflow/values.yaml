@@ -987,6 +987,10 @@ deployer:
   ##
   imagePullSecrets: []
 
+  ## @param deployer.secretRefs Streaming applications secretRefs
+  ##
+  secretRefs: []
+
 ## @section RBAC parameters
 
 ## K8s Service Account.

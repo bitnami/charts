@@ -13,9 +13,9 @@ spec:
   {{- end }}
   publishNotReadyAddresses: true
   ports:
-    - name: http
+    - name: {{ include "elasticsearch.httpPortName" . }}
       port: 9200
-      targetPort: http
+      targetPort: {{ include "elasticsearch.httpPortName" . }}
     - name: tcp-transport
       port: {{ .Values.ingest.service.port }}
       targetPort: transport
