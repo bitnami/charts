@@ -98,7 +98,7 @@ kubectl delete pvc -l release=my-release
 | ------------------------------------ | -------------------------------------------------------------------------------------------------------------------- | -------------------------- |
 | `image.registry`                     | PostgreSQL image registry                                                                                            | `docker.io`                |
 | `image.repository`                   | PostgreSQL image repository                                                                                          | `bitnami/postgresql`       |
-| `image.tag`                          | PostgreSQL image tag (immutable tags are recommended)                                                                | `14.1.0-debian-10-r76`     |
+| `image.tag`                          | PostgreSQL image tag (immutable tags are recommended)                                                                | `14.1.0-debian-10-r80`     |
 | `image.pullPolicy`                   | PostgreSQL image pull policy                                                                                         | `IfNotPresent`             |
 | `image.pullSecrets`                  | Specify image pull secrets                                                                                           | `[]`                       |
 | `image.debug`                        | Specify if debug values should be set                                                                                | `false`                    |
@@ -160,7 +160,7 @@ kubectl delete pvc -l release=my-release
 | `primary.existingConfigmap`                  | Name of an existing ConfigMap with PostgreSQL Primary configuration                                                      | `""`                  |
 | `primary.extendedConfiguration`              | Extended PostgreSQL Primary configuration (appended to main or default configuration)                                    | `""`                  |
 | `primary.existingExtendedConfigmap`          | Name of an existing ConfigMap with PostgreSQL Primary extended configuration                                             | `""`                  |
-| `primary.initdb.args`                        | PostgreSQL initdb extra arguments                                                                                        | `nil`                 |
+| `primary.initdb.args`                        | PostgreSQL initdb extra arguments                                                                                        | `""`                  |
 | `primary.initdb.postgresqlWalDir`            | Specify a custom location for the PostgreSQL transaction log                                                             | `""`                  |
 | `primary.initdb.scripts`                     | Dictionary of initdb scripts                                                                                             | `{}`                  |
 | `primary.initdb.scriptsConfigMap`            | ConfigMap with scripts to be run at first boot                                                                           | `""`                  |
@@ -359,7 +359,7 @@ kubectl delete pvc -l release=my-release
 | `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume | `false`                 |
 | `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                | `docker.io`             |
 | `volumePermissions.image.repository`                   | Init container volume-permissions image repository                              | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)    | `10-debian-10-r312`     |
+| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)    | `10-debian-10-r327`     |
 | `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                             | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Init container volume-permissions image pull secrets                            | `[]`                    |
 | `volumePermissions.resources.limits`                   | Init container volume-permissions resource limits                               | `{}`                    |
@@ -387,7 +387,7 @@ kubectl delete pvc -l release=my-release
 | `metrics.enabled`                               | Start a prometheus exporter                                                           | `false`                     |
 | `metrics.image.registry`                        | PostgreSQL Prometheus Exporter image registry                                         | `docker.io`                 |
 | `metrics.image.repository`                      | PostgreSQL Prometheus Exporter image repository                                       | `bitnami/postgres-exporter` |
-| `metrics.image.tag`                             | PostgreSQL Prometheus Exporter image tag (immutable tags are recommended)             | `0.10.0-debian-10-r172`     |
+| `metrics.image.tag`                             | PostgreSQL Prometheus Exporter image tag (immutable tags are recommended)             | `0.10.1-debian-10-r14`      |
 | `metrics.image.pullPolicy`                      | PostgreSQL Prometheus Exporter image pull policy                                      | `IfNotPresent`              |
 | `metrics.image.pullSecrets`                     | Specify image pull secrets                                                            | `[]`                        |
 | `metrics.customMetrics`                         | Define additional custom metrics                                                      | `{}`                        |
