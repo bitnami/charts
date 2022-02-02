@@ -298,7 +298,7 @@ primary:
   initdb:
     ## @param primary.initdb.args PostgreSQL initdb extra arguments
     ##
-    args:
+    args: ""
     ## @param primary.initdb.postgresqlWalDir Specify a custom location for the PostgreSQL transaction log
     ##
     postgresqlWalDir: ""
