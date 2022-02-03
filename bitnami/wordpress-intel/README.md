@@ -448,7 +448,6 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
-
 ## Bitnami Kubernetes Documentation
 
 Bitnami Kubernetes documentation is available at [https://docs.bitnami.com/](https://docs.bitnami.com/). You can find there the following resources:
@@ -474,4 +473,3 @@ You may obtain a copy of the License at
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
     See the License for the specific language governing permissions and
     limitations under the License.
-
