@@ -175,14 +175,9 @@ volumes:
     emptyDir: {}
   {{- end }}
   {{- end }}
-  {{- if and .Values.metrics.jmx.enabled .Values.metrics.jmx.config (not .Values.metrics.jmx.existingConfigmap) }}
+  {{- if and .Values.metrics.jmx.enabled (or .Values.metrics.jmx.config .Values.metrics.jmx.existingConfigmap) }}
   - configMap:
       name: {{ include "tomcat.metrics.jmx.configmapName" . }}
-    name: jmx-config
-  {{- end }}
-  {{- if and .Values.metrics.jmx.enabled .Values.metrics.jmx.existingConfigmap }}
-  - configMap:
-      name: {{ .Values.metrics.jmx.existingConfigmap | quote }}
     name: jmx-config
   {{- end }}
   {{- if .Values.extraVolumes }}
