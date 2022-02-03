@@ -108,18 +108,18 @@ service:
   ## clusterIP: None
   ##
   clusterIP: ""
-  ## @param service.ports MariaDB service ports
+  ## @param service.ports.mysql MariaDB service port
   ##
   ports:
     mysql: 3306
-  ## @param service.nodePorts Specify the nodePort value for the LoadBalancer and NodePort service types.
+  ## @param service.nodePorts.mysql Specify the nodePort value for the LoadBalancer and NodePort service types.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ## e.g:
   ## nodePort:
-  ##    galera: 30001
+  ##    mysql: 30001
   ##
   nodePorts:
-    galera: ""
+    mysql: ""
   ## @param service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
   ##
   extraPorts: []
@@ -167,10 +167,10 @@ serviceAccount:
   name: ""
   automountServiceAccountToken: true
   annotations: {}
-## @param aggregator.command Override default container command (useful when using custom images)
+## @param command Override default container command (useful when using custom images)
 ##
 command: []
-## @param aggregator.args Override default container args (useful when using custom images)
+## @param args Override default container args (useful when using custom images)
 ##
 args: []
 ## @param extraEnvVars Array containing extra env vars to configure MariaDB Galera replicas
@@ -565,12 +565,12 @@ lifecycleHooks: {}
 ## Galera container port
 ## @param containerPorts.mysql mariadb database container port
 ## @param containerPorts.galera galera cluster container port
-## @param containerPorts.galera galera IST container port
-## @param containerPorts.galera galera SST container port
+## @param containerPorts.ist galera IST container port
+## @param containerPorts.sst galera SST container port
 ##
 containerPorts:
   mysql: 3306
-  # TODO: Container image is not aware if the following container's ports
+  # Note: Container image is not aware of changes in the following container's ports
   galera: 4567
   ist: 4568
   sst: 4444
@@ -881,6 +881,9 @@ metrics:
     ## @param metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
     ##
     honorLabels: false
+    ## @param metrics.serviceMonitor.labels ServiceMonitor extra labels
+    ##
+    labels: {}
 
   ## Prometheus Operator PrometheusRule configuration
   ##

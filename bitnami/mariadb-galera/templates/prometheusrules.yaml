@@ -7,7 +7,10 @@ metadata:
   {{- if .Values.commonLabels }}
   {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
   {{- end }}
-  {{- toYaml .Values.metrics.prometheusRules.selector | nindent 4 }}
+  {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.prometheusRule.additionalLabels "context" $ ) | nindent 4 }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   groups:
   - name: {{ include "common.names.fullname" . }}

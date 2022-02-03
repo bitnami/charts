@@ -7,7 +7,10 @@ metadata:
   {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
   {{- end }}
   {{- if or .Values.service.headless.annotations .Values.commonAnnotations }}
-  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.service.headless.annotations "context" $) | nindent 4 }}
+  annotations:
+    {{- if .Values.service.headless.annotations }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.service.headless.annotations "context" $) | nindent 4 }}
+    {{- end }}
     {{- if .Values.commonAnnotations }}
     {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
     {{- end }}
