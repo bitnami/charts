@@ -190,7 +190,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------------------------------- | ---------------------------------------------------------------------------------------- | -------------------------------- |
 | `ldapDaemon.enabled`                            | Enable LDAP Auth Daemon proxy                                                            | `false`                          |
 | `ldapDaemon.image.registry`                     | LDAP AUth Daemon Image registry                                                          | `docker.io`                      |
-| `ldapDaemon.image.repository`                   | LDAP Auth Daemon Image repository                                                        | `bitnami/nginx-intel-ldap-auth-daemon` |
+| `ldapDaemon.image.repository`                   | LDAP Auth Daemon Image repository                                                        | `bitnami/nginx-ldap-auth-daemon` |
 | `ldapDaemon.image.tag`                          | LDAP Auth Daemon Image tag (immutable tags are recommended)                              | `0.20200116.0-debian-10-r500`    |
 | `ldapDaemon.image.pullPolicy`                   | LDAP Auth Daemon Image pull policy                                                       | `IfNotPresent`                   |
 | `ldapDaemon.port`                               | LDAP Auth Daemon port                                                                    | `8888`                           |
@@ -259,7 +259,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                      | Start a Prometheus exporter sidecar container                                               | `false`                  |
 | `metrics.port`                         | NGINX Container Status Port scraped by Prometheus Exporter                                  | `""`                     |
 | `metrics.image.registry`               | NGINX Prometheus exporter image registry                                                    | `docker.io`              |
-| `metrics.image.repository`             | NGINX Prometheus exporter image repository                                                  | `bitnami/nginx-intel-exporter` |
+| `metrics.image.repository`             | NGINX Prometheus exporter image repository                                                  | `bitnami/nginx-exporter` |
 | `metrics.image.tag`                    | NGINX Prometheus exporter image tag (immutable tags are recommended)                        | `0.9.0-debian-10-r207`   |
 | `metrics.image.pullPolicy`             | NGINX Prometheus exporter image pull policy                                                 | `IfNotPresent`           |
 | `metrics.image.pullSecrets`            | Specify docker-registry secret names as an array                                            | `[]`                     |
