@@ -35,6 +35,7 @@ body:
         tls:
           enabled: true
         ```
+      render: markdown
   - type: textarea
     attributes:
       label: What is the expected behavior?
