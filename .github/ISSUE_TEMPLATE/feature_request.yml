@@ -4,7 +4,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thank you for suggesting an idea to improbe Bitnami Helm charts.
+        Thank you for suggesting an idea to improve Bitnami Helm charts.
         Please fill in as much of the following form as you're able.
   - type: input
     attributes:
