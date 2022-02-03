@@ -1,9 +1,13 @@
 <!--- app-name: Argo CD -->
 
-# Argo CD
+# Argo CD packaged by Bitnami
 
-[Argo CD](https://argoproj.github.io/argo-cd/) is a declarative, GitOps continuous delivery tool for Kubernetes.
+Argo CD is a continuous delivery tool for Kubernetes based on GitOps.
 
+[Overview of Argo CD](https://argoproj.github.io/cd)
+
+Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
+                           
 ## TL;DR
 
 ```console
