@@ -30,12 +30,6 @@ body:
     attributes:
       label: Are you using any custom parameters or values?
       description: Add any parameter used via `--set` or as a `values.yaml` customization.
-      placeholder: |
-        ```
-        tls:
-          enabled: true
-        ```
-      render: markdown
   - type: textarea
     attributes:
       label: What is the expected behavior?
