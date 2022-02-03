@@ -158,7 +158,7 @@ Get the PostgreSQL primary extended configuration ConfigMap name.
 {{- if .Values.primary.existingExtendedConfigmap -}}
     {{- printf "%s" (tpl .Values.primary.existingExtendedConfigmap $) -}}
 {{- else -}}
-    {{- printf printf "%s-extended-configuration" (include "postgresql.primary.fullname" .) -}}
+    {{- printf "%s-extended-configuration" (include "postgresql.primary.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 
