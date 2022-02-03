@@ -11,14 +11,15 @@ body:
     attributes:
       label: Name and Version
       description: Name and version of the affected chart
-      validations:
-        required: true
+      placeholder: bitnami/wordpress 1.2.3
+    validations:
+      required: true
   - type: textarea
     attributes:
       label: What steps will reproduce the bug?
       description: Enter details about your bug.
-      validations:
-        required: true
+    validations:
+      required: true
   - type: textarea
     attributes:
       label: Are you using any custom parameters or values?
