@@ -159,6 +159,8 @@ spec:
               value: {{ .Values.containerPorts.http | quote }}
             - name: APACHE_HTTPS_PORT_NUMBER
               value: {{ .Values.containerPorts.https | quote }}
+            - name: MOODLE_DATABASE_TYPE
+              value: {{ include "moodle.databaseType" . | quote }}
             - name: MOODLE_DATABASE_HOST
               value: {{ include "moodle.databaseHost" . | quote }}
             - name: MOODLE_DATABASE_PORT_NUMBER

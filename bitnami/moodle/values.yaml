@@ -585,6 +585,9 @@ mariadb:
 ## External database configuration
 ##
 externalDatabase:
+  ## @param externalDatabase.type Type of the existing database
+  ##
+  type: ""
   ## @param externalDatabase.host Host of the existing database
   ##
   host: ""
