@@ -102,7 +102,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                        | Description                                                                                                   | Value  |
 | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------- | ------ |
 | `master.configurationConfigMap`             | Set a custom configuration by using an existing configMap with the configuration file.                        | `""`   |
-| `master.webPort`                            | Specify the port where the web interface will listen on the master                                            | `8080` |
+| `master.webPort`                            | Specify the port where the web interface will listen on the master over HTTP                                  | `8080` |
+| `master.webPortHttps`                       | Specify the port where the web interface will listen on the master over HTTPS                                 | `8480` |
 | `master.clusterPort`                        | Specify the port where the master listens to communicate with workers                                         | `7077` |
 | `master.hostAliases`                        | Deployment pod host aliases                                                                                   | `[]`   |
 | `master.daemonMemoryLimit`                  | Set the memory limit for the master daemon                                                                    | `""`   |
@@ -145,7 +146,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                        | Description                                                                                                   | Value          |
 | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------- | -------------- |
 | `worker.configurationConfigMap`             | Set a custom configuration by using an existing configMap with the configuration file.                        | `""`           |
-| `worker.webPort`                            | Specify the port where the web interface will listen on the worker                                            | `8081`         |
+| `worker.webPort`                            | Specify the port where the web interface will listen on the worker over HTTP                                  | `8081`         |
+| `worker.webPortHttps`                       | Specify the port where the web interface will listen on the worker over HTTPS                                 | `8481`         |
 | `worker.clusterPort`                        | Specify the port where the worker listens to communicate with the master                                      | `""`           |
 | `worker.hostAliases`                        | Add deployment host aliases                                                                                   | `[]`           |
 | `worker.extraPorts`                         | Specify the port where the running jobs inside the workers listens                                            | `[]`           |
@@ -215,26 +217,28 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Traffic Exposure parameters
 
-| Name                        | Description                                                                                                                      | Value                    |
-| --------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `service.type`              | Kubernetes Service type                                                                                                          | `ClusterIP`              |
-| `service.clusterPort`       | Spark cluster port                                                                                                               | `7077`                   |
-| `service.webPort`           | Spark client port                                                                                                                | `80`                     |
-| `service.nodePorts.cluster` | Kubernetes cluster node port                                                                                                     | `""`                     |
-| `service.nodePorts.web`     | Kubernetes web node port                                                                                                         | `""`                     |
-| `service.loadBalancerIP`    | Load balancer IP if spark service type is `LoadBalancer`                                                                         | `""`                     |
-| `service.annotations`       | Annotations for spark service                                                                                                    | `{}`                     |
-| `ingress.enabled`           | Enable ingress controller resource                                                                                               | `false`                  |
-| `ingress.pathType`          | Ingress path type                                                                                                                | `ImplementationSpecific` |
-| `ingress.apiVersion`        | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
-| `ingress.hostname`          | Default host for the ingress resource                                                                                            | `spark.local`            |
-| `ingress.path`              | The Path to Spark. You may need to set this to '/*' in order to use this with ALB ingress controllers.                           | `/`                      |
-| `ingress.annotations`       | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
-| `ingress.tls`               | Enable TLS configuration for the hostname defined at ingress.hostname parameter                                                  | `false`                  |
-| `ingress.extraHosts`        | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
-| `ingress.extraPaths`        | Any additional arbitrary paths that may need to be added to the ingress under the main host.                                     | `[]`                     |
-| `ingress.extraTls`          | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
-| `ingress.secrets`           | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
+| Name                         | Description                                                                                                                      | Value                    |
+| ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.type`               | Kubernetes Service type                                                                                                          | `ClusterIP`              |
+| `service.clusterPort`        | Spark cluster port                                                                                                               | `7077`                   |
+| `service.webPort`            | Spark client port for HTTP                                                                                                       | `80`                     |
+| `service.webPortHttps`       | Spark client port for HTTPS                                                                                                      | `443`                    |
+| `service.nodePorts.cluster`  | Kubernetes cluster node port                                                                                                     | `""`                     |
+| `service.nodePorts.web`      | Kubernetes web node port for HTTP                                                                                                | `""`                     |
+| `service.nodePorts.webHttps` | Kubernetes web node port for HTTPS                                                                                               | `""`                     |
+| `service.loadBalancerIP`     | Load balancer IP if spark service type is `LoadBalancer`                                                                         | `""`                     |
+| `service.annotations`        | Annotations for spark service                                                                                                    | `{}`                     |
+| `ingress.enabled`            | Enable ingress controller resource                                                                                               | `false`                  |
+| `ingress.pathType`           | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.apiVersion`         | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
+| `ingress.hostname`           | Default host for the ingress resource                                                                                            | `spark.local`            |
+| `ingress.path`               | The Path to Spark. You may need to set this to '/*' in order to use this with ALB ingress controllers.                           | `/`                      |
+| `ingress.annotations`        | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.tls`                | Enable TLS configuration for the hostname defined at ingress.hostname parameter                                                  | `false`                  |
+| `ingress.extraHosts`         | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
+| `ingress.extraPaths`         | Any additional arbitrary paths that may need to be added to the ingress under the main host.                                     | `[]`                     |
+| `ingress.extraTls`           | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
+| `ingress.secrets`            | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
 
 
 ### Metrics parameters
