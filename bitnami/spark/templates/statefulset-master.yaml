@@ -144,11 +144,13 @@ spec:
           ports:
             {{- if .Values.security.ssl.enabled }}
             - name: https
+              containerPort: {{ .Values.master.webPortHttps }}
+              protocol: TCP
             {{- else }}
             - name: http
-            {{- end }}
               containerPort: {{ .Values.master.webPort }}
               protocol: TCP
+            {{- end }}
             - name: cluster
               containerPort: {{ .Values.master.clusterPort }}
           volumeMounts:
@@ -226,6 +228,8 @@ spec:
               value: {{ .Values.security.ssl.needClientAuth | quote }}
             - name: SPARK_SSL_PROTOCOL
               value: {{ .Values.security.ssl.protocol | quote }}
+            - name: SPARK_WEBUI_SSL_PORT
+              value: {{ .Values.master.webPortHttps | quote }}
             {{- end }}
             {{- if .Values.master.extraEnvVars }}
             {{- toYaml .Values.master.extraEnvVars | nindent 12 }}
