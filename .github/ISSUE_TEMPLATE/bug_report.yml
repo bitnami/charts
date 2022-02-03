@@ -19,12 +19,22 @@ body:
     attributes:
       label: What steps will reproduce the bug?
       description: Enter details about your bug.
+      placeholder: |
+        1. In this environment...
+        2. With this config...
+        3. Run '...'
+        4. See error...
     validations:
       required: true
   - type: textarea
     attributes:
       label: Are you using any custom parameters or values?
       description: Add any parameter used via `--set` or as a `values.yaml` customization.
+      placeholder: |
+        ```
+        tls:
+          enabled: true
+        ```
   - type: textarea
     attributes:
       label: What is the expected behavior?
