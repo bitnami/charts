@@ -297,7 +297,7 @@ readinessProbe:
   enabled: true
   initialDelaySeconds: 5
   periodSeconds: 5
-  timeoutSeconds: 1
+  timeoutSeconds: 3
   successThreshold: 1
   failureThreshold: 5
 ## Enable persistence using Persistent Volume Claims
