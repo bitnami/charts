@@ -1,7 +1,7 @@
 annotations:
   category: Infrastructure
 apiVersion: v2
-appVersion: 2.2.3
+appVersion: 2.2.4
 dependencies:
   - condition: redis.enabled
     name: redis
@@ -12,7 +12,7 @@ dependencies:
     tags:
       - bitnami-common
     version: 1.x.x
-description: Declarative, GitOps continuous delivery tool for Kubernetes.
+description: Argo CD is a continuous delivery tool for Kubernetes based on GitOps.
 engine: gotpl
 home: https://argoproj.github.io/argo-cd/
 icon: https://bitnami.com/assets/stacks/argo-cd/img/argo-cd-stack-220x234.png
@@ -30,4 +30,4 @@ sources:
   - https://github.com/argoproj/argo-cd/
   - https://github.com/bitnami/bitnami-docker-dex
   - https://github.com/dexidp/dex
-version: 3.0.2
+version: 3.0.3
