@@ -1,28 +1,29 @@
----
-name: Feature request
-about: Suggest an idea for this project
-title: ''
-labels: ''
-assignees: ''
-
----
-
-**Which chart**:
-
-<!-- The name (and version) of the affected chart. -->
-
-**Is your feature request related to a problem? Please describe.**
-
-<!-- A clear and concise description of what the problem is. Ex. I'm always frustrated when [...] -->
-
-**Describe the solution you'd like**
-
-<!-- A clear and concise description of what you want to happen. -->
-
-**Describe alternatives you've considered**
-
-<!-- A clear and concise description of any alternative solutions or features you've considered. -->
-
-**Additional context**
-
-<!-- Add any other context or screenshots about the feature request here. -->
+name: "\U0001F680 Feature request"
+description: Suggest an idea for this project
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for suggesting an idea to improbe Bitnami Helm charts.
+        Please fill in as much of the following form as you're able.
+  - type: input
+    attributes:
+      label: Name and Version
+      description: Name and version of the affected chart
+      placeholder: bitnami/wordpress 1.2.3
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: What is the problem this feature will solve?
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: What is the feature you are proposing to solve the problem?
+      description: Describe the requests. If you already have something in mind... PRs are welcome!
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: What alternatives have you considered?
