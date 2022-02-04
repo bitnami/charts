@@ -1,9 +1,13 @@
 <!--- app-name: Apache Airflow -->
 
-# Apache Airflow
+# Apache Airflow packaged by Bitnami
 
-[Apache Airflow](https://airflow.apache.org/) is a platform to programmatically author, schedule and monitor workflows.
+Apache Airflow is a tool to express and execute workflows as directed acyclic graphs (DAGs). It includes utilities to schedule tasks, monitor task progress and handle task dependencies.
 
+[Overview of Apache Airflow](https://airflow.apache.org/)
+
+Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
+                           
 ## TL;DR
 
 ```console
@@ -410,7 +414,7 @@ Learn how to generate one [here](https://airflow.apache.org/docs/apache-airflow/
 
 ### Generate a Secret key
 
-Secret key used to run your flask app. It should be as random as possible. However, when running more than 1 instances of webserver, make sure all of them use the same secret_key otherwise one of them will error with “CSRF session token is missing”.
+Secret key used to run your flask app. It should be as random as possible. However, when running more than 1 instances of webserver, make sure all of them use the same secret_key otherwise one of them will error with ���CSRF session token is missing���.
 
 ### Load DAG files
 
@@ -560,7 +564,7 @@ The Bitnami Airflow chart relies on the PostgreSQL chart persistence. This means
 
 ## Troubleshooting
 
-Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+Find more information about how to deal with common errors related to Bitnami���s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Notable changes
 
