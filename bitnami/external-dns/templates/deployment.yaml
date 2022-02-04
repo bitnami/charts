@@ -4,6 +4,9 @@ metadata:
   name: {{ template "external-dns.fullname" . }}
   namespace: {{ .Release.Namespace }}
   labels: {{ include "external-dns.labels" . | nindent 4 }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   replicas: {{ coalesce .Values.replicas .Values.replicaCount }}
   {{- if .Values.updateStrategy }}
