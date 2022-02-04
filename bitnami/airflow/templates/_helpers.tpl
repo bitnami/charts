@@ -177,20 +177,11 @@ Get the secret name
 Get the configmap name
 */}}
 {{- define "airflow.configMapName" -}}
-{{- if .Values.configurationConfigMap -}}
-  {{- printf "%s" .Values.configurationConfigMap -}}
+{{- if .Values.existingConfigmap -}}
+  {{- printf "%s" (tpl .Values.existingConfigmap $) -}}
 {{- else -}}
   {{- printf "%s-configuration" (include "common.names.fullname" .) -}}
 {{- end -}}
-{{- end -}}
-
-{{/*
-Should use config from the configmap
-*/}}
-{{- define "airflow.shouldUseConfigFromConfigMap" -}}
-{{- if or .Values.config .Values.configurationConfigMap -}}
-  true
-{{- else -}}{{- end -}}
 {{- end -}}
 
 {{/*
@@ -253,16 +244,16 @@ Add environment variables to configure database values
 */}}
 {{- define "airflow.database.existingsecret.key" -}}
 {{- if .Values.postgresql.enabled -}}
-    {{- printf "%s" "postgresql-password" -}}
+    {{- printf "%s" "password" -}}
 {{- else -}}
     {{- if .Values.externalDatabase.existingSecret -}}
         {{- if .Values.externalDatabase.existingSecretPasswordKey -}}
             {{- printf "%s" .Values.externalDatabase.existingSecretPasswordKey -}}
         {{- else -}}
-            {{- printf "%s" "postgresql-password" -}}
+            {{- printf "%s" "password" -}}
         {{- end -}}
     {{- else -}}
-        {{- printf "%s" "postgresql-password" -}}
+        {{- printf "%s" "password" -}}
     {{- end -}}
 {{- end -}}
 {{- end -}}
@@ -272,6 +263,25 @@ Add environment variables to configure database values
 */}}
 {{- define "airflow.database.port" -}}
 {{- ternary "5432" .Values.externalDatabase.port .Values.postgresql.enabled | quote -}}
+{{- end -}}
+
+{{/*
+Add environment variables to configure database values
+*/}}
+{{- define "airflow.redis.existingsecret.key" -}}
+{{- if .Values.redis.enabled -}}
+    {{- printf "%s" "redis-password" -}}
+{{- else -}}
+    {{- if .Values.externalRedis.existingSecret -}}
+        {{- if .Values.externalRedis.existingSecretPasswordKey -}}
+            {{- printf "%s" .Values.externalRedis.existingSecretPasswordKey -}}
+        {{- else -}}
+            {{- printf "%s" "redis-password" -}}
+        {{- end -}}
+    {{- else -}}
+        {{- printf "%s" "redis-password" -}}
+    {{- end -}}
+{{- end -}}
 {{- end -}}
 
 {{/*
@@ -322,12 +332,12 @@ Add environment variables to configure airflow common values
   valueFrom:
     secretKeyRef:
       name: {{ include "airflow.secretName" . }}
-      key: airflow-fernetKey
+      key: airflow-fernet-key
 - name: AIRFLOW_SECRET_KEY
   valueFrom:
     secretKeyRef:
       name: {{ include "airflow.secretName" . }}
-      key: airflow-secretKey
+      key: airflow-secret-key
 - name: AIRFLOW_LOAD_EXAMPLES
   value: {{ ternary "yes" "no" .Values.loadExamples | quote }}
 {{- if .Values.web.image.debug }}
@@ -381,20 +391,23 @@ Gets the host to be used for this application.
 If not using ClusterIP, or if a host or LoadBalancerIP is not defined, the value will be empty.
 */}}
 {{- define "airflow.baseUrl" -}}
-{{- $host := include "airflow.serviceIP" . -}}
-
+{{- $host := "" -}}
 {{- $port := "" -}}
-{{- $servicePortString := printf "%v" .Values.service.port -}}
+{{- $servicePortString := printf "%v" .Values.service.ports.http -}}
 {{- if and (not (eq $servicePortString "80")) (not (eq $servicePortString "443")) -}}
   {{- $port = printf ":%s" $servicePortString -}}
 {{- end -}}
-
-{{- $defaultUrl := "" -}}
+{{- if .Values.ingress.enabled }}
+  {{- $host = .Values.ingress.hostname | default "" -}}
+{{- else -}}
+  {{- $host = .Values.web.baseUrl | default "" -}}
+{{- end }}
+{{- $host = default (include "airflow.serviceIP" .) $host -}}
 {{- if $host -}}
-  {{- $defaultUrl = printf "http://%s%s" $host $port -}}
+  {{- printf "http://%s%s" $host $port -}}
+{{- else -}}
+  {{- default "" .Values.web.baseUrl -}}
 {{- end -}}
-
-{{- default $defaultUrl .Values.web.baseUrl -}}
 {{- end -}}
 
 {{/*
