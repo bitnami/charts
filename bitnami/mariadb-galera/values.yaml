@@ -18,12 +18,21 @@ global:
 
 ## @section Common parameters
 
+## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
+##
+kubeVersion: ""
 ## @param nameOverride String to partially override common.names.fullname template with a string (will prepend the release name)
 ##
 nameOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname template with a string
 ##
 fullnameOverride: ""
+## @param commonAnnotations Annotations to add to all deployed objects
+##
+commonAnnotations: {}
+## @param commonLabels Labels to add to all deployed objects
+##
+commonLabels: {}
 ## @param schedulerName Name of the Kubernetes scheduler (other than default)
 ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
 ##
@@ -94,20 +103,26 @@ service:
   ## @param service.type Kubernetes service type
   ##
   type: ClusterIP
-  ## @param service.port MariaDB service port
-  ##
-  port: 3306
   ## @param service.clusterIP Specific cluster IP when service type is cluster IP. Use `None` for headless service
   ## e.g:
   ## clusterIP: None
   ##
   clusterIP: ""
-  ## @param service.nodePort Specify the nodePort value for the LoadBalancer and NodePort service types.
+  ## @param service.ports.mysql MariaDB service port
+  ##
+  ports:
+    mysql: 3306
+  ## @param service.nodePorts.mysql Specify the nodePort value for the LoadBalancer and NodePort service types.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ## e.g:
-  ## nodePort: 30001
+  ## nodePort:
+  ##    mysql: 30001
   ##
-  nodePort: ""
+  nodePorts:
+    mysql: ""
+  ## @param service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
+  ##
+  extraPorts: []
   ## @param service.externalIPs External IP list to use with ClusterIP service type
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#external-ips
   ##
@@ -142,15 +157,22 @@ service:
     publishNotReadyAddresses: true
 ## Pods Service Account
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+## @param serviceAccount.create Specify whether a ServiceAccount should be created
+## @param serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
+## @param serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+## @param serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
 ##
 serviceAccount:
-  ## @param serviceAccount.create Specify whether a ServiceAccount should be created
-  ##
   create: false
-  ## @param serviceAccount.name The name of the ServiceAccount to create
-  ## If not set and create is true, a name is generated using the common.names.fullname template
-  ##
   name: ""
+  automountServiceAccountToken: false
+  annotations: {}
+## @param command Override default container command (useful when using custom images)
+##
+command: []
+## @param args Override default container args (useful when using custom images)
+##
+args: []
 ## @param extraEnvVars Array containing extra env vars to configure MariaDB Galera replicas
 ## For example:
 ## extraEnvVars:
@@ -173,14 +195,23 @@ rbac:
   create: false
 ## Pod Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
-## @param securityContext.enabled Enable security context
-## @param securityContext.fsGroup Group ID for the container filesystem
-## @param securityContext.runAsUser User ID for the container
+## @param podSecurityContext.enabled Enable security context
+## @param podSecurityContext.fsGroup Group ID for the container filesystem
+## @param podSecurityContext.runAsUser User ID for the container
 ##
-securityContext:
+podSecurityContext:
   enabled: true
   fsGroup: 1001
   runAsUser: 1001
+## Configure Container Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+## @param containerSecurityContext.enabled Enabled galera's container Security Context
+## @param containerSecurityContext.runAsUser Set galera's container Security Context runAsUser
+## @param containerSecurityContext.runAsNonRoot Set galera's container Security Context runAsNonRoot
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1001
+  runAsNonRoot: true
 ## Database credentials for root (admin) user
 ##
 rootUser:
@@ -239,9 +270,12 @@ galera:
   ## ref: https://github.com/bitnami/bitnami-docker-mariadb-galera#bootstraping
   ##
   bootstrap:
+    ## @param galera.bootstrap.forceBootstrap Option to force the boostraping from the indicated node in `galera.bootstarp.bootstrapFromNode`
+    ##
+    forceBootstrap: false
     ## @param galera.bootstrap.bootstrapFromNode Node to bootstrap from, you will need to change this parameter in case you want to bootstrap from other node
     ##
-    bootstrapFromNode: ""
+    bootstrapFromNode: 0
     ## @param galera.bootstrap.forceSafeToBootstrap Force `safe_to_bootstrap: 1` in `grastate.date` file
     ## This will set safe_to_bootstrap=1 in the node indicated by bootstrapFromNode.
     ##
@@ -522,9 +556,25 @@ tolerations: []
 ##     whenUnsatisfiable: DoNotSchedule
 ##
 topologySpreadConstraints: {}
+## @param lifecycleHooks for the galera container(s) to automate configuration before or after startup
+##
+lifecycleHooks: {}
 ## Enable persistence using Persistent Volume Claims
 ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
 ##
+## Galera container port
+## @param containerPorts.mysql mariadb database container port
+## @param containerPorts.galera galera cluster container port
+## @param containerPorts.ist galera IST container port
+## @param containerPorts.sst galera SST container port
+##
+containerPorts:
+  mysql: 3306
+  # Note: Container image is not aware of changes in the following container's ports
+  galera: 4567
+  ist: 4568
+  sst: 4444
+
 persistence:
   ## @param persistence.enabled Enable persistence using PVC
   ##
@@ -565,13 +615,13 @@ persistence:
 ## @param priorityClassName Priority Class Name for Statefulset
 ##
 priorityClassName: ""
-## @param extraInitContainers Additional init containers (this value is evaluated as a template)
+## @param initContainers Additional init containers (this value is evaluated as a template)
 ## extraInitContainers:
 ## - name: do-something
 ##   image: bitnami/minideb
 ##   command: ['do', 'something']
 ##
-extraInitContainers: []
+initContainers: []
 ## @param extraContainers Additional containers (this value is evaluated as a template)
 ##
 extraContainers: []
@@ -675,6 +725,15 @@ startupProbe:
   ## Let's wait 600 seconds by default, it should give enough time in any cluster for mysql to init
   ##
   failureThreshold: 48
+## @param customStartupProbe Custom liveness probe for the Web component
+##
+customStartupProbe: {}
+## @param customLivenessProbe Custom liveness probe for the Web component
+##
+customLivenessProbe: {}
+## @param customReadinessProbe Custom rediness probe for the Web component
+##
+customReadinessProbe: {}
 ## Pod disruption budget configuration
 ##
 podDisruptionBudget:
@@ -751,6 +810,27 @@ metrics:
     annotations:
       prometheus.io/scrape: "true"
       prometheus.io/port: "9104"
+    ## @param metrics.service.loadBalancerIP Load Balancer IP if the Prometheus metrics server type is `LoadBalancer`
+    ## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+    ##
+    loadBalancerIP: ""
+    ## @param metrics.service.clusterIP Prometheus metrics service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param metrics.service.loadBalancerSourceRanges Prometheus metrics service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param metrics.service.externalTrafficPolicy Prometheus metrics service external traffic policy
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+
   ## Prometheus Operator ServiceMonitor configuration
   ##
   serviceMonitor:
@@ -760,6 +840,9 @@ metrics:
     ## @param metrics.serviceMonitor.namespace Optional namespace which Prometheus is running in
     ##
     namespace: ""
+    ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
+    ##
+    jobLabel: ""
     ## @param metrics.serviceMonitor.interval How frequently to scrape metrics (use by default, falling back to Prometheus' default)
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ## e.g:
@@ -795,6 +878,13 @@ metrics:
     ##    replacement: 'example_prefix_$1'
     ##
     metricRelabelings: []
+    ## @param metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
+    ##
+    honorLabels: false
+    ## @param metrics.serviceMonitor.labels ServiceMonitor extra labels
+    ##
+    labels: {}
+
   ## Prometheus Operator PrometheusRule configuration
   ##
   prometheusRules:
