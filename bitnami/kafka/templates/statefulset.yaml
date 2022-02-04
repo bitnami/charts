@@ -6,6 +6,7 @@
 {{- $clientPort := .Values.service.ports.client }}
 {{- $interBrokerProtocol := include "kafka.listenerType" (dict "protocol" .Values.auth.interBrokerProtocol) -}}
 {{- $clientProtocol := include "kafka.listenerType" (dict "protocol" .Values.auth.clientProtocol) -}}
+{{- $externalClientProtocol := include "kafka.listenerType" (dict "protocol" (include "kafka.externalClientProtocol" . )) -}}
 {{- $loadBalancerIPListLength := len .Values.externalAccess.service.loadBalancerIPs }}
 {{- if not (and .Values.externalAccess.enabled (not .Values.externalAccess.autoDiscovery.enabled) (not (eq $replicaCount $loadBalancerIPListLength )) (eq .Values.externalAccess.service.type "LoadBalancer")) }}
 apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
@@ -187,11 +188,11 @@ spec:
               {{- if .Values.listenerSecurityProtocolMap }}
               value: {{ .Values.listenerSecurityProtocolMap | quote }}
               {{- else if .Values.externalAccess.enabled }}
-              value: "INTERNAL:{{ $interBrokerProtocol }},CLIENT:{{ $clientProtocol }},EXTERNAL:{{ $clientProtocol }}"
+              value: "INTERNAL:{{ $interBrokerProtocol }},CLIENT:{{ $clientProtocol }},EXTERNAL:{{ $externalClientProtocol }}"
               {{- else }}
               value: "INTERNAL:{{ $interBrokerProtocol }},CLIENT:{{ $clientProtocol }}"
               {{- end }}
-            {{- if or ($clientProtocol | regexFind "SASL") ($interBrokerProtocol | regexFind "SASL") .Values.auth.sasl.jaas.zookeeperUser }}
+            {{- if or ($clientProtocol | regexFind "SASL") ($externalClientProtocol | regexFind "SASL") ($interBrokerProtocol | regexFind "SASL") .Values.auth.sasl.jaas.zookeeperUser }}
             - name: KAFKA_CFG_SASL_ENABLED_MECHANISMS
               value: {{ upper .Values.auth.sasl.mechanisms | quote }}
             - name: KAFKA_CFG_SASL_MECHANISM_INTER_BROKER_PROTOCOL
@@ -265,7 +266,7 @@ spec:
             - name: KAFKA_CFG_SSL_ENDPOINT_IDENTIFICATION_ALGORITHM
               value: {{ default "" .Values.auth.tls.endpointIdentificationAlgorithm | quote }}
             - name: KAFKA_TLS_CLIENT_AUTH
-              value: {{ ternary "required" "none" (eq .Values.auth.clientProtocol "mtls") | quote }}
+              value: {{ ternary "required" "none" (or (eq (include "kafka.externalClientProtocol" . ) "mtls") (eq .Values.auth.clientProtocol "mtls")) | quote }}
             {{- $tlsPassword := .Values.auth.tls.password }}
             - name: KAFKA_CERTIFICATE_PASSWORD
               value: {{ default "" $tlsPassword | quote }}
