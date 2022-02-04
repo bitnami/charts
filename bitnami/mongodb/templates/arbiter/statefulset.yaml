@@ -187,13 +187,13 @@ spec:
             {{- end }}
             - name: ALLOW_EMPTY_PASSWORD
               value: {{ ternary "no" "yes" .Values.auth.enabled | quote }}
-            {{- if and .Values.tls.enabled .Values.arbiter.enabled }}
-            - name: MONGODB_EXTRA_FLAGS
-              value: --tlsMode={{ .Values.tls.mode }} --tlsCertificateKeyFile=/certs/mongodb.pem --tlsCAFile=/certs/mongodb-ca-cert
+            {{- $extraFlags := .Values.arbiter.extraFlags | join " " -}}
+            {{- if and .Values.tls.enabled .Values.arbiter.enabled  }}
+              {{- $extraFlags = printf "--tlsMode=%s --tlsCertificateKeyFile=/certs/mongodb.pem --tlsCAFile=/certs/mongodb-ca-cert %s" .Values.tls.mode $extraFlags  }}
             {{- end }}
-            {{- if .Values.arbiter.extraFlags }}
+            {{- if ne $extraFlags "" }}
             - name: MONGODB_EXTRA_FLAGS
-              value: {{ .Values.arbiter.extraFlags | join " " | quote }}
+              value: {{ $extraFlags | quote }}
             {{- end }}
             {{- if and .Values.tls.enabled  .Values.arbiter.enabled }}
             - name: MONGODB_CLIENT_EXTRA_FLAGS
