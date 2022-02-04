@@ -473,13 +473,13 @@ spec:
             {{- end }}
             {{- if .Values.auth.usePasswordFiles }}
             - name: DATA_SOURCE_PASS_FILE
-              value: "/opt/bitnami/postgresql/secrets/password"
+              value: {{ printf "/opt/bitnami/postgresql/secrets/%s" (ternary "password" "postgres-password" (and (not (empty $customUser)) (ne $customUser "postgres"))) }}
             {{- else }}
             - name: DATA_SOURCE_PASS
               valueFrom:
                 secretKeyRef:
                   name: {{ include "postgresql.secretName" . }}
-                  key: password
+                  key: {{ ternary "password" "postgres-password" (and (not (empty $customUser)) (ne $customUser "postgres")) }}
             {{- end }}
             - name: DATA_SOURCE_USER
               value: {{ default "postgres" $customUser | quote }}
