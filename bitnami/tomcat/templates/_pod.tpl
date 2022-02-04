@@ -135,35 +135,32 @@ containers:
       {{- if .Values.extraVolumeMounts }}
       {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 6 }}
       {{- end }}
-{{- if .Values.sidecars }}
-{{ include "common.tplvalues.render" ( dict "value" .Values.sidecars "context" $) }}
-{{- end }}
-{{- if .Values.metrics.jmx.enabled }}
-- name: jmx-exporter
-  image: {{ template "tomcat.metrics.jmx.image" . }}
-  imagePullPolicy: {{ .Values.metrics.jmx.image.pullPolicy | quote }}
-  command:
-    - java
-    - -XX:+UnlockExperimentalVMOptions
-    - -XX:+UseCGroupMemoryLimitForHeap
-    - -XX:MaxRAMFraction=1
-    - -XshowSettings:vm
-    - -jar
-    - jmx_prometheus_httpserver.jar
-    - {{ .Values.metrics.jmx.ports.metrics | quote }}
-    - /etc/jmx-tomcat/jmx-tomcat-prometheus.yml
-  ports:
-  {{- range $key, $val := .Values.metrics.jmx.ports }}
-    - name: {{ $key }}
-      containerPort: {{ $val }}
+  {{- if .Values.metrics.jmx.enabled }}
+  - name: jmx-exporter
+    image: {{ template "tomcat.metrics.jmx.image" . }}
+    imagePullPolicy: {{ .Values.metrics.jmx.image.pullPolicy | quote }}
+    command:
+      - java
+      - -XX:+UnlockExperimentalVMOptions
+      - -XX:+UseCGroupMemoryLimitForHeap
+      - -XX:MaxRAMFraction=1
+      - -XshowSettings:vm
+      - -jar
+      - jmx_prometheus_httpserver.jar
+      - {{ .Values.metrics.jmx.ports.metrics | quote }}
+      - /etc/jmx-tomcat/jmx-tomcat-prometheus.yml
+    ports:
+    {{- range $key, $val := .Values.metrics.jmx.ports }}
+      - name: {{ $key }}
+        containerPort: {{ $val }}
+    {{- end }}
+    {{- if .Values.metrics.jmx.resources }}
+    resources: {{- toYaml .Values.metrics.jmx.resources | nindent 6 }}
+    {{- end }}
+    volumeMounts:
+      - name: jmx-config
+        mountPath: /etc/jmx-tomcat
   {{- end }}
-  {{- if .Values.metrics.jmx.resources }}
-  resources: {{- toYaml .Values.metrics.jmx.resources | nindent 4 }}
-  {{- end }}
-  volumeMounts:
-    - name: jmx-config
-      mountPath: /etc/jmx-tomcat
-{{- end }}
   {{- if .Values.sidecars }}
   {{- include "common.tplvalues.render" ( dict "value" .Values.sidecars "context" $) | nindent 2 }}
   {{- end }}
@@ -177,6 +174,11 @@ volumes:
   - name: data
     emptyDir: {}
   {{- end }}
+  {{- end }}
+  {{- if and .Values.metrics.jmx.enabled (or .Values.metrics.jmx.config .Values.metrics.jmx.existingConfigmap) }}
+  - configMap:
+      name: {{ include "tomcat.metrics.jmx.configmapName" . }}
+    name: jmx-config
   {{- end }}
   {{- if .Values.extraVolumes }}
   {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 2 }}
