@@ -108,7 +108,7 @@ spec:
 
               {{- if (or ((empty $bucket.withLock)) (not $bucket.withLock)) }}
               {{- $versioning := ternary ("enable") ("suspend") (and (not (empty $bucket.versioning)) $bucket.versioning) }}
-              mc version {{ $versioning }} {{ $minioAlias }}/{{ $bucket.name }}
+              mc version {{ $versioning }} {{ $minioAlias }}/{{ $bucket.name }};
               {{- end }}
                             
               {{- if $bucket.tags }}
