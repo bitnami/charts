@@ -345,7 +345,7 @@ spec:
                             description: "XffNumTrustedHops defines the number of
                               additional ingress proxy hops from the right side of
                               the x-forwarded-for HTTP header to trust when determining
-                              the origin client’s IP address. \n See https://www.envoyproxy.io/docs/envoy/v1.17.0/api-v3/extensions/filters/network/http_connection_manager/v3/http_connection_manager.proto?highlight=xff_num_trusted_hops
+                              the origin client's IP address. \n See https://www.envoyproxy.io/docs/envoy/v1.17.0/api-v3/extensions/filters/network/http_connection_manager/v3/http_connection_manager.proto?highlight=xff_num_trusted_hops
                               for more information."
                             format: int32
                             type: integer

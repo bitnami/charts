@@ -414,7 +414,7 @@ Learn how to generate one [here](https://airflow.apache.org/docs/apache-airflow/
 
 ### Generate a Secret key
 
-Secret key used to run your flask app. It should be as random as possible. However, when running more than 1 instances of webserver, make sure all of them use the same secret_key otherwise one of them will error with ���CSRF session token is missing���.
+Secret key used to run your flask app. It should be as random as possible. However, when running more than 1 instances of webserver, make sure all of them use the same secret_key otherwise one of them will error with "CSRF session token is missing".
 
 ### Load DAG files
 
@@ -564,7 +564,7 @@ The Bitnami Airflow chart relies on the PostgreSQL chart persistence. This means
 
 ## Troubleshooting
 
-Find more information about how to deal with common errors related to Bitnami���s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Notable changes
 
