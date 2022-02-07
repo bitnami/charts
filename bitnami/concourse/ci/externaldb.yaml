@@ -1,0 +1,8 @@
+postgresql:
+  enabled: false
+externalDatabase:
+  host: localhost
+  port: 5432
+  user: bn_concourse
+  password: somepassword
+  database: bitnami_concourse

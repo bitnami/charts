@@ -6,7 +6,7 @@ dependencies:
   - condition: postgresql.enabled
     name: postgresql
     repository: https://charts.bitnami.com/bitnami
-    version: 10.X.X
+    version: 11.X.X
   - name: common
     repository: https://charts.bitnami.com/bitnami
     tags:
@@ -30,4 +30,4 @@ name: concourse
 sources:
   - https://github.com/bitnami/bitnami-docker-concourse
   - https://github.com/concourse/concourse
-version: 0.2.2
+version: 1.0.0

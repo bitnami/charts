@@ -117,13 +117,13 @@ When using Ingress, it will be set to the Ingress hostname.
 */}}
 {{- define "concourse.host" -}}
 {{- if .Values.ingress.enabled -}}
-{{- $host := .Values.ingress.hostname | default "" -}}
-{{- printf "%s://%s" (ternary "https" "http" .Values.web.tls.enabled) (default (include "concourse.serviceIP" .) $host) -}}
+  {{- $host := .Values.ingress.hostname | default "" -}}
+  {{- printf "%s://%s" (ternary "https" "http" .Values.web.tls.enabled) (default (include "concourse.serviceIP" .) $host) -}}
 {{- else if .Values.web.externalUrl -}}
-{{- $host := .Values.web.externalUrl | default "" -}}
-{{- printf "%s://%s" (ternary "https" "http" .Values.web.tls.enabled) $host -}}
+  {{- $host := .Values.web.externalUrl | default "" -}}
+  {{- printf "%s://%s" (ternary "https" "http" .Values.web.tls.enabled) $host -}}
 {{- else if (include "concourse.serviceIP" .) -}}
-{{- printf "%s://%s" (ternary "https" "http" .Values.web.tls.enabled) (include "concourse.serviceIP" .) -}}
+  {{- printf "%s://%s" (ternary "https" "http" .Values.web.tls.enabled) (include "concourse.serviceIP" .) -}}
 {{- end -}}
 {{- end -}}
 
@@ -173,7 +173,7 @@ Creates the address of the TSA service.
 */}}
 {{- define "concourse.web.tsa.address" -}}
 {{- if .Values.web.enabled -}}
-{{- $port := printf "%v" .Values.web.tsa.containerPort -}}
+{{- $port := printf "%v" .Values.web.containerPorts.tsa -}}
 {{- printf "%s-gateway:%s" (include "concourse.web.fullname" .) $port -}}
 {{- else -}}
 {{- range $i, $tsaHost := .Values.worker.tsa.hosts -}}{{- if $i -}},{{ end -}}{{- $tsaHost -}}{{- end -}}
@@ -184,10 +184,10 @@ Creates the address of the TSA service.
 Get the Postgresql credentials secret.
 */}}
 {{- define "concourse.postgresql.secretName" -}}
-{{- if and (.Values.postgresql.enabled) (not .Values.postgresql.existingSecret) -}}
+{{- if and (.Values.postgresql.enabled) (not .Values.postgresql.auth.existingSecret) -}}
     {{- printf "%s" (include "concourse.postgresql.fullname" .) -}}
-{{- else if and (.Values.postgresql.enabled) (.Values.postgresql.existingSecret) -}}
-    {{- printf "%s" .Values.postgresql.existingSecret -}}
+{{- else if and (.Values.postgresql.enabled) (.Values.postgresql.auth.existingSecret) -}}
+    {{- printf "%s" .Values.postgresql.auth.existingSecret -}}
 {{- else -}}
     {{- if .Values.externalDatabase.existingSecret -}}
         {{- printf "%s" .Values.externalDatabase.existingSecret -}}
@@ -202,16 +202,16 @@ Add environment variables to configure database values
 */}}
 {{- define "concourse.database.existingsecret.key" -}}
 {{- if .Values.postgresql.enabled -}}
-    {{- printf "%s" "postgresql-password" -}}
+    {{- printf "%s" "password" -}}
 {{- else -}}
     {{- if .Values.externalDatabase.existingSecret -}}
         {{- if .Values.externalDatabase.existingSecretPasswordKey -}}
             {{- printf "%s" .Values.externalDatabase.existingSecretPasswordKey -}}
         {{- else -}}
-            {{- printf "%s" "postgresql-password" -}}
+            {{- printf "%s" "password" -}}
         {{- end -}}
     {{- else -}}
-        {{- printf "%s" "postgresql-password" -}}
+        {{- printf "%s" "password" -}}
     {{- end -}}
 {{- end -}}
 {{- end -}}

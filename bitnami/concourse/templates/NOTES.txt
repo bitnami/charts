@@ -48,7 +48,7 @@ host. To configure Concourse with the URL of your service:
 
 * Concourse can be accessed:
 
-  * Within your cluster, at the following DNS name at port {{ .Values.web.containerPort }}:
+  * Within your cluster, at the following DNS name at port {{ .Values.web.containerPorts.http }}:
 
     {{ template "concourse.web.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
 
@@ -63,12 +63,12 @@ host. To configure Concourse with the URL of your service:
      NOTE: It may take a few minutes for the LoadBalancer IP to be available.
            You can watch the status of by running 'kubectl get svc -w {{ template "concourse.web.fullname" . }}'
 
-    echo http://$SERVICE_IP:{{ .Values.web.containerPort }}
+    echo http://$SERVICE_IP:{{ .Values.web.containerPorts.http }}
     {{- else if contains "ClusterIP"  .Values.service.web.type }}
 
     export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app={{ template "concourse.web.fullname" . }}" -o jsonpath="{.items[0].metadata.name}")
     echo "Visit http://127.0.0.1:8080 to use Concourse"
-    kubectl port-forward --namespace {{ .Release.Namespace }} $POD_NAME 8080:{{ .Values.web.containerPort }}
+    kubectl port-forward --namespace {{ .Release.Namespace }} $POD_NAME 8080:{{ .Values.web.containerPorts.http }}
     {{- end }}
 
   echo Username : Password  $(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "concourse.web.secretName" . }} -o jsonpath="{.data.local-users}" | base64 --decode)
