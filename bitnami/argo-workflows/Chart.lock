@@ -7,6 +7,6 @@ dependencies:
   version: 8.8.23
 - name: common
   repository: https://charts.bitnami.com/bitnami
-  version: 1.11.0
-digest: sha256:08c8e06a935969ef0d55ce7e31fa2853f8daabd384b926ba9a34c3b58b25c187
-generated: "2022-02-01T17:57:12.919266+01:00"
+  version: 1.11.1
+digest: sha256:22a4080275f006ffc7d904003703496e0e683c98b2756be60ef30e110ce3cca3
+generated: "2022-02-04T21:51:12.669953454Z"

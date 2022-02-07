@@ -43,9 +43,9 @@ spec:
             {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname" $) "servicePort" "minio-api" "context" $) | nindent 14 }}
     {{- end }}
-  {{- if or (and .Values.apiIngress.tls (or (include "minio.ingress.certManagerRequest" .Values.apiIngress.annotations) .Values.apiIngress.selfSigned)) .Values.apiIngress.extraTls }}
+  {{- if or (and .Values.apiIngress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.apiIngress.annotations )) .Values.apiIngress.selfSigned)) .Values.apiIngress.extraTls }}
   tls:
-    {{- if and .Values.apiIngress.tls (or (include "minio.ingress.certManagerRequest" .Values.apiIngress.annotations) .Values.apiIngress.selfSigned) }}
+    {{- if and .Values.apiIngress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.apiIngress.annotations )) .Values.apiIngress.selfSigned) }}
     - hosts:
         - {{ .Values.apiIngress.hostname }}
       secretName: {{ printf "%s-tls" .Values.apiIngress.hostname }}
