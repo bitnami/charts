@@ -120,7 +120,7 @@ spec:
             {{- end }}
             {{- if (include "kafka.tlsEncryption" .) }}
             {{- if not (empty .Values.auth.tls.existingSecrets) }}
-            {{- range $index := .Values.auth.tls.existingSecrets }}
+            {{- range $index, $_ := .Values.auth.tls.existingSecrets }}
             - name: kafka-certs-{{ $index }}
               mountPath: /certs-{{ $index }}
               readOnly: true
