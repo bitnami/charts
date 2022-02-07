@@ -184,8 +184,8 @@ auth:
     ## If not specified and `auth.peer.enableAuthentication=true` or `rbac.enabled=true`, the default is is `ca.crt`
     ##
     caFilename: ""
-## @param autoCompactionMode Auto compaction mode, by default periodic. Valid values: ���periodic���, ���revision���.
-## - 'periodic' for duration based retention, defaulting to hours if no time unit is provided (e.g. ���5m���).
+## @param autoCompactionMode Auto compaction mode, by default periodic. Valid values: "periodic", "revision".
+## - 'periodic' for duration based retention, defaulting to hours if no time unit is provided (e.g. 5m).
 ## - 'revision' for revision number based retention.
 ##
 autoCompactionMode: ""

@@ -7,7 +7,7 @@ The RabbitMQ Cluster Kubernetes Operator automates provisioning, management, and
 [Overview of &reg;abbitMQ Cluster Operator](https://github.com/rabbitmq/cluster-operator)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -99,31 +99,31 @@ The operator will extend the Kubernetes API with the following object: *Rabbitmq
   |                    |      |     RBAC      |
   |     Deployment     |      | Privileges    |
   +-------+------------+      +-------+-------+
-    ���     ^                           |
-    ���     |   +-----------------+     |
-    ���     +---+ Service Account +<----+
-    ���         +-----------------+
-    ���
-    ���
-    ���
-    ���
-    ���    ���������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������
-    ���    ���                                                                       ���
-    ���    ���                        +--------------+             +-----+           ���
-    ���    ���                        |              |             |     |           ���
-    ������������������     Service            |   RabbitMQ   +<------------+ PVC |           ���
-         ���    <-------------------+              |             |     |           ���
-         ���                        |  StatefulSet |             +-----+           ���
-         ���                        |              |                               ���
-         ���                        +-----------+--+                               ���
-         ���                                    ^                +------------+    ���
-         ���                                    |                |            |    ���
-         ���                                    +----------------+ Configmaps |    ���
-         ���                                                     | Secrets    |    ���
-         ���                                                     +------------+    ���
-         ���                                                                       ���
-         ���                                                                       ���
-         ���������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������
+  |     ^                           |
+  |     |   +-----------------+     |
+  |     +---+ Service Account +<----+
+  |         +-----------------+
+  |
+  |
+  |
+  |
+  |    -------------------------------------------------------------------------
+  |    |                                                                       |
+  |    |                        +--------------+             +-----+           |
+  |    |                        |              |             |     |           |
+  |--->|     Service            |   RabbitMQ   +<------------+ PVC |           |
+       |    <-------------------+              |             |     |           |
+       |                        |  StatefulSet |             +-----+           |
+       |                        |              |                               |
+       |                        +-----------+--+                               |
+       |                                    ^                +------------+    |
+       |                                    |                |            |    |
+       |                                    +----------------+ Configmaps |    |
+       |                                                     | Secrets    |    |
+       |                                                     +------------+    |
+       |                                                                       |
+       |                                                                       |
+       -------------------------------------------------------------------------
 
 ```
 
@@ -134,7 +134,7 @@ This solution allows to easily deploy multiple RabbitMQ instances compared to th
 ### Global parameters
 
 | Name                      | Description                                     | Value |
-| ------------------------- | ----------------------------------------------- | ----- |
+|:--------------------------|:------------------------------------------------|:------|
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
@@ -143,7 +143,7 @@ This solution allows to easily deploy multiple RabbitMQ instances compared to th
 ### Common parameters
 
 | Name                | Description                                        | Value           |
-| ------------------- | -------------------------------------------------- | --------------- |
+|:--------------------|:---------------------------------------------------|:----------------|
 | `kubeVersion`       | Override Kubernetes version                        | `""`            |
 | `nameOverride`      | String to partially override common.names.fullname | `""`            |
 | `fullnameOverride`  | String to fully override common.names.fullname     | `""`            |
@@ -155,62 +155,62 @@ This solution allows to easily deploy multiple RabbitMQ instances compared to th
 
 ### &reg;abbitMQ Cluster Operator Parameters
 
-| Name                                                          | Description                                                                                             | Value                                    |
-| ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | ---------------------------------------- |
-| `rabbitmqImage.registry`                                      | RabbitMQ Image registry                                                                                 | `docker.io`                              |
-| `rabbitmqImage.repository`                                    | RabbitMQ Image repository                                                                               | `bitnami/rabbitmq`                       |
-| `rabbitmqImage.tag`                                           | RabbitMQ Image tag (immutable tags are recommended)                                                     | `3.8.27-debian-10-r6`                    |
-| `rabbitmqImage.pullSecrets`                                   | RabbitMQ Image pull secrets                                                                             | `[]`                                     |
-| `credentialUpdaterImage.registry`                             | RabbitMQ Default User Credential Updater Image registry                                                 | `docker.io`                              |
-| `credentialUpdaterImage.repository`                           | RabbitMQ Default User Credential Updater Image repository                                               | `bitnami/rmq-default-credential-updater` |
-| `credentialUpdaterImage.tag`                                  | RabbitMQ Default User Credential Updater Image tag (immutable tags are recommended)                     | `1.0.1-scratch-r0`                       |
-| `credentialUpdaterImage.pullSecrets`                          | RabbitMQ Default User Credential Updater Image pull secrets                                             | `[]`                                     |
+| Name                                                          | Description                                                                                                 | Value                                    |
+|:--------------------------------------------------------------|:------------------------------------------------------------------------------------------------------------|:-----------------------------------------|
+| `rabbitmqImage.registry`                                      | RabbitMQ Image registry                                                                                     | `docker.io`                              |
+| `rabbitmqImage.repository`                                    | RabbitMQ Image repository                                                                                   | `bitnami/rabbitmq`                       |
+| `rabbitmqImage.tag`                                           | RabbitMQ Image tag (immutable tags are recommended)                                                         | `3.8.27-debian-10-r6`                    |
+| `rabbitmqImage.pullSecrets`                                   | RabbitMQ Image pull secrets                                                                                 | `[]`                                     |
+| `credentialUpdaterImage.registry`                             | RabbitMQ Default User Credential Updater Image registry                                                     | `docker.io`                              |
+| `credentialUpdaterImage.repository`                           | RabbitMQ Default User Credential Updater Image repository                                                   | `bitnami/rmq-default-credential-updater` |
+| `credentialUpdaterImage.tag`                                  | RabbitMQ Default User Credential Updater Image tag (immutable tags are recommended)                         | `1.0.1-scratch-r0`                       |
+| `credentialUpdaterImage.pullSecrets`                          | RabbitMQ Default User Credential Updater Image pull secrets                                                 | `[]`                                     |
 | `clusterOperator.image.registry`                              | &reg;abbitMQ Cluster Operator image registry                                                                | `docker.io`                              |
 | `clusterOperator.image.repository`                            | &reg;abbitMQ Cluster Operator image repository                                                              | `bitnami/rabbitmq-cluster-operator`      |
 | `clusterOperator.image.tag`                                   | &reg;abbitMQ Cluster Operator image tag (immutable tags are recommended)                                    | `1.11.0-scratch-r0`                      |
 | `clusterOperator.image.pullPolicy`                            | &reg;abbitMQ Cluster Operator image pull policy                                                             | `IfNotPresent`                           |
 | `clusterOperator.image.pullSecrets`                           | &reg;abbitMQ Cluster Operator image pull secrets                                                            | `[]`                                     |
 | `clusterOperator.replicaCount`                                | Number of &reg;abbitMQ Cluster Operator replicas to deploy                                                  | `1`                                      |
-| `clusterOperator.schedulerName`                               | Alternative scheduler                                                                                   | `""`                                     |
-| `clusterOperator.topologySpreadConstraints`                   | Topology Spread Constraints for pod assignment                                                          | `[]`                                     |
+| `clusterOperator.schedulerName`                               | Alternative scheduler                                                                                       | `""`                                     |
+| `clusterOperator.topologySpreadConstraints`                   | Topology Spread Constraints for pod assignment                                                              | `[]`                                     |
 | `clusterOperator.livenessProbe.enabled`                       | Enable livenessProbe on &reg;abbitMQ Cluster Operator nodes                                                 | `true`                                   |
-| `clusterOperator.livenessProbe.initialDelaySeconds`           | Initial delay seconds for livenessProbe                                                                 | `5`                                      |
-| `clusterOperator.livenessProbe.periodSeconds`                 | Period seconds for livenessProbe                                                                        | `30`                                     |
-| `clusterOperator.livenessProbe.timeoutSeconds`                | Timeout seconds for livenessProbe                                                                       | `5`                                      |
-| `clusterOperator.livenessProbe.failureThreshold`              | Failure threshold for livenessProbe                                                                     | `5`                                      |
-| `clusterOperator.livenessProbe.successThreshold`              | Success threshold for livenessProbe                                                                     | `1`                                      |
+| `clusterOperator.livenessProbe.initialDelaySeconds`           | Initial delay seconds for livenessProbe                                                                     | `5`                                      |
+| `clusterOperator.livenessProbe.periodSeconds`                 | Period seconds for livenessProbe                                                                            | `30`                                     |
+| `clusterOperator.livenessProbe.timeoutSeconds`                | Timeout seconds for livenessProbe                                                                           | `5`                                      |
+| `clusterOperator.livenessProbe.failureThreshold`              | Failure threshold for livenessProbe                                                                         | `5`                                      |
+| `clusterOperator.livenessProbe.successThreshold`              | Success threshold for livenessProbe                                                                         | `1`                                      |
 | `clusterOperator.readinessProbe.enabled`                      | Enable readinessProbe on &reg;abbitMQ Cluster Operator nodes                                                | `true`                                   |
-| `clusterOperator.readinessProbe.initialDelaySeconds`          | Initial delay seconds for readinessProbe                                                                | `5`                                      |
-| `clusterOperator.readinessProbe.periodSeconds`                | Period seconds for readinessProbe                                                                       | `30`                                     |
-| `clusterOperator.readinessProbe.timeoutSeconds`               | Timeout seconds for readinessProbe                                                                      | `5`                                      |
-| `clusterOperator.readinessProbe.failureThreshold`             | Failure threshold for readinessProbe                                                                    | `5`                                      |
-| `clusterOperator.readinessProbe.successThreshold`             | Success threshold for readinessProbe                                                                    | `1`                                      |
+| `clusterOperator.readinessProbe.initialDelaySeconds`          | Initial delay seconds for readinessProbe                                                                    | `5`                                      |
+| `clusterOperator.readinessProbe.periodSeconds`                | Period seconds for readinessProbe                                                                           | `30`                                     |
+| `clusterOperator.readinessProbe.timeoutSeconds`               | Timeout seconds for readinessProbe                                                                          | `5`                                      |
+| `clusterOperator.readinessProbe.failureThreshold`             | Failure threshold for readinessProbe                                                                        | `5`                                      |
+| `clusterOperator.readinessProbe.successThreshold`             | Success threshold for readinessProbe                                                                        | `1`                                      |
 | `clusterOperator.startupProbe.enabled`                        | Enable startupProbe on &reg;abbitMQ Cluster Operator nodes                                                  | `false`                                  |
-| `clusterOperator.startupProbe.initialDelaySeconds`            | Initial delay seconds for startupProbe                                                                  | `5`                                      |
-| `clusterOperator.startupProbe.periodSeconds`                  | Period seconds for startupProbe                                                                         | `30`                                     |
-| `clusterOperator.startupProbe.timeoutSeconds`                 | Timeout seconds for startupProbe                                                                        | `5`                                      |
-| `clusterOperator.startupProbe.failureThreshold`               | Failure threshold for startupProbe                                                                      | `5`                                      |
-| `clusterOperator.startupProbe.successThreshold`               | Success threshold for startupProbe                                                                      | `1`                                      |
-| `clusterOperator.customLivenessProbe`                         | Custom livenessProbe that overrides the default one                                                     | `{}`                                     |
-| `clusterOperator.customReadinessProbe`                        | Custom readinessProbe that overrides the default one                                                    | `{}`                                     |
-| `clusterOperator.customStartupProbe`                          | Custom startupProbe that overrides the default one                                                      | `{}`                                     |
+| `clusterOperator.startupProbe.initialDelaySeconds`            | Initial delay seconds for startupProbe                                                                      | `5`                                      |
+| `clusterOperator.startupProbe.periodSeconds`                  | Period seconds for startupProbe                                                                             | `30`                                     |
+| `clusterOperator.startupProbe.timeoutSeconds`                 | Timeout seconds for startupProbe                                                                            | `5`                                      |
+| `clusterOperator.startupProbe.failureThreshold`               | Failure threshold for startupProbe                                                                          | `5`                                      |
+| `clusterOperator.startupProbe.successThreshold`               | Success threshold for startupProbe                                                                          | `1`                                      |
+| `clusterOperator.customLivenessProbe`                         | Custom livenessProbe that overrides the default one                                                         | `{}`                                     |
+| `clusterOperator.customReadinessProbe`                        | Custom readinessProbe that overrides the default one                                                        | `{}`                                     |
+| `clusterOperator.customStartupProbe`                          | Custom startupProbe that overrides the default one                                                          | `{}`                                     |
 | `clusterOperator.resources.limits`                            | The resources limits for the &reg;abbitMQ Cluster Operator containers                                       | `{}`                                     |
 | `clusterOperator.resources.requests`                          | The requested resources for the &reg;abbitMQ Cluster Operator containers                                    | `{}`                                     |
 | `clusterOperator.podSecurityContext.enabled`                  | Enabled &reg;abbitMQ Cluster Operator pods' Security Context                                                | `true`                                   |
 | `clusterOperator.podSecurityContext.fsGroup`                  | Set &reg;abbitMQ Cluster Operator pod's Security Context fsGroup                                            | `1001`                                   |
 | `clusterOperator.containerSecurityContext.enabled`            | Enabled &reg;abbitMQ Cluster Operator containers' Security Context                                          | `true`                                   |
 | `clusterOperator.containerSecurityContext.runAsUser`          | Set &reg;abbitMQ Cluster Operator containers' Security Context runAsUser                                    | `1001`                                   |
-| `clusterOperator.containerSecurityContext.runAsNonRoot`       | Force running the container as non root                                                                 | `true`                                   |
-| `clusterOperator.command`                                     | Override default container command (useful when using custom images)                                    | `[]`                                     |
-| `clusterOperator.args`                                        | Override default container args (useful when using custom images)                                       | `[]`                                     |
+| `clusterOperator.containerSecurityContext.runAsNonRoot`       | Force running the container as non root                                                                     | `true`                                   |
+| `clusterOperator.command`                                     | Override default container command (useful when using custom images)                                        | `[]`                                     |
+| `clusterOperator.args`                                        | Override default container args (useful when using custom images)                                           | `[]`                                     |
 | `clusterOperator.hostAliases`                                 | &reg;abbitMQ Cluster Operator pods host aliases                                                             | `[]`                                     |
 | `clusterOperator.podLabels`                                   | Extra labels for &reg;abbitMQ Cluster Operator pods                                                         | `{}`                                     |
 | `clusterOperator.podAnnotations`                              | Annotations for &reg;abbitMQ Cluster Operator pods                                                          | `{}`                                     |
-| `clusterOperator.podAffinityPreset`                           | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                     | `""`                                     |
-| `clusterOperator.podAntiAffinityPreset`                       | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                | `soft`                                   |
-| `clusterOperator.nodeAffinityPreset.type`                     | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`               | `""`                                     |
-| `clusterOperator.nodeAffinityPreset.key`                      | Node label key to match. Ignored if `affinity` is set                                                   | `""`                                     |
-| `clusterOperator.nodeAffinityPreset.values`                   | Node label values to match. Ignored if `affinity` is set                                                | `[]`                                     |
+| `clusterOperator.podAffinityPreset`                           | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                         | `""`                                     |
+| `clusterOperator.podAntiAffinityPreset`                       | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                    | `soft`                                   |
+| `clusterOperator.nodeAffinityPreset.type`                     | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                   | `""`                                     |
+| `clusterOperator.nodeAffinityPreset.key`                      | Node label key to match. Ignored if `affinity` is set                                                       | `""`                                     |
+| `clusterOperator.nodeAffinityPreset.values`                   | Node label values to match. Ignored if `affinity` is set                                                    | `[]`                                     |
 | `clusterOperator.affinity`                                    | Affinity for &reg;abbitMQ Cluster Operator pods assignment                                                  | `{}`                                     |
 | `clusterOperator.nodeSelector`                                | Node labels for &reg;abbitMQ Cluster Operator pods assignment                                               | `{}`                                     |
 | `clusterOperator.tolerations`                                 | Tolerations for &reg;abbitMQ Cluster Operator pods assignment                                               | `[]`                                     |
@@ -225,42 +225,42 @@ This solution allows to easily deploy multiple RabbitMQ instances compared to th
 | `clusterOperator.extraVolumeMounts`                           | Optionally specify extra list of additional volumeMounts for the &reg;abbitMQ Cluster Operator container(s) | `[]`                                     |
 | `clusterOperator.sidecars`                                    | Add additional sidecar containers to the &reg;abbitMQ Cluster Operator pod(s)                               | `[]`                                     |
 | `clusterOperator.initContainers`                              | Add additional init containers to the &reg;abbitMQ Cluster Operator pod(s)                                  | `[]`                                     |
-| `clusterOperator.rbac.create`                                 | Specifies whether RBAC resources should be created                                                      | `true`                                   |
-| `clusterOperator.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                    | `true`                                   |
-| `clusterOperator.serviceAccount.name`                         | The name of the ServiceAccount to use.                                                                  | `""`                                     |
-| `clusterOperator.serviceAccount.annotations`                  | Add annotations                                                                                         | `{}`                                     |
-| `clusterOperator.serviceAccount.automountServiceAccountToken` | Automount API credentials for a service account.                                                        | `true`                                   |
+| `clusterOperator.rbac.create`                                 | Specifies whether RBAC resources should be created                                                          | `true`                                   |
+| `clusterOperator.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                        | `true`                                   |
+| `clusterOperator.serviceAccount.name`                         | The name of the ServiceAccount to use.                                                                      | `""`                                     |
+| `clusterOperator.serviceAccount.annotations`                  | Add annotations                                                                                             | `{}`                                     |
+| `clusterOperator.serviceAccount.automountServiceAccountToken` | Automount API credentials for a service account.                                                            | `true`                                   |
 
 
 ### &reg;abbitMQ Cluster Operator Metrics parameters
 
-| Name                                                       | Description                                                                 | Value                    |
-| ---------------------------------------------------------- | --------------------------------------------------------------------------- | ------------------------ |
-| `clusterOperator.metrics.enabled`                          | Create a service for accessing the metrics endpoint                         | `false`                  |
+| Name                                                       | Description                                                                     | Value                    |
+|:-----------------------------------------------------------|:--------------------------------------------------------------------------------|:-------------------------|
+| `clusterOperator.metrics.enabled`                          | Create a service for accessing the metrics endpoint                             | `false`                  |
 | `clusterOperator.metrics.service.type`                     | &reg;abbitMQ Cluster Operator metrics service type                              | `ClusterIP`              |
 | `clusterOperator.metrics.service.ports.http`               | &reg;abbitMQ Cluster Operator metrics service HTTP port                         | `80`                     |
-| `clusterOperator.metrics.service.nodePorts.http`           | Node port for HTTP                                                          | `""`                     |
+| `clusterOperator.metrics.service.nodePorts.http`           | Node port for HTTP                                                              | `""`                     |
 | `clusterOperator.metrics.service.clusterIP`                | &reg;abbitMQ Cluster Operator metrics service Cluster IP                        | `""`                     |
-| `clusterOperator.metrics.service.extraPorts`               | Extra ports to expose (normally used with the `sidecar` value)              | `[]`                     |
+| `clusterOperator.metrics.service.extraPorts`               | Extra ports to expose (normally used with the `sidecar` value)                  | `[]`                     |
 | `clusterOperator.metrics.service.loadBalancerIP`           | &reg;abbitMQ Cluster Operator metrics service Load Balancer IP                  | `""`                     |
 | `clusterOperator.metrics.service.loadBalancerSourceRanges` | &reg;abbitMQ Cluster Operator metrics service Load Balancer sources             | `[]`                     |
 | `clusterOperator.metrics.service.externalTrafficPolicy`    | &reg;abbitMQ Cluster Operator metrics service external traffic policy           | `Cluster`                |
 | `clusterOperator.metrics.service.annotations`              | Additional custom annotations for &reg;abbitMQ Cluster Operator metrics service | `{}`                     |
-| `clusterOperator.metrics.serviceMonitor.enabled`           | Specify if a servicemonitor will be deployed for prometheus-operator        | `false`                  |
-| `clusterOperator.metrics.serviceMonitor.jobLabel`          | Specify the jobLabel to use for the prometheus-operator                     | `app.kubernetes.io/name` |
-| `clusterOperator.metrics.serviceMonitor.honorLabels`       | Honor metrics labels                                                        | `false`                  |
-| `clusterOperator.metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                         | `{}`                     |
-| `clusterOperator.metrics.serviceMonitor.scrapeTimeout`     | Timeout after which the scrape is ended                                     | `""`                     |
-| `clusterOperator.metrics.serviceMonitor.interval`          | Scrape interval. If not set, the Prometheus default scrape interval is used | `""`                     |
-| `clusterOperator.metrics.serviceMonitor.additionalLabels`  | Used to pass Labels that are required by the installed Prometheus Operator  | `{}`                     |
-| `clusterOperator.metrics.serviceMonitor.metricRelabelings` | Specify additional relabeling of metrics                                    | `[]`                     |
-| `clusterOperator.metrics.serviceMonitor.relabelings`       | Specify general relabeling                                                  | `[]`                     |
+| `clusterOperator.metrics.serviceMonitor.enabled`           | Specify if a servicemonitor will be deployed for prometheus-operator            | `false`                  |
+| `clusterOperator.metrics.serviceMonitor.jobLabel`          | Specify the jobLabel to use for the prometheus-operator                         | `app.kubernetes.io/name` |
+| `clusterOperator.metrics.serviceMonitor.honorLabels`       | Honor metrics labels                                                            | `false`                  |
+| `clusterOperator.metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                             | `{}`                     |
+| `clusterOperator.metrics.serviceMonitor.scrapeTimeout`     | Timeout after which the scrape is ended                                         | `""`                     |
+| `clusterOperator.metrics.serviceMonitor.interval`          | Scrape interval. If not set, the Prometheus default scrape interval is used     | `""`                     |
+| `clusterOperator.metrics.serviceMonitor.additionalLabels`  | Used to pass Labels that are required by the installed Prometheus Operator      | `{}`                     |
+| `clusterOperator.metrics.serviceMonitor.metricRelabelings` | Specify additional relabeling of metrics                                        | `[]`                     |
+| `clusterOperator.metrics.serviceMonitor.relabelings`       | Specify general relabeling                                                      | `[]`                     |
 
 
 ### RabbitMQ Messaging Topology Operator Parameters
 
 | Name                                                              | Description                                                                                                        | Value                                     |
-| ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | ----------------------------------------- |
+|:------------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------|:------------------------------------------|
 | `msgTopologyOperator.image.registry`                              | RabbitMQ Messaging Topology Operator image registry                                                                | `docker.io`                               |
 | `msgTopologyOperator.image.repository`                            | RabbitMQ Messaging Topology Operator image repository                                                              | `bitnami/rmq-messaging-topology-operator` |
 | `msgTopologyOperator.image.tag`                                   | RabbitMQ Messaging Topology Operator image tag (immutable tags are recommended)                                    | `1.2.1-scratch-r0`                        |
@@ -342,33 +342,33 @@ This solution allows to easily deploy multiple RabbitMQ instances compared to th
 
 ### RabbitMQ Messaging Topology Operator parameters
 
-| Name                                                           | Description                                                                 | Value                    |
-| -------------------------------------------------------------- | --------------------------------------------------------------------------- | ------------------------ |
-| `msgTopologyOperator.metrics.enabled`                          | Create a service for accessing the metrics endpoint                         | `false`                  |
+| Name                                                           | Description                                                                     | Value                    |
+|:---------------------------------------------------------------|:--------------------------------------------------------------------------------|:-------------------------|
+| `msgTopologyOperator.metrics.enabled`                          | Create a service for accessing the metrics endpoint                             | `false`                  |
 | `msgTopologyOperator.metrics.service.type`                     | &reg;abbitMQ Cluster Operator metrics service type                              | `ClusterIP`              |
 | `msgTopologyOperator.metrics.service.ports.http`               | &reg;abbitMQ Cluster Operator metrics service HTTP port                         | `80`                     |
-| `msgTopologyOperator.metrics.service.nodePorts.http`           | Node port for HTTP                                                          | `""`                     |
+| `msgTopologyOperator.metrics.service.nodePorts.http`           | Node port for HTTP                                                              | `""`                     |
 | `msgTopologyOperator.metrics.service.clusterIP`                | &reg;abbitMQ Cluster Operator metrics service Cluster IP                        | `""`                     |
-| `msgTopologyOperator.metrics.service.extraPorts`               | Extra ports to expose (normally used with the `sidecar` value)              | `[]`                     |
+| `msgTopologyOperator.metrics.service.extraPorts`               | Extra ports to expose (normally used with the `sidecar` value)                  | `[]`                     |
 | `msgTopologyOperator.metrics.service.loadBalancerIP`           | &reg;abbitMQ Cluster Operator metrics service Load Balancer IP                  | `""`                     |
 | `msgTopologyOperator.metrics.service.loadBalancerSourceRanges` | &reg;abbitMQ Cluster Operator metrics service Load Balancer sources             | `[]`                     |
 | `msgTopologyOperator.metrics.service.externalTrafficPolicy`    | &reg;abbitMQ Cluster Operator metrics service external traffic policy           | `Cluster`                |
 | `msgTopologyOperator.metrics.service.annotations`              | Additional custom annotations for &reg;abbitMQ Cluster Operator metrics service | `{}`                     |
-| `msgTopologyOperator.metrics.serviceMonitor.enabled`           | Specify if a servicemonitor will be deployed for prometheus-operator        | `false`                  |
-| `msgTopologyOperator.metrics.serviceMonitor.jobLabel`          | Specify the jobLabel to use for the prometheus-operator                     | `app.kubernetes.io/name` |
-| `msgTopologyOperator.metrics.serviceMonitor.additionalLabels`  | Used to pass Labels that are required by the installed Prometheus Operator  | `{}`                     |
-| `msgTopologyOperator.metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                         | `{}`                     |
-| `msgTopologyOperator.metrics.serviceMonitor.honorLabels`       | Honor metrics labels                                                        | `false`                  |
-| `msgTopologyOperator.metrics.serviceMonitor.scrapeTimeout`     | Timeout after which the scrape is ended                                     | `""`                     |
-| `msgTopologyOperator.metrics.serviceMonitor.interval`          | Scrape interval. If not set, the Prometheus default scrape interval is used | `""`                     |
-| `msgTopologyOperator.metrics.serviceMonitor.metricRelabelings` | Specify additional relabeling of metrics                                    | `[]`                     |
-| `msgTopologyOperator.metrics.serviceMonitor.relabelings`       | Specify general relabeling                                                  | `[]`                     |
+| `msgTopologyOperator.metrics.serviceMonitor.enabled`           | Specify if a servicemonitor will be deployed for prometheus-operator            | `false`                  |
+| `msgTopologyOperator.metrics.serviceMonitor.jobLabel`          | Specify the jobLabel to use for the prometheus-operator                         | `app.kubernetes.io/name` |
+| `msgTopologyOperator.metrics.serviceMonitor.additionalLabels`  | Used to pass Labels that are required by the installed Prometheus Operator      | `{}`                     |
+| `msgTopologyOperator.metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                             | `{}`                     |
+| `msgTopologyOperator.metrics.serviceMonitor.honorLabels`       | Honor metrics labels                                                            | `false`                  |
+| `msgTopologyOperator.metrics.serviceMonitor.scrapeTimeout`     | Timeout after which the scrape is ended                                         | `""`                     |
+| `msgTopologyOperator.metrics.serviceMonitor.interval`          | Scrape interval. If not set, the Prometheus default scrape interval is used     | `""`                     |
+| `msgTopologyOperator.metrics.serviceMonitor.metricRelabelings` | Specify additional relabeling of metrics                                        | `[]`                     |
+| `msgTopologyOperator.metrics.serviceMonitor.relabelings`       | Specify general relabeling                                                      | `[]`                     |
 
 
 ### cert-manager parameters
 
 | Name             | Description                                                       | Value   |
-| ---------------- | ----------------------------------------------------------------- | ------- |
+|:-----------------|:------------------------------------------------------------------|:--------|
 | `useCertManager` | Deploy cert-manager objects (Issuer and Certificate) for webhooks | `false` |
 
 
