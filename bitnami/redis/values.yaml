@@ -512,7 +512,7 @@ replica:
   extraEnvVarsSecret: ""
   ## @param replica.externalMaster.enabled Use external master for bootstrapping
   ## @param replica.externalMaster.host External master host to bootstrap from
-  ## @param replica.externalMaster.port Port for external master host
+  ## @param replica.externalMaster.port Port for Redis service external master host
   ##
   externalMaster:
     enabled: false
@@ -912,11 +912,11 @@ sentinel:
   extraEnvVarsSecret: ""
   ## @param sentinel.externalMaster.enabled Use external master for bootstrapping
   ## @param sentinel.externalMaster.host External master host to bootstrap from
-  ## @param sentinel.externalMaster.port Port for external master host
+  ## @param sentinel.externalMaster.port Port for Redis service external master host
   externalMaster:
     enabled: false
     host: ""
-    port: 26379
+    port: 6379
   ## @param sentinel.containerPorts.sentinel Container port to open on Redis&trade; Sentinel nodes
   ##
   containerPorts:

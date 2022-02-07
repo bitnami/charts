@@ -220,7 +220,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `replica.extraEnvVarsSecret`                 | Name of existing Secret containing extra env vars for Redis&trade; replicas nodes                   | `""`                     |
 | `replica.externalMaster.enabled`             | Use external master for bootstrapping                                                               | `false`                  |
 | `replica.externalMaster.host`                | External master host to bootstrap from                                                              | `""`                     |
-| `replica.externalMaster.port`                | Port for external master host                                                                       | `6379`                   |
+| `replica.externalMaster.port`                | Port for Redis service external master host                                                         | `6379`                   |
 | `replica.containerPorts.redis`               | Container port to open on Redis&trade; replicas nodes                                               | `6379`                   |
 | `replica.startupProbe.enabled`               | Enable startupProbe on Redis&trade; replicas nodes                                                  | `false`                  |
 | `replica.startupProbe.initialDelaySeconds`   | Initial delay seconds for startupProbe                                                              | `20`                     |
@@ -324,7 +324,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sentinel.extraEnvVarsSecret`                 | Name of existing Secret containing extra env vars for Redis&trade; Sentinel nodes                                                           | `""`                     |
 | `sentinel.externalMaster.enabled`             | Use external master for bootstrapping                                                                                                       | `false`                  |
 | `sentinel.externalMaster.host`                | External master host to bootstrap from                                                                                                      | `""`                     |
-| `sentinel.externalMaster.port`                | Port for external master host                                                                                                               | `26379`                  |
+| `sentinel.externalMaster.port`                | Port for Redis service external master host                                                                                                 | `6379`                   |
 | `sentinel.containerPorts.sentinel`            | Container port to open on Redis&trade; Sentinel nodes                                                                                       | `26379`                  |
 | `sentinel.startupProbe.enabled`               | Enable startupProbe on Redis&trade; Sentinel nodes                                                                                          | `false`                  |
 | `sentinel.startupProbe.initialDelaySeconds`   | Initial delay seconds for startupProbe                                                                                                      | `20`                     |
