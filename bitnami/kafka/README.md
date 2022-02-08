@@ -7,7 +7,7 @@ Apache Kafka is a distributed streaming platform designed to build real-time pip
 [Overview of Apache Kafka](http://kafka.apache.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -244,6 +244,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalAccess.service.type`                     | Kubernetes Service type for external access. It can be NodePort or LoadBalancer                | `LoadBalancer`        |
 | `externalAccess.service.ports.external`           | Kafka port used for external access when service type is LoadBalancer                          | `9094`                |
 | `externalAccess.service.loadBalancerIPs`          | Array of load balancer IPs for each Kafka broker. Length must be the same as replicaCount      | `[]`                  |
+| `externalAccess.service.loadBalancerNames`        | Array of load balancer names for each Kafka broker. Length must be the same as replicaCount    | `[]`                  |
 | `externalAccess.service.loadBalancerSourceRanges` | Address(es) that are allowed when service is LoadBalancer                                      | `[]`                  |
 | `externalAccess.service.nodePorts`                | Array of node ports used for each Kafka broker. Length must be the same as replicaCount        | `[]`                  |
 | `externalAccess.service.useHostIPs`               | Use service host IPs to configure Kafka external listener when service type is NodePort        | `false`               |

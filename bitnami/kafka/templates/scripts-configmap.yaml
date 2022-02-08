@@ -88,7 +88,7 @@ data:
     {{- if .Values.externalAccess.autoDiscovery.enabled }}
     export EXTERNAL_ACCESS_IP="$(<${SHARED_FILE})"
     {{- else }}
-    export EXTERNAL_ACCESS_IP=$(echo '{{ .Values.externalAccess.service.loadBalancerIPs }}' | tr -d '[]' | cut -d ' ' -f "$(($ID + 1))")
+    export EXTERNAL_ACCESS_IP=$(echo '{{ .Values.externalAccess.service.loadBalancerNames | default .Values.externalAccess.service.loadBalancerIPs }}' | tr -d '[]' | cut -d ' ' -f "$(($ID + 1))")
     {{- end }}
     export EXTERNAL_ACCESS_PORT={{ .Values.externalAccess.service.ports.external }}
     {{- else if eq .Values.externalAccess.service.type "NodePort" }}
