@@ -114,7 +114,7 @@ When using Ingress, it will be set to the Ingress hostname.
 {{/* Concourse credential web secret name */}}
 {{- define "concourse.web.secretName" -}}
 {{- if .Values.web.existingSecret -}}
-  {{- .Values.web.existingSecret -}}
+  {{- printf "%s" .Values.web.existingSecret -}}
 {{- else -}}
   {{- printf "%s" (include "concourse.web.fullname" . ) -}}
 {{- end -}}
@@ -125,7 +125,7 @@ When using Ingress, it will be set to the Ingress hostname.
 */}}
 {{- define "concourse.web.configmapName" -}}
 {{- if .Values.web.existingConfigmap -}}
-  {{- .Values.web.existingConfigmap -}}
+  {{- printf "%s" .Values.web.existingConfigmap -}}
 {{- else -}}
   {{- printf "%s" (include "concourse.web.fullname" . ) -}}
 {{- end -}}
@@ -164,17 +164,17 @@ Get the Postgresql credentials secret.
             {{- else if .Values.postgresql.auth.existingSecret -}}
                 {{- printf "%s" (tpl .Values.postgresql.auth.existingSecret $) -}}
             {{- else -}}
-                {{- printf "%s" (include "common.names.fullname" .) -}}
+                {{- printf "%s" (include "concourse.postgresql.fullname" .) -}}
             {{- end -}}
         {{- else if .Values.postgresql.auth.existingSecret -}}
             {{- printf "%s" (tpl .Values.postgresql.auth.existingSecret $) -}}
         {{- else -}}
-            {{- printf "%s" (include "common.names.fullname" .) -}}
+            {{- printf "%s" (include "concourse.postgresql.fullname" .) -}}
         {{- end -}}
     {{- else if .Values.postgresql.auth.existingSecret -}}
         {{- printf "%s" (tpl .Values.postgresql.auth.existingSecret $) -}}
     {{- else -}}
-        {{- printf "%s" (include "common.names.fullname" .) -}}
+        {{- printf "%s" (include "concourse.postgresql.fullname" .) -}}
     {{- end -}}
 {{- else if .Values.externalDatabase.existingSecret -}}
     {{- printf "%s" .Values.externalDatabase.existingSecret -}}

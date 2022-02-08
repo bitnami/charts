@@ -1,9 +1,9 @@
-{{- if and .Values.web.enabled .Values.web.rbac.create -}}
+{{- if .Values.web.enabled }}
+{{- if .Values.web.rbac.create }}
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
-kind: Role
+kind: ClusterRole
 metadata:
-  name: {{ template "concourse.web.fullname" . }}
-  namespace: {{ .Release.Namespace | quote }}
+  name: {{ include "concourse.web.fullname" . }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: web
     {{- if .Values.commonLabels }}
@@ -13,14 +13,6 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 rules:
-  {{- $pspAvailable := (semverCompare "<1.25-0" (include "common.capabilities.kubeVersion" .)) -}}
-  {{- if and $pspAvailable .Values.web.psp.create }}
-  - apiGroups: ['policy']
-    resources: ['podsecuritypolicies']
-    verbs:     ['use']
-    resourceNames:
-      - {{ template "concourse.web.fullname" . }}
-  {{- end }}
   - apiGroups: [""]
     resources: ["secrets"]
     verbs: ["get"]
@@ -28,25 +20,27 @@ rules:
   {{- include "common.tplvalues.render" ( dict "value" .Values.web.rbac.rules "context" $ ) | nindent 2 }}
   {{- end }}
 ---
+{{- end }}
+{{- $pspAvailable := (semverCompare "<1.25-0" (include "common.capabilities.kubeVersion" .)) }}
+{{- if and $pspAvailable .Values.web.psp.create }}
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
-kind: RoleBinding
+kind: ClusterRole
 metadata:
-  name: {{ template "concourse.web.fullname" . }}
-  namespace: {{ .Release.Namespace | quote }}
+  name: {{ printf "%s-psp" (include "concourse.web.fullname" .) }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
-    app: concourse
+    app.kubernetes.io/component: web
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: Role
-  name: {{ template "concourse.web.fullname" . }}
-subjects:
-  - kind: ServiceAccount
-    name: {{ template "concourse.web.serviceAccountName" . }}
-    namespace: {{ .Release.Namespace | quote }}
+rules:
+  - apiGroups: ['policy']
+    resources: ['podsecuritypolicies']
+    verbs:     ['use']
+    resourceNames:
+      - {{ include "concourse.web.fullname" . }}
+---
+{{- end }}
 {{- end }}
