@@ -400,6 +400,10 @@ postgresql:
   repmgrConnectTimeout: 5
   repmgrReconnectAttempts: 3
   repmgrReconnectInterval: 5
+  ## EXPERMENTAL: Use pg_rewind for standby failover
+  ## @param postgresql.usePgRewind Use pg_rewind for standby failover (experimental)
+  ##
+  usePgRewind: false
   ## Audit settings
   ## https://github.com/bitnami/bitnami-docker-postgresql#auditing
   ##
@@ -1383,4 +1387,5 @@ networkPolicy:
     ##       - namespaceSelector:
     ##           matchLabels:
     ##             label: example
+    ##
     customRules: []
