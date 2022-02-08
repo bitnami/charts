@@ -142,16 +142,8 @@ data:
       REDIS_MASTER_PORT_NUMBER="${REDIS_EXTERNAL_MASTER_PORT}"
     fi
 
-    if [[ "$REDIS_REPLICATION_MODE" = "master" ]]; then
-        debug "Starting as master node"
-        if [[ ! -f /opt/bitnami/redis/etc/master.conf ]]; then
-            cp /opt/bitnami/redis/mounted-etc/master.conf /opt/bitnami/redis/etc/master.conf
-        fi
-    else
-        debug "Starting as replica node"
-        if [[ ! -f /opt/bitnami/redis/etc/replica.conf ]];then
-            cp /opt/bitnami/redis/mounted-etc/replica.conf /opt/bitnami/redis/etc/replica.conf
-        fi
+    if [[ ! -f /opt/bitnami/redis/etc/replica.conf ]];then
+        cp /opt/bitnami/redis/mounted-etc/replica.conf /opt/bitnami/redis/etc/replica.conf
     fi
 
     if [[ ! -f /opt/bitnami/redis/etc/redis.conf ]];then
