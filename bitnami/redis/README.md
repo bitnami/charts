@@ -7,7 +7,7 @@ Redis(TM) is an open source, advanced key-value store. It is often referred to a
 [Overview of &reg;edis(&trade;)](http://redis.io)
 
 Disclaimer: Redis is a registered trademark of Redis Labs Ltd. Any rights therein are reserved to Redis Labs Ltd. Any use by Bitnami is for referential purposes only and does not indicate any sponsorship, endorsement, or affiliation between Redis Labs Ltd.
-                           
+
 ## TL;DR
 
 ```bash
@@ -525,6 +525,8 @@ sentinel:
 ```
 
 :warning: This is currently limited to clusters in which Sentinel and Redis run on the same node! :warning:
+
+Please also note that sentinel must be listening on port `26379`, and this is currently not configurable.
 
 Once the Kubernetes Redis Deployment is online and confirmed to be working with the existing cluster, the configuration can then be removed and the cluster will remain connected.
 
