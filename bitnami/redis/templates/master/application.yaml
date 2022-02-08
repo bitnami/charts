@@ -428,6 +428,10 @@ spec:
         - name: redis-data
           persistentVolumeClaim:
             claimName: {{ printf "%s" (tpl .Values.master.persistence.existingClaim .) }}
+  {{- else if (eq .Values.master.kind "Deployment") }}
+        - name: redis-data
+          persistentVolumeClaim:
+            claimName: {{ printf "redis-data-%s-master" (include "common.names.fullname" .) }}
   {{- else }}
   volumeClaimTemplates:
     - metadata:
