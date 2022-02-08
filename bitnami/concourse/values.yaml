@@ -26,6 +26,9 @@ nameOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname
 ##
 fullnameOverride: ""
+## @param clusterDomain Kubernetes Cluster Domain
+##
+clusterDomain: cluster.local
 ## @param commonLabels Labels to add to all deployed objects
 ##
 commonLabels: {}
