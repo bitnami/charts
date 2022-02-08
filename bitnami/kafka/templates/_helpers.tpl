@@ -158,6 +158,23 @@ Return true if encryption via TLS for client connections should be configured
 {{- end -}}
 
 {{/*
+Return the configured value for the external client protocol, defaults to the same value as clientProtocol
+*/}}
+{{- define "kafka.externalClientProtocol" -}}
+    {{- coalesce .Values.auth.externalClientProtocol .Values.auth.clientProtocol -}}
+{{- end -}}
+
+{{/*
+Return true if encryption via TLS for external client connections should be configured
+*/}}
+{{- define "kafka.externalClient.tlsEncryption" -}}
+{{- $tlsProtocols := list "tls" "mtls" "sasl_tls" -}}
+{{- if (has (include "kafka.externalClientProtocol" . ) $tlsProtocols) -}}
+    {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return true if encryption via TLS for inter broker communication connections should be configured
 */}}
 {{- define "kafka.interBroker.tlsEncryption" -}}
@@ -171,7 +188,7 @@ Return true if encryption via TLS for inter broker communication connections sho
 Return true if encryption via TLS should be configured
 */}}
 {{- define "kafka.tlsEncryption" -}}
-{{- if or (include "kafka.client.tlsEncryption" .) (include "kafka.interBroker.tlsEncryption" .) -}}
+{{- if or (include "kafka.client.tlsEncryption" .) (include "kafka.interBroker.tlsEncryption" .) (include "kafka.externalClient.tlsEncryption" .) -}}
     {{- true -}}
 {{- end -}}
 {{- end -}}
@@ -333,8 +350,8 @@ Compile all warnings into a single message, and call fail.
 {{/* Validate values of Kafka - Authentication protocols for Kafka */}}
 {{- define "kafka.validateValues.authProtocols" -}}
 {{- $authProtocols := list "plaintext" "tls" "mtls" "sasl" "sasl_tls" -}}
-{{- if or (not (has .Values.auth.clientProtocol $authProtocols)) (not (has .Values.auth.interBrokerProtocol $authProtocols)) -}}
-kafka: auth.clientProtocol auth.interBrokerProtocol
+{{- if or (not (has .Values.auth.clientProtocol $authProtocols)) (not (has .Values.auth.interBrokerProtocol $authProtocols)) (not (has (include "kafka.externalClientProtocol" . ) $authProtocols)) -}}
+kafka: auth.clientProtocol auth.externalClientProtocol auth.interBrokerProtocol
     Available authentication protocols are "plaintext", "tls", "mtls", "sasl" and "sasl_tls"
 {{- end -}}
 {{- end -}}

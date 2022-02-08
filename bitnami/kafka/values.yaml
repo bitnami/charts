@@ -68,7 +68,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/kafka
-  tag: 3.1.0-debian-10-r8
+  tag: 3.1.0-debian-10-r14
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -225,14 +225,18 @@ auth:
   ## | sasl      | Yes (via SASL)                | No                 |
   ## | sasl_tls  | Yes (via SASL)                | Yes                |
   ## @param auth.clientProtocol Authentication protocol for communications with clients. Allowed protocols: `plaintext`, `tls`, `mtls`, `sasl` and `sasl_tls`
+  ## @param auth.externalClientProtocol Authentication protocol for communications with external clients. Defaults to value of `auth.clientProtocol`. Allowed protocols: `plaintext`, `tls`, `mtls`, `sasl` and `sasl_tls`
   ## @param auth.interBrokerProtocol Authentication protocol for inter-broker communications. Allowed protocols: `plaintext`, `tls`, `mtls`, `sasl` and `sasl_tls`
   ##
   clientProtocol: plaintext
+  # Note: empty by default for backwards compatibility reasons, find more information at
+  # https://github.com/bitnami/charts/pull/8902/
+  externalClientProtocol: ""
   interBrokerProtocol: plaintext
   ## SASL configuration
   ##
   sasl:
-    ## @param auth.sasl.mechanisms SASL mechanisms when either `auth.interBrokerProtocol` or `auth.clientProtocol` are `sasl`. Allowed types: `plain`, `scram-sha-256`, `scram-sha-512`
+    ## @param auth.sasl.mechanisms SASL mechanisms when either `auth.interBrokerProtocol`, `auth.clientProtocol` or `auth.externalClientProtocol` are `sasl`. Allowed types: `plain`, `scram-sha-256`, `scram-sha-512`
     ##
     mechanisms: plain,scram-sha-256,scram-sha-512
     ## @param auth.sasl.interBrokerMechanism SASL mechanism for inter broker communication.
@@ -332,16 +336,16 @@ auth:
     endpointIdentificationAlgorithm: https
 ## @param listeners The address(es) the socket server listens on. Auto-calculated it's set to an empty array
 ## When it's set to an empty array, the listeners will be configured
-## based on the authentication protocols (auth.clientProtocol and auth.interBrokerProtocol parameters)
+## based on the authentication protocols (auth.clientProtocol, auth.externalClientProtocol and auth.interBrokerProtocol parameters)
 ##
 listeners: []
 ## @param advertisedListeners The address(es) (hostname:port) the broker will advertise to producers and consumers. Auto-calculated it's set to an empty array
 ## When it's set to an empty array, the advertised listeners will be configured
-## based on the authentication protocols (auth.clientProtocol and auth.interBrokerProtocol parameters)
+## based on the authentication protocols (auth.clientProtocol, auth.externalClientProtocol and auth.interBrokerProtocol parameters)
 ##
 advertisedListeners: []
 ## @param listenerSecurityProtocolMap The protocol->listener mapping. Auto-calculated it's set to nil
-## When it's nil, the listeners will be configured based on the authentication protocols (auth.clientProtocol and auth.interBrokerProtocol parameters)
+## When it's nil, the listeners will be configured based on the authentication protocols (auth.clientProtocol, auth.externalClientProtocol and auth.interBrokerProtocol parameters)
 ##
 listenerSecurityProtocolMap: ""
 ## @param allowPlaintextListener Allow to use the PLAINTEXT listener
@@ -684,7 +688,7 @@ externalAccess:
     image:
       registry: docker.io
       repository: bitnami/kubectl
-      tag: 1.23.3-debian-10-r7
+      tag: 1.23.3-debian-10-r13
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -897,7 +901,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r326
+    tag: 10-debian-10-r332
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -975,7 +979,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/kafka-exporter
-      tag: 1.4.2-debian-10-r135
+      tag: 1.4.2-debian-10-r140
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1201,7 +1205,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/jmx-exporter
-      tag: 0.16.1-debian-10-r197
+      tag: 0.16.1-debian-10-r203
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
