@@ -1,9 +1,13 @@
 <!--- app-name: Node.js -->
 
-# Node
+# Node.js packaged by Bitnami
 
-[Node](https://www.nodejs.org) Event-driven I/O server-side JavaScript environment based on V8.
+Node.js is a runtime environment built on V8 JavaScript engine. Its event-driven, non-blocking I/O model enables the development of fast, scalable, and data-intensive server applications.
 
+[Overview of Node.js](http://nodejs.org/)
+
+Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
+                           
 ## TL;DR
 
 ```console
