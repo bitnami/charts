@@ -1,0 +1,4 @@
+diff a/bitnami/metrics-server/ci/ct-values.yaml b/bitnami/metrics-server/ci/ct-values.yaml	(rejected hunks)
+@@ -1 +0,0 @@
+-values-with-rbac.yaml
+\ No newline at end of file
