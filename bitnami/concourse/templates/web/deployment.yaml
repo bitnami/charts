@@ -1,4 +1,4 @@
-{{- if and .Values.web.enabled (include "concourse.host" .) -}}
+{{- if and .Values.web.enabled (include "concourse.host" .) }}
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
@@ -31,7 +31,7 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.web.podLabels "context" $) | nindent 8 }}
         {{- end }}
     spec:
-      {{- include "imagePullSecrets" . | nindent 6 }}
+      {{- include "concourse.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.web.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.web.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -66,24 +66,6 @@ spec:
       {{- end }}
       serviceAccountName: {{ template "concourse.web.serviceAccountName" . }}
       initContainers:
-        {{- if and .Values.volumePermissions.enabled }}
-        - name: volume-permissions
-          image: {{ include "concourse.volumePermissions.image" . }}
-          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
-          command:
-            - /bin/bash
-          args:
-            - -ec
-            - |
-              mkdir -p /bitnami/concourse
-              find /bitnami/concourse -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs chown -R {{ .Values.web.containerSecurityContext.runAsUser }}:{{ .Values.web.podSecurityContext.fsGroup }}
-          {{- if .Values.volumePermissions.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.volumePermissions.containerSecurityContext "enabled" | toYaml | nindent 12 }}
-          {{- end }}
-          {{- if .Values.volumePermissions.resources }}
-          resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
-          {{- end }}
-        {{- end }}
         {{- if .Values.postgresql.enabled }}
         # NOTE: The value postgresql.image is not available unless postgresql.enabled is not set. We could change this to use bitnami-shell if
         # it had the binary wait-for-port.
@@ -201,9 +183,9 @@ spec:
             {{- end }}
             - name: CONCOURSE_TSA_BIND_PORT
               value: {{ .Values.web.containerPorts.tsa | quote }}
-            {{- if .Values.web.tsa.debugbindIp }}
+            {{- if .Values.web.tsa.debugBindIp }}
             - name: CONCOURSE_TSA_DEBUG_BIND_IP
-              value: {{ .Values.web.tsa.debugbindIp | quote }}
+              value: {{ .Values.web.tsa.debugBindIp | quote }}
             {{- end }}
             {{- if .Values.web.containerPorts.pprof }}
             - name: CONCOURSE_TSA_DEBUG_BIND_PORT

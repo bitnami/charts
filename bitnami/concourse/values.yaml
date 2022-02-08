@@ -594,7 +594,7 @@ worker:
   existingSecret: ""
   ## @param worker.baggageclaim.logLevel Minimum level of logs to see. Allowed values: `debug`, `info`, and `error`
   ## @param worker.baggageclaim.bindIp IP address on which to listen for API traffic
-  ## @param worker.baggageclaim.debugbindIp IP address on which to listen for the pprof debugger endpoints
+  ## @param worker.baggageclaim.debugBindIp IP address on which to listen for the pprof debugger endpoints
   ## @param worker.baggageclaim.disableUserNamespaces Disable remapping of user/group IDs in unprivileged volumes
   ## @param worker.baggageclaim.volumes Directory in which to place volume data
   ## @param worker.baggageclaim.driver Driver to use for managing volumes. Allowed values: `detect`, `naive`, `btrfs`, and `overlay`
@@ -605,7 +605,7 @@ worker:
   baggageclaim:
     logLevel: info
     bindIp: 127.0.0.1
-    debugbindIp: 127.0.0.1
+    debugBindIp: 127.0.0.1
     disableUserNamespaces: ""
     volumes: ""
     driver: ""
@@ -621,8 +621,8 @@ worker:
   ## @param worker.replicaCount Number of worker replicas
   ##
   replicaCount: 2
-  ## @param worker.mode Selects kind of Deployment. Valid Options are: statefulSet | deployment
-  ## Using Deployment leads to ephemeral workers. Meaning workers do not share state between restarts
+  ## @param worker.mode Selects kind of Deployment. Allowed values: `deployment` or `statefulset`
+  ## Using `deployment` leads to ephemeral workers. Meaning workers do not share state between restarts
   ##
   mode: deployment
   ## @param worker.containerPorts.garden Concourse worker Garden server container port
@@ -787,6 +787,10 @@ worker:
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
   ##
   terminationGracePeriodSeconds: ""
+  ## @param worker.podManagementPolicy Statefulset Pod Management Policy Type. Allowed values: `OrderedReady` or `Parallel`
+  ## ref: https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#pod-management-policy
+  ##
+  podManagementPolicy: OrderedReady
   ## @param worker.updateStrategy.rollingUpdate Concourse worker statefulset rolling update configuration parameters
   ## @param worker.updateStrategy.type Concourse worker statefulset strategy type
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
@@ -858,11 +862,11 @@ worker:
   pdb:
     create: true
     ## @param worker.pdb.create Create Pod disruption budget object for Concourse worker nodes
-    ## @param worker.pdb.minAvailable Minimum number of Concourse workers available after an eviction
-    ## @param worker.pdb.maxAvailable Maximum number of Concourse workers available
+    ## @param worker.pdb.minAvailable Minimum number / percentage of Concourse worker pods that should remain scheduled
+    ## @param worker.pdb.maxUnavailable Maximum number/percentage of Concourse worker pods that may be made unavailable
     ##
     minAvailable: 2
-    maxAvailable: ""
+    maxUnavailable: ""
   ## @param worker.psp.create Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later
   ##
   psp:
@@ -1045,6 +1049,11 @@ ingress:
   ## @param ingress.enabled Enable ingress record generation for Concourse
   ##
   enabled: false
+  ## @param ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+  ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+  ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+  ##
+  ingressClassName: ""
   ## @param ingress.pathType Ingress path type
   ##
   pathType: ImplementationSpecific

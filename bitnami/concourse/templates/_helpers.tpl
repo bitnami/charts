@@ -15,36 +15,8 @@ Return the proper image name (for the init container volume-permissions image)
 {{/*
 Return the proper Docker Image Registry Secret Names
 */}}
-{{- define "imagePullSecrets" -}}
+{{- define "concourse.imagePullSecrets" -}}
 {{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.volumePermissions.image) "global" .Values.global) -}}
-{{- end -}}
-
-{{/*
-Compile all warnings into a single message.
-*/}}
-{{- define "concourse.validateValues" -}}
-{{- $messages := list -}}
-{{- $messages := append $messages (include "concourse.validateValues.enabled" .) -}}
-{{- $messages := without $messages "" -}}
-{{- $message := join "\n" $messages -}}
-{{- if $message -}}
-{{- printf "\nVALUES VALIDATION:\n%s" $message | fail -}}
-{{- end -}}
-{{- end -}}
-
-{{/* Check if web or worker are enable */}}
-{{- define "concourse.validateValues.enabled" -}}
-{{- if not (or .Values.web.enabled .Values.worker.enabled) -}}
-concourse: enabled
-  Must set either web.enabled or worker.enabled to create a Concourse deployment
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return  the proper Storage Class
-*/}}
-{{- define "concourse.storageClass" -}}
-{{- include "common.storage.class" ( dict "persistence" .Values.persistence "global" .Values.global ) -}}
 {{- end -}}
 
 {{/*
@@ -103,8 +75,8 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{- define "concourse.database.port" -}}
-  {{- if eq .Values.postgresql.enabled true -}}
-    {{- printf "%s" "5432" -}}
+  {{- if .Values.postgresql.enabled -}}
+    {{- print "5432" -}}
   {{- else -}}
     {{- .Values.externalDatabase.port -}}
   {{- end -}}
@@ -184,16 +156,30 @@ Creates the address of the TSA service.
 Get the Postgresql credentials secret.
 */}}
 {{- define "concourse.postgresql.secretName" -}}
-{{- if and (.Values.postgresql.enabled) (not .Values.postgresql.auth.existingSecret) -}}
-    {{- printf "%s" (include "concourse.postgresql.fullname" .) -}}
-{{- else if and (.Values.postgresql.enabled) (.Values.postgresql.auth.existingSecret) -}}
-    {{- printf "%s" .Values.postgresql.auth.existingSecret -}}
-{{- else -}}
-    {{- if .Values.externalDatabase.existingSecret -}}
-        {{- printf "%s" .Values.externalDatabase.existingSecret -}}
+{{- if .Values.postgresql.enabled }}
+    {{- if .Values.global.postgresql }}
+        {{- if .Values.global.postgresql.auth }}
+            {{- if .Values.global.postgresql.auth.existingSecret }}
+                {{- printf "%s" (tpl .Values.global.postgresql.auth.existingSecret $) -}}
+            {{- else if .Values.postgresql.auth.existingSecret -}}
+                {{- printf "%s" (tpl .Values.postgresql.auth.existingSecret $) -}}
+            {{- else -}}
+                {{- printf "%s" (include "common.names.fullname" .) -}}
+            {{- end -}}
+        {{- else if .Values.postgresql.auth.existingSecret -}}
+            {{- printf "%s" (tpl .Values.postgresql.auth.existingSecret $) -}}
+        {{- else -}}
+            {{- printf "%s" (include "common.names.fullname" .) -}}
+        {{- end -}}
+    {{- else if .Values.postgresql.auth.existingSecret -}}
+        {{- printf "%s" (tpl .Values.postgresql.auth.existingSecret $) -}}
     {{- else -}}
-        {{ printf "%s-%s" .Release.Name "externaldb" -}}
+        {{- printf "%s" (include "common.names.fullname" .) -}}
     {{- end -}}
+{{- else if .Values.externalDatabase.existingSecret -}}
+    {{- printf "%s" .Values.externalDatabase.existingSecret -}}
+{{- else -}}
+    {{ printf "%s-%s" .Release.Name "externaldb" -}}
 {{- end -}}
 {{- end -}}
 
@@ -202,16 +188,37 @@ Add environment variables to configure database values
 */}}
 {{- define "concourse.database.existingsecret.key" -}}
 {{- if .Values.postgresql.enabled -}}
-    {{- printf "%s" "password" -}}
+    {{- print "password" -}}
 {{- else -}}
     {{- if .Values.externalDatabase.existingSecret -}}
         {{- if .Values.externalDatabase.existingSecretPasswordKey -}}
             {{- printf "%s" .Values.externalDatabase.existingSecretPasswordKey -}}
         {{- else -}}
-            {{- printf "%s" "password" -}}
+            {{- print "password" -}}
         {{- end -}}
     {{- else -}}
-        {{- printf "%s" "password" -}}
+        {{- print "password" -}}
     {{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Compile all warnings into a single message.
+*/}}
+{{- define "concourse.validateValues" -}}
+{{- $messages := list -}}
+{{- $messages := append $messages (include "concourse.validateValues.enabled" .) -}}
+{{- $messages := without $messages "" -}}
+{{- $message := join "\n" $messages -}}
+{{- if $message -}}
+{{- printf "\nVALUES VALIDATION:\n%s" $message | fail -}}
+{{- end -}}
+{{- end -}}
+
+{{/* Check if web or worker are enable */}}
+{{- define "concourse.validateValues.enabled" -}}
+{{- if not (or .Values.web.enabled .Values.worker.enabled) -}}
+concourse: enabled
+  Must set either web.enabled or worker.enabled to create a Concourse deployment
 {{- end -}}
 {{- end -}}

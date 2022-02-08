@@ -9,6 +9,23 @@ APP VERSION: {{ .Chart.AppVersion }}
 
 ** Please be patient while the chart is being deployed **
 
+{{- if .Values.diagnosticMode.enabled }}
+
+The chart has been deployed in diagnostic mode. All probes have been disabled and the command has been overwritten with:
+
+  command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 4 }}
+  args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 4 }}
+
+Get the list of pods by executing:
+
+    kubectl get pods --namespace {{ $releaseNamespace }} -l app.kubernetes.io/instance={{ .Release.Name }}
+
+Access the pod you want to debug by executing
+
+    kubectl exec --namespace {{ $releaseNamespace }} -ti <NAME OF THE POD> -- bash
+
+{{- else }}
+
 {{- if empty (include "concourse.host" .) }}
 ###############################################################################
 ### ERROR: You did not provide an external host in your 'helm install' call ###
@@ -132,6 +149,7 @@ To connect to Concourse from outside the cluster, perform the following steps:
 
 2. Open a browser and access Concourse using the obtained URL. If this is your first time using Concourse, follow the examples at https://concourse-ci.org/examples.html
 
+{{- end }}
 {{- end }}
 
 {{- include "concourse.validateValues" . }}
