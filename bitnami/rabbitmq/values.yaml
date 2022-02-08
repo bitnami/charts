@@ -691,7 +691,14 @@ persistence:
   ## So, for example, the name can depend on .Release or .Chart
   ##
   existingClaim: ""
-
+  ## @param persistence.mountPath The path the volume will be mounted at
+  ## Note: useful when using custom RabbitMQ images
+  ##
+  mountPath: /bitnami/rabbitmq/mnesia
+  ## @param persistence.subPath The subdirectory of the volume to mount to
+  ## Useful in dev environments and one PV for multiple services
+  ##
+  subPath: ""
   ## @param persistence.size PVC Storage Request for &reg;abbitMQ data volume
   ## If you change this value, you might have to adjust `rabbitmq.diskFreeLimit` as well
   ##
