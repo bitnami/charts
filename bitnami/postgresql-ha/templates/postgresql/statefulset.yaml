@@ -220,6 +220,10 @@ spec:
             - name: POSTGRESQL_MAX_CONNECTIONS
               value: {{ .Values.postgresql.maxConnections | quote }}
             {{- end }}
+            {{- if .Values.postgresql.usePgRewind }}
+            - name: REPMGR_USE_PGREWIND
+              value: {{ .Values.postgresql.usePgRewind | quote }}
+            {{- end }}
             {{- if .Values.postgresql.postgresConnectionLimit }}
             - name: POSTGRESQL_POSTGRES_CONNECTION_LIMIT
               value: {{ .Values.postgresql.postgresConnectionLimit | quote }}
