@@ -30,7 +30,8 @@ In order to replicate the container startup scripts execute this command:
 {{- $externalClientProtocol := include "kafka.listenerType" (dict "protocol" (include "kafka.externalClientProtocol" . )) -}}
 {{- $saslMechanisms := .Values.auth.sasl.mechanisms -}}
 {{- $tlsEndpointIdentificationAlgorithm := default "" .Values.auth.tls.endpointIdentificationAlgorithm -}}
-{{- $tlsPassword := .Values.auth.tls.password -}}
+{{- $tlsPasswordSecret := printf "$(kubectl get secret %s --namespace %s -o jsonpath='{.data.password}' | base64 --decode | cut -d , -f 1)" .Values.auth.tls.passwordSecret $releaseNamespace -}}
+{{- $tlsPassword :=  ternary .Values.auth.tls.password $tlsPasswordSecret (eq .Values.auth.tls.passwordSecret "") -}}
 {{- $servicePort := int .Values.service.ports.client -}}
 
 {{- if and (or (eq .Values.service.type "LoadBalancer") .Values.externalAccess.enabled) (eq $externalClientProtocol "PLAINTEXT") }}
