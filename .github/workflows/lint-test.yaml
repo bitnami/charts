@@ -23,7 +23,7 @@ jobs:
 
       - name: Run chart-testing (lint)
         run: |
-          if grep -q 'templates\|crds\|Chart.yaml\|values.yaml']; then
+          if grep -q 'templates\|crds\|Chart.yaml\|values.yaml' $HOME/files.txt; then
             ct lint --config .github/ct-lint.yaml --check-version-increment
           else
             ct lint --config .github/ct-lint.yaml
