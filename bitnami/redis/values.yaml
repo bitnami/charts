@@ -514,6 +514,14 @@ replica:
   ## @param replica.extraEnvVarsSecret Name of existing Secret containing extra env vars for Redis&trade; replicas nodes
   ##
   extraEnvVarsSecret: ""
+  ## @param replica.externalMaster.enabled Use external master for bootstrapping
+  ## @param replica.externalMaster.host External master host to bootstrap from
+  ## @param replica.externalMaster.port Port for Redis service external master host
+  ##
+  externalMaster:
+    enabled: false
+    host: ""
+    port: 6379
   ## @param replica.containerPorts.redis Container port to open on Redis&trade; replicas nodes
   ##
   containerPorts:
@@ -906,6 +914,13 @@ sentinel:
   ## @param sentinel.extraEnvVarsSecret Name of existing Secret containing extra env vars for Redis&trade; Sentinel nodes
   ##
   extraEnvVarsSecret: ""
+  ## @param sentinel.externalMaster.enabled Use external master for bootstrapping
+  ## @param sentinel.externalMaster.host External master host to bootstrap from
+  ## @param sentinel.externalMaster.port Port for Redis service external master host
+  externalMaster:
+    enabled: false
+    host: ""
+    port: 6379
   ## @param sentinel.containerPorts.sentinel Container port to open on Redis&trade; Sentinel nodes
   ##
   containerPorts:
