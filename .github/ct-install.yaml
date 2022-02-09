@@ -10,7 +10,6 @@ excluded-charts:
   - kong
   - mariadb-galera
   - discourse
-  - ejbca
   - wavefront
   - harbor
   - dataplatform-bp1
