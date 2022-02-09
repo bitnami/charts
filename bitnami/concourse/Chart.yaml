@@ -12,7 +12,7 @@ dependencies:
     tags:
       - bitnami-common
     version: 1.x.x
-description: Concourse is a pipeline-based continuous thing-doer.
+description: Concourse is an automation system written in Go. It is most commonly used for CI/CD, and is built to scale to any kind of automation pipeline, from simple to complex.
 engine: gotpl
 home: https://github.com/concourse/concourse
 icon: https://bitnami.com/assets/stacks/concourse/img/concourse-stack-220x234.png
