@@ -149,16 +149,22 @@ Get the Redis&trade; credentials secret.
 Get the Postgresql credentials secret.
 */}}
 {{- define "airflow.postgresql.secretName" -}}
-{{- if and (.Values.postgresql.enabled) (not .Values.postgresql.existingSecret) -}}
-    {{- printf "%s" (include "airflow.postgresql.fullname" .) -}}
-{{- else if and (.Values.postgresql.enabled) (.Values.postgresql.existingSecret) -}}
-    {{- printf "%s" .Values.postgresql.existingSecret -}}
-{{- else }}
-    {{- if .Values.externalDatabase.existingSecret -}}
-        {{- printf "%s" .Values.externalDatabase.existingSecret -}}
+{{- if .Values.postgresql.enabled }}
+    {{- if .Values.global.postgresql }}
+        {{- if .Values.global.postgresql.auth }}
+            {{- if .Values.global.postgresql.auth.existingSecret }}
+                {{- tpl .Values.global.postgresql.auth.existingSecret $ -}}
+            {{- else -}}
+                {{- default (include "airflow.postgresql.fullname" .) (tpl .Values.postgresql.auth.existingSecret $) -}}
+            {{- end -}}
+        {{- else -}}
+            {{- default (include "airflow.postgresql.fullname" .) (tpl .Values.postgresql.auth.existingSecret $) -}}
+        {{- end -}}
     {{- else -}}
-        {{ printf "%s-%s" .Release.Name "externaldb" }}
+        {{- default (include "airflow.postgresql.fullname" .) (tpl .Values.postgresql.auth.existingSecret $) -}}
     {{- end -}}
+{{- else -}}
+    {{- default (printf "%s-externaldb" .Release.Name) (tpl .Values.externalDatabase.existingSecret $) -}}
 {{- end -}}
 {{- end -}}
 
@@ -229,14 +235,38 @@ Add environment variables to configure database values
 Add environment variables to configure database values
 */}}
 {{- define "airflow.database.user" -}}
-{{- ternary .Values.postgresql.postgresqlUsername .Values.externalDatabase.user .Values.postgresql.enabled | quote -}}
+{{- if .Values.postgresql.enabled }}
+    {{- if .Values.global.postgresql }}
+        {{- if .Values.global.postgresql.auth }}
+            {{- coalesce .Values.global.postgresql.auth.username .Values.postgresql.auth.username | quote -}}
+        {{- else -}}
+            {{- .Values.postgresql.auth.username | quote -}}
+        {{- end -}}
+    {{- else -}}
+        {{- .Values.postgresql.auth.username | quote -}}
+    {{- end -}}
+{{- else -}}
+    {{- .Values.externalDatabase.user | quote -}}
+{{- end -}}
 {{- end -}}
 
 {{/*
 Add environment variables to configure database values
 */}}
 {{- define "airflow.database.name" -}}
-{{- ternary .Values.postgresql.postgresqlDatabase .Values.externalDatabase.database .Values.postgresql.enabled | quote -}}
+{{- if .Values.postgresql.enabled }}
+    {{- if .Values.global.postgresql }}
+        {{- if .Values.global.postgresql.auth }}
+            {{- coalesce .Values.global.postgresql.auth.database .Values.postgresql.auth.database | quote -}}
+        {{- else -}}
+            {{- .Values.postgresql.auth.database | quote -}}
+        {{- end -}}
+    {{- else -}}
+        {{- .Values.postgresql.auth.database | quote -}}
+    {{- end -}}
+{{- else -}}
+    {{- .Values.externalDatabase.database | quote -}}
+{{- end -}}
 {{- end -}}
 
 {{/*
