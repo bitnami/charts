@@ -118,6 +118,29 @@ webhooks:
       caBundle: {{ default $ca.Cert .Values.msgTopologyOperator.existingWebhookCertCABundle | b64enc | quote }}
       {{- end }}
       service:
+        name: webhook-service
+        namespace: rabbitmq-system
+        path: /validate-rabbitmq-com-v1alpha1-superstream
+    failurePolicy: Fail
+    name: vsuperstream.kb.io
+    rules:
+      - apiGroups:
+          - rabbitmq.com
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - superstreams
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      {{- if not .Values.useCertManager }}
+      caBundle: {{ default $ca.Cert .Values.msgTopologyOperator.existingWebhookCertCABundle | b64enc | quote }}
+      {{- end }}
+      service:
         name: {{ template "rmqco.msgTopologyOperator.webhook.fullname" . }}
         namespace: {{ .Release.Namespace | quote }}
         path: /validate-rabbitmq-com-v1beta1-permission
