@@ -1,9 +1,13 @@
 <!--- app-name: Fluentd -->
 
-# Fluentd
+# Fluentd packaged by Bitnami
 
-[Fluentd](https://www.fluentd.org/) is an open source data collector, which lets you unify the data collection and consumption for a better use and understanding of data.
+Fluentd collects events from various data sources and writes them to files, RDBMS, NoSQL, IaaS, SaaS, Hadoop and so on. 
 
+[Overview of Fluentd](https://www.fluentd.org)
+
+Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
+                           
 ## TL;DR
 
 ```console
