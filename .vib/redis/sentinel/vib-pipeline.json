@@ -1,0 +1,39 @@
+{
+    "phases": {
+      "package": {
+        "context": {
+          "resources": {
+            "url": "{SHA_ARCHIVE}",
+            "path": "/bitnami/redis"
+          }
+        },
+        "actions": [
+          {
+            "action_id": "helm-package"
+          },
+          {
+            "action_id": "linter-packaging",
+            "params": {
+              "kind": "HELM"
+            }
+          }
+        ]
+      },
+      "verify": {
+        "context": {
+          "runtime_parameters": "c2VudGluZWw6CiAgZW5hYmxlZDogdHJ1ZQ=="
+        },
+        "actions": [
+          {
+            "action_id": "trivy",
+            "params": {
+              "config": {
+                "threshold": "CRITICAL",
+                "vuln_type": ["OS"]
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
