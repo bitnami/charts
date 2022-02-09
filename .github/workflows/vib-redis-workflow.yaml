@@ -1,9 +1,9 @@
-name: 'vib-redis'
+name: 'vib-redis-workflow'
 on: # rebuild any PRs and main branch changes
   pull_request_target:
     branches:
       - master
-      - bitnami:master
+      - superaleks:master
     types:
       - assigned 
       - opened 
