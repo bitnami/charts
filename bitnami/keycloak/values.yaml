@@ -415,6 +415,9 @@ keycloakConfigCli:
 ## @param replicaCount Number of Keycloak replicas to deploy
 ##
 replicaCount: 1
+## @param podManagementPolicy Whay that statefulSets area managed
+##
+podManagementPolicy: Parallel
 ## @param containerPorts [object] Keycloak container ports to open
 ##
 containerPorts:
