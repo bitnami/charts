@@ -1,6 +1,6 @@
 {{- if or (not (eq .Values.architecture "replication")) (not .Values.sentinel.enabled) }}
 apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
-kind: StatefulSet
+kind: {{ .Values.master.kind }}
 metadata:
   name: {{ printf "%s-master" (include "common.names.fullname" .) }}
   namespace: {{ .Release.Namespace | quote }}
@@ -17,9 +17,15 @@ spec:
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: master
+  {{- if (eq .Values.master.kind "StatefulSet") }}
   serviceName: {{ printf "%s-headless" (include "common.names.fullname" .) }}
+  {{- end }}
   {{- if .Values.master.updateStrategy }}
+  {{- if (eq .Values.master.kind "Deployment") }}
+  strategy: {{- toYaml .Values.master.updateStrategy | nindent 4 }}
+  {{- else }}
   updateStrategy: {{- toYaml .Values.master.updateStrategy | nindent 4 }}
+  {{- end }}
   {{- end }}
   template:
     metadata:
@@ -422,6 +428,10 @@ spec:
         - name: redis-data
           persistentVolumeClaim:
             claimName: {{ printf "%s" (tpl .Values.master.persistence.existingClaim .) }}
+  {{- else if (eq .Values.master.kind "Deployment") }}
+        - name: redis-data
+          persistentVolumeClaim:
+            claimName: {{ printf "redis-data-%s-master" (include "common.names.fullname" .) }}
   {{- else }}
   volumeClaimTemplates:
     - metadata:

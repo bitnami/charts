@@ -262,6 +262,10 @@ master:
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
+  ## @param master.kind Use either Deployment or StatefulSet (default)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/
+  ##
+  kind: StatefulSet
   ## @param master.schedulerName Alternate scheduler for Redis&trade; master pods
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
