@@ -199,7 +199,7 @@ hub:
         {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
         {{- end }}
         {{- if .Values.singleuser.podLabels }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.singleuser.podLabels "context" $ ) | nindent 4 }}
         {{- end }}
       {{- if .Values.singleuser.extraEnvVars }}
       extraEnv: {{- include "common.tplvalues.render" ( dict "value" .Values.singleuser.extraEnvVars "context" $ ) | nindent 4 }}
