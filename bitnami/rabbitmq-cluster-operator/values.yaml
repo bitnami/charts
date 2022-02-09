@@ -42,7 +42,7 @@ clusterDomain: cluster.local
 ##
 extraDeploy: []
 
-## @section RabbitMQ Cluster Operator Parameters
+## @section &reg;abbitMQ Cluster Operator Parameters
 ##
 
 ## Bitnami RabbitMQ Image
@@ -55,7 +55,7 @@ extraDeploy: []
 rabbitmqImage:
   registry: docker.io
   repository: bitnami/rabbitmq
-  tag: 3.8.27-debian-10-r17
+  tag: 3.8.27-debian-10-r25
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-rabbitmqImage-private-registry/
@@ -75,7 +75,7 @@ rabbitmqImage:
 credentialUpdaterImage:
   registry: docker.io
   repository: bitnami/rmq-default-credential-updater
-  tag: 1.0.1-scratch-r1
+  tag: 1.0.1-scratch-r2
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-credentialUpdaterImage-private-registry/
@@ -86,18 +86,18 @@ credentialUpdaterImage:
   pullSecrets: []
 
 clusterOperator:
-  ## Bitnami RabbitMQ Cluster Operator image
+  ## Bitnami &reg;abbitMQ Cluster Operator image
   ## ref: https://hub.docker.com/r/bitnami/rabbitmq-cluster-operator/tags/
-  ## @param clusterOperator.image.registry RabbitMQ Cluster Operator image registry
-  ## @param clusterOperator.image.repository RabbitMQ Cluster Operator image repository
-  ## @param clusterOperator.image.tag RabbitMQ Cluster Operator image tag (immutable tags are recommended)
-  ## @param clusterOperator.image.pullPolicy RabbitMQ Cluster Operator image pull policy
-  ## @param clusterOperator.image.pullSecrets RabbitMQ Cluster Operator image pull secrets
+  ## @param clusterOperator.image.registry &reg;abbitMQ Cluster Operator image registry
+  ## @param clusterOperator.image.repository &reg;abbitMQ Cluster Operator image repository
+  ## @param clusterOperator.image.tag &reg;abbitMQ Cluster Operator image tag (immutable tags are recommended)
+  ## @param clusterOperator.image.pullPolicy &reg;abbitMQ Cluster Operator image pull policy
+  ## @param clusterOperator.image.pullSecrets &reg;abbitMQ Cluster Operator image pull secrets
   ##
   image:
     registry: docker.io
     repository: bitnami/rabbitmq-cluster-operator
-    tag: 1.11.1-scratch-r0
+    tag: 1.11.1-scratch-r2
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -112,7 +112,7 @@ clusterOperator:
     ##
     pullSecrets: []
 
-  ## @param clusterOperator.replicaCount Number of RabbitMQ Cluster Operator replicas to deploy
+  ## @param clusterOperator.replicaCount Number of &reg;abbitMQ Cluster Operator replicas to deploy
   ##
   replicaCount: 1
   ## @param clusterOperator.schedulerName Alternative scheduler
@@ -123,9 +123,9 @@ clusterOperator:
   ## The value is evaluated as a template
   ##
   topologySpreadConstraints: []
-  ## Configure extra options for RabbitMQ Cluster Operator containers' liveness and readiness probes
+  ## Configure extra options for &reg;abbitMQ Cluster Operator containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
-  ## @param clusterOperator.livenessProbe.enabled Enable livenessProbe on RabbitMQ Cluster Operator nodes
+  ## @param clusterOperator.livenessProbe.enabled Enable livenessProbe on &reg;abbitMQ Cluster Operator nodes
   ## @param clusterOperator.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
   ## @param clusterOperator.livenessProbe.periodSeconds Period seconds for livenessProbe
   ## @param clusterOperator.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
@@ -139,7 +139,7 @@ clusterOperator:
     timeoutSeconds: 5
     successThreshold: 1
     failureThreshold: 5
-  ## @param clusterOperator.readinessProbe.enabled Enable readinessProbe on RabbitMQ Cluster Operator nodes
+  ## @param clusterOperator.readinessProbe.enabled Enable readinessProbe on &reg;abbitMQ Cluster Operator nodes
   ## @param clusterOperator.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
   ## @param clusterOperator.readinessProbe.periodSeconds Period seconds for readinessProbe
   ## @param clusterOperator.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
@@ -153,7 +153,7 @@ clusterOperator:
     timeoutSeconds: 5
     successThreshold: 1
     failureThreshold: 5
-  ## @param clusterOperator.startupProbe.enabled Enable startupProbe on RabbitMQ Cluster Operator nodes
+  ## @param clusterOperator.startupProbe.enabled Enable startupProbe on &reg;abbitMQ Cluster Operator nodes
   ## @param clusterOperator.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
   ## @param clusterOperator.startupProbe.periodSeconds Period seconds for startupProbe
   ## @param clusterOperator.startupProbe.timeoutSeconds Timeout seconds for startupProbe
@@ -178,10 +178,10 @@ clusterOperator:
   ##
   customStartupProbe: {}
 
-  ## RabbitMQ Cluster Operator resource requests and limits
+  ## &reg;abbitMQ Cluster Operator resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
-  ## @param clusterOperator.resources.limits The resources limits for the RabbitMQ Cluster Operator containers
-  ## @param clusterOperator.resources.requests The requested resources for the RabbitMQ Cluster Operator containers
+  ## @param clusterOperator.resources.limits The resources limits for the &reg;abbitMQ Cluster Operator containers
+  ## @param clusterOperator.resources.requests The requested resources for the &reg;abbitMQ Cluster Operator containers
   ##
   resources:
     limits: {}
@@ -189,16 +189,16 @@ clusterOperator:
 
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param clusterOperator.podSecurityContext.enabled Enabled RabbitMQ Cluster Operator pods' Security Context
-  ## @param clusterOperator.podSecurityContext.fsGroup Set RabbitMQ Cluster Operator pod's Security Context fsGroup
+  ## @param clusterOperator.podSecurityContext.enabled Enabled &reg;abbitMQ Cluster Operator pods' Security Context
+  ## @param clusterOperator.podSecurityContext.fsGroup Set &reg;abbitMQ Cluster Operator pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param clusterOperator.containerSecurityContext.enabled Enabled RabbitMQ Cluster Operator containers' Security Context
-  ## @param clusterOperator.containerSecurityContext.runAsUser Set RabbitMQ Cluster Operator containers' Security Context runAsUser
+  ## @param clusterOperator.containerSecurityContext.enabled Enabled &reg;abbitMQ Cluster Operator containers' Security Context
+  ## @param clusterOperator.containerSecurityContext.runAsUser Set &reg;abbitMQ Cluster Operator containers' Security Context runAsUser
   ## @param clusterOperator.containerSecurityContext.runAsNonRoot Force running the container as non root
   ##
   containerSecurityContext:
@@ -212,15 +212,15 @@ clusterOperator:
   ## @param clusterOperator.args Override default container args (useful when using custom images)
   ##
   args: []
-  ## @param clusterOperator.hostAliases RabbitMQ Cluster Operator pods host aliases
+  ## @param clusterOperator.hostAliases &reg;abbitMQ Cluster Operator pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
-  ## @param clusterOperator.podLabels Extra labels for RabbitMQ Cluster Operator pods
+  ## @param clusterOperator.podLabels Extra labels for &reg;abbitMQ Cluster Operator pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
   podLabels: {}
-  ## @param clusterOperator.podAnnotations Annotations for RabbitMQ Cluster Operator pods
+  ## @param clusterOperator.podAnnotations Annotations for &reg;abbitMQ Cluster Operator pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
@@ -249,20 +249,20 @@ clusterOperator:
     ##   - e2e-az2
     ##
     values: []
-  ## @param clusterOperator.affinity Affinity for RabbitMQ Cluster Operator pods assignment
+  ## @param clusterOperator.affinity Affinity for &reg;abbitMQ Cluster Operator pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## NOTE: `podAffinityPreset`, `podAntiAffinityPreset`, and `nodeAffinityPreset` will be ignored when it's set
   ##
   affinity: {}
-  ## @param clusterOperator.nodeSelector Node labels for RabbitMQ Cluster Operator pods assignment
+  ## @param clusterOperator.nodeSelector Node labels for &reg;abbitMQ Cluster Operator pods assignment
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
-  ## @param clusterOperator.tolerations Tolerations for RabbitMQ Cluster Operator pods assignment
+  ## @param clusterOperator.tolerations Tolerations for &reg;abbitMQ Cluster Operator pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-  ## @param clusterOperator.updateStrategy.type RabbitMQ Cluster Operator statefulset strategy type
+  ## @param clusterOperator.updateStrategy.type &reg;abbitMQ Cluster Operator statefulset strategy type
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategy:
@@ -270,38 +270,38 @@ clusterOperator:
     ## Can be set to RollingUpdate or OnDelete
     ##
     type: RollingUpdate
-  ## @param clusterOperator.priorityClassName RabbitMQ Cluster Operator pods' priorityClassName
+  ## @param clusterOperator.priorityClassName &reg;abbitMQ Cluster Operator pods' priorityClassName
   ##
   priorityClassName: ""
-  ## @param clusterOperator.lifecycleHooks for the RabbitMQ Cluster Operator container(s) to automate configuration before or after startup
+  ## @param clusterOperator.lifecycleHooks for the &reg;abbitMQ Cluster Operator container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
 
-  ## @param clusterOperator.containerPorts.metrics RabbitMQ Cluster Operator container port (used for metrics)
+  ## @param clusterOperator.containerPorts.metrics &reg;abbitMQ Cluster Operator container port (used for metrics)
   ##
   containerPorts:
     metrics: 9782
 
-  ## @param clusterOperator.extraEnvVars Array with extra environment variables to add to RabbitMQ Cluster Operator nodes
+  ## @param clusterOperator.extraEnvVars Array with extra environment variables to add to &reg;abbitMQ Cluster Operator nodes
   ## e.g:
   ## extraEnvVars:
   ##   - name: FOO
   ##     value: "bar"
   ##
   extraEnvVars: []
-  ## @param clusterOperator.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for RabbitMQ Cluster Operator nodes
+  ## @param clusterOperator.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for &reg;abbitMQ Cluster Operator nodes
   ##
   extraEnvVarsCM: ""
-  ## @param clusterOperator.extraEnvVarsSecret Name of existing Secret containing extra env vars for RabbitMQ Cluster Operator nodes
+  ## @param clusterOperator.extraEnvVarsSecret Name of existing Secret containing extra env vars for &reg;abbitMQ Cluster Operator nodes
   ##
   extraEnvVarsSecret: ""
-  ## @param clusterOperator.extraVolumes Optionally specify extra list of additional volumes for the RabbitMQ Cluster Operator pod(s)
+  ## @param clusterOperator.extraVolumes Optionally specify extra list of additional volumes for the &reg;abbitMQ Cluster Operator pod(s)
   ##
   extraVolumes: []
-  ## @param clusterOperator.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the RabbitMQ Cluster Operator container(s)
+  ## @param clusterOperator.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the &reg;abbitMQ Cluster Operator container(s)
   ##
   extraVolumeMounts: []
-  ## @param clusterOperator.sidecars Add additional sidecar containers to the RabbitMQ Cluster Operator pod(s)
+  ## @param clusterOperator.sidecars Add additional sidecar containers to the &reg;abbitMQ Cluster Operator pod(s)
   ## e.g:
   ## sidecars:
   ##   - name: your-image-name
@@ -312,7 +312,7 @@ clusterOperator:
   ##         containerPort: 1234
   ##
   sidecars: []
-  ## @param clusterOperator.initContainers Add additional init containers to the RabbitMQ Cluster Operator pod(s)
+  ## @param clusterOperator.initContainers Add additional init containers to the &reg;abbitMQ Cluster Operator pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
   ## initContainers:
@@ -347,7 +347,7 @@ clusterOperator:
     ##
     automountServiceAccountToken: true
 
-  ## @section RabbitMQ Cluster Operator Metrics parameters
+  ## @section &reg;abbitMQ Cluster Operator Metrics parameters
   ##
   metrics:
     ## @param clusterOperator.metrics.enabled Create a service for accessing the metrics endpoint
@@ -356,10 +356,10 @@ clusterOperator:
     ## Metrics service parameters
     ##
     service:
-      ## @param clusterOperator.metrics.service.type RabbitMQ Cluster Operator metrics service type
+      ## @param clusterOperator.metrics.service.type &reg;abbitMQ Cluster Operator metrics service type
       ##
       type: ClusterIP
-      ## @param clusterOperator.metrics.service.ports.http RabbitMQ Cluster Operator metrics service HTTP port
+      ## @param clusterOperator.metrics.service.ports.http &reg;abbitMQ Cluster Operator metrics service HTTP port
       ##
       ports:
         http: 80
@@ -369,7 +369,7 @@ clusterOperator:
       ##
       nodePorts:
         http: ""
-      ## @param clusterOperator.metrics.service.clusterIP RabbitMQ Cluster Operator metrics service Cluster IP
+      ## @param clusterOperator.metrics.service.clusterIP &reg;abbitMQ Cluster Operator metrics service Cluster IP
       ## e.g.:
       ## clusterIP: None
       ##
@@ -377,22 +377,22 @@ clusterOperator:
       ## @param clusterOperator.metrics.service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
       ##
       extraPorts: []
-      ## @param clusterOperator.metrics.service.loadBalancerIP RabbitMQ Cluster Operator metrics service Load Balancer IP
+      ## @param clusterOperator.metrics.service.loadBalancerIP &reg;abbitMQ Cluster Operator metrics service Load Balancer IP
       ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
       ##
       loadBalancerIP: ""
-      ## @param clusterOperator.metrics.service.loadBalancerSourceRanges RabbitMQ Cluster Operator metrics service Load Balancer sources
+      ## @param clusterOperator.metrics.service.loadBalancerSourceRanges &reg;abbitMQ Cluster Operator metrics service Load Balancer sources
       ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
       ## e.g:
       ## loadBalancerSourceRanges:
       ##   - 10.10.10.0/24
       ##
       loadBalancerSourceRanges: []
-      ## @param clusterOperator.metrics.service.externalTrafficPolicy RabbitMQ Cluster Operator metrics service external traffic policy
+      ## @param clusterOperator.metrics.service.externalTrafficPolicy &reg;abbitMQ Cluster Operator metrics service external traffic policy
       ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
       ##
       externalTrafficPolicy: Cluster
-      ## @param clusterOperator.metrics.service.annotations [object] Additional custom annotations for RabbitMQ Cluster Operator metrics service
+      ## @param clusterOperator.metrics.service.annotations [object] Additional custom annotations for &reg;abbitMQ Cluster Operator metrics service
       ##
       annotations:
         prometheus.io/scrape: "true"
@@ -763,10 +763,10 @@ msgTopologyOperator:
     ## Metrics service parameters
     ##
     service:
-      ## @param msgTopologyOperator.metrics.service.type RabbitMQ Cluster Operator metrics service type
+      ## @param msgTopologyOperator.metrics.service.type &reg;abbitMQ Cluster Operator metrics service type
       ##
       type: ClusterIP
-      ## @param msgTopologyOperator.metrics.service.ports.http RabbitMQ Cluster Operator metrics service HTTP port
+      ## @param msgTopologyOperator.metrics.service.ports.http &reg;abbitMQ Cluster Operator metrics service HTTP port
       ##
       ports:
         http: 80
@@ -776,7 +776,7 @@ msgTopologyOperator:
       ##
       nodePorts:
         http: ""
-      ## @param msgTopologyOperator.metrics.service.clusterIP RabbitMQ Cluster Operator metrics service Cluster IP
+      ## @param msgTopologyOperator.metrics.service.clusterIP &reg;abbitMQ Cluster Operator metrics service Cluster IP
       ## e.g.:
       ## clusterIP: None
       ##
@@ -784,22 +784,22 @@ msgTopologyOperator:
       ## @param msgTopologyOperator.metrics.service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
       ##
       extraPorts: []
-      ## @param msgTopologyOperator.metrics.service.loadBalancerIP RabbitMQ Cluster Operator metrics service Load Balancer IP
+      ## @param msgTopologyOperator.metrics.service.loadBalancerIP &reg;abbitMQ Cluster Operator metrics service Load Balancer IP
       ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
       ##
       loadBalancerIP: ""
-      ## @param msgTopologyOperator.metrics.service.loadBalancerSourceRanges RabbitMQ Cluster Operator metrics service Load Balancer sources
+      ## @param msgTopologyOperator.metrics.service.loadBalancerSourceRanges &reg;abbitMQ Cluster Operator metrics service Load Balancer sources
       ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
       ## e.g:
       ## loadBalancerSourceRanges:
       ##   - 10.10.10.0/24
       ##
       loadBalancerSourceRanges: []
-      ## @param msgTopologyOperator.metrics.service.externalTrafficPolicy RabbitMQ Cluster Operator metrics service external traffic policy
+      ## @param msgTopologyOperator.metrics.service.externalTrafficPolicy &reg;abbitMQ Cluster Operator metrics service external traffic policy
       ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
       ##
       externalTrafficPolicy: Cluster
-      ## @param msgTopologyOperator.metrics.service.annotations [object] Additional custom annotations for RabbitMQ Cluster Operator metrics service
+      ## @param msgTopologyOperator.metrics.service.annotations [object] Additional custom annotations for &reg;abbitMQ Cluster Operator metrics service
       ##
       annotations:
         prometheus.io/scrape: "true"
