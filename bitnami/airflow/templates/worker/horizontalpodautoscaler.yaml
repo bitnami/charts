@@ -2,26 +2,27 @@
 apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ include "common.names.fullname" . }}-worker
+  name: {{ printf "%s-worker" (include "common.names.fullname" .) }}
+  namespace: {{ .Release.Namespace }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: worker
     {{- if .Values.commonLabels }}
-      {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
     {{- end }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: StatefulSet
-    name: {{ include "common.names.fullname" . }}-worker
-  minReplicas: {{ .Values.worker.autoscaling.replicas.min }}
-  maxReplicas: {{ .Values.worker.autoscaling.replicas.max }}
+    name: {{ printf "%s-worker" (include "common.names.fullname" .) }}
+  minReplicas: {{ .Values.worker.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.worker.autoscaling.maxReplicas }}
   metrics:
     - type: Resource
       resource:
         name: cpu
-        targetAverageUtilization: {{ .Values.worker.autoscaling.targets.cpu }}
+        targetAverageUtilization: {{ .Values.worker.autoscaling.targetCPU }}
     - type: Resource
       resource:
         name: memory
-        targetAverageUtilization: {{ .Values.worker.autoscaling.targets.memory }}
+        targetAverageUtilization: {{ .Values.worker.autoscaling.targetMemory }}
 {{- end }}
