@@ -162,6 +162,12 @@ spec:
             {{- end }}
             - name: REDIS_DATA_DIR
               value: {{ .Values.replica.persistence.path }}
+            {{- if .Values.replica.externalMaster.enabled }}
+            - name:  REDIS_EXTERNAL_MASTER_HOST
+              value: {{ .Values.replica.externalMaster.host | quote }}
+            - name:  REDIS_EXTERNAL_MASTER_PORT
+              value: {{ .Values.replica.externalMaster.port | quote }}
+            {{- end }}
             {{- if .Values.replica.extraEnvVars }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.replica.extraEnvVars "context" $ ) | nindent 12 }}
             {{- end }}
@@ -318,6 +324,12 @@ spec:
             {{- else }}
             - name: REDIS_SENTINEL_PORT
               value: {{ .Values.sentinel.containerPorts.sentinel | quote }}
+            {{- end }}
+            {{- if .Values.sentinel.externalMaster.enabled }}
+            - name:  REDIS_EXTERNAL_MASTER_HOST
+              value: {{ .Values.sentinel.externalMaster.host | quote }}
+            - name:  REDIS_EXTERNAL_MASTER_PORT
+              value: {{ .Values.sentinel.externalMaster.port | quote }}
             {{- end }}
             {{- if .Values.sentinel.extraEnvVars }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.sentinel.extraEnvVars "context" $ ) | nindent 12 }}

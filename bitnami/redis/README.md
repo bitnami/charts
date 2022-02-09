@@ -7,7 +7,7 @@ Redis(TM) is an open source, advanced key-value store. It is often referred to a
 [Overview of &reg;edis(&trade;)](http://redis.io)
 
 Disclaimer: Redis is a registered trademark of Redis Labs Ltd. Any rights therein are reserved to Redis Labs Ltd. Any use by Bitnami is for referential purposes only and does not indicate any sponsorship, endorsement, or affiliation between Redis Labs Ltd.
-                           
+
 ## TL;DR
 
 ```bash
@@ -219,6 +219,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `replica.extraEnvVars`                       | Array with extra environment variables to add to Redis&trade; replicas nodes                        | `[]`                     |
 | `replica.extraEnvVarsCM`                     | Name of existing ConfigMap containing extra env vars for Redis&trade; replicas nodes                | `""`                     |
 | `replica.extraEnvVarsSecret`                 | Name of existing Secret containing extra env vars for Redis&trade; replicas nodes                   | `""`                     |
+| `replica.externalMaster.enabled`             | Use external master for bootstrapping                                                               | `false`                  |
+| `replica.externalMaster.host`                | External master host to bootstrap from                                                              | `""`                     |
+| `replica.externalMaster.port`                | Port for Redis service external master host                                                         | `6379`                   |
 | `replica.containerPorts.redis`               | Container port to open on Redis&trade; replicas nodes                                               | `6379`                   |
 | `replica.startupProbe.enabled`               | Enable startupProbe on Redis&trade; replicas nodes                                                  | `false`                  |
 | `replica.startupProbe.initialDelaySeconds`   | Initial delay seconds for startupProbe                                                              | `20`                     |
@@ -320,6 +323,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sentinel.extraEnvVars`                       | Array with extra environment variables to add to Redis&trade; Sentinel nodes                                                                | `[]`                     |
 | `sentinel.extraEnvVarsCM`                     | Name of existing ConfigMap containing extra env vars for Redis&trade; Sentinel nodes                                                        | `""`                     |
 | `sentinel.extraEnvVarsSecret`                 | Name of existing Secret containing extra env vars for Redis&trade; Sentinel nodes                                                           | `""`                     |
+| `sentinel.externalMaster.enabled`             | Use external master for bootstrapping                                                                                                       | `false`                  |
+| `sentinel.externalMaster.host`                | External master host to bootstrap from                                                                                                      | `""`                     |
+| `sentinel.externalMaster.port`                | Port for Redis service external master host                                                                                                 | `6379`                   |
 | `sentinel.containerPorts.sentinel`            | Container port to open on Redis&trade; Sentinel nodes                                                                                       | `26379`                  |
 | `sentinel.startupProbe.enabled`               | Enable startupProbe on Redis&trade; Sentinel nodes                                                                                          | `false`                  |
 | `sentinel.startupProbe.initialDelaySeconds`   | Initial delay seconds for startupProbe                                                                                                      | `20`                     |
@@ -503,6 +509,27 @@ Bitnami will release a new chart updating its containers if a new version of the
 ### Use a different Redis&trade; version
 
 To modify the application version used in this chart, specify a different version of the image using the `image.tag` parameter and/or a different repository using the `image.repository` parameter. Refer to the [chart documentation for more information on these parameters and how to use them with images from a private registry](https://docs.bitnami.com/kubernetes/infrastructure/redis/configuration/change-image-version/).
+
+### Bootstrapping with an External Cluster
+
+This chart is equipped with the ability to bring online a set of Pods that connect to an existing Redis deployment that lies outside of Kubernetes.  This effectively creates a hybrid Redis Deployment where both Pods in Kubernetes and Instances such as Virtual Machines can partake in a single Redis Deployment. This is helpful in situations where one may be migrating Redis from Virtual Machines into Kubernetes, for example.  To take advantage of this, use the following as an example configuration:
+
+```yaml
+replica:
+  externalMaster:
+    enabled: true
+    host: external-redis-0.internal
+sentinel:
+  externalMaster:
+    enabled: true
+    host: external-redis-0.internal
+```
+
+:warning: This is currently limited to clusters in which Sentinel and Redis run on the same node! :warning:
+
+Please also note that the external sentinel must be listening on port `26379`, and this is currently not configurable.
+
+Once the Kubernetes Redis Deployment is online and confirmed to be working with the existing cluster, the configuration can then be removed and the cluster will remain connected.
 
 ### External DNS
 
