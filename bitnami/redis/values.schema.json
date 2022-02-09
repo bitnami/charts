@@ -36,6 +36,13 @@
       "title": "Master replicas settings",
       "form": true,
       "properties": {
+        "kind": {
+          "type": "string",
+          "title": "Workload Kind",
+          "form": true,
+          "description": "Allowed values: `Deployment` or `StatefulSet`",
+          "enum": ["Deployment", "StatefulSet"]
+        },
         "persistence": {
           "type": "object",
           "title": "Persistence for master replicas",
