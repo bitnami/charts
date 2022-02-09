@@ -1,4 +1,4 @@
-name: 'vib-tedis'
+name: 'vib-redis'
 on: # rebuild any PRs and main branch changes
   pull_request_target:
     branches:
