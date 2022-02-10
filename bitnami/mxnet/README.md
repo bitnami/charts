@@ -1,9 +1,13 @@
 <!--- app-name: Apache MXNet (Incubating) -->
 
-# Apache MXNet (Incubating)
+# Apache MXNet (Incubating) packaged by Bitnami
 
-[Apache MXNet (Incubating)](https://mxnet.apache.org/) is a deep learning platform that accelerates the transition from research prototyping to production deployment. It is built for full integration into Python that enables you to use it with its libraries and main packages.
+Apache MXNet (Incubating) is a flexible and efficient library for deep learning designed to work as a neural network. Bitnami image ships OpenBLAS as math library.
 
+[Overview of Apache MXNet (Incubating)](https://mxnet.incubator.apache.org/)
+
+Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
+                           
 ## TL;DR
 
 ```console
