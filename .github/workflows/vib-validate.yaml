@@ -29,12 +29,7 @@ jobs:
       - id: get-chart
         run: |
           # Selecting one chart for the time being, it needs to be discussed whether to allow more than 1
-          echo HERE!!
-          git branch
-          git diff --name-only origin/master HEAD
-          echo AFTER!!
-          ls
-          chart="$(git diff --name-only origin/master HEAD | grep Chart.yaml | sort | uniq | head -n 1 | dirname)"
+          chart="$(git diff --name-only origin/master HEAD | grep Chart.yaml | sort | uniq | head -n 1 | xargs dirname)"
           echo "::set-output name=chart::${chart}"
   vib-validate:
     runs-on: ubuntu-latest
