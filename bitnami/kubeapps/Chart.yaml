@@ -1,7 +1,7 @@
 annotations:
   category: Infrastructure
 apiVersion: v2
-appVersion: 2.4.2
+appVersion: 2.4.3
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -19,9 +19,9 @@ dependencies:
     repository: https://charts.bitnami.com/bitnami
     version: 15.x.x
     condition: redis.enabled
-description: Kubeapps is a web-based UI for launching and managing applications on Kubernetes. It allows users to deploy trusted applications and operators to control users access to the cluster.
+description: Kubeapps is a dashboard for your Kubernetes cluster that makes it easy to deploy and manage applications in your cluster using Helm
 home: https://kubeapps.com
-icon: https://raw.githubusercontent.com/kubeapps/kubeapps/master/docs/img/logo.png
+icon: https://raw.githubusercontent.com/kubeapps/kubeapps/main/docs/img/logo.png
 keywords:
   - helm
   - dashboard
@@ -33,4 +33,4 @@ maintainers:
 name: kubeapps
 sources:
   - https://github.com/kubeapps/kubeapps
-version: 7.7.4
+version: 7.8.0-dev5
