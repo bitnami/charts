@@ -25,6 +25,7 @@ jobs:
         with:
           ref: ${{github.event.pull_request.head.ref}}
           repository: ${{github.event.pull_request.head.repo.full_name}}
+          fetch-depth: 0
       - id: get-chart
         run: |
           # Selecting one chart for the time being, it needs to be discussed whether to allow more than 1
