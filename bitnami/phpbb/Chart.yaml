@@ -10,7 +10,7 @@ dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
     version: 1.x.x
-description: Community forum that supports the notion of users and groups, file attachments, full-text search, notifications and more.
+description: phpBB is a popular bulletin board that features robust messaging capabilities such as flat message structure, subforums, topic split/merge/lock, user groups, full-text search, and attachments.
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/phpbb
 icon: https://bitnami.com/assets/stacks/phpbb/img/phpbb-stack-220x234.png
@@ -26,4 +26,4 @@ name: phpbb
 sources:
   - https://github.com/bitnami/bitnami-docker-phpbb
   - https://www.phpbb.com/
-version: 11.0.3
+version: 11.0.4
