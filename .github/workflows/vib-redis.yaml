@@ -68,5 +68,4 @@ jobs:
         with: 
           pipeline: redis/replicas/vib-platform-verify.json
         env: 
-          TARGET_PLATFORM: 7ddab896-2e4e-4d58-a501-f79897eba3a0           
-          
+          TARGET_PLATFORM: 7ddab896-2e4e-4d58-a501-f79897eba3a0
