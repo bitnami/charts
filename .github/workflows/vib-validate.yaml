@@ -2,15 +2,15 @@ name: 'Early feedback'
 on: # rebuild any PRs and main branch changes
   pull_request_target:
     branches:
-      - vib-validate-action-test
-      - bitnami:vib-validate-action-test
+      - master
+      - bitnami:master
     types:
       - assigned
       - opened
       - synchronize
       - reopened
     paths:
-      - 'bitnami/*'
+      - 'bitnami/**'
 env:
   CSP_API_URL: https://console.cloud.vmware.com
   CSP_API_TOKEN: ${{ secrets.CSP_API_TOKEN }}
