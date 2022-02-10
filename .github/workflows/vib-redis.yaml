@@ -3,11 +3,8 @@ on: # rebuild any PRs and main branch changes
   pull_request_target:
     branches:
       - master
-      - bitnami:master
-    types:
-      - assigned 
+    types: 
       - opened 
-      - synchronize 
       - reopened
     paths:
       - 'bitnami/redis/*'
