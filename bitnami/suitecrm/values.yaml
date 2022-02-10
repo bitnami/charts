@@ -30,28 +30,28 @@ fullnameOverride: ""
 ## @param extraDeploy Array with extra yaml to deploy with the chart. Evaluated as a template
 ##
 extraDeploy: []
-## @param commonAnnotations Common annotations to add to all SuiteCRM resources (sub-charts are not considered). Evaluated as a template
+## @param commonAnnotations Common annotations to add to all SuiteC&reg;M resources (sub-charts are not considered). Evaluated as a template
 ##
 commonAnnotations: {}
-## @param commonLabels Common labels to add to all SuiteCRM resources (sub-charts are not considered). Evaluated as a template
+## @param commonLabels Common labels to add to all SuiteC&reg;M resources (sub-charts are not considered). Evaluated as a template
 ##
 commonLabels: {}
 
-## @section SuiteCRM parameters
+## @section SuiteC&reg;M parameters
 
-## Bitnami SuiteCRM image version
+## Bitnami SuiteC&reg;M image version
 ## ref: https://hub.docker.com/r/bitnami/suitecrm/tags/
-## @param image.registry SuiteCRM image registry
-## @param image.repository SuiteCRM image repository
-## @param image.tag SuiteCRM image tag (immutable tags are recommended)
-## @param image.pullPolicy SuiteCRM image pull policy
+## @param image.registry SuiteC&reg;M image registry
+## @param image.repository SuiteC&reg;M image repository
+## @param image.tag SuiteC&reg;M image tag (immutable tags are recommended)
+## @param image.pullPolicy SuiteC&reg;M image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
 ## @param image.debug Specify if debug logs should be enabled
 ##
 image:
   registry: docker.io
   repository: bitnami/suitecrm
-  tag: 7.12.2-debian-10-r24
+  tag: 7.12.4-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -71,7 +71,7 @@ image:
 ## @param replicaCount Number of replicas (requires ReadWriteMany PVC support)
 ##
 replicaCount: 1
-## @param suitecrmSkipInstall Skip SuiteCRM installation wizard. Useful for migrations and restoring from SQL dump
+## @param suitecrmSkipInstall Skip SuiteC&reg;M installation wizard. Useful for migrations and restoring from SQL dump
 ## ref: https://github.com/bitnami/bitnami-docker-suitecrm#configuration
 ##
 suitecrmSkipInstall: false
@@ -79,7 +79,7 @@ suitecrmSkipInstall: false
 ## ref: https://github.com/bitnami/bitnami-docker-suitecrm#configuration
 ##
 suitecrmValidateUserIP: false
-## @param suitecrmHost SuiteCRM host to create application URLs
+## @param suitecrmHost SuiteC&reg;M host to create application URLs
 ## ref: https://github.com/bitnami/bitnami-docker-suitecrm#configuration
 ##
 suitecrmHost: ""
@@ -150,7 +150,7 @@ sidecars: []
 ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
-## @param priorityClassName SuiteCRM pods' priorityClassName
+## @param priorityClassName SuiteC&reg;M pods' priorityClassName
 ##
 priorityClassName: ""
 ## @param schedulerName Name of the k8s scheduler (other than default)
@@ -172,8 +172,8 @@ existingSecret: ""
 ## @param suitecrmSmtpUser SMTP user
 ## @param suitecrmSmtpPassword SMTP password
 ## @param suitecrmSmtpProtocol SMTP protocol [`ssl`, `tls`]
-## @param suitecrmNotifyAddress SuiteCRM notify address
-## @param suitecrmNotifyName SuiteCRM notify name
+## @param suitecrmNotifyAddress SuiteC&reg;M notify address
+## @param suitecrmNotifyName SuiteC&reg;M notify name
 ##
 suitecrmSmtpHost: ""
 suitecrmSmtpPort: ""
@@ -244,17 +244,17 @@ resources:
   requests: {}
 ## Configure Pods Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-## @param podSecurityContext.enabled Enable SuiteCRM pods' Security Context
-## @param podSecurityContext.fsGroup SuiteCRM pods' group ID
+## @param podSecurityContext.enabled Enable SuiteC&reg;M pods' Security Context
+## @param podSecurityContext.fsGroup SuiteC&reg;M pods' group ID
 ##
 podSecurityContext:
   enabled: true
   fsGroup: 1001
 ## Configure Container Security Context (only main container)
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-## @param containerSecurityContext.enabled Enable SuiteCRM containers' Security Context
-## @param containerSecurityContext.runAsUser SuiteCRM containers' Security Context runAsUser
-## @param containerSecurityContext.runAsNonRoot SuiteCRM containers' Security Context runAsNonRoot
+## @param containerSecurityContext.enabled Enable SuiteC&reg;M containers' Security Context
+## @param containerSecurityContext.runAsUser SuiteC&reg;M containers' Security Context runAsUser
+## @param containerSecurityContext.runAsNonRoot SuiteC&reg;M containers' Security Context runAsNonRoot
 ##
 containerSecurityContext:
   enabled: true
@@ -426,7 +426,7 @@ persistence:
   ## @param persistence.enabled Enable persistence using PVC
   ##
   enabled: true
-  ## @param persistence.storageClass PVC Storage Class for SuiteCRM volume
+  ## @param persistence.storageClass PVC Storage Class for SuiteC&reg;M volume
   ## If defined, storageClassName: <storageClass>
   ## If set to "-", storageClassName: "", which disables dynamic provisioning
   ## If undefined (the default) or set to null, no storageClassName spec is
@@ -434,21 +434,21 @@ persistence:
   ##   GKE, AWS & OpenStack)
   ##
   storageClass: ""
-  ## @param persistence.accessModes PVC Access Mode for SuiteCRM volume
+  ## @param persistence.accessModes PVC Access Mode for SuiteC&reg;M volume
   ## Requires persistence.enabled: true
   ## If defined, PVC must be created manually before volume will be bound
   ##
   accessModes:
     - ReadWriteOnce
-  ## @param persistence.size PVC Storage Request for SuiteCRM volume
+  ## @param persistence.size PVC Storage Request for SuiteC&reg;M volume
   ##
   size: 8Gi
-  ## @param persistence.existingClaim An Existing PVC name for SuiteCRM volume
+  ## @param persistence.existingClaim An Existing PVC name for SuiteC&reg;M volume
   ## Requires persistence.enabled: true
   ## If defined, PVC must be created manually before volume will be bound
   ##
   existingClaim: ""
-  ## @param persistence.hostPath Host mount path for SuiteCRM volume
+  ## @param persistence.hostPath Host mount path for SuiteC&reg;M volume
   ## Requires persistence.enabled: true
   ## Requires persistence.existingClaim: nil|false
   ## Default: nil.
@@ -476,7 +476,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r305
+    tag: 10-debian-10-r334
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -532,7 +532,7 @@ service:
   ##   - 0.0.0.0/0
   ##
   loadBalancerSourceRanges: []
-  ## @param service.loadBalancerIP loadBalancerIP for the SuiteCRM Service (optional, cloud specific)
+  ## @param service.loadBalancerIP loadBalancerIP for the SuiteC&reg;M Service (optional, cloud specific)
   ## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
   loadBalancerIP: ""
   ## @param service.nodePorts.http Kubernetes HTTP node port
@@ -551,7 +551,7 @@ service:
   ## @param service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
   ##
   extraPorts: []
-  ## @param service.annotations Additional custom annotations for SuiteCRM service
+  ## @param service.annotations Additional custom annotations for SuiteC&reg;M service
   ##
   annotations: {}
   ## @param service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
@@ -567,7 +567,7 @@ service:
   sessionAffinityConfig: {}
 
 ## Configure the ingress resource that allows you to access the
-## SuiteCRM installation. Set up the URL
+## SuiteC&reg;M installation. Set up the URL
 ## ref: https://kubernetes.io/docs/user-guide/ingress/
 ##
 ingress:
@@ -674,7 +674,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.11.0-debian-10-r23
+    tag: 0.11.0-debian-10-r53
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -708,23 +708,23 @@ metrics:
     annotations:
       prometheus.io/scrape: "true"
       prometheus.io/port: "{{ .Values.metrics.service.port }}"
-    ## @param metrics.service.clusterIP SuiteCRM service Cluster IP
+    ## @param metrics.service.clusterIP SuiteC&reg;M service Cluster IP
     ## e.g.:
     ## clusterIP: None
     ##
     clusterIP: ""
-    ## @param metrics.service.loadBalancerIP SuiteCRM service Load Balancer IP
+    ## @param metrics.service.loadBalancerIP SuiteC&reg;M service Load Balancer IP
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
     ##
     loadBalancerIP: ""
-    ## @param metrics.service.loadBalancerSourceRanges SuiteCRM service Load Balancer sources
+    ## @param metrics.service.loadBalancerSourceRanges SuiteC&reg;M service Load Balancer sources
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## e.g:
     ## loadBalancerSourceRanges:
     ##   - 10.10.10.0/24
     ##
     loadBalancerSourceRanges: []
-    ## @param metrics.service.externalTrafficPolicy SuiteCRM service external traffic policy
+    ## @param metrics.service.externalTrafficPolicy SuiteC&reg;M service external traffic policy
     ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
     externalTrafficPolicy: Cluster
@@ -742,7 +742,7 @@ metrics:
 
 ## @section Certificate injection parameters
 
-## Add custom certificates and certificate authorities to SuiteCRM container
+## Add custom certificates and certificate authorities to SuiteC&reg;M container
 ##
 certificates:
   ## @param certificates.customCertificate.certificateSecret Secret containing the certificate and key to add
@@ -790,7 +790,7 @@ certificates:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r305
+    tag: 10-debian-10-r334
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -846,15 +846,15 @@ networkPolicy:
     ##   label: ingress
     ##
     namespaceSelector: {}
-  ## @param networkPolicy.ingressRules.backendOnlyAccessibleByFrontend Enable ingress rule that makes the backend (mariadb) only accessible by SuiteCRM's pods.
+  ## @param networkPolicy.ingressRules.backendOnlyAccessibleByFrontend Enable ingress rule that makes the backend (mariadb) only accessible by SuiteC&reg;M's pods.
   ## @param networkPolicy.ingressRules.customBackendSelector Backend selector labels. These labels will be used to identify the backend pods.
-  ## @param networkPolicy.ingressRules.accessOnlyFrom.enabled Enable ingress rule that makes SuiteCRM only accessible from a particular origin
-  ## @param networkPolicy.ingressRules.accessOnlyFrom.namespaceSelector Namespace selector label that is allowed to access SuiteCRM. This label will be used to identified the allowed namespace(s).
-  ## @param networkPolicy.ingressRules.accessOnlyFrom.podSelector Pods selector label that is allowed to access SuiteCRM. This label will be used to identified the allowed pod(s).
+  ## @param networkPolicy.ingressRules.accessOnlyFrom.enabled Enable ingress rule that makes SuiteC&reg;M only accessible from a particular origin
+  ## @param networkPolicy.ingressRules.accessOnlyFrom.namespaceSelector Namespace selector label that is allowed to access SuiteC&reg;M. This label will be used to identified the allowed namespace(s).
+  ## @param networkPolicy.ingressRules.accessOnlyFrom.podSelector Pods selector label that is allowed to access SuiteC&reg;M. This label will be used to identified the allowed pod(s).
   ## @param networkPolicy.ingressRules.customRules Custom network policy ingress rule
   ##
   ingressRules:
-    ## mariadb backend only can be accessed from SuiteCRM
+    ## mariadb backend only can be accessed from SuiteC&reg;M
     ##
     backendOnlyAccessibleByFrontend: false
     customBackendSelector: {}
