@@ -62,14 +62,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### &reg;abbitMQ Image parameters
 
-| Name                | Description                                                    | Value                 |
-| ------------------- | -------------------------------------------------------------- | --------------------- |
-| `image.registry`    | &reg;abbitMQ image registry                                        | `docker.io`           |
-| `image.repository`  | &reg;abbitMQ image repository                                      | `bitnami/rabbitmq`    |
-| `image.tag`         | &reg;abbitMQ image tag (immutable tags are recommended)            | `3.9.13-debian-10-r2` |
-| `image.pullPolicy`  | &reg;abbitMQ image pull policy                                     | `IfNotPresent`        |
-| `image.pullSecrets` | Specify docker-registry secret names as an array               | `[]`                  |
-| `image.debug`       | Set to true if you would like to see extra information on logs | `false`               |
+| Name                | Description                                                    | Value                  |
+| ------------------- | -------------------------------------------------------------- | ---------------------- |
+| `image.registry`    | &reg;abbitMQ image registry                                    | `docker.io`            |
+| `image.repository`  | &reg;abbitMQ image repository                                  | `bitnami/rabbitmq`     |
+| `image.tag`         | &reg;abbitMQ image tag (immutable tags are recommended)        | `3.9.13-debian-10-r13` |
+| `image.pullPolicy`  | &reg;abbitMQ image pull policy                                 | `IfNotPresent`         |
+| `image.pullSecrets` | Specify docker-registry secret names as an array               | `[]`                   |
+| `image.debug`       | Set to true if you would like to see extra information on logs | `false`                |
 
 
 ### Common parameters
@@ -86,46 +86,46 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.args`              | Args to override all containers in the deployment                                                                                        | `["infinity"]`                                    |
 | `hostAliases`                      | Deployment pod host aliases                                                                                                              | `[]`                                              |
 | `commonAnnotations`                | Annotations to add to all deployed objects                                                                                               | `{}`                                              |
-| `auth.username`                    | &reg;abbitMQ application username                                                                                                            | `user`                                            |
-| `auth.password`                    | &reg;abbitMQ application password                                                                                                            | `""`                                              |
-| `auth.existingPasswordSecret`      | Existing secret with &reg;abbitMQ credentials (must contain a value for `rabbitmq-password` key)                                             | `""`                                              |
+| `auth.username`                    | &reg;abbitMQ application username                                                                                                        | `user`                                            |
+| `auth.password`                    | &reg;abbitMQ application password                                                                                                        | `""`                                              |
+| `auth.existingPasswordSecret`      | Existing secret with &reg;abbitMQ credentials (must contain a value for `rabbitmq-password` key)                                         | `""`                                              |
 | `auth.erlangCookie`                | Erlang cookie to determine whether different nodes are allowed to communicate with each other                                            | `""`                                              |
-| `auth.existingErlangSecret`        | Existing secret with &reg;abbitMQ Erlang cookie (must contain a value for `rabbitmq-erlang-cookie` key)                                      | `""`                                              |
-| `auth.tls.enabled`                 | Enable TLS support on &reg;abbitMQ                                                                                                           | `false`                                           |
+| `auth.existingErlangSecret`        | Existing secret with &reg;abbitMQ Erlang cookie (must contain a value for `rabbitmq-erlang-cookie` key)                                  | `""`                                              |
+| `auth.tls.enabled`                 | Enable TLS support on &reg;abbitMQ                                                                                                       | `false`                                           |
 | `auth.tls.autoGenerated`           | Generate automatically self-signed TLS certificates                                                                                      | `false`                                           |
 | `auth.tls.failIfNoPeerCert`        | When set to true, TLS connection will be rejected if client fails to provide a certificate                                               | `true`                                            |
 | `auth.tls.sslOptionsVerify`        | Should [peer verification](https://www.rabbitmq.com/ssl.html#peer-verification) be enabled?                                              | `verify_peer`                                     |
 | `auth.tls.caCertificate`           | Certificate Authority (CA) bundle content                                                                                                | `""`                                              |
 | `auth.tls.serverCertificate`       | Server certificate content                                                                                                               | `""`                                              |
 | `auth.tls.serverKey`               | Server private key content                                                                                                               | `""`                                              |
-| `auth.tls.existingSecret`          | Existing secret with certificate content to &reg;abbitMQ credentials                                                                         | `""`                                              |
+| `auth.tls.existingSecret`          | Existing secret with certificate content to &reg;abbitMQ credentials                                                                     | `""`                                              |
 | `auth.tls.existingSecretFullChain` | Whether or not the existing secret contains the full chain in the certificate (`tls.crt`). Will be used in place of `ca.cert` if `true`. | `false`                                           |
-| `logs`                             | Path of the &reg;abbitMQ server's Erlang log file. Value for the `RABBITMQ_LOGS` environment variable                                        | `-`                                               |
-| `ulimitNofiles`                    | &reg;abbitMQ Max File Descriptors                                                                                                            | `65536`                                           |
-| `maxAvailableSchedulers`           | &reg;abbitMQ maximum available scheduler threads                                                                                             | `""`                                              |
-| `onlineSchedulers`                 | &reg;abbitMQ online scheduler threads                                                                                                        | `""`                                              |
-| `memoryHighWatermark.enabled`      | Enable configuring Memory high watermark on &reg;abbitMQ                                                                                     | `false`                                           |
+| `logs`                             | Path of the &reg;abbitMQ server's Erlang log file. Value for the `RABBITMQ_LOGS` environment variable                                    | `-`                                               |
+| `ulimitNofiles`                    | &reg;abbitMQ Max File Descriptors                                                                                                        | `65536`                                           |
+| `maxAvailableSchedulers`           | &reg;abbitMQ maximum available scheduler threads                                                                                         | `""`                                              |
+| `onlineSchedulers`                 | &reg;abbitMQ online scheduler threads                                                                                                    | `""`                                              |
+| `memoryHighWatermark.enabled`      | Enable configuring Memory high watermark on &reg;abbitMQ                                                                                 | `false`                                           |
 | `memoryHighWatermark.type`         | Memory high watermark type. Either `absolute` or `relative`                                                                              | `relative`                                        |
 | `memoryHighWatermark.value`        | Memory high watermark value                                                                                                              | `0.4`                                             |
 | `plugins`                          | List of default plugins to enable (should only be altered to remove defaults; for additional plugins use `extraPlugins`)                 | `rabbitmq_management rabbitmq_peer_discovery_k8s` |
 | `communityPlugins`                 | List of Community plugins (URLs) to be downloaded during container initialization                                                        | `""`                                              |
 | `extraPlugins`                     | Extra plugins to enable (single string containing a space-separated list)                                                                | `rabbitmq_auth_backend_ldap`                      |
-| `clustering.enabled`               | Enable &reg;abbitMQ clustering                                                                                                               | `true`                                            |
+| `clustering.enabled`               | Enable &reg;abbitMQ clustering                                                                                                           | `true`                                            |
 | `clustering.addressType`           | Switch clustering mode. Either `ip` or `hostname`                                                                                        | `hostname`                                        |
 | `clustering.rebalance`             | Rebalance master for queues in cluster when new replica is created                                                                       | `false`                                           |
 | `clustering.forceBoot`             | Force boot of an unexpectedly shut down cluster (in an unexpected order).                                                                | `false`                                           |
 | `clustering.partitionHandling`     | Switch Partition Handling Strategy. Either `autoheal` or `pause-minority` or `pause-if-all-down` or `ignore`                             | `autoheal`                                        |
-| `loadDefinition.enabled`           | Enable loading a &reg;abbitMQ definitions file to configure &reg;abbitMQ                                                                         | `false`                                           |
+| `loadDefinition.enabled`           | Enable loading a &reg;abbitMQ definitions file to configure &reg;abbitMQ                                                                 | `false`                                           |
 | `loadDefinition.existingSecret`    | Existing secret with the load definitions file                                                                                           | `""`                                              |
 | `command`                          | Override default container command (useful when using custom images)                                                                     | `[]`                                              |
 | `args`                             | Override default container args (useful when using custom images)                                                                        | `[]`                                              |
 | `terminationGracePeriodSeconds`    | Default duration in seconds k8s waits for container to exit before sending kill signal.                                                  | `120`                                             |
-| `extraEnvVars`                     | Extra environment variables to add to &reg;abbitMQ pods                                                                                      | `[]`                                              |
+| `extraEnvVars`                     | Extra environment variables to add to &reg;abbitMQ pods                                                                                  | `[]`                                              |
 | `extraEnvVarsCM`                   | Name of existing ConfigMap containing extra environment variables                                                                        | `""`                                              |
 | `extraEnvVarsSecret`               | Name of existing Secret containing extra environment variables (in case of sensitive data)                                               | `""`                                              |
 | `extraContainerPorts`              | Extra ports to be included in container spec, primarily informational                                                                    | `[]`                                              |
-| `configuration`                    | &reg;abbitMQ Configuration file content: required cluster configuration                                                                      | `""`                                              |
-| `extraConfiguration`               | Configuration file content: extra configuration to be appended to &reg;abbitMQ configuration                                                 | `""`                                              |
+| `configuration`                    | &reg;abbitMQ Configuration file content: required cluster configuration                                                                  | `""`                                              |
+| `extraConfiguration`               | Configuration file content: extra configuration to be appended to &reg;abbitMQ configuration                                             | `""`                                              |
 | `advancedConfiguration`            | Configuration file content: advanced configuration                                                                                       | `""`                                              |
 | `ldap.enabled`                     | Enable LDAP support                                                                                                                      | `false`                                           |
 | `ldap.servers`                     | List of LDAP servers hostnames                                                                                                           | `[]`                                              |
@@ -142,14 +142,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                                 | Description                                                                                                              | Value           |
 | ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------ | --------------- |
-| `replicaCount`                       | Number of &reg;abbitMQ replicas to deploy                                                                                    | `1`             |
+| `replicaCount`                       | Number of &reg;abbitMQ replicas to deploy                                                                                | `1`             |
 | `schedulerName`                      | Use an alternate scheduler, e.g. "stork".                                                                                | `""`            |
 | `podManagementPolicy`                | Pod management policy                                                                                                    | `OrderedReady`  |
-| `podLabels`                          | &reg;abbitMQ Pod labels. Evaluated as a template                                                                             | `{}`            |
-| `podAnnotations`                     | &reg;abbitMQ Pod annotations. Evaluated as a template                                                                        | `{}`            |
-| `updateStrategyType`                 | Update strategy type for &reg;abbitMQ statefulset                                                                            | `RollingUpdate` |
-| `statefulsetLabels`                  | &reg;abbitMQ statefulset labels. Evaluated as a template                                                                     | `{}`            |
-| `priorityClassName`                  | Name of the priority class to be used by &reg;abbitMQ pods, priority class needs to be created beforehand                    | `""`            |
+| `podLabels`                          | &reg;abbitMQ Pod labels. Evaluated as a template                                                                         | `{}`            |
+| `podAnnotations`                     | &reg;abbitMQ Pod annotations. Evaluated as a template                                                                    | `{}`            |
+| `updateStrategyType`                 | Update strategy type for &reg;abbitMQ statefulset                                                                        | `RollingUpdate` |
+| `statefulsetLabels`                  | &reg;abbitMQ statefulset labels. Evaluated as a template                                                                 | `{}`            |
+| `priorityClassName`                  | Name of the priority class to be used by &reg;abbitMQ pods, priority class needs to be created beforehand                | `""`            |
 | `podAffinityPreset`                  | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                      | `""`            |
 | `podAntiAffinityPreset`              | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                 | `soft`          |
 | `nodeAffinityPreset.type`            | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                | `""`            |
@@ -159,12 +159,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `nodeSelector`                       | Node labels for pod assignment. Evaluated as a template                                                                  | `{}`            |
 | `tolerations`                        | Tolerations for pod assignment. Evaluated as a template                                                                  | `[]`            |
 | `topologySpreadConstraints`          | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`            |
-| `podSecurityContext.enabled`         | Enable &reg;abbitMQ pods' Security Context                                                                                   | `true`          |
+| `podSecurityContext.enabled`         | Enable &reg;abbitMQ pods' Security Context                                                                               | `true`          |
 | `podSecurityContext.fsGroup`         | Group ID for the filesystem used by the containers                                                                       | `1001`          |
 | `podSecurityContext.runAsUser`       | User ID for the service user running the pod                                                                             | `1001`          |
-| `containerSecurityContext`           | &reg;abbitMQ containers' Security Context                                                                                    | `{}`            |
-| `resources.limits`                   | The resources limits for &reg;abbitMQ containers                                                                             | `{}`            |
-| `resources.requests`                 | The requested resources for &reg;abbitMQ containers                                                                          | `{}`            |
+| `containerSecurityContext`           | &reg;abbitMQ containers' Security Context                                                                                | `{}`            |
+| `resources.limits`                   | The resources limits for &reg;abbitMQ containers                                                                         | `{}`            |
+| `resources.requests`                 | The requested resources for &reg;abbitMQ containers                                                                      | `{}`            |
 | `livenessProbe.enabled`              | Enable livenessProbe                                                                                                     | `true`          |
 | `livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                                  | `120`           |
 | `livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                                         | `30`            |
@@ -180,8 +180,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `customLivenessProbe`                | Override default liveness probe                                                                                          | `{}`            |
 | `customReadinessProbe`               | Override default readiness probe                                                                                         | `{}`            |
 | `customStartupProbe`                 | Define a custom startup probe                                                                                            | `{}`            |
-| `initContainers`                     | Add init containers to the &reg;abbitMQ pod                                                                                  | `[]`            |
-| `sidecars`                           | Add sidecar containers to the &reg;abbitMQ pod                                                                               | `[]`            |
+| `initContainers`                     | Add init containers to the &reg;abbitMQ pod                                                                              | `[]`            |
+| `sidecars`                           | Add sidecar containers to the &reg;abbitMQ pod                                                                           | `[]`            |
 | `pdb.create`                         | Enable/disable a Pod Disruption Budget creation                                                                          | `false`         |
 | `pdb.minAvailable`                   | Minimum number/percentage of pods that should remain scheduled                                                           | `1`             |
 | `pdb.maxUnavailable`                 | Maximum number/percentage of pods that may be made unavailable                                                           | `""`            |
@@ -189,26 +189,28 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### RBAC parameters
 
-| Name                                          | Description                                         | Value  |
-| --------------------------------------------- | --------------------------------------------------- | ------ |
+| Name                                          | Description                                             | Value  |
+| --------------------------------------------- | ------------------------------------------------------- | ------ |
 | `serviceAccount.create`                       | Enable creation of ServiceAccount for &reg;abbitMQ pods | `true` |
-| `serviceAccount.name`                         | Name of the created serviceAccount                  | `""`   |
-| `serviceAccount.automountServiceAccountToken` | Auto-mount the service account token in the pod     | `true` |
-| `rbac.create`                                 | Whether RBAC rules should be created                | `true` |
+| `serviceAccount.name`                         | Name of the created serviceAccount                      | `""`   |
+| `serviceAccount.automountServiceAccountToken` | Auto-mount the service account token in the pod         | `true` |
+| `rbac.create`                                 | Whether RBAC rules should be created                    | `true` |
 
 
 ### Persistence parameters
 
-| Name                        | Description                                      | Value           |
-| --------------------------- | ------------------------------------------------ | --------------- |
-| `persistence.enabled`       | Enable &reg;abbitMQ data persistence using PVC       | `true`          |
-| `persistence.storageClass`  | PVC Storage Class for &reg;abbitMQ data volume       | `""`            |
-| `persistence.selector`      | Selector to match an existing Persistent Volume  | `{}`            |
-| `persistence.accessMode`    | PVC Access Mode for &reg;abbitMQ data volume         | `ReadWriteOnce` |
-| `persistence.existingClaim` | Provide an existing PersistentVolumeClaims       | `""`            |
-| `persistence.size`          | PVC Storage Request for &reg;abbitMQ data volume     | `8Gi`           |
-| `persistence.volumes`       | Additional volumes without creating PVC          | `[]`            |
-| `persistence.annotations`   | Persistence annotations. Evaluated as a template | `{}`            |
+| Name                        | Description                                      | Value                      |
+| --------------------------- | ------------------------------------------------ | -------------------------- |
+| `persistence.enabled`       | Enable &reg;abbitMQ data persistence using PVC   | `true`                     |
+| `persistence.storageClass`  | PVC Storage Class for &reg;abbitMQ data volume   | `""`                       |
+| `persistence.selector`      | Selector to match an existing Persistent Volume  | `{}`                       |
+| `persistence.accessMode`    | PVC Access Mode for &reg;abbitMQ data volume     | `ReadWriteOnce`            |
+| `persistence.existingClaim` | Provide an existing PersistentVolumeClaims       | `""`                       |
+| `persistence.mountPath`     | The path the volume will be mounted at           | `/bitnami/rabbitmq/mnesia` |
+| `persistence.subPath`       | The subdirectory of the volume to mount to       | `""`                       |
+| `persistence.size`          | PVC Storage Request for &reg;abbitMQ data volume | `8Gi`                      |
+| `persistence.volumes`       | Additional volumes without creating PVC          | `[]`                       |
+| `persistence.annotations`   | Persistence annotations. Evaluated as a template | `{}`                       |
 
 
 ### Exposure parameters
@@ -227,14 +229,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.distPort`                 | Erlang distribution server port                                                                                                  | `25672`                  |
 | `service.distPortName`             | Erlang distribution service port name                                                                                            | `dist`                   |
 | `service.distNodePort`             | Node port override for `dist` port, if serviceType is `NodePort`                                                                 | `""`                     |
-| `service.managerPortEnabled`       | &reg;abbitMQ Manager port                                                                                                            | `true`                   |
-| `service.managerPort`              | &reg;abbitMQ Manager port                                                                                                            | `15672`                  |
-| `service.managerPortName`          | &reg;abbitMQ Manager service port name                                                                                               | `http-stats`             |
+| `service.managerPortEnabled`       | &reg;abbitMQ Manager port                                                                                                        | `true`                   |
+| `service.managerPort`              | &reg;abbitMQ Manager port                                                                                                        | `15672`                  |
+| `service.managerPortName`          | &reg;abbitMQ Manager service port name                                                                                           | `http-stats`             |
 | `service.managerNodePort`          | Node port override for `http-stats` port, if serviceType `NodePort`                                                              | `""`                     |
-| `service.metricsPort`              | &reg;abbitMQ Prometheues metrics port                                                                                                | `9419`                   |
-| `service.metricsPortName`          | &reg;abbitMQ Prometheues metrics service port name                                                                                   | `metrics`                |
+| `service.metricsPort`              | &reg;abbitMQ Prometheues metrics port                                                                                            | `9419`                   |
+| `service.metricsPortName`          | &reg;abbitMQ Prometheues metrics service port name                                                                               | `metrics`                |
 | `service.metricsNodePort`          | Node port override for `metrics` port, if serviceType is `NodePort`                                                              | `""`                     |
-| `service.epmdPortEnabled`          | &reg;abbitMQ EPMD Discovery service port                                                                                             | `true`                   |
+| `service.epmdPortEnabled`          | &reg;abbitMQ EPMD Discovery service port                                                                                         | `true`                   |
 | `service.epmdNodePort`             | Node port override for `epmd` port, if serviceType is `NodePort`                                                                 | `""`                     |
 | `service.epmdPortName`             | EPMD Discovery service port name                                                                                                 | `epmd`                   |
 | `service.extraPorts`               | Extra ports to expose in the service                                                                                             | `[]`                     |
@@ -265,8 +267,8 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                                       | Description                                                                                            | Value                 |
 | ------------------------------------------ | ------------------------------------------------------------------------------------------------------ | --------------------- |
-| `metrics.enabled`                          | Enable exposing &reg;abbitMQ metrics to be gathered by Prometheus                                          | `false`               |
-| `metrics.plugins`                          | Plugins to enable Prometheus metrics in &reg;abbitMQ                                                       | `rabbitmq_prometheus` |
+| `metrics.enabled`                          | Enable exposing &reg;abbitMQ metrics to be gathered by Prometheus                                      | `false`               |
+| `metrics.plugins`                          | Plugins to enable Prometheus metrics in &reg;abbitMQ                                                   | `rabbitmq_prometheus` |
 | `metrics.podAnnotations`                   | Annotations for enabling prometheus to access the metrics endpoint                                     | `{}`                  |
 | `metrics.serviceMonitor.enabled`           | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator                           | `false`               |
 | `metrics.serviceMonitor.namespace`         | Specify the namespace in which the serviceMonitor resource will be created                             | `""`                  |
@@ -293,7 +295,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                     | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image repository                                                                   | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                          | `10-debian-10-r313`     |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                          | `10-debian-10-r326`     |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                  | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                     | `[]`                    |
 | `volumePermissions.resources.limits`   | Init container volume-permissions resource limits                                                                    | `{}`                    |
