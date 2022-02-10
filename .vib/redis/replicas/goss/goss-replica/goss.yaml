@@ -87,4 +87,3 @@ file:
       - slave-read-only yes
       - rename-command FLUSHDB ""  
       - rename-command FLUSHALL ""
-      
