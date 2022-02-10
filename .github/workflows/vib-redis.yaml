@@ -6,6 +6,7 @@ on: # rebuild any PRs and main branch changes
     types: 
       - opened 
       - reopened
+      - synchronize
     paths:
       - 'bitnami/redis/*'
 env:
