@@ -103,7 +103,7 @@ spec:
             - name: AIRFLOW_WEBSERVER_HOST
               value: {{ include "common.names.fullname" . }}
             - name: AIRFLOW_WEBSERVER_PORT_NUMBER
-              value: {{ .Values.service.port | quote }}
+              value: {{ .Values.service.ports.http | quote }}
             {{- if .Values.worker.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.worker.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
