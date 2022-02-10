@@ -538,7 +538,6 @@ When installing the chart with `architecture=replication`, it will deploy a Redi
 
 In case the master crashes, the replicas will wait until the master node is respawned again by the Kubernetes Controller Manager.
 
-
 #### Standalone
 
 When installing the chart with `architecture=standalone`, it will deploy a standalone Redis&trade; StatefulSet (only one node allowed). A single service will be exposed:
