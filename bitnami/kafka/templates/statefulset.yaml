@@ -266,10 +266,10 @@ spec:
             - name: KAFKA_TLS_CLIENT_AUTH
               value: {{ ternary "required" "none" (or (eq (include "kafka.externalClientProtocol" . ) "mtls") (eq .Values.auth.clientProtocol "mtls")) | quote }}
             - name: KAFKA_CERTIFICATE_PASSWORD
-              {{- if .Values.auth.tls.passwordSecret }}
+              {{- if .Values.auth.tls.existingSecret }}
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.auth.tls.passwordSecret }}
+                  name: {{ .Values.auth.tls.existingSecret }}
                   key: password
               {{- else }}
               value: {{ default "" .Values.auth.tls.password | quote }}
