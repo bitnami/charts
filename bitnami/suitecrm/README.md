@@ -1,9 +1,13 @@
-<!--- app-name: SuiteCRM -->
+<!--- app-name: SuiteC&reg;M -->
 
-# SuiteCRM
+# SuiteC&reg;M packaged by Bitnami
 
-[SuiteCRM](https://www.suitecrm.com) is a completely open source enterprise-grade Customer Relationship Management (CRM) application.
+SuiteC&reg;M is a completely open source, enterprise-grade Customer Relationship Management (CRM) application. SuiteC&reg;M is a fork of the popular SugarCRM application.
 
+[Overview of SuiteC&reg;M](http://www.suitecrm.com/)
+
+Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
+                           
 ## TL;DR
 
 ```console
@@ -13,11 +17,11 @@ $ helm install my-release bitnami/suitecrm
 
 ## Introduction
 
-This chart bootstraps a [SuiteCRM](https://github.com/bitnami/bitnami-docker-suitecrm) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [SuiteC&reg;M](https://github.com/bitnami/bitnami-docker-suitecrm) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-SuiteCRM is a software fork of the popular customer relationship management (CRM) system SugarCRM.
+SuiteC&reg;M is a software fork of the popular customer relationship management (CRM) system SugarCRM.
 
-It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) which is required for bootstrapping a MariaDB deployment for the database requirements of the SuiteCRM application.
+It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) which is required for bootstrapping a MariaDB deployment for the database requirements of the SuiteC&reg;M application.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This chart has been tested to work with NGINX Ingress, cert-manager, fluentd and Prometheus on top of the [BKPR](https://kubeprod.io/).
 
@@ -36,7 +40,7 @@ To install the chart with the release name `my-release`:
 $ helm install my-release bitnami/suitecrm
 ```
 
-The command deploys SuiteCRM on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
+The command deploys SuiteC&reg;M on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
 > **Tip**: List all releases using `helm list`
 
@@ -69,24 +73,24 @@ The command removes all the Kubernetes components associated with the chart and 
 | `nameOverride`      | String to partially override suitecrm.fullname template (will maintain the release name)                     | `""`  |
 | `fullnameOverride`  | String to fully override suitecrm.fullname template                                                          | `""`  |
 | `extraDeploy`       | Array with extra yaml to deploy with the chart. Evaluated as a template                                      | `[]`  |
-| `commonAnnotations` | Common annotations to add to all SuiteCRM resources (sub-charts are not considered). Evaluated as a template | `{}`  |
-| `commonLabels`      | Common labels to add to all SuiteCRM resources (sub-charts are not considered). Evaluated as a template      | `{}`  |
+| `commonAnnotations` | Common annotations to add to all SuiteC&reg;M resources (sub-charts are not considered). Evaluated as a template | `{}`  |
+| `commonLabels`      | Common labels to add to all SuiteC&reg;M resources (sub-charts are not considered). Evaluated as a template      | `{}`  |
 
 
-### SuiteCRM parameters
+### SuiteC&reg;M parameters
 
 | Name                                    | Description                                                                               | Value                  |
 | --------------------------------------- | ----------------------------------------------------------------------------------------- | ---------------------- |
-| `image.registry`                        | SuiteCRM image registry                                                                   | `docker.io`            |
-| `image.repository`                      | SuiteCRM image repository                                                                 | `bitnami/suitecrm`     |
-| `image.tag`                             | SuiteCRM image tag (immutable tags are recommended)                                       | `7.12.2-debian-10-r24` |
-| `image.pullPolicy`                      | SuiteCRM image pull policy                                                                | `IfNotPresent`         |
+| `image.registry`                        | SuiteC&reg;M image registry                                                                   | `docker.io`            |
+| `image.repository`                      | SuiteC&reg;M image repository                                                                 | `bitnami/suitecrm`     |
+| `image.tag`                             | SuiteC&reg;M image tag (immutable tags are recommended)                                       | `7.12.2-debian-10-r24` |
+| `image.pullPolicy`                      | SuiteC&reg;M image pull policy                                                                | `IfNotPresent`         |
 | `image.pullSecrets`                     | Specify docker-registry secret names as an array                                          | `[]`                   |
 | `image.debug`                           | Specify if debug logs should be enabled                                                   | `false`                |
 | `replicaCount`                          | Number of replicas (requires ReadWriteMany PVC support)                                   | `1`                    |
-| `suitecrmSkipInstall`                   | Skip SuiteCRM installation wizard. Useful for migrations and restoring from SQL dump      | `false`                |
+| `suitecrmSkipInstall`                   | Skip SuiteC&reg;M installation wizard. Useful for migrations and restoring from SQL dump      | `false`                |
 | `suitecrmValidateUserIP`                | Whether to validate the user IP address or not                                            | `false`                |
-| `suitecrmHost`                          | SuiteCRM host to create application URLs                                                  | `""`                   |
+| `suitecrmHost`                          | SuiteC&reg;M host to create application URLs                                                  | `""`                   |
 | `suitecrmUsername`                      | User of the application                                                                   | `user`                 |
 | `suitecrmPassword`                      | Application password                                                                      | `""`                   |
 | `suitecrmEmail`                         | Admin email                                                                               | `user@example.com`     |
@@ -103,7 +107,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `initContainers`                        | Extra init containers to add to the deployment                                            | `[]`                   |
 | `sidecars`                              | Extra sidecar containers to add to the deployment                                         | `[]`                   |
 | `tolerations`                           | Tolerations for pod assignment. Evaluated as a template.                                  | `[]`                   |
-| `priorityClassName`                     | SuiteCRM pods' priorityClassName                                                          | `""`                   |
+| `priorityClassName`                     | SuiteC&reg;M pods' priorityClassName                                                          | `""`                   |
 | `schedulerName`                         | Name of the k8s scheduler (other than default)                                            | `""`                   |
 | `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment                                            | `[]`                   |
 | `existingSecret`                        | Name of a secret with the application password                                            | `""`                   |
@@ -112,8 +116,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `suitecrmSmtpUser`                      | SMTP user                                                                                 | `""`                   |
 | `suitecrmSmtpPassword`                  | SMTP password                                                                             | `""`                   |
 | `suitecrmSmtpProtocol`                  | SMTP protocol [`ssl`, `tls`]                                                              | `""`                   |
-| `suitecrmNotifyAddress`                 | SuiteCRM notify address                                                                   | `""`                   |
-| `suitecrmNotifyName`                    | SuiteCRM notify name                                                                      | `""`                   |
+| `suitecrmNotifyAddress`                 | SuiteC&reg;M notify address                                                                   | `""`                   |
+| `suitecrmNotifyName`                    | SuiteC&reg;M notify name                                                                      | `""`                   |
 | `containerPorts`                        | Container ports                                                                           | `{}`                   |
 | `sessionAffinity`                       | Control where client requests go, to the same pod or round-robin                          | `None`                 |
 | `podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                   |
@@ -124,11 +128,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `affinity`                              | Affinity for pod assignment                                                               | `{}`                   |
 | `nodeSelector`                          | Node labels for pod assignment. Evaluated as a template.                                  | `{}`                   |
 | `resources.requests`                    | The requested resources for the container                                                 | `{}`                   |
-| `podSecurityContext.enabled`            | Enable SuiteCRM pods' Security Context                                                    | `true`                 |
-| `podSecurityContext.fsGroup`            | SuiteCRM pods' group ID                                                                   | `1001`                 |
-| `containerSecurityContext.enabled`      | Enable SuiteCRM containers' Security Context                                              | `true`                 |
-| `containerSecurityContext.runAsUser`    | SuiteCRM containers' Security Context runAsUser                                           | `1001`                 |
-| `containerSecurityContext.runAsNonRoot` | SuiteCRM containers' Security Context runAsNonRoot                                        | `true`                 |
+| `podSecurityContext.enabled`            | Enable SuiteC&reg;M pods' Security Context                                                    | `true`                 |
+| `podSecurityContext.fsGroup`            | SuiteC&reg;M pods' group ID                                                                   | `1001`                 |
+| `containerSecurityContext.enabled`      | Enable SuiteC&reg;M containers' Security Context                                              | `true`                 |
+| `containerSecurityContext.runAsUser`    | SuiteC&reg;M containers' Security Context runAsUser                                           | `1001`                 |
+| `containerSecurityContext.runAsNonRoot` | SuiteC&reg;M containers' Security Context runAsNonRoot                                        | `true`                 |
 | `livenessProbe.enabled`                 | Enable livenessProbe                                                                      | `true`                 |
 | `livenessProbe.path`                    | Request path for livenessProbe                                                            | `/index.php`           |
 | `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                   | `600`                  |
@@ -187,11 +191,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                        | Description                              | Value               |
 | --------------------------- | ---------------------------------------- | ------------------- |
 | `persistence.enabled`       | Enable persistence using PVC             | `true`              |
-| `persistence.storageClass`  | PVC Storage Class for SuiteCRM volume    | `""`                |
-| `persistence.accessModes`   | PVC Access Mode for SuiteCRM volume      | `["ReadWriteOnce"]` |
-| `persistence.size`          | PVC Storage Request for SuiteCRM volume  | `8Gi`               |
-| `persistence.existingClaim` | An Existing PVC name for SuiteCRM volume | `""`                |
-| `persistence.hostPath`      | Host mount path for SuiteCRM volume      | `""`                |
+| `persistence.storageClass`  | PVC Storage Class for SuiteC&reg;M volume    | `""`                |
+| `persistence.accessModes`   | PVC Access Mode for SuiteC&reg;M volume      | `["ReadWriteOnce"]` |
+| `persistence.size`          | PVC Storage Request for SuiteC&reg;M volume  | `8Gi`               |
+| `persistence.existingClaim` | An Existing PVC name for SuiteC&reg;M volume | `""`                |
+| `persistence.hostPath`      | Host mount path for SuiteC&reg;M volume      | `""`                |
 | `persistence.annotations`   | Persistent Volume Claim annotations      | `{}`                |
 
 
@@ -218,12 +222,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.ports.https`              | Service HTTPS port                                                                                                               | `8443`                   |
 | `service.clusterIP`                | Static clusterIP or None for headless services                                                                                   | `""`                     |
 | `service.loadBalancerSourceRanges` | Service Load Balancer sources                                                                                                    | `[]`                     |
-| `service.loadBalancerIP`           | loadBalancerIP for the SuiteCRM Service (optional, cloud specific)                                                               | `""`                     |
+| `service.loadBalancerIP`           | loadBalancerIP for the SuiteC&reg;M Service (optional, cloud specific)                                                               | `""`                     |
 | `service.nodePorts.http`           | Kubernetes HTTP node port                                                                                                        | `""`                     |
 | `service.nodePorts.https`          | Kubernetes HTTPS node port                                                                                                       | `""`                     |
 | `service.externalTrafficPolicy`    | Enable client source IP preservation                                                                                             | `Cluster`                |
 | `service.extraPorts`               | Extra ports to expose (normally used with the `sidecar` value)                                                                   | `[]`                     |
-| `service.annotations`              | Additional custom annotations for SuiteCRM service                                                                               | `{}`                     |
+| `service.annotations`              | Additional custom annotations for SuiteC&reg;M service                                                                               | `{}`                     |
 | `service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                             | `None`                   |
 | `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
 | `ingress.enabled`                  | Enable ingress controller resource                                                                                               | `false`                  |
@@ -255,10 +259,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.service.type`                     | Kubernetes service type for Prometheus metrics                       | `ClusterIP`               |
 | `metrics.service.port`                     | Prometheus metrics service port                                      | `9117`                    |
 | `metrics.service.annotations`              | Annotations for the Prometheus metrics service                       | `{}`                      |
-| `metrics.service.clusterIP`                | SuiteCRM service Cluster IP                                          | `""`                      |
-| `metrics.service.loadBalancerIP`           | SuiteCRM service Load Balancer IP                                    | `""`                      |
-| `metrics.service.loadBalancerSourceRanges` | SuiteCRM service Load Balancer sources                               | `[]`                      |
-| `metrics.service.externalTrafficPolicy`    | SuiteCRM service external traffic policy                             | `Cluster`                 |
+| `metrics.service.clusterIP`                | SuiteC&reg;M service Cluster IP                                          | `""`                      |
+| `metrics.service.loadBalancerIP`           | SuiteC&reg;M service Load Balancer IP                                    | `""`                      |
+| `metrics.service.loadBalancerSourceRanges` | SuiteC&reg;M service Load Balancer sources                               | `[]`                      |
+| `metrics.service.externalTrafficPolicy`    | SuiteC&reg;M service external traffic policy                             | `Cluster`                 |
 | `metrics.service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP" | `None`                    |
 | `metrics.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                          | `{}`                      |
 
@@ -297,11 +301,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.ingress.enabled`                               | Enable network policy for Ingress Proxies                                                                                    | `false` |
 | `networkPolicy.ingress.namespaceSelector`                     | Ingress Proxy namespace selector labels. These labels will be used to identify the Ingress Proxy's namespace.                | `{}`    |
 | `networkPolicy.ingress.podSelector`                           | Ingress Proxy pods selector labels. These labels will be used to identify the Ingress Proxy pods.                            | `{}`    |
-| `networkPolicy.ingressRules.backendOnlyAccessibleByFrontend`  | Enable ingress rule that makes the backend (mariadb) only accessible by SuiteCRM's pods.                                     | `false` |
+| `networkPolicy.ingressRules.backendOnlyAccessibleByFrontend`  | Enable ingress rule that makes the backend (mariadb) only accessible by SuiteC&reg;M's pods.                                     | `false` |
 | `networkPolicy.ingressRules.customBackendSelector`            | Backend selector labels. These labels will be used to identify the backend pods.                                             | `{}`    |
-| `networkPolicy.ingressRules.accessOnlyFrom.enabled`           | Enable ingress rule that makes SuiteCRM only accessible from a particular origin                                             | `false` |
-| `networkPolicy.ingressRules.accessOnlyFrom.namespaceSelector` | Namespace selector label that is allowed to access SuiteCRM. This label will be used to identified the allowed namespace(s). | `{}`    |
-| `networkPolicy.ingressRules.accessOnlyFrom.podSelector`       | Pods selector label that is allowed to access SuiteCRM. This label will be used to identified the allowed pod(s).            | `{}`    |
+| `networkPolicy.ingressRules.accessOnlyFrom.enabled`           | Enable ingress rule that makes SuiteC&reg;M only accessible from a particular origin                                             | `false` |
+| `networkPolicy.ingressRules.accessOnlyFrom.namespaceSelector` | Namespace selector label that is allowed to access SuiteC&reg;M. This label will be used to identified the allowed namespace(s). | `{}`    |
+| `networkPolicy.ingressRules.accessOnlyFrom.podSelector`       | Pods selector label that is allowed to access SuiteC&reg;M. This label will be used to identified the allowed pod(s).            | `{}`    |
 | `networkPolicy.ingressRules.customRules`                      | Custom network policy ingress rule                                                                                           | `{}`    |
 | `networkPolicy.egressRules.denyConnectionsToExternal`         | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).                               | `false` |
 | `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                   | `{}`    |
@@ -311,9 +315,9 @@ The above parameters map to the env variables defined in [bitnami/suitecrm](http
 
 > **Note**:
 >
-> For SuiteCRM to function correctly, you should specify the `suitecrmHost` parameter to specify the FQDN (recommended) or the public IP address of the SuiteCRM service.
+> For SuiteC&reg;M to function correctly, you should specify the `suitecrmHost` parameter to specify the FQDN (recommended) or the public IP address of the SuiteC&reg;M service.
 >
-> Optionally, you can specify the `suitecrmLoadBalancerIP` parameter to assign a reserved IP address to the SuiteCRM service of the chart. However please note that this feature is only available on a few cloud providers (f.e. GKE).
+> Optionally, you can specify the `suitecrmLoadBalancerIP` parameter to assign a reserved IP address to the SuiteC&reg;M service of the chart. However please note that this feature is only available on a few cloud providers (f.e. GKE).
 >
 > To reserve a public IP address on GKE:
 >
@@ -321,7 +325,7 @@ The above parameters map to the env variables defined in [bitnami/suitecrm](http
 > $ gcloud compute addresses create suitecrm-public-ip
 > ```
 >
-> The reserved IP address can be associated to the SuiteCRM service by specifying it as the value of the `suitecrmLoadBalancerIP` parameter while installing the chart.
+> The reserved IP address can be associated to the SuiteC&reg;M service by specifying it as the value of the `suitecrmLoadBalancerIP` parameter while installing the chart.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -331,7 +335,7 @@ $ helm install my-release \
     bitnami/suitecrm
 ```
 
-The above command sets the SuiteCRM administrator account username and password to `admin` and `password` respectively. Additionally, it sets the MariaDB `root` user password to `secretpassword`.
+The above command sets the SuiteC&reg;M administrator account username and password to `admin` and `password` respectively. Additionally, it sets the MariaDB `root` user password to `secretpassword`.
 
 > NOTE: Once this chart is deployed, it is not possible to change the application's access credentials, such as usernames or passwords, using Helm. To change these application credentials after deployment, delete any persistent volumes (PVs) used by the chart and re-deploy it, or use the application's built-in administrative tools if available.
 
@@ -377,7 +381,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 
 ## Persistence
 
-The [Bitnami SuiteCRM](https://github.com/bitnami/bitnami-docker-suitecrm) image stores the SuiteCRM data and configurations at the `/bitnami/suitecrm` path of the container.
+The [Bitnami SuiteC&reg;M](https://github.com/bitnami/bitnami-docker-suitecrm) image stores the SuiteC&reg;M data and configurations at the `/bitnami/suitecrm` path of the container.
 
 Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
 See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
@@ -409,7 +413,7 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
     ```
 
     This will mount the `suitecrm-data` volume into the `hostPath` directory. The site data will be persisted if the mount path contains valid data, else the site data will be initialized at first launch.
-1. Because the container cannot control the host machine's directory permissions, you must set the SuiteCRM file directory permissions yourself and disable or clear SuiteCRM cache.
+1. Because the container cannot control the host machine's directory permissions, you must set the SuiteC&reg;M file directory permissions yourself and disable or clear SuiteC&reg;M cache.
 
 ## Troubleshooting
 
@@ -467,9 +471,9 @@ Please read the update notes carefully.
 
 In this major the MariaDB dependency version was also bumped to a new major version that introduces several incompatilibites. Therefore, backwards compatibility is not guaranteed unless an external database is used. Check [MariaDB Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#to-800) for more information.
 
-**3. Migration of the SuiteCRM image to non-root **
+**3. Migration of the SuiteC&reg;M image to non-root **
 
-The [Bitnami SuiteCRM](https://github.com/bitnami/bitnami-docker-suitecrm) image was updated to support and enable the "non-root" user approach
+The [Bitnami SuiteC&reg;M](https://github.com/bitnami/bitnami-docker-suitecrm) image was updated to support and enable the "non-root" user approach
 
 If you want to continue to run the container image as the `root` user, you need to set `podSecurityContext.enabled=false` and `containerSecurity.context.enabled=false`.
 
@@ -478,11 +482,11 @@ Consequences:
 - The HTTP/HTTPS ports exposed by the container are now `8080/8443` instead of `80/443`.
 - Backwards compatibility is not guaranteed.
 
-To upgrade to `9.0.0`, you can either install a new SuiteCRM chart and migrate your site or reuse the PVCs used to hold both the MariaDB and SuiteCRM data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is `suitecrm` and that a `rootUser.password` was defined for MariaDB in `values.yaml` when the chart was first installed):
+To upgrade to `9.0.0`, you can either install a new SuiteC&reg;M chart and migrate your site or reuse the PVCs used to hold both the MariaDB and SuiteC&reg;M data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is `suitecrm` and that a `rootUser.password` was defined for MariaDB in `values.yaml` when the chart was first installed):
 
 > NOTE: Please, create a backup of your database before running any of those actions. The steps below would be only valid if your application (e.g. any plugins or custom code) is compatible with MariaDB 10.5.x
 
-Obtain the credentials and the names of the PVCs used to hold both the MariaDB and SuiteCRM data on your current release:
+Obtain the credentials and the names of the PVCs used to hold both the MariaDB and SuiteC&reg;M data on your current release:
 
 ```console
 export SUITECRM_HOST=$(kubectl get svc --namespace default suitecrm --template "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}")
@@ -492,7 +496,7 @@ export MARIADB_PASSWORD=$(kubectl get secret --namespace default suitecrm-mariad
 export MARIADB_PVC=$(kubectl get pvc -l app=mariadb,component=master,release=suitecrm -o jsonpath="{.items[0].metadata.name}")
 \```
 
-Upgrade your release (maintaining the version) disabling MariaDB and scaling SuiteCRM replicas to 0:
+Upgrade your release (maintaining the version) disabling MariaDB and scaling SuiteC&reg;M replicas to 0:
 
 ```console
 $ helm upgrade suitecrm bitnami/suitecrm --set suitecrmPassword=$SUITECRM_PASSWORD --set replicaCount=0 --set mariadb.enabled=false --version 8.0.26
