@@ -76,6 +76,10 @@ containers:
             key: tomcat-password
       - name: TOMCAT_ALLOW_REMOTE_MANAGEMENT
         value: {{ .Values.tomcatAllowRemoteManagement | quote }}
+      {{- if or .Values.catalinaOpts .Values.metrics.jmx.enabled }}
+      - name: CATALINA_OPTS
+        value: {{ include "tomcat.catalinaOpts" . | quote }} 
+      {{- end }}
       {{- if .Values.extraEnvVars }}
       {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 6 }}
       {{- end }}
