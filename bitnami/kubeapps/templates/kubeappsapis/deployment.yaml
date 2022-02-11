@@ -32,7 +32,7 @@ spec:
       {{- if .Values.kubeappsapis.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.kubeappsapis.hostAliases "context" $) | nindent 8 }}
       {{- end }}
-      # Increase termination timeout to let remaining operations to finish before killing the pods
+      # Increase termination timeout to let remaining operations to finish before ending the pods
       # This is because new releases/upgrades/deletions are synchronous operations
       {{- if .Values.kubeappsapis.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.kubeappsapis.affinity "context" $) | nindent 8 }}
@@ -80,6 +80,13 @@ spec:
             {{- end }}
             {{- if .Values.pinnipedProxy.enabled }}
             - --pinniped-proxy-url=http://{{ template "kubeapps.pinniped-proxy.fullname" . }}.{{ .Release.Namespace }}:{{ .Values.pinnipedProxy.containerPort }}
+            {{- end }}
+            - --global-repos-namespace={{ .Release.Namespace }}{{ .Values.apprepository.globalReposNamespaceSuffix }}
+            {{- if .Values.kubeappsapis.qps }}
+            - --kube-api-qps={{ .Values.kubeappsapis.qps }}
+            {{- end }}
+            {{- if .Values.kubeappsapis.burst }}
+            - --kube-api-burst={{ .Values.kubeappsapis.burst }}
             {{- end }}
           env:
             - name: GOGC
