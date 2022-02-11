@@ -1,9 +1,13 @@
 <!--- app-name: TestLink -->
 
-# TestLink
+# TestLink packaged by Bitnami
 
-[TestLink](https://www.testlink.org) is a web-based test management system that facilitates software quality assurance.
+TestLink is test management software that facilitates software quality assurance. It suppors test cases, test suites, test plans, test projects and user management, and stats reporting.
 
+[Overview of TestLink](http://www.testlink.org)
+
+Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
+                           
 ## TL;DR
 
 ```console
