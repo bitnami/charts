@@ -336,6 +336,7 @@ Compile all warnings into a single message, and call fail.
 {{- $messages := append $messages (include "kafka.validateValues.nodePortListLength" .) -}}
 {{- $messages := append $messages (include "kafka.validateValues.externalAccessServiceType" .) -}}
 {{- $messages := append $messages (include "kafka.validateValues.externalAccessAutoDiscoveryRBAC" .) -}}
+{{- $messages := append $messages (include "kafka.validateValues.externalAccessServiceLoadBalancerNames" .) -}}
 {{- $messages := append $messages (include "kafka.validateValues.saslMechanisms" .) -}}
 {{- $messages := append $messages (include "kafka.validateValues.tlsSecrets" .) -}}
 {{- $messages := append $messages (include "kafka.validateValues.tlsSecrets.length" .) -}}
@@ -356,7 +357,7 @@ kafka: auth.clientProtocol auth.externalClientProtocol auth.interBrokerProtocol
 {{- end -}}
 {{- end -}}
 
-{{/* Validate values of Kafka - number of replicas must be the same than NodePort list */}}
+{{/* Validate values of Kafka - number of replicas must be the same as NodePort list */}}
 {{- define "kafka.validateValues.nodePortListLength" -}}
 {{- $replicaCount := int .Values.replicaCount }}
 {{- $nodePortListLength := len .Values.externalAccess.service.nodePorts }}
@@ -382,6 +383,16 @@ kafka: rbac.create
     an initContainer will be used to auto-detect the external IPs/ports by querying the
     K8s API. Please note this initContainer requires specific RBAC resources. You can create them
     by specifying "--set rbac.create=true".
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of Kafka - number of replicas must be the same as loadBalancerNames list */}}
+{{- define "kafka.validateValues.externalAccessServiceLoadBalancerNames" -}}
+{{- $replicaCount := int .Values.replicaCount }}
+{{- $loadBalancerNameListLength := len .Values.externalAccess.service.loadBalancerNames -}}
+{{- if and .Values.externalAccess.enabled (not .Values.externalAccess.autoDiscovery.enabled) (gt $loadBalancerNameListLength 0) (not (eq $replicaCount $loadBalancerNameListLength)) (eq .Values.externalAccess.service.type "LoadBalancer") }}
+kafka: externalAccess.service.loadBalancerNames
+    Number of replicas and loadBalancerNames array length must be the same. Currently: replicaCount = {{ $replicaCount }} and loadBalancerNames = {{ $loadBalancerNameListLength }}
 {{- end -}}
 {{- end -}}
 

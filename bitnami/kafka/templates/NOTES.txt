@@ -33,7 +33,6 @@ In order to replicate the container startup scripts execute this command:
 {{- $tlsPassword := .Values.auth.tls.password -}}
 {{- $servicePort := int .Values.service.ports.client -}}
 {{- $loadBalancerIPListLength := len .Values.externalAccess.service.loadBalancerIPs -}}
-{{- $loadBalancerNameListLength := len .Values.externalAccess.service.loadBalancerNames -}}
 {{- if and .Values.externalAccess.enabled (not .Values.externalAccess.autoDiscovery.enabled) (not (eq $replicaCount $loadBalancerIPListLength )) (eq .Values.externalAccess.service.type "LoadBalancer") }}
 
 ###############################################################################
@@ -79,16 +78,6 @@ IPs for Kafka brokers. To complete your deployment follow the steps below:
 
 ---------------------------------------------------------------------------------------------
 {{- end }}
-{{- if and .Values.externalAccess.enabled (not .Values.externalAccess.autoDiscovery.enabled) (gt $loadBalancerNameListLength 0) (not (eq $replicaCount $loadBalancerNameListLength)) (eq .Values.externalAccess.service.type "LoadBalancer") }}
----------------------------------------------------------------------------------------------
- WARNING
-
-    If "externalAccess.service.loadBalancerNames" is specified it should have the same number
-    of names as replicas has been deployed. This deployment could be incomplete, some of the
-    brokers could be not reachable for outside of K8S
-
----------------------------------------------------------------------------------------------
-{{- end}}
 
 ** Please be patient while the chart is being deployed **
 
