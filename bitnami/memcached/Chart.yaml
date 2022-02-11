@@ -1,7 +1,7 @@
 annotations:
   category: Infrastructure
 apiVersion: v2
-appVersion: 1.6.13
+appVersion: 1.6.14
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -22,4 +22,4 @@ name: memcached
 sources:
   - https://github.com/bitnami/bitnami-docker-memcached
   - http://memcached.org/
-version: 6.0.2
+version: 6.0.3

@@ -160,6 +160,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                    | Description                                                                               | Value                 |
 | --------------------------------------- | ----------------------------------------------------------------------------------------- | --------------------- |
 | `replicaCount`                          | Number of Keycloak replicas to deploy                                                     | `1`                   |
+| `podManagementPolicy`                   | Keycloak statefulSet podManagement policy                                                          | `Parallel`                  |
 | `containerPorts`                        | Keycloak container ports to open                                                          | `{}`                  |
 | `podSecurityContext.enabled`            | Enabled Keykloak pods' Security Context                                                   | `true`                |
 | `podSecurityContext.fsGroup`            | Set Keykloak pod's Security Context fsGroup                                               | `1001`                |

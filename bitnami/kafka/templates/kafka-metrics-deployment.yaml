@@ -96,7 +96,7 @@ spec:
             - --sasl.enabled
             - --sasl.username="$SASL_USERNAME"
             - --sasl.password="${SASL_USER_PASSWORD%%,*}"
-            - --sasl.mechanism="{{ include "kafka.metrics.kafka.saslMechanism" . }}"
+            - --sasl.mechanism={{ include "kafka.metrics.kafka.saslMechanism" . }}
             {{- end }}
             {{- if (include "kafka.client.tlsEncryption" .) }}
             - --tls.enabled

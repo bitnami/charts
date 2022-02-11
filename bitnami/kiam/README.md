@@ -1,9 +1,13 @@
 <!--- app-name: Kiam -->
 
-# kiam
+# Kiam packaged by Bitnami
 
-[kiam](https://github.com/uswitch/kiam) is a Kubernetes agent that allows to associate IAM roles to pods.
+kiam is a proxy that captures AWS Metadata API requests. It allows AWS IAM roles to be set for Kubernetes workloads.
 
+[Overview of Kiam](https://github.com/uswitch/kiam)
+
+Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
+                           
 ## TL;DR
 
 ```console
