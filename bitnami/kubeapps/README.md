@@ -2,7 +2,7 @@
 
 # Kubeapps packaged by Bitnami
 
-Kubeapps is an in-cluster web-based application that enables users with a one-time installation to deploy, manage, and upgrade applications on a Kubernetes cluster.
+Kubeapps is an in-cluster web-based UI for deploying and managing applications on Kubernetes clusters.
 
 [Overview of Kubeapps](https://kubeapps.com)
 
