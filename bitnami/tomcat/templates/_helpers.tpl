@@ -61,13 +61,11 @@ Expand the name of the chart.
 Return the proper CATALINA_OPTS value
 */}}
 {{- define "tomcat.catalinaOpts" -}}
-  {{- if and .Values.catalinaOpts .Values.metrics.jmx.enabled -}}
-    {{- printf "%s %s" .Values.catalinaOpts .Values.metrics.jmx.catalinaOpts  | trim  -}}
-  {{- else if .Values.catalinaOpts -}}
-    {{- printf "%s" .Values.catalinaOpts | trim  -}}
-  {{- else if .Values.metrics.jmx.enabled -}}
-    {{- printf "%s" .Values.metrics.jmx.catalinaOpts  | trim  -}}
-  {{- end -}}
+{{- if .Values.metrics.jmx.enabled -}}
+{{- default "" (cat .Values.catalinaOpts .Values.metrics.jmx.catalinaOpts) | trim  -}}
+{{- else -}} 
+{{- default "" .Values.catalinaOpts  | trim -}}
+{{- end -}}
 {{- end -}}
 
 {{/*
