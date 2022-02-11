@@ -62,24 +62,53 @@ Create a default fully qualified postgresql name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 {{- define "concourse.postgresql.fullname" -}}
-{{- $name := default "postgresql" .Values.postgresql.nameOverride -}}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
+{{- include "common.names.dependency.fullname" (dict "chartName" "postgresql" "chartValues" .Values.postgresql "context" $) -}}
 {{- end -}}
 
 {{- define "concourse.database.host" -}}
-  {{- if eq .Values.postgresql.enabled true -}}
-    {{- template "concourse.postgresql.fullname" . -}}
-  {{- else -}}
-    {{- .Values.externalDatabase.host -}}
-  {{- end -}}
+{{- ternary (include "concourse.postgresql.fullname" .) .Values.externalDatabase.host .Values.postgresql.enabled | quote -}}
 {{- end -}}
 
 {{- define "concourse.database.port" -}}
-  {{- if .Values.postgresql.enabled -}}
-    {{- print "5432" -}}
-  {{- else -}}
-    {{- .Values.externalDatabase.port -}}
-  {{- end -}}
+{{- ternary "5432" .Values.externalDatabase.port .Values.postgresql.enabled | quote -}}
+{{- end -}}
+
+{{/*
+Add environment variables to configure database values
+*/}}
+{{- define "concourse.database.user" -}}
+{{- if .Values.postgresql.enabled }}
+    {{- if .Values.global.postgresql }}
+        {{- if .Values.global.postgresql.auth }}
+            {{- coalesce .Values.global.postgresql.auth.username .Values.postgresql.auth.username | quote -}}
+        {{- else -}}
+            {{- .Values.postgresql.auth.username | quote -}}
+        {{- end -}}
+    {{- else -}}
+        {{- .Values.postgresql.auth.username | quote -}}
+    {{- end -}}
+{{- else -}}
+    {{- .Values.externalDatabase.user | quote -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Add environment variables to configure database values
+*/}}
+{{- define "concourse.database.name" -}}
+{{- if .Values.postgresql.enabled }}
+    {{- if .Values.global.postgresql }}
+        {{- if .Values.global.postgresql.auth }}
+            {{- coalesce .Values.global.postgresql.auth.database .Values.postgresql.auth.database | quote -}}
+        {{- else -}}
+            {{- .Values.postgresql.auth.database | quote -}}
+        {{- end -}}
+    {{- else -}}
+        {{- .Values.postgresql.auth.database | quote -}}
+    {{- end -}}
+{{- else -}}
+    {{- .Values.externalDatabase.database | quote -}}
+{{- end -}}
 {{- end -}}
 
 {{/*
@@ -160,26 +189,18 @@ Get the Postgresql credentials secret.
     {{- if .Values.global.postgresql }}
         {{- if .Values.global.postgresql.auth }}
             {{- if .Values.global.postgresql.auth.existingSecret }}
-                {{- printf "%s" (tpl .Values.global.postgresql.auth.existingSecret $) -}}
-            {{- else if .Values.postgresql.auth.existingSecret -}}
-                {{- printf "%s" (tpl .Values.postgresql.auth.existingSecret $) -}}
+                {{- tpl .Values.global.postgresql.auth.existingSecret $ -}}
             {{- else -}}
-                {{- printf "%s" (include "concourse.postgresql.fullname" .) -}}
+                {{- default (include "concourse.postgresql.fullname" .) (tpl .Values.postgresql.auth.existingSecret $) -}}
             {{- end -}}
-        {{- else if .Values.postgresql.auth.existingSecret -}}
-            {{- printf "%s" (tpl .Values.postgresql.auth.existingSecret $) -}}
         {{- else -}}
-            {{- printf "%s" (include "concourse.postgresql.fullname" .) -}}
+            {{- default (include "concourse.postgresql.fullname" .) (tpl .Values.postgresql.auth.existingSecret $) -}}
         {{- end -}}
-    {{- else if .Values.postgresql.auth.existingSecret -}}
-        {{- printf "%s" (tpl .Values.postgresql.auth.existingSecret $) -}}
     {{- else -}}
-        {{- printf "%s" (include "concourse.postgresql.fullname" .) -}}
+        {{- default (include "concourse.postgresql.fullname" .) (tpl .Values.postgresql.auth.existingSecret $) -}}
     {{- end -}}
-{{- else if .Values.externalDatabase.existingSecret -}}
-    {{- printf "%s" .Values.externalDatabase.existingSecret -}}
 {{- else -}}
-    {{ printf "%s-%s" .Release.Name "externaldb" -}}
+    {{- default (printf "%s-externaldb" .Release.Name) (tpl .Values.externalDatabase.existingSecret $) -}}
 {{- end -}}
 {{- end -}}
 
