@@ -183,6 +183,7 @@ helm uninstall my-release
 | `server.jdwp.enabled`                               | Set to true to enable Java debugger                                                                                              | `false`                                              |
 | `server.jdwp.port`                                  | Specify port for remote debugging                                                                                                | `5005`                                               |
 | `server.proxy`                                      | Add proxy configuration for SCDF server                                                                                          | `{}`                                                 |
+| `server.applicationProperties`                      | Specify common application properties added by SCDF server to streams and/or tasks                                               | `{}`                                                 |
 
 
 ### Dataflow Skipper parameters

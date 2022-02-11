@@ -30,6 +30,9 @@ data:
     spring:
       cloud:
         dataflow:
+          {{- if .Values.server.applicationProperties }}
+          applicationProperties: {{- include "common.tplvalues.render" (dict "value" .Values.server.applicationProperties "context" $) | nindent 12 }}
+          {{- end }}
           {{- if .Values.server.configuration.batchEnabled }}
           task:
             platform:
