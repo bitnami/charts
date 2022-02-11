@@ -104,18 +104,18 @@ spec:
           {{- end }}
           env:
             - name: POSTGRESQL_CLIENT_DATABASE_HOST
-              value: {{ ternary (include "concourse.database.host" .) .Values.externalDatabase.host .Values.postgresql.enabled | quote }}
+              value: {{ include "concourse.database.host" . }}
             - name: POSTGRESQL_CLIENT_DATABASE_NAME
-              value: {{ ternary .Values.postgresql.auth.database .Values.externalDatabase.port .Values.postgresql.enabled }}
+              value: {{ include "concourse.database.name" . }}
             - name: POSTGRESQL_CLIENT_DATABASE_PORT_NUMBER
-              value: {{ ternary "5432" .Values.externalDatabase.port .Values.postgresql.enabled | quote }}
+              value: {{ include "concourse.database.port" . }}
             - name: POSTGRESQL_CLIENT_CREATE_DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "concourse.postgresql.secretName" . }}
                   key: {{ include "concourse.database.existingsecret.key" . }}
             - name: POSTGRESQL_CLIENT_POSTGRES_USER
-              value: {{ ternary .Values.postgresql.auth.username .Values.externalDatabase.user .Values.postgresql.enabled | quote }}
+              value: {{ include "concourse.database.user" . }}
         {{- end }}
         - name: db-migrate
           image: {{ template "concourse.image" . }}
@@ -132,13 +132,13 @@ spec:
                   name: {{ include "concourse.postgresql.secretName" . }}
                   key: {{ include "concourse.database.existingsecret.key" . }}
             - name: CONCOURSE_POSTGRES_DATABASE
-              value: {{ ternary .Values.postgresql.auth.database .Values.externalDatabase.database .Values.postgresql.enabled | quote }}
+              value: {{ include "concourse.database.name" . }}
             - name: CONCOURSE_POSTGRES_HOST
-              value: {{ ternary (include "concourse.database.host" .) .Values.externalDatabase.host .Values.postgresql.enabled | quote }}
+              value: {{ include "concourse.database.host" . }}
             - name: CONCOURSE_POSTGRES_PORT
-              value: {{ include "concourse.database.port" . | quote }}
+              value: {{ include "concourse.database.port" . }}
             - name: CONCOURSE_POSTGRES_USER
-              value: {{ ternary .Values.postgresql.auth.username .Values.externalDatabase.user .Values.postgresql.enabled | quote  }}
+              value: {{ include "concourse.database.user" . }}
         {{- if .Values.web.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.web.initContainers "context" $) | nindent 8 }}
         {{- end }}
@@ -286,13 +286,22 @@ spec:
                   name: {{ include "concourse.postgresql.secretName" . }}
                   key: {{ include "concourse.database.existingsecret.key" . }}
             - name: CONCOURSE_POSTGRES_DATABASE
-              value: {{ ternary .Values.postgresql.auth.database .Values.externalDatabase.database .Values.postgresql.enabled | quote }}
+              value: {{ include "concourse.database.name" . }}
             - name: CONCOURSE_POSTGRES_HOST
-              value: {{ ternary (include "concourse.database.host" .) .Values.externalDatabase.host .Values.postgresql.enabled | quote }}
+              value: {{ include "concourse.database.host" . }}
             - name: CONCOURSE_POSTGRES_PORT
-              value: {{ include "concourse.database.port" . | quote }}
+              value: {{ include "concourse.database.port" . }}
             - name: CONCOURSE_POSTGRES_USER
-              value: {{ ternary .Values.postgresql.auth.username .Values.externalDatabase.user .Values.postgresql.enabled | quote  }}
+              value: {{ include "concourse.database.user" . }}
+          envFrom:
+            {{- if .Values.web.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.web.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.web.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.web.extraEnvVarsSecret "context" $) }}
+            {{- end }}
           ports:
             - name: http
               containerPort: {{ .Values.web.containerPorts.http }}
@@ -305,15 +314,6 @@ spec:
             {{- if .Values.web.containerPorts.tsa }}
             - name: http-debug
               containerPort: {{ .Values.web.containerPorts.tsa }}
-            {{- end }}
-          envFrom:
-            {{- if .Values.web.extraEnvVarsCM }}
-            - configMapRef:
-                name: {{ include "common.tplvalues.render" (dict "value" .Values.web.extraEnvVarsCM "context" $) }}
-            {{- end }}
-            {{- if .Values.web.extraEnvVarsSecret }}
-            - secretRef:
-                name: {{ include "common.tplvalues.render" (dict "value" .Values.web.extraEnvVarsSecret "context" $) }}
             {{- end }}
           {{- if .Values.web.resources }}
           resources: {{- toYaml .Values.web.resources | nindent 12 }}
