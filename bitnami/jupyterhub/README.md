@@ -1,9 +1,13 @@
 <!--- app-name: JupyterHub -->
 
-# JupyterHub
+# JupyterHub packaged by Bitnami
 
-[JupyterHub](https://github.com/jupyterhub/jupyterhub) is a multi-user version of the notebook designed for companies, classrooms and research labs.
+JupyterHub brings the power of notebooks to groups of users. It gives users access to computational environments and resources without burdening the users with installation and maintenance tasks.
 
+[Overview of JupyterHub](https://jupyter.org/hub)
+
+Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
+                           
 ## TL;DR
 
 ```console

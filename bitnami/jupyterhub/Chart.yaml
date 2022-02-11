@@ -12,7 +12,7 @@ dependencies:
     repository: https://charts.bitnami.com/bitnami
     condition: postgresql.enabled
     version: 10.x.x
-description: JupyterHub brings the power of notebooks to groups of users. It gives users access to computational environments and resources without burdening the users with installation and maintenance tasks
+description: JupyterHub brings the power of notebooks to groups of users. It gives users access to computational environments and resources without burdening the users with installation and maintenance tasks.
 engine: gotpl
 home: https://jupyter.org/hub
 icon: https://bitnami.com/assets/stacks/jupyterhub/img/jupyterhub-stack-220x234.png
@@ -26,4 +26,4 @@ name: jupyterhub
 sources:
   - https://github.com/bitnami/bitnami-docker-jupyterhub
   - https://github.com/jupyterhub/jupyterhub
-version: 0.4.5
+version: 0.4.6
