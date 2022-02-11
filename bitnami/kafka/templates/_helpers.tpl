@@ -288,11 +288,11 @@ The exporter uses a different nomenclature so we need to do this hack
 {{- define "kafka.metrics.kafka.saslMechanism" -}}
 {{- $saslMechanisms := .Values.auth.sasl.mechanisms }}
 {{- if contains "scram-sha-512" $saslMechanisms }}
-    {{- printf "scram-sha512" -}}
+    {{- print "scram-sha512" -}}
 {{- else if contains "scram-sha-256" $saslMechanisms }}
-    {{- printf "scram-sha256" -}}
+    {{- print "scram-sha256" -}}
 {{- else -}}
-    {{- printf "plain" -}}
+    {{- print "plain" -}}
 {{- end -}}
 {{- end -}}
 
