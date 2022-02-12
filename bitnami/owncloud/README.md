@@ -1,9 +1,13 @@
 <!--- app-name: ownCloud -->
 
-# ownCloud
+# ownCloud packaged by Bitnami
 
-[ownCloud](https://owncloud.org/) is a file sharing server that puts the control and security of your own data back into your hands.
+ownCloud is an open source content collaboration platform used to store and share files from any device. It grants data privacy, synchronization between devices, and file access control. 
 
+[Overview of ownCloud](http://owncloud.org)
+
+Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
+                           
 ## TL;DR
 
 ```console

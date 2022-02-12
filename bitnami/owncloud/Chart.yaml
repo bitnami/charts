@@ -14,7 +14,7 @@ dependencies:
     tags:
       - owncloud-database
     version: 10.x.x
-description: A file sharing server that puts the control and security of your own data back into your hands.
+description: ownCloud is an open source content collaboration platform used to store and share files from any device. It grants data privacy, synchronization between devices, and file access control. 
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/owncloud
 icon: https://bitnami.com/assets/stacks/owncloud/img/owncloud-stack-220x234.png
@@ -31,4 +31,4 @@ name: owncloud
 sources:
   - https://github.com/bitnami/bitnami-docker-owncloud
   - https://owncloud.org/
-version: 11.0.4
+version: 11.0.5
