@@ -1,9 +1,13 @@
-<!--- app-name: TensorFlow ResNet -->
+<!--- app-name: TensorFlow &reg;esNet -->
 
-# TensorFlow Serving ResNet
+# TensorFlow &reg;esNet packaged by Bitnami
 
-TensorFlow Serving is an open-source software library for serving machine learning models. This chart will specifically serve the ResNet model with already trained data.
+TensorFlow &reg;esNet is a client utility for use with TensorFlow Serving and ResNet models.
 
+[Overview of TensorFlow &reg;esNet](https://github.com/tensorflow/models/tree/master/official/resnet)
+
+Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
+                           
 ## TL;DR
 
 ```console
@@ -78,10 +82,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.image.tag`                   | TensorFlow Serving Image tag (immutable tags are recommended)                             | `2.7.0-debian-10-r64`        |
 | `server.image.pullPolicy`            | TensorFlow Serving image pull policy                                                      | `IfNotPresent`               |
 | `server.image.pullSecrets`           | Specify docker-registry secret names as an array                                          | `[]`                         |
-| `client.image.registry`              | TensorFlow ResNet image registry                                                          | `docker.io`                  |
-| `client.image.repository`            | TensorFlow ResNet image repository                                                        | `bitnami/tensorflow-resnet`  |
-| `client.image.tag`                   | TensorFlow ResNet Image tag (immutable tags are recommended)                              | `2.7.0-debian-10-r10`        |
-| `client.image.pullPolicy`            | TensorFlow ResNet image pull policy                                                       | `IfNotPresent`               |
+| `client.image.registry`              | TensorFlow &reg;esNet image registry                                                          | `docker.io`                  |
+| `client.image.repository`            | TensorFlow &reg;esNet image repository                                                        | `bitnami/tensorflow-resnet`  |
+| `client.image.tag`                   | TensorFlow &reg;esNet Image tag (immutable tags are recommended)                              | `2.7.0-debian-10-r10`        |
+| `client.image.pullPolicy`            | TensorFlow &reg;esNet image pull policy                                                       | `IfNotPresent`               |
 | `client.image.pullSecrets`           | Specify docker-registry secret names as an array                                          | `[]`                         |
 | `hostAliases`                        | Deployment pod host aliases                                                               | `[]`                         |
 | `containerPorts.server`              | Tensorflow server port                                                                    | `8500`                       |
@@ -157,7 +161,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ### To 3.3.0
 
-TensorFlow ResNet's version was updated to `2.7.0`. Although this new version [does not include breaking changes](https://github.com/tensorflow/serving/releases/tag/2.7.0), the client [was updated to work with newer TF Model Garden models](https://github.com/tensorflow/serving/commit/bb1428d53abb53fe938ddf9bb8839d4dfe48d291). Older models may need to adapt their signature [to the newer, common one](https://www.tensorflow.org/hub/common_signatures/images).
+TensorFlow &reg;esNet's version was updated to `2.7.0`. Although this new version [does not include breaking changes](https://github.com/tensorflow/serving/releases/tag/2.7.0), the client [was updated to work with newer TF Model Garden models](https://github.com/tensorflow/serving/commit/bb1428d53abb53fe938ddf9bb8839d4dfe48d291). Older models may need to adapt their signature [to the newer, common one](https://www.tensorflow.org/hub/common_signatures/images).
 
 As a result, the pretrained model served by this Chart was updated to [Imagenet (ILSVRC-2012-CLS) classification with ResNet 50](https://tfhub.dev/tensorflow/resnet_50/classification/1).
 
