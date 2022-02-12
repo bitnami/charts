@@ -16,7 +16,7 @@ dependencies:
     name: redis
     repository: https://charts.bitnami.com/bitnami
     version: 15.X.X
-description: A Helm chart for deploying Discourse to Kubernetes
+description: Discourse is an open source discussion platform with built-in moderation and governance systems that let discussion communities protect themselves from bad actors even without official moderators.
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/discourse
 icon: https://bitnami.com/assets/stacks/discourse/img/discourse-stack-220x234.png
@@ -35,4 +35,4 @@ sources:
   - https://github.com/bitnami/bitnami-docker-discourse
   - https://github.com/spinnaker
   - https://www.discourse.org/
-version: 5.2.4
+version: 5.2.5

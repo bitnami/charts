@@ -1,11 +1,13 @@
-<!--- app-name: Discourse(R) -->
+<!--- app-name: Discourse(&reg;) -->
 
-# Discourse&reg;
+# Discourse(R) packaged by Bitnami
 
-[Discourse](https://www.discourse.org/) is an open source discussion platform. It can be used as a mailing list, discussion forum, long-form chat room, and more.
+Discourse is an open source discussion platform with built-in moderation and governance systems that let discussion communities protect themselves from bad actors even without official moderators.
+
+[Overview of Discourse(&reg;)](http://www.discourse.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-
+                           
 ## TL;DR
 
 ```console
