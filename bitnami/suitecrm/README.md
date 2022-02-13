@@ -1,8 +1,8 @@
 <!--- app-name: SuiteC&reg;M -->
 
-# SuiteC&reg;M packaged by Bitnami
+# SuiteCRM packaged by Bitnami
 
-SuiteC&reg;M is a completely open source, enterprise-grade Customer Relationship Management (CRM) application. SuiteC&reg;M is a fork of the popular SugarCRM application.
+SuiteCRM is a completely open source, enterprise-grade Customer Relationship Management (CRM) application. SuiteCRM is a fork of the popular SugarCRM application.
 
 [Overview of SuiteC&reg;M](http://www.suitecrm.com/)
 
