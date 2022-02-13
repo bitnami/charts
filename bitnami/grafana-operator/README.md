@@ -1,9 +1,13 @@
 <!--- app-name: Grafana Operator -->
 
-# grafana-operator
+# Grafana Operator packaged by Bitnami
 
-[Grafana Operator](https://github.com/integr8ly/grafana-operator) is an Operator which introduces Lifecycle Management for Grafana Dashboards and Plugins.
+Grafana Operator is a Kubernetes operator that enables the installation and management of Grafana instances, dashboards and plugins.
 
+[Overview of Grafana Operator](https://github.com/integr8ly/grafana-operator)
+
+Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
+                           
 ## TL;DR
 
 ```console
