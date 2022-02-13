@@ -1,8 +1,8 @@
 <!--- app-name: Jasper&reg;eports -->
 
-# Jasper&reg;eports packaged by Bitnami
+# JasperReports packaged by Bitnami
 
-Jasper&reg;eports Server is a stand-alone and embeddable reporting server. It is a central information hub, with reporting and analytics that can be embedded into web and mobile applications.
+JasperReports Server is a stand-alone and embeddable reporting server. It is a central information hub, with reporting and analytics that can be embedded into web and mobile applications.
 
 [Overview of Jasper&reg;eports](http://community.jaspersoft.com/project/jasperreports-server)
 
