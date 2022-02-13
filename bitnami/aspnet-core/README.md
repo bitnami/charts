@@ -1,9 +1,13 @@
 <!--- app-name: ASP.NET -->
 
-# ASP.NET Core
+# ASP.NET packaged by Bitnami
 
-[ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core) is an open-source framework created by Microsoft for building cloud-enabled, modern applications.
+ASP.NET Core is an open-source framework for web application development created by Microsoft. It runs on both the full .NET Framework, on Windows, and the cross-platform .NET Core.
 
+[Overview of ASP.NET](https://github.com/dotnet/aspnetcore)
+
+Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
+                           
 ## TL;DR
 
 ```console
