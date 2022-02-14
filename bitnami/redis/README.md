@@ -544,6 +544,7 @@ useExternalDNS:
     ttl: 10
 ```
 
+
 On a cluster where the name of the Helm release is `a`, the hostname of a Pod is generated as: `a-redis-node-0.a-redis.prod.example.org`. The IP of that FQDN will match that of the associated Pod. This modifies the following parameters of the Redis/Sentinel configuration using this new FQDN:
 
 * `replica-announce-ip`
