@@ -21,7 +21,7 @@ jobs:
     name: 'Get affected chart'
     outputs:
       chart: ${{ steps.get-chart.outputs.chart }}
-      error: ${{ steps.get-chart.outputs.error }}
+      result: ${{ steps.get-chart.outputs.result }}
     steps:
       - uses: actions/checkout@v2
         with:
@@ -37,22 +37,32 @@ jobs:
           num_charts_yaml_changed="$(echo "$files_changed" | grep -c "Chart.yaml")"
 
           if [[ "$num_charts_changed" -ne "$num_charts_yaml_changed" ]]; then
-            echo -e "Detected changes in charts without bump in Chart.yaml.\nCharts changed:\n ${charts_dirs_changed}\nChart.yaml changes detected: ${num_charts_yaml_changed}"
-            echo "::set-output name=error::Missing Chart.yaml changes. The rest of the tests will be skipped."
-            exit 1
+            echo -e "::set-output name=error::Detected changes in charts without bump in Chart.yaml.\nCharts changed:\n ${charts_dirs_changed}\nChart.yaml changes detected: ${num_charts_yaml_changed}"
+            echo "::set-output name=result::fail"
           fi
 
           if [[ "$num_charts_changed" -eq "1" ]]; then
             echo "::set-output name=chart::${charts_dirs_changed}"
+            echo "::set-output name=result::ok"
           elif [[ "$num_charts_changed" -le "0" ]]; then
             echo -e "::set-output name=error::No changes detected in charts. The rest of the tests will be skipped."
+            echo "::set-output name=result::skip"
           else
             echo -e "::set-output name=error::Changes detected in more than one chart directory:\n${charts_dirs_changed}\nIt is strongly advised to change only one chart in a PR. The rest of the tests will be skipped."
+            echo "::set-output name=result::skip"
           fi
+      - id: show-error
+        name: Show error
+        if: ${{needs.get-chart.outputs.fail == 'true'}}
+        uses: actions/github-script@v3
+        with:
+          script: |
+              core.setFailed('${{steps.get-chart.outputs.result}}')
+
   vib-verify:
     runs-on: ubuntu-latest
     needs: get-chart
-    if: ${{needs.get-chart.outputs.error == ''}}
+    if: ${{needs.get-chart.outputs.result == 'ok'}}
     name: 'Package, Lint and Trivy scan'
     steps:
       - uses: actions/checkout@v2
