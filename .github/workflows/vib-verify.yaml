@@ -31,7 +31,7 @@ jobs:
       - id: get-chart
         run: |
           charts_dirs_changed="$(git diff --name-only origin/master HEAD | xargs dirname | sort | uniq)"
-          charts_yaml_changed="$(git diff --name-only origin/master HEAD | grep Chart.yaml | sort | uniq  | xargs dirname)"
+          charts_yaml_changed="$(git diff --name-only origin/master HEAD | grep Chart.yaml | sort | uniq)"
           num_charts_changed="$(echo "$charts_dirs_changed" | wc -l )"
 
           if [[ "$num_charts_changed" -ne "$(echo "$charts_yaml_changed" | wc -l )" ]]; then
@@ -40,7 +40,7 @@ jobs:
           fi
 
           if [[ "$num_charts_changed" -eq "1" ]]; then
-            echo "::set-output name=chart::${charts_yaml_changed}"
+            echo "::set-output name=chart::${charts_dirs_changed}"
           else
             echo -e "::set-output name=error::Changes detected in more than one chart directory:\n${charts_dirs_changed}\nIt is strongly advised to change only one chart in a PR"
           fi
