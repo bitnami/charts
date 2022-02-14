@@ -199,7 +199,7 @@ Get the initialization scripts ConfigMap name.
 {{- if .Values.primary.initdb.scriptsConfigMap -}}
     {{- printf "%s" (tpl .Values.primary.initdb.scriptsConfigMap $) -}}
 {{- else -}}
-    {{- printf "%s-init-scripts" (include "common.names.fullname" .) -}}
+    {{- printf "%s-init-scripts" (include "postgresql.primary.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 
