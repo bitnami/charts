@@ -30,19 +30,21 @@ jobs:
           fetch-depth: 0
       - id: get-chart
         run: |
-          charts_dirs_changed="$(git diff --name-only origin/master HEAD | xargs dirname | sort | uniq)"
-          charts_yaml_changed="$(git diff --name-only origin/master HEAD | grep Chart.yaml | sort | uniq)"
+          charts_dirs_changed="$(git diff --name-only origin/master HEAD | xargs dirname | grep "bitnami/"| sort | uniq)"
           num_charts_changed="$(echo -n "$charts_dirs_changed" | wc -l )"
+          num_charts_yaml_changed="$(git diff --name-only origin/master HEAD | grep Chart.yaml | sort | uniq | wc -l)"
 
-          if [[ "$num_charts_changed" -ne "$(echo -n "$charts_yaml_changed" | wc -l )" ]]; then
+          if [[ "$num_charts_changed" -ne "$num_charts_yaml_changed" ]]; then
             echo -e "::set-output name=error::Detected changes in charts without bump in Chart.yaml.\nCharts changed: ${charts_dirs_changed}\nChart.yaml changes detected: ${charts_yaml_changed}"
             exit 1
           fi
 
           if [[ "$num_charts_changed" -eq "1" ]]; then
             echo "::set-output name=chart::${charts_dirs_changed}"
+          elif [[ "$num_charts_changed" -le "0" ]]; then
+            echo -e "::set-output name=error::No changes detected in charts. The rest of the tests will be skipped."
           else
-            echo -e "::set-output name=error::Changes detected in more than one chart directory:\n${charts_dirs_changed}\nIt is strongly advised to change only one chart in a PR"
+            echo -e "::set-output name=error::Changes detected in more than one chart directory:\n${charts_dirs_changed}\nIt is strongly advised to change only one chart in a PR. The rest of the tests will be skipped."
           fi
   vib-verify:
     runs-on: ubuntu-latest
