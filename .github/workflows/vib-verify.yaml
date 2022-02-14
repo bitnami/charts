@@ -30,8 +30,7 @@ jobs:
           fetch-depth: 0
       - id: get-chart
         run: |
-          # Selecting one chart for the time being, it needs to be discussed whether to allow more than 1
-          chart="$(git diff --name-only origin/master HEAD | grep Chart.yaml | sort | uniq | head -n 1 | xargs dirname)"
+          chart="$(git diff --name-only origin/master HEAD | grep Chart.yaml | sort | uniq | xargs dirname)"
           number_of_charts="$(echo "$chart" | wc -l )"
           if [[ "$number_of_charts" -le "0" ]]; then
             echo "::set-output name=error::No changes in Chart.yaml were detected. It is mandatory to bump the chart version"
@@ -44,7 +43,7 @@ jobs:
   vib-verify:
     runs-on: ubuntu-latest
     needs: get-chart
-    if: ${{needs.get-chart.outputs.error != ''}}
+    if: ${{needs.get-chart.outputs.error == ''}}
     name: 'Package, Lint and Trivy scan'
     steps:
       - uses: actions/checkout@v2
