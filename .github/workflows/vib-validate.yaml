@@ -18,8 +18,10 @@ env:
 jobs:
   get-chart:
     runs-on: ubuntu-latest
+    name: 'Get affected chart'
     outputs:
       chart: ${{ steps.get-chart.outputs.chart }}
+      error: ${{ steps.get-chart.outputs.error }}
     steps:
       - uses: actions/checkout@v2
         with:
@@ -30,10 +32,19 @@ jobs:
         run: |
           # Selecting one chart for the time being, it needs to be discussed whether to allow more than 1
           chart="$(git diff --name-only origin/master HEAD | grep Chart.yaml | sort | uniq | head -n 1 | xargs dirname)"
-          echo "::set-output name=chart::${chart}"
-  vib-validate:
+          number_of_charts="$(echo "$chart" | wc -l )"
+          if [[ "$number_of_charts" -le "0" ]]; then
+            echo "::set-output name=error::No changes in Chart.yaml were detected. It is mandatory to bump the chart version"
+            exit 1
+          elif [[ "$number_of_charts" -eq "1" ]]; then
+            echo "::set-output name=chart::${chart}"
+          else
+            echo "::set-output name=error::Changes detected in more than one Chart.yaml file. It is strongly advised to change only one chart in a PR"
+          fi
+  vib-verify:
     runs-on: ubuntu-latest
     needs: get-chart
+    if: ${{needs.get-chart.outputs.error != ''}}
     name: 'Package, Lint and Trivy scan'
     steps:
       - uses: actions/checkout@v2
@@ -42,6 +53,6 @@ jobs:
           repository: ${{github.event.pull_request.head.repo.full_name}}
       - uses: vmware-samples/vmware-image-builder-examples/vib-action@main
         with:
-          pipeline: vib-validate.json
+          pipeline: vib-verify.json
         env:
           VIB_ENV_CHART_PATH: "${{needs.get-chart.outputs.chart}}"
