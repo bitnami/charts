@@ -149,7 +149,7 @@ command: []
 ## @param args Override default container args (useful when using custom images)
 ##
 args: []
-## @param lifecycleHooks for the %%MAIN_CONTAINER_NAME%% container(s) to automate configuration before or after startup
+## @param lifecycleHooks for the container to automate configuration before or after startup
 ##
 lifecycleHooks: {}
 ## Container resource requests and limits
