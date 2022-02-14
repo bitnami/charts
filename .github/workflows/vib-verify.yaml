@@ -58,7 +58,7 @@ jobs:
       # Source: https://github.community/t/no-output-on-process-completed-with-exit-code-1/123821/3
       - id: show-error
         name: Show error
-        if: ${{needs.get-chart.outputs.result == 'fail'}}
+        if: ${{steps.get-chart.outputs.result == 'fail'}}
         uses: actions/github-script@v3
         with:
           script: |
