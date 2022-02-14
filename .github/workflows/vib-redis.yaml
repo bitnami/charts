@@ -22,6 +22,8 @@ jobs:
           ref: ${{github.event.pull_request.head.ref}}
           repository: ${{github.event.pull_request.head.repo.full_name}}
       - uses: vmware-samples/vmware-image-builder-examples/vib-action@main
+        with:
+          pipeline: redis/vib-pipeline.json
 
   vib-verify-standalone: # verify in GKE
     runs-on: ubuntu-latest
