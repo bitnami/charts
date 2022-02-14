@@ -46,7 +46,7 @@ jobs:
             echo "::set-output name=chart::${charts_dirs_changed}"
             echo "::set-output name=result::ok"
           elif [[ "$num_charts_changed" -le "0" ]]; then
-            # Changes done in the bitnami/ folder but inside a chart subfolder -> SKIP
+            # Changes done in the bitnami/ folder not but inside a chart subfolder -> SKIP
             echo -e "::set-output name=error::No changes detected in charts. The rest of the tests will be skipped."
             echo "::set-output name=result::skip"
           else
