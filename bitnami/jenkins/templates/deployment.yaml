@@ -44,6 +44,12 @@ spec:
       {{- if .Values.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.schedulerName }}
+      schedulerName: {{ .Values.schedulerName }}
+      {{- end }}
+      {{- if .Values.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
       {{- if .Values.priorityClassName }}
       priorityClassName: {{ .Values.priorityClassName | quote }}
       {{- end }}
@@ -110,9 +116,9 @@ spec:
             - name: JENKINS_HOST
               value: {{ include "jenkins.host" . | quote }}
             - name: JENKINS_EXTERNAL_HTTP_PORT_NUMBER
-              value: {{ .Values.service.port | quote }}
+              value: {{ .Values.service.ports.http | quote }}
             - name: JENKINS_EXTERNAL_HTTPS_PORT_NUMBER
-              value: {{ .Values.service.httpsPort | quote }}
+              value: {{ .Values.service.ports.https | quote }}
             {{- if .Values.javaOpts }}
             - name: JAVA_OPTS
               value: {{ .Values.javaOpts | join " " | quote }}
@@ -138,6 +144,13 @@ spec:
             - name: https
               containerPort: {{ .Values.containerPorts.https }}
               protocol: TCP
+          {{- if .Values.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.startupProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: http
+          {{- else if .Values.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
@@ -219,7 +232,7 @@ spec:
         - name: jenkins-data
           {{- if .Values.persistence.enabled }}
           persistentVolumeClaim:
-            claimName: {{ include "common.names.fullname" . }}
+            claimName: {{ default (include "common.names.fullname" .) .Values.persistence.existingClaim }}
           {{- else }}
           emptyDir: {}
           {{- end }}
