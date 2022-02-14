@@ -129,6 +129,11 @@ extraEnvVarsSecret: ""
 ##
 updateStrategy:
   type: RollingUpdate
+
+## @param serviceAccountName Jenkins pod service account name
+##
+serviceAccountName: "default"
+
 ## @param priorityClassName Jenkins pod priority class name
 ##
 priorityClassName: ""
