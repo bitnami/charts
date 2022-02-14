@@ -36,7 +36,7 @@ jobs:
           num_charts_changed="$(echo "$charts_dirs_changed" | grep -c "bitnami")"
           num_charts_yaml_changed="$(echo "$files_changed" | grep -c "Chart.yaml")"
 
-          if [[ "$num_charts_changed" -ne "$num_charts_yaml_changed" ]]; then
+          if [[ "$num_charts_changed" -eq "$num_charts_yaml_changed" ]]; then
             # Changes done in charts but version not bumped -> ERROR
             echo HIIII
           elif [[ "$num_charts_changed" -eq "1" ]]; then
