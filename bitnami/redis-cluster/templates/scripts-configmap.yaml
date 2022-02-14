@@ -76,6 +76,9 @@ data:
     fi
 {{- end }}
   ping_liveness_local.sh: |-
+    #!/bin/sh
+    set -e
+
     {{- if .Values.usePasswordFile }}
     password_aux=`cat ${REDIS_PASSWORD_FILE}`
     export REDISCLI_AUTH=$password_aux
