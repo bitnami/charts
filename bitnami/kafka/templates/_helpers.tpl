@@ -336,7 +336,10 @@ Compile all warnings into a single message, and call fail.
 {{- $messages := append $messages (include "kafka.validateValues.nodePortListLength" .) -}}
 {{- $messages := append $messages (include "kafka.validateValues.externalAccessServiceType" .) -}}
 {{- $messages := append $messages (include "kafka.validateValues.externalAccessAutoDiscoveryRBAC" .) -}}
-{{- $messages := append $messages (include "kafka.validateValues.externalAccessServiceLoadBalancerNames" .) -}}
+{{- $messages := append $messages (include "kafka.validateValues.externalAccessAutoDiscoveryIPsOrNames" .) -}}
+{{- $messages := append $messages (include "kafka.validateValues.externalAccessServiceList" (dict "element" "loadBalancerIPs" "context" .)) -}}
+{{- $messages := append $messages (include "kafka.validateValues.externalAccessServiceList" (dict "element" "loadBalancerNames" "context" .)) -}}
+{{- $messages := append $messages (include "kafka.validateValues.externalAccessServiceList" (dict "element" "loadBalancerAnnotations" "context" . )) -}}
 {{- $messages := append $messages (include "kafka.validateValues.saslMechanisms" .) -}}
 {{- $messages := append $messages (include "kafka.validateValues.tlsSecrets" .) -}}
 {{- $messages := append $messages (include "kafka.validateValues.tlsSecrets.length" .) -}}
@@ -386,13 +389,26 @@ kafka: rbac.create
 {{- end -}}
 {{- end -}}
 
-{{/* Validate values of Kafka - number of replicas must be the same as loadBalancerNames list */}}
-{{- define "kafka.validateValues.externalAccessServiceLoadBalancerNames" -}}
-{{- $replicaCount := int .Values.replicaCount }}
+{{/* Validate values of Kafka - LoadBalancerIPs or LoadBalancerNames should be set when autoDiscovery is disabled */}}
+{{- define "kafka.validateValues.externalAccessAutoDiscoveryIPsOrNames" -}}
 {{- $loadBalancerNameListLength := len .Values.externalAccess.service.loadBalancerNames -}}
-{{- if and .Values.externalAccess.enabled (not .Values.externalAccess.autoDiscovery.enabled) (gt $loadBalancerNameListLength 0) (not (eq $replicaCount $loadBalancerNameListLength)) (eq .Values.externalAccess.service.type "LoadBalancer") }}
-kafka: externalAccess.service.loadBalancerNames
-    Number of replicas and loadBalancerNames array length must be the same. Currently: replicaCount = {{ $replicaCount }} and loadBalancerNames = {{ $loadBalancerNameListLength }}
+{{- $loadBalancerIPListLength := len .Values.externalAccess.service.loadBalancerIPs -}}
+{{- if and .Values.externalAccess.enabled (eq .Values.externalAccess.service.type "LoadBalancer") (not .Values.externalAccess.autoDiscovery.enabled) (eq $loadBalancerNameListLength 0) (eq $loadBalancerIPListLength 0) }}
+kafka: externalAccess.service.loadBalancerNames or externalAccess.service.loadBalancerIPs
+    By specifying "externalAccess.enabled=true", "externalAccess.autoDiscovery.enabled=false" and
+    "externalAccess.service.type=LoadBalancer" at least one of externalAccess.service.loadBalancerNames
+    or externalAccess.service.loadBalancerIPs  must be set and the length of those arrays must be equal
+    to the number of replicas.
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of Kafka - number of replicas must be the same as loadBalancerIPs list */}}
+{{- define "kafka.validateValues.externalAccessServiceList" -}}
+{{- $replicaCount := int .context.Values.replicaCount }}
+{{- $listLength := len (get .context.Values.externalAccess.service .element) -}}
+{{- if and .context.Values.externalAccess.enabled (not .context.Values.externalAccess.autoDiscovery.enabled) (eq .context.Values.externalAccess.service.type "LoadBalancer") (gt $listLength 0) (not (eq $replicaCount $listLength)) }}
+kafka: externalAccess.service.{{ .element }}
+    Number of replicas and {{ .element }} array length must be the same. Currently: replicaCount = {{ $replicaCount }} and {{ .element }} = {{ $listLength }}
 {{- end -}}
 {{- end -}}
 
