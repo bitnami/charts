@@ -118,6 +118,9 @@ spec:
       {{- end }}
     {{- end }}
     {{- if .Values.grafana.updateStrategy }}
+    nodeSelector: {{ toYaml .Values.grafana.nodeSelector | nindent 6 }}
+    {{- end }}
+    {{- if .Values.grafana.updateStrategy }}
     strategy: {{ toYaml .Values.grafana.updateStrategy | nindent 6 }}
     {{- end }}
     {{- if .Values.grafana.extraVolumeMounts }}
