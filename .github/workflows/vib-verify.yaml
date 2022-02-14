@@ -39,7 +39,7 @@ jobs:
 
           if [[ "$num_charts_changed" -ne "$num_version_bumps" ]]; then
             # Changes done in charts but version not bumped -> ERROR
-            echo -e "::set-output name=error::Detected changes in charts without bump in Chart.yaml.\nCharts changed:\n ${charts_dirs_changed}\nVersion bumps detected: ${num_version_bumps}"
+            echo "::set-output name=error::Detected changes in charts without version bump in Chart.yaml.\nCharts changed:\n${charts_dirs_changed}\nVersion bumps detected: ${num_version_bumps}"
             echo "::set-output name=result::fail"
           elif [[ "$num_charts_changed" -eq "1" ]]; then
             # Changes done in only one chart -> OK
@@ -47,7 +47,7 @@ jobs:
             echo "::set-output name=result::ok"
           elif [[ "$num_charts_changed" -le "0" ]]; then
             # Changes done in the bitnami/ folder not but inside a chart subfolder -> SKIP
-            echo -e "::set-output name=error::No changes detected in charts. The rest of the tests will be skipped."
+            echo "::set-output name=error::No changes detected in charts. The rest of the tests will be skipped."
             echo "::set-output name=result::skip"
           else
             # Changes done in more than chart -> SKIP
