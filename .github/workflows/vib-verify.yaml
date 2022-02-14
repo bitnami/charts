@@ -62,7 +62,7 @@ jobs:
         uses: actions/github-script@v3
         with:
           script: |
-              core.setFailed('${{steps.get-chart.outputs.result}}')
+              core.setFailed('${{steps.get-chart.outputs.error}}')
 
   vib-verify:
     runs-on: ubuntu-latest
