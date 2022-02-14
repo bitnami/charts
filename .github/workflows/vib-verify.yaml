@@ -37,7 +37,7 @@ jobs:
           num_charts_yaml_changed="$(echo "$files_changed" | grep -c "Chart.yaml")"
 
           if [[ "$num_charts_changed" -ne "$num_charts_yaml_changed" ]]; then
-            echo -e "::set-output name=error::Detected changes in charts without bump in Chart.yaml.\nCharts changed: ${charts_dirs_changed}\nChart.yaml changes detected: ${num_charts_yaml_changed}" 2>&1
+            echo -e "::set-output name=error::Detected changes in charts without bump in Chart.yaml.\nCharts changed: ${charts_dirs_changed}\nChart.yaml changes detected: ${num_charts_yaml_changed}" >&2
             exit 1
           fi
 
