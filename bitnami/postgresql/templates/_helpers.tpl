@@ -226,7 +226,6 @@ Compile all warnings into a single message, and call fail.
 {{- $messages := list -}}
 {{- $messages := append $messages (include "postgresql.validateValues.ldapConfigurationMethod" .) -}}
 {{- $messages := append $messages (include "postgresql.validateValues.psp" .) -}}
-{{- $messages := append $messages (include "postgresql.validateValues.tls" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
@@ -255,17 +254,6 @@ Validate values of Postgresql - If PSP is enabled RBAC should be enabled too
 postgresql: psp.create, rbac.create
     RBAC should be enabled if PSP is enabled in order for PSP to work.
     More info at https://kubernetes.io/docs/concepts/policy/pod-security-policy/#authorizing-policies
-{{- end -}}
-{{- end -}}
-
-{{/*
-Validate values of Postgresql TLS - When TLS is enabled, so must be VolumePermissions
-*/}}
-{{- define "postgresql.validateValues.tls" -}}
-{{- if and .Values.tls.enabled (not .Values.volumePermissions.enabled) }}
-postgresql: tls.enabled, volumePermissions.enabled
-    When TLS is enabled you must enable volumePermissions as well to ensure certificates files have
-    the right permissions.
 {{- end -}}
 {{- end -}}
 
