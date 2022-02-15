@@ -86,20 +86,20 @@ data:
     # Configure external ip and port
     {{- if eq .Values.externalAccess.service.type "LoadBalancer" }}
     {{- if .Values.externalAccess.autoDiscovery.enabled }}
-    export EXTERNAL_ACCESS_IP="$(<${SHARED_FILE})"
+    export EXTERNAL_ACCESS_HOST="$(<${SHARED_FILE})"
     {{- else }}
-    export EXTERNAL_ACCESS_IP=$(echo '{{ .Values.externalAccess.service.loadBalancerIPs }}' | tr -d '[]' | cut -d ' ' -f "$(($ID + 1))")
+    export EXTERNAL_ACCESS_HOST=$(echo '{{ .Values.externalAccess.service.loadBalancerNames | default .Values.externalAccess.service.loadBalancerIPs }}' | tr -d '[]' | cut -d ' ' -f "$(($ID + 1))")
     {{- end }}
     export EXTERNAL_ACCESS_PORT={{ .Values.externalAccess.service.ports.external }}
     {{- else if eq .Values.externalAccess.service.type "NodePort" }}
     {{- if and .Values.externalAccess.service.usePodIPs .Values.externalAccess.autoDiscovery.enabled }}
-    export EXTERNAL_ACCESS_IP="${MY_POD_IP}"
+    export EXTERNAL_ACCESS_HOST="${MY_POD_IP}"
     {{- else if or .Values.externalAccess.service.useHostIPs .Values.externalAccess.autoDiscovery.enabled }}
-    export EXTERNAL_ACCESS_IP="${HOST_IP}"
+    export EXTERNAL_ACCESS_HOST="${HOST_IP}"
     {{- else if .Values.externalAccess.service.domain }}
-    export EXTERNAL_ACCESS_IP={{ .Values.externalAccess.service.domain }}
+    export EXTERNAL_ACCESS_HOST={{ .Values.externalAccess.service.domain }}
     {{- else }}
-    export EXTERNAL_ACCESS_IP=$(curl -s https://ipinfo.io/ip)
+    export EXTERNAL_ACCESS_HOST=$(curl -s https://ipinfo.io/ip)
     {{- end }}
     {{- if .Values.externalAccess.autoDiscovery.enabled }}
     export EXTERNAL_ACCESS_PORT="$(<${SHARED_FILE})"
@@ -112,7 +112,7 @@ data:
     {{- if .Values.advertisedListeners }}
     export KAFKA_CFG_ADVERTISED_LISTENERS={{ join "," .Values.advertisedListeners }}
     {{- else }}
-    export KAFKA_CFG_ADVERTISED_LISTENERS="INTERNAL://${MY_POD_NAME}.{{ $fullname }}-headless.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ $interBrokerPort }},CLIENT://${MY_POD_NAME}.{{ $fullname }}-headless.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ $clientPort }},EXTERNAL://${EXTERNAL_ACCESS_IP}:${EXTERNAL_ACCESS_PORT}"
+    export KAFKA_CFG_ADVERTISED_LISTENERS="INTERNAL://${MY_POD_NAME}.{{ $fullname }}-headless.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ $interBrokerPort }},CLIENT://${MY_POD_NAME}.{{ $fullname }}-headless.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ $clientPort }},EXTERNAL://${EXTERNAL_ACCESS_HOST}:${EXTERNAL_ACCESS_PORT}"
     {{- end }}
     {{- end }}
 
