@@ -1,7 +1,8 @@
 name: 'vib'
 on: # rebuild any PRs and main branch changes
   workflow_run:
-    workflows: [Early feedback]
+    workflows:
+      - 'Early feedback'
     types:
       - completed
   pull_request_target:
