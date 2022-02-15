@@ -1,11 +1,8 @@
 name: 'vib'
 on: # rebuild any PRs and main branch changes
-  workflow_run:
-    workflows:
-      - 'Early feedback'
-    types:
-      - completed
   pull_request_target:
+    branches:
+      - master
     paths:
       - 'bitnami/redis/*'
 env:
@@ -31,7 +28,6 @@ jobs:
   vib-verify-sentinel: # verify in AKS
     runs-on: ubuntu-latest
     environment: vmware-image-builder
-    needs: [vib-validate]
     name: Redis Sentinel
     steps:
       - uses: actions/checkout@v2
@@ -47,7 +43,6 @@ jobs:
   vib-verify-replica: # verify in TKG
     runs-on: ubuntu-latest
     environment: vmware-image-builder
-    needs: [vib-validate]
     name: Redis Replica
     steps:
       - uses: actions/checkout@v2
