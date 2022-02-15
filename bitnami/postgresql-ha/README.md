@@ -419,6 +419,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | ----------------------------------------------------- | --------------------------------------------------------------------------------------------- | ----------- |
 | `service.type`                                        | Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`)                           | `ClusterIP` |
 | `service.port`                                        | PostgreSQL port                                                                               | `5432`      |
+| `service.portName`                                    | PostgreSQL port name                                                                          | `postgresql`|
 | `service.nodePort`                                    | Kubernetes service nodePort                                                                   | `""`        |
 | `service.loadBalancerIP`                              | Load balancer IP if service type is `LoadBalancer`                                            | `""`        |
 | `service.loadBalancerSourceRanges`                    | Addresses that are allowed when service is LoadBalancer                                       | `[]`        |
