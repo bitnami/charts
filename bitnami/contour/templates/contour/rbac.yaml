@@ -78,6 +78,7 @@ rules:
       - update
   - apiGroups:
       - networking.x-k8s.io
+      - gateway.networking.k8s.io
     resources:
       - gatewayclasses
       - gateways
@@ -85,12 +86,14 @@ rules:
       - tcproutes
       - tlsroutes
       - udproutes
+      - referencepolicies
     verbs:
       - get
       - list
       - watch
   - apiGroups:
       - networking.x-k8s.io
+      - gateway.networking.k8s.io
     resources:
       - gatewayclasses/status
       - gateways/status
