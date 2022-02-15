@@ -1,34 +1,8 @@
-name: Lint and Test Charts
+name: Test Charts
 
 on: pull_request
 
 jobs:
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Fetch history
-        run: git fetch --prune --unshallow
-
-      - name: Set up chart-testing
-        uses: helm/chart-testing-action@v2.1.0
-
-      - name: Get list of files with changes in Pull Request
-        id: pr-file-changes
-        uses: trilom/file-changes-action@v1.2.4
-        with:
-          fileOutput: ' '
-
-      - name: Run chart-testing (lint)
-        run: |
-          if grep -q 'templates\|crds\|Chart.yaml\|values.yaml' $HOME/files.txt; then
-            ct lint --config .github/ct-lint.yaml --check-version-increment
-          else
-            ct lint --config .github/ct-lint.yaml
-          fi
-
   test:
     runs-on: ubuntu-latest
     steps:
