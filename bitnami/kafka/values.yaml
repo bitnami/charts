@@ -727,6 +727,20 @@ externalAccess:
     ##   - Y.Y.Y.Y
     ##
     loadBalancerIPs: []
+    ## @param externalAccess.service.loadBalancerNames Array of load balancer Names for each Kafka broker. Length must be the same as replicaCount
+    ## e.g:
+    ## loadBalancerNames:
+    ##   - broker1.external.example.com
+    ##   - broker2.external.example.com
+    ##
+    loadBalancerNames: []
+    ## @param externalAccess.service.loadBalancerAnnotations Array of load balancer annotations for each Kafka broker. Length must be the same as replicaCount
+    ## e.g:
+    ## loadBalancerAnnotations:
+    ##   - external-dns.alpha.kubernetes.io/hostname: broker1.external.example.com.
+    ##   - external-dns.alpha.kubernetes.io/hostname: broker2.external.example.com.
+    ##
+    loadBalancerAnnotations: []
     ## @param externalAccess.service.loadBalancerSourceRanges Address(es) that are allowed when service is LoadBalancer
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## e.g:

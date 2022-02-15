@@ -32,38 +32,6 @@ In order to replicate the container startup scripts execute this command:
 {{- $tlsEndpointIdentificationAlgorithm := default "" .Values.auth.tls.endpointIdentificationAlgorithm -}}
 {{- $tlsPassword := .Values.auth.tls.password -}}
 {{- $servicePort := int .Values.service.ports.client -}}
-{{- $loadBalancerIPListLength := len .Values.externalAccess.service.loadBalancerIPs -}}
-{{- if and .Values.externalAccess.enabled (not .Values.externalAccess.autoDiscovery.enabled) (not (eq $replicaCount $loadBalancerIPListLength )) (eq .Values.externalAccess.service.type "LoadBalancer") }}
-
-###############################################################################
-### ERROR: You enabled external access to Kafka brokers without specifying  ###
-###   the array of load balancer IPs for Kafka brokers.                     ###
-###############################################################################
-
-This deployment will be incomplete until you configure the array of load balancer
-IPs for Kafka brokers. To complete your deployment follow the steps below:
-
-1. Wait for the load balancer IPs (it may take a few minutes for them to be available):
-
-    kubectl get svc --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ template "kafka.name" . }},app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=kafka,pod" -w
-
-2. Obtain the load balancer IPs and upgrade your chart:
-
-    {{- range $i, $e := until $replicaCount }}
-    LOAD_BALANCER_IP_{{ add $i 1 }}="$(kubectl get svc --namespace {{ $releaseNamespace }} {{ $fullname }}-{{ $i }}-external -o jsonpath='{.status.loadBalancer.ingress[0].ip}')"
-    {{- end }}
-
-3. Upgrade you chart:
-
-    helm upgrade --namespace {{ .Release.Namespace }} {{ .Release.Name }} bitnami/{{ .Chart.Name }} \
-      --set replicaCount={{ $replicaCount }} \
-      --set externalAccess.enabled=true \
-      {{- range $i, $e := until $replicaCount }}
-      --set externalAccess.service.loadBalancerIPs[{{ $i }}]=$LOAD_BALANCER_IP_{{ add $i 1 }} \
-      {{- end }}
-      --set externalAccess.service.type=LoadBalancer
-
-{{- else }}
 
 {{- if and (or (eq .Values.service.type "LoadBalancer") .Values.externalAccess.enabled) (eq $externalClientProtocol "PLAINTEXT") }}
 ---------------------------------------------------------------------------------------------
@@ -326,7 +294,6 @@ ssl.keystore.key=-----BEGIN ENCRYPTED PRIVATE KEY----- \
 ssl.endpoint.identification.algorithm=
 {{- end }}
 
-{{- end }}
 {{- end }}
 {{- end }}
 {{- end }}

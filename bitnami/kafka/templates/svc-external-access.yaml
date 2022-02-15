@@ -18,8 +18,11 @@ metadata:
     {{- if $root.Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" $root.Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
-  {{- if or $root.Values.externalAccess.service.annotations $root.Values.commonAnnotations }}
+  {{- if or $root.Values.externalAccess.service.annotations $root.Values.commonAnnotations $root.Values.externalAccess.service.loadBalancerAnnotations }}
   annotations:
+    {{- if and (not (empty $root.Values.externalAccess.service.loadBalancerAnnotations)) (eq (len $root.Values.externalAccess.service.loadBalancerAnnotations) $replicaCount) }}
+    {{ include "common.tplvalues.render" ( dict "value" (index $root.Values.externalAccess.service.loadBalancerAnnotations $i) "context" $) | nindent 4 }}
+    {{- end }}
     {{- if $root.Values.externalAccess.service.annotations }}
     {{ include "common.tplvalues.render" ( dict "value" $root.Values.externalAccess.service.annotations "context" $) | nindent 4 }}
     {{- end }}
@@ -30,7 +33,7 @@ metadata:
 spec:
   type: {{ $root.Values.externalAccess.service.type }}
   {{- if eq $root.Values.externalAccess.service.type "LoadBalancer" }}
-  {{- if not (empty $root.Values.externalAccess.service.loadBalancerIPs) }}
+  {{- if and (not (empty $root.Values.externalAccess.service.loadBalancerIPs)) (eq (len $root.Values.externalAccess.service.loadBalancerIPs) $replicaCount) }}
   loadBalancerIP: {{ index $root.Values.externalAccess.service.loadBalancerIPs $i }}
   {{- end }}
   {{- if $root.Values.externalAccess.service.loadBalancerSourceRanges }}

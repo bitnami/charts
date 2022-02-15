@@ -7,8 +7,6 @@
 {{- $interBrokerProtocol := include "kafka.listenerType" (dict "protocol" .Values.auth.interBrokerProtocol) -}}
 {{- $clientProtocol := include "kafka.listenerType" (dict "protocol" .Values.auth.clientProtocol) -}}
 {{- $externalClientProtocol := include "kafka.listenerType" (dict "protocol" (include "kafka.externalClientProtocol" . )) -}}
-{{- $loadBalancerIPListLength := len .Values.externalAccess.service.loadBalancerIPs }}
-{{- if not (and .Values.externalAccess.enabled (not .Values.externalAccess.autoDiscovery.enabled) (not (eq $replicaCount $loadBalancerIPListLength )) (eq .Values.externalAccess.service.type "LoadBalancer")) }}
 apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
@@ -570,5 +568,4 @@ spec:
         {{- if .Values.logPersistence.selector }}
         selector: {{- include "common.tplvalues.render" (dict "value" .Values.logPersistence.selector "context" $) | nindent 10 }}
         {{- end -}}
-{{- end }}
 {{- end }}
