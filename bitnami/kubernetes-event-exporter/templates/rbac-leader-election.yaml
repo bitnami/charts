@@ -12,22 +12,22 @@ metadata:
     {{- end }}
   name: {{ include "common.names.fullname" . }}-leader-election
 rules:
-- apiGroups:
-  - ""
-  resourceNames:
-  - {{ $config.leaderElection.leaderElectionID }}
-  resources:
-  - configmaps
-  verbs:
-  - get
-  - update
-  - patch
-- apiGroups:
-  - ""
-  resources:
-  - configmaps
-  verbs:
-  - create
+  - apiGroups:
+      - ""
+    resourceNames:
+      - {{ $config.leaderElection.leaderElectionID }}
+    resources:
+      - configmaps
+    verbs:
+      - get
+      - update
+      - patch
+  - apiGroups:
+      - ""
+    resources:
+      - configmaps
+    verbs:
+      - create
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
@@ -45,6 +45,6 @@ roleRef:
   kind: Role
   name: {{ include "common.names.fullname" . }}-leader-election
 subjects:
-- kind: ServiceAccount
-  name: {{ include "kubernetes-event-exporter.serviceAccountName" . }}
+  - kind: ServiceAccount
+    name: {{ include "kubernetes-event-exporter.serviceAccountName" . }}
 {{- end -}}

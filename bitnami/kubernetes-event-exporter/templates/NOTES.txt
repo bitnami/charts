@@ -3,3 +3,9 @@ CHART VERSION: {{ .Chart.Version }}
 APP VERSION: {{ .Chart.AppVersion }}
 
 ** Please be patient while the chart is being deployed **
+
+To verify that kubernetes-event-exporter has started, run:
+
+  kubectl get deploy -w --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }}
+
+{{- include "common.warnings.rollingTag" .Values.image }}
