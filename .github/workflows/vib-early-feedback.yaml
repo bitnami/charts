@@ -29,14 +29,14 @@ jobs:
         run: |
           files_changed="$(git diff --name-only origin/master HEAD)"
           # Adding || true to avoid "Process exited with code 1" errors
-          charts_dirs_changed="$(echo "$files_changed" | xargs dirname | grep "bitnami/"| sort | uniq || true)"
+          charts_dirs_changed="$(echo "$files_changed" | xargs dirname | grep -o "bitnami/[^/]*" | sort | uniq || true)"
           # Using grep -c as a better alternative to wc -l when dealing with empty strings."
           num_charts_changed="$(echo "$charts_dirs_changed" | grep -c "bitnami" || true)"
           num_version_bumps="$(echo "$charts_dirs_changed" | grep Chart.yaml | xargs git diff origin/master | grep -c "+version" || true)"
 
           if [[ "$num_charts_changed" -ne "$num_version_bumps" ]]; then
             # Changes done in charts but version not bumped -> ERROR
-            echo "::set-output name=error::Detected changes in charts without version bump in Chart.yaml.\nCharts changed:\n${charts_dirs_changed}\nVersion bumps detected: ${num_version_bumps}"
+            echo "::set-output name=error::Detected changes in charts without version bump in Chart.yaml.\nCharts changed: ${num_charts_changed}\n${charts_dirs_changed}\nVersion bumps detected: ${num_version_bumps}"
             echo "::set-output name=result::fail"
           elif [[ "$num_charts_changed" -eq "1" ]]; then
             # Changes done in only one chart -> OK
