@@ -56,14 +56,17 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common parameters
 
-| Name                | Description                                                          | Value |
-| ------------------- | -------------------------------------------------------------------- | ----- |
-| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set) | `""`  |
-| `nameOverride`      | String to partially override common.names.fullname template          | `""`  |
-| `fullnameOverride`  | String to fully override common.names.fullname template              | `""`  |
-| `commonLabels`      | Labels to add to all deployed objects                                | `{}`  |
-| `commonAnnotations` | Annotations to add to all deployed objects                           | `{}`  |
-| `extraDeploy`       | Array of extra objects to deploy with the release                    | `[]`  |
+| Name                     | Description                                                                             | Value          |
+| ------------------------ | --------------------------------------------------------------------------------------- | -------------- |
+| `kubeVersion`            | Force target Kubernetes version (using Helm capabilities if not set)                    | `""`           |
+| `nameOverride`           | String to partially override common.names.fullname template                             | `""`           |
+| `fullnameOverride`       | String to fully override common.names.fullname template                                 | `""`           |
+| `commonLabels`           | Labels to add to all deployed objects                                                   | `{}`           |
+| `commonAnnotations`      | Annotations to add to all deployed objects                                              | `{}`           |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`        |
+| `diagnosticMode.command` | Command to override all containers in the the deployment(s)/statefulset(s)              | `["sleep"]`    |
+| `diagnosticMode.args`    | Args to override all containers in the the deployment(s)/statefulset(s)                 | `["infinity"]` |
+| `extraDeploy`            | Array of extra objects to deploy with the release                                       | `[]`           |
 
 
 ### Kubewatch parameters
