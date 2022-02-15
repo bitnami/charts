@@ -117,6 +117,9 @@ spec:
       nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.grafana.nodeAffinityPreset.type "key" .Values.grafana.nodeAffinityPreset.key "values" .Values.grafana.nodeAffinityPreset.values) | nindent 8 }}
       {{- end }}
     {{- end }}
+    {{- if .Values.grafana.nodeSelector }}
+    nodeSelector: {{ toYaml .Values.grafana.nodeSelector | nindent 6 }}
+    {{- end }}
     {{- if .Values.grafana.updateStrategy }}
     strategy: {{ toYaml .Values.grafana.updateStrategy | nindent 6 }}
     {{- end }}
