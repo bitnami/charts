@@ -3,10 +3,6 @@ on: # rebuild any PRs and main branch changes
   pull_request_target:
     branches:
       - master
-    types: 
-      - opened 
-      - reopened
-      - synchronize
     paths:
       - 'bitnami/redis/*'
 env:
@@ -14,21 +10,9 @@ env:
   CSP_API_TOKEN: ${{ secrets.CSP_API_TOKEN }}
   VIB_PUBLIC_URL: https://cp.bromelia.vmware.com
 jobs:
-  vib-validate: # make sure chart is linted/safe
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          ref: ${{github.event.pull_request.head.ref}}
-          repository: ${{github.event.pull_request.head.repo.full_name}}
-      - uses: vmware-samples/vmware-image-builder-examples/vib-action@main
-        with:
-          pipeline: redis/vib-pipeline.json
-
   vib-verify-standalone: # verify in GKE
     runs-on: ubuntu-latest
     environment: vmware-image-builder
-    needs: [vib-validate]
     name: Redis Standalone
     steps:
       - uses: actions/checkout@v2
@@ -36,15 +20,14 @@ jobs:
           ref: ${{github.event.pull_request.head.ref}}
           repository: ${{github.event.pull_request.head.repo.full_name}}
       - uses: vmware-samples/vmware-image-builder-examples/vib-action@main
-        with: 
+        with:
           pipeline: redis/standalone/vib-platform-verify.json
-        env: 
+        env:
           TARGET_PLATFORM: 91d398a2-25c4-4cda-8732-75a3cfc179a1
-          
+
   vib-verify-sentinel: # verify in AKS
     runs-on: ubuntu-latest
     environment: vmware-image-builder
-    needs: [vib-validate]
     name: Redis Sentinel
     steps:
       - uses: actions/checkout@v2
@@ -52,15 +35,14 @@ jobs:
           ref: ${{github.event.pull_request.head.ref}}
           repository: ${{github.event.pull_request.head.repo.full_name}}
       - uses: vmware-samples/vmware-image-builder-examples/vib-action@main
-        with: 
+        with:
           pipeline: redis/sentinel/vib-platform-verify.json
-        env: 
-          TARGET_PLATFORM: 7b13a7bb-011c-474f-ad71-8152fc321b9e   
+        env:
+          TARGET_PLATFORM: 7b13a7bb-011c-474f-ad71-8152fc321b9e
 
   vib-verify-replica: # verify in TKG
     runs-on: ubuntu-latest
     environment: vmware-image-builder
-    needs: [vib-validate]
     name: Redis Replica
     steps:
       - uses: actions/checkout@v2
@@ -68,7 +50,7 @@ jobs:
           ref: ${{github.event.pull_request.head.ref}}
           repository: ${{github.event.pull_request.head.repo.full_name}}
       - uses: vmware-samples/vmware-image-builder-examples/vib-action@main
-        with: 
+        with:
           pipeline: redis/replicas/vib-platform-verify.json
-        env: 
+        env:
           TARGET_PLATFORM: 7ddab896-2e4e-4d58-a501-f79897eba3a0
