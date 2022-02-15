@@ -1,0 +1,389 @@
+## @section Global parameters
+## Global Docker image parameters
+## Please, note that this will override the image parameters, including dependencies, configured to use the global value
+## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+
+## @param global.imageRegistry Global Docker image registry
+## @param global.imagePullSecrets Global Docker registry secret names as an array
+## @param global.storageClass Global StorageClass for Persistent Volume(s)
+##
+global:
+  imageRegistry: ""
+  ## E.g.
+  ## imagePullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  imagePullSecrets: []
+  storageClass: ""
+
+## @section Common parameters
+
+## @param kubeVersion Override Kubernetes version
+##
+kubeVersion: ""
+## @param nameOverride String to partially override common.names.fullname
+##
+nameOverride: ""
+## @param fullnameOverride String to fully override common.names.fullname
+##
+fullnameOverride: ""
+## @param commonLabels Labels to add to all deployed objects
+##
+commonLabels: {}
+## @param commonAnnotations Annotations to add to all deployed objects
+##
+commonAnnotations: {}
+## @param clusterDomain Kubernetes cluster domain name
+##
+clusterDomain: cluster.local
+## @param extraDeploy Array of extra objects to deploy with the release
+##
+extraDeploy: []
+
+## Enable diagnostic mode in the deployment
+##
+diagnosticMode:
+  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+  ##
+  enabled: false
+  ## @param diagnosticMode.command Command to override all containers in the deployment
+  ##
+  command:
+    - sleep
+  ## @param diagnosticMode.args Args to override all containers in the deployment
+  ##
+  args:
+    - infinity
+
+## @section phpfpm Parameters
+
+##
+phpfpm:
+  ## Bitnami phpfpm image
+  ## ref: https://hub.docker.com/r/bitnami/php-fpm/tags/
+  ## @param phpfpm.image.registry phpfpm image registry
+  ## @param phpfpm.image.repository phpfpm image repository
+  ## @param phpfpm.image.tag phpfpm image tag (immutable tags are recommended)
+  ## @param phpfpm.image.pullPolicy phpfpm image pull policy
+  ## @param phpfpm.image.pullSecrets phpfpm image pull secrets
+  ## @param phpfpm.image.debug Enable phpfpm image debug mode
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/php-fpm
+    tag: 8.1.1-debian-10-r6
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+    ## Enable debug mode
+    ##
+    debug: false
+  ## @param phpfpm.replicaCount Number of phpfpm replicas to deploy
+  ##
+  replicaCount: 1
+  ## @param phpfpm.containerPorts.tcp phpfpm HTTP container port
+  ##
+  containerPorts:
+    tcp: 9000
+  ## @param phpfpm.containerExtraPorts Extra ports to expose at container level
+  ##
+  ## Example:
+  ## containerExtraPorts:
+  ##  - name: ajp
+  ##    containerPort: 8081
+  ##
+  containerExtraPorts: {}
+  ## Configure extra options for phpfpm containers' liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param phpfpm.livenessProbe.enabled Enable livenessProbe on phpfpm containers
+  ## @param phpfpm.livenessProbe.tcpSocket.port Liveness Probe TCP Socket
+  ## @param phpfpm.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param phpfpm.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param phpfpm.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param phpfpm.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param phpfpm.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    tcpSocket:
+      port: 9000
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 5
+    successThreshold: 1
+  ## @param phpfpm.readinessProbe.enabled Enable readinessProbe on phpfpm containers
+  ## @param phpfpm.readinessProbe.tcpSocket.port Liveness Probe TCP Socket
+  ## @param phpfpm.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param phpfpm.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param phpfpm.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param phpfpm.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param phpfpm.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    tcpSocket:
+      port: 9000
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 5
+    successThreshold: 1
+  ## @param phpfpm.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param phpfpm.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param phpfpm.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## phpfpm resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param phpfpm.resources.limits The resources limits for the phpfpm containers
+  ## @param phpfpm.resources.requests The requested resources for the phpfpm containers
+  ##
+  resources:
+    limits: {}
+    requests: {}
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param phpfpm.podSecurityContext.enabled Enabled phpfpm pods' Security Context
+  ## @param phpfpm.podSecurityContext.fsGroup Set phpfpm pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param phpfpm.containerSecurityContext.enabled Enabled phpfpm containers' Security Context
+  ## @param phpfpm.containerSecurityContext.runAsUser Set phpfpm containers' Security Context runAsUser
+  ## @param phpfpm.containerSecurityContext.runAsNonRoot Set phpfpm containers' Security Context runAsNonRoot
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+
+  ## @param phpfpm.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param phpfpm.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param phpfpm.hostAliases phpfpm pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param phpfpm.podLabels Extra labels for phpfpm pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param phpfpm.podAnnotations Annotations for phpfpm pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param phpfpm.podAffinityPreset Pod affinity preset. Ignored if `phpfpm.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param phpfpm.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `phpfpm.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## Node phpfpm.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param phpfpm.nodeAffinityPreset.type Node affinity preset type. Ignored if `phpfpm.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param phpfpm.nodeAffinityPreset.key Node label key to match. Ignored if `phpfpm.affinity` is set
+    ##
+    key: ""
+    ## @param phpfpm.nodeAffinityPreset.values Node label values to match. Ignored if `phpfpm.affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param phpfpm.affinity Affinity for phpfpm pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `phpfpm.podAffinityPreset`, `phpfpm.podAntiAffinityPreset`, and `phpfpm.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param phpfpm.nodeSelector Node labels for phpfpm pods assignment
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+  ## @param phpfpm.tolerations Tolerations for phpfpm pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param phpfpm.updateStrategy.type phpfpm statefulset strategy type
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    ## StrategyType
+    ## Can be set to RollingUpdate or OnDelete
+    ##
+    type: RollingUpdate
+  ## @param phpfpm.priorityClassName phpfpm pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param phpfpm.schedulerName Name of the k8s scheduler (other than default) for phpfpm pods
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param phpfpm.lifecycleHooks for the phpfpm container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param phpfpm.extraEnvVars Array with extra environment variables to add to phpfpm nodes
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param phpfpm.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for phpfpm nodes
+  ##
+  extraEnvVarsCM:
+  ## @param phpfpm.extraEnvVarsSecret Name of existing Secret containing extra env vars for phpfpm nodes
+  ##
+  extraEnvVarsSecret:
+  ## @param phpfpm.extraVolumes Optionally specify extra list of additional volumes for the phpfpm pod(s)
+  ##
+  extraVolumes: []
+  ## @param phpfpm.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the phpfpm container(s)
+  ##
+  extraVolumeMounts: []
+  ## @param phpfpm.sidecars Add additional sidecar containers to the phpfpm pod(s)
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: {}
+  ## @param phpfpm.initContainers Add additional init containers to the phpfpm pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: {}
+
+## @section php-fpm configuration
+## @param phpfpmConfiguration php-fpm configuration
+## Specify runtime configuration
+## Alternatively, you can put your php-fpm.conf under the files/ directory
+## ref: https://www.php.net/manual/fr/install.fpm.configuration.php
+##
+phpfpmConfiguration: {}
+## @param phpfpmExtendedConfiguration Extended Runtime Config Parameters PHP has been configured at compile time to scan the /opt/bitnami/php/etc/conf.d/
+## folder for extra .ini configuration files so it is also possible to mount your customizations there.
+## https://github.com/bitnami/bitnami-docker-postgresql#allow-settings-to-be-loaded-from-files-other-than-the-default-postgresqlconf
+##
+phpfpmExtendedConfiguration: {}
+## @param phpfpmExtendedConfConfigMap  specify an existing configmap used as extra php-fpm ini files.
+##
+phpfpmExtendedConfConfigMap: ""
+## @param phpfpmExistingConfConfigmap specify an existing configmap used as php-fpm configuration.
+##
+phpfpmExistingConfConfigmap: ""
+
+## @section Traffic Exposure Parameters
+
+networkPolicy:
+  ## @param networkPolicy.enabled Enable creation of NetworkPolicy resources. Only Ingress traffic is filtered for now.
+  ##
+  enabled: false
+  ## @param networkPolicy.allowExternal Don't require client label for connections
+  ## The Policy model to apply. When set to false, only pods with the correct
+  ## client label will have network access to every phpfpm port defined on containerPort and containerExtraPorts.
+  ## When true, phpfpm will accept connections from any source
+  ## (with the correct destination port).
+  ##
+  allowExternal: true
+  ## @param networkPolicy.explicitNamespacesSelector A Kubernetes LabelSelector to explicitly select namespaces from which traffic could be allowed
+  ## If explicitNamespacesSelector is missing or set to {}, only client Pods that are in the networkPolicy's namespace
+  ## and that match other criteria, the ones that have the good label, can reach the phpfpm.
+  ## But sometimes, we want the phpfpm to be accessible to clients from other namespaces, in this case, we can use this
+  ## LabelSelector to select these namespaces, note that the networkPolicy's namespace should also be explicitly added.
+  ##
+  ## Example:
+  ## explicitNamespacesSelector:
+  ##   matchLabels:
+  ##     role: frontend
+  ##   matchExpressions:
+  ##    - {key: role, operator: In, values: [frontend]}
+  ##
+  explicitNamespacesSelector: {}
+
+## phpfpm service parameters
+##
+service:
+  ## @param service.type phpfpm service type
+  ##
+  type: LoadBalancer
+  ## @param service.ports.tcp phpfpm service TCP port
+  ##
+  ports:
+    tcp: 9000
+  ## Node ports to expose
+  ## @param service.nodePorts.tcp Node port for HTTP
+  ## NOTE: choose port between <30000-32767>
+  ##
+  nodePorts:
+    tcp:
+  ## @param service.clusterIP phpfpm service Cluster IP
+  ## e.g.:
+  ## clusterIP: None
+  ##
+  clusterIP:
+  ## @param service.loadBalancerIP phpfpm service Load Balancer IP
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+  ##
+  loadBalancerIP:
+  ## @param service.loadBalancerSourceRanges phpfpm service Load Balancer sources
+  ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+  ## e.g:
+  ## loadBalancerSourceRanges:
+  ##   - 10.10.10.0/24
+  ##
+  loadBalancerSourceRanges: []
+  ## @param service.externalTrafficPolicy phpfpm service external traffic policy
+  ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+  ##
+  externalTrafficPolicy: Cluster
+  ## @param service.annotations Additional custom annotations for phpfpm service
+  ##
+  annotations: {}
+  ## @param service.extraPorts Extra ports to expose in phpfpm service (normally used with the `sidecars` value)
+  ##
+  extraPorts: []
+
+
+## @section Init Container Parameters
+
+## 'volumePermissions' init container parameters
+## Changes the owner and group of the persistent volume mount point to runAsUser:fsGroup values
+##   based on the *podSecurityContext/*containerSecurityContext parameters
+##

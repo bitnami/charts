@@ -1,0 +1,24 @@
+annotations:
+  category: Infrastructure
+apiVersion: v2
+appVersion: 7.4.26
+dependencies:
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+    version: 1.x.x
+description: PHP-FPM service designed to be used with a web server to serve your PHP app
+engine: gotpl
+home: https://github.com/bitnami/charts/tree/master/bitnami/phpfpm
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/php/img/php-stack-110x117.png
+keywords:
+  - php-fpm
+maintainers:
+  - email: containers@bitnami.com
+    name: Bitnami
+name: phpfpm
+sources:
+  - https://github.com/bitnami/bitnami-docker-php-fpm
+  - https://www.php.net/
+version: 0.1.0
