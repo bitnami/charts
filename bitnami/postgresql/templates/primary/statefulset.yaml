@@ -88,7 +88,7 @@ spec:
       securityContext: {{- omit .Values.primary.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       initContainers:
-      {{- if and .Values.tls.enabled (not .Values.volumePermissions.enabled) }}
+        {{- if and .Values.tls.enabled (not .Values.volumePermissions.enabled) }}
         - name: copy-certs
           image: {{ include "postgresql.volumePermissions.image" . }}
           imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
@@ -110,7 +110,7 @@ spec:
               mountPath: /tmp/certs
             - name: postgresql-certificates
               mountPath: /opt/bitnami/postgresql/certs
-        {{- else if and .Values.volumePermissions.enabled (or .Values.primary.persistence.enabled .Values.shmVolume.enabled .Values.tls.enabled) }}
+        {{- else if and .Values.volumePermissions.enabled (or .Values.primary.persistence.enabled .Values.shmVolume.enabled) }}
         - name: init-chmod-data
           image: {{ include "postgresql.volumePermissions.image" . }}
           imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
