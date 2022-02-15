@@ -55,14 +55,17 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common parameters
 
-| Name                | Description                                                                                              | Value |
-| ------------------- | -------------------------------------------------------------------------------------------------------- | ----- |
-| `kubeVersion`       | Override Kubernetes version                                                                              | `""`  |
-| `nameOverride`      | String to partially override kubernetes-event-exporter.fullname include (will maintain the release name) | `""`  |
-| `fullnameOverride`  | String to fully override kubernetes-event-exporter.fullname template                                     | `""`  |
-| `commonAnnotations` | Annotations to add to all deployed objects                                                               | `{}`  |
-| `commonLabels`      | Labels to add to all deployed objects                                                                    | `{}`  |
-| `extraDeploy`       | Array of extra objects to deploy with the release (evaluated as a template)                              | `[]`  |
+| Name                     | Description                                                                                              | Value          |
+| ------------------------ | -------------------------------------------------------------------------------------------------------- | -------------- |
+| `kubeVersion`            | Override Kubernetes version                                                                              | `""`           |
+| `nameOverride`           | String to partially override kubernetes-event-exporter.fullname include (will maintain the release name) | `""`           |
+| `fullnameOverride`       | String to fully override kubernetes-event-exporter.fullname template                                     | `""`           |
+| `commonAnnotations`      | Annotations to add to all deployed objects                                                               | `{}`           |
+| `commonLabels`           | Labels to add to all deployed objects                                                                    | `{}`           |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                  | `false`        |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                                     | `["sleep"]`    |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                                        | `["infinity"]` |
+| `extraDeploy`            | Array of extra objects to deploy with the release (evaluated as a template)                              | `[]`           |
 
 
 ### Kubernetes Event Exporter parameters
@@ -97,9 +100,30 @@ The command removes all the Kubernetes components associated with the chart and 
 | `containerSecurityContext.runAsUser`              | Define the uid with which the pod will run                                                                          | `1001`                              |
 | `command`                                         | Override default container command (useful when using custom images)                                                | `[]`                                |
 | `args`                                            | Override default container args (useful when using custom images)                                                   | `[]`                                |
-| `lifecycleHooks`                                  | for the %%MAIN_CONTAINER_NAME%% container(s) to automate configuration before or after startup                      | `{}`                                |
+| `lifecycleHooks`                                  | Lifecycle for the container to automate configuration before or after startup                                       | `{}`                                |
 | `resources.limits`                                | Specify resource limits which the container is not allowed to succeed.                                              | `{}`                                |
 | `resources.requests`                              | Specify resource requests which the container needs to spawn.                                                       | `{}`                                |
+| `startupProbe.enabled`                            | Enable startupProbe                                                                                                 | `false`                             |
+| `startupProbe.initialDelaySeconds`                | Initial delay seconds for startupProbe                                                                              | `10`                                |
+| `startupProbe.periodSeconds`                      | Period seconds for startupProbe                                                                                     | `10`                                |
+| `startupProbe.timeoutSeconds`                     | Timeout seconds for startupProbe                                                                                    | `1`                                 |
+| `startupProbe.failureThreshold`                   | Failure threshold for startupProbe                                                                                  | `3`                                 |
+| `startupProbe.successThreshold`                   | Success threshold for startupProbe                                                                                  | `1`                                 |
+| `livenessProbe.enabled`                           | Enable livenessProbe                                                                                                | `false`                             |
+| `livenessProbe.initialDelaySeconds`               | Initial delay seconds for livenessProbe                                                                             | `10`                                |
+| `livenessProbe.periodSeconds`                     | Period seconds for livenessProbe                                                                                    | `10`                                |
+| `livenessProbe.timeoutSeconds`                    | Timeout seconds for livenessProbe                                                                                   | `1`                                 |
+| `livenessProbe.failureThreshold`                  | Failure threshold for livenessProbe                                                                                 | `3`                                 |
+| `livenessProbe.successThreshold`                  | Success threshold for livenessProbe                                                                                 | `1`                                 |
+| `readinessProbe.enabled`                          | Enable readinessProbe                                                                                               | `false`                             |
+| `readinessProbe.initialDelaySeconds`              | Initial delay seconds for readinessProbe                                                                            | `10`                                |
+| `readinessProbe.periodSeconds`                    | Period seconds for readinessProbe                                                                                   | `10`                                |
+| `readinessProbe.timeoutSeconds`                   | Timeout seconds for readinessProbe                                                                                  | `1`                                 |
+| `readinessProbe.failureThreshold`                 | Failure threshold for readinessProbe                                                                                | `3`                                 |
+| `readinessProbe.successThreshold`                 | Success threshold for readinessProbe                                                                                | `1`                                 |
+| `customStartupProbe`                              | Override default startup probe                                                                                      | `{}`                                |
+| `customLivenessProbe`                             | Override default liveness probe                                                                                     | `{}`                                |
+| `customReadinessProbe`                            | Override default readiness probe                                                                                    | `{}`                                |
 | `nodeSelector`                                    | Node labels for pod assignment                                                                                      | `{}`                                |
 | `priorityClassName`                               | Set Priority Class Name to allow priority control over other pods                                                   | `""`                                |
 | `schedulerName`                                   | Name of the k8s scheduler (other than default)                                                                      | `""`                                |
