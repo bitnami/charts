@@ -97,7 +97,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
 | `postgresqlImage.registry`                      | PostgreSQL with Repmgr image registry                                                                                                                                                                         | `docker.io`                 |
 | `postgresqlImage.repository`                    | PostgreSQL with Repmgr image repository                                                                                                                                                                       | `bitnami/postgresql-repmgr` |
-| `postgresqlImage.tag`                           | PostgreSQL with Repmgr image tag                                                                                                                                                                              | `11.14.0-debian-10-r78`     |
+| `postgresqlImage.tag`                           | PostgreSQL with Repmgr image tag                                                                                                                                                                              | `11.14.0-debian-10-r86`     |
 | `postgresqlImage.pullPolicy`                    | PostgreSQL with Repmgr image pull policy                                                                                                                                                                      | `IfNotPresent`              |
 | `postgresqlImage.pullSecrets`                   | Specify docker-registry secret names as an array                                                                                                                                                              | `[]`                        |
 | `postgresqlImage.debug`                         | Specify if debug logs should be enabled                                                                                                                                                                       | `false`                     |
@@ -217,7 +217,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | ------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
 | `pgpoolImage.registry`                      | Pgpool image registry                                                                                                                    | `docker.io`           |
 | `pgpoolImage.repository`                    | Pgpool image repository                                                                                                                  | `bitnami/pgpool`      |
-| `pgpoolImage.tag`                           | Pgpool image tag                                                                                                                         | `4.3.0-debian-10-r20` |
+| `pgpoolImage.tag`                           | Pgpool image tag                                                                                                                         | `4.3.0-debian-10-r27` |
 | `pgpoolImage.pullPolicy`                    | Pgpool image pull policy                                                                                                                 | `IfNotPresent`        |
 | `pgpoolImage.pullSecrets`                   | Specify docker-registry secret names as an array                                                                                         | `[]`                  |
 | `pgpoolImage.debug`                         | Specify if debug logs should be enabled                                                                                                  | `false`               |
@@ -337,7 +337,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | -------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
 | `metricsImage.registry`                      | PostgreSQL Prometheus exporter image registry                                                                                                             | `docker.io`                 |
 | `metricsImage.repository`                    | PostgreSQL Prometheus exporter image repository                                                                                                           | `bitnami/postgres-exporter` |
-| `metricsImage.tag`                           | PostgreSQL Prometheus exporter image tag                                                                                                                  | `0.10.1-debian-10-r14`      |
+| `metricsImage.tag`                           | PostgreSQL Prometheus exporter image tag                                                                                                                  | `0.10.1-debian-10-r21`      |
 | `metricsImage.pullPolicy`                    | PostgreSQL Prometheus exporter image pull policy                                                                                                          | `IfNotPresent`              |
 | `metricsImage.pullSecrets`                   | Specify docker-registry secret names as an array                                                                                                          | `[]`                        |
 | `metricsImage.debug`                         | Specify if debug logs should be enabled                                                                                                                   | `false`                     |
@@ -390,7 +390,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | --------------------------------------------- | --------------------------------------------------- | ----------------------- |
 | `volumePermissionsImage.registry`             | Init container volume-permissions image registry    | `docker.io`             |
 | `volumePermissionsImage.repository`           | Init container volume-permissions image repository  | `bitnami/bitnami-shell` |
-| `volumePermissionsImage.tag`                  | Init container volume-permissions image tag         | `10-debian-10-r327`     |
+| `volumePermissionsImage.tag`                  | Init container volume-permissions image tag         | `10-debian-10-r333`     |
 | `volumePermissionsImage.pullPolicy`           | Init container volume-permissions image pull policy | `IfNotPresent`          |
 | `volumePermissionsImage.pullSecrets`          | Specify docker-registry secret names as an array    | `[]`                    |
 | `volumePermissions.enabled`                   | Enable init container to adapt volume permissions   | `false`                 |
@@ -415,22 +415,23 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 
 ### Traffic Exposure parameters
 
-| Name                                                  | Description                                                                                   | Value       |
-| ----------------------------------------------------- | --------------------------------------------------------------------------------------------- | ----------- |
-| `service.type`                                        | Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`)                           | `ClusterIP` |
-| `service.port`                                        | PostgreSQL port                                                                               | `5432`      |
-| `service.nodePort`                                    | Kubernetes service nodePort                                                                   | `""`        |
-| `service.loadBalancerIP`                              | Load balancer IP if service type is `LoadBalancer`                                            | `""`        |
-| `service.loadBalancerSourceRanges`                    | Addresses that are allowed when service is LoadBalancer                                       | `[]`        |
-| `service.clusterIP`                                   | Set the Cluster IP to use                                                                     | `""`        |
-| `service.externalTrafficPolicy`                       | Enable client source IP preservation                                                          | `Cluster`   |
-| `service.sessionAffinity`                             | Control where client requests go, to the same pod or round-robin                              | `None`      |
-| `service.annotations`                                 | Provide any additional annotations for PostgreSQL service                                     | `{}`        |
-| `service.serviceLabels`                               | Labels for PostgreSQL service                                                                 | `{}`        |
-| `networkPolicy.enabled`                               | Enable NetworkPolicy                                                                          | `false`     |
-| `networkPolicy.allowExternal`                         | Don't require client label for connections                                                    | `true`      |
-| `networkPolicy.egressRules.denyConnectionsToExternal` | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53) | `false`     |
-| `networkPolicy.egressRules.customRules`               | Custom network policy rule                                                                    | `{}`        |
+| Name                                                  | Description                                                                                   | Value        |
+| ----------------------------------------------------- | --------------------------------------------------------------------------------------------- | ------------ |
+| `service.type`                                        | Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`)                           | `ClusterIP`  |
+| `service.port`                                        | PostgreSQL port                                                                               | `5432`       |
+| `service.portName`                                    | PostgreSQL service port name                                                                  | `postgresql` |
+| `service.nodePort`                                    | Kubernetes service nodePort                                                                   | `""`         |
+| `service.loadBalancerIP`                              | Load balancer IP if service type is `LoadBalancer`                                            | `""`         |
+| `service.loadBalancerSourceRanges`                    | Addresses that are allowed when service is LoadBalancer                                       | `[]`         |
+| `service.clusterIP`                                   | Set the Cluster IP to use                                                                     | `""`         |
+| `service.externalTrafficPolicy`                       | Enable client source IP preservation                                                          | `Cluster`    |
+| `service.sessionAffinity`                             | Control where client requests go, to the same pod or round-robin                              | `None`       |
+| `service.annotations`                                 | Provide any additional annotations for PostgreSQL service                                     | `{}`         |
+| `service.serviceLabels`                               | Labels for PostgreSQL service                                                                 | `{}`         |
+| `networkPolicy.enabled`                               | Enable NetworkPolicy                                                                          | `false`      |
+| `networkPolicy.allowExternal`                         | Don't require client label for connections                                                    | `true`       |
+| `networkPolicy.egressRules.denyConnectionsToExternal` | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53) | `false`      |
+| `networkPolicy.egressRules.customRules`               | Custom network policy rule                                                                    | `{}`         |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
