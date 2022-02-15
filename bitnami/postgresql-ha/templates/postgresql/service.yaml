@@ -17,7 +17,7 @@ metadata:
 spec:
   type: ClusterIP
   ports:
-    - name: postgresql
+    - name: {{ .Values.service.portName }}
       port: {{ .Values.service.port }}
       targetPort: postgresql
       protocol: TCP
