@@ -28,7 +28,7 @@ it('contains the sample blogpost and a comment', () => {
   })
 })
 
-it('disallows login to an invalid user.', () => {
+it('disallows login to an invalid user', () => {
   cy.clearCookies();
   cy.visit('/wp-login.php')
   cy.fixture('user').then((user) => {
@@ -42,7 +42,7 @@ it('disallows login to an invalid user.', () => {
 
 })
 
-it('disallows login to a valid user with wrong password.', () => {
+it('disallows login to a valid user with wrong password', () => {
   cy.clearCookies();
   cy.visit('/wp-login.php')
 
@@ -54,14 +54,14 @@ it('disallows login to a valid user with wrong password.', () => {
   cy.get('#login_error').should('contain.text', `Error: The password you entered for the username ${Cypress.env('username')} is incorrect. Lost your password?`);
 })
 
-it('checks the blog name and user email', () => {
+it('checks the blog name and user email configuration', () => {
   cy.login();
   cy.visit('/wp-admin/options-general.php')
   cy.get('#new_admin_email').should('have.value', Cypress.env('wordpressEmail'));
   cy.get('#blogname').should('have.value', Cypress.env('wordpressBlogname'));
 })
 
-it('allows editing the site as admin', () => {
+it('checks if admin can edit a site', () => {
   cy.login();
   cy.visit('/wp-admin/index.php')
   cy.contains('Open site editor').click()
@@ -93,7 +93,7 @@ it('checks the value of auto update status', () => {
   cy.get('.auto-update-status').should('contain.text', 'This site is automatically kept up to date with maintenance and security releases of WordPress only.');
 })
 
-it('allows to log out.', () => {
+it('allows to log out', () => {
   cy.login();
   cy.get("#wp-admin-bar-logout .ab-item").click({
     force: true
