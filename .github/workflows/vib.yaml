@@ -1,13 +1,10 @@
 name: 'vib'
 on: # rebuild any PRs and main branch changes
-  pull_request_target:
-    branches:
-      - master
-      - bitnami:master
+  workflow_run:
+    workflows: [Early feedback]
     types:
-      - opened
-      - synchronize
-      - reopened
+      - completed
+  pull_request_target:
     paths:
       - 'bitnami/wordpress/*'
 env:
@@ -18,7 +15,6 @@ jobs:
   vib-k8s-verify: # verify in multiple target platforms
     runs-on: ubuntu-latest
     environment: vmware-image-builder
-    needs: [vib-validate]
     strategy:
       matrix:
        include:

@@ -1,4 +1,4 @@
-name: Lint and Test Charts
+name: Test Charts
 
 on: pull_request
 
