@@ -602,7 +602,7 @@ In https://github.com/helm/charts/pulls/12642 the `apiVersion` of the deployment
 
 This major version signifies this change.
 
-### To 3.0.0
+### To version 3.0.0
 
 Backwards compatibility is not guaranteed unless you modify the labels used on the chart's deployments.
 Use the workaround below to upgrade from versions previous to `3.0.0`. The following example assumes that the release name is `wordpress`:
