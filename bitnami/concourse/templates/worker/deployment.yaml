@@ -110,7 +110,7 @@ spec:
               value: {{ .Values.worker.logLevel | quote }}
             {{- end }}
             - name: CONCOURSE_TSA_HOST
-              value: {{ template "concourse.web.tsa.address" . }}
+              value: {{ include "concourse.web.tsa.address" . | quote }}
             {{- if .Values.worker.bindIp }}
             - name: CONCOURSE_BIND_IP
               value: {{ .Values.worker.bindIp | quote }}

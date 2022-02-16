@@ -16,7 +16,7 @@ dependencies:
     name: postgresql
     repository: https://charts.bitnami.com/bitnami
     version: 10.x.x
-description: A flexible project management web application.
+description: Redmine is an open source management application. It includes a tracking issue system, Gantt charts for a visual view of projects and deadlines, and supports SCM integration for version control.
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/redmine
 icon: https://bitnami.com/assets/stacks/redmine/img/redmine-stack-220x234.png
@@ -36,4 +36,4 @@ name: redmine
 sources:
   - https://github.com/bitnami/bitnami-docker-redmine
   - https://www.redmine.org/
-version: 17.2.4
+version: 17.2.5

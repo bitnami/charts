@@ -8,7 +8,7 @@ dependencies:
     tags:
       - bitnami-common
     version: 1.x.x
-description: Chart for Apache HTTP Server
+description: Apache HTTP Server is an open-source HTTP server. The goal of this project is to provide a secure, efficient and extensible server that provides HTTP services in sync with the current HTTP standards.
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/apache
 icon: https://bitnami.com/assets/stacks/apache/img/apache-stack-220x234.png
@@ -26,4 +26,4 @@ name: apache
 sources:
   - https://github.com/bitnami/bitnami-docker-apache
   - https://httpd.apache.org
-version: 9.0.1
+version: 9.0.2

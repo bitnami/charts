@@ -37,19 +37,19 @@ commonAnnotations: {}
 ##
 extraDeploy: []
 
-## Bitnami Redmine image
+## Bitnami &reg;edmine image
 ## ref: https://hub.docker.com/r/bitnami/redmine/tags/
-## @param image.registry Redmine image registry
-## @param image.repository Redmine image repository
-## @param image.tag Redmine image tag (immutable tags are recommended)
-## @param image.pullPolicy Redmine image pull policy
-## @param image.pullSecrets [array] Redmine image pull secrets
+## @param image.registry &reg;edmine image registry
+## @param image.repository &reg;edmine image repository
+## @param image.tag &reg;edmine image tag (immutable tags are recommended)
+## @param image.pullPolicy &reg;edmine image pull policy
+## @param image.pullSecrets [array] &reg;edmine image pull secrets
 ## @param image.debug Enable image debug mode
 ##
 image:
   registry: docker.io
   repository: bitnami/redmine
-  tag: 4.2.3-debian-10-r88
+  tag: 4.2.3-debian-10-r117
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -67,24 +67,24 @@ image:
   ##
   debug: false
 
-## @section Redmine Configuration parameters
-## Redmine settings based on environment variables
+## @section &reg;edmine Configuration parameters
+## &reg;edmine settings based on environment variables
 ## ref: https://github.com/bitnami/bitnami-docker-redmine#environment-variables
 
-## @param redmineUsername Redmine username
+## @param redmineUsername &reg;edmine username
 ## ref: https://github.com/bitnami/bitnami-docker-redmine#configuration
 ##
 redmineUsername: user
-## @param redminePassword Redmine user password
+## @param redminePassword &reg;edmine user password
 ## Defaults to a random 10-character alphanumeric string if not set
 ## ref: https://github.com/bitnami/bitnami-docker-redmine#configuration
 ##
 redminePassword: ""
-## @param redmineEmail Redmine user email
+## @param redmineEmail &reg;edmine user email
 ## ref: https://github.com/bitnami/bitnami-docker-redmine#configuration
 ##
 redmineEmail: user@example.com
-## @param redmineLanguage Redmine default data language
+## @param redmineLanguage &reg;edmine default data language
 ## ref: https://github.com/bitnami/bitnami-docker-redmine/#environment-variables
 ##
 redmineLanguage: en
@@ -113,7 +113,7 @@ smtpPort: ""
 smtpUser: ""
 smtpPassword: ""
 smtpProtocol: ""
-## @param existingSecret Name of existing secret containing Redmine credentials
+## @param existingSecret Name of existing secret containing &reg;edmine credentials
 ## NOTE: Must contain key `redmine-password`
 ## NOTE: When it's set, the `redminePassword` parameter is ignored
 ##
@@ -132,7 +132,7 @@ command: []
 ## @param args Override default container args (useful when using custom images)
 ##
 args: []
-## @param extraEnvVars Array with extra environment variables to add to the Redmine container
+## @param extraEnvVars Array with extra environment variables to add to the &reg;edmine container
 ## e.g:
 ##
 # extraEnvVars:
@@ -146,13 +146,13 @@ extraEnvVarsCM: ""
 ##
 extraEnvVarsSecret: ""
 
-## @section Redmine deployment parameters
+## @section &reg;edmine deployment parameters
 
-## @param replicaCount Number of Redmine replicas to deploy
+## @param replicaCount Number of &reg;edmine replicas to deploy
 ## NOTE: ReadWriteMany PVC(s) are required if replicaCount > 1
 ##
 replicaCount: 1
-## @param updateStrategy.type Redmine deployment strategy type
+## @param updateStrategy.type &reg;edmine deployment strategy type
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
 ## NOTE: Set it to `Recreate` if you use a PV that cannot be mounted on multiple pods
 ## e.g:
@@ -174,17 +174,17 @@ schedulerName: ""
 serviceAccount:
   create: false
   name: ""
-## @param hostAliases [array] Redmine pod host aliases
+## @param hostAliases [array] &reg;edmine pod host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
 hostAliases: []
-## @param extraVolumes Optionally specify extra list of additional volumes for Redmine pods
+## @param extraVolumes Optionally specify extra list of additional volumes for &reg;edmine pods
 ##
 extraVolumes: []
-## @param extraVolumeMounts Optionally specify extra list of additional volumeMounts for Redmine container(s)
+## @param extraVolumeMounts Optionally specify extra list of additional volumeMounts for &reg;edmine container(s)
 ##
 extraVolumeMounts: []
-## @param sidecars Add additional sidecar containers to the Redmine pod
+## @param sidecars Add additional sidecar containers to the &reg;edmine pod
 ## e.g:
 ##
 # sidecars:
@@ -195,7 +195,7 @@ extraVolumeMounts: []
 #       - name: portname
 #         containerPort: 1234
 sidecars: []
-## @param initContainers Add additional init containers to the Redmine pods
+## @param initContainers Add additional init containers to the &reg;edmine pods
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
 ## e.g:
 ##
@@ -205,11 +205,11 @@ sidecars: []
 #    imagePullPolicy: Always
 #    command: ['sh', '-c', 'copy addons from git and push to /bitnami/redmine/plugins. Should work with extraVolumeMounts and extraVolumes']
 initContainers: []
-## @param podLabels Extra labels for Redmine pods
+## @param podLabels Extra labels for &reg;edmine pods
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
 podLabels: {}
-## @param podAnnotations Annotations for Redmine pods
+## @param podAnnotations Annotations for &reg;edmine pods
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
 podAnnotations: {}
@@ -251,10 +251,10 @@ nodeSelector: {}
 ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
-## Redmine containers' resource requests and limits
+## &reg;edmine containers' resource requests and limits
 ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
-## @param resources.limits The resources limits for the Redmine container
-## @param resources.requests [object] The requested resources for the Redmine container
+## @param resources.limits The resources limits for the &reg;edmine container
+## @param resources.requests [object] The requested resources for the &reg;edmine container
 ##
 resources:
   limits: {}
@@ -262,26 +262,26 @@ resources:
     memory: 512Mi
     cpu: 300m
 ## Container ports
-## @param containerPort Redmine HTTP container port
+## @param containerPort &reg;edmine HTTP container port
 ##
 containerPort: 3000
 ## Configure Pods Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-## @param podSecurityContext.enabled Enabled Redmine pods' Security Context
-## @param podSecurityContext.fsGroup Set Redmine pod's Security Context fsGroup
+## @param podSecurityContext.enabled Enabled &reg;edmine pods' Security Context
+## @param podSecurityContext.fsGroup Set &reg;edmine pod's Security Context fsGroup
 ##
 podSecurityContext:
   enabled: false
   fsGroup: 1001
 ## Configure Container Security Context (only main container)
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-## @param containerSecurityContext.enabled Enabled Redmine containers' Security Context
-## @param containerSecurityContext.runAsUser Set Redmine container's Security Context runAsUser
+## @param containerSecurityContext.enabled Enabled &reg;edmine containers' Security Context
+## @param containerSecurityContext.runAsUser Set &reg;edmine container's Security Context runAsUser
 ##
 containerSecurityContext:
   enabled: false
   runAsUser: 1001
-## Configure extra options for Redmine containers' liveness and readiness probes
+## Configure extra options for &reg;edmine containers' liveness and readiness probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param livenessProbe.enabled Enable livenessProbe
 ## @param livenessProbe.path Path for to check for livenessProbe
@@ -343,13 +343,13 @@ customStartupProbe: {}
 
 ## @section Traffic Exposure Parameters
 
-## Redmine service parameters
+## &reg;edmine service parameters
 ##
 service:
-  ## @param service.type Redmine service type
+  ## @param service.type &reg;edmine service type
   ##
   type: LoadBalancer
-  ## @param service.port Redmine service HTTP port
+  ## @param service.port &reg;edmine service HTTP port
   ##
   port: 80
   ## Node ports to expose
@@ -357,38 +357,38 @@ service:
   ## NOTE: choose port between <30000-32767>
   ##
   nodePort: ""
-  ## @param service.clusterIP Redmine service Cluster IP
+  ## @param service.clusterIP &reg;edmine service Cluster IP
   ## e.g.:
   ## clusterIP: None
   ##
   clusterIP: ""
-  ## @param service.loadBalancerIP Redmine service Load Balancer IP
+  ## @param service.loadBalancerIP &reg;edmine service Load Balancer IP
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
   ##
   loadBalancerIP: ""
-  ## @param service.loadBalancerSourceRanges Redmine service Load Balancer sources
+  ## @param service.loadBalancerSourceRanges &reg;edmine service Load Balancer sources
   ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
   ## e.g:
   ##
   # loadBalancerSourceRanges:
   #   - 10.10.10.0/24
   loadBalancerSourceRanges: []
-  ## @param service.externalTrafficPolicy Redmine service external traffic policy
+  ## @param service.externalTrafficPolicy &reg;edmine service external traffic policy
   ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
   externalTrafficPolicy: Cluster
-  ## @param service.annotations Additional custom annotations for Redmine service
+  ## @param service.annotations Additional custom annotations for &reg;edmine service
   ##
   annotations: {}
-  ## @param service.extraPorts Extra port to expose on Redmine service
+  ## @param service.extraPorts Extra port to expose on &reg;edmine service
   ##
   extraPorts: []
 
-## Configure the ingress resource that allows you to access the Redmine installation
+## Configure the ingress resource that allows you to access the &reg;edmine installation
 ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
 ##
 ingress:
-  ## @param ingress.enabled Enable ingress record generation for Redmine
+  ## @param ingress.enabled Enable ingress record generation for &reg;edmine
   ##
   enabled: false
   ## @param ingress.className Set the ingressClassName which will be used for this ingress
@@ -535,7 +535,7 @@ volumePermissions:
 
 ## @section Other Parameters
 
-## Redmine Pod Disruption Budget configuration
+## &reg;edmine Pod Disruption Budget configuration
 ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
 ## @param podDisruptionBudget.create Enable a Pod Disruption Budget creation
 ## @param podDisruptionBudget.minAvailable Minimum number/percentage of pods that should remain scheduled
@@ -546,11 +546,11 @@ podDisruptionBudget:
   minAvailable: ""
   maxUnavailable: ""
 
-## Redmine Autoscaling configuration
+## &reg;edmine Autoscaling configuration
 ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
-## @param autoscaling.enabled Enable Horizontal POD autoscaling for Redmine
-## @param autoscaling.minReplicas Minimum number of Redmine replicas
-## @param autoscaling.maxReplicas Maximum number of Redmine replicas
+## @param autoscaling.enabled Enable Horizontal POD autoscaling for &reg;edmine
+## @param autoscaling.minReplicas Minimum number of &reg;edmine replicas
+## @param autoscaling.maxReplicas Maximum number of &reg;edmine replicas
 ## @param autoscaling.targetCPU Target CPU utilization percentage
 ## @param autoscaling.targetMemory Target Memory utilization percentage
 ##
@@ -563,7 +563,7 @@ autoscaling:
 
 ## @section Database Parameters
 
-## @param databaseType Redmine database type. Allowed values: `mariadb` and `postgresql`
+## @param databaseType &reg;edmine database type. Allowed values: `mariadb` and `postgresql`
 ## ref: https://github.com/bitnami/bitnami-docker-redmine/#environment-variables
 ##
 databaseType: mariadb
@@ -701,7 +701,7 @@ externalDatabase:
 ## @section Mail Receiver/Cron Job Parameters
 
 ## Configure CronJob scheduler for receiving emails and converting them to tasks
-## ref: https://www.redmine.org/projects/redmine/wiki/RedmineReceivingEmails
+## ref: https://www.redmine.org/projects/redmine/wiki/&reg;edmineReceivingEmails
 ##
 mailReceiver:
   ## @param mailReceiver.enabled Whether to enable scheduled mail-to-task CronJob
@@ -721,7 +721,7 @@ mailReceiver:
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
   podLabels: {}
-  ## @param mailReceiver.priorityClassName Redmine pods' priority.
+  ## @param mailReceiver.priorityClassName &reg;edmine pods' priority.
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
   ##
   priorityClassName: ""
@@ -760,7 +760,7 @@ mailReceiver:
   ##
   moveOnFailure: ""
   ## @param mailReceiver.unknownUserAction Action to perform is an email received from unregistered user
-  ## ref: https://www.redmine.org/projects/redmine/wiki/RedmineReceivingEmails
+  ## ref: https://www.redmine.org/projects/redmine/wiki/&reg;edmineReceivingEmails
   ##
   unknownUserAction: ignore
   ## @param mailReceiver.noPermissionCheck Whether skip permission check during creating a new task
@@ -826,8 +826,8 @@ mailReceiver:
   args: ["-c", "/cj/receive.sh"]
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param mailReceiver.podSecurityContext.enabled Enabled Redmine pods' Security Context
-  ## @param mailReceiver.podSecurityContext.fsGroup Set Redmine pod's Security Context fsGroup
+  ## @param mailReceiver.podSecurityContext.enabled Enabled &reg;edmine pods' Security Context
+  ## @param mailReceiver.podSecurityContext.fsGroup Set &reg;edmine pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
@@ -940,16 +940,16 @@ certificates:
   customCA: []
   # - secret: custom-CA
   # - secret: more-custom-CAs
-  ## @param certificates.image.registry Redmine image registry
-  ## @param certificates.image.repository Redmine image repository
-  ## @param certificates.image.tag Redmine image tag (immutable tags are recommended)
-  ## @param certificates.image.pullPolicy Redmine image pull policy
-  ## @param certificates.image.pullSecrets [array] Redmine image pull secrets
+  ## @param certificates.image.registry &reg;edmine image registry
+  ## @param certificates.image.repository &reg;edmine image repository
+  ## @param certificates.image.tag &reg;edmine image tag (immutable tags are recommended)
+  ## @param certificates.image.pullPolicy &reg;edmine image pull policy
+  ## @param certificates.image.pullSecrets [array] &reg;edmine image pull secrets
   ##
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r309
+    tag: 10-debian-10-r336
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -988,15 +988,15 @@ networkPolicy:
     ##   label: ingress
     ##
     namespaceSelector: {}
-  ## @param networkPolicy.ingressRules.backendOnlyAccessibleByFrontend Enable ingress rule that makes the backend (mariadb) only accessible by Redmine's pods.
+  ## @param networkPolicy.ingressRules.backendOnlyAccessibleByFrontend Enable ingress rule that makes the backend (mariadb) only accessible by &reg;edmine's pods.
   ## @param networkPolicy.ingressRules.customBackendSelector Backend selector labels. These labels will be used to identify the backend pods.
-  ## @param networkPolicy.ingressRules.accessOnlyFrom.enabled Enable ingress rule that makes Redmine only accessible from a particular origin
-  ## @param networkPolicy.ingressRules.accessOnlyFrom.namespaceSelector Namespace selector label that is allowed to access Redmine. This label will be used to identified the allowed namespace(s).
-  ## @param networkPolicy.ingressRules.accessOnlyFrom.podSelector Pods selector label that is allowed to access Redmine. This label will be used to identified the allowed pod(s).
+  ## @param networkPolicy.ingressRules.accessOnlyFrom.enabled Enable ingress rule that makes &reg;edmine only accessible from a particular origin
+  ## @param networkPolicy.ingressRules.accessOnlyFrom.namespaceSelector Namespace selector label that is allowed to access &reg;edmine. This label will be used to identified the allowed namespace(s).
+  ## @param networkPolicy.ingressRules.accessOnlyFrom.podSelector Pods selector label that is allowed to access &reg;edmine. This label will be used to identified the allowed pod(s).
   ## @param networkPolicy.ingressRules.customRules Custom network policy ingress rule
   ##
   ingressRules:
-    ## mariadb backend only can be accessed from Redmine
+    ## mariadb backend only can be accessed from &reg;edmine
     ##
     backendOnlyAccessibleByFrontend: false
     customBackendSelector: {}

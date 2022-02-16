@@ -545,6 +545,9 @@ server:
   ##   password: ""
   ##
   proxy: {}
+  ## @param server.applicationProperties Specify common application properties added by SCDF server to streams and/or tasks
+  ## ref: https://docs.spring.io/spring-cloud-dataflow/docs/current/reference/htmlsingle/#spring-cloud-dataflow-global-properties
+  applicationProperties: {}
 
 ## @section Dataflow Skipper parameters
 
