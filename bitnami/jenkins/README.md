@@ -112,6 +112,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                    | Description                                                                               | Value           |
 | --------------------------------------- | ----------------------------------------------------------------------------------------- | --------------- |
 | `updateStrategy.type`                   | Jenkins deployment strategy type                                                          | `RollingUpdate` |
+| `serviceAccountName`                    | Jenkins pod service account name                                                          | `default`       |
 | `priorityClassName`                     | Jenkins pod priority class name                                                           | `""`            |
 | `schedulerName`                         | Name of the k8s scheduler (other than default)                                            | `""`            |
 | `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment                                            | `[]`            |

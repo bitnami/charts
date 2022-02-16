@@ -35,7 +35,7 @@ spec:
   {{- end }}
   sessionAffinity: {{ default "None" .Values.service.sessionAffinity }}
   ports:
-    - name: postgresql
+    - name: {{ .Values.service.portName }}
       port: {{ .Values.service.port }}
       targetPort: postgresql
       protocol: TCP
