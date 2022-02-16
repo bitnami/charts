@@ -101,12 +101,12 @@ spec:
             {{- if (include "kafka.client.tlsEncryption" .) }}
             - --tls.enabled
             {{- if .Values.metrics.kafka.certificatesSecret }}
-            - --tls.key-file="/opt/bitnami/kafka-exporter/certs/{{ .Values.metrics.kafka.tlsKey }}"
-            - --tls.cert-file="/opt/bitnami/kafka-exporter/certs/{{ .Values.metrics.kafka.tlsCert }}"
+            - --tls.key-file=/opt/bitnami/kafka-exporter/certs/{{ .Values.metrics.kafka.tlsKey }}
+            - --tls.cert-file=/opt/bitnami/kafka-exporter/certs/{{ .Values.metrics.kafka.tlsCert }}
             {{- if .Values.metrics.kafka.tlsCaSecret }}
-            - --tls.ca-file="/opt/bitnami/kafka-exporter/cacert/{{ .Values.metrics.kafka.tlsCaCert }}"
+            - --tls.ca-file=/opt/bitnami/kafka-exporter/cacert/{{ .Values.metrics.kafka.tlsCaCert }}
             {{- else }}
-            - --tls.ca-file="/opt/bitnami/kafka-exporter/certs/{{ .Values.metrics.kafka.tlsCaCert }}"
+            - --tls.ca-file=/opt/bitnami/kafka-exporter/certs/{{ .Values.metrics.kafka.tlsCaCert }}
             {{- end }}
             {{- end }}
             {{- end }}
