@@ -3,12 +3,6 @@ on: # rebuild any PRs and main branch changes
   pull_request_target:
     branches:
       - master
-      - bitnami:master
-    types:
-      - assigned 
-      - opened 
-      - synchronize 
-      - reopened
     paths:
       - 'bitnami/wordpress/*'
 env:
@@ -16,19 +10,9 @@ env:
   CSP_API_TOKEN: ${{ secrets.CSP_API_TOKEN }}
   VIB_PUBLIC_URL: https://cp.bromelia.vmware.com
 jobs:
-  vib-validate: # make sure chart is linted/safe
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          ref: ${{github.event.pull_request.head.ref}}
-          repository: ${{github.event.pull_request.head.repo.full_name}}
-      - uses: vmware-samples/vmware-image-builder-examples/vib-action@main
-
   vib-k8s-verify: # verify in multiple target platforms
     runs-on: ubuntu-latest
     environment: vmware-image-builder
-    needs: [vib-validate]
     strategy:
       matrix:
        include:
@@ -46,7 +30,7 @@ jobs:
           ref: ${{github.event.pull_request.head.ref}}
           repository: ${{github.event.pull_request.head.repo.full_name}}
       - uses: vmware-samples/vmware-image-builder-examples/vib-action@main
-        with: 
+        with:
           pipeline: vib-platform-verify.json
-        env: 
+        env:
           TARGET_PLATFORM: ${{ matrix.target-platform-id }}
