@@ -1,9 +1,14 @@
 <!--- app-name: MetalLB -->
 
-# MetalLB
+# MetalLB packaged by Bitnami
 
-[MetalLB](https://metallb.universe.tf/faq/) is an open source, rock solid LoadBalancer. It handles the `ServiceType: Loadbalancer`.
+MetalLB is a load-balancer implementation for bare metal Kubernetes clusters, using standard routing protocols.
 
+
+[Overview of MetalLB](https://metallb.universe.tf/)
+
+Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
+                           
 ## TL;DR
 
 ```console
