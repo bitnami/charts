@@ -502,6 +502,14 @@ persistence:
   ## @param persistence.size Persistent Volume size
   ##
   size: 8Gi
+  ## @param persistence.selector Selector to match an existing Persistent Volume for Ingester's data PVC
+  ## If set, the PVC can't have a PV dynamically provisioned for it
+  ## E.g.
+  ## selector:
+  ##   matchLabels:
+  ##     app: my-app
+  ##
+  selector: {}
 ## 'volumePermissions' init container parameters
 ## Changes the owner and group of the persistent volume mount point to runAsUser:fsGroup values
 ##   based on the podSecurityContext/containerSecurityContext parameters

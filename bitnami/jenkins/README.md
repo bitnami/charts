@@ -203,6 +203,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.annotations`                     | Additional custom annotations for the PVC                                                       | `{}`                    |
 | `persistence.accessModes`                     | Persistent Volume access modes                                                                  | `[]`                    |
 | `persistence.size`                            | Persistent Volume size                                                                          | `8Gi`                   |
+| `persistence.selector`                        | Selector to match an existing Persistent Volume for Ingester's data PVC                         | `{}`                    |
 | `volumePermissions.enabled`                   | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`            | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`          | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |

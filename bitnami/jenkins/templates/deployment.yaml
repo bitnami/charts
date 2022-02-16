@@ -103,6 +103,9 @@ spec:
           {{- else if .Values.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
           {{- end }}
+          {{- if .Values.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
           env:
             - name: JENKINS_USERNAME
               value: {{ .Values.jenkinsUser | quote }}
@@ -147,9 +150,6 @@ spec:
               containerPort: {{ .Values.containerPorts.https }}
               protocol: TCP
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.lifecycleHooks }}
-          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.lifecycleHooks "context" $) | nindent 12 }}
-          {{- end }}
           {{- if .Values.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
@@ -239,7 +239,7 @@ spec:
         - name: jenkins-data
           {{- if .Values.persistence.enabled }}
           persistentVolumeClaim:
-            claimName: {{ default (include "common.names.fullname" .) .Values.persistence.existingClaim }}
+            claimName: {{ default (include "common.names.fullname" .) (tpl .Values.persistence.existingClaim $) }}
           {{- else }}
           emptyDir: {}
           {{- end }}

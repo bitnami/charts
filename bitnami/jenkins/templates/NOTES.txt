@@ -45,9 +45,3 @@ APP VERSION: {{ .Chart.AppVersion }}
   echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} -o jsonpath="{.data.jenkins-password}" | base64 --decode)
 
 {{- include "jenkins.checkRollingTags" . }}
-{{- $passwordValidationErrors := list -}}
-{{- $secretName := include "common.names.fullname" . -}}
-{{- $requiredJenkinsPassword := dict "valueKey" "jenkinsPassword" "secret" $secretName "field" "jenkins-password" "context" $ -}}
-{{- $requiredJenkinsPasswordError := include "common.validations.values.single.empty" $requiredJenkinsPassword -}}
-{{- $passwordValidationErrors = append $passwordValidationErrors $requiredJenkinsPasswordError -}}
-{{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordValidationErrors "context" $) -}}
