@@ -293,7 +293,7 @@ provisioning:
   ##     # Only when mode is 'distributed'
   ##     # ref: https://docs.minio.io/docs/distributed-minio-quickstart-guide
   ##     quota:
-  ##       # hard, fifo or clear(+ omit size)
+  ##       # hard or clear(+ omit size)
   ##       type: hard
   ##       size: 10GiB
   ##     tags:
