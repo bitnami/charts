@@ -1,9 +1,13 @@
 <!--- app-name: Apache ZooKeeper -->
 
-# ZooKeeper
+# Apache ZooKeeper packaged by Bitnami
 
-[ZooKeeper](https://zookeeper.apache.org/) is a centralized service for maintaining configuration information, naming, providing distributed synchronization, and providing group services. All of these kinds of services are used in some form or other by distributed applications.
+Apache ZooKeeper provides a reliable, centralized register of configuration data and services for distributed applications.
 
+[Overview of Apache ZooKeeper](https://zookeeper.apache.org)
+
+Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
+                           
 ## TL;DR
 
 ```console
