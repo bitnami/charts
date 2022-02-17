@@ -7,7 +7,7 @@ kiam is a proxy that captures AWS Metadata API requests. It allows AWS IAM roles
 [Overview of Kiam](https://github.com/uswitch/kiam)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -420,3 +420,16 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
+Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+
+## Upgrading
+
+### To 1.0.0
+
+Kiam version was updated from `3.6.0` to `4.0.0`, there are no relevant changes in the chart itself. According to the official documentation, this new major introduces the following breaking changes at application level:
+
+>- The role policy is now applied after the role ARN has been resolved, this may cause compatibility issues with existing `iam.amazonaws.com/permitted` restrictions.
+>- StatsD metrics have been removed.
+>- A number of agent flags have changed.
+
+For further information, you may check the [official notes](https://github.com/uswitch/kiam/blob/master/docs/UPGRADING.md) covering upgrade details.
