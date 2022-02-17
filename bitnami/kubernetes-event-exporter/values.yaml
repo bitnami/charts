@@ -16,6 +16,9 @@ global:
 
 ## @section Common parameters
 
+## @param kubeVersion Override Kubernetes version
+##
+kubeVersion: ""
 ## @param nameOverride String to partially override kubernetes-event-exporter.fullname include (will maintain the release name)
 ##
 nameOverride: ""
@@ -28,6 +31,20 @@ commonAnnotations: {}
 ## @param commonLabels Labels to add to all deployed objects
 ##
 commonLabels: {}
+## Enable diagnostic mode in the deployment
+##
+diagnosticMode:
+  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+  ##
+  enabled: false
+  ## @param diagnosticMode.command Command to override all containers in the deployment
+  ##
+  command:
+    - sleep
+  ## @param diagnosticMode.args Args to override all containers in the deployment
+  ##
+  args:
+    - infinity
 ## @param extraDeploy Array of extra objects to deploy with the release (evaluated as a template)
 ##
 extraDeploy: []
@@ -46,7 +63,7 @@ image:
   ##
   registry: docker.io
   repository: bitnami/kubernetes-event-exporter
-  tag: 0.11.0-debian-10-r59
+  tag: 0.11.0-debian-10-r88
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -97,17 +114,26 @@ rbac:
   ## @param rbac.create Create the RBAC roles for API accessibility
   ##
   create: true
+## Pods Service Account
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+## @param serviceAccount.create Specifies whether a ServiceAccount should be created
+## @param serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
+## @param serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+## @param serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
+##
 serviceAccount:
-  ## @param serviceAccount.create Create a serviceAccount for the pod
-  ##
   create: true
-  ## @param serviceAccount.name Use the serviceAccount with the specified name
-  ## If not set and create is true, a name is generated using the fullname template
   name: ""
+  automountServiceAccountToken: true
+  annotations: {}
 ## @param podAnnotations Pod annotations
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
 podAnnotations: {}
+## @param podLabels Pod labels
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+##
+podLabels: {}
 ## SecurityContext holds pod-level security attributes and common container settings.
 ## @param podSecurityContext.enabled Enable security context
 ## @param podSecurityContext.fsGroup Group ID for the container
@@ -131,6 +157,15 @@ containerSecurityContext:
   readOnlyRootFilesystem: true
   runAsNonRoot: true
   runAsUser: 1001
+## @param command Override default container command (useful when using custom images)
+##
+command: []
+## @param args Override default container args (useful when using custom images)
+##
+args: []
+## @param lifecycleHooks Lifecycle for the container to automate configuration before or after startup
+##
+lifecycleHooks: {}
 ## Container resource requests and limits
 ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
 ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -151,6 +186,18 @@ resources:
   ##    cpu: 100m
   ##    memory: 25Mi
   requests: {}
+
+## Configure extra custom startup, liveness and readiness probes
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+## @param customStartupProbe Configure startup probe for Kubernetes event exporter pod
+##
+customStartupProbe: {}
+## @param customLivenessProbe Configure liveness probe for Kubernetes event exporter pod
+##
+customLivenessProbe: {}
+## @param customReadinessProbe Configure readiness probe for Kubernetes event exporter pod
+##
+customReadinessProbe: {}
 ## @param nodeSelector Node labels for pod assignment
 ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
 ##
@@ -159,6 +206,15 @@ nodeSelector: {}
 ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
 ##
 priorityClassName: ""
+## @param schedulerName Name of the k8s scheduler (other than default)
+## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+##
+schedulerName: ""
+## @param topologySpreadConstraints Topology Spread Constraints for pod assignment
+## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+## The value is evaluated as a template
+##
+topologySpreadConstraints: []
 ## @param tolerations Tolerations for pod assignment
 ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
@@ -195,6 +251,17 @@ nodeAffinityPreset:
 ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
 ##
 affinity: {}
+## @param updateStrategy.type Deployment strategy type.
+## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+## e.g:
+## updateStrategy:
+##  type: RollingUpdate
+##  rollingUpdate:
+##    maxSurge: 25%
+##    maxUnavailable: 25%
+##
+updateStrategy:
+  type: RollingUpdate
 ## @param extraEnvVars Array containing extra env vars to be added to all containers
 ## For example:
 ## extraEnvVars:
@@ -202,9 +269,9 @@ affinity: {}
 ##    value: env_var_value
 ##
 extraEnvVars: []
-## @param extraEnvVarsConfigMap ConfigMap containing extra env vars to be added to all containers
+## @param extraEnvVarsCM ConfigMap containing extra env vars to be added to all containers
 ##
-extraEnvVarsConfigMap: ""
+extraEnvVarsCM: ""
 ## @param extraEnvVarsSecret Secret containing extra env vars to be added to all containers
 ##
 extraEnvVarsSecret: ""
@@ -222,3 +289,14 @@ extraVolumes: []
 ##     imagePullPolicy: Always
 ##
 initContainers: []
+## @param sidecars Add additional sidecar containers to pods
+## e.g:
+## sidecars:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
+##
+sidecars: []
