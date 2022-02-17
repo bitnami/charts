@@ -136,6 +136,26 @@ ingress:
   ##
   secrets: []
 
+## @section Kubeapps packaging options
+## Note: the helm and flux plugins are mutually exclusive, you can only
+## enable one or the other since they both operate on Helm release objects.
+## Enabling carvel or flux does *not* install the required related Carvel or
+## Flux controllers on your cluster. Please read the documentation for running
+## Kubeapps with Carvel or Flux support.
+packaging:
+  ## Default helm packaging
+  ## @param packaging.helm.enabled Enable the standard Helm packaging.
+  helm:
+    enabled: true
+  ## Carvel packaging
+  ## @param packaging.carvel.enabled Enable support for the Carvel (kapp-controller) packaging.
+  carvel:
+    enabled: false
+  ## Flux (v2) packaging
+  ## @param packaging.flux.enabled Enable support for Flux (v2) packaging.
+  flux:
+    enabled: false
+
 ## @section Frontend parameters
 
 ## Frontend parameters
@@ -1609,16 +1629,15 @@ postgresql:
 
 ## @section kubeappsapis parameters
 kubeappsapis:
-  ## @param kubeappsapis.enabledPlugins Enabled plugins for the Kubeapps-APIs service
-  ## e.g:
-  ## enabledPlugins:
-  ## - helm
-  ## - fluxv2
-  ## - kapp-controller
+  ## @param kubeappsapis.enabledPlugins Manually override which plugins are
+  ## enabled for the Kubeapps-APIs service
+  ##
+  ## NOTE: normally this should remain blank, with the top-level `packaging`
+  ## value automatically determining which plugins should be enabled. Only
+  ## set this value if you want to manually override the list of plugins
+  ## enabled for the service.
   ##
   enabledPlugins:
-    - helm
-    - resources
   pluginConfig:
     core:
       packages:
@@ -1848,18 +1867,12 @@ kubeappsapis:
 ## @section Redis&trade; chart configuration
 ## ref: https://github.com/bitnami/charts/blob/master/bitnami/redis/values.yaml
 ##
+## Redis will be enabled and installed if `packages.flux.enabled` is true.
 redis:
   ## @param redis.redisPassword Password used in Redis&trade;
   ## ref: https://github.com/bitnami/bitnami-docker-redis/blob/master/README.md#setting-the-server-password-on-first-run
   ##
   redisPassword: ""
-  ## @param redis.enabled Enable the Redis&trade; deployment when deploying Kubeapps APIs.
-  ## We currently have the situation that Redis is required for the fluxv2 plugin only.
-  ## Until such a point that we're releasing with the fluxv2 plugin enabled, or the
-  ## plugin cache support has been generalised so all plugins use Redis, we'll need
-  ## to manually enable this in dev while ensuring it is false for releases (as it
-  ## is a conditional dependency in the Chart.yaml).
-  enabled: false
   master:
     ## @param redis.master.extraFlags Array with additional command line flags for Redis&trade; master
     extraFlags:
