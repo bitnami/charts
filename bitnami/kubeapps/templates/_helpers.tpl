@@ -192,6 +192,7 @@ Compile all warnings into a single message, and call fail.
 {{- define "kubeapps.validateValues" -}}
 {{- $messages := list -}}
 {{- $messages := append $messages (include "kubeapps.validateValues.ingress.tls" .) -}}
+{{- $messages := append $messages (include "kubeapps.validateValues.kubeappsapis.enabledPlugins" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
@@ -214,6 +215,29 @@ kubeapps: ingress.tls
       - Relay on cert-manager to create it by adding its supported annotations in `ingress.annotations`
       - Relay on Helm to create self-signed certificates by setting `ingress.selfSigned=true`
 {{- end -}}
+{{- end -}}
+
+
+{{/*
+# Validate values of common mistakes in kubeappsapis.enabledPlugins
+*/}}
+{{- define "kubeapps.validateValues.kubeappsapis.enabledPlugins" -}}
+    {{- if has "flux" .Values.kubeappsapis.enabledPlugins }}
+    kubeapps: kubeappsapis.enabledPlugins
+        You enter "flux", perhaps you meant "fluxv2"?
+    {{- end -}}
+    {{- if has "kapp_controller" .Values.kubeappsapis.enabledPlugins }}
+    kubeapps: kubeappsapis.enabledPlugins
+        You enter "kapp_controller", perhaps you meant "kapp-controller"?
+    {{- end -}}
+    {{- if and (has "fluxv2" .Values.kubeappsapis.enabledPlugins) (not .Values.redis.enabled) }}
+    kubeapps: kubeappsapis.enabledPlugins
+        If you enable the "fluxv2" plugin, you must also set redis.enabled=true
+    {{- end -}}
+    {{- if and (has "fluxv2" .Values.kubeappsapis.enabledPlugins) (has "helm" .Values.kubeappsapis.enabledPlugins) }}
+    kubeapps: kubeappsapis.enabledPlugins
+        Please choose just one of the flux2 and helm plugins, since they both operate on Helm releases.
+    {{- end -}}
 {{- end -}}
 
 {{/*
