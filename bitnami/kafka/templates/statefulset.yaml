@@ -265,9 +265,15 @@ spec:
               value: {{ default "" .Values.auth.tls.endpointIdentificationAlgorithm | quote }}
             - name: KAFKA_TLS_CLIENT_AUTH
               value: {{ ternary "required" "none" (or (eq (include "kafka.externalClientProtocol" . ) "mtls") (eq .Values.auth.clientProtocol "mtls")) | quote }}
-            {{- $tlsPassword := .Values.auth.tls.password }}
             - name: KAFKA_CERTIFICATE_PASSWORD
-              value: {{ default "" $tlsPassword | quote }}
+              {{- if .Values.auth.tls.existingSecret }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.auth.tls.existingSecret }}
+                  key: password
+              {{- else }}
+              value: {{ default "" .Values.auth.tls.password | quote }}
+              {{- end }}
             {{- end }}
             {{- if .Values.metrics.jmx.enabled }}
             - name: JMX_PORT
