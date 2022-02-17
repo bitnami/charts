@@ -443,7 +443,7 @@ grafana:
   ##  - name: GF_DEFAULT_INSTANCE_NAME
   ##    value: my-instance
   ##
-  extraEnvVars: {}
+  extraEnvVars: []
   ## @param grafana.extraConfigmaps Array to mount extra ConfigMaps to configure Grafana
   ## For example:
   ## extraConfigmaps:
@@ -452,7 +452,7 @@ grafana:
   ##     subPath: file-name.extension (optional)
   ##     readOnly: true
   ##
-  extraConfigmaps: {}
+  extraConfigmaps: []
   ## @param grafana.command Override default container command (useful when using custom images)
   ##
   command: []
