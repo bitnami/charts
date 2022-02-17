@@ -398,8 +398,8 @@ postgresql:
   repmgrDatabase: repmgr
   repmgrLogLevel: NOTICE
   repmgrConnectTimeout: 5
-  repmgrReconnectAttempts: 3
-  repmgrReconnectInterval: 5
+  repmgrReconnectAttempts: 2
+  repmgrReconnectInterval: 3
   ## EXPERMENTAL: Use pg_rewind for standby failover
   ## @param postgresql.usePgRewind Use pg_rewind for standby failover (experimental)
   ##
