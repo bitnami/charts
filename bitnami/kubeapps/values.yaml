@@ -1629,8 +1629,7 @@ postgresql:
 
 ## @section kubeappsapis parameters
 kubeappsapis:
-  ## @param kubeappsapis.enabledPlugins Manually override which plugins are
-  ## enabled for the Kubeapps-APIs service
+  ## @param kubeappsapis.enabledPlugins Manually override which plugins are enabled for the Kubeapps-APIs service
   ##
   ## NOTE: normally this should remain blank, with the top-level `packaging`
   ## value automatically determining which plugins should be enabled. Only
