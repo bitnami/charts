@@ -572,14 +572,17 @@ agent:
   ## @param agent.containerSecurityContext.enabled Enabled agent containers' Security Context
   ## @param agent.containerSecurityContext.runAsUser Set agent container's Security Context runAsUser
   ## @param agent.containerSecurityContext.runAsNonRoot Set agent container's Security Context runAsNonRoot
-  ## @param agent.containerSecurityContext.seLinuxOptions Set agent container's Security Context SE Linux options
+  ## @param agent.containerSecurityContext.seLinuxOptions [object] Set agent container's Security Context SE Linux options
+  ## @param agent.containerSecurityContext.capabilities.add Add capabilities for the securityContext
   ##
   containerSecurityContext:
-    runAsNonRoot: false
+    enabled: true
     runAsUser: 0
+    runAsNonRoot: false
+    seLinuxOptions: {}
     capabilities:
       add:
-      - NET_ADMIN
+        - NET_ADMIN
   ## @param agent.podSecurityContext.enabled Enabled agent pods' Security Context
   ## @param agent.podSecurityContext.fsGroup Set agent pod's Security Context fsGroup
   ##
