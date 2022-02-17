@@ -260,8 +260,8 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `grafana.extraVolumeMounts`                  | Additional volume mounts for the Grafana container                                                      | `[]`            |
 | `grafana.extraEnvVarsCM`                     | Name of existing ConfigMap containing extra env vars for %%MAIN_CONTAINER_NAME%% nodes                  | `""`            |
 | `grafana.extraEnvVarsSecret`                 | Name of existing Secret containing extra env vars for %%MAIN_CONTAINER_NAME%% nodes                     | `""`            |
-| `grafana.extraEnvVars`                       | Array containing extra env vars to configure Grafana                                                    | `{}`            |
-| `grafana.extraConfigmaps`                    | Array to mount extra ConfigMaps to configure Grafana                                                    | `{}`            |
+| `grafana.extraEnvVars`                       | Array containing extra env vars to configure Grafana                                                    | `[]`            |
+| `grafana.extraConfigmaps`                    | Array to mount extra ConfigMaps to configure Grafana                                                    | `[]`            |
 | `grafana.command`                            | Override default container command (useful when using custom images)                                    | `[]`            |
 | `grafana.args`                               | Override default container args (useful when using custom images)                                       | `[]`            |
 
