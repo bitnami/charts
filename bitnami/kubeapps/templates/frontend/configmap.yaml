@@ -13,7 +13,7 @@ metadata:
   {{- end }}
 data:
   k8s-api-proxy.conf: |-
-    # Disable buffering for log streaming
+    # Deactivate buffering for log streaming
     proxy_buffering off;
     # Hide Www-Authenticate to prevent it triggering a basic auth prompt in
     # the browser with some clusters
@@ -61,10 +61,14 @@ data:
         return 200 "healthy\n";
       }
 
+      # Only proxy to k8s API endpoints if operators are enabled.
+    {{- if $.Values.featureFlags.operators }}
+
       # Ensure each cluster can be reached (should only be
       # used with an auth-proxy where k8s credentials never leave
       # the cluster). See clusters option.
     {{- range .Values.clusters }}
+
       location ~* /api/clusters/{{ .name }} {
     {{/* We need to split the API service URL(s) into the base url and the path segment so
            those configurations using a path can be appropriately rewritten below while
@@ -101,6 +105,7 @@ data:
     {{- end }}
         include "./server_blocks/k8s-api-proxy.conf";
       }
+    {{- end }}
     {{- end }}
 
       location ~* /apis {
