@@ -1,9 +1,13 @@
 <!--- app-name: Kubernetes Event Exporter -->
 
-# Kubernetes Event Exporter
+# Kubernetes Event Exporter packaged by Bitnami
 
-[Kubernetes Event Exporter](https://github.com/opsgenie/kubernetes-event-exporter) allows exporting the often missed Kubernetes events to various outputs so that they can be used for observability or alerting purposes.
+Kubernetes Event Exporter makes it easy to export Kubernetes events to other tools, thereby enabling better event observability, custom alerts and aggregation.
 
+[Overview of Kubernetes Event Exporter](https://github.com/opsgenie/kubernetes-event-exporter)
+
+Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
+                           
 ## TL;DR
 
 ```console
