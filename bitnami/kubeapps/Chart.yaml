@@ -19,7 +19,7 @@ dependencies:
     repository: https://charts.bitnami.com/bitnami
     version: 15.x.x
     condition: redis.enabled
-description: Kubeapps is an in-cluster web-based UI for deploying and managing applications on Kubernetes clusters
+description: Kubeapps is a web-based UI for launching and managing applications on Kubernetes. It allows users to deploy trusted applications and operators to control users access to the cluster.
 home: https://kubeapps.com
 icon: https://raw.githubusercontent.com/kubeapps/kubeapps/main/docs/img/logo.png
 keywords:
