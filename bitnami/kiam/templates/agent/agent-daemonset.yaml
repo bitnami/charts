@@ -53,6 +53,12 @@ spec:
       {{- if .Values.agent.priorityClassName }}
       priorityClassName: {{ .Values.agent.priorityClassName | quote }}
       {{- end }}
+      {{- if .Values.agent.schedulerName }}
+      schedulerName: {{ .Values.agent.schedulerName }}
+      {{- end }}
+      {{- if .Values.agent.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.agent.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
       {{- if .Values.agent.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.agent.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
@@ -146,6 +152,18 @@ spec:
             {{- end }}
           {{- if .Values.agent.resources }}
           resources: {{- toYaml .Values.agent.resources | nindent 12 }}
+          {{- end }}
+          {{- if .Values.agent.startupProbe.enabled }}
+          startupProbe:
+            tcpSocket:
+              port: {{ .Values.agent.containerPort }}
+            initialDelaySeconds: {{ .Values.agent.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.agent.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.agent.startupProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.agent.startupProbe.successThreshold }}
+            failureThreshold: {{ .Values.agent.startupProbe.failureThreshold }}
+          {{- else if .Values.agent.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.agent.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.agent.livenessProbe.enabled }}
           livenessProbe:

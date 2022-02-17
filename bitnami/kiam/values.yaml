@@ -18,6 +18,9 @@ global:
 
 ## @section Common parameters
 
+## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
+##
+kubeVersion: ""
 ## @param nameOverride Release name override
 ##
 nameOverride: ""
@@ -103,8 +106,32 @@ server:
   ## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
   ##
   priorityClassName: ""
-  ## Configure extra options for liveness probe
+  ## @param server.schedulerName Name of the k8s scheduler (other than default)
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param server.topologySpreadConstraints Topology Spread Constraints for pod assignment
+  ## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+  ## The value is evaluated as a template
+  ##
+  topologySpreadConstraints: []
+  ## Configure extra options for startup probe
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param server.startupProbe.enabled Enable startupProbe
+  ## @param server.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param server.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param server.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param server.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param server.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 5
+    periodSeconds: 30
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  ## Configure extra options for liveness probe
   ## @param server.livenessProbe.enabled Enable livenessProbe
   ## @param server.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
   ## @param server.livenessProbe.periodSeconds Period seconds for livenessProbe
@@ -135,6 +162,15 @@ server:
     timeoutSeconds: 5
     successThreshold: 1
     failureThreshold: 5
+  ## @param server.customStartupProbe Override default startup probe
+  ##
+  customStartupProbe: {}
+  ## @param server.customLivenessProbe Override default liveness probe
+  ##
+  customLivenessProbe: {}
+  ## @param server.customReadinessProbe Override default readiness probe
+  ##
+  customReadinessProbe: {}
   ## @param server.extraArgs Extra arguments to add to the default kiam command
   ##
   extraArgs: {}
@@ -267,12 +303,6 @@ server:
   ## @param server.lifecycleHooks lifecycleHooks for the kiam server container to automate configuration before or after startup.
   ##
   lifecycleHooks: {}
-  ## @param server.customLivenessProbe Override default liveness probe
-  ##
-  customLivenessProbe: {}
-  ## @param server.customReadinessProbe Override default readiness probe
-  ##
-  customReadinessProbe: {}
   ## @param server.updateStrategy.type Update strategy - only really applicable for deployments with RWO PVs attached
   ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
   ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
@@ -329,7 +359,7 @@ server:
     ## @param server.service.type Kubernetes service type
     ##
     type: ClusterIP
-    ## @param server.service.port Service HTTPS port
+    ## @param server.service.port Service grpc-lb port
     ##
     port: 8443
     ## @param server.service.nodePorts [object] Specify the nodePort values for the LoadBalancer and NodePort service types.
@@ -352,6 +382,9 @@ server:
     ##   - 10.10.10.0/24
     ##
     loadBalancerSourceRanges: []
+    ## @param server.service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
+    ##
+    extraPorts: []
     ## @param server.service.externalTrafficPolicy Enable client source IP preservation
     ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
@@ -362,16 +395,18 @@ server:
 
   ## @section kiam server Service Account parameters
 
-  ## Specifies whether a ServiceAccount should be created
+  ## Kiam server Service Account
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+  ## @param server.serviceAccount.create Specifies whether a ServiceAccount should be created
+  ## @param server.serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
+  ## @param server.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+  ## @param server.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
   ##
   serviceAccount:
-    ## @param server.serviceAccount.create Enable the creation of a ServiceAccount for kiam pods
-    ##
     create: true
-    ## @param server.serviceAccount.name Name of the created ServiceAccount
-    ## If not set and create is true, a name is generated using the fullname template
-    ##
     name: ""
+    automountServiceAccountToken: true
+    annotations: {}
 
   ## @section kiam server metrics parameters
 
@@ -399,6 +434,9 @@ server:
       ## @param server.metrics.serviceMonitor.namespace Namespace in which Prometheus is running
       ##
       namespace: ""
+      ## @param server.metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
+      ##
+      jobLabel: ""
       ## @param server.metrics.serviceMonitor.interval Interval at which metrics should be scraped
       ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
       ##
@@ -419,6 +457,12 @@ server:
       ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
       ##
       selector: {}
+      ## @param server.metrics.serviceMonitor.labels Extra labels for the ServiceMonitor
+      ##
+      labels: {}
+      ## @param server.metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
+      ##
+      honorLabels: false
 
 ## @section kiam agent parameters
 
@@ -438,6 +482,15 @@ agent:
   ## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
   ##
   priorityClassName: ""
+  ## @param agent.schedulerName Name of the k8s scheduler (other than default)
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param agent.topologySpreadConstraints Topology Spread Constraints for pod assignment
+  ## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+  ## The value is evaluated as a template
+  ##
+  topologySpreadConstraints: []
   ## @param agent.allowRouteRegExp Regexp with the allowed paths for agents to redirect
   ##
   allowRouteRegExp: ""
@@ -503,6 +556,22 @@ agent:
     certFileName: cert.pem
     keyFileName: key.pem
     caFileName: ca.pem
+  ## Configure extra options for startup probe
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param agent.startupProbe.enabled Enable startupProbe
+  ## @param agent.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param agent.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param agent.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param agent.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param agent.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 5
+    periodSeconds: 30
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
   ## Configure extra options for liveness probe
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param agent.livenessProbe.enabled Enable livenessProbe
@@ -535,6 +604,15 @@ agent:
     timeoutSeconds: 5
     successThreshold: 1
     failureThreshold: 5
+  ## @param agent.customStartupProbe Override default startup probe
+  ##
+  customStartupProbe: {}
+  ## @param agent.customLivenessProbe Override default liveness probe
+  ##
+  customLivenessProbe: {}
+  ## @param agent.customReadinessProbe Override default readiness probe
+  ##
+  customReadinessProbe: {}
   ## @param agent.extraArgs Extra arguments to add to the default kiam command
   ##
   extraArgs: {}
@@ -639,12 +717,6 @@ agent:
   ## @param agent.lifecycleHooks LifecycleHooks to set additional configuration at startup.
   ##
   lifecycleHooks: {}
-  ## @param agent.customLivenessProbe Override default liveness probe
-  ##
-  customLivenessProbe: {}
-  ## @param agent.customReadinessProbe Override default readiness probe
-  ##
-  customReadinessProbe: {}
   ## @param agent.updateStrategy.type Update strategy - only really applicable for deployments with RWO PVs attached
   ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
   ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
@@ -730,14 +802,17 @@ agent:
 
   ## @section kiam agent Service Account parameters
 
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+  ## @param agent.serviceAccount.create Specifies whether a ServiceAccount should be created
+  ## @param agent.serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
+  ## @param agent.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+  ## @param agent.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
+  ##
   serviceAccount:
-    ## @param agent.serviceAccount.create Enable the creation of a ServiceAccount for kiam pods
-    ##
     create: true
-    ## @param agent.serviceAccount.name Name of the created ServiceAccount
-    ## If not set and create is true, a name is generated using the fullname template
-    ##
     name: ""
+    automountServiceAccountToken: true
+    annotations: {}
 
   ## @section kiam agent metrics parameters
 
@@ -765,6 +840,9 @@ agent:
       ## @param agent.metrics.serviceMonitor.namespace Namespace which Prometheus is running in
       ##
       namespace: ""
+      ## @param agent.metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
+      ##
+      jobLabel: ""
       ## @param agent.metrics.serviceMonitor.interval Interval at which metrics should be scraped
       ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
       ##
@@ -785,6 +863,12 @@ agent:
       ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
       ##
       selector: {}
+      ## @param agent.metrics.serviceMonitor.labels Extra labels for the ServiceMonitor
+      ##
+      labels: {}
+      ## @param agent.metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
+      ##
+      honorLabels: false
 
 ## @section RBAC parameters
 
