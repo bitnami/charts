@@ -28,13 +28,13 @@ APP VERSION: {{ .Chart.AppVersion }}
 ** Watch the status using: kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "common.names.fullname" . }} **
 
   export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
-{{- $port:=.Values.service.port | toString }}
-  echo "Jenkins URL: http://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.service.port }}{{ end }}/"
+{{- $port:=.Values.service.ports.http | toString }}
+  echo "Jenkins URL: http://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.service.ports.http }}{{ end }}/"
 
 {{- else if contains "ClusterIP"  .Values.service.type }}
 
   echo "Jenkins URL: http://127.0.0.1:8080/"
-  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "common.names.fullname" . }} 8080:{{ .Values.service.port }}
+  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "common.names.fullname" . }} 8080:{{ .Values.service.ports.http }}
 
 {{- end }}
 {{- end }}
@@ -45,9 +45,3 @@ APP VERSION: {{ .Chart.AppVersion }}
   echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} -o jsonpath="{.data.jenkins-password}" | base64 --decode)
 
 {{- include "jenkins.checkRollingTags" . }}
-{{- $passwordValidationErrors := list -}}
-{{- $secretName := include "common.names.fullname" . -}}
-{{- $requiredJenkinsPassword := dict "valueKey" "jenkinsPassword" "secret" $secretName "field" "jenkins-password" "context" $ -}}
-{{- $requiredJenkinsPasswordError := include "common.validations.values.single.empty" $requiredJenkinsPassword -}}
-{{- $passwordValidationErrors = append $passwordValidationErrors $requiredJenkinsPasswordError -}}
-{{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordValidationErrors "context" $) -}}

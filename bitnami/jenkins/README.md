@@ -64,15 +64,18 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common parameters
 
-| Name                | Description                                        | Value           |
-| ------------------- | -------------------------------------------------- | --------------- |
-| `kubeVersion`       | Override Kubernetes version                        | `""`            |
-| `nameOverride`      | String to partially override common.names.fullname | `""`            |
-| `fullnameOverride`  | String to fully override common.names.fullname     | `""`            |
-| `commonLabels`      | Labels to add to all deployed objects              | `{}`            |
-| `commonAnnotations` | Annotations to add to all deployed objects         | `{}`            |
-| `clusterDomain`     | Kubernetes cluster domain name                     | `cluster.local` |
-| `extraDeploy`       | Array of extra objects to deploy with the release  | `[]`            |
+| Name                     | Description                                                                             | Value           |
+| ------------------------ | --------------------------------------------------------------------------------------- | --------------- |
+| `kubeVersion`            | Override Kubernetes version                                                             | `""`            |
+| `nameOverride`           | String to partially override common.names.fullname                                      | `""`            |
+| `fullnameOverride`       | String to fully override common.names.fullname                                          | `""`            |
+| `commonLabels`           | Labels to add to all deployed objects                                                   | `{}`            |
+| `commonAnnotations`      | Annotations to add to all deployed objects                                              | `{}`            |
+| `clusterDomain`          | Kubernetes cluster domain name                                                          | `cluster.local` |
+| `extraDeploy`            | Array of extra objects to deploy with the release                                       | `[]`            |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`     |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]`  |
 
 
 ### Jenkins Image parameters
@@ -111,6 +114,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `updateStrategy.type`                   | Jenkins deployment strategy type                                                          | `RollingUpdate` |
 | `serviceAccountName`                    | Jenkins pod service account name                                                          | `default`       |
 | `priorityClassName`                     | Jenkins pod priority class name                                                           | `""`            |
+| `schedulerName`                         | Name of the k8s scheduler (other than default)                                            | `""`            |
+| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment                                            | `[]`            |
 | `hostAliases`                           | Jenkins pod host aliases                                                                  | `[]`            |
 | `extraVolumes`                          | Optionally specify extra list of additional volumes for Jenkins pods                      | `[]`            |
 | `extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for Jenkins container(s)         | `[]`            |
@@ -136,6 +141,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `containerSecurityContext.enabled`      | Enabled Jenkins containers' Security Context                                              | `true`          |
 | `containerSecurityContext.runAsUser`    | Set Jenkins container's Security Context runAsUser                                        | `1001`          |
 | `containerSecurityContext.runAsNonRoot` | Set Jenkins container's Security Context runAsNonRoot                                     | `true`          |
+| `startupProbe.enabled`                  | Enable startupProbe                                                                       | `false`         |
+| `startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                    | `180`           |
+| `startupProbe.periodSeconds`            | Period seconds for startupProbe                                                           | `10`            |
+| `startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                          | `5`             |
+| `startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                        | `6`             |
+| `startupProbe.successThreshold`         | Success threshold for startupProbe                                                        | `1`             |
 | `livenessProbe.enabled`                 | Enable livenessProbe                                                                      | `true`          |
 | `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                   | `180`           |
 | `livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                          | `10`            |
@@ -148,6 +159,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                        | `3`             |
 | `readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                      | `3`             |
 | `readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                      | `1`             |
+| `customStartupProbe`                    | Custom startupProbe that overrides the default one                                        | `{}`            |
 | `customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                       | `{}`            |
 | `customReadinessProbe`                  | Custom readinessProbe that overrides the default one                                      | `{}`            |
 
@@ -157,8 +169,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                               | Description                                                                                                                      | Value                    |
 | ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
 | `service.type`                     | Jenkins service type                                                                                                             | `LoadBalancer`           |
-| `service.port`                     | Jenkins service HTTP port                                                                                                        | `80`                     |
-| `service.httpsPort`                | Jenkins service HTTPS port                                                                                                       | `443`                    |
+| `service.ports.http`               | Jenkins service HTTP port                                                                                                        | `80`                     |
+| `service.ports.https`              | Jenkins service HTTPS port                                                                                                       | `443`                    |
 | `service.nodePorts.http`           | Node port for HTTP                                                                                                               | `""`                     |
 | `service.nodePorts.https`          | Node port for HTTPS                                                                                                              | `""`                     |
 | `service.clusterIP`                | Jenkins service Cluster IP                                                                                                       | `""`                     |
@@ -178,6 +190,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.extraPaths`               | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |
 | `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
 | `ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
+| `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
 
 
 ### Persistence Parameters
@@ -186,9 +199,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------- | ----------------------------------------------------------------------------------------------- | ----------------------- |
 | `persistence.enabled`                         | Enable persistence using Persistent Volume Claims                                               | `true`                  |
 | `persistence.storageClass`                    | Persistent Volume storage class                                                                 | `""`                    |
+| `persistence.existingClaim`                   | Use a existing PVC which must be created manually before bound                                  | `""`                    |
 | `persistence.annotations`                     | Additional custom annotations for the PVC                                                       | `{}`                    |
 | `persistence.accessModes`                     | Persistent Volume access modes                                                                  | `[]`                    |
 | `persistence.size`                            | Persistent Volume size                                                                          | `8Gi`                   |
+| `persistence.selector`                        | Selector to match an existing Persistent Volume for Ingester's data PVC                         | `{}`                    |
 | `volumePermissions.enabled`                   | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`            | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`          | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
@@ -202,32 +217,35 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Metrics Parameters
 
-| Name                                         | Description                                                                                      | Value                         |
-| -------------------------------------------- | ------------------------------------------------------------------------------------------------ | ----------------------------- |
-| `metrics.enabled`                            | Start a sidecar prometheus exporter to expose Jenkins metrics                                    | `false`                       |
-| `metrics.image.registry`                     | Jenkins Exporter image registry                                                                  | `docker.io`                   |
-| `metrics.image.repository`                   | Jenkins Exporter image repository                                                                | `bitnami/jenkins-exporter`    |
-| `metrics.image.tag`                          | Jenkins Jenkins Exporter image tag (immutable tags are recommended)                              | `0.20171225.0-debian-10-r701` |
-| `metrics.image.pullPolicy`                   | Jenkins Exporter image pull policy                                                               | `IfNotPresent`                |
-| `metrics.image.pullSecrets`                  | Jenkins Exporter image pull secrets                                                              | `[]`                          |
-| `metrics.containerSecurityContext.enabled`   | Enabled Jenkins exporter containers' Security Context                                            | `true`                        |
-| `metrics.containerSecurityContext.runAsUser` | Set Jenkins exporter containers' Security Context runAsUser                                      | `1001`                        |
-| `metrics.resources.limits`                   | The resources limits for the Jenkins exporter container                                          | `{}`                          |
-| `metrics.resources.requests`                 | The requested resources for the Jenkins exporter container                                       | `{}`                          |
-| `metrics.service.type`                       | Jenkins exporter service type                                                                    | `ClusterIP`                   |
-| `metrics.service.port`                       | Jenkins exporter service port                                                                    | `9122`                        |
-| `metrics.service.nodePort`                   | Node port for exporter                                                                           | `""`                          |
-| `metrics.service.externalTrafficPolicy`      | Jenkins exporter service external traffic policy                                                 | `Cluster`                     |
-| `metrics.service.loadBalancerIP`             | Jenkins exporter service Load Balancer IP                                                        | `""`                          |
-| `metrics.service.loadBalancerSourceRanges`   | Jenkins exporter service Load Balancer sources                                                   | `[]`                          |
-| `metrics.service.annotations`                | Additional custom annotations for Jenkins exporter service                                       | `{}`                          |
-| `metrics.serviceMonitor.enabled`             | Create ServiceMonitor resource(s) for scraping metrics using PrometheusOperator                  | `false`                       |
-| `metrics.serviceMonitor.namespace`           | The namespace in which the ServiceMonitor will be created                                        | `""`                          |
-| `metrics.serviceMonitor.interval`            | The interval at which metrics should be scraped                                                  | `30s`                         |
-| `metrics.serviceMonitor.scrapeTimeout`       | The timeout after which the scrape is ended                                                      | `""`                          |
-| `metrics.serviceMonitor.relabellings`        | Metrics relabellings to add to the scrape endpoint                                               | `[]`                          |
-| `metrics.serviceMonitor.honorLabels`         | Specify honorLabels parameter to add the scrape endpoint                                         | `false`                       |
-| `metrics.serviceMonitor.additionalLabels`    | Additional labels that can be used so ServiceMonitor resource(s) can be discovered by Prometheus | `{}`                          |
+| Name                                         | Description                                                                       | Value                         |
+| -------------------------------------------- | --------------------------------------------------------------------------------- | ----------------------------- |
+| `metrics.enabled`                            | Start a sidecar prometheus exporter to expose Jenkins metrics                     | `false`                       |
+| `metrics.image.registry`                     | Jenkins Exporter image registry                                                   | `docker.io`                   |
+| `metrics.image.repository`                   | Jenkins Exporter image repository                                                 | `bitnami/jenkins-exporter`    |
+| `metrics.image.tag`                          | Jenkins Jenkins Exporter image tag (immutable tags are recommended)               | `0.20171225.0-debian-10-r701` |
+| `metrics.image.pullPolicy`                   | Jenkins Exporter image pull policy                                                | `IfNotPresent`                |
+| `metrics.image.pullSecrets`                  | Jenkins Exporter image pull secrets                                               | `[]`                          |
+| `metrics.containerSecurityContext.enabled`   | Enabled Jenkins exporter containers' Security Context                             | `true`                        |
+| `metrics.containerSecurityContext.runAsUser` | Set Jenkins exporter containers' Security Context runAsUser                       | `1001`                        |
+| `metrics.resources.limits`                   | The resources limits for the Jenkins exporter container                           | `{}`                          |
+| `metrics.resources.requests`                 | The requested resources for the Jenkins exporter container                        | `{}`                          |
+| `metrics.service.type`                       | Jenkins exporter service type                                                     | `ClusterIP`                   |
+| `metrics.service.port`                       | Jenkins exporter service port                                                     | `9122`                        |
+| `metrics.service.nodePort`                   | Node port for exporter                                                            | `""`                          |
+| `metrics.service.externalTrafficPolicy`      | Jenkins exporter service external traffic policy                                  | `Cluster`                     |
+| `metrics.service.loadBalancerIP`             | Jenkins exporter service Load Balancer IP                                         | `""`                          |
+| `metrics.service.loadBalancerSourceRanges`   | Jenkins exporter service Load Balancer sources                                    | `[]`                          |
+| `metrics.service.annotations`                | Additional custom annotations for Jenkins exporter service                        | `{}`                          |
+| `metrics.serviceMonitor.enabled`             | Create ServiceMonitor resource(s) for scraping metrics using PrometheusOperator   | `false`                       |
+| `metrics.serviceMonitor.namespace`           | The namespace in which the ServiceMonitor will be created                         | `""`                          |
+| `metrics.serviceMonitor.interval`            | The interval at which metrics should be scraped                                   | `30s`                         |
+| `metrics.serviceMonitor.scrapeTimeout`       | The timeout after which the scrape is ended                                       | `""`                          |
+| `metrics.serviceMonitor.jobLabel`            | The name of the label on the target service to use as the job name in prometheus. | `""`                          |
+| `metrics.serviceMonitor.relabelings`         | RelabelConfigs to apply to samples before scraping                                | `[]`                          |
+| `metrics.serviceMonitor.metricRelabelings`   | MetricRelabelConfigs to apply to samples before ingestion                         | `[]`                          |
+| `metrics.serviceMonitor.selector`            | ServiceMonitor selector labels                                                    | `{}`                          |
+| `metrics.serviceMonitor.honorLabels`         | Specify honorLabels parameter to add the scrape endpoint                          | `false`                       |
+| `metrics.serviceMonitor.labels`              | Extra labels for the ServiceMonitor                                               | `{}`                          |
 
 
 The above parameters map to the env variables defined in [bitnami/jenkins](https://github.com/bitnami/bitnami-docker-jenkins). For more information please refer to the [bitnami/jenkins](https://github.com/bitnami/bitnami-docker-jenkins) image documentation.
@@ -310,6 +328,15 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 9.0.0
+
+This major release renames several values in this chart and adds missing features, in order to be inline with the rest of assets in the Bitnami charts repository.
+
+Affected values:
+- `service.port` renamed as `service.ports.http`.
+- `service.httpsPort` renamed as `service.ports.https`.
+- `serviceMonitor.additionalLabels` renamed as `serviceMonitor.labels`.
 
 ### To 8.0.0
 
