@@ -82,9 +82,30 @@ spec:
       {{- if .Values.readReplicas.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.readReplicas.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
-      {{- if or .Values.readReplicas.initContainers (and .Values.volumePermissions.enabled (or .Values.readReplicas.persistence.enabled .Values.shmVolume.enabled)) }}
       initContainers:
-        {{- if and .Values.volumePermissions.enabled (or .Values.readReplicas.persistence.enabled .Values.shmVolume.enabled .Values.tls.enabled) }}
+        {{- if and .Values.tls.enabled (not .Values.volumePermissions.enabled) }}
+        - name: copy-certs
+          image: {{ include "postgresql.volumePermissions.image" . }}
+          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
+          {{- if .Values.readReplicas.resources }}
+          resources: {{- toYaml .Values.readReplicas.resources | nindent 12 }}
+          {{- end }}
+          # We don't require a privileged container in this case
+          {{- if .Values.readReplicas.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.readReplicas.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          command:
+            - /bin/sh
+            - -ec
+            - |
+              cp /tmp/certs/* /opt/bitnami/postgresql/certs/
+              chmod 600 {{ include "postgresql.tlsCertKey" . }}
+          volumeMounts:
+            - name: raw-certificates
+              mountPath: /tmp/certs
+            - name: postgresql-certificates
+              mountPath: /opt/bitnami/postgresql/certs
+        {{- else if and .Values.volumePermissions.enabled (or .Values.readReplicas.persistence.enabled .Values.shmVolume.enabled) }}
         - name: init-chmod-data
           image: {{ include "postgresql.volumePermissions.image" . }}
           imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
@@ -93,7 +114,7 @@ spec:
           {{- end }}
           command:
             - /bin/sh
-            - -cx
+            - -ec
             - |
               {{- if .Values.readReplicas.persistence.enabled }}
               {{- if eq ( toString ( .Values.volumePermissions.containerSecurityContext.runAsUser )) "auto" }}
@@ -149,7 +170,6 @@ spec:
         {{- if .Values.readReplicas.initContainers }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.readReplicas.initContainers "context" $ ) | nindent 8 }}
         {{- end }}
-      {{- end }}
       containers:
         - name: postgresql
           image: {{ include "postgresql.image" . }}
