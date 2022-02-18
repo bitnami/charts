@@ -1,9 +1,13 @@
-<!--- app-name: OAuth 2 Proxy -->
+<!--- app-name: OAuth2 Proxy -->
 
-# OAuth2 Proxy
+# OAuth2 Proxy packaged by Bitnami
 
-[oauth2-proxy](https://github.com/oauth2-proxy/oauth2-proxy) is a reverse proxy and static file server that provides authentication using Providers (Google, GitHub, and others) to validate accounts by email, domain or group.
+A reverse proxy and static file server that provides authentication using Providers (Google, GitHub, and others) to validate accounts by email, domain or group.
 
+[Overview of OAuth2 Proxy](https://github.com/oauth2-proxy/oauth2-proxy)
+
+Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
+                           
 ## TL;DR
 
 ```console
