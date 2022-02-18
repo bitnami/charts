@@ -4,8 +4,6 @@ on: # rebuild any PRs and main branch changes
     branches:
       - master
       - bitnami:master
-    paths:
-      - 'bitnami/**'
 env:
   CSP_API_URL: https://console.cloud.vmware.com
   CSP_API_TOKEN: ${{ secrets.CSP_API_TOKEN }}
