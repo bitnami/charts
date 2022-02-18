@@ -253,6 +253,13 @@ Return the Kafka configuration configmap
 {{- end -}}
 
 {{/*
+Return the Kafka client configuration configmap
+*/}}
+{{- define "kafka.client.configmapName" -}}
+    {{- printf "%s-client-configuration" (include "common.names.fullname" .) -}}
+{{- end -}}
+
+{{/*
 Return true if a configmap object should be created
 */}}
 {{- define "kafka.createConfigmap" -}}

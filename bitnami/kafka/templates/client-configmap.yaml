@@ -1,0 +1,33 @@
+{{- if .Values.provisioning.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "kafka.client.configmapName" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+data:
+  client.properties: |-
+    security.protocol={{ include "kafka.listenerType" ( dict "protocol" .Values.auth.clientProtocol ) }}
+    {{- if (include "kafka.client.tlsEncryption" .) }}
+    ssl.keystore.type={{ upper .Values.provisioning.auth.tls.type }}
+    ssl.truststore.type={{ upper .Values.provisioning.auth.tls.type }}
+    ssl.key.password=KAFKA_CERTIFICATE_PASSWORD
+    ssl.keystore.password=KAFKA_CERTIFICATE_PASSWORD
+    ssl.truststore.password=KAFKA_CERTIFICATE_PASSWORD
+    {{- if (eq .Values.provisioning.auth.tls.type "jks") }}
+    ssl.keystore.location=/certs/{{ .Values.provisioning.auth.tls.keystore }}
+    ssl.truststore.location=/certs/{{ .Values.provisioning.auth.tls.truststore }}
+    {{- end -}}
+    {{- if (eq .Values.provisioning.auth.tls.type "pem") }}
+    ssl.keystore.key=/certs/{{ .Values.provisioning.auth.tls.key }}
+    ssl.keystore.certificate.chain=/certs/{{ .Values.provisioning.auth.tls.caCert }}
+    ssl.truststore.certificates=/certs/{{ .Values.provisioning.auth.tls.cert }}
+    {{- end -}}
+    {{- end -}}
+{{- end }}
