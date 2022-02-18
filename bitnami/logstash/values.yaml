@@ -163,17 +163,14 @@ extraVolumes: []
 ##
 extraVolumeMounts: []
 
-## @param serviceAccount [array] Array containing the creation of ServiceAccount Object on Kubernetes
+##
+## @param serviceAccount Containing the creation of ServiceAccount Object on Kubernetes
 serviceAccount:
   create: false
   annotations: []
 
 ## @param containerPorts [array] Array containing the ports to open in the Logstash container
 ##
-## @param serviceAccount Array containing the creation of ServiceAccount Object on Kubernetes
-serviceAccount:
-  create: false
-  annotations: []
 containerPorts:
   ## - name: syslog-udp
   ##   containerPort: 1514
