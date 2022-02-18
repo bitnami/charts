@@ -196,7 +196,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ include "solr.secretName" . }}
-                  key: solr-password
+                  key: {{ include "solr.secretPasswordKey" . }}
             {{- end }}
             - name: SOLR_ZK_HOSTS
               value: {{ include "solr.zookeeper.host" . | quote }}

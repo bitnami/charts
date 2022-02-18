@@ -98,6 +98,10 @@ auth:
   ## @param auth.existingSecret Existing secret with Solr password
   ##
   existingSecret: ""
+  ## @param auth.existingSecretPasswordKey Password key to be retrieved from existing secret
+  ## NOTE: ignored unless `auth.existingSecret` parameter is set
+  ##
+  existingSecretPasswordKey: ""
 ## @param coreNames Solr core names to be created
 ##
 coreNames:
