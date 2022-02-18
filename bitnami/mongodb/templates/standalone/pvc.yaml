@@ -27,4 +27,7 @@ spec:
     requests:
       storage: {{ .Values.persistence.size | quote }}
   {{ include "common.storage.class" (dict "persistence" .Values.persistence "global" .Values.global) }}
+  {{- if .Values.persistence.volumeClaimTemplates.selector }}
+  selector: {{- include "common.tplvalues.render" (dict "value" .Values.persistence.volumeClaimTemplates.selector "context" $) | nindent 4 }}
+  {{- end -}}
 {{- end }}
