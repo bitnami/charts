@@ -66,7 +66,7 @@ spec:
       initContainers:
         {{- include "airflow.git.containers.clone" . | trim | nindent 8 }}
         {{- if .Values.dags.existingConfigmap }}
-        {{- include "airflow.loadDAGsInitContainer" . | trim | nindent 8 }}
+        {{- include "airflow.loadDAGsInitContainer" (dict "component" "web" "context" . ) | trim | nindent 8 }}
         {{- end }}
         {{- if .Values.web.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.web.initContainers "context" $) | trim | nindent 8 }}
