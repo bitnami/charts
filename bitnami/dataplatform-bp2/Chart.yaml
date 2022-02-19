@@ -28,7 +28,7 @@ dependencies:
     tags:
       - bitnami-common
     version: 1.x.x
-description: OCTO Data platform Kafka-Spark-Elasticsearch Helm Chart
+description: This Helm chart can be used for the automated deployment of a data platform blueprint containing Kafka, Apache Spark and Elasticsearch. It covers optimized pod sizing and placement diversity rules.
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/dataplatform-bp2
 icon: https://bitnami.com/assets/stacks/dataplatform-bp1/img/dataplatform-bp1-stack-220x234.png
@@ -58,4 +58,4 @@ sources:
   - https://www.elastic.co/products/logstash
   - https://zookeeper.apache.org/
   - https://github.com/bitnami/bitnami-docker-zookeeper
-version: 10.0.8
+version: 10.0.9
