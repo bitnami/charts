@@ -69,6 +69,7 @@ data:
     {
       "kubeappsCluster": "{{ template "kubeapps.kubeappsCluster" . -}}",
       "kubeappsNamespace": "{{ .Release.Namespace }}",
+      "globalReposNamespace": "{{ .Release.Namespace }}{{ .Values.apprepository.globalReposNamespaceSuffix }}",
       "appVersion": "v{{ .Chart.AppVersion }}",
       "authProxyEnabled": {{ .Values.authProxy.enabled }},
       "oauthLoginURI": {{ .Values.authProxy.oauthLoginURI | quote }},

@@ -6,7 +6,7 @@ metadata:
   {{- if .namespace }}
   namespace: {{ .namespace | quote }}
   {{- else }}
-  namespace: {{ $.Release.Namespace | quote }}
+  namespace: {{ printf "%s%s" $.Release.Namespace $.Values.apprepository.globalReposNamespaceSuffix | quote }}
   {{- end }}
   labels: {{- include "common.labels.standard" $ | nindent 4 }}
     {{- if $.Values.commonLabels }}

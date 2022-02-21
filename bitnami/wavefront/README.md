@@ -1,9 +1,13 @@
 <!--- app-name: Wavefront -->
 
-# Wavefront Collector for Kubernetes
+# Wavefront packaged by Bitnami
 
-[Wavefront](https://wavefront.com) is a cloud-native monitoring and analytics platform that provides three dimensional microservices observability with metrics, histograms and OpenTracing-compatible distributed tracing.
+Wavefront is a high-performance streaming analytics platform for monitoring and optimizing your environment and applications.
 
+[Overview of Wavefront](https://github.com/wavefrontHQ/wavefront-collector-for-kubernetes)
+
+
+                           
 ## TL;DR
 
 ```console
