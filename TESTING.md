@@ -40,7 +40,7 @@ The current test system supports a set of tools that are listed below. Test exec
 * [Trivy](https://aquasecurity.github.io/trivy/v0.17.0/)
 * Helm lint
 
-Static analysis is needed for all assets. The need for other test types will be determined based on the asset needs. If your asset has a user interface, you will <span style="text-decoration:underline;">need</span> to include the following tests:
+Static analysis is needed for all assets. The need for other test types will be determined based on the asset needs. If your asset has a user interface, you will **need** to include the following tests:
 
 * Cypress
 * Goss 
