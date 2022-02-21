@@ -82,6 +82,7 @@ spec:
       {{- if .Values.readReplicas.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.readReplicas.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
+      hostNetwork: {{ .Values.readReplicas.hostNetwork }}
       initContainers:
         {{- if and .Values.tls.enabled (not .Values.volumePermissions.enabled) }}
         - name: copy-certs
