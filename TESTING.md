@@ -3,7 +3,6 @@
 The overall test strategy can be described as _minimalistic_, rather than extensive. The goal of the tests is to verify that the application is deployed properly, so we will verify the main application features. 
 
 Decide the testing scope carefully, keeping in mind the maintainability of the tests and the value they provide.
-
 The tests described here are _deployment_ tests since their goal is to verify that the software is correctly deployed with all the inherent features. Both functional and non-functional characteristics are evaluated in these tests, focusing on the installation aspect. 
 
 * The core asset features work properly when deployed
