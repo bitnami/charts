@@ -56,6 +56,17 @@ Return the Solr authentication credentials secret
 {{- end -}}
 
 {{/*
+Get the password key to be retrieved from the Solr auth secret.
+*/}}
+{{- define "solr.secretPasswordKey" -}}
+{{- if and .Values.auth.existingSecret .Values.auth.existingSecretPasswordKey -}}
+{{- printf "%s" .Values.auth.existingSecretPasswordKey -}}
+{{- else -}}
+{{- printf "solr-password" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return true if a Solr authentication credentials secret object should be created
 */}}
 {{- define "solr.createSecret" -}}
