@@ -2,7 +2,7 @@
 
 Contributions are welcome via GitHub Pull Requests. This document outlines the process to help get your contribution accepted.
 
-Any type of contribution is welcome; from new features, bug fixes, documentation improvements or even [adding charts to the repository](#adding-a-new-chart-to-the-repository) (if it's viable once evaluated the feasibility).
+Any type of contribution is welcome; from new features, bug fixes, [tests](#testing), documentation improvements or even [adding charts to the repository](#adding-a-new-chart-to-the-repository) (if it's viable once evaluated the feasibility).
 
 ## How to Contribute
 
@@ -59,7 +59,13 @@ Notice the `Author` and `Signed-off-by` lines match. If they don't your PR will 
 
 ***NOTE***: Please note that, in terms of time, may be a slight difference between the appearance of the code in GitHub and the chart in the registry.
 
-[Here](https://docs.bitnami.com/kubernetes/faq/get-started/understand-charts-release-process/) you can find more information about this process.
+### Testing 
+
+1. Read the [Test Strategy](https://github.com/bitnami/charts/blob/master/TESTING.md).
+2. Determine the types of tests you will need based on the chart you are testing and the information in the test strategy.
+3. Before you create a pull request, make sure you achieved the [Test Acceptance Criteria](https://github.com/bitnami/charts/blob/master/TESTING.md#Test-acceptance-criteria).
+4. If you were able to achieve them, congrats! Create a PR and wait for approval. You should then be able to see the result of the test execution for multiple cloud platforms (AKS, TKG, GKE) after the approval.
+
 
 ### Adding a new chart to the repository
 

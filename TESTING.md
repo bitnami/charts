@@ -1,6 +1,8 @@
 ### Testing approach
 
-Test approach chosen here leverages test automation. This prompts us to decide the testing scope carefully, keeping in mind the maintainability of our tests and the value they provide. Tests need to allow for peace of mind, avoiding common pitfalls like flakiness and painful maintenance efforts. Trustworthiness if the measure of success of the tests. During the bug triage the regression bugs will be analysed and based on need, added to the test suite. Regression test cases will be reviewed periodically and once there is no need for them, they will be removed. 
+The overall test strategy can be described as *minimalistic*, rather than extensive. The goal of the tests is to verify that the application is deployed properly, so we will verify the main application features. 
+
+Decide the testing scope carefully, keeping in mind the maintainability of the tests and the value they provide. 
 
 #### Test types
 
@@ -10,18 +12,17 @@ Test approach chosen here leverages test automation. This prompts us to decide t
 * Smoke testing
 * Functional testing
 
-The overall test strategy can be described as *minimalistic*, rather than extensive. 
 
 The tests described here are _deployment_ tests since their goal is to verify that the software is correctly deployed with all the inherent features. Both functional and non-functional characteristics are evaluated in these tests, focusing on the installation aspect. 
 
 * The core asset features work properly when deployed
 * There are no regression bugs 
 
-Before writing any test scenario, the primary purpose of the asset needs to be clear. To understand the asset specifics there is [the documentation about the chart under test](https://github.com/bitnami/charts/tree/master/bitnami) as well as the [docker image documentation](https://github.com/bitnami?q=docker&type=all&language=&sort=). Combining the primary purpose of the asset as well as assets documentation gives a solid base for creating a test scenario.
+Before writing any test scenario, understand the primary purpose of the chart. Take a look at the  [the documentation about the chart under test](https://github.com/bitnami/charts/tree/master/bitnami) as well as the [docker image documentation](https://github.com/bitnami?q=docker&type=all&language=&sort=). This will give you as a solid base for creating valuable test scenario.
 
 #### Common test cases
 
-* Relevant files and folders are present in the docker image
+* Important files and folders are present in the docker image
 * CRUD
 * File upload
 * SMTP (if applicable)
@@ -56,11 +57,11 @@ Static analysis is needed for all assets. The need for other test types will be 
 
 Resilience check needs to be done for all assets that have a need for high availability (eg. databases).
 
-### Testware acceptance criteria
+### Test acceptance criteria
 
 In order for your test code PR to be accepted the following criteria must be fulfilled. 
 
-## Generic:
+## Generic
 
 - [ ] Minimum of 5 test cases per test type is needed 
 - [ ] Key features of the asset need to be covered 
@@ -82,7 +83,7 @@ In order for your test code PR to be accepted the following criteria must be ful
 - [ ] Include only necessary files
 - [ ] Test code needs to be [maintainable](https://testautomationpatterns.org/wiki/index.php/MAINTAINABLE_TESTWARE)
 
-#### Cypress specific:
+#### Cypress
 
 - [ ] Test suite name has the following format: Asset under test name + test suite (ex: `Wordpress test suite`)
 - [ ] No `describe()` blocks for Cypress test
@@ -94,15 +95,5 @@ In order for your test code PR to be accepted the following criteria must be ful
   * [plugins](https://docs.cypress.io/guides/tooling/plugins-guide) folder will contain plugin configuration, if applicable
   * [support](https://jira.eng.vmware.com/browse/CONTENT-1375) folder will contain reusable behaviours and overrides 
   * [cypress.json](https://docs.cypress.io/guides/tooling/plugins-guide) file will contain configuration values you wish to store
-
-#### How to add the tests
-
-Suppose you want to contribute to Helm charts repository by adding tests to one of the assets. This is a step-by-step guide to do so.
-
-1. Go to the [public charts repo](https://github.com/bitnami/charts) and create a branch
-2. Determine the types of tests you will need based on the asset you are testing and the information in this guide
-3. Look into Common test cases for inspiration 
-1. Before you create a pull request, make sure you achieved the acceptance criteria. 
-2. If you were able to achieve them, congrats! Create a PR and wait for approval. You should then be able to see the result of the test execution for multiple cloud platforms (AKS, TKG, GKE) after the approval
 
  
