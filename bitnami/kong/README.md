@@ -60,7 +60,6 @@ To uninstall/delete the `my-release` deployment:
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                     | Description                                                                                              | Value           |
@@ -75,7 +74,6 @@ To uninstall/delete the `my-release` deployment:
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                  | `false`         |
 | `diagnosticMode.command` | Command to override all containers in the deployment                                                     | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                                        | `["infinity"]`  |
-
 
 ### Deployment parameters
 
@@ -117,7 +115,6 @@ To uninstall/delete the `my-release` deployment:
 | `pdb.enabled`                           | Deploy a pdb object for the Kong pod                                                                                                                                             | `false`               |
 | `pdb.maxUnavailable`                    | Maximum unavailable Kong replicas (expressed in percentage)                                                                                                                      | `50%`                 |
 
-
 ### Traffic Exposure Parameters
 
 | Name                            | Description                                                                                                                      | Value                    |
@@ -150,7 +147,6 @@ To uninstall/delete the `my-release` deployment:
 | `ingress.extraTls`              | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
 | `ingress.secrets`               | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
 
-
 ### Kong Container Parameters
 
 | Name                                      | Description                                                                                                                | Value  |
@@ -181,7 +177,6 @@ To uninstall/delete the `my-release` deployment:
 | `kong.resources.limits`                   | The resources limits for the container                                                                                     | `{}`   |
 | `kong.resources.requests`                 | The requested resources for the container                                                                                  | `{}`   |
 
-
 ### Kong Migration job Parameters
 
 | Name                           | Description                                                                                                                | Value |
@@ -196,7 +191,6 @@ To uninstall/delete the `my-release` deployment:
 | `migration.extraVolumeMounts`  | Array of extra volume mounts to be added to the Kong Container (evaluated as template). Normally used with `extraVolumes`. | `[]`  |
 | `migration.resources.limits`   | The resources limits for the container                                                                                     | `{}`  |
 | `migration.resources.requests` | The requested resources for the container                                                                                  | `{}`  |
-
 
 ### Kong Ingress Controller Container Parameters
 
@@ -236,7 +230,6 @@ To uninstall/delete the `my-release` deployment:
 | `ingressController.resources.limits`                   | The resources limits for the container                                                                                                        | `{}`                              |
 | `ingressController.resources.requests`                 | The requested resources for the container                                                                                                     | `{}`                              |
 
-
 ### PostgreSQL Parameters
 
 | Name                               | Description                                                                               | Value   |
@@ -249,9 +242,8 @@ To uninstall/delete the `my-release` deployment:
 | `postgresql.auth.password`         | Postgresql password                                                                       | `""`    |
 | `postgresql.auth.database`         | Postgresql database                                                                       | `kong`  |
 | `postgresql.auth.postgresPassword` | Postgresql password for the postgres user                                                 | `""`    |
-| `postgresql.auth.existingSecret`   | Name of an existing secret containing the PostgreSQL password ('postgresql-password' key) | `""`    |
+| `postgresql.auth.existingSecret`   | Name of an existing secret containing the PostgreSQL password ('password' key) | `""`    |
 | `postgresql.auth.usePasswordFiles` | Mount credentials as a files instead of using an environment variable                     | `false` |
-
 
 ### Cassandra Parameters
 
@@ -265,7 +257,6 @@ To uninstall/delete the `my-release` deployment:
 | `cassandra.external.user`     | Username of the external cassandra installation                                                                               | `""`    |
 | `cassandra.external.password` | Password of the external cassandra installation                                                                               | `""`    |
 | `cassandra.existingSecret`    | Use an existing secret file with the Cassandra password (can be used with the bundled chart or with an existing installation) | `""`    |
-
 
 ### Metrics Parameters
 
@@ -282,7 +273,6 @@ To uninstall/delete the `my-release` deployment:
 | `metrics.serviceMonitor.scrapeTimeout`  | Timeout after which the scrape is ended                                                                | `""`        |
 | `metrics.serviceMonitor.selector`       | Prometheus instance selector labels                                                                    | `{}`        |
 | `metrics.serviceMonitor.rbac.enabled`   | Whether to enable RBAC                                                                                 | `true`      |
-
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -501,7 +491,7 @@ Kong Ingress Controller version was bumped to new major version, `1.x.x`. The as
 ##### Export secrets and required values to update
 
 ```console
-$ export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default kong-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+$ export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default kong-postgresql -o jsonpath="{.data.password}" | base64 --decode)
 $ export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=kong,app.kubernetes.io/name=postgresql,role=master -o jsonpath="{.items[0].metadata.name}")
 ```
 

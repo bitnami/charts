@@ -697,7 +697,7 @@ postgresql:
     ##
     postgresPassword: ""
     ## This secret is used in case of postgresql.enabled=true and we would like to specify password for newly created postgresql instance
-    ## @param postgresql.auth.existingSecret Name of an existing secret containing the PostgreSQL password ('postgresql-password' key)
+    ## @param postgresql.auth.existingSecret Name of an existing secret containing the PostgreSQL password ('password' key)
     ##
     existingSecret: ""
     ## @param postgresql.auth.usePasswordFiles Mount credentials as a files instead of using an environment variable
