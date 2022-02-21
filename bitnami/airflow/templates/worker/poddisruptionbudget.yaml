@@ -1,6 +1,6 @@
 {{- if and .Values.worker.pdb.create (or (eq .Values.executor "CeleryExecutor") (eq .Values.executor "CeleryKubernetesExecutor")) }}
 kind: PodDisruptionBudget
-apiVersion: policy/v1beta1
+apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 metadata:
   name: {{ printf "%s-worker" (include "common.names.fullname" .) }}
   namespace: {{ .Release.Namespace }}

@@ -12,7 +12,7 @@ dependencies:
     name: memcached
     repository: https://charts.bitnami.com/bitnami
     version: 6.x.x
-description: Grafana Tempo is an open source, easy-to-use and high-scale distributed tracing backend.
+description: Grafana Tempo is a distributed tracing system that has out-of-the-box integration with Grafana. It is highly scalable and works with many popular tracing protocols.
 engine: gotpl
 home: https://github.com/grafana/tempo/
 icon: https://bitnami.com/assets/stacks/grafana-tempo/img/grafana-tempo-stack-220x234.png
@@ -28,4 +28,4 @@ name: grafana-tempo
 sources:
   - https://github.com/bitnami/bitnami-docker-grafana-tempo
   - https://github.com/grafana/tempo/
-version: 1.0.2
+version: 1.0.3
