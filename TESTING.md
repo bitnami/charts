@@ -56,7 +56,6 @@ In order for your test code PR to be accepted the following criteria must be ful
 - [ ] Tests need to be retry-able
 - [ ] Tests need to be executable in any order 
 - [ ] Test scope needs to be focused on **installation** of the asset and not testing the asset
-- [ ] Tests need to be tested. Proof of testing needs to be attached to the PR whenever feasible
 - [ ] Test code needs to be peer-reviewed
 - [ ] Aim to write one scenario per test type. In case there is a need to divide test code into two scenarios, the reasoning should be provided
 - [ ] Tests need to be as minimalistic as possible
