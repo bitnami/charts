@@ -43,14 +43,14 @@ This deployment will be incomplete until you configure Discourse with a resolvab
   {{- if contains "NodePort" .Values.service.type }}
 
     export DISCOURSE_HOST=$(kubectl get nodes --namespace {{ $releaseNamespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
-    export DISCOURSE_PORT=$(kubectl get svc {{ $fullname . }} --namespace {{ $releaseNamespace }} -o jsonpath="{.spec.ports[0].nodePort}")
+    export DISCOURSE_PORT=$(kubectl get svc {{ $fullname }} --namespace {{ $releaseNamespace }} -o jsonpath="{.spec.ports[0].nodePort}")
 
   {{- else if contains "LoadBalancer" .Values.service.type }}
 
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-        Watch the status with: 'kubectl get svc --namespace {{ $releaseNamespace }} -w {{ $fullname . }}'
+        Watch the status with: 'kubectl get svc --namespace {{ $releaseNamespace }} -w {{ $fullname }}'
 
-    export DISCOURSE_HOST=$(kubectl get svc --namespace {{ $releaseNamespace }} {{ $fullname . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+    export DISCOURSE_HOST=$(kubectl get svc --namespace {{ $releaseNamespace }} {{ $fullname }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
     export DISCOURSE_PORT={{ .Values.service.ports.http }}
 
   {{- end }}
@@ -63,7 +63,8 @@ This deployment will be incomplete until you configure Discourse with a resolvab
       --set global.imagePullSecrets={{ .Values.global.imagePullSecrets }} \
       {{- end }}
       {{- end }}
-      --set discourse.host="$DISCOURSE_HOST:$DISCOURSE_PORT"
+      --set service.type={{ .Values.service.type }} \
+      --set host="$DISCOURSE_HOST:$DISCOURSE_PORT"
 
 {{- else -}}
 

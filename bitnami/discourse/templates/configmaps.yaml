@@ -11,7 +11,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 data:
-  DISCOURSE_HOST: {{ include "discourse.host" . }}
+  DISCOURSE_HOST: {{ include "discourse.host" . | quote }}
   DISCOURSE_SKIP_INSTALL: {{ ternary "yes" "no" .Values.discourse.skipInstall | quote }}
   DISCOURSE_SITE_NAME: {{ .Values.siteName | quote }}
   DISCOURSE_USERNAME: {{ .Values.auth.username | quote }}
