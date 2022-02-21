@@ -33,7 +33,6 @@ If your asset has a user interface, you will **need** to include the following t
 * [Cypress](https://docs.cypress.io/guides/overview/why-cypress) (functional tests)
 * [Goss](https://github.com/aelsabbahy/goss/blob/master/docs/manual.md) (infrastructure and configuration tests)
 * Health checks
-
 Resilience check needs to be done for all assets that have a need for high availability (eg. databases).
 
 #### Static analysis
