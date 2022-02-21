@@ -61,11 +61,10 @@ Notice the `Author` and `Signed-off-by` lines match. If they don't your PR will 
 
 ### Testing 
 
-1. Read the [Test Strategy](https://github.com/bitnami/charts/blob/master/TESTING.md).
+1. Read the [Test Strategy](https://github.com/bitnami/charts/blob/master/TESTING.md) guide.
 2. Determine the types of tests you will need based on the chart you are testing and the information in the test strategy.
 3. Before you create a pull request, make sure you achieved the [Test Acceptance Criteria](https://github.com/bitnami/charts/blob/master/TESTING.md#Test-acceptance-criteria).
-4. If you were able to achieve them, congrats! Create a PR and wait for approval. You should then be able to see the result of the test execution for multiple cloud platforms (AKS, TKG, GKE) after the approval.
-
+4. If you were able to achieve them, congrats! Create a PR and wait for the approval. You should then be able to see the result of the test execution for multiple cloud platforms (AKS, TKG, GKE) after the approval.
 
 ### Adding a new chart to the repository
 
