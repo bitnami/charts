@@ -75,7 +75,7 @@ In order for your test code PR to be accepted the following criteria must be ful
 - [ ] Aim to have an assertion after every command to avoid flakiness, taking advantage of Cypress retry-ability 
 - [ ] Test description is a sentence with the following format: Expected result summary, starting with a verb, in third person, no dots at the end of the sentence (ex: “**disallows login to an invalid user**”)
 - [ ] Respect the folder structure recommended by Cypress: 
-  * [fixtures](https://docs.cypress.io/api/commands/fixture) is for test data
+  * [fixtures](https://docs.cypress.io/api/commands/fixture) - for test data
   * [Integration](https://docs.cypress.io/api/commands/fixture) - test scenario
   * [plugins](https://docs.cypress.io/guides/tooling/plugins-guide) - plugin configuration, if applicable
   * [support](https://docs.cypress.io/api/commands/fixture) - reusable behaviours and overrides 
