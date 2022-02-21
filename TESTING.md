@@ -2,16 +2,7 @@
 
 The overall test strategy can be described as *minimalistic*, rather than extensive. The goal of the tests is to verify that the application is deployed properly, so we will verify the main application features. 
 
-Decide the testing scope carefully, keeping in mind the maintainability of the tests and the value they provide. 
-
-### Test types
-
-* Performance testing
-* Resilience testing
-* Security testing
-* Smoke testing
-* Functional testing
-
+Decide the testing scope carefully, keeping in mind the maintainability of the tests and the value they provide.
 
 The tests described here are _deployment_ tests since their goal is to verify that the software is correctly deployed with all the inherent features. Both functional and non-functional characteristics are evaluated in these tests, focusing on the installation aspect. 
 
@@ -95,5 +86,3 @@ In order for your test code PR to be accepted the following criteria must be ful
   * [plugins](https://docs.cypress.io/guides/tooling/plugins-guide) folder will contain plugin configuration, if applicable
   * [support](https://jira.eng.vmware.com/browse/CONTENT-1375) folder will contain reusable behaviours and overrides 
   * [cypress.json](https://docs.cypress.io/guides/tooling/plugins-guide) file will contain configuration values you wish to store
-
- 
