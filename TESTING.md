@@ -11,7 +11,7 @@ The tests described here are _deployment_ tests since their goal is to verify th
 
 Before writing any test scenario, understand the primary purpose of the chart. Take a look at the  [the documentation about the chart under test](https://github.com/bitnami/charts/tree/master/bitnami) as well as the [docker image documentation](https://github.com/bitnami?q=docker&type=all&language=&sort=). This will give you as a solid base for creating valuable test scenario.
 
-### Common test cases
+## Common test cases
 
 * Important files and folders are present in the docker image
 * CRUD
