@@ -75,9 +75,9 @@ spec:
               chmod 700 /bitnami/influxdb/{data,meta,wal}
               find /bitnami/influxdb/{data,meta,wal} -mindepth 0 -maxdepth 1 | \
               {{- if eq ( toString ( .Values.volumePermissions.securityContext.runAsUser )) "auto" }}
-                xargs chown -R `id -u`:`id -G | cut -d " " -f2`
+                xargs -r chown -R `id -u`:`id -G | cut -d " " -f2`
               {{- else }}
-                xargs chown -R {{ .Values.influxdb.securityContext.runAsUser }}:{{ .Values.influxdb.securityContext.fsGroup }}
+                xargs -r chown -R {{ .Values.influxdb.securityContext.runAsUser }}:{{ .Values.influxdb.securityContext.fsGroup }}
               {{- end }}
           {{- if eq ( toString ( .Values.volumePermissions.securityContext.runAsUser )) "auto" }}
           securityContext:
