@@ -67,13 +67,14 @@ In order for your test code PR to be accepted the following criteria must be ful
 - [ ] Favor URL’s for navigation over UI interaction
 - [ ] Include only necessary files
 - [ ] Test code needs to be [maintainable](https://testautomationpatterns.org/wiki/index.php/MAINTAINABLE_TESTWARE)
+- [ ] Test names should be descriptive
 
 ### Cypress
 
-- [ ] Test suite name has the following format: Asset under test name + test suite (ex: `Wordpress test suite`)
+- [ ] Test file name has the following format: Helm chart name + spec (ex: `wordpress_spec.js`)
 - [ ] No `describe()` blocks for Cypress test
 - [ ] Aim to have an assertion after every command to avoid flakiness, taking advantage of Cypress retry-ability 
-- [ ] Test description is a sentence with the following format: Expected result summary, starting with a verb, in third person, no dots at the end of the sentence (ex: “**disallows login to an invalid user**”)
+- [ ] Test description is a sentence with the following format: Expected result summary, starting with a verb, in third person, no dots at the end of the sentence (ex: `it('checks if admin can edit a site', ()`)
 - [ ] Respect the folder structure recommended by Cypress: 
   * [fixtures](https://docs.cypress.io/api/commands/fixture) - for test data
   * [Integration](https://docs.cypress.io/api/commands/fixture) - test scenario
