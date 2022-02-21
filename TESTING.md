@@ -1,6 +1,6 @@
 # Test Strategy
 
-The overall test strategy can be described as *minimalistic*, rather than extensive. The goal of the tests is to verify that the application is deployed properly, so we will verify the main application features. 
+The overall test strategy can be described as _minimalistic_, rather than extensive. The goal of the tests is to verify that the application is deployed properly, so we will verify the main application features. 
 
 Decide the testing scope carefully, keeping in mind the maintainability of the tests and the value they provide.
 
