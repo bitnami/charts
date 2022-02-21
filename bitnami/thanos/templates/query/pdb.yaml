@@ -1,6 +1,6 @@
 {{- $query := (include "thanos.query.values" . | fromYaml) -}}
 {{- if and $query.enabled $query.pdb.create }}
-apiVersion: policy/v1beta1
+apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 kind: PodDisruptionBudget
 metadata:
   name: {{ include "common.names.fullname" . }}-query

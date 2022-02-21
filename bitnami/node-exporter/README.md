@@ -1,9 +1,13 @@
 <!--- app-name: Node Exporter -->
 
-# Node Exporter
+# Node Exporter packaged by Bitnami
 
-[Node Exporter](https://github.com/prometheus/node_exporter) is a Prometheus exporter for hardware and OS metrics exposed by *NIX kernels, written in Go with pluggable metric collectors.
+Prometheus exporter for hardware and OS metrics exposed by UNIX kernels, with pluggable metric collectors.
 
+[Overview of Node Exporter](https://prometheus.io/)
+
+Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
+                           
 ## TL;DR
 
 ```bash
