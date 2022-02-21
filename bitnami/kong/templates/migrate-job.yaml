@@ -53,7 +53,7 @@ spec:
             {{- if (eq .Values.database "postgresql") }}
             - name: KONG_DATABASE
               value: "postgres"
-            {{- if .Values.postgresql.usePasswordFile }}
+            {{- if .Values.postgresql.auth.usePasswordFiles }}
             - name: KONG_POSTGRESQL_PASSWORD_FILE
               value: "/bitnami/kong/secrets/postgresql-password"
             {{- else }}
