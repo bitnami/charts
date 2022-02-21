@@ -93,6 +93,16 @@ it('checks the value of auto update status', () => {
   cy.get('.auto-update-status').should('contain.text', 'This site is automatically kept up to date with maintenance and security releases of WordPress only.');
 })
 
+it('allows the upload of a file',() => {
+  cy.login();
+  cy.visit("wp-admin/upload.php");
+  cy.get("[role='button']").contains('Add New').click();
+  cy.get("[aria-labelledby]").contains('Select Files').should('be.visible');
+  cy.get('input[type=file]').selectFile('cypress/fixtures/images/test_image.jpeg',
+    {force:true});
+  cy.get('.attachment').should('be.visible');
+})
+
 it('allows to log out', () => {
   cy.login();
   cy.get("#wp-admin-bar-logout .ab-item").click({
@@ -100,4 +110,3 @@ it('allows to log out', () => {
   });
   cy.get('.message').contains('logged out');
 })
-

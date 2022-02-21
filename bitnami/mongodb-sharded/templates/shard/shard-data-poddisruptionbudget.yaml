@@ -2,7 +2,7 @@
 {{- $replicas := .Values.shards | int -}}
 {{- range $i, $e := until $replicas -}}
 kind: PodDisruptionBudget
-apiVersion: policy/v1beta1
+apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 metadata:
   name: {{ printf "%s-shard%d-data" (include "common.names.fullname" $ ) $i }}
   labels: {{- include "common.labels.standard" $ | nindent 4 }}

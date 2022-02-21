@@ -639,7 +639,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
-Refer to the [chart documentation for more information oabout how to upgrade from previous releases](https://docs.bitnami.com/kubernetes/infrastructure/postgresql/administration/upgrade/).
+Refer to the [chart documentation for more information about how to upgrade from previous releases](https://docs.bitnami.com/kubernetes/infrastructure/postgresql/administration/upgrade/).
 
 ## License
 
