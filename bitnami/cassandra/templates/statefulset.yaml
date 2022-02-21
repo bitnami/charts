@@ -85,10 +85,11 @@ spec:
               {{- end }}
               mkdir -p {{ .Values.persistence.mountPath }}/data
               chmod 700 {{ .Values.persistence.mountPath }}/data
+              find {{ .Values.persistence.mountPath }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | \
               {{- if eq ( toString ( .Values.volumePermissions.securityContext.runAsUser )) "auto" }}
-                chown -R `id -u`:`id -G | cut -d " " -f2` {{ .Values.persistence.mountPath }}
+                xargs chown -R `id -u`:`id -G | cut -d " " -f2`
               {{- else }}
-                chown -R {{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }} {{ .Values.persistence.mountPath }}
+                xargs chown -R {{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}
               {{- end }}
               {{- end }}
             {{- if .Values.persistence.commitStorageClass }}
@@ -103,10 +104,11 @@ spec:
               {{- end }}
               mkdir -p {{ .Values.persistence.commitLogMountPath }}/commitlog
               chmod 700 {{ .Values.persistence.commitLogMountPath }}/commitlog
+              find {{ .Values.persistence.mountPath }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | \
               {{- if eq ( toString ( .Values.volumePermissions.securityContext.runAsUser )) "auto" }}
-                chown -R `id -u`:`id -G | cut -d " " -f2` {{ .Values.persistence.mountPath }}
+                xargs -r chown -R `id -u`:`id -G | cut -d " " -f2`
               {{- else }}
-                chown -R {{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }} {{ .Values.persistence.mountPath }}
+                xargs -r chown -R {{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}
               {{- end }}
               {{- end }}
               {{- end }}
