@@ -442,6 +442,9 @@ primary:
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
+  ## @param primary.hostNetwork Specify if host network should be enabled for PostgreSQL pod (postgresql primary)
+  ##
+  hostNetwork: false
   ## @param primary.labels Map of labels to add to the statefulset (postgresql primary)
   ##
   labels: {}
@@ -746,6 +749,9 @@ readReplicas:
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
+  ## @param readReplicas.hostNetwork Specify if host network should be enabled for PostgreSQL pod (PostgreSQL read only)
+  ##
+  hostNetwork: false
   ## @param readReplicas.labels Map of labels to add to the statefulset (PostgreSQL read only)
   ##
   labels: {}

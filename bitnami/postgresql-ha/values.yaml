@@ -161,6 +161,12 @@ postgresql:
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
+  ## @param postgresql.hostNetwork Specify if host network should be enabled for PostgreSQL pod
+  ##
+  hostNetwork: false
+  ## @param postgresql.hostIPC Specify if host IPC should be enabled for PostgreSQL pod
+  ##
+  hostIPC: false
   ## @param postgresql.podAnnotations Additional pod annotations
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##

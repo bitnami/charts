@@ -3,6 +3,7 @@ apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
 kind: NetworkPolicy
 metadata:
   name: {{ printf "%s-postgresql-backend" (include "common.names.fullname" .) }}
+  namespace: {{ .Release.Namespace }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
@@ -18,8 +19,7 @@ spec:
   ingress:
     - from:
         - podSelector:
-            matchLabels:
-              {{- include "common.labels.matchLabels" . | nindent 14 }}
+            matchLabels:  {{- include "common.labels.matchLabels" . | nindent 14 }}
 {{- end }}
 ---
 {{- if and .Values.networkPolicy.enabled .Values.redis.enabled .Values.networkPolicy.ingressRules.backendOnlyAccessibleByFrontend }}
@@ -27,6 +27,7 @@ apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
 kind: NetworkPolicy
 metadata:
   name: {{ printf "%s-redis-backend" (include "common.names.fullname" .) }}
+  namespace: {{ .Release.Namespace }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
@@ -46,8 +47,7 @@ spec:
   ingress:
     - from:
         - podSelector:
-            matchLabels:
-              {{- include "common.labels.matchLabels" . | nindent 14 }}
+            matchLabels: {{- include "common.labels.matchLabels" . | nindent 14 }}
 {{- end }}
 ---
 {{- if and .Values.networkPolicy.enabled .Values.networkPolicy.ingressRules.customBackendSelector .Values.networkPolicy.ingressRules.backendOnlyAccessibleByFrontend }}
@@ -55,6 +55,7 @@ apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
 kind: NetworkPolicy
 metadata:
   name: {{ printf "%s-custom-backend" (include "common.names.fullname" .) }}
+  namespace: {{ .Release.Namespace }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
@@ -69,6 +70,5 @@ spec:
   ingress:
     - from:
         - podSelector:
-            matchLabels:
-              {{- include "common.labels.matchLabels" . | nindent 14 }}
+            matchLabels: {{- include "common.labels.matchLabels" . | nindent 14 }}
 {{- end }}
