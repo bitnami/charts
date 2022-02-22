@@ -490,6 +490,9 @@ containerSecurityContext:
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
 hostAliases: []
+## @param hostNetwork Specify if host network should be enabled for Kafka pods
+##
+hostNetwork: false
 ## @param podLabels Extra labels for Kafka pods
 ## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
