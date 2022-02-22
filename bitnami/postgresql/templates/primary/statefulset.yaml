@@ -87,6 +87,7 @@ spec:
       {{- if .Values.primary.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.primary.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
+      hostNetwork: {{ .Values.primary.hostNetwork }}
       initContainers:
         {{- if and .Values.tls.enabled (not .Values.volumePermissions.enabled) }}
         - name: copy-certs
@@ -131,9 +132,9 @@ spec:
               chmod 700 {{ .Values.primary.persistence.mountPath }}/data {{- if (include "postgresql.mountConfigurationCM" .) }} {{ .Values.primary.persistence.mountPath }}/conf {{- end }}
               find {{ .Values.primary.persistence.mountPath }} -mindepth 1 -maxdepth 1 {{- if not (include "postgresql.mountConfigurationCM" .) }} -not -name "conf" {{- end }} -not -name ".snapshot" -not -name "lost+found" | \
               {{- if eq ( toString ( .Values.volumePermissions.containerSecurityContext.runAsUser )) "auto" }}
-                xargs chown -R `id -u`:`id -G | cut -d " " -f2`
+                xargs -r chown -R `id -u`:`id -G | cut -d " " -f2`
               {{- else }}
-                xargs chown -R {{ .Values.primary.containerSecurityContext.runAsUser }}:{{ .Values.primary.podSecurityContext.fsGroup }}
+                xargs -r chown -R {{ .Values.primary.containerSecurityContext.runAsUser }}:{{ .Values.primary.podSecurityContext.fsGroup }}
               {{- end }}
               {{- end }}
               {{- if .Values.shmVolume.enabled }}
