@@ -206,6 +206,7 @@ kubectl delete pvc -l release=my-release
 | `primary.containerSecurityContext.runAsUser` | User ID for the container                                                                                                | `1001`                |
 | `primary.hostAliases`                        | PostgreSQL primary pods host aliases                                                                                     | `[]`                  |
 | `primary.hostNetwork`                        | Specify if host network should be enabled for PostgreSQL pod                                                             | `false`               |
+| `primary.hostIPC`                            | Specify if host IPC should be enabled for PostgreSQL pod                                                                 | `false`               |
 | `primary.labels`                             | Map of labels to add to the statefulset (postgresql primary)                                                             | `{}`                  |
 | `primary.annotations`                        | Annotations for PostgreSQL primary pods                                                                                  | `{}`                  |
 | `primary.podLabels`                          | Map of labels to add to the pods (postgresql primary)                                                                    | `{}`                  |
@@ -291,6 +292,7 @@ kubectl delete pvc -l release=my-release
 | `readReplicas.containerSecurityContext.runAsUser` | User ID for the container                                                                                                | `1001`                |
 | `readReplicas.hostAliases`                        | PostgreSQL read only pods host aliases                                                                                   | `[]`                  |
 | `readReplicas.hostNetwork`                        | Specify if host network should be enabled for PostgreSQL pod                                                             | `false`               |
+| `readReplicas.hostIPC`                            | Specify if host IPC should be enabled for PostgreSQL pod                                                                 | `false`               |
 | `readReplicas.labels`                             | Map of labels to add to the statefulset (PostgreSQL read only)                                                           | `{}`                  |
 | `readReplicas.annotations`                        | Annotations for PostgreSQL read only pods                                                                                | `{}`                  |
 | `readReplicas.podLabels`                          | Map of labels to add to the pods (PostgreSQL read only)                                                                  | `{}`                  |
