@@ -75,14 +75,18 @@ spec:
           {{- if .Values.agent.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.agent.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
-          {{- if .Values.agent.command }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.agent.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.agent.command "context" $) | nindent 12 }}
           {{- else }}
           command:
             - kiam
             - agent
           {{- end }}
-          {{- if .Values.agent.args }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.agent.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.agent.args "context" $) | nindent 12 }}
           {{- else }}
           args:
@@ -153,6 +157,7 @@ spec:
           {{- if .Values.agent.resources }}
           resources: {{- toYaml .Values.agent.resources | nindent 12 }}
           {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.agent.startupProbe.enabled }}
           startupProbe:
             tcpSocket:
@@ -198,6 +203,7 @@ spec:
             failureThreshold: {{ .Values.agent.readinessProbe.failureThreshold }}
           {{- else if .Values.agent.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.agent.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
           {{- end }}
           volumeMounts:
             - mountPath: /bitnami/kiam/tls

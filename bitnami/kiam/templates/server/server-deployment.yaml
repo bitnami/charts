@@ -76,14 +76,18 @@ spec:
           {{- if .Values.server.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.server.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
-          {{- if .Values.server.command }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.server.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.server.command "context" $) | nindent 12 }}
           {{- else }}
           command:
             - kiam
             - server
           {{- end }}
-          {{- if .Values.server.args }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.server.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.server.args "context" $) | nindent 12 }}
           {{- else }}
           args:
@@ -141,6 +145,7 @@ spec:
           {{- if .Values.server.resources }}
           resources: {{- toYaml .Values.server.resources | nindent 12 }}
           {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.server.startupProbe.enabled }}
           startupProbe:
             grpc:
@@ -194,6 +199,7 @@ spec:
             failureThreshold: {{ .Values.server.readinessProbe.failureThreshold }}
           {{- else if .Values.server.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.server.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
           {{- end }}
           volumeMounts:
             - mountPath: /bitnami/kiam/tls

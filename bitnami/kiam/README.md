@@ -66,14 +66,17 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common parameters
 
-| Name                | Description                                                          | Value |
-| ------------------- | -------------------------------------------------------------------- | ----- |
-| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set) | `""`  |
-| `nameOverride`      | Release name override                                                | `""`  |
-| `fullnameOverride`  | Release full name override                                           | `""`  |
-| `commonLabels`      | Labels to add to all deployed objects                                | `{}`  |
-| `commonAnnotations` | Annotations to add to all deployed objects                           | `{}`  |
-| `extraDeploy`       | Array of extra objects to deploy with the release                    | `[]`  |
+| Name                     | Description                                                                             | Value          |
+| ------------------------ | --------------------------------------------------------------------------------------- | -------------- |
+| `kubeVersion`            | Force target Kubernetes version (using Helm capabilities if not set)                    | `""`           |
+| `nameOverride`           | Release name override                                                                   | `""`           |
+| `fullnameOverride`       | Release full name override                                                              | `""`           |
+| `commonLabels`           | Labels to add to all deployed objects                                                   | `{}`           |
+| `commonAnnotations`      | Annotations to add to all deployed objects                                              | `{}`           |
+| `extraDeploy`            | Array of extra objects to deploy with the release                                       | `[]`           |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`        |
+| `diagnosticMode.command` | Command to override all containers in the the deployment(s)/statefulset(s)              | `["sleep"]`    |
+| `diagnosticMode.args`    | Args to override all containers in the the deployment(s)/statefulset(s)                 | `["infinity"]` |
 
 
 ### kiam image parameters
@@ -180,6 +183,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.service.extraPorts`               | Extra ports to expose (normally used with the `sidecar` value)               | `[]`        |
 | `server.service.externalTrafficPolicy`    | Enable client source IP preservation                                         | `Cluster`   |
 | `server.service.annotations`              | Annotations for kiam service                                                 | `{}`        |
+| `server.service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"         | `None`      |
+| `server.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                  | `{}`        |
 
 
 ### kiam server Service Account parameters
@@ -306,6 +311,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `agent.service.loadBalancerSourceRanges` | Address that are allowed when service is LoadBalancer                        | `[]`        |
 | `agent.service.externalTrafficPolicy`    | Enable client source IP preservation                                         | `Cluster`   |
 | `agent.service.annotations`              | Annotations for kiam service                                                 | `{}`        |
+| `agent.service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"         | `None`      |
+| `agent.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                  | `{}`        |
 
 
 ### kiam agent Service Account parameters
