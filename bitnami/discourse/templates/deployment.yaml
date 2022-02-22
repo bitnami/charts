@@ -1,10 +1,10 @@
 {{- if and (include "discourse.host" .) (or .Values.postgresql.enabled .Values.externalDatabase.host) -}}
-apiVersion: {{ template "common.capabilities.deployment.apiVersion" . }}
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: {{ template "common.names.fullname" . }}
+  name: {{ include "common.names.fullname" . }}
+  namespace: {{ .Release.Namespace }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
-    component: discourse
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
@@ -15,7 +15,6 @@ spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
-      component: discourse
   {{- if .Values.updateStrategy }}
   strategy: {{- toYaml .Values.updateStrategy | nindent 4 }}
   {{- end }}
@@ -27,7 +26,6 @@ spec:
         checksum/secrets-database: {{ include (print $.Template.BasePath "/secrets-database.yaml") . | sha256sum }}
         checksum/secrets-redis: {{ include (print $.Template.BasePath "/secrets-redis.yaml") . | sha256sum }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
-        component: discourse
         {{- if .Values.podLabels }}
         {{- include "common.tplvalues.render" (dict "value" .Values.podLabels "context" $) | nindent 8 }}
         {{- end }}
@@ -53,8 +51,19 @@ spec:
       {{- if .Values.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.priorityClassName }}
+      priorityClassName: {{ .Values.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.schedulerName }}
+      schedulerName: {{ .Values.schedulerName }}
+      {{- end }}
       serviceAccountName: {{ include "discourse.serviceAccountName" . }}
-      securityContext: {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      {{- if .Values.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
       initContainers:
         {{- if .Values.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
@@ -67,10 +76,11 @@ spec:
             - sh
             - -c
             - |
-              mkdir -p "/bitnami/discourse"
-              chown -R "discourse:root" "/bitnami/discourse"
-          securityContext:
-            runAsUser: 0
+              mkdir -p /bitnami/discourse
+              find /bitnami/discourse -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs chown -R {{ .Values.discourse.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}
+          {{- if .Values.volumePermissions.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.volumePermissions.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
           {{- end }}
@@ -80,13 +90,19 @@ spec:
         {{- end }}
       containers:
         - name: discourse
-          securityContext: {{- toYaml .Values.discourse.containerSecurityContext | nindent 12 }}
-          image: {{ template "discourse.image" . }}
+          image: {{ include "discourse.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
-          {{- if .Values.discourse.command }}
+          {{- if .Values.discourse.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.discourse.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.discourse.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.discourse.command "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.discourse.args }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.discourse.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.discourse.args "context" $) | nindent 12 }}
           {{- end }}
           env:
@@ -97,17 +113,21 @@ spec:
                 secretKeyRef:
                   name: {{ include "discourse.secretName" . }}
                   key: discourse-password
+            - name: DISCOURSE_PORT_NUMBER
+              value: {{ .Values.discourse.containerPorts.http | quote }}
+            - name: DISCOURSE_EXTERNAL_HTTP_PORT_NUMBER
+              value: {{ .Values.service.ports.http | quote }}
             - name: DISCOURSE_DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "discourse.postgresql.secretName" . }}
-                  key: postgresql-password
+                  name: {{ include "discourse.database.secretName" . }}
+                  key: {{ include "discourse.database.secretPasswordKey" . }}
             {{- if or .Values.postgresql.enabled .Values.externalDatabase.create }}
             - name: POSTGRESQL_CLIENT_POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "discourse.postgresql.secretName" . }}
-                  key: postgresql-postgres-password
+                  name: {{ include "discourse.database.secretName" . }}
+                  key: {{ include "discourse.database.secretPostgresPasswordKey" . }}
             {{- end }}
             {{- if (include "discourse.redis.auth.enabled" .) }}
             - name: DISCOURSE_REDIS_PASSWORD
@@ -116,11 +136,11 @@ spec:
                   name: {{ include "discourse.redis.secretName" . }}
                   key: {{ include "discourse.redis.secretPasswordKey" . }}
             {{- end }}
-            {{- if (include "discourse.smtp.password.enabled" .) }}
+            {{- if (include "smtp.password.enabled" .) }}
             - name: DISCOURSE_SMTP_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "discourse.smtp.secretName" . }}
+                  name: {{ include "smtp.secretName" . }}
                   key: smtp-password
             {{- end }}
             {{- if .Values.discourse.extraEnvVars }}
@@ -139,8 +159,9 @@ spec:
             {{- end }}
           ports:
             - name: http
-              containerPort: 3000
+              containerPort: {{ .Values.discourse.containerPorts.http }}
               protocol: TCP
+          {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.discourse.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
@@ -167,6 +188,20 @@ spec:
           {{- else if .Values.discourse.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.discourse.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
+          {{- if .Values.discourse.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.discourse.startupProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: http
+          {{- else if .Values.discourse.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.discourse.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- end }}
+          {{- if .Values.discourse.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.discourse.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.discourse.resources }}
+          resources: {{- toYaml .Values.discourse.resources | nindent 12 }}
+          {{- end }}
           volumeMounts:
             - name: discourse-data
               mountPath: /bitnami/discourse
@@ -174,15 +209,22 @@ spec:
             {{- if .Values.discourse.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.discourse.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
-          {{- if .Values.discourse.resources }}
-          resources: {{- toYaml .Values.discourse.resources | nindent 12 }}
-          {{- end }}
         - name: sidekiq
-          securityContext: {{- toYaml .Values.sidekiq.containerSecurityContext | nindent 12 }}
-          image: {{ template "discourse.image" . }}
+          image: {{ include "discourse.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.sidekiq.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.sidekiq.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.sidekiq.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.sidekiq.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.sidekiq.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.sidekiq.args "context" $) | nindent 12 }}
+          {{- end }}
           env:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.image.debug | quote }}
@@ -194,8 +236,8 @@ spec:
             - name: DISCOURSE_POSTGRESQL_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "discourse.postgresql.secretName" . }}
-                  key: postgresql-password
+                  name: {{ include "discourse.database.secretName" . }}
+                  key: {{ include "discourse.database.secretPasswordKey" . }}
             {{- if (include "discourse.redis.auth.enabled" .) }}
             - name: REDIS_PASSWORD
               valueFrom:
@@ -203,11 +245,11 @@ spec:
                   name: {{ include "discourse.redis.secretName" . }}
                   key: {{ include "discourse.redis.secretPasswordKey" . }}
             {{- end }}
-            {{- if (include "discourse.smtp.password.enabled" .) }}
+            {{- if (include "smtp.password.enabled" .) }}
             - name: DISCOURSE_SMTP_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "discourse.smtp.secretName" . }}
+                  name: {{ include "smtp.secretName" . }}
                   key: smtp-password
             {{- end }}
             {{- if .Values.sidekiq.extraEnvVars }}
@@ -224,6 +266,7 @@ spec:
             - secretRef:
                 name: {{ .Values.sidekiq.extraEnvVarsSecret }}
             {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.sidekiq.livenessProbe.enabled }}
           livenessProbe:
             exec:
@@ -248,6 +291,20 @@ spec:
           {{- else if .Values.sidekiq.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.sidekiq.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
+          {{- if .Values.sidekiq.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.sidekiq.startupProbe "enabled") "context" $) | nindent 12 }}
+            exec:
+              command: ["/bin/sh", "-c", "pgrep -f ^sidekiq"]
+          {{- else if .Values.sidekiq.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.sidekiq.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- end }}
+          {{- if .Values.sidekiq.resources }}
+          resources: {{- toYaml .Values.sidekiq.resources | nindent 12 }}
+          {{- end }}
+          {{- if .Values.sidekiq.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.sidekiq.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
           volumeMounts:
             - name: discourse-data
               mountPath: /bitnami/discourse
@@ -255,9 +312,6 @@ spec:
             {{- if .Values.sidekiq.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.sidekiq.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
-          {{- if .Values.sidekiq.resources }}
-          resources: {{- toYaml .Values.sidekiq.resources | nindent 12 }}
-          {{- end }}
         {{- if .Values.sidecars }}
         {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
@@ -265,7 +319,7 @@ spec:
         - name: discourse-data
           {{- if .Values.persistence.enabled }}
           persistentVolumeClaim:
-            claimName: {{ .Values.persistence.existingClaim | default (include "common.names.fullname" .) }}
+            claimName: {{ default (include "common.names.fullname" .) (tpl .Values.persistence.existingClaim $)}}
           {{- else }}
           emptyDir: {}
           {{ end }}
