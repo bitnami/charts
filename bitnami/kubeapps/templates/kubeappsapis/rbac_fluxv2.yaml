@@ -1,4 +1,4 @@
-{{- if has "fluxv2" .Values.kubeappsapis.enabledPlugins }}
+{{- if .Values.packaging.flux.enabled }}
 {{- if .Values.rbac.create -}}
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
