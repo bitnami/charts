@@ -39,7 +39,7 @@ If your asset has a user interface, you will **need** to include the following t
 
 Static analysis is needed for all assets. 
 
-* [Trivy](https://aquasecurity.github.io/trivy/v0.17.0/)
+* [Trivy](https://github.com/aquasecurity/trivy)
 * Helm lint
 
 ## Test acceptance criteria
