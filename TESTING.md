@@ -26,6 +26,11 @@ Before writing any test scenario, understand the primary purpose of the chart. T
 
 The current test system supports a set of tools that are listed below. Test execution is done on temporary environments which are deployed and destroyed on the fly. In order to trigger the test execution in these test environments, internal approval is needed. Keeping in mind the acceptance criteria as well as the best practices for test automation using the supported tool will help you get your PR approved. 
 
+#### Test types
+
+* Functional tests
+* Infrastructure tests
+
 #### Dynamic testing
 
 If your asset has a user interface, you will **need** to include the following tests:
@@ -35,12 +40,15 @@ If your asset has a user interface, you will **need** to include the following t
 * Health checks
 * Resilience check (needed for all assets that require high availability (eg. databases))
 
+
 #### Static analysis
 
 Static analysis is needed for all assets. 
 
 * [Trivy](https://github.com/aquasecurity/trivy)
 * Helm lint
+
+***NOTE***: Health checks, resilience checks, Trivy and Helm lint are specified using actions based on the Helm chart need. The action will be the same for every chart. Cypress and Goss tests need to be tailored per application under test. 
 
 ## Test acceptance criteria
 
