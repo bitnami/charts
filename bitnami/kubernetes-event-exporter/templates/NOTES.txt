@@ -28,7 +28,7 @@ To verify that kubernetes-event-exporter has started, run:
   kubectl get deploy -w --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }}
 
 By default, the kubernetes-event-exporter will dump events to stdout.
-To configure additional endpoints, redeploy the chart with a overwritting the field 'config' at your 'values.yml'.
+To configure additional endpoints, redeploy the chart overwritting the field 'config' at your 'values.yml'.
 
 {{- end }}
 
