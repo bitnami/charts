@@ -52,7 +52,7 @@ commonAnnotations: {}
 image:
   registry: docker.io
   repository: bitnami/nginx
-  tag: 1.21.6-debian-10-r0
+  tag: 1.21.6-debian-10-r23
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -98,6 +98,13 @@ extraEnvVarsSecret: ""
 ## @param replicaCount Number of NGINX replicas to deploy
 ##
 replicaCount: 1
+## @param updateStrategy.type NGINX deployment strategy type
+## @param updateStrategy.rollingUpdate NGINX deployment rolling update configuration parameters
+## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+##
+updateStrategy:
+  type: RollingUpdate
+  rollingUpdate: {}
 ## @param podLabels Additional labels for NGINX pods
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
@@ -138,6 +145,9 @@ nodeAffinityPreset:
 ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
 ##
 affinity: {}
+## @param hostNetwork Specify if host network should be enabled for NGINX pod
+##
+hostNetwork: false
 ## @param nodeSelector Node labels for pod assignment. Evaluated as a template.
 ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
 ##
@@ -331,7 +341,7 @@ cloneStaticSiteFromGit:
   image:
     registry: docker.io
     repository: bitnami/git
-    tag: 2.35.0-debian-10-r1
+    tag: 2.35.1-debian-10-r19
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -435,7 +445,7 @@ ldapDaemon:
   image:
     registry: docker.io
     repository: bitnami/nginx-ldap-auth-daemon
-    tag: 0.20200116.0-debian-10-r581
+    tag: 0.20200116.0-debian-10-r589
     pullPolicy: IfNotPresent
   ## @param ldapDaemon.port LDAP Auth Daemon port
   ##
@@ -767,7 +777,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/nginx-exporter
-    tag: 0.10.0-debian-10-r34
+    tag: 0.10.0-debian-10-r56
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

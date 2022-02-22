@@ -106,9 +106,9 @@ spec:
               chmod 700 {{ .Values.persistence.commitLogMountPath }}/commitlog
               find {{ .Values.persistence.mountPath }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | \
               {{- if eq ( toString ( .Values.volumePermissions.securityContext.runAsUser )) "auto" }}
-                xargs chown -R `id -u`:`id -G | cut -d " " -f2`
+                xargs -r chown -R `id -u`:`id -G | cut -d " " -f2`
               {{- else }}
-                xargs chown -R {{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}
+                xargs -r chown -R {{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}
               {{- end }}
               {{- end }}
               {{- end }}

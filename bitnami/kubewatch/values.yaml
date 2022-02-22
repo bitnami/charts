@@ -16,6 +16,9 @@ global:
 
 ## @section Common parameters
 
+## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
+##
+kubeVersion: ""
 ## @param nameOverride String to partially override common.names.fullname template
 ##
 nameOverride: ""
@@ -28,6 +31,20 @@ commonLabels: {}
 ## @param commonAnnotations Annotations to add to all deployed objects
 ##
 commonAnnotations: {}
+## Enable diagnostic mode in the deployment(s)/statefulset(s)
+##
+diagnosticMode:
+  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+  ##
+  enabled: false
+  ## @param diagnosticMode.command Command to override all containers in the the deployment(s)/statefulset(s)
+  ##
+  command:
+    - sleep
+  ## @param diagnosticMode.args Args to override all containers in the the deployment(s)/statefulset(s)
+  ##
+  args:
+    - infinity
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
@@ -45,7 +62,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/kubewatch
-  tag: 0.1.0-debian-10-r537
+  tag: 0.1.0-debian-10-r538
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -171,6 +188,9 @@ command: []
 ## @param args Override default container args (useful when using custom images)
 ##
 args: []
+## @param lifecycleHooks for the Kubewatch container(s) to automate configuration before or after startup
+##
+lifecycleHooks: {}
 ## @param extraEnvVars Extra environment variables to be set on Kubewatch container
 ## Example:
 ## extraEnvVars:
@@ -228,6 +248,22 @@ resources:
   ##    cpu: 100m
   ##    memory: 10Mi
   requests: {}
+## Configure extra options for startup probe
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+## @param startupProbe.enabled Enable startupProbe
+## @param startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+## @param startupProbe.periodSeconds Period seconds for startupProbe
+## @param startupProbe.timeoutSeconds Timeout seconds for startupProbe
+## @param startupProbe.failureThreshold Failure threshold for startupProbe
+## @param startupProbe.successThreshold Success threshold for startupProbe
+##
+startupProbe:
+  enabled: false
+  initialDelaySeconds: 10
+  periodSeconds: 10
+  timeoutSeconds: 1
+  failureThreshold: 3
+  successThreshold: 1
 ## Configure extra options for liveness probe
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param livenessProbe.enabled Enable livenessProbe
@@ -260,6 +296,9 @@ readinessProbe:
   timeoutSeconds: 1
   failureThreshold: 3
   successThreshold: 1
+## @param customStartupProbe Override default startup probe
+##
+customStartupProbe: {}
 ## @param customLivenessProbe Override default liveness probe
 ##
 customLivenessProbe: {}
@@ -310,6 +349,15 @@ tolerations: []
 ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
 ##
 priorityClassName: ""
+## @param schedulerName Name of the k8s scheduler (other than default)
+## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+##
+schedulerName: ""
+## @param topologySpreadConstraints Topology Spread Constraints for pod assignment
+## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+## The value is evaluated as a template
+##
+topologySpreadConstraints: []
 ## @param podLabels Extra labels for Kubewatch pods
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
@@ -324,6 +372,17 @@ extraVolumes: []
 ## @param extraVolumeMounts Optionally specify extra list of additional volumeMounts for Kubewatch container(s)
 ##
 extraVolumeMounts: []
+## @param updateStrategy.type Deployment strategy type.
+## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+## e.g:
+## updateStrategy:
+##  type: RollingUpdate
+##  rollingUpdate:
+##    maxSurge: 25%
+##    maxUnavailable: 25%
+##
+updateStrategy:
+  type: RollingUpdate
 ## @param initContainers Add additional init containers to the Kubewatch pods
 ## Example:
 ## initContainers:
@@ -353,13 +412,15 @@ sidecars: []
 ##
 rbac:
   create: false
-## Specifies whether a ServiceAccount should be created
+## Pods Service Account
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+## @param serviceAccount.create Specifies whether a ServiceAccount should be created
+## @param serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
+## @param serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+## @param serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
 ##
 serviceAccount:
-  ## @param serviceAccount.create Enable the creation of a ServiceAccount for Kubewatch pods
-  ##
   create: true
-  ## @param serviceAccount.name Name of the created ServiceAccount
-  ## If not set and create is true, a name is generated using the fullname template
-  ##
   name: ""
+  automountServiceAccountToken: true
+  annotations: {}
