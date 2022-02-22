@@ -11,11 +11,11 @@ dependencies:
   - condition: postgresql.enabled
     name: postgresql
     repository: https://charts.bitnami.com/bitnami
-    version: 10.X.X
+    version: 11.X.X
   - condition: redis.enabled
     name: redis
     repository: https://charts.bitnami.com/bitnami
-    version: 15.X.X
+    version: 16.X.X
 description: Discourse is an open source discussion platform with built-in moderation and governance systems that let discussion communities protect themselves from bad actors even without official moderators.
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/discourse
@@ -35,4 +35,4 @@ sources:
   - https://github.com/bitnami/bitnami-docker-discourse
   - https://github.com/spinnaker
   - https://www.discourse.org/
-version: 5.2.6
+version: 6.0.0
