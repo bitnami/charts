@@ -493,6 +493,9 @@ hostAliases: []
 ## @param hostNetwork Specify if host network should be enabled for Kafka pods
 ##
 hostNetwork: false
+## @param hostIPC Specify if host IPC should be enabled for Kafka pods
+##
+hostIPC: false
 ## @param podLabels Extra labels for Kafka pods
 ## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
