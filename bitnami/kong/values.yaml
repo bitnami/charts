@@ -672,7 +672,29 @@ postgresql:
   ##
   enabled: true
   ## Properties for using an existing PostgreSQL installation
+  ## @param postgresql.image.registry PostgreSQL image registry
+  ## @param postgresql.image.repository PostgreSQL image repository
+  ## @param postgresql.image.tag PostgreSQL image tag (immutable tags are recommended)
+  ## @param postgresql.image.pullPolicy PostgreSQL image pull policy
+  ## @param postgresql.image.pullSecrets Specify image pull secrets
   ##
+  image:
+    registry: docker.io
+    repository: bitnami/postgresql
+    tag: 13.6.0-debian-10-r8
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## Example:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
   external:
     ## @param postgresql.external.host Host of an external PostgreSQL installation
     ##
