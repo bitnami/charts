@@ -73,6 +73,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       hostNetwork: {{ .Values.postgresql.hostNetwork }}
+      hostIPC: {{ .Values.postgresql.hostIPC }}
       initContainers:
       {{- if .Values.postgresql.tls.enabled }}
         - name: init-chmod-tls
