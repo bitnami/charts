@@ -185,7 +185,7 @@ spec:
                 name: {{ include "mongodb-sharded.tplValue" ( dict "value" $.Values.shardsvr.dataNode.extraEnvVarsCM "context" $ ) }}
             {{- end }}
             {{- if $.Values.shardsvr.dataNode.extraEnvVarsSecret }}
-            - configMapRef:
+            - secretRef:
                 name: {{ include "mongodb-sharded.tplValue" ( dict "value" $.Values.shardsvr.dataNode.extraEnvVarsSecret "context" $ ) }}
             {{- end }}
           {{- end }}

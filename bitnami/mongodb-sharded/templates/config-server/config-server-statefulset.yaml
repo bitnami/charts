@@ -178,7 +178,7 @@ spec:
                 name: {{ include "common.tplvalues.render" ( dict "value" .Values.configsvr.extraEnvVarsCM "context" $ ) }}
             {{- end }}
             {{- if .Values.configsvr.extraEnvVarsSecret }}
-            - configMapRef:
+            - secretRef:
                 name: {{ include "common.tplvalues.render" ( dict "value" .Values.configsvr.extraEnvVarsSecret "context" $ ) }}
             {{- end }}
           {{- end }}
