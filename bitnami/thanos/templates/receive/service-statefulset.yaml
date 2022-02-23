@@ -1,0 +1,47 @@
+{{- if $.Values.receive.enabled -}}
+{{- range $i, $v := until (int $.Values.receive.replicationFactor) -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "common.names.fullname" $ }}-receive-{{ $i }}
+  namespace: {{ $.Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" $ | nindent 4 }}
+    app.kubernetes.io/component: receive
+    {{- if $.Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" $.Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  annotations:
+    {{- if $.Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" $.Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if $.Values.receive.service.annotations }}
+    {{- include "common.tplvalues.render" (dict "value" $.Values.receive.service.annotations "context" $) | nindent 4 }}
+    {{- end }}
+spec:
+  type: ClusterIP
+  ports:
+    - port: {{ if $.Values.receive.service.http }}{{ coalesce $.Values.receive.service.ports.http $.Values.receive.service.http.port }}{{ else }}{{ $.Values.receive.service.ports.http }}{{ end }}
+      targetPort: http
+      protocol: TCP
+      name: http
+    - port: {{ if $.Values.receive.service.grpc }}{{ coalesce $.Values.receive.service.ports.grpc $.Values.receive.service.grpc.port }}{{ else }}{{ $.Values.receive.service.ports.grpc }}{{ end }}
+      targetPort: grpc
+      protocol: TCP
+      name: grpc
+    - port: {{ if $.Values.receive.service.remoteWrite }}{{ coalesce $.Values.receive.service.ports.remote $.Values.receive.service.remoteWrite.port }}{{ else }}{{ $.Values.receive.service.ports.remote }}{{ end }}
+      targetPort: remote-write
+      protocol: TCP
+      name: remote
+    {{- if $.Values.receive.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" $.Values.receive.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  selector:
+    statefulset.kubernetes.io/pod-name: {{ include "common.names.fullname" $ }}-receive-{{ $i }}
+    {{- if $.Values.receive.service.labelSelectorsOverride }}
+    {{- include "common.tplvalues.render" (dict "value" $.Values.receive.service.labelSelectorsOverride "context" $) | nindent 4 }}
+    {{- else }}
+    {{- include "common.labels.matchLabels" $ | nindent 4 }}
+    {{- end }}
+---
+{{- end }}
+{{- end }}
