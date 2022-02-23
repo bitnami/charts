@@ -16,7 +16,7 @@ spec:
   scaleTargetRef:
     apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
     kind: Deployment
-    name: {{ include "common.capabilities.deployment.apiVersion" . }}
+    name: {{ include "common.names.fullname" . }}-receive-distributor
   minReplicas: {{ .Values.receiveDistributor.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.receiveDistributor.autoscaling.maxReplicas }}
   metrics:
