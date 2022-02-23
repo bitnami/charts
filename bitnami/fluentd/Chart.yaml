@@ -8,7 +8,7 @@ dependencies:
     tags:
       - bitnami-common
     version: 1.x.x
-description: Fluentd collects events from various data sources and writes them to files, RDBMS, NoSQL, IaaS, SaaS, Hadoop and so on.
+description: Fluentd collects events from various data sources and writes them to files, RDBMS, NoSQL, IaaS, SaaS, Hadoop and so on. 
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/fluentd
 icon: https://bitnami.com/assets/stacks/fluentd/img/fluentd-stack-220x234.png
@@ -25,4 +25,4 @@ name: fluentd
 sources:
   - https://github.com/bitnami/bitnami-docker-fluentd
   - https://www.fluentd.org/
-version: 5.0.4
+version: 5.0.5
