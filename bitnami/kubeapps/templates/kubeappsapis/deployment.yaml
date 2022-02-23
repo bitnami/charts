@@ -68,7 +68,8 @@ spec:
           command:
             - /kubeapps-apis
           args:
-            {{- range .Values.kubeappsapis.enabledPlugins }}
+            {{- $enabledPlugins := include "kubeapps.kubeappsapis.enabledPlugins" . | fromJsonArray }}
+            {{- range $enabledPlugins }}
             - --plugin-dir
             - /plugins/{{ . }}
             {{- end }}
@@ -90,10 +91,10 @@ spec:
             {{- end }}
           env:
             - name: GOGC
-              value: "50" # default is 100. 50 means increasing x2 the frequency of GC 
+              value: "50" # default is 100. 50 means increasing x2 the frequency of GC
             - name: PORT
               value: {{ .Values.kubeappsapis.containerPort | quote }}
-            {{- if .Values.redis.enabled }}
+            {{- if .Values.packaging.flux.enabled }}
             # REDIS-* vars are required by the plugins for caching functionality
             # TODO (gfichtenolt) this as required by the kubeapps apis service (which will
             # longer-term pass something to the plugins so that the plugins won't need to

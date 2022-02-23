@@ -343,6 +343,12 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 16.0.0
+
+In this version, the mongodb-exporter bundled as part of the bitnami/mongodb dependency was updated to a new version which, even it is not a major change, can contain breaking changes (from `0.11.X` to `0.30.X`).
+
+Please visit the release notes from the upstream project at https://github.com/percona/mongodb_exporter/releases
+
 ### To 15.0.0
 
 The [Bitnami Parse](https://github.com/bitnami/bitnami-docker-parse) and [Bitnami Parse Dashboard](https://github.com/bitnami/bitnami-docker-parse-dashboard) images were refactored and now the source code is published in GitHub in the [`rootfs`](https://github.com/bitnami/bitnami-docker-parse/tree/master/4/debian-10/rootfs) folder of the container images.

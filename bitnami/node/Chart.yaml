@@ -6,7 +6,7 @@ dependencies:
   - condition: mongodb.enabled
     name: mongodb
     repository: https://charts.bitnami.com/bitnami
-    version: 10.x.x
+    version: 11.x.x
   - name: common
     repository: https://charts.bitnami.com/bitnami
     tags:
@@ -28,4 +28,4 @@ name: node
 sources:
   - https://github.com/bitnami/bitnami-docker-node
   - http://nodejs.org/
-version: 16.3.2
+version: 17.0.1

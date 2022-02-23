@@ -1,10 +1,10 @@
-<!--- app-name: &reg;edmine -->
+<!--- app-name: Redmine -->
 
-# &reg;edmine packaged by Bitnami
+# Redmine packaged by Bitnami
 
-&reg;edmine is an open source management application. It includes a tracking issue system, Gantt charts for a visual view of projects and deadlines, and supports SCM integration for version control.
+Redmine is an open source management application. It includes a tracking issue system, Gantt charts for a visual view of projects and deadlines, and supports SCM integration for version control.
 
-[Overview of &reg;edmine](http://www.redmine.org/)
+[Overview of Redmine](http://www.redmine.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
                            
@@ -17,9 +17,9 @@ $ helm install my-release bitnami/redmine
 
 ## Introduction
 
-This chart bootstraps a [&reg;edmine](https://github.com/bitnami/bitnami-docker-redmine) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Redmine](https://github.com/bitnami/bitnami-docker-redmine) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) and the [PostgreSQL chart](https://github.com/bitnami/charts/tree/master/bitnami/postgresql) which are required for bootstrapping a MariaDB/PostgreSQL deployment for the database requirements of the &reg;edmine application.
+It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) and the [PostgreSQL chart](https://github.com/bitnami/charts/tree/master/bitnami/postgresql) which are required for bootstrapping a MariaDB/PostgreSQL deployment for the database requirements of the Redmine application.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This chart has been tested to work with NGINX Ingress, cert-manager, fluentd and Prometheus on top of the [BKPR](https://kubeprod.io/).
 
@@ -38,7 +38,7 @@ To install the chart with the release name `my-release`:
 $ helm install my-release bitnami/redmine
 ```
 
-The command deploys &reg;edmine on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
+The command deploys Redmine on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
 > **Tip**: List all releases using `helm list`
 
@@ -54,7 +54,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ## Using PostgreSQL instead of MariaDB
 
-This chart includes the option to use a PostgreSQL database for &reg;edmine instead of MariaDB. To use this, set the `databaseType` parameter to `postgresql`:
+This chart includes the option to use a PostgreSQL database for Redmine instead of MariaDB. To use this, set the `databaseType` parameter to `postgresql`:
 
 ```
 helm install my-release bitnami/redmine --set databaseType=postgresql
@@ -81,54 +81,54 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 | `commonLabels`      | Labels to add to all deployed objects              | `{}`                  |
 | `commonAnnotations` | Annotations to add to all deployed objects         | `{}`                  |
 | `extraDeploy`       | Array of extra objects to deploy with the release  | `[]`                  |
-| `image.registry`    | &reg;edmine image registry                             | `docker.io`           |
-| `image.repository`  | &reg;edmine image repository                           | `bitnami/redmine`     |
-| `image.tag`         | &reg;edmine image tag (immutable tags are recommended) | `4.2.3-debian-10-r88` |
-| `image.pullPolicy`  | &reg;edmine image pull policy                          | `IfNotPresent`        |
-| `image.pullSecrets` | &reg;edmine image pull secrets                         | `[]`                  |
+| `image.registry`    | Redmine image registry                             | `docker.io`           |
+| `image.repository`  | Redmine image repository                           | `bitnami/redmine`     |
+| `image.tag`         | Redmine image tag (immutable tags are recommended) | `4.2.3-debian-10-r88` |
+| `image.pullPolicy`  | Redmine image pull policy                          | `IfNotPresent`        |
+| `image.pullSecrets` | Redmine image pull secrets                         | `[]`                  |
 | `image.debug`       | Enable image debug mode                            | `false`               |
 
 
-### &reg;edmine Configuration parameters
+### Redmine Configuration parameters
 
 | Name                    | Description                                                            | Value              |
 | ----------------------- | ---------------------------------------------------------------------- | ------------------ |
-| `redmineUsername`       | &reg;edmine username                                                       | `user`             |
-| `redminePassword`       | &reg;edmine user password                                                  | `""`               |
-| `redmineEmail`          | &reg;edmine user email                                                     | `user@example.com` |
-| `redmineLanguage`       | &reg;edmine default data language                                          | `en`               |
+| `redmineUsername`       | Redmine username                                                       | `user`             |
+| `redminePassword`       | Redmine user password                                                  | `""`               |
+| `redmineEmail`          | Redmine user email                                                     | `user@example.com` |
+| `redmineLanguage`       | Redmine default data language                                          | `en`               |
 | `customPostInitScripts` | Custom post-init.d user scripts                                        | `{}`               |
 | `smtpHost`              | SMTP server host                                                       | `""`               |
 | `smtpPort`              | SMTP server port                                                       | `""`               |
 | `smtpUser`              | SMTP username                                                          | `""`               |
 | `smtpPassword`          | SMTP user password                                                     | `""`               |
 | `smtpProtocol`          | SMTP protocol                                                          | `""`               |
-| `existingSecret`        | Name of existing secret containing &reg;edmine credentials                 | `""`               |
+| `existingSecret`        | Name of existing secret containing Redmine credentials                 | `""`               |
 | `smtpExistingSecret`    | The name of an existing secret with SMTP credentials                   | `""`               |
 | `allowEmptyPassword`    | Allow the container to be started with blank passwords                 | `false`            |
 | `command`               | Override default container command (useful when using custom images)   | `[]`               |
 | `args`                  | Override default container args (useful when using custom images)      | `[]`               |
-| `extraEnvVars`          | Array with extra environment variables to add to the &reg;edmine container | `[]`               |
+| `extraEnvVars`          | Array with extra environment variables to add to the Redmine container | `[]`               |
 | `extraEnvVarsCM`        | Name of existing ConfigMap containing extra env vars                   | `""`               |
 | `extraEnvVarsSecret`    | Name of existing Secret containing extra env vars                      | `""`               |
 
 
-### &reg;edmine deployment parameters
+### Redmine deployment parameters
 
 | Name                                 | Description                                                                               | Value           |
 | ------------------------------------ | ----------------------------------------------------------------------------------------- | --------------- |
-| `replicaCount`                       | Number of &reg;edmine replicas to deploy                                                      | `1`             |
-| `updateStrategy.type`                | &reg;edmine deployment strategy type                                                          | `RollingUpdate` |
+| `replicaCount`                       | Number of Redmine replicas to deploy                                                      | `1`             |
+| `updateStrategy.type`                | Redmine deployment strategy type                                                          | `RollingUpdate` |
 | `schedulerName`                      | Alternate scheduler                                                                       | `""`            |
 | `serviceAccount.create`              | Specifies whether a ServiceAccount should be created                                      | `false`         |
 | `serviceAccount.name`                | The name of the ServiceAccount to create. Defaults to the `redmine.fullname` macro        | `""`            |
-| `hostAliases`                        | &reg;edmine pod host aliases                                                                  | `[]`            |
-| `extraVolumes`                       | Optionally specify extra list of additional volumes for &reg;edmine pods                      | `[]`            |
-| `extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for &reg;edmine container(s)         | `[]`            |
-| `sidecars`                           | Add additional sidecar containers to the &reg;edmine pod                                      | `[]`            |
-| `initContainers`                     | Add additional init containers to the &reg;edmine pods                                        | `[]`            |
-| `podLabels`                          | Extra labels for &reg;edmine pods                                                             | `{}`            |
-| `podAnnotations`                     | Annotations for &reg;edmine pods                                                              | `{}`            |
+| `hostAliases`                        | Redmine pod host aliases                                                                  | `[]`            |
+| `extraVolumes`                       | Optionally specify extra list of additional volumes for Redmine pods                      | `[]`            |
+| `extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for Redmine container(s)         | `[]`            |
+| `sidecars`                           | Add additional sidecar containers to the Redmine pod                                      | `[]`            |
+| `initContainers`                     | Add additional init containers to the Redmine pods                                        | `[]`            |
+| `podLabels`                          | Extra labels for Redmine pods                                                             | `{}`            |
+| `podAnnotations`                     | Annotations for Redmine pods                                                              | `{}`            |
 | `podAffinityPreset`                  | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`            |
 | `podAntiAffinityPreset`              | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`          |
 | `nodeAffinityPreset.type`            | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`            |
@@ -137,13 +137,13 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 | `affinity`                           | Affinity for pod assignment                                                               | `{}`            |
 | `nodeSelector`                       | Node labels for pod assignment                                                            | `{}`            |
 | `tolerations`                        | Tolerations for pod assignment                                                            | `[]`            |
-| `resources.limits`                   | The resources limits for the &reg;edmine container                                            | `{}`            |
-| `resources.requests`                 | The requested resources for the &reg;edmine container                                         | `{}`            |
-| `containerPort`                      | &reg;edmine HTTP container port                                                               | `3000`          |
-| `podSecurityContext.enabled`         | Enabled &reg;edmine pods' Security Context                                                    | `false`         |
-| `podSecurityContext.fsGroup`         | Set &reg;edmine pod's Security Context fsGroup                                                | `1001`          |
-| `containerSecurityContext.enabled`   | Enabled &reg;edmine containers' Security Context                                              | `false`         |
-| `containerSecurityContext.runAsUser` | Set &reg;edmine container's Security Context runAsUser                                        | `1001`          |
+| `resources.limits`                   | The resources limits for the Redmine container                                            | `{}`            |
+| `resources.requests`                 | The requested resources for the Redmine container                                         | `{}`            |
+| `containerPort`                      | Redmine HTTP container port                                                               | `3000`          |
+| `podSecurityContext.enabled`         | Enabled Redmine pods' Security Context                                                    | `false`         |
+| `podSecurityContext.fsGroup`         | Set Redmine pod's Security Context fsGroup                                                | `1001`          |
+| `containerSecurityContext.enabled`   | Enabled Redmine containers' Security Context                                              | `false`         |
+| `containerSecurityContext.runAsUser` | Set Redmine container's Security Context runAsUser                                        | `1001`          |
 | `livenessProbe.enabled`              | Enable livenessProbe                                                                      | `true`          |
 | `livenessProbe.path`                 | Path for to check for livenessProbe                                                       | `/`             |
 | `livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                   | `300`           |
@@ -174,16 +174,16 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 
 | Name                               | Description                                                                                                                      | Value                    |
 |------------------------------------|----------------------------------------------------------------------------------------------------------------------------------|--------------------------|
-| `service.type`                     | &reg;edmine service type                                                                                                             | `LoadBalancer`           |
-| `service.port`                     | &reg;edmine service HTTP port                                                                                                        | `80`                     |
+| `service.type`                     | Redmine service type                                                                                                             | `LoadBalancer`           |
+| `service.port`                     | Redmine service HTTP port                                                                                                        | `80`                     |
 | `service.nodePort`                 | Node port for HTTP                                                                                                               | `""`                     |
-| `service.clusterIP`                | &reg;edmine service Cluster IP                                                                                                       | `""`                     |
-| `service.loadBalancerIP`           | &reg;edmine service Load Balancer IP                                                                                                 | `""`                     |
-| `service.loadBalancerSourceRanges` | &reg;edmine service Load Balancer sources                                                                                            | `[]`                     |
-| `service.externalTrafficPolicy`    | &reg;edmine service external traffic policy                                                                                          | `Cluster`                |
-| `service.annotations`              | Additional custom annotations for &reg;edmine service                                                                                | `{}`                     |
-| `service.extraPorts`               | Extra port to expose on &reg;edmine service                                                                                          | `[]`                     |
-| `ingress.enabled`                  | Enable ingress record generation for &reg;edmine                                                                                     | `false`                  |
+| `service.clusterIP`                | Redmine service Cluster IP                                                                                                       | `""`                     |
+| `service.loadBalancerIP`           | Redmine service Load Balancer IP                                                                                                 | `""`                     |
+| `service.loadBalancerSourceRanges` | Redmine service Load Balancer sources                                                                                            | `[]`                     |
+| `service.externalTrafficPolicy`    | Redmine service external traffic policy                                                                                          | `Cluster`                |
+| `service.annotations`              | Additional custom annotations for Redmine service                                                                                | `{}`                     |
+| `service.extraPorts`               | Extra port to expose on Redmine service                                                                                          | `[]`                     |
+| `ingress.enabled`                  | Enable ingress record generation for Redmine                                                                                     | `false`                  |
 | `ingress.selfSigned`               | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
 | `ingress.className`                | Set the ingressClassName which will be used for this ingress                                                                     | `""`                     |
 | `ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
@@ -221,9 +221,9 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 | `podDisruptionBudget.create`         | Enable a Pod Disruption Budget creation                        | `false` |
 | `podDisruptionBudget.minAvailable`   | Minimum number/percentage of pods that should remain scheduled | `""`    |
 | `podDisruptionBudget.maxUnavailable` | Maximum number/percentage of pods that may be made unavailable | `""`    |
-| `autoscaling.enabled`                | Enable Horizontal POD autoscaling for &reg;edmine                  | `false` |
-| `autoscaling.minReplicas`            | Minimum number of &reg;edmine replicas                             | `1`     |
-| `autoscaling.maxReplicas`            | Maximum number of &reg;edmine replicas                             | `11`    |
+| `autoscaling.enabled`                | Enable Horizontal POD autoscaling for Redmine                  | `false` |
+| `autoscaling.minReplicas`            | Minimum number of Redmine replicas                             | `1`     |
+| `autoscaling.maxReplicas`            | Maximum number of Redmine replicas                             | `11`    |
 | `autoscaling.targetCPU`              | Target CPU utilization percentage                              | `50`    |
 | `autoscaling.targetMemory`           | Target Memory utilization percentage                           | `50`    |
 
@@ -232,7 +232,7 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 
 | Name                                        | Description                                                                                                                              | Value             |
 | ------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ----------------- |
-| `databaseType`                              | &reg;edmine database type. Allowed values: `mariadb` and `postgresql`                                                                        | `mariadb`         |
+| `databaseType`                              | Redmine database type. Allowed values: `mariadb` and `postgresql`                                                                        | `mariadb`         |
 | `mariadb.enabled`                           | Whether to deploy a MariaDB server to satisfy the database requirements                                                                  | `true`            |
 | `mariadb.architecture`                      | MariaDB architecture. Allowed values: `standalone` or `replication`                                                                      | `standalone`      |
 | `mariadb.auth.rootPassword`                 | MariaDB root password                                                                                                                    | `""`              |
@@ -272,7 +272,7 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 | `mailReceiver.suspend`                               | Whether to create suspended CronJob                                                                                                           | `true`                    |
 | `mailReceiver.podAnnotations`                        | Additional pod annotations                                                                                                                    | `{}`                      |
 | `mailReceiver.podLabels`                             | Additional pod labels                                                                                                                         | `{}`                      |
-| `mailReceiver.priorityClassName`                     | &reg;edmine pods' priority.                                                                                                                       | `""`                      |
+| `mailReceiver.priorityClassName`                     | Redmine pods' priority.                                                                                                                       | `""`                      |
 | `mailReceiver.mailProtocol`                          | Mail protocol to use for reading emails. Allowed values: `IMAP` and `POP3`                                                                    | `IMAP`                    |
 | `mailReceiver.host`                                  | Server to receive emails from                                                                                                                 | `""`                      |
 | `mailReceiver.port`                                  | TCP port on the `host`                                                                                                                        | `993`                     |
@@ -302,8 +302,8 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 | `mailReceiver.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for mailReceiver container                                                           | `[]`                      |
 | `mailReceiver.command`                               | Override default container command (useful when using custom images)                                                                          | `["bash"]`                |
 | `mailReceiver.args`                                  | Override default container args (useful when using custom images)                                                                             | `["-c","/cj/receive.sh"]` |
-| `mailReceiver.podSecurityContext.enabled`            | Enabled &reg;edmine pods' Security Context                                                                                                        | `true`                    |
-| `mailReceiver.podSecurityContext.fsGroup`            | Set &reg;edmine pod's Security Context fsGroup                                                                                                    | `1001`                    |
+| `mailReceiver.podSecurityContext.enabled`            | Enabled Redmine pods' Security Context                                                                                                        | `true`                    |
+| `mailReceiver.podSecurityContext.fsGroup`            | Set Redmine pod's Security Context fsGroup                                                                                                    | `1001`                    |
 | `mailReceiver.containerSecurityContext.enabled`      | mailReceiver Container securityContext                                                                                                        | `false`                   |
 | `mailReceiver.containerSecurityContext.runAsUser`    | User ID for the mailReceiver container                                                                                                        | `1001`                    |
 | `mailReceiver.containerSecurityContext.runAsNonRoot` | Whether to run the mailReceiver container as a non-root user                                                                                  | `true`                    |
@@ -330,11 +330,11 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 | `certificates.customCertificate.chainSecret.name`    | Name of the secret containing the certificate chain                | `""`                                     |
 | `certificates.customCertificate.chainSecret.key`     | Key of the certificate chain file inside the secret                | `""`                                     |
 | `certificates.customCA`                              | Defines a list of secrets to import into the container trust store | `[]`                                     |
-| `certificates.image.registry`                        | &reg;edmine image registry                                             | `docker.io`                              |
-| `certificates.image.repository`                      | &reg;edmine image repository                                           | `bitnami/bitnami-shell`                  |
-| `certificates.image.tag`                             | &reg;edmine image tag (immutable tags are recommended)                 | `10-debian-10-r309`                      |
-| `certificates.image.pullPolicy`                      | &reg;edmine image pull policy                                          | `IfNotPresent`                           |
-| `certificates.image.pullSecrets`                     | &reg;edmine image pull secrets                                         | `[]`                                     |
+| `certificates.image.registry`                        | Redmine image registry                                             | `docker.io`                              |
+| `certificates.image.repository`                      | Redmine image repository                                           | `bitnami/bitnami-shell`                  |
+| `certificates.image.tag`                             | Redmine image tag (immutable tags are recommended)                 | `10-debian-10-r309`                      |
+| `certificates.image.pullPolicy`                      | Redmine image pull policy                                          | `IfNotPresent`                           |
+| `certificates.image.pullSecrets`                     | Redmine image pull secrets                                         | `[]`                                     |
 | `certificates.extraEnvVars`                          | Container sidecar extra environment variables (e.g. proxy)         | `[]`                                     |
 
 
@@ -346,11 +346,11 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 | `networkPolicy.ingress.enabled`                               | Enable network policy for Ingress Proxies                                                                                   | `false` |
 | `networkPolicy.ingress.namespaceSelector`                     | Ingress Proxy namespace selector labels. These labels will be used to identify the Ingress Proxy's namespace.               | `{}`    |
 | `networkPolicy.ingress.podSelector`                           | Ingress Proxy pods selector labels. These labels will be used to identify the Ingress Proxy pods.                           | `{}`    |
-| `networkPolicy.ingressRules.backendOnlyAccessibleByFrontend`  | Enable ingress rule that makes the backend (mariadb) only accessible by &reg;edmine's pods.                                     | `false` |
+| `networkPolicy.ingressRules.backendOnlyAccessibleByFrontend`  | Enable ingress rule that makes the backend (mariadb) only accessible by Redmine's pods.                                     | `false` |
 | `networkPolicy.ingressRules.customBackendSelector`            | Backend selector labels. These labels will be used to identify the backend pods.                                            | `{}`    |
-| `networkPolicy.ingressRules.accessOnlyFrom.enabled`           | Enable ingress rule that makes &reg;edmine only accessible from a particular origin                                             | `false` |
-| `networkPolicy.ingressRules.accessOnlyFrom.namespaceSelector` | Namespace selector label that is allowed to access &reg;edmine. This label will be used to identified the allowed namespace(s). | `{}`    |
-| `networkPolicy.ingressRules.accessOnlyFrom.podSelector`       | Pods selector label that is allowed to access &reg;edmine. This label will be used to identified the allowed pod(s).            | `{}`    |
+| `networkPolicy.ingressRules.accessOnlyFrom.enabled`           | Enable ingress rule that makes Redmine only accessible from a particular origin                                             | `false` |
+| `networkPolicy.ingressRules.accessOnlyFrom.namespaceSelector` | Namespace selector label that is allowed to access Redmine. This label will be used to identified the allowed namespace(s). | `{}`    |
+| `networkPolicy.ingressRules.accessOnlyFrom.podSelector`       | Pods selector label that is allowed to access Redmine. This label will be used to identified the allowed pod(s).            | `{}`    |
 | `networkPolicy.ingressRules.customRules`                      | Custom network policy ingress rule                                                                                          | `{}`    |
 | `networkPolicy.egressRules.denyConnectionsToExternal`         | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).                              | `false` |
 | `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                  | `{}`    |
@@ -366,7 +366,7 @@ $ helm install my-release \
     bitnami/redmine
 ```
 
-The above command sets the &reg;edmine administrator account username and password to `admin` and `password` respectively. Additionally, it sets the MariaDB `root` user password to `secretpassword`.
+The above command sets the Redmine administrator account username and password to `admin` and `password` respectively. Additionally, it sets the MariaDB `root` user password to `secretpassword`.
 
 > NOTE: Once this chart is deployed, it is not possible to change the application's access credentials, such as usernames or passwords, using Helm. To change these application credentials after deployment, delete any persistent volumes (PVs) used by the chart and re-deploy it, or use the application's built-in administrative tools if available.
 
@@ -388,9 +388,9 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ### Replicas
 
-&reg;edmine writes uploaded files to a persistent volume. By default that volume cannot be shared between pods (RWO). In such a configuration the `replicas` option must be set to `1`. If the persistent volume supports more than one writer (RWX), ie NFS, `replicas` can be greater than `1`.
+Redmine writes uploaded files to a persistent volume. By default that volume cannot be shared between pods (RWO). In such a configuration the `replicas` option must be set to `1`. If the persistent volume supports more than one writer (RWX), ie NFS, `replicas` can be greater than `1`.
 
-> **Important**: When running more than one instance of &reg;edmine they must share the same `secret_key_base` to have sessions working acreoss all instances.
+> **Important**: When running more than one instance of Redmine they must share the same `secret_key_base` to have sessions working acreoss all instances.
 > This can be achieved by setting
 >
 > ```
@@ -403,7 +403,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 (adapted from https://github.com/bitnami/bitnami-docker-redmine)
 
-On certain occasions, you may need that &reg;edmine is available under a specific sub-URI path rather than the root. A common scenario to this problem may arise if you plan to set up your &reg;edmine container behind a reverse proxy. To deploy your &reg;edmine container using a certain sub-URI you just need to follow these steps:
+On certain occasions, you may need that Redmine is available under a specific sub-URI path rather than the root. A common scenario to this problem may arise if you plan to set up your Redmine container behind a reverse proxy. To deploy your Redmine container using a certain sub-URI you just need to follow these steps:
 
 #### Create a configmap containing an altered version of post-init.sh
 
@@ -431,7 +431,7 @@ data:
     echo 'map ActionController::Base.config.try(:relative_url_root) || "/" do' >> ${config1}
     echo 'run Rails.application' >> ${config1}
     echo 'end' >> ${config1}
-    echo '&reg;edmine::Utils::relative_url_root = "'${SUB_URI_PATH}'"' >> ${config2}
+    echo 'Redmine::Utils::relative_url_root = "'${SUB_URI_PATH}'"' >> ${config2}
 
     SUB_URI_PATH=$(echo ${SUB_URI_PATH} | sed -e 's|/|\\/|g')
     sed -i -e "s/\(relative_url_root\ \=\ \"\).*\(\"\)/\1${SUB_URI_PATH}\2/" ${config2}
@@ -472,7 +472,7 @@ readinessProbe:
 
 ## Persistence
 
-The [Bitnami &reg;edmine](https://github.com/bitnami/bitnami-docker-redmine) image stores the &reg;edmine data and configurations at the `/bitnami/redmine` path of the container.
+The [Bitnami Redmine](https://github.com/bitnami/bitnami-docker-redmine) image stores the Redmine data and configurations at the `/bitnami/redmine` path of the container.
 
 Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube. The volume is created using dynamic volume provisioning. Clusters configured with NFS mounts require manually managed volumes and claims.
 
@@ -480,7 +480,7 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 
 ### Existing PersistentVolumeClaims
 
-The following example includes two PVCs, one for &reg;edmine and another for MariaDB.
+The following example includes two PVCs, one for Redmine and another for MariaDB.
 
 1. Create the PersistentVolume
 1. Create the PersistentVolumeClaim
@@ -581,7 +581,7 @@ See [PR#7114](https://github.com/bitnami/charts/pull/7114) for more info about t
 
 ### To 16.0.0
 
-The [Bitnami &reg;edmine](https://github.com/bitnami/bitnami-docker-redmine) image was refactored and now the source code is published in GitHub in the [`rootfs`](https://github.com/bitnami/bitnami-docker-redmine/tree/master/4/debian-10/rootfs) folder of the container image repository.
+The [Bitnami Redmine](https://github.com/bitnami/bitnami-docker-redmine) image was refactored and now the source code is published in GitHub in the [`rootfs`](https://github.com/bitnami/bitnami-docker-redmine/tree/master/4/debian-10/rootfs) folder of the container image repository.
 
 Upgrades from previous versions require to specify `--set volumePermissions.enabled=true` in order for all features to work properly:
 
@@ -617,7 +617,7 @@ Full compatibility is not guaranteed due to the amount of involved changes, howe
 
 As a consequence, backwards compatibility from previous versions is not guaranteed during the upgrade. To upgrade to this new version `15.0.0` there are two alternatives:
 
-- Install a new &reg;edmine chart and follow the [official guide on how to backup/restore](https://www.redmine.org/projects/redmine/wiki/&reg;edmineBackupRestore).
+- Install a new Redmine chart and follow the [official guide on how to backup/restore](https://www.redmine.org/projects/redmine/wiki/RedmineBackupRestore).
 
 - Reuse the PVC used to hold the PostgreSQL/MariaDB data on your previous release. To do so, follow the instructions below.
 
@@ -635,7 +635,7 @@ example-mariadb-0                 1/1     Running   0          40s
 example-redmine-9f8c7b54d-trns2   1/1     Running   0          72s
 ```
 
-2. Export both MariaDB and &reg;edmine credentials in order to provide them in the update
+2. Export both MariaDB and Redmine credentials in order to provide them in the update
 
 ```console
 $ export REDMINE_PASSWORD=$(kubectl get secret --namespace default example-redmine -o jsonpath="{.data.redmine-password}" | base64 --decode)
@@ -645,7 +645,7 @@ $ export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default example-
 $ export MARIADB_PASSWORD=$(kubectl get secret --namespace default example-mariadb -o jsonpath="{.data.mariadb-password}" | base64 --decode)
 ```
 
-3. Delete the &reg;edmine deployment and delete the MariaDB statefulset. Notice the option `--cascade=false` in the latter.
+3. Delete the Redmine deployment and delete the MariaDB statefulset. Notice the option `--cascade=false` in the latter.
 
 ```console
 $ kubectl delete deployment.apps/example-redmine
